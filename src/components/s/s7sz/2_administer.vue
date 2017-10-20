@@ -2,51 +2,94 @@
   <div class="bs-example bs-example-tabs sz" data-example-id="togglable-tabs">
     <ul id="myTabs" class="nav nav-tabs" role="tablist">
       <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">品牌库</a></li>
-      <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">品牌审核</a></li>
-      <button type="button" class="btn btn-info pull-right btn-lg">新增</button>
+      <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" >品牌审核</a></li>
+      <button type="button" class="btn btn-info pull-right btn-lg" @click="addGood()">新增</button>
     </ul>
     <div id="myTabContent" class="tab-content">
-
       <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
         <div class="search_cell">
-          <span>申请时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span>
-          <div class="time" v-show="is_Success">
+          <span>申请时间<i class="glyphicon glyphicon-calendar" @click="is_Success=!is_Success"></i></span>
+          <div class="time" v-if="is_Success">
             <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
           </div>
         </div>
         <div class="search">
-          <input type="text" class="inp" value="输入商品名称 / 编码 / 条形码 / 品牌 "><i class="glyphicon glyphicon-search"></i>
+          <input type="text" class="inp" placeholder="输入商家名称/商家ID/品牌名称" v-model="search_params.condition"><i class="glyphicon glyphicon-search"></i>
+        </div>
+        <div class="search_cell">
+          <button class="btn search_button" @click="get_comment_info">搜索</button>
         </div>
         <div class="comment_info">
           <table id="table" style="table-layout:fixed"></table>
         </div>
       </div>
-
       <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
         <div class="dropdown">
           <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">品牌状态
             <span class="caret"></span>
           </div>
           <ul class="dropdown-menu" aria-labelledby="dLabel1">
-            <li>全部<i class="glyphicon glyphicon-menu-right"></i></li>
-            <li>申请中<i class="glyphicon glyphicon-menu-right"></i></li>
-            <li>审核不通过<i class="glyphicon glyphicon-menu-right"></i></li>
+            <li @click="get_comment_info()">全部<i class="glyphicon glyphicon-menu-right"></i></li>
+            <li @click="get_comment_info(1)">申请中<i class="glyphicon glyphicon-menu-right"></i></li>
+            <li @click="get_comment_info(2)">审核不通过<i class="glyphicon glyphicon-menu-right"></i></li>
           </ul>
         </div>
         <div class="search_cell">
-          <span>申请时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span>
-          <div class="time" v-show="is_Success">
+          <span>申请时间<i class="glyphicon glyphicon-calendar" @click="is_Success2=!is_Success2"></i></span>
+          <div class="time" v-if="is_Success2">
             <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
           </div>
         </div>
         <div class="search">
-          <input type="text" class="inp" value="输入商品名称 / 编码 / 条形码 / 品牌 "><i class="glyphicon glyphicon-search"></i>
+          <input type="text" class="inp" placeholder="输入商家名称/商家ID/品牌名称"><i class="glyphicon glyphicon-search"></i>
         </div>
         <div class="comment_info">
           <table id="table1" style="table-layout:fixed"></table>
         </div>
       </div>
+      <!--详情-->
+      <div class="goodInfo" v-if="goodInfoShow">
+        <p>品牌名称：{{goodInfo.brandName==''?'--':goodInfo.brandName}}</p>
+        <p>英文名称：{{goodInfo.brandNameEn==''?'--':goodInfo.brandNameEn}}</p>
+        <p>品牌区域：{{goodInfo.firstAreaName==''?'--':goodInfo.firstAreaName}},
+          {{goodInfo.twoAreaName==''?'--':goodInfo.twoAreaName}},
+          {{goodInfo.threeAreaName==''?'--':goodInfo.threeAreaName}}</p>
+        <div>品牌LOGO：
+          <img :src="goodInfo.brandLogo"/>
+        </div>
+        <button @click="goodInfoShow=!goodInfoShow">返回</button>
+      </div>
+      <!--删除-->
+      <div class="delectGoodBg" v-if="delectGood"></div>
+      <div class="delectGoodWrap" v-if="delectGood">
+        <div class="delectGoodCon">
+          <p>是否删除品牌</p>
+          <button class="blueBtn" @click="delete_confirm()">确定</button>
+          <button class="defultBtn" @click="delectGood=!delectGood">取消</button>
+          <a class="colseDelectBox" @click="delectGood=!delectGood"></a>
+        </div>
+      </div>
+      <!--修改/新增-->
+      <div class="goodInfo changeGoodInfo" v-if="changeGoodShow">
+        <p>品牌名称：<input type="text" v-model="add_modify_params.brandName" /></p>
+        <p>英文名称：<input type="text" v-model="add_modify_params.brandNameEn" /></p>
+        <div>品牌区域：
+          <select id="select">
+            <option v-for="pinpai in pinpais" :value="pinpai.value">{{pinpai.name}}</option>
+          </select>
+        </div>
+        <div>品牌LOGO：
+          <input type="file" id="m11yhgl_img_input" style="display:none" @change="upload_img()">
+                <div class="img_up">
+                  <img width="60" height="60" v-show='imgshow' id="m11yhgl_img">
+                </div>
+                <span class="upload" onclick="document.querySelector('#m11yhgl_img_input').click()"><div style="color:#337ab7;cursor:pointer;display:inline;">点击上传(小于1M)</div></span>
+        </div>
+        <button @click="change_confirm()">保存</button>
+        <button @click="changeGoodShow=!changeGoodShow">返回</button>
+      </div>
     </div>
+    
   </div>
 </template>
 
@@ -56,24 +99,228 @@
     data () {
       return {
         is_Success: false,
+        is_Success2: false,
+        btnShow: true,
+        goodInfoShow: false, // 详情盒子
+        delectGood: false, // 删除盒子
+        changeGoodShow: false,
         // 搜索参数
-        search_params: {orderNo: '', settleBillId: '', dealerKey: '', mediaKey: '', salerKey: '', startTime: '', endTime: ''}
+        search_params: {condition: '', startTime: '', endTime: ''},
+        search_approve: {condition: '', startTime: '', endTime: '', approveStatus: ''},
+        goodInfo: [],
+        delete_params: {brandId: ''},
+        change_params: {brandId: ''},
+        pinpais: [
+          {name: '品牌一', value: '1'},
+          {name: '品牌一', value: '2'}
+        ],
+        // 上传图片后返回的地址
+        imgshow: false,
+        add_modify_params_imgurl: '',
+        // 新增/修改的数据
+        add_modify_params: {approveId: '', brandId: '', brandName: '', brandNameEn: '', firstAreaName: '', twoAreaName: '', threeAreaName: '', brandLogo: ''},
+        // 控制新增/修改的参数
+        handle_toggle: '',
+        // 上传头像标识
+        touxiang_change: false
       }
     },
     methods: {
-      // 获取结算单列表
+      // 重置
+      reset_add_modify_params_bind () {
+        this.add_modify_params.brandId = ''
+        this.add_modify_params.brandName = ''
+        this.add_modify_params.brandNameEn = ''
+        this.add_modify_params.firstAreaName = ''
+        this.add_modify_params.twoAreaName = ''
+        this.add_modify_params.threeAreaName = ''
+        this.add_modify_params.brandLogo = ''
+      },
+      // 新增
+      addGood () {
+        let that = this
+        that.reset_add_modify_params_bind()
+        that.$.ajax({
+          type: 'get',
+          url: that.localbase + 'm2c.scm/brand/approve/id',
+          data: {
+            token: sessionStorage.getItem('mToken')
+          },
+          success: function (result) {
+            // that.reset_add_modify_params_bind()
+            that.add_modify_params.approveId = result.content
+            // console.warn(that.add_modify_params.brandId)
+            that.changeGoodShow = true
+            that.handle_toggle = 'add'
+          }
+        })
+      },
+      // 上传图片时获取本地地址
+      getObjectURL (file) {
+        let url = null
+        if (window.createObjectURL !== undefined) { // basic
+          url = window.createObjectURL(file)
+        } else if (window.URL !== undefined) { // mozilla(firefox)
+          url = window.URL.createObjectURL(file)
+        } else if (window.webkitURL !== undefined) { // webkit or chrome
+          url = window.webkitURL.createObjectURL(file)
+        }
+        return url
+      },
+      // 上传图片
+      upload_img () {
+        let target = event.target
+        let objUrl = this.getObjectURL(target.files[0])
+        let size = target.files[0].size
+        if (size >= 102400 * 10) this.show_tip('图片超过1M了哦')
+        else {
+          if (objUrl) {
+            // this.img_url = objUrl
+            this.imgshow = true
+            document.querySelector('#m11yhgl_img').src = objUrl
+            this.touxiang_change = true
+          }
+        }
+      },
+      // 新增/修改上传图片处理
+      add_modify_imgStep (callback) {
+        let that = this
+        if (!that.touxiang_change) {
+          callback()
+        } else {
+          let formData = new FormData()
+          formData.append('img', document.querySelector('#m11yhgl_img_input').files[0])
+          formData.append('token', sessionStorage.getItem('mToken'))
+          formData.append('imgGroup', 1)
+          that.$.ajax({
+            type: 'post',
+            url: that.localbase + 'm2c.support/img/upload',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+              result = JSON.parse(result)
+              // document.querySelector('#m11yhgl_img').src = that.img_url
+              if (result.errorMessage && result.errorMessage !== '') {
+                that.show_tip(result.errorMessage)
+                return
+              }
+              // console.log('上传图片成功,返回结果是: ', result)
+              that.add_modify_params_imgurl = result.content.url
+              // console.warn(that.add_modify_params_imgurl)
+              callback()
+            }
+          })
+        }
+      },
+  // 表格上点击修改
+      modify_td_click (row) {
+        let that = this
+        new Promise(function (resolve, reject) {
+          resolve()
+        }).then(function () {
+          let arr = {}
+          for (let [key, value] of Object.entries(row)) {
+            arr[key] = value
+          }
+          that.add_modify_params = arr
+          that.handle_toggle = 'modify_status'
+          that.imgshow = true
+          that.touxiang_change = false
+        })
+      },
+      // 修改保存
+      change_confirm () {
+        let that = this
+        // that.reset_add_modify_params_bind()
+        that.add_modify_imgStep(function () {
+          // console.log('结果', that.add_modify_params_imgurl)
+          that.$.ajax({
+            type: 'post',
+            url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/brand/approve' : that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.brandId,
+            // data: Object.assign({}, that.add_modify_params, that.touxiang_change ? {icon: that.add_modify_params_imgurl} : {}, {
+            data: Object.assign({
+              token: sessionStorage.getItem('mToken'),
+              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+              dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName
+            }, that.add_modify_params, that.touxiang_change ? {brandLogo: that.add_modify_params_imgurl} : {}),
+            success: function (result) {
+              that.get_comment_info()
+              that.changeGoodShow = false
+            }
+          })
+        })
+      },
+      // 删除确认
+      delete_confirm () {
+        let that = this
+        // that.reset_add_modify_params_bind()
+        that.$.ajax({
+          type: 'delete',
+          url: that.localbase + 'm2c.scm/brand/' + that.delete_params.brandId,
+          data: {
+            token: sessionStorage.getItem('mToken')
+          },
+          success: function (result) {
+            that.delectGood = false
+            that.get_comment_info()
+          }
+        })
+      },
+      // 表格上的按钮点击
+      td_click (toggle, row, index) {
+        let that = this
+        // 品牌库上操作
+        if (toggle === 'btnshow') {
+          // console.warn(row)
+          // let index = that.$('a.btnImg').index()
+          that.$('.btnBox').eq(index).toggle()
+          // console.log($(that).index().toggle())
+        } else if (toggle === 'modify') { // 表格上点击详情
+          that.$('.btnBox').hide()
+          that.goodInfoShow = true
+          that.$.ajax({
+            url: that.localbase + 'm2c.scm/brand/' + row.brandId,
+            success: function (result) {
+              that.goodInfo = result.content
+            }
+          })
+        } else if (toggle === 'delete') { // 表格上点击删除
+          that.$('.btnBox').hide()
+          that.delete_params = row
+          that.delectGood = true
+        } else if (toggle === 'modify_status') { // 表格上点击修改
+          that.$('.btnBox').hide()
+          that.changeGoodShow = true
+          // let row = this.$('#table').bootstrapTable('getSelections')[0]
+          that.$.ajax({
+            url: that.localbase + 'm2c.scm/brand/' + row.brandId,
+            success: function (result) {
+              that.add_modify_params = result.content
+              /* 初始化图片 */
+              document.querySelector('#m11yhgl_img').src = result.content.brandLogo ? result.content.brandLogo : ''
+            }
+          })
+          that.modify_td_click(that.add_modify_params)
+        } else if (toggle === 'btnshow1') {
+          // console.warn(row)
+          // let index = that.$('a.btnImg').index()
+          that.$('.btnBox1').eq(index).toggle()
+          // console.log($(that).index().toggle())
+        }
+      },
+      // 获取商品库列表
       get_comment_info () {
         let that = this
         this.$("[data-toggle='popover']").popover('hide')
         that.$('#table').bootstrapTable('destroy').bootstrapTable({
           cache: false,
-          url: that.base + 'm2c.pay/settle/bill/list',
+          url: that.localbase + 'm2c.scm/brand',
           queryParams: function (params) {
             return Object.assign({}, {
               token: sessionStorage.getItem('mToken'),
-              isEncry: false,
               rows: params.limit,                          // 每页多少条数据
-              pageNumber: params.offset / params.limit + 1    // 请求第几页
+              pageNum: params.offset / params.limit + 1    // 请求第几页
             }, that.search_params)
           },
           pagination: true,
@@ -92,47 +339,47 @@
             }
           },
           columns: [{
+            field: 'brandName',
             title: '品牌名称',
             align: 'center',
-            valign: 'middle',
-            formatter: function (x, y) {
-              let orderNo = y.orderNo
-              let l = orderNo.length
-              return `<span class="tooltip-test" data-container="body" data-toggle="popover" data-placement="right" data-content="${orderNo}">${orderNo.slice(l - 5, l)}</span>`
-            }
+            valign: 'middle'
           }, {
+            field: 'createTime',
             title: '申请时间',
             align: 'center',
-            valign: 'middle',
-            width: 100,
-            formatter: function (x, y) {
-              let d = new Date(y.settleTime)
-              return that.date_format(d, 'yyyy-MM-dd hh:mm:ss')
-            }
+            valign: 'middle'
           }, {
-            field: 'createdUserName',
             title: '操作',
             align: 'center',
             valign: 'middle',
-            formatter: function () {
-              return `<img :src='../../../assets/images/ico_more.png' width='17px' height='16px'>`
+            events: 'handle',
+            formatter: function (x, y) {
+              return `
+              <div class="btnWrap">
+                <a class="btnImg" btnshow=true handle=true></a>
+                <div class="btnBox">
+                  <a class="color_default" modify=true handle=true>详情</a><a class="color_green" modify_status=true handle=true>编辑</a><a class="color_red" delete=true handle=true>删除</a>
+                </div>
+              </div>
+              `
             }
           }]
         })
       },
-      get_comment_info1 () {
+      // 获取审核列表
+      get_comment_info1 (n) {
         let that = this
+        that.search_approve.approveStatus = n
         this.$("[data-toggle='popover']").popover('hide')
         that.$('#table1').bootstrapTable('destroy').bootstrapTable({
           cache: false,
-          url: that.base + 'm2c.pay/settle/bill/list',
+          url: that.localbase + 'm2c.scm/brand/approve',
           queryParams: function (params) {
             return Object.assign({}, {
               token: sessionStorage.getItem('mToken'),
-              isEncry: false,
               rows: params.limit,                          // 每页多少条数据
-              pageNumber: params.offset / params.limit + 1    // 请求第几页
-            }, that.search_params)
+              pageNum: params.offset / params.limit + 1    // 请求第几页
+            }, that.search_approve)
           },
           pagination: true,
           pageNumber: 1,
@@ -150,51 +397,42 @@
             }
           },
           columns: [{
-            title: '评论内容',
-            align: 'center',
-            valign: 'middle',
-            formatter: function (x, y) {
-              let orderNo = y.orderNo
-              let l = orderNo.length
-              return `<span class="tooltip-test" data-container="body" data-toggle="popover" data-placement="right" data-content="${orderNo}">${orderNo.slice(l - 5, l)}</span>`
-            }
-          },
-          {
-            title: '评价星级',
-            align: 'center',
-            valign: 'middle',
-            formatter: function (x, y) {
-              return (y.dealerPercent ? y.dealerPercent * 100 + '%' : 0) + ' : ' + (y.mediaPercent ? y.mediaPercent * 100 + '%' : 0) + ' : ' + (y.salerPercent ? y.salerPercent * 100 + '%' : 0) + ' : ' + (y.platformPercent ? y.platformPercent * 100 + '%' : 0)
-            }
-          }, {
-            field: 'dealerName',
-            title: '商品名称',
+            field: 'brandName',
+            title: '品牌名称',
             align: 'center',
             valign: 'middle'
           }, {
-            field: 'mediaName',
-            title: '订单号',
+            field: 'createTime',
+            title: '申请时间',
             align: 'center',
             valign: 'middle'
           }, {
-            field: 'salerName',
-            title: '顾客信息',
-            align: 'center',
-            valign: 'middle'
-          }, {
-            title: '评价时间',
+            title: '品牌状态',
             align: 'center',
             valign: 'middle',
-            width: 100,
             formatter: function (x, y) {
-              let d = new Date(y.settleTime)
-              return that.date_format(d, 'yyyy-MM-dd hh:mm:ss')
+              return y.approveStatus === 1 ? '审批中' : `
+              <div class="color_default">审批不通过
+                <i></i>
+                <p>` + y.rejectReason + `</p>
+              </div>
+              `
             }
           }, {
-            field: 'createdUserName',
             title: '操作',
             align: 'center',
-            valign: 'middle'
+            valign: 'middle',
+            events: 'handle',
+            formatter: function (x, y) {
+              return `
+              <div class="btnWrap">
+                <a class="btnImg" btnshow1=true handle=true></a>
+                <div class="btnBox1">
+                  <a class="color_default" modify=true handle=true>详情</a><a class="color_green" yes=true handle=true>同意</a><a class="color_red" no=true handle=true>拒绝</a>
+                </div>
+              </div>
+              `
+            }
           }]
         })
       },
@@ -203,8 +441,16 @@
       }
     },
     mounted () {
-      this.get_comment_info()
-      this.get_comment_info1()
+      let that = this
+      window.handle = {
+        'click [handle]': function (event, value, row, index) {
+          let target = event.target
+          let toggle = target.getAttribute('btnshow') ? 'btnshow' : target.getAttribute('modify') ? 'modify' : target.getAttribute('delete') ? 'delete' : target.getAttribute('modify_status') ? 'modify_status' : target.getAttribute('btnshow1') ? 'btnshow1' : ''
+          that.td_click(toggle, row, index)
+        }
+      }
+      that.get_comment_info()
+      that.get_comment_info1()
     }
   }
 </script>
@@ -224,6 +470,7 @@
       }
     }
     .tab-content{
+      position: relative;
       .tab-pane{
         .search_cell{
           display: inline-block;
@@ -266,6 +513,7 @@
           }
         }
       }
+
     }
     .dropdown{
       display: inline-block;
@@ -357,6 +605,7 @@
         .print_order {
           background: #18DCF6;
         }
+        
         //表格样式
         .comment_info{
           table {
@@ -371,6 +620,20 @@
           }
         }
     }
-    
 }
+/*详情*/
+#myTabContent{position:relative;}
+.goodInfo{position:absolute;top:0;left:0;width:100%;height:840px;padding-top:40px;background:#fff;z-index:99;}
+.goodInfo p,.goodInfo div,.goodInfo button{margin-left:40px;margin-top:20px;}
+.goodInfo div img{width:60px;height:60px; display:inline-block;}
+.goodInfo button{width:150px;height:50px;border:1px solid #ccc; text-align: center;}
+/*删除*/
+.delectGoodBg{position:absolute;top:0;left:0;width:100%;height:880px;background:rgba(0,0,0,0.6);z-index:99;}
+.delectGoodWrap{position:absolute;width:380px;height:280px;padding:10px;border-radius:10px;top:50%;left:50%;margin-left:-200px;background:#fff;z-index:99;}
+.delectGoodWrap p{line-height:50px;}
+.blueBtn,.defultBtn{background:rgb(96, 174, 246);width:80px;height:30px;border-radius:4px;text-align: center;color:#fff;}
+.defultBtn{background:#ccc;}
+/*修改/新增*/
+.changeGoodInfo input,.changeGoodInfo select{width:200px;line-height:40px;color:#666;}
+.glyphicon{width:40px;height:24px;z-index:11;}
 </style>

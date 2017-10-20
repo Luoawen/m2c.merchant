@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="search">
-      <input type="text" class="inp" value="输入商品名称 / 编码 / 条形码 / 品牌 "><i class="glyphicon glyphicon-search"></i>
+      <input type="text" class="inp" placeholder="输入商品名称 / 编码 / 条形码 / 品牌"><i class="glyphicon glyphicon-search"></i>
     </div>
     <span>高级搜索</span>
     <button type="button" class="btn btn-info pull-right operation">批量操作</button>

@@ -39,8 +39,8 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  .s,#show_tip{
+<style lang="scss">
+.m,.bi,.s,#show_tip{
   .btn_table{width:auto;padding:0 15px;color:white;border-radius:14px;margin-right:10px;border:none;height:30px;line-height:30px;text-align:center;}
   #toolbar{margin-left:30px;margin-top:15px;}
   .bootstrap-table{
@@ -68,4 +68,9 @@
 .xls{background-color:rgb(255,105,105)}
 .csv{background-color:rgb(48,235,149)}
 .txt{background-color:rgb(141,182,205)}
+.btnWrap{position:relative;width:16px;height:16px;left:50%;margin-left:-8px;}
+.btnWrap .btnImg{position:absolute;width:16px;height:16px;background:#18DCF6;display:inline-block;}
+.btnWrap .btnBox,.btnWrap .btnBox1{display:none;width:100px;height:auto;position:absolute;top:16px;border:1px solid #ccc;border-radius: 4px;background:#fff;z-index:2;}
+.btnBox a,.btnBox1 a{display:block;width:100%;height:40px;text-align:center;line-height:40px; float:left;}
+.btnBox a:hover,.btnBox1 a:hover{ text-decoration:none; background:#ccc;}
 </style>
