@@ -29,9 +29,9 @@
             <span class="caret"></span>
           </div>
           <ul class="dropdown-menu" aria-labelledby="dLabel1">
-            <li @click="get_comment_info()">全部<i class="glyphicon glyphicon-menu-right"></i></li>
-            <li @click="get_comment_info(1)">申请中<i class="glyphicon glyphicon-menu-right"></i></li>
-            <li @click="get_comment_info(2)">审核不通过<i class="glyphicon glyphicon-menu-right"></i></li>
+            <li @click="get_comment_info1()">全部<i class="glyphicon glyphicon-menu-right"></i></li>
+            <li @click="get_comment_info1(1)">申请中<i class="glyphicon glyphicon-menu-right"></i></li>
+            <li @click="get_comment_info1(2)">审核不通过<i class="glyphicon glyphicon-menu-right"></i></li>
           </ul>
         </div>
         <div class="search_cell">
@@ -57,16 +57,23 @@
         <div>品牌LOGO：
           <img :src="goodInfo.brandLogo"/>
         </div>
+        <p v-show="goodInfo.rejectReason!==''">拒绝原因：{{goodInfo.rejectReason}}</p>
         <button @click="goodInfoShow=!goodInfoShow">返回</button>
       </div>
       <!--删除-->
-      <div class="delectGoodBg" v-if="delectGood"></div>
-      <div class="delectGoodWrap" v-if="delectGood">
-        <div class="delectGoodCon">
+      <div class="delectGoodBg" v-if="delectGoodBg"></div>
+      <div class="delectGoodWrap" v-if="delectGoodBg">
+        <div class="delectGoodCon" v-if="delectGood">
           <p>是否删除品牌</p>
           <button class="blueBtn" @click="delete_confirm()">确定</button>
-          <button class="defultBtn" @click="delectGood=!delectGood">取消</button>
-          <a class="colseDelectBox" @click="delectGood=!delectGood"></a>
+          <button class="defultBtn" @click="delectGoodHide()">取消</button>
+          <a class="colseDelectBox" @click="delectGoodHide()"></a>
+        </div>
+        <div class="delectGoodCon" v-if="delectApprove">
+          <p>是否删除品牌审核</p>
+          <button class="blueBtn" @click="deleteApprove_confirm()">确定</button>
+          <button class="defultBtn" @click="delectApproveHide()">取消</button>
+          <a class="colseDelectBox" @click="delectApproveHide()"></a>
         </div>
       </div>
       <!--修改/新增-->
@@ -86,6 +93,7 @@
                 <span class="upload" onclick="document.querySelector('#m11yhgl_img_input').click()"><div style="color:#337ab7;cursor:pointer;display:inline;">点击上传(小于1M)</div></span>
         </div>
         <button @click="change_confirm()">保存</button>
+        <button v-show="" @click="approve_confirm()">提交审核</button>
         <button @click="changeGoodShow=!changeGoodShow">返回</button>
       </div>
     </div>
@@ -102,13 +110,16 @@
         is_Success2: false,
         btnShow: true,
         goodInfoShow: false, // 详情盒子
+        delectGoodBg: false, // 弹层背景
         delectGood: false, // 删除盒子
+        delectApprove: false, // 删除品牌审核
         changeGoodShow: false,
         // 搜索参数
         search_params: {condition: '', startTime: '', endTime: ''},
         search_approve: {condition: '', startTime: '', endTime: '', approveStatus: ''},
         goodInfo: [],
         delete_params: {brandId: ''},
+        deleteApprove_params: {approveId: ''},
         change_params: {brandId: ''},
         pinpais: [
           {name: '品牌一', value: '1'},
@@ -227,6 +238,8 @@
           that.handle_toggle = 'modify_status'
           that.imgshow = true
           that.touxiang_change = false
+          that.get_comment_info()
+          that.get_comment_info1()
         })
       },
       // 修改保存
@@ -251,6 +264,28 @@
           })
         })
       },
+      // 删除品牌审核弹层显示
+      deleteApprove () {
+        let that = this
+        that.delectApprove = true
+        that.delectGoodBg = true
+      },
+      // 删除品牌审核确认
+      deleteApprove_confirm () {
+        let that = this
+        // that.reset_add_modify_params_bind()
+        that.$.ajax({
+          type: 'delete',
+          url: that.localbase + 'm2c.scm/brand/approve/' + that.deleteApprove_params.approveId,
+          data: {
+            token: sessionStorage.getItem('mToken')
+          },
+          success: function (result) {
+            that.delectApproveHide()
+            that.get_comment_info1()
+          }
+        })
+      },
       // 删除确认
       delete_confirm () {
         let that = this
@@ -262,10 +297,28 @@
             token: sessionStorage.getItem('mToken')
           },
           success: function (result) {
-            that.delectGood = false
+            that.delectGoodHide()
             that.get_comment_info()
           }
         })
+      },
+      // 删除盒子显示
+      delectGoodShow () {
+        let that = this
+        that.delectGood = true
+        that.delectGoodBg = true
+      },
+      // 删除盒子隐藏
+      delectGoodHide () {
+        let that = this
+        that.delectGood = false
+        that.delectGoodBg = false
+      },
+      // 删除品牌审核盒子隐藏
+      delectApproveHide () {
+        let that = this
+        that.delectApprove = false
+        that.delectGoodBg = false
       },
       // 表格上的按钮点击
       td_click (toggle, row, index) {
@@ -288,7 +341,7 @@
         } else if (toggle === 'delete') { // 表格上点击删除
           that.$('.btnBox').hide()
           that.delete_params = row
-          that.delectGood = true
+          that.delectGoodShow()
         } else if (toggle === 'modify_status') { // 表格上点击修改
           that.$('.btnBox').hide()
           that.changeGoodShow = true
@@ -302,11 +355,39 @@
             }
           })
           that.modify_td_click(that.add_modify_params)
-        } else if (toggle === 'btnshow1') {
+        } else if (toggle === 'btnshow1') { // 品牌审核上的操作
           // console.warn(row)
           // let index = that.$('a.btnImg').index()
           that.$('.btnBox1').eq(index).toggle()
           // console.log($(that).index().toggle())
+        } else if (toggle === 'handleInfo') { // 表格上点击详情
+          that.$('.btnBox1').hide()
+          that.goodInfoShow = true
+          that.$.ajax({
+            url: that.localbase + 'm2c.scm/brand/approve/' + row.approveId,
+            success: function (result) {
+              that.goodInfo = result.content
+              console.warn(that.goodInfo)
+            }
+          })
+        } else if (toggle === 'deleteApprove') { // 表格上点击删除
+          that.$('.btnBox1').hide()
+          that.deleteApprove_params = row
+          console.warn(that.deleteApprove_params)
+          that.deleteApprove()
+        } else if (toggle === 'modifyApprove') { // 表格上点击修改
+          that.$('.btnBox1').hide()
+          that.changeGoodShow = true
+          // let row = this.$('#table').bootstrapTable('getSelections')[0]
+          that.$.ajax({
+            url: that.localbase + 'm2c.scm/brand/approve/' + row.approveId,
+            success: function (result) {
+              that.add_modify_params = result.content
+              /* 初始化图片 */
+              document.querySelector('#m11yhgl_img').src = result.content.brandLogo ? result.content.brandLogo : ''
+            }
+          })
+          that.modify_td_click(that.add_modify_params)
         }
       },
       // 获取商品库列表
@@ -319,6 +400,7 @@
           queryParams: function (params) {
             return Object.assign({}, {
               token: sessionStorage.getItem('mToken'),
+              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // 商户ID
               rows: params.limit,                          // 每页多少条数据
               pageNum: params.offset / params.limit + 1    // 请求第几页
             }, that.search_params)
@@ -377,6 +459,7 @@
           queryParams: function (params) {
             return Object.assign({}, {
               token: sessionStorage.getItem('mToken'),
+              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // 商户ID
               rows: params.limit,                          // 每页多少条数据
               pageNum: params.offset / params.limit + 1    // 请求第几页
             }, that.search_approve)
@@ -428,7 +511,7 @@
               <div class="btnWrap">
                 <a class="btnImg" btnshow1=true handle=true></a>
                 <div class="btnBox1">
-                  <a class="color_default" modify=true handle=true>详情</a><a class="color_green" yes=true handle=true>同意</a><a class="color_red" no=true handle=true>拒绝</a>
+                  <a class="color_default" handleInfo=true handle=true>详情</a><a class="color_green" modifyApprove=true handle=true>编辑</a><a class="color_red" deleteApprove=true handle=true>删除</a>
                 </div>
               </div>
               `
@@ -445,7 +528,7 @@
       window.handle = {
         'click [handle]': function (event, value, row, index) {
           let target = event.target
-          let toggle = target.getAttribute('btnshow') ? 'btnshow' : target.getAttribute('modify') ? 'modify' : target.getAttribute('delete') ? 'delete' : target.getAttribute('modify_status') ? 'modify_status' : target.getAttribute('btnshow1') ? 'btnshow1' : ''
+          let toggle = target.getAttribute('btnshow') ? 'btnshow' : target.getAttribute('modify') ? 'modify' : target.getAttribute('delete') ? 'delete' : target.getAttribute('modify_status') ? 'modify_status' : target.getAttribute('btnshow1') ? 'btnshow1' : target.getAttribute('handleInfo') ? 'handleInfo' : target.getAttribute('deleteApprove') ? 'deleteApprove' : target.getAttribute('modifyApprove') ? 'modifyApprove' : ''
           that.td_click(toggle, row, index)
         }
       }

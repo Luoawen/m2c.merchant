@@ -1,40 +1,43 @@
 <template>
   <div class="sz">
     <button type="button" class="btn btn-info pull-right add btn-lg" @click="goto()">新增</button>
-    <table class="table table-bordered">
-      <thead>
-        <tr class="active">
-          <th>模板名称</th>
-          <th>按重计费</th>
-          <th class="some">已有30个商品使用></th>
-          <th class="act">编辑</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="active">
-          <th scope="row">可配送至</th>
-          <td>首重/kg</td>
-          <td>运费/元</td>
-          <td>续重/kg</td>
-          <td>续重/元</td>
-        </tr>
-        <tr>
-          <th scope="row">全国（默认运费）</th>
-          <td>1</td>
-          <td>12</td>
-          <td>2</td>
-          <td>5</td>
-        </tr>
-        <tr>
-          <th scope="row">辽宁，吉林，黑龙江，广东（深圳、广州、珠海）</th>
-          <td>1</td>
-          <td>20</td>
-          <td>2</td>
-          <td>20</td>
-        </tr>
-      </tbody>
-    </table>
+    <template v-for="(formwork,index) in formworks">
+      <table class="table table-bordered">
+        <thead>
+          <tr class="active">
+            <th>模板名称</th>
+            <th>{{formwork.modelName}}</th>
+            <th class="some">已有{{formwork.goodsUserNum}}个商品使用 <router-link v-if="formwork.goodsUserNum!=0">&gt;</router-link></th>
+            <th class="act">编辑</th>
+            <th><a @click="addModify" v-if="formwork.goodsUserNum==0">删除</a></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="active">
+            <th scope="row">可配送至</th>
+            <td>首重/kg</td>
+            <td>运费/元</td>
+            <td>续重/kg</td>
+            <td>续重/元</td>
+          </tr>
+          <tr>
+            <th scope="row">全国（默认运费）</th>
+            <td>1</td>
+            <td>12</td>
+            <td>2</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <th scope="row">辽宁，吉林，黑龙江，广东（深圳、广州、珠海）</th>
+            <td>1</td>
+            <td>20</td>
+            <td>2</td>
+            <td>20</td>
+          </tr>
+        </tbody>
+      </table>
+    </template>
+    
     <table class="table table-bordered">
       <thead>
         <tr class="active">

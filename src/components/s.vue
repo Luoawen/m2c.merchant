@@ -158,25 +158,25 @@
         return
       }
       //  获取供应商信息
-      that.$.ajax({
-        url: that.base + 'm2c.goods/dealer/app/detail',
-        data: {
-          token: sessionStorage.getItem('mToken'),
-          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-          userId: JSON.parse(sessionStorage.getItem('mUser')).userId
-        },
-        success: function (data) {
-          console.log(data)
-          that.dealerName = data.content.dealerName
-          that.userName = data.content.userName
-          that.dealerMobile = data.content.dealerMobile
-          that.dealerProvince = data.content.dealerProvince
-          that.dealerCity = data.content.dealerCity
-          that.detailAddress = data.content.detailAddress
-          that.dealerArea = data.content.dealerArea
-          if (data.content.createdDate !== null) that.createdDate = that.date_format(new Date(data.content.createdDate), 'yyyy-MM-dd hh:mm:ss')
-        }
-      })
+      // that.$.ajax({
+      //   url: that.base + 'm2c.goods/dealer/app/detail',
+      //   data: {
+      //     token: sessionStorage.getItem('mToken'),
+      //     dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+      //     userId: JSON.parse(sessionStorage.getItem('mUser')).userId
+      //   },
+      //   success: function (data) {
+      //     console.log(data)
+      //     that.dealerName = data.content.dealerName
+      //     that.userName = data.content.userName
+      //     that.dealerMobile = data.content.dealerMobile
+      //     that.dealerProvince = data.content.dealerProvince
+      //     that.dealerCity = data.content.dealerCity
+      //     that.detailAddress = data.content.detailAddress
+      //     that.dealerArea = data.content.dealerArea
+      //     if (data.content.createdDate !== null) that.createdDate = that.date_format(new Date(data.content.createdDate), 'yyyy-MM-dd hh:mm:ss')
+      //   }
+      // })
       window.onbeforeunload = function () {
         sessionStorage.setItem('active_path', that.$('.right_nav_content').text())
       }
