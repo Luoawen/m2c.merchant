@@ -4,15 +4,15 @@
       <div class="form-group">
         <label class="col-sm-2 control-label">*运费模板名称：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="inputEmail3" placeholder="1-20字符" >
+          <input type="text" class="form-control" placeholder="1-20字符" v-model="formwork.modelName" >
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">*计费方式：</label>
         <div class="col-sm-3">
-          <form action="" method="get">
-            <label><input name="tem" type="radio" value="" checked/>按重量</label>
-            <label><input name="tem" type="radio" value="" />按件数</label>
+          <form>
+            <input name="tem" type="radio" value='0' v-model="formwork.chargeType" id="tem" checked="checked" /><label for="tem">0</label>
+            <input name="tem" type="radio" value='1' v-model="formwork.chargeType" id="tem1" /><label for="tem1">1</label>
           </form>
         </div>
       </div>
@@ -127,7 +127,8 @@
 export default {
   data () {
     return {
-      type: 'normal'
+      type: 'normal',
+      formwork: []
     }
   },
   created () {
