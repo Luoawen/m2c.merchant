@@ -145,7 +145,7 @@ export default {
         }
       })
     },
-    // 修改店铺信息
+    // 修改店铺信息1
     modifyDealerMess (callback) {
       let that = this
       that.modify_imgStep(function () {
