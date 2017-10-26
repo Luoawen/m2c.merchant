@@ -57,7 +57,12 @@
                   <!--地区选择-->
                     <div class="cityBox">
                       <h4>选择地区<a class="close" @click="cityBoxHide">X</a></h4>
-                      <div class="test-div"></div>
+                      <div class="test-div" v-for="(item,index) in datas">
+                        <div class="bigArea">
+                          
+                          {{item.name}}
+                        </div>
+                      </div>
                     </div>
                   </td>
                   <td>
@@ -178,75 +183,9 @@ export default {
       formwork: {chargeType: 0, postageModelRules: [{firstWeight: '', firstPiece: '', firstPostage: '', continuedWeight: '', continuedPiece: '', continuedPostage: ''}]},
       addRows: [],
       addModify: 'add',
-      chargeType: 0
-      // IdArr: [102,201001,202002,203003,2021,2022],
-      // datas:[{
-      //       id: 1,
-      //       name: "华北北京",
-      //       children:[{
-      //           id: 101,
-      //           name: "北京"
-      //       },{
-      //           id: 102,
-      //           name: "天津"
-      //       },{
-      //           id: 103,
-      //           name: "河北",
-      //           children:[{
-      //               id: 103001,
-      //               name:"石家庄"
-      //           },{
-      //               id: 103002,
-      //               name:"保定"
-      //           },{
-      //               id: 103003,
-      //               name:"承德"
-      //           }]
-      //       }]
-      //   },{
-      //       id: 2,
-      //       name: "华中",
-      //       children:[{
-      //           id: 201,
-      //           name: "河南",
-      //           children:[{
-      //               id: 201001,
-      //               name:"郑州市"
-      //           },{
-      //               id: 202002,
-      //               name:"南阳市"
-      //           },{
-      //               id: 203003,
-      //               name:"洛阳市"
-      //           }]
-      //       },{
-      //           id: 202,
-      //           name: "湖北",
-      //           children:[{
-      //               id: 2021,
-      //               name:"武汉市"
-      //           },{
-      //               id: 2022,
-      //               name:"黄石市"
-      //           },{
-      //               id: 2023,
-      //               name:"十堰市"
-      //           }]
-      //       },{
-      //           id:203,
-      //           name: "湖南",
-      //           children:[{
-      //               id:2031,
-      //               name:"长沙市"
-      //           },{
-      //               id:2032,
-      //               name:"株洲市"
-      //           },{
-      //               id:2033,
-      //               name:"衡阳市"
-      //           }]
-      //       }]
-      //   }]
+      chargeType: 0,
+      IdArr: [],
+      datas:[]
     }
   },
   created () {
@@ -274,6 +213,13 @@ export default {
   },
   mounted () {
     let that = this
+    that.$.ajax({
+      type: 'get',
+      url: that.localbase + 'm2c.operate/address/getinner.web',
+      success: function (result) {
+        that.datas = result.content.subs
+      }
+    })
     console.warn(that.$route.query.addModify)
     if (that.$route.query.addModify === 'true') {
       that.addModify = 'add'
