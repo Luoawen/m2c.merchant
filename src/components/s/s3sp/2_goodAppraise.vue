@@ -55,13 +55,13 @@
         this.$("[data-toggle='popover']").popover('hide')
         that.$('#table').bootstrapTable('destroy').bootstrapTable({
           cache: false,
-          url: that.base + 'm2c.pay/settle/bill/list',
+          url: that.base + 'm2c.scm/goods/comment',
           queryParams: function (params) {
             return Object.assign({}, {
               token: sessionStorage.getItem('mToken'),
-              isEncry: false,
+              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // 商户ID
               rows: params.limit,                          // 每页多少条数据
-              pageNumber: params.offset / params.limit + 1    // 请求第几页
+              pageNum: params.offset / params.limit + 1    // 请求第几页
             }, that.search_params)
           },
           pagination: true,
@@ -80,51 +80,60 @@
             }
           },
           columns: [{
+//            field: 'commentContent',
             title: '评论内容',
             align: 'center',
             valign: 'middle',
             formatter: function (x, y) {
-              let orderNo = y.orderNo
-              let l = orderNo.length
-              return `<span class="tooltip-test" data-container="body" data-toggle="popover" data-placement="right" data-content="${orderNo}">${orderNo.slice(l - 5, l)}</span>`
+              var str = ''
+              for (var i = 0 ; i < y.commentImages.length; i++) {
+                  str = `<img src="` + y.commentImages[i] + `" width="50px;" height="50px;">` + str
+              }
+              return  y.commentContent + '<br/>' + str
             }
           },
           {
+            field: 'starLevel',
             title: '评价星级',
-            align: 'center',
-            valign: 'middle',
-            formatter: function (x, y) {
-              return (y.dealerPercent ? y.dealerPercent * 100 + '%' : 0) + ' : ' + (y.mediaPercent ? y.mediaPercent * 100 + '%' : 0) + ' : ' + (y.salerPercent ? y.salerPercent * 100 + '%' : 0) + ' : ' + (y.platformPercent ? y.platformPercent * 100 + '%' : 0)
-            }
-          }, {
-            field: 'dealerName',
-            title: '商品名称',
             align: 'center',
             valign: 'middle'
           }, {
-            field: 'mediaName',
+            field: 'goodsName',
+            title: '商品名称',
+            align: 'center',
+            valign: 'middle',
+              formatter: function (x, y) {
+                 return y.goodsName + '<br/>' + '规格：' + y.skuName
+              }
+          }, {
+            field: 'orderId',
             title: '订单号',
             align: 'center',
             valign: 'middle'
           }, {
-            field: 'salerName',
+            field: 'buyerName',
             title: '顾客信息',
             align: 'center',
-            valign: 'middle'
+            valign: 'middle',
+              formatter: function (x, y) {
+                return y.buyerName + '<br/>' + y.buyerPhoneNumber
+              }
           }, {
+            field: 'commentTime',
             title: '评价时间',
             align: 'center',
             valign: 'middle',
-            width: 100,
-            formatter: function (x, y) {
-              let d = new Date(y.settleTime)
-              return that.date_format(d, 'yyyy-MM-dd hh:mm:ss')
-            }
+            width: 100
           }, {
             field: 'createdUserName',
             title: '操作',
             align: 'center',
-            valign: 'middle'
+            valign: 'middle',
+              formatter: function (x, y) {
+                return `
+                  <a class="color_default" replyComment=true handle=true>回评</a>
+              `
+              }
           }]
         })
       },
@@ -133,6 +142,14 @@
       }
     },
     mounted () {
+      let that = this
+      window.handle = {
+        'click [handle]': function (event, value, row, index) {
+          let target = event.target
+          let toggle = target.getAttribute('replyComment') ? 'replyComment' : ''
+          that.td_click(toggle, row, index)
+        }
+      }
       this.get_comment_info()
     }
   }
