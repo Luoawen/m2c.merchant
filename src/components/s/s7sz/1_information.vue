@@ -59,7 +59,7 @@ export default {
       modify_params_imgurl: '',
       // 上传头像标识
       touxiang_change: false,
-      storeinformation: {appellation: '', introduce: '', service: '', imgUrl: ''}
+      storeinformation: {appellation: '', introduce: '', service: '', imgUrl: '', shopId: ''}
     }
   },
   created () {
@@ -130,7 +130,7 @@ export default {
       const that = this
       that.$.ajax({
         type: 'get',
-        url: this.mobanbase + 'm2c.scm/dealer/sys/shopInfo',
+        url: this.localbase + 'm2c.scm/shop/sys/shopInfo',
         data: {
           dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
         },
@@ -141,6 +141,7 @@ export default {
           that.storeinformation.introduce = res.content.shopIntroduce
           that.storeinformation.service = res.content.customerServiceTel
           that.storeinformation.imgUrl = res.content.shopIcon
+          that.storeinformation.shopId = res.content.shopId
         }
       })
     },
@@ -150,9 +151,10 @@ export default {
       that.modify_imgStep(function () {
         that.$.ajax({
           type: 'put',
-          url: that.mobanbase + 'm2c.scm/dealer/sys/shopInfo',
+          url: that.localbase + 'm2c.scm/shop/sys/shopInfo',
           data: {
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            shopId: that.storeinformation.shopId,
             shopName: that.storeinformation.appellation,
             shopIntroduce: that.storeinformation.introduce,
             customerServiceTel: that.storeinformation.service,
