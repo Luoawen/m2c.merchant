@@ -15,7 +15,8 @@ import 'bootstrap-table'
 import 'tableexport'
 import './assets/css/bootstrap3.0.min.css'
 import './assets/css/manage.css'
-
+// import 'addressCheckbox/js/RegionalChoice.js'
+// import 'addressCheckbox/css.css'
 // 导入ueditor相关
 // import '../static/UE/ueditor.config.js'
 // import '../static/UE/ueditor.all.js'
@@ -93,7 +94,7 @@ Vue.config.productionTip = false
     } else if (href.includes('m2c2017test')) { // 测试环境
       Vue.prototype.base = 'http://api.m2c2017test.com:80/'
       Vue.prototype.localbase = 'http://api.m2c2017test.com:80/'
-    } else if (href.includes('10.0.40.35')) { // 本地环境
+    } else if (href.includes('localhost')) { // 本地环境
       Vue.prototype.base = 'http://api.m2c2017local.com:80/'
       Vue.prototype.bases = 'http://api.m2c2017local.com/'
       Vue.prototype.localbase = 'http://api.m2c2017local.com:80/'
