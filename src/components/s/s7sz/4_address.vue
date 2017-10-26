@@ -259,7 +259,7 @@ export default {
       const that = this
       that.$.ajax({
         type: 'get',
-        url: this.mobanbase + 'm2c.scm/after/sale/address/id',
+        url: this.localbase + 'm2c.scm/after/sale/address/id',
         success: function (res) {
           console.log('获取的id', res)
           that.addressId = res.content
@@ -271,7 +271,7 @@ export default {
       const that = this
       that.$.ajax({
         type: 'get',
-        url: this.mobanbase + 'm2c.scm/after/sale/address',
+        url: this.localbase + 'm2c.scm/after/sale/address',
         data: {
           dealerId: that.dealerId
         },
@@ -357,7 +357,7 @@ export default {
       }
       that.$.ajax({
         type: 'post',
-        url: this.mobanbase + 'm2c.scm/after/sale/address',
+        url: this.localbase + 'm2c.scm/after/sale/address',
         data: {
           dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
           addressId: that.addressId,
@@ -383,7 +383,7 @@ export default {
       console.log('修改拿到的', that.search_params.province)
       that.$.ajax({
         type: 'get',
-        url: this.mobanbase + 'm2c.scm/after/sale/address',
+        url: this.localbase + 'm2c.scm/after/sale/address',
         data: {
           dealerId: that.dealerId
         },
@@ -393,7 +393,7 @@ export default {
       })
       that.$.ajax({
         type: 'put',
-        url: this.mobanbase + 'm2c.scm/after/sale/address',
+        url: this.localbase + 'm2c.scm/after/sale/address',
         data: {
           dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
           addressId: that.addressId,
