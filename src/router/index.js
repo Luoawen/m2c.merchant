@@ -9,6 +9,7 @@ const home = r => require.ensure([], () => r(require('@/components/s/s1sy/home')
 // s2右侧内容
 const bug = r => require.ensure([], () => r(require('@/components/s/s2dd/1_bug')), 's')
 const afterSale = r => require.ensure([], () => r(require('@/components/s/s2dd/2_afterSale')), 's')
+const details = r => require.ensure([], () => r(require('@/components/s/s2dd/3_details')), 's')
 // s3右侧内容
 const goodList = r => require.ensure([], () => r(require('@/components/s/s3sp/1_goodList')), 's')
 const goodAppraise = r => require.ensure([], () => r(require('@/components/s/s3sp/2_goodAppraise')), 's')
@@ -60,6 +61,11 @@ export default new Router({
           path: 'afterSale',
           name: 'afterSale',
           component: afterSale
+        },
+        {
+          path: 'details',
+          name: 'details',
+          component: details
         },
         {
           path: 'goodList',
@@ -130,4 +136,3 @@ export default new Router({
     }
   ]
 })
-
