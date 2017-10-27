@@ -33,10 +33,95 @@
       <input type="text" class="inp" value="输入商品名称 / 编码 / 条形码 / 品牌 "><i class="glyphicon glyphicon-search"></i>
     </div>
     <span>高级搜索</span>
-    <div class="comment_info">
-      <table id="table" style="table-layout:fixed"></table>
+    <div class="comment_info clear" style="background:#fff;">
+      <table class="comment_table" id="table" style="table-layout:fixed">
+        <thead>
+          <tr>
+            <td class="a1">评论内容</td>
+            <td class="a2">评价星级</td>
+            <td class="a3">商品信息</td>
+            <td class="a4">订单号</td>
+            <td class="a5">顾客信息</td>
+            <td class="a6">评价时间</td>
+            <td class="a7">操作</td>
+          </tr>
+        </thead>
+        <tbody v-for="comment in datacomment">
+          <tr>
+            <td class="a1">
+              <div>{{comment.commentContent}}</div>
+              <div class="mt10" v-for="img in comment.commentImages">
+                <img class="conimg mr10 fl" :src="img" />
+              </div>
+            </td>
+            <td class="a2">
+              <span>{{comment.starLevel}}</span>星
+            </td>
+            <td class="a3">
+              <div class="tdtit">{{comment.goodsName}}</div>
+              <div class="tdcolor mt10">{{comment.skuName}}</div>
+            </td>
+            <td class="a4">
+              {{comment.orderId}}
+            </td>
+            <td class="a5">
+              <div>{{comment.buyerName}}</div>
+              <div>{{comment.buyerPhoneNumber}}</div>
+            </td>
+            <td class="a6">
+              <div>{{comment.commentTime}}</div>
+            </td>
+            <td class="a7">
+              <div @click="showtchp">
+              <i class="icon_hp"></i>
+              <span>回评</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="7">
+              <div class="tdhf">
+                <div class="nr">回复内容</div>
+                <div class="tit"></div>
+                <div class="time"></div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="page fr">
+        <span class="mr10">
+        共<span></span>条，每页<input class="form-control wid50" />条
+        <input class="form-control wid50" /><span>/<span></span>页</span>
+        </span>
+        <span class="fr mt5">
+        <span class="tdpade bg1 ml20 "></span>
+        <span class="tdpade bg2 ml20"></span>
+        <span class="tdpade bg3 ml20"></span>
+        <span class="tdpade bg4 ml20"></span>
+        </span>
+      </div>
+    </div>
+      <!-- 回评弹出框 hptc-->
+    <div class="hptczp" v-show="showhptc===true"  style="">
+
+    </div>
+    <div class="hptczp_content"  v-show="showhptc===true">
+        <div class="hptczp_header">
+          <span>回评内容</span>
+          <span class="fr" @click="showhptc=false">X</span>
+        </div>
+        <div class="hptczp_body">
+            <textarea placeholder="请填写" ></textarea>
+        </div>
+        <div class="hptczp_footer">
+          <button type="button" class="btn save">确认</button>
+          <button type="button" class="btn cancel" @click="showhptc=false" >取消</button>
+        </div>
     </div>
   </div>
+
+
 </template>
 <script>
   export default {
@@ -45,98 +130,126 @@
       return {
         is_Success: false,
         // 搜索参数
-        search_params: {orderNo: '', settleBillId: '', dealerKey: '', mediaKey: '', salerKey: '', startTime: '', endTime: ''}
+        search_params: {orderNo: '', settleBillId: '', dealerKey: '', mediaKey: '', salerKey: '', startTime: '', endTime: ''},
+        datacomment: '',
+        showhptc: false
       }
     },
     methods: {
       // 获取结算单列表
-      get_comment_info () {
-        let that = this
-        this.$("[data-toggle='popover']").popover('hide')
-        that.$('#table').bootstrapTable('destroy').bootstrapTable({
-          cache: false,
+       get_comment_info () {
+         let that = this
+         that.$.ajax({
           url: that.base + 'm2c.scm/goods/comment',
-          queryParams: function (params) {
-            return Object.assign({}, {
-              token: sessionStorage.getItem('mToken'),
-              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // 商户ID
-              rows: params.limit,                          // 每页多少条数据
-              pageNum: params.offset / params.limit + 1    // 请求第几页
-            }, that.search_params)
-          },
+          cache: false,
           pagination: true,
-          pageNumber: 1,
-          pageSize: 10,
-          pageList: [5, 10, 20, 100, 200, 500],
-          striped: true,
-          queryParamsType: 'limit',
-          sidePagination: 'server',
-          contentType: 'application/x-www-form-urlencoded',
-          responseHandler: function (result) {
-            // console.log('结算单列表:', result)
-            return {
-              total: result.totalCount,    // 总页数
-              rows: result.content         // 数据
-            }
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // 商户ID
+            rows:5,                          // 每页多少条数据
+            pageNum: 1    // 请求第几页
           },
-          columns: [{
-//            field: 'commentContent',
-            title: '评论内容',
-            align: 'center',
-            valign: 'middle',
-            formatter: function (x, y) {
-              var str = ''
-              for (var i = 0 ; i < y.commentImages.length; i++) {
-                  str = `<img src="` + y.commentImages[i] + `" width="50px;" height="50px;">` + str
-              }
-              return  y.commentContent + '<br/>' + str
+          success: function (result) {
+            if(result.status === 200){
+              console.log(result)
+              that.datacomment = result.content
             }
-          },
-          {
-            field: 'starLevel',
-            title: '评价星级',
-            align: 'center',
-            valign: 'middle'
-          }, {
-            field: 'goodsName',
-            title: '商品名称',
-            align: 'center',
-            valign: 'middle',
-              formatter: function (x, y) {
-                 return y.goodsName + '<br/>' + '规格：' + y.skuName
-              }
-          }, {
-            field: 'orderId',
-            title: '订单号',
-            align: 'center',
-            valign: 'middle'
-          }, {
-            field: 'buyerName',
-            title: '顾客信息',
-            align: 'center',
-            valign: 'middle',
-              formatter: function (x, y) {
-                return y.buyerName + '<br/>' + y.buyerPhoneNumber
-              }
-          }, {
-            field: 'commentTime',
-            title: '评价时间',
-            align: 'center',
-            valign: 'middle',
-            width: 100
-          }, {
-            field: 'createdUserName',
-            title: '操作',
-            align: 'center',
-            valign: 'middle',
-              formatter: function (x, y) {
-                return `
-                  <a class="color_default" replyComment=true handle=true>回评</a>
-              `
-              }
-          }]
+          }
         })
       },
+      showtchp () {
+          var that = this
+          // that.$('#hptc').modal('show')
+          that.showhptc = true
+
+      },
+//       get_comment_info () {
+//         let that = this
+//         this.$("[data-toggle='popover']").popover('hide')
+//         that.$('#table').bootstrapTable('destroy').bootstrapTable({
+//           cache: false,
+//           url: that.base + 'm2c.scm/goods/comment',
+//           queryParams: function (params) {
+//             return Object.assign({}, {
+//               token: sessionStorage.getItem('mToken'),
+//               dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // 商户ID
+//               rows: params.limit,                          // 每页多少条数据
+//               pageNum: params.offset / params.limit + 1    // 请求第几页
+//             }, that.search_params)
+//           },
+//           pagination: true,
+//           pageNumber: 1,
+//           pageSize: 10,
+//           pageList: [5, 10, 20, 100, 200, 500],
+//           striped: true,
+//           queryParamsType: 'limit',
+//           sidePagination: 'server',
+//           contentType: 'application/x-www-form-urlencoded',
+//           responseHandler: function (result) {
+//             // console.log('结算单列表:', result)
+//             return {
+//               total: result.totalCount,    // 总页数
+//               rows: result.content         // 数据
+//             }
+//           },
+//           columns: [{
+// //            field: 'commentContent',
+//             title: '评论内容',
+//             align: 'center',
+//             valign: 'middle',
+//             formatter: function (x, y) {
+//               var str = ''
+//               for (var i = 0 ; i < y.commentImages.length; i++) {
+//                   str = `<img src="` + y.commentImages[i] + `" width="50px;" height="50px;">` + str
+//               }
+//               return  y.commentContent + '<br/>' + str
+//             }
+//           },
+//           {
+//             field: 'starLevel',
+//             title: '评价星级',
+//             align: 'center',
+//             valign: 'middle'
+//           }, {
+//             field: 'goodsName',
+//             title: '商品名称',
+//             align: 'center',
+//             valign: 'middle',
+//               formatter: function (x, y) {
+//                  return y.goodsName + '<br/>' + '规格：' + y.skuName
+//               }
+//           }, {
+//             field: 'orderId',
+//             title: '订单号',
+//             align: 'center',
+//             valign: 'middle'
+//           }, {
+//             field: 'buyerName',
+//             title: '顾客信息',
+//             align: 'center',
+//             valign: 'middle',
+//               formatter: function (x, y) {
+//                 return y.buyerName + '<br/>' + y.buyerPhoneNumber
+//               }
+//           }, {
+//             field: 'commentTime',
+//             title: '评价时间',
+//             align: 'center',
+//             valign: 'middle',
+//             width: 100
+//           }, {
+//             field: 'createdUserName',
+//             title: '操作',
+//             align: 'center',
+//             valign: 'middle',
+//               formatter: function (x, y) {
+//                 return `
+//                   <a class="color_default" replyComment=true handle=true>回评</a>
+//               `
+//               }
+//           }]
+//         })
+//       },
       timeBox () {
         this.is_Success = true
       }
@@ -155,6 +268,218 @@
   }
 </script>
 <style lang="scss" scoped>
+/*公用样式*/
+.clear{
+  clear: both;
+  overflow: hidden;
+}
+.mt5{
+  margin-top: 5px;
+}
+.wid50{
+  width: 50px;
+  display: inline-block;
+}
+.mt10{
+  margin-top: 10px;
+}
+.mr10{
+  margin-right: 10px;
+}
+.mr{margin-right: 20px;}
+.fl{
+  float: left;
+}
+.fr{
+  float: right;
+}
+.hptczp{
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  background: #000;
+  z-index: 999;
+  opacity: 0.5;
+
+}
+.hptczp_content{
+  width: 400px;
+  height: 280px;
+  background: #fff;
+  z-index: 9999;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -200px;
+  margin-top: 140px;
+  background: #FFFFFF;
+  border-radius: 4px;
+  .hptczp_header{
+    width:100%;
+    height: 50px;
+    background: #DFE9F6;
+    padding-left: 20px;
+    padding-right: 20px;
+    span{
+      display: inline-block;
+      line-height: 50px;
+    }
+  }
+  .hptczp_body{
+    padding-left: 20px;
+    padding-right: 20px;
+    background: #FFFFFF;
+    margin-top: 10px;
+    textarea{
+      width: 100%;
+      height: 100%;
+      border: 1px solid #E5E5E5;
+      width: 360px;
+      height: 140px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  }
+  .hptczp_footer{
+      height: 80px;
+      padding-top: 10px;
+      padding-left: 50%;
+      .btn {
+        width: 80px;
+        height: 30px;
+        border: none;
+        border-radius: 2px;
+        color: #fff;
+      }
+      .save {
+        margin-left: -110px;
+        background: #0086FF;
+      }
+      .cancel {
+        margin-left: 40px;
+        background: #FFF;
+        border: 1px solid #CCCCCC;
+        color: #444;
+      }
+
+  }
+}
+.comment_table{
+  width: 1160px;
+  border: 1px solid #DFE9F6;
+  .a1{width: 344px;}
+  .a2{width: 155px;}
+  .a3{width: 205px;}
+  .a4{width: 145px;}
+  .a5{width: 145px;}
+  .a6{width: 145px;}
+  .a7{width: 145px;}
+  thead{
+    tr{
+      min-height: 40px;
+      line-height: 40px;
+      background: #DFE9F6;
+      td{
+        padding-left: 20px;
+      }
+    }
+  }
+    tbody{
+      background: #fff;
+      border-bottom:1px solid #DFE9F6;
+      tr{
+        td{
+          padding-left: 20px;
+          padding-top: 10px;
+          padding-bottom: 10px;
+          padding-right: 20px;
+          background: #fff;
+          min-height: 80px;
+        }
+        .td_img{
+          width: 50px;
+          height: 50px;
+          img{
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .conimg{
+          width: 50px;
+          height: 50px;
+        }
+        .tdcolor{
+          color: #999999;
+        }
+        .tdtit{
+          width: 180px;
+          height: 40px;
+        }
+        .tdhf{
+          /*width: 1120px;*/
+          min-height: 100px;
+          background: #F4F5FA;
+          border-radius: 4px;
+          padding-left: 20px;
+          padding-right: 20px;
+          line-height: 30px;
+          .nr{
+            font-family: PingFangSC-Regular;
+            font-size: 14px;
+            color: #0086FF;
+          }
+          .tit{
+            ont-family: PingFangSC-Regular;
+            font-size: 14px;
+            color: #333333;
+          }
+          .time{
+            font-family: PingFangSC-Regular;
+            font-size: 12px;
+            color: #999999;
+          }
+
+        }
+        .icon_hp{
+          width: 16px;
+          height: 17px;
+          display: inline-block;
+          margin-right: 10px;
+          background: url(../../../assets/images/ico_compile_thick.png) no-repeat center;
+        }
+      }
+    }
+}
+.page{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  line-height: 40px;
+  margin-right: 20px;
+  .tdpade{
+    width: 31px;
+    height: 31px;
+    display: inline-block;
+    background: url(../../../assets/images/ico_latter_disabled.png) no-repeat center;
+  }
+  .bg1{
+      background: url(../../../assets/images/ico_latter_disabled.png) no-repeat center;
+  }
+  .bg2{
+      background: url(../../../assets/images/ico_headmost_disabled.png) no-repeat center;
+  }
+  .bg3{
+      background: url(../../../assets/images/ico_front_default.png) no-repeat center;
+  }
+  .bg4{
+      background: url(../../../assets/images/ico_finally_hover.png) no-repeat center;
+  }
+
+}
 .sp{
     width: 1583px;
     height: 84px;
@@ -288,7 +613,7 @@
         .print_order {
           background: #18DCF6;
         }
-        //表格样式
+        /*//表格样式*/
         table {
           td {
             overflow: hidden;
@@ -297,5 +622,9 @@
           }
         }
     }
+}
+.modal-open{
+  #add_modify,#modify_status,#bind_img,#delete{display:flex}
+  #add_modify.in,#modify_status.in,#bind_img.in,#hptc.in{z-index:2000}
 }
 </style>
