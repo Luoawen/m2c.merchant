@@ -5,9 +5,11 @@
         <span class="caret"></span>
       </div>
       <ul class="dropdown-menu" aria-labelledby="dLabel1">
-        <li>全部<i class="glyphicon glyphicon-menu-right"></i></li>
-        <li>已回复<i class="glyphicon glyphicon-menu-right"></i></li>
-        <li>未回复<i class="glyphicon glyphicon-menu-right"></i></li>
+        <li @click="replyStatus()">全部<i class="glyphicon glyphicon-menu-right"></i></li>
+        <li v-for="(cell,index) in replyStatuses" @click="replyStatus(cell.replyStatus)">
+          {{cell.replyStatus==2?"已回复":cell.replyStatus==1?"未回复":"全部"}}
+          <i class="glyphicon glyphicon-menu-right"></i>
+        </li>
       </ul>
     </div>
     <div class="dropdown">
@@ -15,24 +17,23 @@
         <span class="caret"></span>
       </div>
       <ul class="dropdown-menu" aria-labelledby="dLabel2">
-        <li>全部<i class="glyphicon glyphicon-menu-right"></i></li>
-        <li>5星<i class="glyphicon glyphicon-menu-right"></i></li>
-        <li>4星<i class="glyphicon glyphicon-menu-right"></i></li>
-        <li>3星<i class="glyphicon glyphicon-menu-right"></i></li>
-        <li>2星<i class="glyphicon glyphicon-menu-right"></i></li>
-        <li>1星<i class="glyphicon glyphicon-menu-right"></i></li>
+        <li @click="level()">全部<i class="glyphicon glyphicon-menu-right"></i></li>
+        <li v-for="(cell,index) in leveles" @click="level(cell.level)">
+          {{cell.level==5?"5星":cell.level==4?"4星":cell.level==3?"3星":cell.level==2?"2星":cell.level==1?"1星":"全部"}}
+          <i class="glyphicon glyphicon-menu-right"></i>
+        </li>
       </ul>
     </div>
     <div class="search_cell">
-        <span>注册时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span>
+        <span>评论时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span>
         <div class="time" v-show="is_Success">
           <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
         </div>
     </div>
     <div class="search">
-      <input type="text" class="inp" value="输入商品名称 / 编码 / 条形码 / 品牌 "><i class="glyphicon glyphicon-search"></i>
+      <input type="text" class="inp" placeholder="输入商品名称 / 订单号 / 顾客姓名/ 顾客手机号 / 商家名称 / 商家ID" v-model="search_params.condition"><i class="glyphicon glyphicon-search" @click="get_comment_info"></i>
     </div>
-    <span>高级搜索</span>
+    <span >高级搜索</span>
     <div class="comment_info clear" style="background:#fff;">
       <table class="comment_table" id="table" style="table-layout:fixed">
         <thead>
@@ -71,17 +72,21 @@
             <td class="a6">
               <div>{{comment.commentTime}}</div>
             </td>
-            <td class="a7">
-              <div @click="showtchp">
+            <td class="a7" v-if='!comment.replyCommentContent '>
+              <div @click="showtchp(comment.commentId)">
               <i class="icon_hp"></i>
               <span>回评</span>
               </div>
             </td>
           </tr>
-          <tr>
+          <tr v-if='comment.replyCommentContent '>
             <td colspan="7">
               <div class="tdhf">
-                <div class="nr">回复内容</div>
+                <div class="nr">
+                  回复内容: <br>
+                  {{comment.replyCommentContent}} <br>
+                  {{comment.replyTime}}回复
+                </div>
                 <div class="tit"></div>
                 <div class="time"></div>
               </div>
@@ -112,10 +117,10 @@
           <span class="fr" @click="showhptc=false">X</span>
         </div>
         <div class="hptczp_body">
-            <textarea placeholder="请填写" ></textarea>
+            <textarea placeholder="请填写" v-model="reply_params.replyContent"></textarea>
         </div>
         <div class="hptczp_footer">
-          <button type="button" class="btn save">确认</button>
+          <button type="button" class="btn save" @click="reply()" >确认</button>
           <button type="button" class="btn cancel" @click="showhptc=false" >取消</button>
         </div>
     </div>
@@ -130,126 +135,81 @@
       return {
         is_Success: false,
         // 搜索参数
-        search_params: {orderNo: '', settleBillId: '', dealerKey: '', mediaKey: '', salerKey: '', startTime: '', endTime: ''},
+        search_params: {condition: '', replyStatus: '', starLevel: '', startTime: '', endTime: ''},
+        reply_params: {commentId: '', replyContent: ''},
+        replyStatuses: [{replyStatus: 1}, {replyStatus: 2}], // 回复状态
+        leveles: [{level: 1}, {level: 2}, {level: 3}, {level: 4}, {level: 5}], // 评价星级
         datacomment: '',
-        showhptc: false
+        showhptc: false,
+        commentId: ''
       }
     },
     methods: {
+      reply () {
+        let that = this
+        that.$.ajax({
+          url: that.base + 'm2c.scm/goods/comment/reply',
+          type: 'put',
+          cache: false,
+          pagination: true,
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            commentId: that.commentId,
+            replyContent: that.reply_params.replyContent
+          },
+          success: function (result) {
+            if (result.status === 200) {
+              console.log(result)
+              that.get_comment_info()
+              that.showhptc = false
+            }
+          }
+        })
+      },
+      // 回复状态
+      replyStatus (n) {
+        let that = this
+        that.search_params.replyStatus = n
+        that.get_comment_info()
+      },
+      // 评价星级
+      level (n) {
+        let that = this
+        that.search_params.starLevel = n
+        that.get_comment_info()
+      },
       // 获取结算单列表
-       get_comment_info () {
-         let that = this
-         that.$.ajax({
+      get_comment_info () {
+        let that = this
+        that.$.ajax({
           url: that.base + 'm2c.scm/goods/comment',
           cache: false,
           pagination: true,
           data: {
             token: sessionStorage.getItem('mToken'),
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // 商户ID
-            rows:5,                          // 每页多少条数据
+            replyStatus: that.search_params.replyStatus,
+            starLevel: that.search_params.starLevel,
+            startTime: that.search_params.startTime,
+            endTime: that.search_params.endTime,
+            condition: that.search_params.condition,
+            rows: 5,                          // 每页多少条数据
             pageNum: 1    // 请求第几页
           },
           success: function (result) {
-            if(result.status === 200){
+            if (result.status === 200) {
               console.log(result)
               that.datacomment = result.content
             }
           }
         })
       },
-      showtchp () {
-          var that = this
+      showtchp (n) {
+        var that = this
           // that.$('#hptc').modal('show')
-          that.showhptc = true
-
+        that.showhptc = true
+        that.commentId = n
       },
-//       get_comment_info () {
-//         let that = this
-//         this.$("[data-toggle='popover']").popover('hide')
-//         that.$('#table').bootstrapTable('destroy').bootstrapTable({
-//           cache: false,
-//           url: that.base + 'm2c.scm/goods/comment',
-//           queryParams: function (params) {
-//             return Object.assign({}, {
-//               token: sessionStorage.getItem('mToken'),
-//               dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // 商户ID
-//               rows: params.limit,                          // 每页多少条数据
-//               pageNum: params.offset / params.limit + 1    // 请求第几页
-//             }, that.search_params)
-//           },
-//           pagination: true,
-//           pageNumber: 1,
-//           pageSize: 10,
-//           pageList: [5, 10, 20, 100, 200, 500],
-//           striped: true,
-//           queryParamsType: 'limit',
-//           sidePagination: 'server',
-//           contentType: 'application/x-www-form-urlencoded',
-//           responseHandler: function (result) {
-//             // console.log('结算单列表:', result)
-//             return {
-//               total: result.totalCount,    // 总页数
-//               rows: result.content         // 数据
-//             }
-//           },
-//           columns: [{
-// //            field: 'commentContent',
-//             title: '评论内容',
-//             align: 'center',
-//             valign: 'middle',
-//             formatter: function (x, y) {
-//               var str = ''
-//               for (var i = 0 ; i < y.commentImages.length; i++) {
-//                   str = `<img src="` + y.commentImages[i] + `" width="50px;" height="50px;">` + str
-//               }
-//               return  y.commentContent + '<br/>' + str
-//             }
-//           },
-//           {
-//             field: 'starLevel',
-//             title: '评价星级',
-//             align: 'center',
-//             valign: 'middle'
-//           }, {
-//             field: 'goodsName',
-//             title: '商品名称',
-//             align: 'center',
-//             valign: 'middle',
-//               formatter: function (x, y) {
-//                  return y.goodsName + '<br/>' + '规格：' + y.skuName
-//               }
-//           }, {
-//             field: 'orderId',
-//             title: '订单号',
-//             align: 'center',
-//             valign: 'middle'
-//           }, {
-//             field: 'buyerName',
-//             title: '顾客信息',
-//             align: 'center',
-//             valign: 'middle',
-//               formatter: function (x, y) {
-//                 return y.buyerName + '<br/>' + y.buyerPhoneNumber
-//               }
-//           }, {
-//             field: 'commentTime',
-//             title: '评价时间',
-//             align: 'center',
-//             valign: 'middle',
-//             width: 100
-//           }, {
-//             field: 'createdUserName',
-//             title: '操作',
-//             align: 'center',
-//             valign: 'middle',
-//               formatter: function (x, y) {
-//                 return `
-//                   <a class="color_default" replyComment=true handle=true>回评</a>
-//               `
-//               }
-//           }]
-//         })
-//       },
       timeBox () {
         this.is_Success = true
       }
@@ -555,7 +515,7 @@
       display: inline-block;
       position: relative;
       .inp{
-        width: 380px;
+        width: 500px;
         height: 39px;
         color: #ccc;
       }
