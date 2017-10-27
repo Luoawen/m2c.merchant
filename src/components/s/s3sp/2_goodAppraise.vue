@@ -60,7 +60,7 @@
             </td>
             <td class="a3">
               <div class="tdtit">{{comment.goodsName}}</div>
-              <div class="tdcolor mt10">{{comment.skuName}}</div>
+              <div class="tdcolor mt10">规格：{{comment.skuName}}</div>
             </td>
             <td class="a4">
               {{comment.orderId}}
