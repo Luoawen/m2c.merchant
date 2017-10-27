@@ -3,14 +3,14 @@ s<template>
     <form class="form-horizontal">
       <div class="form-group">
         <label class="col-sm-3 control-label">已向手机号{{userPhone}}发送验证码</label>
-        <div class="col-sm-3">
-          <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode">获取验证码</button>
-        </div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">*验证码：</label>
         <div class="col-sm-3">
           <input type="text" class="form-control" id="verifyCode" placeholder="6位数字">
+        </div>
+        <div class="col-sm-3">
+          <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode">获取验证码</button>
         </div>
       </div>
       <div class="form-group">
