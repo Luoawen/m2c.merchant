@@ -14,7 +14,7 @@
     <div class="dropdown">
       <div id="dLabel2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="state">
         <select v-model="search_params.status" name="status" >
-          <option value="" selected>售后状态</option>0,1申请换货,2,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
+          <option value="" selected>售后状态</option>
           <option value="0">申请退货</option>
           <option value="1">申请换货</option>
           <option value="2">申请退款</option>
@@ -40,7 +40,7 @@
       <input type="text" class="inp" value=""  v-model="search_params.condition"><i class="glyphicon glyphicon-search" id="searchIco" @click="search()"></i>
     </div>
     <span>高级搜索</span>
-    <button type="button" class="btn btn-default pull-right operation">导出</button>
+    <button type="button" class="btn btn-default pull-right operation" @click="exportSaleOrder()">导出</button>
     <div class="good_info">
       <table id="table" style="table-layout:fixed"></table>
     </div>
@@ -65,13 +65,12 @@
         that.is_Success = false
         that.$('#table').bootstrapTable('destroy').bootstrapTable({
           method: 'get',
-          //url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselllist',
-          url: 'http://localhost:8080/m2c.scm/dealerorderafter/dealerorderafterselllist',
+          url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselllist',
           queryParams: function (params) {
             return Object.assign({}, {
               token: sessionStorage.getItem('mToken'),
               isEncry: false,
-              dealerId: 'JXS42ACB6D352E9417FBBCF03908219AAF1', // JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
               rows: params.limit,                     // 每页多少条数据
               pageNumber: params.offset / params.limit + 1    // 请求第几页
             }, that.search_params)
@@ -162,6 +161,15 @@
       },
       search () {
         this.get_good_info()
+      },
+      exportSaleOrder () {
+        let that = this
+        let strHref = this.base + 'm2c.scm//order/export/saleafter?'
+        let strParam = "dealerId=" + JSON.parse(sessionStorage.getItem('mUser')).dealerId
+        that.$.each(that.search_params, function (i, n) {
+          strParam +=  "&" + i + "=" + n;
+        });
+        window.open(strHref + strParam, '_export')
       }
     },
     mounted () {
