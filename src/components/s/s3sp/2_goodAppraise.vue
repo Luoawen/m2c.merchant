@@ -94,17 +94,16 @@
           </tr>
         </tbody>
       </table>
-      <div class="page fr">
-        <span class="mr10">
-        共<span></span>条，每页<input class="form-control wid50" />条
-        <input class="form-control wid50" /><span>/<span></span>页</span>
-        </span>
-        <span class="fr mt5">
-        <span class="tdpade bg1 ml20 "></span>
-        <span class="tdpade bg2 ml20"></span>
-        <span class="tdpade bg3 ml20"></span>
-        <span class="tdpade bg4 ml20"></span>
-        </span>
+      <div class="block" style="margin: 20px;float: right">
+        <el-pagination
+          @size-change="goodsCommentHandleSizeChange"
+          @current-change="goodsCommentHandleCurrentChange"
+          :current-page="goodsCommentCurrentPage"
+          :page-sizes="[5, 10, 20, 30]"
+          :page-size="goodsCommentPageRows"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="goodsCommentTotalCount">
+        </el-pagination>
       </div>
     </div>
       <!-- 回评弹出框 hptc-->
@@ -141,10 +140,23 @@
         leveles: [{level: 1}, {level: 2}, {level: 3}, {level: 4}, {level: 5}], // 评价星级
         datacomment: '',
         showhptc: false,
-        commentId: ''
+        commentId: '',
+        goodsCommentCurrentPage: 1,
+        goodsCommentPageRows: 5,
+        goodsCommentTotalCount: 0
       }
     },
     methods: {
+      goodsCommentHandleSizeChange (val) {
+        let that = this
+        that.goodsCommentPageRows = val
+        that.get_comment_info()
+      },
+      goodsCommentHandleCurrentChange (val) {
+        let that = this
+        that.goodsCommentCurrentPage = val
+        that.get_comment_info()
+      },
       reply () {
         let that = this
         that.$.ajax({
@@ -193,13 +205,14 @@
             startTime: that.search_params.startTime,
             endTime: that.search_params.endTime,
             condition: that.search_params.condition,
-            rows: 5,                          // 每页多少条数据
-            pageNum: 1    // 请求第几页
+            rows: that.goodsCommentPageRows,                          // 每页多少条数据
+            pageNum: that.goodsCommentCurrentPage     // 请求第几页
           },
           success: function (result) {
             if (result.status === 200) {
               console.log(result)
               that.datacomment = result.content
+              that.goodsCommentTotalCount = result.totalCount
             }
           }
         })
