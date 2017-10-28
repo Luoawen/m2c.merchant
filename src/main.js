@@ -10,11 +10,15 @@ import md5 from 'md5'
 import Vuex from 'vuex'
 import store from './vuex/store'
 import VueResource from 'vue-resource'
+import Element from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 import 'bootstrap'
 import 'bootstrap-table'
 import 'tableexport'
 import './assets/css/bootstrap3.0.min.css'
 import './assets/css/manage.css'
+
+
 // import 'addressCheckbox/js/RegionalChoice.js'
 // import 'addressCheckbox/css.css'
 // 导入ueditor相关
@@ -27,7 +31,7 @@ Vue.use(VueResource)
 Vue.use(Vuex)
 // 关闭生产模式下给出的提示
 Vue.config.productionTip = false
-
+Vue.use(Element)
 {
   // bootstrap-table中文显示设置
   (function ($) {
