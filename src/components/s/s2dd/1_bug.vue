@@ -50,7 +50,7 @@
   </div>
 </template>
 <script>
-  /* eslint-disable indent,no-trailing-spaces,semi-spacing */
+  /* eslint-disable indent,no-trailing-spaces,semi-spacing,no-unused-vars,space-infix-ops,no-multi-spaces */
 
   export default {
     name: '',
@@ -76,7 +76,8 @@
             return Object.assign({}, {
               token: sessionStorage.getItem('mToken'),
               isEncry: false,
-              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+             // dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+              dealerId: 'JXS42ACB6D352E9417FBBCF03908219AAF1',
               rows: params.limit,                     // 每页多少条数据
               pageNumber: params.offset / params.limit + 1    // 请求第几页
             }, that.search_params)
@@ -106,61 +107,76 @@
             events: 'handle',
             width: '150',
             formatter: function (x, y) {
-              for (var i = 0;i < y.goodsList.size();i++) {
-                return "<image src='" + JSON.parse(y.goodsList.goodsImage)[0] + "' width='50'></image>" + y.goodsList.goodsName + y.goodsList.skuName
+              var result =''
+              for (var i = 0;i < y.goodsList.length;i++) {
+                 result =  result + "<image src='" + JSON.parse(y.goodsList[i].goodsImage)[0] + "' width='50'></image>" + y.goodsList[i].goodsName + y.goodsList[i].skuName
               }
+              return result
             },
             align: 'center',
             valign: 'middle'
           }, {
-            field: 'afterSellOrderId',
             title: '单价/元',
             align: 'center',
             valign: 'middle',
-            width: '155'
+            width: '155',
+            formatter: function (x, y) {
+              var result =''
+              for (var i = 0;i < y.goodsList.length;i++) {
+                result = result + y.goodsList[i].discountPrice + '</br>'
+              }
+              return result
+            }
           }, {
-              field: 'sellNum',
               title: '数量',
               align: 'center',
               valign: 'middle',
-              width: '155'
+              width: '155',
+            formatter: function (x, y) {
+              var result =''
+              for (var i = 0;i < y.goodsList.length;i++) {
+                result = result + y.goodsList[i].sellNum + '</br>'
+              }
+              return result
+            }
             }, {
             title: '售后状态',
             align: 'center',
             valign: 'middle',
             width: '155',
             formatter: function (x, y) {
-              return y.orderType === 0 ? '换货' : y.orderType === 1 ? '退货' : y.orderType === 2 ? '仅退款' : '-'
+              var result =''
+              for (var i = 0;i < y.goodsList.length;i++) {
+                var afstatus = y.goodsList[i].afStatus === 0 ? '申请退款' : y.goodsList[i].afStatus === 1 ? '申请换货' : y.goodsList[i].afStatus === 2 ? '申请退款' : y.goodsList[i].afStatus === 3 ?'拒绝': y.goodsList[i].afStatus === 4 ?'同意(退换货)':y.goodsList[i].afStatus === 5 ?'客户寄出':y.goodsList[i].afStatus === 6 ?'商家收到':y.goodsList[i].afStatus === 7 ?'商家寄出':y.goodsList[i].afStatus === 8 ?'客户收到':y.goodsList[i].afStatus === 9 ?'同意退款':y.goodsList[i].afStatus === 10 ?'确认退款': '-'
+                result = result + afstatus + '</br>'
+              }
+              return result
             }
           }, {
-            field: 'backMoney',
-            title: '售后总金额/元',
+            title: '订单总额/元',
             align: 'center',
             valign: 'middle',
             width: '155',
             formatter: function (x, y) {
-              return y.backMoney / 100
+              return y.goodsMoney / 100
             }
           }, {
             title: '下单时间',
             align: 'center',
             valign: 'middle',
             width: '80',
-            // 0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
             formatter: function (x, y) {
-              return y.status === 0 ? '申请退货' : y.status === 1 ? '申请换货' : y.status === 2 ? '申请退款' : y.status === 3 ? '拒绝' : y.status === 4 ? '同意' : y.status === 5 ? '客户寄出' : y.status === 6 ? '商家收到' : y.status === 7 ? '商家寄出' : y.status === 8 ? '客户收到' : y.status === 9 ? '同意退款' : '-'
-            }
-          }, {
-            title: '下单时间',
-            align: 'center',
-            valign: 'middle',
-            width: '155',
-            formatter: function (x, y) {
-              let d = new Date(y.createDate)
+              let d = new Date(y.createdDate)
               return that.date_format(d, 'yyyy-MM-dd hh:mm:ss')
             }
           }, {
-            title: '操作',
+            field: 'revPerson',
+            title: '收货人',
+            align: 'center',
+            valign: 'middle',
+            width: '155'
+          }, {
+            title: '订货单状态',
             align: 'center',
             valign: 'middle',
             width: '80',
