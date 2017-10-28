@@ -9,7 +9,7 @@
             <th>{{formwork.modelName}}</th>
             <th class="some">已有{{formwork.goodsUserNum}}个商品使用 <router-link v-if="formwork.goodsUserNum!=0">&gt;</router-link></th>
             <th class="act"><router-link :to="{ name:'formworkadd', query: {addModify: false, modelId: formwork.modelId} }">编辑</router-link></th>
-            <th><a @click="addModify" v-if="formwork.goodsUserNum==0">删除</a></th>
+            <th><a @click="delectModel(formwork.modelId)" v-if="formwork.goodsUserNum==0">删除</a></th>
           </tr>
         </thead>
         <tbody>
@@ -21,7 +21,7 @@
             <td>续费/元</td>
           </tr>
           <tr v-for="(postageModelRule,index) in formwork.postageModelRules">
-            <th scope="row">{{postageModelRule.address}}</th>
+            <th scope="row">{{postageModelRule.address==''?'全国（默认运费）':postageModelRule.address}}</th>
             <td>{{formwork.chargeType==1?postageModelRule.firstPiece:postageModelRule.firstWeight}}</td>
             <td>{{postageModelRule.firstPostage}}</td>
             <td>{{formwork.chargeType==1?postageModelRule.continuedPiece:postageModelRule.continuedWeight}}</td>
@@ -37,13 +37,34 @@ export default {
   name: '',
   data () {
     return {
-      formworks: []
+      formworks: [],
+      dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
     }
   },
   created () {
     this.getTemplate()
   },
   methods: {
+    delectModel (n) {
+      // alert((sessionStorage.getItem('mUser')).dealerId)
+      let that = this
+      that.$.ajax({
+        method: 'delete',
+        url: this.localbase + 'm2c.scm/postage?dealerId=' + that.dealerId +'&modelId=' + n,
+        data: {
+          token: sessionStorage.getItem('mToken')
+        },
+        success: function (result) {
+          if (result.status==200){
+            that.show_tip("删除成功")
+            that.getTemplate()
+          } else {
+            that.show_tip(result.errorMessage)
+          }
+          
+        }
+      })
+    },
     getTemplate () {
       const that = this
       that.$.ajax({
