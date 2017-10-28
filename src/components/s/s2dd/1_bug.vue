@@ -50,7 +50,7 @@
   </div>
 </template>
 <script>
-  /* eslint-disable indent,no-trailing-spaces */
+  /* eslint-disable indent,no-trailing-spaces,semi-spacing */
 
   export default {
     name: '',
@@ -106,7 +106,9 @@
             events: 'handle',
             width: '150',
             formatter: function (x, y) {
-              return "<image src='" + JSON.parse(y.goodsInfo.goodsImage)[0] + "' width='50'></image>" + y.goodsInfo.goodsName + y.goodsInfo.skuName
+              for (var i = 0;i < y.goodsList.size();i++) {
+                return "<image src='" + JSON.parse(y.goodsList.goodsImage)[0] + "' width='50'></image>" + y.goodsList.goodsName + y.goodsList.skuName
+              }
             },
             align: 'center',
             valign: 'middle'
@@ -118,12 +120,12 @@
             width: '155'
           }, {
               field: 'sellNum',
-              title: '单价/元',
+              title: '数量',
               align: 'center',
               valign: 'middle',
               width: '155'
             }, {
-            title: '售后期望',
+            title: '售后状态',
             align: 'center',
             valign: 'middle',
             width: '155',
@@ -140,7 +142,7 @@
               return y.backMoney / 100
             }
           }, {
-            title: '售后状态',
+            title: '下单时间',
             align: 'center',
             valign: 'middle',
             width: '80',
@@ -149,7 +151,7 @@
               return y.status === 0 ? '申请退货' : y.status === 1 ? '申请换货' : y.status === 2 ? '申请退款' : y.status === 3 ? '拒绝' : y.status === 4 ? '同意' : y.status === 5 ? '客户寄出' : y.status === 6 ? '商家收到' : y.status === 7 ? '商家寄出' : y.status === 8 ? '客户收到' : y.status === 9 ? '同意退款' : '-'
             }
           }, {
-            title: '申请时间',
+            title: '下单时间',
             align: 'center',
             valign: 'middle',
             width: '155',
