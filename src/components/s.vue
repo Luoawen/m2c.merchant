@@ -39,6 +39,7 @@
 				<div path='/s/address' class="content_s">售后地址</div>
 				<div path='/s/transact' class="content_s">交易密码</div>
 			</div>
+      <div class="public_nav" path='/s/updatePass'><i class="nav_setting"></i>修改密码</div>
     </div>
     <div class="right_nav">
       <i></i>

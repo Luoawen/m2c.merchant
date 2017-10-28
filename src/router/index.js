@@ -29,6 +29,7 @@ const address = r => require.ensure([], () => r(require('@/components/s/s7sz/4_a
 const transact = r => require.ensure([], () => r(require('@/components/s/s7sz/5_transact')), 's')
 const formworkadd = r => require.ensure([], () => r(require('@/components/s/s7sz/6_formworkadd')), 's')
 
+const updatePass = r => require.ensure([], () => r(require('@/components/s/s8password/1_updatePass')), 's')
 Vue.use(Router)
 
 export default new Router({
@@ -126,6 +127,11 @@ export default new Router({
           path: 'transact',
           name: 'transact',
           component: transact
+        },
+        {
+          path: 'updatePass',
+          name: 'updatePass',
+          component: updatePass
         },
         {
           path: 'formworkadd',
