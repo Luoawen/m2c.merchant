@@ -52,7 +52,7 @@
                   <td></td>
                 </tr>
                 <tr v-for="(addRow,index) in addRows" v-if="addRows.length!==0">
-                  <td class="relative">{{address.length == 0 ? '未添加地区' : address}} 
+                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} 
                     <a @click="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
@@ -60,15 +60,15 @@
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox" v-model="areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/> 
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/> 
                             {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox" v-model="IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
+                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
                             <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox" v-model="cityList" :value="city.code" @click="chooseCity(city,$event)"/> {{city.name}}
+                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
@@ -102,7 +102,35 @@
               </tbody>
               <tbody v-if="addModify==='modify'">
                 <tr v-for="(add_postageModelRule_w,index) in formwork.postageModelRules">
-                  <td>{{add_postageModelRule_w.address==''?'全国（ 默认运费）':add_postageModelRule_w.address}}
+                  <td>{{add_postageModelRule_w.address==''?'全国（ 默认运费）':add_postageModelRule_w.address}}<a v-if="index!=0" @click="addressCheckBox(index,$event)">编辑 </a>
+                  <!--地区选择-->
+                    <div class="cityBox">
+                      <h4> 选择地区 <a class="close"
+                                  @click="cityBoxHide"> X </a></h4>
+                      <div class="test-div">
+                        <div class="bigArea"
+                            v-for="(item,index) in datas">
+                          <div class="left">
+                            <input type="checkbox"
+                                  v-model="addRow.areaIdArr" :value="item.code"
+                                  @click="chooseArea(item.code,$event)"/>{{item.name}}
+                          </div>
+                          <div class="pro" v-for="(pro,index) in item.subs">
+                            <input type="checkbox"
+                                  v-model="addRow.IdArr" :value="pro.code"
+                                  @click="choosePro(pro,$event)"/>
+                            <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                            <div class="cityWrap">
+                              <div class="city" v-for="(city,index) in pro.subs">
+                                <input type="checkbox"
+                                      v-model="addRow.cityList" :value="city.code"
+                                      @click="chooseCity(city,$event)"/> {{city.name}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </td>
                   <td>
                     <input type="text"
@@ -128,7 +156,7 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{address = '' ? '未添加地区' : address}} <a @click="addressCheckBox(index,$event)">
+                  <td class="relative">{{addRow.address = '' ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
                     编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
@@ -139,18 +167,18 @@
                             v-for="(item,index) in datas">
                           <div class="left">
                             <input type="checkbox"
-                                  v-model="areaIdArr" :value="item.code"
+                                  v-model="addRow.areaIdArr" :value="item.code"
                                   @click="chooseArea(item.code,$event)"/>{{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
                             <input type="checkbox"
-                                  v-model="IdArr" :value="pro.code"
+                                  v-model="addRow.IdArr" :value="pro.code"
                                   @click="choosePro(pro,$event)"/>
                             <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
                                 <input type="checkbox"
-                                      v-model="cityList" :value="city.code"
+                                      v-model="addRow.cityList" :value="city.code"
                                       @click="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
@@ -230,7 +258,7 @@
               <!-- modify -->
               <tbody v-if="addModify==='modify'">
               <tr v-for="(add_postageModelRule,index) in formwork.postageModelRules">
-                  <td scope="row"> {{add_postageModelRule.address}}
+                  <td scope="row"> {{add_postageModelRule.address}}<a v-if="index!=0" @click="addressCheckBox(index,$event)">编辑 </a>
                   </td>
                   <td>
                     <input type="text"
@@ -256,7 +284,7 @@
               </tr>
               <tr v-for="(addRow,index) in addRows"
                   v-if="addRows.length!==0">
-                <td class="relative">{{address = '' ? '未添加地区' : address}} <a @click="addressCheckBox(index,$event)">
+                <td class="relative">{{addRow.address = '' ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
                   编辑 </a>
                   <!--地区选择-->
                   <div class="cityBox">
@@ -264,16 +292,16 @@
                     <div class="test-div">
                       <div class="bigArea" v-for="(item,index) in datas">
                         <div class="left">
-                          <input type="checkbox" v-model="areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/> 
+                          <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/> 
                           {{item.name}}
                         </div>
                         <div class="pro" v-for="(pro,index) in item.subs">
-                          <input type="checkbox" v-model="IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
+                          <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
                           <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
                           <div class="cityWrap">
                             <div class="city" v-for="(city,index) in pro.subs">
                               <input type="checkbox"
-                                     v-model="cityList" :value="city.code"
+                                     v-model="addRow.cityList" :value="city.code"
                                      @click="chooseCity(city,$event)"/> {{city.name}}
                             </div>
                           </div>
@@ -309,7 +337,7 @@
               <!-- add -->
               <tbody v-if="addModify==='add'">
               <tr>
-                <td v-model="add_postageModelRule_w.address"> 全国（ 默认运费）</td>
+                <td v-model="add_postageModelRule.address"> 全国（ 默认运费）</td>
                 <td>
                   <input type="text"
                          style="width:50px;height:30px;"
@@ -345,19 +373,19 @@
                              v-for="(item,index) in datas">
                           <div class="left">
                             <input type="checkbox"
-                                   v-model="areaIdArr" :value="item.code"
+                                   v-model="addRow.areaIdArr" :value="item.code"
                                    @click="chooseArea(item.code,$event)"/> {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
                             <input type="checkbox"
-                                   v-model="IdArr" :value="pro.code"
+                                   v-model="addRow.IdArr" :value="pro.code"
                                    @click="choosePro(pro,$event)"/>
                             <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
                             <div class="cityWrap">
                               <div class="city"
                                    v-for="(city,index) in pro.subs">
                                 <input type="checkbox"
-                                       v-model="cityList" :value="city.code"
+                                       v-model="addRow.cityList" :value="city.code"
                                        @click="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
@@ -487,12 +515,13 @@
           for (var i = 0; i < that.datas.length; i++) {
             if (that.datas[i].code === n) {
               for (var j = 0; j < that.datas[i].subs.length; j++) {
-                that.IdArr.push(that.datas[i].subs[j].code)
-                that.address.push(that.datas[i].subs[j].name)
-                that.proList.push(that.datas[i].subs[j].code)
+                // (that.addRows).push(that.datas[i].subs[j].code)
+                that.addRows[that.index].IdArr.push(that.datas[i].subs[j].code)
+                that.addRows[that.index].address.push(that.datas[i].subs[j].name)
+                that.addRows[that.index].proList.push(that.datas[i].subs[j].code)
                 for (var k = 0; k < that.datas[i].subs[j].subs.length; k++) {
                   if (that.datas[i].subs[j].subs[k].parent === that.datas[i].subs[j].code) {
-                    that.cityList.push(that.datas[i].subs[j].subs[k].code)
+                    that.addRows[that.index].cityList.push(that.datas[i].subs[j].subs[k].code)
                   }
                 }
               }
@@ -504,11 +533,11 @@
               for (var j = 0; j < that.datas[i].subs.length; j++) {
                 for (var k = 0; k < that.datas[i].subs[j].subs.length; k++) {
                   if (that.datas[i].subs[j].subs[k].parent === that.datas[i].subs[j].code) {
-                    that.cityList.splice(that.$.inArray(that.datas[i].subs[j].subs[k].code, that.cityList), 1)
+                    that.addRows[that.index].cityList.splice(that.$.inArray(that.datas[i].subs[j].subs[k].code, that.addRows[that.index].cityList), 1)
                   }
                 }
-                that.IdArr.splice(that.$.inArray(that.datas[i].subs[j].code, that.IdArr), 1)
-                that.address.splice(that.datas[i].subs[j].name, 1)
+                that.addRows[that.index].IdArr.splice(that.$.inArray(that.datas[i].subs[j].code, that.addRows[that.index].IdArr), 1)
+                that.addRows[that.index].address.splice(that.datas[i].subs[j].name, 1)
               }
             }
           }
@@ -519,14 +548,14 @@
         let that = this
         let el = event.target
         if (el.checked) {
-          that.IdArr.push(n.code)
-          that.address.push(n.name)
+          that.addRows[that.index].IdArr.push(n.code)
+          that.addRows[that.index].address.push(n.name)
           for (var i = 0; i < that.datas.length; i++) {
             for (var j = 0; j < that.datas[i].subs.length; j++) {
               if (that.datas[i].subs[j].code === n.code) {
                 for (var k = 0; k < that.datas[i].subs[j].subs.length; k++) {
                   if (that.datas[i].subs[j].subs[k].parent === n.code) {
-                    that.cityList.push(that.datas[i].subs[j].subs[k].code)
+                    that.addRows[that.index].cityList.push(that.datas[i].subs[j].subs[k].code)
                   }
                 }
               }
@@ -534,8 +563,8 @@
           }
           for (var i = 0; i < that.datas.length; i++) {
             if(that.datas[i].code==n.parent){
-              if(that.$.inArray(n.parent,that.areaIdArr)==-1){
-                that.areaIdArr.push(n.parent)
+              if(that.$.inArray(n.parent,that.addRows[that.index].areaIdArr)==-1){
+                that.addRows[that.index].areaIdArr.push(n.parent)
               }
             }
           }
@@ -544,26 +573,26 @@
             for (var j = 0; j < that.datas[i].subs.length; j++) {
               for (var k = 0; k < that.datas[i].subs[j].subs.length; k++) {
                 if (that.datas[i].subs[j].subs[k].parent === n.code) {
-                  that.cityList.splice(that.$.inArray(that.datas[i].subs[j].subs[k].code, that.cityList), 1)
+                  that.addRows[that.index].cityList.splice(that.$.inArray(that.datas[i].subs[j].subs[k].code, that.addRows[that.index].cityList), 1)
                 }
               }
             }
           }
-          that.address.splice(that.$.inArray(n.name, that.address), 1)
-          that.IdArr.splice(that.$.inArray(n.code, that.IdArr), 1)
+          that.addRows[that.index].address.splice(that.$.inArray(n.name, that.addRows[that.index].address), 1)
+          that.addRows[that.index].IdArr.splice(that.$.inArray(n.code, that.addRows[that.index].IdArr), 1)
 
           let point=0
           for (var i = 0; i < that.datas.length; i++) {
             if(that.datas[i].code==n.parent){
               for(let j =0 ;j<that.datas[i].subs.length;j++){
-                for(let p = 0; p<that.IdArr.length;p++){
-                  if(that.datas[i].subs[j].code==that.IdArr[p]){
+                for(let p = 0; p<that.addRows[that.index].IdArr.length;p++){
+                  if(that.datas[i].subs[j].code==that.addRows[that.index].IdArr[p]){
                     point++
                   }
                 }
               }
               if(point==0){
-                that.areaIdArr.splice(that.$.inArray(n.parent, that.areaIdArr), 1)
+                that.addRows[that.index].areaIdArr.splice(that.$.inArray(n.parent, that.addRows[that.index].areaIdArr), 1)
               }
             }
           }
@@ -578,14 +607,14 @@
           for (var i = 0; i < that.datas.length; i++) {
             for (var j = 0; j < that.datas[i].subs.length; j++) {
               if (that.datas[i].subs[j].code === city.parent) {
-                if (that.$.inArray(that.datas[i].code, that.areaIdArr == -1)) {
-                  that.areaIdArr.push(that.datas[i].code)
+                if (that.$.inArray(that.datas[i].code, that.addRows[that.index].areaIdArr == -1)) {
+                  that.addRows[that.index].areaIdArr.push(that.datas[i].code)
                 }
-                if (that.$.inArray(city.parent, that.IdArr) == -1) {
-                  that.IdArr.push(city.parent)
+                if (that.$.inArray(city.parent, that.addRows[that.index].IdArr) == -1) {
+                  that.addRows[that.index].IdArr.push(city.parent)
                 }
-                if (that.$.inArray(that.datas[i].subs[j].name, that.address) == -1) {
-                  that.address.push(that.datas[i].subs[j].name)
+                if (that.$.inArray(that.datas[i].subs[j].name, that.addRows[that.index].address) == -1) {
+                  that.addRows[that.index].address.push(that.datas[i].subs[j].name)
                 }
               }
             }
@@ -596,29 +625,29 @@
             for (let j = 0; j < that.datas[i].subs.length; j++) {
               if (that.datas[i].subs[j].code === city.parent) {
                 for (let m = 0; m < that.datas[i].subs[j].subs.length; m++) {
-                  for (let p = 0; p < that.cityList.length; p++) {
-                    if (that.datas[i].subs[j].subs[m].code == that.cityList[p]) {
+                  for (let p = 0; p < that.addRows[that.index].cityList.length; p++) {
+                    if (that.datas[i].subs[j].subs[m].code == that.addRows[that.index].cityList[p]) {
                       point++
                     }
                   }
                 }
                 if (point==1) {
-                  that.IdArr.splice(that.$.inArray(city.parent, that.IdArr), 1)
-                  that.address.splice(that.$.inArray(that.datas[i].subs[j].name, that.address), 1)
+                  that.addRows[that.index].IdArr.splice(that.$.inArray(city.parent, that.addRows[that.index].IdArr), 1)
+                  that.addRows[that.index].address.splice(that.$.inArray(that.datas[i].subs[j].name, that.addRows[that.index].address), 1)
                 }
                 let point2=0
                 for(let n=0;n<that.datas.length;n++){
                     if(that.datas[i].subs[j].parent==that.datas[n].code){
                       
                       for(let f=0;f<that.datas[n].subs.length;f++){
-                          for(let y = 0; y < that.IdArr.length; y++){
-                            if(that.IdArr[y]==that.datas[n].subs[f].code){
+                          for(let y = 0; y < that.addRows[that.index].IdArr.length; y++){
+                            if(that.addRows[that.index].IdArr[y]==that.datas[n].subs[f].code){
                               point2++
                             }
                           }
                       }
                       if(point2==0){ 
-                         that.areaIdArr.splice(that.$.inArray(that.datas[n].code, that.areaIdArr), 1)
+                         that.addRows[that.index].areaIdArr.splice(that.$.inArray(that.datas[n].code, that.addRows[that.index].areaIdArr), 1)
                       }   
                     }
                 }
@@ -638,10 +667,11 @@
 // 新增行
       addRow(){
         let newRow = {
+          address: [],
           areaIdArr: [],
           IdArr: [],
-          datas: [],
           cityList: [],
+          proList: [],
           firstWeight: '',
           firstPiece: '',
           firstPostage: '',
@@ -686,17 +716,17 @@
           }
           for (var i = 0; i < that.addRows.length; i++) {
             that.postageModelRule = {
-              address: that.address.join(),
-              cityCode: that.cityList.join(),
+              address: that.addRows[i].address.join(),
+              cityCode: that.addRows[i].cityList.join(),
               continuedPiece: that.addRows[i].continuedPiece,
               continuedPostage: that.addRows[i].continuedPostage,
               continuedWeight: that.addRows[i].continuedWeight,
               firstPiece: that.addRows[i].firstPiece,
               firstPostage: that.addRows[i].firstPostage,
               firstWeight: that.addRows[i].firstWeight,
-              defaultFlag: that.address == '' ? 0 : 1
+              defaultFlag: that.addRows[that.index].address == '' ? 0 : 1
             }
-            that.postageModelRules.push(JSON.stringify(that.postageModelRule))
+            that.postageModelRules.push(that.postageModelRule)
           }
         } else {
           for(var i=0; i<that.formwork.postageModelRules.length; i++){
@@ -704,15 +734,15 @@
           }
           for (var i = 0; i < that.addRows.length; i++) {
             that.postageModelRule = {
-              address: that.address.join(),
-              cityCode: that.cityList.join(),
+              address: that.addRows[i].address.join(),
+              cityCode: that.addRows[i].cityList.join(),
               continuedPiece: that.addRows[i].continuedPiece,
               continuedPostage: that.addRows[i].continuedPostage,
               continuedWeight: that.addRows[i].continuedWeight,
               firstPiece: that.addRows[i].firstPiece,
               firstPostage: that.addRows[i].firstPostage,
               firstWeight: that.addRows[i].firstWeight,
-              defaultFlag: that.address == '' ? 0 : 1
+              defaultFlag: that.addRows[that.index].address == '' ? 0 : 1
             }
             that.postageModelRules.push(that.postageModelRule)
           }
