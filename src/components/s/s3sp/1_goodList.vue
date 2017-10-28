@@ -224,7 +224,91 @@
         </div>
 
       </el-tab-pane>
-      <el-tab-pane label="已删商品" name="delete">已删商品</el-tab-pane>
+      <el-tab-pane label="已删商品" name="delete">
+        <div class="goods_search" style="width: 100%; height: 40px;">
+          <div  style="float: left">
+            商品分类:<el-cascader  :options="goodsClassifys" v-model="selectedOptions2"  change-on-select :props="goodsClassifyProps"></el-cascader>
+          </div><!--商品分类-->
+          <div class="search" style="width: 400px;float: left">
+            <el-input placeholder="输入商品名称 / 编码 / 条形码 / 品牌" v-model="search_goodsCheck_params.condition" class="input-with-select">
+              <el-button slot="append" icon="el-icon-search" @click.native="goodsDeleteStore()"></el-button>
+            </el-input>
+          </div>
+        </div>
+        <el-table
+          ref="multipleTable"
+          :data="goodsDelStoreData"
+          tooltip-effect="dark"
+          style="width: 100%">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column
+            label="商品信息"
+            width="200">
+            <template slot-scope="scope"><img v-bind:src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsName}}</span></template>
+          </el-table-column>
+          <el-table-column
+            prop="goodsClassify"
+            label="分类"
+            width="200">
+          </el-table-column>
+          <el-table-column
+            prop="brandName"
+            label="品牌"
+            width="200"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="goodsPrice"
+            label="拍货价/元"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="stockNum"
+            label="库存"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="sellNum"
+            label="销量"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            label="状态"
+            show-overflow-tooltip>
+            <template slot-scope="scope"><span >{{scope.row.goodsStatus==1?'仓库':scope.row.goodsStatus==2?'出售中':scope.row.goodsStatus==3?'已售罄':''}}</span></template>
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-col :span="12">
+                <el-dropdown trigger="click">
+                      <span class="el-dropdown-link">
+                        操作<i class="el-icon-arrow-down el-icon--right"></i>
+                      </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','a')">详情</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-col>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="block" style="margin: 20px;float: right">
+          <el-pagination
+            @size-change="goodsDelStoreHandleSizeChange"
+            @current-change="goodsDelStoreHandleCurrentChange"
+            :current-page="goodsDelStoreCurrentPage"
+            :page-sizes="[5, 10, 20, 30]"
+            :page-size="goodsDelStorePageRows"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="goodsDelStoreTotalCount">
+          </el-pagination>
+        </div>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -260,6 +344,7 @@
         activeName: 'first',
         selectedOptions1: [''],
         selectedOptions2: [''],
+        selectedOptions3: [''],
         goodsStoreData:[],
         goodsCheckStorePageRows:5,
         goodsCheckStoreCurrentPage: 1,
@@ -276,6 +361,10 @@
           label: '审核不通过'
         }],
         search_goodsCheck_params: { goodsClassifyId: '', approveStatus: '', condition: '', startTime: '', endTime: '' },
+        goodsDelStorePageRows:5,
+        goodsDelStoreCurrentPage: 1,
+        goodsDelStoreTotalCount:0,
+        goodsDelStoreData:[]
       }
     },
     methods: {
@@ -340,9 +429,13 @@
         that.goodsCheckStorePageRows=2,
         that.goodsCheckStoreCurrentPage= 1,
         that.goodsCheckStoreTotalCount=0,
+        that.goodsDelStorePageRows=5,
+        that.goodsDelStoreCurrentPage=1,
+        that.goodsDelStoreTotalCount=0,
 
         that.selectedOptions1=['']
         that.selectedOptions2=['']
+        that.selectedOptions3=['']
         that.search_goods_params.goodsClassifyId=''
         that.search_goods_params.goodsStatus=''
         that.search_goods_params.condition=''
@@ -359,7 +452,7 @@
         }else if (tab.paneName==='second'){
           that.goodsCheckStore()//商品审核列表
         }else if (tab.paneName==='delete'){
-          alert('delete')
+          that.goodsDeleteStore()//删除商品列表
         }
       }
 
@@ -466,6 +559,39 @@
         } else if (action === '_delete') {
           that.goodsCheckStore();
         }
+      }
+      ,goodsDeleteStore () {
+        let that = this
+        that.$.ajax({
+          type: 'get',
+          url: this.base + 'm2c.scm/goods',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            isEncry: false,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            rows: that.goodsDelStorePageRows,                     // 每页多少条数据
+            pageNum: that.goodsDelStoreCurrentPage,    // 请求第几页*/
+            goodsClassifyId:that.selectedOptions3[that.selectedOptions3.length-1],
+            delStatus:2,
+          },
+          success: function (result) {
+            if (result.status === 200){
+              // 获取商品列表
+              that.goodsDelStoreData = result.content
+              that.goodsDelStoreTotalCount = result.totalCount
+            }
+          }
+        })
+      }
+      ,goodsDelStoreHandleSizeChange(val) {
+        let that = this
+        that.goodsDelStorePageRows=val
+        that.goodsCheckStore();
+      }
+      ,goodsDelStoreHandleCurrentChange(val) {
+        let that = this
+        that.goodsDelStoreCurrentPage=val
+        that.goodsCheckStore();
       }
   },
     mounted () {
