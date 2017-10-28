@@ -1,100 +1,110 @@
 <template>
   <div class="detail">
-    <div class="nav">
+
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="售后单详情" name="first">
+        <div class="customerdetail_container">
+          拒绝结果，做法根据后台返回数据判断v-show
+          <div class="detail_tit">已拒绝顾客售后申请</div>
+          <div class="detail_tit02">顾客发起售后申请，请处理</div>
+          <div class="detail_top mt20 clear">
+            <div class="col-sm-4 detail_cen">
+              <div>
+                <span class="tit01">售后状态</span>
+                <span class="ml20">待退货审核</span>
+              </div>
+              <div>
+                <span class="tit01">售后单号</span>
+                <span class="ml20">65432134562354</span>
+              </div>
+              <div>
+                <span class="tit01">申请原因</span>
+                <span class="ml20">质量有问题</span>
+              </div>
+              <div>
+                <span class="tit01">关联订货号</span>
+                <span class="ml20">672634532432445324</span>
+              </div>
+              <div>
+                <span class="tit01">订单总额</span>
+                <span class="ml20">309.00元（含运费<span>10.00</span>元）</span>
+              </div>
+            </div>
+            <div class="col-sm-4 detail_cen">
+              <div>
+                <span class="tit01">售后期望</span>
+                <span class="ml20">退货退款</span>
+              </div>
+              <div>
+                <span class="tit01">售后金额</span>
+                <span class="ml20 redcolor">101.00元（含运费5.00元）</span>
+              </div>
+              <div>
+                <span class="tit01">申请时间</span>
+                <span class="ml20">2017-09-22 20:35:58</span>
+              </div>
+              <div>
+                <span class="tit01">拒绝原因</span>
+                <span class="ml20"></span>
+              </div>
+            </div>
+          </div>
+          <table class="mt20 detail_table">
+            <thead>
+            <tr>
+              <td class="a1">商品信息</td>
+              <td class="a2">广告位信息</td>
+              <td class="a3">单价</td>
+              <td class="a4">数量</td>
+              <td class="a5">商品金额/元</td>
+              <td class="a5">商品金额/元</td>
+              <td class="a6">操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="a1 clear">
+                <div class="a1tab fl mr20"><img /></div>
+                <div class="a1tit fl">
+                  <div class="wobse top">
+                    冬季新款侧开叉高领毛衣女不规则套头针织衫宽松...
+                  </div>
+                  <div class="btm">
+                    规格：蓝色，L
+                  </div>
+                </div>
+              </td>
+              <td class="a2">-</td>
+              <td class="a3">299.00</td>
+              <td class="a4">1</td>
+              <td class="a5">299.00</td>
+              <td class="a5">-</td>
+              <td class="a6">
+                <div class="btm"  >同意</div>
+                <div class="btm mt10"  >拒绝</div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </el-tab-pane>
+      <el-tab-pane label="售后物流" name="second">售后物流</el-tab-pane>
+      <el-tab-pane label="操作记录" name="third">操作记录</el-tab-pane>
+    </el-tabs>
+
+    <!--<div class="nav">
       <span :class="{active:showactive}" @click="customerdetail"><a>售后单详情</a></span>
       <span :class="{active:showactive02}" @click="customerfreight"><a>售后物流</a></span>
       <span :class="{active:showactive03}" @click="customerecord"><a>操作记录</a></span>
     </div>
-    <!-- 售后单详情 -->
-    <div v-show="showactive" class="customerdetail_container">
-      <!-- 拒绝结果，做法根据后台返回数据判断v-show -->
-      <div class="detail_tit">已拒绝顾客售后申请</div>
-      <!-- <div class="detail_tit02">顾客发起售后申请，请处理</div> -->
-      <div class="detail_top mt20 clear">
-        <div class="col-sm-4 detail_cen">
-          <div>
-            <span class="tit01">售后状态</span>
-            <span class="ml20">待退货审核</span>
-          </div>
-          <div>
-            <span class="tit01">售后单号</span>
-            <span class="ml20">65432134562354</span>
-          </div>
-          <div>
-            <span class="tit01">申请原因</span>
-            <span class="ml20">质量有问题</span>
-          </div>
-          <div>
-            <span class="tit01">关联订货号</span>
-            <span class="ml20">672634532432445324</span>
-          </div>
-          <div>
-            <span class="tit01">订单总额</span>
-            <span class="ml20">309.00元（含运费<span>10.00</span>元）</span>
-          </div>
-        </div>
-        <div class="col-sm-4 detail_cen">
-          <div>
-            <span class="tit01">售后期望</span>
-            <span class="ml20">退货退款</span>
-          </div>
-          <div>
-            <span class="tit01">售后金额</span>
-            <span class="ml20 redcolor">101.00元（含运费5.00元）</span>
-          </div>
-          <div>
-            <span class="tit01">申请时间</span>
-            <span class="ml20">2017-09-22 20:35:58</span>
-          </div>
-          <div>
-            <span class="tit01">拒绝原因</span>
-            <span class="ml20"></span>
-          </div>
-        </div>
-      </div>
-      <table class="mt20 detail_table">
-        <thead>
-          <tr>
-            <td class="a1">商品信息</td>
-            <td class="a2">广告位信息</td>
-            <td class="a3">单价</td>
-            <td class="a4">数量</td>
-            <td class="a5">商品金额/元</td>
-            <td class="a5">商品金额/元</td>
-            <td class="a6">操作</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="a1 clear">
-              <div class="a1tab fl mr20"><img /></div>
-              <div class="a1tit fl">
-                <div class="wobse top">
-                  冬季新款侧开叉高领毛衣女不规则套头针织衫宽松...
-                </div>
-                <div class="btm">
-                  规格：蓝色，L
-                </div>
-              </div>
-            </td>
-            <td class="a2">-</td>
-            <td class="a3">299.00</td>
-            <td class="a4">1</td>
-            <td class="a5">299.00</td>
-            <td class="a5">-</td>
-            <td class="a6">
-              <div class="btm" @click="showagree">同意</div>
-              <div class="btm mt10" @click="showrefuses">拒绝</div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <!-- 是否同意 或者拒绝浮层弹框 -->
+    &lt;!&ndash; 售后单详情 &ndash;&gt;
+
+    &lt;!&ndash; 是否同意 或者拒绝浮层弹框 &ndash;&gt;
   <div class="agreetc"  style="" v-show="showagrees===true||showrefuse===true">
 
   </div>
-  <!-- 是否同意弹框 -->
+  &lt;!&ndash; 是否同意弹框 &ndash;&gt;
   <div class="agreetc_content"  v-show="showagrees===true">
       <div class="agreetc_header">
         <span>提示</span>
@@ -106,7 +116,7 @@
         <button type="button" class="btn cancel" @click="showagrees=false">取消</button>
       </div>
   </div>
-  <!-- 拒绝原因 -->
+  &lt;!&ndash; 拒绝原因 &ndash;&gt;
   <div class="refuse_content" v-show="showrefuse===true">
       <div class="refuse_header">
         <span>拒绝理由</span>
@@ -119,16 +129,16 @@
         <button type="button" class="btn save"  >确认</button>
         <button type="button" class="btn cancel" @click="showrefuse=false">取消</button>
       </div>
-  </div>
+  </div>&ndash;&gt;-->
 
-    <!-- 售后物流 -->
+  <!--  &lt;!&ndash; 售后物流 &ndash;&gt;
     <div v-show="showactive02">
 
     </div>
-    <!-- 操作记录 -->
+    &lt;!&ndash; 操作记录 &ndash;&gt;
     <div v-show="showactive03">
       333
-    </div>
+    </div>-->
   </div>
 </template>
 <script>
@@ -136,8 +146,7 @@
     name: '',
     data () {
       return {
-        amout: '',
-        number: '',
+        activeName: 'first',
         is_Success: false,
         showactive: true,
         showactive02: false,
@@ -150,31 +159,9 @@
     },
     methods: {
       // 获取全部订单信息
-      customerdetail () {
-        var that = this
-        that.showactive = true
-        that.showactive02 = false
-        that.showactive03 = false
-      },
-      customerfreight () {
-        var that = this
-        that.showactive02 = true
-        that.showactive = false
-        that.showactive03 = false
-      },
-      customerecord () {
-        var that = this
-        that.showactive03 = true
-        that.showactive02 = false
-        that.showactive = false
-      },
-      showagree () {
-        var that = this
-        that.showagrees= true
-      },
-      showrefuses () {
-        var that = this
-        that.showrefuse= true
+      handleClick(tab, event) {
+        console.log(tab, event);
+       // alert(tab)
       }
     },
     mounted () {
