@@ -452,13 +452,18 @@
       ,handleCommand (index,row,action,to) {
         let that = this
         if (action === '_detail') {
-
+          this.$message({
+            message: '详情还未开发',
+            type: 'success'
+          });
         } else if (action === '_soldout') {
           that.soldGoods(row,to)
         } else if (action === '_edit') {
-
+          this.$message({
+            message: '编辑还未开发',
+            type: 'success'
+          });
         } else if (action === '_delete') {
-          //that.deleteGoods(row,to)
           that.goodsCheckStore();
         }
       }
