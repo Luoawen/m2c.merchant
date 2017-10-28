@@ -2,262 +2,878 @@
   <div class="addMess">
     <form class="form-horizontal" id="temMess">
       <div class="form-group">
-        <label class="col-sm-2 control-label">*运费模板名称：</label>
+        <label class="col-sm-2 control-label"> 运费模板名称： </label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" placeholder="1-20字符" v-model="formwork.modelName" >
+          <input type="text" class="form-control" placeholder="1-20字符" v-model="formwork.modelName">
         </div>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label">*计费方式：</label>
+        <label class="col-sm-2 control-label"> 计费方式： </label>
         <div class="col-sm-3">
           <form>
-            <input name="tem" type="radio" value='0' v-model="formwork.chargeType" id="tem" /><label for="tem">按重量</label>
-            <input name="tem" type="radio" value='1' v-model="formwork.chargeType" id="tem1" /><label for="tem1">按件数</label>
+            <input name="tem" type="radio" value='0' v-model="formwork.chargeType" id="tem"/>
+            <label for="tem">按重量</label>
+            <input name="tem" type="radio" value='1' v-model="formwork.chargeType" id="tem1"/>
+            <label for="tem1">按件数</label>
           </form>
         </div>
       </div>
       <!--按重量-->
       <template v-if="formwork.chargeType==0">
         <div class="form-group">
-          <label class="col-sm-2 control-label">*运费计算规则：</label>
+          <label class="col-sm-2 control-label"> * 运费计算规则： </label>
           <div class="col-sm-8">
             <table class="table table-bordered">
               <thead>
-                <tr class="active">
-                  <th style="width:210px">可配送至</th>
-                  <th>首重/kg</th>
-                  <th>运费/元</th>
-                  <th>续重/kg</th>
-                  <th>续费/元</th>
-                  <th>操作</th>
-                </tr>
+              <tr class="active">
+                <th style="width:210px"> 可配送至</th>
+                <th> 首重 / kg</th>
+                <th> 运费 / 元</th>
+                <th> 续重 / kg</th>
+                <th> 续费 / 元</th>
+                <th> 操作</th>
+              </tr>
               </thead>
-              <tbody>
+              <tbody v-if="addModify==='add'">
                 <tr>
-                  <template v-for="(postageModelRule,index) in formwork.postageModelRules">
-                    <td v-if="addModify==='add'">全国（默认运费）</td>
-                    <td v-if="addModify==='modify'">{{postageModelRule.address}}</td>
-                    <td>
-                      <input type="text" style="width:50px;height:30px;" v-model="postageModelRule.firstWeight">
-                    </td>
-                    <td>
-                      <input type="text" style="width:50px;height:30px;" v-model="postageModelRule.firstPostage">
-                    </td>
-                    <td>
-                      <input type="text" style="width:50px;height:30px;" v-model="postageModelRule.continuedWeight">
-                    </td>
-                    <td>
-                      <input type="text" style="width:50px;height:30px;" v-model="postageModelRule.continuedPostage">
-                    </td>
-                    <td></td>
-                  </template>
+                  <td v-model="add_postageModelRule_w.address"> 全国（ 默认运费）</td>
+                  <td>
+                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstWeight">
+                  </td>
+                  <td>
+                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstPostage">
+                  </td>
+                  <td>
+                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedWeight">
+                  </td>
+                  <td>
+                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedPostage">
+                  </td>
+                  <td></td>
                 </tr>
                 <tr v-for="(addRow,index) in addRows" v-if="addRows.length!==0">
-                  <td class="relative">未添加地区<a @click="addressCheckBox(index,$event)">编辑</a>
-                  <!--地区选择-->
+                  <td class="relative">{{address.length == 0 ? '未添加地区' : address}} 
+                    <a @click="addressCheckBox(index,$event)"> 编辑 </a>
+                    <!--地区选择-->
                     <div class="cityBox">
-                      <h4>选择地区<a class="close" @click="cityBoxHide">X</a></h4>
-                      <div class="test-div" v-for="(item,index) in datas">
-                        <div class="bigArea">
-                          
-                          {{item.name}}
+                      <h4> 选择地区 <a class="close" @click="cityBoxHide"> X </a></h4>
+                      <div class="test-div">
+                        <div class="bigArea" v-for="(item,index) in datas">
+                          <div class="left">
+                            <input type="checkbox" v-model="areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/> 
+                            {{item.name}}
+                          </div>
+                          <div class="pro" v-for="(pro,index) in item.subs">
+                            <input type="checkbox" v-model="IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
+                            <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                            <div class="cityWrap">
+                              <div class="city" v-for="(city,index) in pro.subs">
+                                <input type="checkbox" v-model="cityList" :value="city.code" @click="chooseCity(city,$event)"/> {{city.name}}
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
+                      
                     </div>
                   </td>
                   <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="addRow.firstWeight">
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.firstWeight">
                   </td>
                   <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="addRow.firstPostage">
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.firstPostage">
                   </td>
                   <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="addRow.continuedWeight">
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.continuedWeight">
                   </td>
-                <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="addRow.continuedPostage">
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.continuedPostage">
                   </td>
-                  <td @click="delectRule(index)">删除</td>
+                  <td @click="delectRule(index)"> 删除</td>
+                </tr>
+              </tbody>
+              <tbody v-if="addModify==='modify'">
+                <tr v-for="(add_postageModelRule_w,index) in formwork.postageModelRules">
+                  <td>{{add_postageModelRule_w.address==''?'全国（ 默认运费）':add_postageModelRule_w.address}}
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="add_postageModelRule_w.firstWeight">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="add_postageModelRule_w.firstPostage">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="add_postageModelRule_w.continuedWeight">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="add_postageModelRule_w.continuedPostage">
+                  </td>
+                  <td></td>
+                </tr>
+                <tr v-for="(addRow,index) in addRows"
+                    v-if="addRows.length!==0">
+                  <td class="relative">{{address = '' ? '未添加地区' : address}} <a @click="addressCheckBox(index,$event)">
+                    编辑 </a>
+                    <!--地区选择-->
+                    <div class="cityBox">
+                      <h4> 选择地区 <a class="close"
+                                  @click="cityBoxHide"> X </a></h4>
+                      <div class="test-div">
+                        <div class="bigArea"
+                            v-for="(item,index) in datas">
+                          <div class="left">
+                            <input type="checkbox"
+                                  v-model="areaIdArr" :value="item.code"
+                                  @click="chooseArea(item.code,$event)"/>{{item.name}}
+                          </div>
+                          <div class="pro" v-for="(pro,index) in item.subs">
+                            <input type="checkbox"
+                                  v-model="IdArr" :value="pro.code"
+                                  @click="choosePro(pro,$event)"/>
+                            <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                            <div class="cityWrap">
+                              <div class="city" v-for="(city,index) in pro.subs">
+                                <input type="checkbox"
+                                      v-model="cityList" :value="city.code"
+                                      @click="chooseCity(city,$event)"/> {{city.name}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.firstWeight">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.firstPostage">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.continuedWeight">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.continuedPostage">
+                  </td>
+                  <td @click="delectRule(index)"> 删除</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-          <p style="padding-left:290px;color:blue;cursor:pointer;" @click="addRow()">为制定地区设置运费</p>
-          <div class="form-group">
-            <label class="col-sm-2 control-label">模板说明：</label>
-            <div class="col-sm-6">
-              <textarea class="form-control" cols="80" rows="7" placeholder="1-200字符" style="resize:none;"></textarea>
-            </div>
+        <p style="padding-left:290px;color:blue;cursor:pointer;" @click="addRow()"> 为制定地区设置运费 </p>
+        <div class="form-group">
+          <label class="col-sm-2 control-label"> 模板说明： </label>
+          <div class="col-sm-6">
+<textarea class="form-control"
+          cols="80"
+          rows="7"
+          placeholder="1-200字符"
+          style="resize:none;"
+          v-model="formwork.modelDescription"> </textarea></div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit"
+                    class="btn btn-info btn-lg save"
+                    @click="save()"> 保存
+            </button>
+            <button type="submit"
+                    class="btn btn-default btn-lg"
+                    @click="back()"> 取消
+            </button>
           </div>
-          <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-              <button type="submit" class="btn btn-info btn-lg save" @click="goto()">保存</button>
-              <button type="submit" class="btn btn-default btn-lg">取消</button>
-            </div>
-          </div>
+        </div>
       </template>
       <!--按件数-->
       <template v-if="formwork.chargeType==1">
         <div class="form-group">
-          <label class="col-sm-2 control-label">*运费计算规则：</label>
+          <label class="col-sm-2 control-label"> * 运费计算规则： </label>
           <div class="col-sm-8">
             <table class="table table-bordered">
               <thead>
-                <tr class="active">
-                  <th scope="row" style="width：210px;">可配送至</th>
-                  <th>首件/个</th>
-                  <th>运费/元</th>
-                  <th>续件/个</th>
-                  <th>续费/元</th>
-                  <th>操作</th>
-                </tr>
+              <tr class="active">
+                <th scope="row" style="width:210px "> 可配送至
+                </th>
+                <th> 首件 / 个</th>
+                <th> 运费 / 元</th>
+                <th> 续件 / 个</th>
+                <th> 续费 / 元</th>
+                <th> 操作</th>
+              </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <template v-for="(postageModelRule,index) in formwork.postageModelRules">
-                    <td scope="row" v-if="addModify==='add'">全国（默认运费）</td>
-                    <td scope="row" v-if="addModify==='modify'">{{postageModelRule.address}}</td>
-                    <td>
-                      <input type="text" style="width：79px;height:30px;" v-model="postageModelRule.firstPiece">
-                    </td>
-                    <td>
-                      <input type="text" style="width：79px;height:30px;" v-model="postageModelRule.firstPostage">
-                    </td>
-                    <td>
-                      <input type="text" style="width：79px;height:30px;" v-model="postageModelRule.continuedPiece">
-                    </td>
-                    <td>
-                      <input type="text" style="width：79px;height:30px;" v-model="postageModelRule.continuedPostage">
-                    </td>
-                    <td></td>
-                  </template>
-                </tr>
-                <tr v-for="(addRow,index) in addRows" v-if="addRows.length!==0">
-                  <td scope="row" class="relative">未添加地区<span @click="addressCheckBox(index,$event)">编辑</span>
+              <!-- modify -->
+              <tbody v-if="addModify==='modify'">
+              <tr v-for="(add_postageModelRule,index) in formwork.postageModelRules">
+                  <td scope="row"> {{add_postageModelRule.address}}
+                  </td>
+                  <td>
+                    <input type="text"
+                           style="width:50px;height:30px;"
+                           v-model="add_postageModelRule.firstPiece">
+                  </td>
+                  <td>
+                    <input type="text"
+                           style="width:50px;height:30px;"
+                           v-model="add_postageModelRule.firstPostage">
+                  </td>
+                  <td>
+                    <input type="text"
+                           style="width:50px;height:30px;"
+                           v-model="add_postageModelRule.continuedPiece">
+                  </td>
+                  <td>
+                    <input type="text"
+                           style="width:50px;height:30px;"
+                           v-model="add_postageModelRule.continuedPostage">
+                  </td>
+                  <td></td>
+              </tr>
+              <tr v-for="(addRow,index) in addRows"
+                  v-if="addRows.length!==0">
+                <td class="relative">{{address = '' ? '未添加地区' : address}} <a @click="addressCheckBox(index,$event)">
+                  编辑 </a>
                   <!--地区选择-->
-                    <div class="cityBox">
-                      <h4>选择地区<a class="close" @click="cityBoxHide">X</a></h4>
+                  <div class="cityBox">
+                    <h4> 选择地区 <a class="close" @click="cityBoxHide"> X </a></h4>
+                    <div class="test-div">
+                      <div class="bigArea" v-for="(item,index) in datas">
+                        <div class="left">
+                          <input type="checkbox" v-model="areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/> 
+                          {{item.name}}
+                        </div>
+                        <div class="pro" v-for="(pro,index) in item.subs">
+                          <input type="checkbox" v-model="IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
+                          <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                          <div class="cityWrap">
+                            <div class="city" v-for="(city,index) in pro.subs">
+                              <input type="checkbox"
+                                     v-model="cityList" :value="city.code"
+                                     @click="chooseCity(city,$event)"/> {{city.name}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </td>
-                  <td>
-                    <input type="text" style="width：79px;height:30px;" v-model="addRow.firstPiece">
-                  </td>
-                  <td>
-                    <input type="text" style="width：79px;height:30px;" v-model="addRow.firstPostage">
-                  </td>
-                  <td>
-                    <input type="text" style="width：79px;height:30px;" v-model="addRow.continuedPiece">
-                  </td>
+                    
+                  </div>
+                </td>
                 <td>
-                    <input type="text" style="width：79px;height:30px;" v-model="addRow.continuedPostage">
-                  </td>
-                  <td @click="delectRule(index)">删除</td>
-                </tr>
+                  <input type="text"
+                         style="width:50px;height:30px;"
+                         v-model="addRow.firstWeight">
+                </td>
+                <td>
+                  <input type="text"
+                         style="width:50px;height:30px;"
+                         v-model="addRow.firstPostage">
+                </td>
+                <td>
+                  <input type="text"
+                         style="width:50px;height:30px;"
+                         v-model="addRow.continuedWeight">
+                </td>
+                <td>
+                  <input type="text"
+                         style="width:50px;height:30px;"
+                         v-model="addRow.continuedPostage">
+                </td>
+                <td @click="delectRule(index)"> 删除</td>
+              </tr>
+              </tbody>
+              <!-- add -->
+              <tbody v-if="addModify==='add'">
+              <tr>
+                <td v-model="add_postageModelRule_w.address"> 全国（ 默认运费）</td>
+                <td>
+                  <input type="text"
+                         style="width:50px;height:30px;"
+                         v-model="add_postageModelRule.firstPiece"/>
+                </td>
+                <td>
+                  <input type="text"
+                         style="width:50px;height:30px;"
+                         v-model="add_postageModelRule.firstPostage"/>
+                </td>
+                <td>
+                  <input type="text"
+                         style="width:50px;height:30px;"
+                         v-model="add_postageModelRule.continuedPiece"/>
+                </td>
+                <td>
+                  <input type="text"
+                         style="width:50px;height:30px;"
+                         v-model="add_postageModelRule.continuedPostage"/>
+                </td>
+                <td></td>
+              </tr>
+              <tr v-for="(addRow,index) in addRows"
+                  v-if="addRows.length!==0">
+                <td class="relative">{{addRow.address = '' ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
+                  编辑 </a>
+                  <!--地区选择-->
+                  <div class="cityBox">
+                    <h4> 选择地区 <a class="close"
+                                 @click="cityBoxHide"> X </a></h4>
+                      <div class="test-div">
+                        <div class="bigArea"
+                             v-for="(item,index) in datas">
+                          <div class="left">
+                            <input type="checkbox"
+                                   v-model="areaIdArr" :value="item.code"
+                                   @click="chooseArea(item.code,$event)"/> {{item.name}}
+                          </div>
+                          <div class="pro" v-for="(pro,index) in item.subs">
+                            <input type="checkbox"
+                                   v-model="IdArr" :value="pro.code"
+                                   @click="choosePro(pro,$event)"/>
+                            <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                            <div class="cityWrap">
+                              <div class="city"
+                                   v-for="(city,index) in pro.subs">
+                                <input type="checkbox"
+                                       v-model="cityList" :value="city.code"
+                                       @click="chooseCity(city,$event)"/> {{city.name}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </td>
+                <td>
+                  <input type="text"
+                         style="width:50px;height:30px;"
+                         v-model="addRow.firstWeight">
+                </td>
+                <td>
+                  <input type="text"
+                         style="width:50px;height:30px;"
+                         v-model="addRow.firstPostage">
+                </td>
+                <td>
+                  <input type="text"
+                         style="width:50px;height:30px;"
+                         v-model="addRow.continuedWeight">
+                </td>
+                <td>
+                  <input type="text"
+                         style="width:50px;height:30px;"
+                         v-model="addRow.continuedPostage">
+                </td>
+                <td @click="delectRule(index)"> 删除</td>
+              </tr>
               </tbody>
             </table>
           </div>
         </div>
-          <p style="padding-left:290px;color:blue;cursor:pointer;" @click="addRow()">为制定地区设置运费</p>
-          <div class="form-group">
-            <label class="col-sm-2 control-label">模板说明：</label>
-            <div class="col-sm-6">
-              <textarea class="form-control" cols="80" rows="7" placeholder="1-200字符" style="resize:none;" v-model="formwork.modelDescription"></textarea>
-            </div>
+        <p style="padding-left:290px;color:blue;cursor:pointer;"
+           @click="addRow()"> 为制定地区设置运费 </p>
+        <div class="form-group">
+          <label class="col-sm-2 control-label"> 模板说明： </label>
+          <div class="col-sm-6">
+          <textarea class="form-control"
+          cols="80"
+          rows="7"
+          placeholder="1-200字符"
+          style="resize:none;"
+          v-model="formwork.modelDescription"> </textarea></div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit"
+                    class="btn btn-info btn-lg save"
+                    @click="save()"> 保存
+            </button>
+            <button type="submit"
+                    class="btn btn-default btn-lg"
+                    @click="back()"> 取消
+            </button>
           </div>
-          <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-              <button type="submit" class="btn btn-info btn-lg save" @click="goto()">保存</button>
-              <button type="submit" class="btn btn-default btn-lg">取消</button>
-            </div>
-          </div>
+        </div>
       </template>
     </form>
   </div>
 </template>
 <script>
-export default {
-  data () {
-    return {
-      type: 'normal',
-      formwork: {chargeType: 0, postageModelRules: [{firstWeight: '', firstPiece: '', firstPostage: '', continuedWeight: '', continuedPiece: '', continuedPostage: ''}]},
-      addRows: [],
-      addModify: 'add',
-      chargeType: 0,
-      IdArr: [],
-      datas:[]
-    }
-  },
-  created () {
-  },
-  methods: {
-    // 新增行
-    addRow () {
-      let newRow = {firstWeight: '', firstPiece: '', firstPostage: '', continuedWeight: '', continuedPiece: '', continuedPostage: ''}
-      this.addRows.push(newRow)
-    },
-    // 删除行
-    delectRule (index) {
-      this.addRows.splice(index, 1)
-    },
-    // 显示地区选择盒子
-    addressCheckBox (index, $event) {
-      let that = this
-      var el = event.target
-      that.$(el).parents('.table').find('.cityBox').eq(index).toggle()
-    },
-    // 隐藏地区选择盒子
-    cityBoxHide () {
-      this.$('.table').find('.cityBox').hide()
-    }
-  },
-  mounted () {
-    let that = this
-    that.$.ajax({
-      type: 'get',
-      url: that.localbase + 'm2c.operate/address/getinner.web',
-      success: function (result) {
-        that.datas = result.content.subs
+  export default {
+    data() {
+      return {
+        type: 'normal',
+        formwork: {
+          chargeType: 0,
+          postageModelRules: [{
+              firstWeight: '',
+              firstPiece: '',
+              firstPostage: '',
+              continuedWeight: '',
+              continuedPiece: '',
+              continuedPostage: ''
+            }]
+        },
+        addRows: [],
+        addModify: 'add', // 判断是否是新增按钮进入
+        chargeType: 0, // 按件还是按重
+        areaIdArr: [], // area id
+        IdArr: [], // 省id
+        datas: [], // data树
+        cityList: [], // 市id
+        proList: [], // 省id暂存盒子
+        cityLength: [], // 比对省下市是否全选
+        address: [], // 选中的省/市名
+        postageModelRules: [], // 运费规则
+        modelId: '', // 模板id
+        add_postageModelRule: {
+          address: '',
+          firstPiece: '',
+          firstPostage: '',
+          continuedPiece: '',
+          continuedPostage: ''
+        }, //add  allCoutry
+        add_postageModelRule_w: {
+          address: '',
+          firstWeight: '',
+          firstPostage: '',
+          continuedWeight: '',
+          continuedPostage: '',
+          index: ''
+        }
       }
-    })
-    console.warn(that.$route.query.addModify)
-    if (that.$route.query.addModify === 'true') {
-      that.addModify = 'add'
+    },
+    created() {},
+    watch: {
+      'formwork.chargeType': {
+        handler: function (val, oldVal) {
+          let that = this
+          if (val != oldVal) {
+            that.add_postageModelRule = {}
+            that.add_postageModelRule_w = {}
+          }
+        },
+        deep: true
+      }
+    },
+    methods: {
+// 选中大区时同时选中所有省市
+      chooseArea(n, $event) {
+        let that = this
+        let el = event.target
+        if (el.checked) {
+          for (var i = 0; i < that.datas.length; i++) {
+            if (that.datas[i].code === n) {
+              for (var j = 0; j < that.datas[i].subs.length; j++) {
+                that.IdArr.push(that.datas[i].subs[j].code)
+                that.address.push(that.datas[i].subs[j].name)
+                that.proList.push(that.datas[i].subs[j].code)
+                for (var k = 0; k < that.datas[i].subs[j].subs.length; k++) {
+                  if (that.datas[i].subs[j].subs[k].parent === that.datas[i].subs[j].code) {
+                    that.cityList.push(that.datas[i].subs[j].subs[k].code)
+                  }
+                }
+              }
+            }
+          }
+        } else {
+          for (var i = 0; i < that.datas.length; i++) {
+            if (that.datas[i].code === n) {
+              for (var j = 0; j < that.datas[i].subs.length; j++) {
+                for (var k = 0; k < that.datas[i].subs[j].subs.length; k++) {
+                  if (that.datas[i].subs[j].subs[k].parent === that.datas[i].subs[j].code) {
+                    that.cityList.splice(that.$.inArray(that.datas[i].subs[j].subs[k].code, that.cityList), 1)
+                  }
+                }
+                that.IdArr.splice(that.$.inArray(that.datas[i].subs[j].code, that.IdArr), 1)
+                that.address.splice(that.datas[i].subs[j].name, 1)
+              }
+            }
+          }
+        }
+      },
+// 选中省时同时选中所有市
+      choosePro(n, $event) {
+        let that = this
+        let el = event.target
+        if (el.checked) {
+          that.IdArr.push(n.code)
+          that.address.push(n.name)
+          for (var i = 0; i < that.datas.length; i++) {
+            for (var j = 0; j < that.datas[i].subs.length; j++) {
+              if (that.datas[i].subs[j].code === n.code) {
+                for (var k = 0; k < that.datas[i].subs[j].subs.length; k++) {
+                  if (that.datas[i].subs[j].subs[k].parent === n.code) {
+                    that.cityList.push(that.datas[i].subs[j].subs[k].code)
+                  }
+                }
+              }
+            }
+          }
+          for (var i = 0; i < that.datas.length; i++) {
+            if(that.datas[i].code==n.parent){
+              if(that.$.inArray(n.parent,that.areaIdArr)==-1){
+                that.areaIdArr.push(n.parent)
+              }
+            }
+          }
+        } else {
+          for (var i = 0; i < that.datas.length; i++) {
+            for (var j = 0; j < that.datas[i].subs.length; j++) {
+              for (var k = 0; k < that.datas[i].subs[j].subs.length; k++) {
+                if (that.datas[i].subs[j].subs[k].parent === n.code) {
+                  that.cityList.splice(that.$.inArray(that.datas[i].subs[j].subs[k].code, that.cityList), 1)
+                }
+              }
+            }
+          }
+          that.address.splice(that.$.inArray(n.name, that.address), 1)
+          that.IdArr.splice(that.$.inArray(n.code, that.IdArr), 1)
+
+          let point=0
+          for (var i = 0; i < that.datas.length; i++) {
+            if(that.datas[i].code==n.parent){
+              for(let j =0 ;j<that.datas[i].subs.length;j++){
+                for(let p = 0; p<that.IdArr.length;p++){
+                  if(that.datas[i].subs[j].code==that.IdArr[p]){
+                    point++
+                  }
+                }
+              }
+              if(point==0){
+                that.areaIdArr.splice(that.$.inArray(n.parent, that.areaIdArr), 1)
+              }
+            }
+          }
+          
+        }
+      },
+// 市被选时对应省被选中,
+      chooseCity(city, $event) {
+        let that = this
+        let el = event.target
+        if (el.checked) {
+          for (var i = 0; i < that.datas.length; i++) {
+            for (var j = 0; j < that.datas[i].subs.length; j++) {
+              if (that.datas[i].subs[j].code === city.parent) {
+                if (that.$.inArray(that.datas[i].code, that.areaIdArr == -1)) {
+                  that.areaIdArr.push(that.datas[i].code)
+                }
+                if (that.$.inArray(city.parent, that.IdArr) == -1) {
+                  that.IdArr.push(city.parent)
+                }
+                if (that.$.inArray(that.datas[i].subs[j].name, that.address) == -1) {
+                  that.address.push(that.datas[i].subs[j].name)
+                }
+              }
+            }
+          }
+        } else {
+          let point = 0
+          for (let i = 0; i < that.datas.length; i++) {
+            for (let j = 0; j < that.datas[i].subs.length; j++) {
+              if (that.datas[i].subs[j].code === city.parent) {
+                for (let m = 0; m < that.datas[i].subs[j].subs.length; m++) {
+                  for (let p = 0; p < that.cityList.length; p++) {
+                    if (that.datas[i].subs[j].subs[m].code == that.cityList[p]) {
+                      point++
+                    }
+                  }
+                }
+                if (point==1) {
+                  that.IdArr.splice(that.$.inArray(city.parent, that.IdArr), 1)
+                  that.address.splice(that.$.inArray(that.datas[i].subs[j].name, that.address), 1)
+                }
+                let point2=0
+                for(let n=0;n<that.datas.length;n++){
+                    if(that.datas[i].subs[j].parent==that.datas[n].code){
+                      
+                      for(let f=0;f<that.datas[n].subs.length;f++){
+                          for(let y = 0; y < that.IdArr.length; y++){
+                            if(that.IdArr[y]==that.datas[n].subs[f].code){
+                              point2++
+                            }
+                          }
+                      }
+                      if(point2==0){ 
+                         that.areaIdArr.splice(that.$.inArray(that.datas[n].code, that.areaIdArr), 1)
+                      }   
+                    }
+                }
+
+              }
+            }
+          }
+        }
+      },
+// 点击取消
+      back(){
+        let that = this
+        that.$goRoute({
+          name: 'formwork'
+        })
+      },
+// 新增行
+      addRow(){
+        let newRow = {
+          areaIdArr: [],
+          IdArr: [],
+          datas: [],
+          cityList: [],
+          firstWeight: '',
+          firstPiece: '',
+          firstPostage: '',
+          continuedWeight: '',
+          continuedPiece: '',
+          continuedPostage: ''
+        }
+        this.addRows.push(newRow)
+      },
+// 删除行
+      delectRule(index)
+      {
+        this.addRows.splice(index, 1)
+      },
+// 显示地区选择盒子
+      addressCheckBox(index, $event)
+      {
+        let that = this
+        var el = event.target
+        that.$(el).parents('.table').find('.cityBox').eq(index).toggle()
+        that.index = index
+      },
+// 隐藏地区选择盒子
+      cityBoxHide(){
+        this.$('.table').find('.cityBox').hide()
+      },
+// 显示市级盒子
+      cityShow(index, $event){
+        let that = this
+        var el = event.target
+        that.$(el).parent('.pro').find('.cityWrap').toggle()
+      },
+//点击保存
+      save(){
+        let that = this
+        console.log(that.$route.query.modelId)
+        if (that.addModify === 'add'){
+          if (that.formwork.chargeType == 1) {
+            that.postageModelRules.push(that.add_postageModelRule)
+          } else {
+            that.postageModelRules.push(that.add_postageModelRule_w)
+          }
+          for (var i = 0; i < that.addRows.length; i++) {
+            that.postageModelRule = {
+              address: that.address.join(),
+              cityCode: that.cityList.join(),
+              continuedPiece: that.addRows[i].continuedPiece,
+              continuedPostage: that.addRows[i].continuedPostage,
+              continuedWeight: that.addRows[i].continuedWeight,
+              firstPiece: that.addRows[i].firstPiece,
+              firstPostage: that.addRows[i].firstPostage,
+              firstWeight: that.addRows[i].firstWeight,
+              defaultFlag: that.address == '' ? 0 : 1
+            }
+            that.postageModelRules.push(JSON.stringify(that.postageModelRule))
+          }
+        } else {
+          for(var i=0; i<that.formwork.postageModelRules.length; i++){
+            that.postageModelRules.push(that.formwork.postageModelRules[i])
+          }
+          for (var i = 0; i < that.addRows.length; i++) {
+            that.postageModelRule = {
+              address: that.address.join(),
+              cityCode: that.cityList.join(),
+              continuedPiece: that.addRows[i].continuedPiece,
+              continuedPostage: that.addRows[i].continuedPostage,
+              continuedWeight: that.addRows[i].continuedWeight,
+              firstPiece: that.addRows[i].firstPiece,
+              firstPostage: that.addRows[i].firstPostage,
+              firstWeight: that.addRows[i].firstWeight,
+              defaultFlag: that.address == '' ? 0 : 1
+            }
+            that.postageModelRules.push(that.postageModelRule)
+          }
+        }
+        that.$.ajax({
+          type: that.addModify === 'add' ? 'post' : 'put',
+          url: that.localbase + 'm2c.scm/postage',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            modelId: that.addModify === 'add' ? that.modelId : that.$route.query.modelId,
+            postageModelRules: JSON.stringify(that.postageModelRules),
+            modelName: that.formwork.modelName,
+            chargeType: that.formwork.chargeType,
+            modelDescription: that.formwork.modelDescription
+          },
+          success: function (result) {
+            if (result.status === 200) {
+              that.show_tip('保存成功')
+              that.$goRoute({path: 'formwork'})
+            } else {
+              that.show_tip(result.errorMessage)
+            }
+          }
+        })
+      }
+    },
+    mounted(){
+      let that = this
       that.$.ajax({
         type: 'get',
-        url: that.localbase + 'm2c.scm/postage/id',
-        data: {
-          token: sessionStorage.getItem('mToken')
-        },
+        url: that.localbase + 'm2c.operate/address/getinner.web',
         success: function (result) {
-          that.formwork.modelId = result.content
+          that.datas = result.content.subs
         }
       })
-    } else if (that.$route.query.addModify === 'false') {
-      that.addModify = 'modify'
-      that.$.ajax({
-        type: 'get',
-        url: that.localbase + 'm2c.scm/postage/' + that.$route.query.modelId,
-        data: {
-          token: sessionStorage.getItem('mToken')
-        },
-        success: function (result) {
-          that.formwork = result.content
-        }
-      })
+      if (that.$route.query.addModify === true) {
+        console.log('add')
+        that.addModify = 'add'
+        that.$.ajax({
+          type: 'get',
+          url: that.localbase + 'm2c.scm/postage/id',
+          data: {
+            token: sessionStorage.getItem('mToken')
+          },
+          success: function (result) {
+            that.modelId = result.content
+          }
+        })
+      } else {
+        console.log('modify')
+        that.addModify = 'modify'
+        that.$.ajax({
+          type: 'get',
+          url: that.localbase + 'm2c.scm/postage/' + that.$route.query.modelId,
+          data: {
+            token: sessionStorage.getItem('mToken')
+          },
+          success: function (result) {
+            that.formwork = result.content
+            console.warn(that.formwork.postageModelRules)
+          }
+        })
+      }
     }
   }
-}
 </script>
 <style scoped>
-  .addMess{
+  .addMess {
     margin-top: 168px;
   }
-  td.relative{position:relative;}
-  td.relative a{display:block;float:right; margin-right:10px;}
-  .cityBox{display:none;width:500px;height:400px;background:#fff;border:1px solid #ccc;position:absolute;
-  top:40px;left: -150px;z-index:2;}
-  .cityBox h4{width:100%;height:40px;background:#ededed;line-height:40px;text-indent:20px;}
-  .cityBox h4 a.close{float:right;margin-right:10px;}
-</style>
 
+  td.relative {
+    position: relative;
+  }
+
+  td.relative a {
+    display: block;
+    float: right;
+    margin-right: 10px;
+  }
+
+  .cityBox {
+    display: none;
+    width: 650px;
+    height: 400px;
+    background: #fff;
+    border: 1px solid #ccc;
+    position: absolute;
+    top: 40px;
+    left: -150px;
+    z-index: 2;
+  }
+
+  .cityBox h4 {
+    width: 100%;
+    height: 40px;
+    background: #ededed;
+    line-height: 40px;
+    text-indent: 20px;
+  }
+
+  .cityBox h4 a.close {
+    float: right;
+    margin-right: 10px;
+  }
+
+  .cityBox .bigArea {
+    width: 100%;
+    height: 48px;
+    float: left;
+    line-height: 48px;
+    padding-left: 20px;
+  }
+
+  .cityBox .bigArea:nth-child(even) {
+    background: #ccc
+  }
+
+  .cityBox .bigArea:nth-child(odd) {
+    background: #fff
+  }
+
+  .cityBox .bigArea .left {
+    float: left;
+    font-weight: bold;
+  }
+
+  .cityBox .bigArea .pro {
+    display: inline-block;
+    float: left;
+    width: 84px;
+    margin-left: 12px;
+    position: relative;
+  }
+
+  .pro span {
+    width: 64px;
+  }
+
+  .pro span i {
+    display: inline-block;
+    margin-right: 14px;
+    float: right;
+  }
+
+  .pro .cityWrap {
+    display: none;
+    width: 200px;
+    height: auto;
+    border: 1px solid #ccc;
+    position: absolute;
+    top: 30px;
+    left: -30px;
+    background: #fff;
+    z-index: 2;
+  }
+
+  .cityWrap .city {
+    display: inline-block;
+    float: left;
+    margin-left: 10px;
+  }
+</style>
