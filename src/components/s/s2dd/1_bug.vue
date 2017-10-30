@@ -34,10 +34,12 @@
       </div>
     </div>
     <div class="search_cell">
+
       <span>下单时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span>
       <div class="time" v-show="is_Success">
         <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
       </div>
+
     </div>
     <div class="search">
       <input type="text" class="inp" value=""  v-model="search_params.condition"><i class="glyphicon glyphicon-search" id="searchIco" @click="search()"></i>
