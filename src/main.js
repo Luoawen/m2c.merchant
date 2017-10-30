@@ -100,7 +100,7 @@ Vue.use(Element)
       Vue.prototype.base = 'http://api.m2c2017test.com:80/'
       Vue.prototype.localbase = 'http://api.m2c2017test.com:80/'
     }
-    else if (href.includes('localhost')) { // 本地环境
+    else if (href.includes('m2c2017local')) { // 本地环境
       Vue.prototype.base = 'http://api.m2c2017local.com:80/'
       Vue.prototype.localbase = 'http://api.m2c2017local.com:80/'
     }
