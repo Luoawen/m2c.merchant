@@ -281,10 +281,6 @@
   agreeshow () {
     var that = this
     that.Agreeshow = true
-      get_good_info () {
-      let that = this
-      that.is_Success = false
-    },
     refuseshow () {
       var that = this
       that.Refuseshow = true
