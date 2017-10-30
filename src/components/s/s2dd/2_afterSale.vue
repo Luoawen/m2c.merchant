@@ -181,10 +181,9 @@
     },
     methods: {
       // 获取全部订单信息
-<<<<<<< HEAD
       get_good_info () {
-        let that = this
-        that.is_Success = false
+        let that = this;
+        that.is_Success = false;
         that.$('#table').bootstrapTable('destroy').bootstrapTable({
           method: 'get',
           url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselllist',
@@ -284,8 +283,7 @@
       search () {
         this.get_good_info()
       },
-      exportSaleOrder () {
-=======
+
        orderStore () {
       let that = this
       that.$.ajax({
@@ -315,7 +313,6 @@
       })
     }
       ,exportSaleOrder () {
->>>>>>> 6c1527f37aaab2e3d48ff1d9488428ffd5d2f804
         let that = this
         let strHref = this.base + 'm2c.scm//order/export/saleafter?'
         let strParam = "dealerId=" + JSON.parse(sessionStorage.getItem('mUser')).dealerId
