@@ -14,6 +14,7 @@ const dealerOrDtl = r => require.ensure([], () => r(require('@/components/s/s2dd
 // s3右侧内容
 const goodList = r => require.ensure([], () => r(require('@/components/s/s3sp/1_goodList')), 's')
 const goodAppraise = r => require.ensure([], () => r(require('@/components/s/s3sp/2_goodAppraise')), 's')
+const goodAddModify = r => require.ensure([], () => r(require('@/components/s/s3sp/3_goodAddModify')), 's')
 // s4右侧内容
 const survey = r => require.ensure([], () => r(require('@/components/s/s4zj/1_survey')), 's')
 const detail = r => require.ensure([], () => r(require('@/components/s/s4zj/2_detail')), 's')
@@ -31,6 +32,7 @@ const transact = r => require.ensure([], () => r(require('@/components/s/s7sz/5_
 const formworkadd = r => require.ensure([], () => r(require('@/components/s/s7sz/6_formworkadd')), 's')
 
 const updatePass = r => require.ensure([], () => r(require('@/components/s/s8password/1_updatePass')), 's')
+const userInfo = r => require.ensure([], () => r(require('@/components/s/s8password/2_userInfo')), 's')
 Vue.use(Router)
 
 export default new Router({
@@ -78,6 +80,11 @@ export default new Router({
           path: 'goodAppraise',
           name: 'goodAppraise',
           component: goodAppraise
+        },
+        {
+          path: 'goodAddModify',
+          name: 'goodAddModify',
+          component: goodAddModify
         },
         {
           path: 'survey',
@@ -133,6 +140,11 @@ export default new Router({
           path: 'updatePass',
           name: 'updatePass',
           component: updatePass
+        },
+        {
+          path: 'userInfo',
+          name: 'userInfo',
+          component: userInfo
         },
         {
           path: 'formworkadd',

@@ -309,6 +309,7 @@
           </el-pagination>
         </div>
       </el-tab-pane>
+      <el-button type="primary"><router-link :to="{name:'goodAddModify'}" style="color:#fff;">新增</router-link></el-button>
     </el-tabs>
   </div>
 </template>
