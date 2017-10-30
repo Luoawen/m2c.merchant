@@ -242,6 +242,7 @@
         let that = this
         if (action === '_detail') {
           let path='details';
+          sessionStorage.setItem('afterSale:afterSellOrderId', row.afterSellOrderId)
           that.$goRoute({path: path})
         }
       }
