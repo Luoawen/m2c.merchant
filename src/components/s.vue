@@ -12,8 +12,8 @@
             {{dealerName}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown" >
-            <el-dropdown-item><router-link @click="goto" path='/s/userInfo' :to="{name:'userInfo'}">账户信息</router-link></el-dropdown-item>
-            <el-dropdown-item><router-link @click="goto" path='/s/updatePass' :to="{name:'updatePass'}">登录密码</router-link></el-dropdown-item>
+            <el-dropdown-item><div @click="goto" path='/s/userInfo'>账户信息</div></el-dropdown-item>
+            <el-dropdown-item><div @click="goto" path='/s/updatePass'>登录密码</div></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <div class="right_title_quit" @click="sign_out_tips">退出</div>
