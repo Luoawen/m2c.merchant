@@ -1,48 +1,110 @@
 <template>
-  <div class="sp">
-    <div class="dropdown">
-      <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">
-        <select v-model="search_params.orderType" name="orderType" >
-          <option value="" selected>售后期望</option>
-          <option value="0">换货</option>
-          <option value="1">退货</option>
-          <option value="2">退款</option>
-        </select>
+  <div role="tabpanel" class="tab-pane fade in active"  aria-labelledby="home-tab">
+    <div class="goods_search" style="width: 100%; height: 40px;">
+      <div  style="float: left">
+        售后期望:
+          <el-select v-model="search_params.expectation" placeholder="请选择售后期望">
+            <el-option v-for="item in expectations" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+      </div><!-- 售后期望-->
+      <div style="float: left">
+        售后状态:
+          <el-select v-model="search_params.afterSaleStatus" placeholder="请选择售后状态">
+            <el-option v-for="item in afterSales" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+      </div><!--售后状态-->
+      <div style="float: left">
+        媒体信息:
+        <el-select v-model="search_params.hasMedia" placeholder="请选择媒体信息">
+          <el-option v-for="item in mediaStatus" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+      </div><!--售后状态-->
+      <div class="ops_time" style="float:left;width: 540px;">申请时间:
+      <el-date-picker  v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+        </el-date-picker>
+        -
+        <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+        </el-date-picker>
+      </div><!--时间-->
+      <div class="search" style="width: 350px;float: left">
+        <el-input placeholder="输入商品名称 / 订货号 / 售后号" v-model="search_params.condition" class="input-with-select">
+          <el-button slot="append" icon="el-icon-search" @click.native="orderStore()"></el-button>
+        </el-input>
       </div>
-
     </div>
-    <div class="dropdown">
-      <div id="dLabel2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="state">
-        <select v-model="search_params.status" name="status" >
-          <option value="" selected>售后状态</option>
-          <option value="0">申请退货</option>
-          <option value="1">申请换货</option>
-          <option value="2">申请退款</option>
-          <option value="3">商家拒绝申请</option>
-          <option value="4">商家同意申请</option>
-          <option value="5">客户寄出</option>
-          <option value="6">商家收到</option>
-          <option value="7">商家寄出</option>
-          <option value="8">客户收到</option>
-          <option value="9">同意退款</option>
-          <option value="10">确认退款</option>
-          <option value="11">交易关闭</option>
-        </select>
+    <div class="order_tab_list" style="margin-top: 20px;">
+      <el-table
+        ref="multipleTable"
+        :data="orderStoreData"
+        tooltip-effect="dark"
+        style="width: 100%">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column
+          label="商品信息"
+          width="200">
+          <template slot-scope="scope"><img v-bind:src="JSON.parse(scope.row.goodsInfo.goodsImage)[0]" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsInfo.goodsName}}</span></template>
+        </el-table-column>
+        <el-table-column
+          prop="afterSellOrderId"
+          label="单号"
+          width="200">
+        </el-table-column>
+        <el-table-column
+          label="售后期望"
+          width="200"
+          show-overflow-tooltip>
+          <template slot-scope="scope"><span>{{scope.row.orderType==0?'换货':scope.row.orderType==1?'退货':scope.row.orderType==2?'仅退款':'-'}}</span></template>
+        </el-table-column>
+        <el-table-column
+          label="售后总额/元"
+          show-overflow-tooltip>
+          <template slot-scope="scope"><span>{{scope.row.backMoney/100}}</span></template>
+        </el-table-column>
+        <el-table-column
+          label="售后状态"
+          width="200"
+          show-overflow-tooltip>
+          <template slot-scope="scope"><span>{{scope.row.status==0?'申请退货':scope.row.status==1?'申请换货':scope.row.status==2?'申请退款':scope.row.status==3?'拒绝':scope.row.status==4?'同意':scope.row.status==5?'客户寄出':scope.row.status==6?'商家收到':scope.row.status==7?'商家寄出':scope.row.status==8?'客户收到':scope.row.status==9?'同意退款':'-'}}</span></template>
+        </el-table-column>
+        <el-table-column
+          label="申请时间"
+          show-overflow-tooltip>
+          <template slot-scope="scope"><span >{{handleDate(scope.row.createDate)}}</span></template>
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-col :span="12">
+              <el-dropdown trigger="click">
+                      <span class="el-dropdown-link">
+                        操作<i class="el-icon-arrow-down el-icon--right"></i>
+                      </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail')">详情</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-col>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="block" style="margin: 20px;float: right">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[5, 10, 20, 30]"
+          :page-size="pageRows"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalCount">
+        </el-pagination>
       </div>
-    </div>
-    <div class="search_cell">
-        <span>申请时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span>
-        <div class="time" v-show="is_Success">
-          <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
-        </div>
-    </div>
-    <div class="search">
-      <input type="text" class="inp" value=""  v-model="search_params.condition"><i class="glyphicon glyphicon-search" id="searchIco" @click="search()"></i>
-    </div>
-    <span>高级搜索</span>
-    <button type="button" class="btn btn-default pull-right operation" @click="exportSaleOrder()">导出</button>
-    <div class="good_info">
-      <table id="table" style="table-layout:fixed"></table>
     </div>
   </div>
 </template>
@@ -51,118 +113,103 @@
     name: '',
     data () {
       return {
-        amout: '',
-        number: '',
-        is_Success: false,
+        pageRows:5,
+        currentPage: 1,
+        totalCount:0,
+        expectations:[{
+          value: '',
+          label: '全部'
+        }, {
+          value: '2',
+          label: '仅退款'
+        }, {
+          value: '1',
+          label: '退货退款'
+        }, {
+          value: '0',
+          label: '换货'
+        }],
+        afterSales:[{
+          value: '',
+          label: '全部'
+        }, {
+          value: '0',
+          label: '申请退货'
+        }, {
+          value: '1',
+          label: '申请换货'
+        }, {
+          value: '2',
+          label: '申请退款'
+        }, {
+          value: '3',
+          label: '拒绝'
+        }, {
+          value: '4',
+          label: '同意'
+        }, {
+          value: '5',
+          label: '客户寄出'
+        }, {
+          value: '6',
+          label: '商家收到'
+        }, {
+          value: '7',
+          label: '商家寄出'
+        }, {
+          value: '8',
+          label: '客户收到'
+        }, {
+          value: '9',
+          label: '同意退款'
+        }],
+        afterSaleStatus:'',//售后状态
+        mediaStatus:[{
+          value: '',
+          label: '全部'
+        }, {
+          value: '1',
+          label: '有媒体信息'
+        }, {
+          value: '2',
+          label: '无媒体信息'
+        }],
         // 搜索参数
-        search_params: { orderType: '', status: sessionStorage.getItem('statusFlag'), startTime: sessionStorage.getItem('startTime'), endTime: sessionStorage.getItem('endTime'), condition: '' }
+        search_params: { expectation: '', afterSaleStatus: '', condition: '', startTime: '', endTime: '',hasMedia:'' }
+        ,orderStoreData:[]
       }
     },
     methods: {
       // 获取全部订单信息
-      get_good_info () {
-        let that = this
-        that.is_Success = false
-        that.$('#table').bootstrapTable('destroy').bootstrapTable({
-          method: 'get',
-          url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselllist',
-          queryParams: function (params) {
-            return Object.assign({}, {
-              token: sessionStorage.getItem('mToken'),
-              isEncry: false,
-              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-              rows: params.limit,                     // 每页多少条数据
-              pageNumber: params.offset / params.limit + 1    // 请求第几页
-            }, that.search_params)
-          },
-          pagination: true,
-          pageNumber: 1,
-          pageSize: 10,
-          pageList: [5, 10, 20, 100],
-          striped: true,
-          showExport: true,
-          exportDataType: 'selected',
-          queryParamsType: 'limit',
-          sidePagination: 'server',
-          contentType: 'application/x-www-form-urlencoded',
-          responseHandler: function (result) {
-            console.log(result)
-            return {
-              total: result.totalCount,    // 总页数
-              rows: result.content         // 数据
-            }
-          },
-          columns: [{
-            checkbox: true,
-            valign: 'middle'
-          }, {
-            title: '商品信息',
-            events: 'handle',
-            width: '150',
-            formatter: function (x, y) {
-              return "<image src='" + JSON.parse(y.goodsInfo.goodsImage)[0] + "' width='50'></image>" + y.goodsInfo.goodsName + y.goodsInfo.skuName
-            },
-            align: 'center',
-            valign: 'middle'
-          }, {
-            field: 'afterSellOrderId',
-            title: '单号',
-            align: 'center',
-            valign: 'middle',
-            width: '155'
-          }, {
-            title: '售后期望',
-            align: 'center',
-            valign: 'middle',
-            width: '155',
-            formatter: function (x, y) {
-              return y.orderType === 0 ? '换货' : y.orderType === 1 ? '退货' : y.orderType === 2 ? '仅退款' : '-'
-            }
-          }, {
-            field: 'backMoney',
-            title: '售后总金额/元',
-            align: 'center',
-            valign: 'middle',
-            width: '155',
-            formatter: function (x, y) {
-              return y.backMoney / 100
-            }
-          }, {
-            title: '售后状态',
-            align: 'center',
-            valign: 'middle',
-            width: '80',
-            //0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
-            formatter: function (x, y) {
-              return y.status === 0 ? '申请退货' : y.status === 1 ? '申请换货' : y.status === 2 ? '申请退款' : y.status === 3 ? '拒绝' : y.status === 4 ? '同意' : y.status === 5 ? '客户寄出' : y.status === 6 ? '商家收到' : y.status === 7 ? '商家寄出' : y.status === 8 ? '客户收到' : y.status === 9 ? '同意退款' : '-'
-            }
-          }, {
-            title: '申请时间',
-            align: 'center',
-            valign: 'middle',
-            width: '155',
-            formatter: function (x, y) {
-              let d = new Date(y.createDate)
-              return that.date_format(d, 'yyyy-MM-dd hh:mm:ss')
-            }
-          }, {
-            title: '操作',
-            align: 'center',
-            valign: 'middle',
-            width: '80',
-            formatter: function (x, y) {
-              return '<a href=#>详情</a>'
-            }
-          }]
-        })
-      },
-      timeBox () {
-        this.is_Success = true
-      },
-      search () {
-        this.get_good_info()
-      },
-      exportSaleOrder () {
+       orderStore () {
+      let that = this
+      that.$.ajax({
+        type: 'get',
+        url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselllist',
+        data: {
+          token: sessionStorage.getItem('mToken'),
+          isEncry: false,
+          /*dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,*/
+          dealerId:'JXS42ACB6D352E9417FBBCF03908219AAF1',
+          rows: that.pageRows,                     // 每页多少条数据
+          pageNum: that.currentPage,    // 请求第几页*/
+          orderType:that.search_params.expectation,
+          status:that.search_params.afterSaleStatus,
+          condition:that.search_params.condition,
+          startTime:that.search_params.startTime,
+          endTime:that.search_params.endTime
+        },
+        success: function (result) {
+          if (result.status === 200){
+            // 获取商品列表
+
+            that.orderStoreData = result.content
+            that.totalCount = result.totalCount
+          }
+        }
+      })
+    }
+      ,exportSaleOrder () {
         let that = this
         let strHref = this.base + 'm2c.scm//order/export/saleafter?'
         let strParam = "dealerId=" + JSON.parse(sessionStorage.getItem('mUser')).dealerId
@@ -171,9 +218,37 @@
         });
         window.open(strHref + strParam, '_export')
       }
+      ,handleSizeChange(val) {
+      let that = this
+      that.goodsStorePageRows=val
+      that.goodsStore();
+    }
+      ,handleCurrentChange(val) {
+      let that = this
+      that.goodsStoreCurrentPage=val
+      that.goodsStore();
+    }
+      ,handleDate (input){
+        var d = new Date(input);
+        var year = d.getFullYear();
+        var month = d.getMonth() + 1;
+        var day = d.getDate() <10 ? '0' + d.getDate() : '' + d.getDate();
+        var hour = d.getHours();
+        var minutes = d.getMinutes();
+        var seconds = d.getSeconds();
+        return  year+ '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + seconds;
+      }
+      ,handleCommand (index,row,action) {
+        let that = this
+        if (action === '_detail') {
+          let path='details';
+          sessionStorage.setItem('afterSale:afterSellOrderId', row.afterSellOrderId)
+          that.$goRoute({path: path})
+        }
+      }
     },
     mounted () {
-      this.get_good_info()
+      this.orderStore()
     }
   }
 
