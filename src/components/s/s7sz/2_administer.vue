@@ -81,8 +81,23 @@
         <p>品牌名称：<input type="text" v-model="add_modify_params.brandName" /></p>
         <p>英文名称：<input type="text" v-model="add_modify_params.brandNameEn" /></p>
         <div>品牌区域：
-          <select id="select">
-            <option v-for="pinpai in pinpais" :value="pinpai.value">{{pinpai.name}}</option>
+          <select id="country_select" v-model="add_modify_params.firstAreaCode">
+            <option value=""></option>
+            <option v-for="(cell,index) in country_all_search" :key="index" :value="cell.code">
+              {{cell.name}}
+            </option>
+          </select>
+          <select id="province_select" v-model="add_modify_params.twoAreaCode" v-if="province_show">
+            <option value=""></option>
+            <option v-for="(cell,index) in province_all_search" :key="index" :value="cell.code">
+              {{cell.name}}
+            </option>
+          </select>
+          <select id="city_select" v-model="add_modify_params.threeAreaCode" v-if="city_show">
+            <option value=""></option>
+            <option v-for="(cell,index) in city_all_search" :key="index" :value="cell.code">
+              {{cell.name}}
+            </option>
           </select>
         </div>
         <div>品牌LOGO：
@@ -97,7 +112,7 @@
         <button @click="changeGoodShow=!changeGoodShow">返回</button>
       </div>
     </div>
-    
+
   </div>
 </template>
 
@@ -129,19 +144,98 @@
         imgshow: false,
         add_modify_params_imgurl: '',
         // 新增/修改的数据
-        add_modify_params: {approveId: '', brandId: '', brandName: '', brandNameEn: '', firstAreaName: '', twoAreaName: '', threeAreaName: '', brandLogo: ''},
+        add_modify_params: {approveId: '', brandId: '', brandName: '', brandNameEn: '', firstAreaCode: '', twoAreaCode: '', threeAreaCode: '', firstAreaName: '', twoAreaName: '', threeAreaName: '', brandLogo: ''},
         // 控制新增/修改的参数
         handle_toggle: '',
         // 上传头像标识
-        touxiang_change: false
+        touxiang_change: false,
+        // 所有的国家(供搜索使用)
+        country_all_search: [],
+        // 可选的省份(供搜索使用)
+        province_all_search: [],
+        // 所有的城市(供搜索使用)
+        city_all_search: [],
+        province_show: false,
+        city_show: false
+      }
+    },
+    watch: {
+      // 查询时监控国家
+      'add_modify_params.firstAreaCode': {
+        handler (code, oldCode) {
+          let that = this
+          if (code === '' || code === undefined) {
+            that.add_modify_params.twoAreaCode = ''
+            return
+          }
+          if (code !== oldCode) {
+            that.$.ajax({
+              url: that.base + 'm2c.operate/address/getintel.web',
+              data: {
+                token: sessionStorage.getItem('mToken'),
+                parentCode: code
+              },
+              success: function (result) {
+                that.province_all_search = result.content
+                if (result.content.length > 0) {
+                  that.province_show = true
+                  that.city_show = false
+                }
+              }
+            })
+          }
+        },
+        deep: true
+      },
+      // 查询时监控省份
+      'add_modify_params.twoAreaCode': {
+        handler (code, oldCode) {
+          let that = this
+          if (code === '' || code === undefined) {
+            that.add_modify_params.threeAreaCode = ''
+            return
+          }
+          if (code !== oldCode) {
+            that.$.ajax({
+              url: that.base + 'm2c.operate/address/getintel.web',
+              data: {
+                token: sessionStorage.getItem('mToken'),
+                parentCode: code
+              },
+              success: function (result) {
+                that.city_all_search = result.content
+                if (result.content.length > 0) {
+                  that.city_show = true
+                }
+              }
+            })
+          }
+        },
+        deep: true
       }
     },
     methods: {
+      area () {
+        let that = this
+        // 获取省市区列表
+        that.$.ajax({
+          url: that.base + 'm2c.operate/address/getintel.web',
+          data: {
+            token: sessionStorage.getItem('mToken')
+          },
+          success: function (result) {
+            that.country_all_search = result.content
+          }
+        })
+      },
       // 重置
       reset_add_modify_params_bind () {
         this.add_modify_params.brandId = ''
         this.add_modify_params.brandName = ''
         this.add_modify_params.brandNameEn = ''
+        this.add_modify_params.firstAreaCode = ''
+        this.add_modify_params.twoAreaCode = ''
+        this.add_modify_params.threeAreaCode = ''
         this.add_modify_params.firstAreaName = ''
         this.add_modify_params.twoAreaName = ''
         this.add_modify_params.threeAreaName = ''
@@ -150,6 +244,7 @@
       // 新增
       addGood () {
         let that = this
+        that.area()
         that.reset_add_modify_params_bind()
         that.$.ajax({
           type: 'get',
@@ -202,7 +297,7 @@
           let formData = new FormData()
           formData.append('img', document.querySelector('#m11yhgl_img_input').files[0])
           formData.append('token', sessionStorage.getItem('mToken'))
-          formData.append('imgGroup', 1)
+          formData.append('imgGroup', 4)
           that.$.ajax({
             type: 'post',
             url: that.localbase + 'm2c.support/img/upload',
@@ -238,8 +333,9 @@
           that.handle_toggle = 'modify_status'
           that.imgshow = true
           that.touxiang_change = false
-          that.get_comment_info()
-          that.get_comment_info1()
+          // that.get_comment_info()
+          // that.get_comment_info1()
+          that.area()
         })
       },
       // 修改保存
@@ -247,10 +343,46 @@
         let that = this
         // that.reset_add_modify_params_bind()
         that.add_modify_imgStep(function () {
-          // console.log('结果', that.add_modify_params_imgurl)
+          // 根据国家的code获取省份名字
+          {
+            let select = document.querySelector('#country_select')
+            let options = select.options
+            let index = select.selectedIndex
+            if (index === -1) {
+              that.add_modify_params.firstAreaName = ''
+            } else {
+              that.add_modify_params.firstAreaName = options[index].text
+            }
+          }
+          // 根据省份code获取城市名字
+          {
+            let select = document.querySelector('#province_select')
+            if (select !== null) {
+              let options = select.options
+              let index = select.selectedIndex
+              if (index === -1) {
+                that.add_modify_params.twoAreaName = ''
+              } else {
+                that.add_modify_params.twoAreaName = options[index].text
+              }
+            }
+          }
+          // 根据城市code获取区域名字
+          {
+            let select = document.querySelector('#city_select')
+            if (select !== null) {
+              let options = select.options
+              let index = select.selectedIndex
+              if (index === -1) {
+                that.add_modify_params.threeAreaName = ''
+              } else {
+                that.add_modify_params.threeAreaName = options[index].text
+              }
+            }
+          }
           that.$.ajax({
-            type: 'post',
-            url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/brand/approve' : that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.brandId,
+            type: that.handle_toggle === 'add' ? 'post' : 'put',
+            url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/brand/approve' : that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.approveId,
             // data: Object.assign({}, that.add_modify_params, that.touxiang_change ? {icon: that.add_modify_params_imgurl} : {}, {
             data: Object.assign({
               token: sessionStorage.getItem('mToken'),
@@ -258,7 +390,7 @@
               dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName
             }, that.add_modify_params, that.touxiang_change ? {brandLogo: that.add_modify_params_imgurl} : {}),
             success: function (result) {
-              that.get_comment_info()
+              that.get_comment_info1()
               that.changeGoodShow = false
             }
           })
@@ -688,7 +820,7 @@
         .print_order {
           background: #18DCF6;
         }
-        
+
         //表格样式
         .comment_info{
           table {
