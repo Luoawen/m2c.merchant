@@ -12,7 +12,7 @@ s<template>
       return {
         // 售后id
         addressId: '',
-        dealer_user_info: { userPhone: '' , dealerName : '' , dealerFristClassifyName : '' , dealerSecondClassifyName : '' , startSignDate : '' ,endSignDate : '' cooperationMode :'' ,dealerDetailAddress : '',sellerName : '' sellerPhone :'' },
+       // dealer_user_info: { userPhone: '' , dealerName : '' , dealerFristClassifyName : '' , dealerSecondClassifyName : '' , startSignDate : '' ,endSignDate : '' cooperationMode :'' ,dealerDetailAddress : '',sellerName : '' sellerPhone :'' },
         dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
         userPhone: JSON.parse(sessionStorage.getItem('mUser')).mobile
       }
