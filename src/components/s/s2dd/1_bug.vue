@@ -101,7 +101,7 @@
               rows: result.content         // 数据
             }
           },
-          columns: [{
+          columns: [{    
             checkbox: true,
             valign: 'middle'
           }, {
