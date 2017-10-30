@@ -70,7 +70,7 @@
             return Object.assign({}, {
               token: sessionStorage.getItem('mToken'),
               isEncry: false,
-              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            //  dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
               rows: params.limit,                     // 每页多少条数据
               pageNumber: params.offset / params.limit + 1    // 请求第几页
             }, that.search_params)
