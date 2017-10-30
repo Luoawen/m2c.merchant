@@ -102,7 +102,8 @@
               </tbody>
               <tbody v-if="addModify==='modify'">
                 <tr v-for="(add_postageModelRule_w,index) in formwork.postageModelRules">
-                  <td>{{add_postageModelRule_w.address==''?'全国（ 默认运费）':add_postageModelRule_w.address}}<a v-if="index!=0" @click="addressCheckBox(index,$event)">编辑 </a>
+                  <td>{{add_postageModelRule_w.address==''?'全国（ 默认运费）':add_postageModelRule_w.address}}
+                    <!-- <a v-if="index!=0" @click="addressCheckBox(index,$event)">编辑 </a> -->
                   <!--地区选择-->
                     <div class="cityBox">
                       <h4> 选择地区 <a class="close"
@@ -152,7 +153,7 @@
                           style="width:50px;height:30px;"
                           v-model="add_postageModelRule_w.continuedPostage">
                   </td>
-                  <td></td>
+                  <td> <!--<a v-if="index!=0" @click="delectRule(index)">删除</a>--></td>
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
