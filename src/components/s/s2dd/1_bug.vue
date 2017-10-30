@@ -35,7 +35,7 @@
     </div>
     <div class="search_cell">
 
-      <span>下单时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span>
+      <span>下单时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span><router-link :to="{ name : 'dealerOrDtl', query: {orderId: '20171018142052LOKIJN',dealerOrderId: '20171026161652LOKIXX0'}}">xineeeee</router-link>
       <div class="time" v-show="is_Success">
         <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
       </div>

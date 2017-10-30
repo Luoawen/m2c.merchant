@@ -10,6 +10,7 @@ const home = r => require.ensure([], () => r(require('@/components/s/s1sy/home')
 const bug = r => require.ensure([], () => r(require('@/components/s/s2dd/1_bug')), 's')
 const afterSale = r => require.ensure([], () => r(require('@/components/s/s2dd/2_afterSale')), 's')
 const details = r => require.ensure([], () => r(require('@/components/s/s2dd/3_details')), 's')
+const dealerOrDtl = r => require.ensure([], () => r(require('@/components/s/s2dd/4_dealerOrDtl')), 's')
 // s3右侧内容
 const goodList = r => require.ensure([], () => r(require('@/components/s/s3sp/1_goodList')), 's')
 const goodAppraise = r => require.ensure([], () => r(require('@/components/s/s3sp/2_goodAppraise')), 's')
@@ -137,6 +138,11 @@ export default new Router({
           path: 'formworkadd',
           name: 'formworkadd',
           component: formworkadd
+        },
+        {
+          path: 'dealerOrDtl',
+          name: 'dealerOrDtl',
+          component: dealerOrDtl
         }
       ]
     }
