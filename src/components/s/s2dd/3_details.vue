@@ -147,7 +147,7 @@
     data () {
       return {
         activeName: 'first',
-        is_Success: false,
+        orderDetail:{},
         showactive: true,
         showactive02: false,
         showactive03: false,
@@ -163,9 +163,29 @@
         console.log(tab, event);
        // alert(tab)
       }
+      ,loadOrderDetail () {
+      let that = this
+      that.$.ajax({
+        type: 'get',
+        url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselldetail',
+        data: {
+          token: sessionStorage.getItem('mToken'),
+          isEncry: false,
+          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+          afterSellOrderId:sessionStorage.getItem('afterSale:afterSellOrderId')
+        },
+        success: function (result) {
+          if (result.status === 200){
+            // 获取商品列表
+            that.orderDetail = result.content
+          }
+        }
+      })
+    }
     },
     mounted () {
-      // this.get_good_info()
+      let that = this
+      that.loadOrderDetail()
     }
   }
 </script>
