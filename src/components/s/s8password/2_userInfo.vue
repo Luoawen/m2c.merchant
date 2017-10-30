@@ -1,33 +1,18 @@
 s<template>
   <div class="sz">
     账户信息
+    <div>管理员手机号：<div id="userPhone"></div></div>
   </div>
 </template>
 <script>
+  /* eslint-disable space-infix-ops,quotes */
+
   export default {
     data () {
       return {
-        name: '',
-        // 搜索参数
-        search_params: {accNo: '', mediaName: '', province: '', proName: '', city: '', cityName: '', regionCode: '', areaName: '', parCate: '', cate: '', cooperWay: '', staff: '', addr: '', regisDateStart: '', regisDateEnd: '', detail: '', person: '', tel: ''},
-        // 所有的省份(供搜索使用)
-        province_all_search: [],
-        // 可选的城市(供搜索使用)
-        city_all_search: [],
-        // 所有的区(供搜索使用)
-        area_all_search: [],
-        // 所有的省份(供新增搜索删除(上)使用)
-        province_all_add_modify_1: [],
-        // 所有的城市(供新增搜索删除(上)使用)
-        city_all_add_modify_1: [],
-        // 所有的省份(供新增搜索删除(下)使用)
-        province_all_add_modify_2: [],
-        // 所有的城市(供新增搜索删除(下)使用)
-        city_all_add_modify_2: [],
-        // 所有的区域(供新增搜索删除(下)使用)
-        area_all_add_modify_2: [],
         // 售后id
         addressId: '',
+        dealer_user_info: { userPhone: '' , dealerName : '' , dealerFristClassifyName : '' , dealerSecondClassifyName : '' , startSignDate : '' ,endSignDate : '' cooperationMode :'' ,dealerDetailAddress : '',sellerName : '' sellerPhone :'' },
         dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
         userPhone: JSON.parse(sessionStorage.getItem('mUser')).mobile
       }
@@ -96,6 +81,21 @@ s<template>
       }
     },
     mounted () {
+      let that = this
+      var dealerId = JSON.parse(sessionStorage.getItem('mUser')).dealerId
+      that.$.ajax({
+        url: that.base + 'm2c.scm/dealer/sys/'+ dealerId,
+        type: 'get',
+        data: {
+        },
+        success: function (result) {
+          if (result.status === 200) {
+            that.dealer_user_info = result.content
+          } else {
+            alert(result.errorMessage)
+          }
+        }
+      })
     }
   }
 </script>
