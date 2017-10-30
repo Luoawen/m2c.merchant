@@ -1,8 +1,8 @@
 <template>
   <div class="bs-example bs-example-tabs sz" data-example-id="togglable-tabs">
     <ul id="myTabs" class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">品牌库</a></li>
-      <li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" >品牌审核</a></li>
+      <li role="presentation" class="active" @click="brandQuery()"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">品牌库</a></li>
+      <li role="presentation" @click="brandApproveQuery()"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" >品牌审核</a></li>
       <button type="button" class="btn btn-info pull-right btn-lg" @click="addGood()">新增</button>
     </ul>
     <div id="myTabContent" class="tab-content">
@@ -156,7 +156,8 @@
         // 所有的城市(供搜索使用)
         city_all_search: [],
         province_show: false,
-        city_show: false
+        city_show: false,
+        modifyLocal: ''
       }
     },
     watch: {
@@ -215,6 +216,20 @@
       }
     },
     methods: {
+      brandQuery () {
+        let that = this
+        that.changeGoodShow = false
+        that.goodInfoShow = false
+        that.modifyLocal = 1
+        that.get_comment_info()
+      },
+      brandApproveQuery () {
+        let that = this
+        that.changeGoodShow = false
+        that.goodInfoShow = false
+        that.modifyLocal = 2
+        that.get_comment_info1()
+      },
       area () {
         let that = this
         // 获取省市区列表
@@ -381,8 +396,8 @@
             }
           }
           that.$.ajax({
-            type: that.handle_toggle === 'add' ? 'post' : 'put',
-            url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/brand/approve' : that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.approveId,
+            type: that.handle_toggle === 'add' ? 'post' : (that.modifyLocal === 1 ? 'post' : 'put'),
+            url: that.handle_toggle === 'add' ? (that.localbase + 'm2c.scm/brand/approve') : (that.modifyLocal === 1 ? (that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.brandId) : that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.approveId),
             // data: Object.assign({}, that.add_modify_params, that.touxiang_change ? {icon: that.add_modify_params_imgurl} : {}, {
             data: Object.assign({
               token: sessionStorage.getItem('mToken'),
@@ -665,7 +680,7 @@
         }
       }
       that.get_comment_info()
-      that.get_comment_info1()
+      that.modifyLocal = 1
     }
   }
 </script>
