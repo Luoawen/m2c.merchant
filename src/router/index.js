@@ -9,6 +9,7 @@ const home = r => require.ensure([], () => r(require('@/components/s/s1sy/home')
 // s2右侧内容
 const bug = r => require.ensure([], () => r(require('@/components/s/s2dd/1_bug')), 's')
 const afterSale = r => require.ensure([], () => r(require('@/components/s/s2dd/2_afterSale')), 's')
+const details = r => require.ensure([], () => r(require('@/components/s/s2dd/3_details')), 's')
 // s3右侧内容
 const goodList = r => require.ensure([], () => r(require('@/components/s/s3sp/1_goodList')), 's')
 const goodAppraise = r => require.ensure([], () => r(require('@/components/s/s3sp/2_goodAppraise')), 's')
@@ -28,6 +29,7 @@ const address = r => require.ensure([], () => r(require('@/components/s/s7sz/4_a
 const transact = r => require.ensure([], () => r(require('@/components/s/s7sz/5_transact')), 's')
 const formworkadd = r => require.ensure([], () => r(require('@/components/s/s7sz/6_formworkadd')), 's')
 
+const updatePass = r => require.ensure([], () => r(require('@/components/s/s8password/1_updatePass')), 's')
 Vue.use(Router)
 
 export default new Router({
@@ -60,6 +62,11 @@ export default new Router({
           path: 'afterSale',
           name: 'afterSale',
           component: afterSale
+        },
+        {
+          path: 'details',
+          name: 'details',
+          component: details
         },
         {
           path: 'goodList',
@@ -122,6 +129,11 @@ export default new Router({
           component: transact
         },
         {
+          path: 'updatePass',
+          name: 'updatePass',
+          component: updatePass
+        },
+        {
           path: 'formworkadd',
           name: 'formworkadd',
           component: formworkadd
@@ -130,4 +142,3 @@ export default new Router({
     }
   ]
 })
-

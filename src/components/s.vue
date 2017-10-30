@@ -39,12 +39,13 @@
 				<div path='/s/address' class="content_s">售后地址</div>
 				<div path='/s/transact' class="content_s">交易密码</div>
 			</div>
+      <div class="public_nav" path='/s/updatePass'><i class="nav_setting"></i>修改密码</div>
     </div>
     <div class="right_nav">
       <i></i>
       <a @click="goto_right_nav" path='/s/home'>首页</a>
       <div class="right_nav_content" path='' @click="goto_right_nav"></div>
-      <div id="public_nav_three_level"></div> 
+      <div id="public_nav_three_level"></div>
     </div>
     <!-- 供应商提示框样式 -->
     <div class="modal_refund_bg" v-show="sign_out_tip.isShow"></div>
@@ -56,7 +57,7 @@
         <button class="button_refund1" @click="sign_out">退出</button>
         <button class="button_refund2" @click="sign_out_tips_close">取消</button>
       </div>
-      
+
     </div>
     <router-view></router-view>
   </div>
