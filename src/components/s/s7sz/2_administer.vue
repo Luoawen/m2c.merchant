@@ -681,6 +681,8 @@
       }
       that.get_comment_info()
       that.modifyLocal = 1
+      that.province_show = false
+      that.city_show = false
     }
   }
 </script>
