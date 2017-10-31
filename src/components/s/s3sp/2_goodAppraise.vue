@@ -83,12 +83,10 @@
             <td colspan="7">
               <div class="tdhf">
                 <div class="nr">
-                  回复内容: <br>
-                  {{comment.replyCommentContent}} <br>
-                  {{comment.replyTime}}回复
+                  回复内容:
                 </div>
-                <div class="tit"></div>
-                <div class="time"></div>
+                <div class="tit">{{comment.replyCommentContent}}</div>
+                <div class="time">{{comment.replyTime}}回复</div>
               </div>
             </td>
           </tr>

@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="search">
-          <input type="text" class="inp" placeholder="输入商家名称/商家ID/品牌名称" v-model="search_params.condition"><i class="glyphicon glyphicon-search"></i>
+          <input type="text" class="inp" placeholder="输入品牌名称" v-model="search_params.condition"><i class="glyphicon glyphicon-search"></i>
         </div>
         <div class="search_cell">
           <button class="btn search_button" @click="get_comment_info">搜索</button>
@@ -41,7 +41,7 @@
           </div>
         </div>
         <div class="search">
-          <input type="text" class="inp" placeholder="输入商家名称/商家ID/品牌名称"><i class="glyphicon glyphicon-search"></i>
+          <input type="text" class="inp" placeholder="输入品牌名称"><i class="glyphicon glyphicon-search"></i>
         </div>
         <div class="comment_info">
           <table id="table1" style="table-layout:fixed"></table>
@@ -51,19 +51,21 @@
       <div class="goodInfo" v-if="goodInfoShow">
         <p>品牌名称：{{goodInfo.brandName==''?'--':goodInfo.brandName}}</p>
         <p>英文名称：{{goodInfo.brandNameEn==''?'--':goodInfo.brandNameEn}}</p>
-        <p>品牌区域：{{goodInfo.firstAreaName==''?'--':goodInfo.firstAreaName}},
-          {{goodInfo.twoAreaName==''?'--':goodInfo.twoAreaName}},
-          {{goodInfo.threeAreaName==''?'--':goodInfo.threeAreaName}}</p>
+        <p>品牌区域：{{goodInfo.firstAreaName==''?'':goodInfo.firstAreaName}}
+          {{goodInfo.twoAreaName=='' ? '': ','+ goodInfo.twoAreaName}}
+          {{goodInfo.threeAreaName==''? '': ',' + goodInfo.threeAreaName}}</p>
         <div>品牌LOGO：
           <img :src="goodInfo.brandLogo"/>
         </div>
-        <p v-show="goodInfo.rejectReason!==''">拒绝原因：{{goodInfo.rejectReason}}</p>
+        <div v-show="isBrandApprove">
+          <p v-show="goodInfo.rejectReason!==''">拒绝原因：{{goodInfo.rejectReason}}</p>
+        </div>
         <button @click="goodInfoShow=!goodInfoShow">返回</button>
       </div>
       <!--删除-->
       <div class="delectGoodBg" v-if="delectGoodBg"></div>
       <div class="delectGoodWrap" v-if="delectGoodBg">
-        <div class="delectGoodCon" v-if="delectGood">
+      <div class="delectGoodCon" v-if="delectGood">
           <p>是否删除品牌</p>
           <button class="blueBtn" @click="delete_confirm()">确定</button>
           <button class="defultBtn" @click="delectGoodHide()">取消</button>
@@ -157,7 +159,8 @@
         city_all_search: [],
         province_show: false,
         city_show: false,
-        modifyLocal: ''
+        modifyLocal: '',
+        isBrandApprove: false
       }
     },
     watch: {
@@ -222,6 +225,7 @@
         that.goodInfoShow = false
         that.modifyLocal = 1
         that.get_comment_info()
+        that.isBrandApprove = false
       },
       brandApproveQuery () {
         let that = this
@@ -229,6 +233,7 @@
         that.goodInfoShow = false
         that.modifyLocal = 2
         that.get_comment_info1()
+        that.isBrandApprove = true
       },
       area () {
         let that = this
@@ -261,6 +266,8 @@
         let that = this
         that.area()
         that.reset_add_modify_params_bind()
+        that.province_show = false
+        that.city_show = false
         that.$.ajax({
           type: 'get',
           url: that.localbase + 'm2c.scm/brand/approve/id',
@@ -268,9 +275,7 @@
             token: sessionStorage.getItem('mToken')
           },
           success: function (result) {
-            // that.reset_add_modify_params_bind()
             that.add_modify_params.approveId = result.content
-            // console.warn(that.add_modify_params.brandId)
             that.changeGoodShow = true
             that.handle_toggle = 'add'
           }
@@ -405,8 +410,13 @@
               dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName
             }, that.add_modify_params, that.touxiang_change ? {brandLogo: that.add_modify_params_imgurl} : {}),
             success: function (result) {
-              that.get_comment_info1()
-              that.changeGoodShow = false
+              if (result.status === '200' || result.status === 200) {
+                that.get_comment_info1()
+                that.changeGoodShow = false
+              } else {
+                that.show_tip(result.errorMessage)
+                return
+              }
             }
           })
         })
@@ -683,6 +693,7 @@
       that.modifyLocal = 1
       that.province_show = false
       that.city_show = false
+      that.isBrandApprove = false
     }
   }
 </script>
