@@ -65,7 +65,7 @@
       <!--删除-->
       <div class="delectGoodBg" v-if="delectGoodBg"></div>
       <div class="delectGoodWrap" v-if="delectGoodBg">
-        <div class="delectGoodCon" v-if="delectGood">
+      <div class="delectGoodCon" v-if="delectGood">
           <p>是否删除品牌</p>
           <button class="blueBtn" @click="delete_confirm()">确定</button>
           <button class="defultBtn" @click="delectGoodHide()">取消</button>
@@ -275,16 +275,9 @@
             token: sessionStorage.getItem('mToken')
           },
           success: function (result) {
-            // that.reset_add_modify_params_bind()
-            if(result.status=='200'){
-              that.add_modify_params.approveId = result.content
-              // console.warn(that.add_modify_params.brandId)
-              that.changeGoodShow = true
-              that.handle_toggle = 'add'
-              that.show_tips("保存成功")
-            }else{
-              that.show_tips(result.errorMessage)
-            }
+            that.add_modify_params.approveId = result.content
+            that.changeGoodShow = true
+            that.handle_toggle = 'add'
           }
         })
       },
@@ -417,8 +410,13 @@
               dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName
             }, that.add_modify_params, that.touxiang_change ? {brandLogo: that.add_modify_params_imgurl} : {}),
             success: function (result) {
-              that.get_comment_info1()
-              that.changeGoodShow = false
+              if (result.status === '200' || result.status === 200) {
+                that.get_comment_info1()
+                that.changeGoodShow = false
+              } else {
+                that.show_tip(result.errorMessage)
+                return
+              }
             }
           })
         })
