@@ -122,7 +122,7 @@
       <table id="table"  class="notetable col-sm-12">
         <thead>
         <tr>
-          <td>
+          <td class="a1">
                 <span class=" mt10">
                   <!-- type="checkbox" :id="'classify_'+index" @click="setClassify(classify.classifyId)" v-model="rangeClassifyList" :value="classify.classifyId" -->
                   <input class="input_check" type="checkbox" id="classify" />
@@ -139,36 +139,37 @@
         </tr>
         </thead>
         <!-- 在tbody上v-for循环 -->
-        <tbody>
+        <tbody v-for="resu in resultye">
         <tr>
           <td colspan="8" class="bt clear">
             <div class="fl">
-                      <span data-v-6f270b16="" class="mt10">
-                        <input data-v-6f270b16="" type="checkbox" id="classify1" class="input_check">
-                        <label data-v-6f270b16="" for="classify1" class="fl mt10">
+                      <span  class="mt10">
+                        <input  type="checkbox" id="classify1" class="input_check">
+                        <label  for="classify1" class="fl mt10">
                         </label>
                       </span>
-              <span class="ml10">订货号：</span><span>345654345634</span>
+              <span class="ml10">订货号：</span><span>{{resu.dealerOrderId}}</span>
             </div>
             <div class="fr detail">查看详情</div>
           </td>
         </tr>
         <!-- 按照设计，同一个买家多个商品，则循环a1~a4,第一行a5~a8加上属性rowspan="2"需要js做控制，请与设计协商 -->
         <tr class="content clear">
-          <td class="a1 clear">
+         <td colspan="4" class="clear">
+          <div class="b1 fl" id="a1">
             <div class="a1_img mr10 fl"><img /></div>
-            <div>
+            <div class="fl">
               <div class="wose wid">冬季新款侧开叉高领毛衣女不规则套头针织衫宽松.</div>
               <div class="blue">规格：蓝色，L</div>
             </div>
-          </td>
-          <td class="a2">
+          </div>
+          <div class="b2" id="a2">
             299.00
-          </td>
-          <td class="a3">
+          </div>
+          <div class="b3" id="a3">
             1
-          </td>
-          <td class="a4 border_r">
+          </div>
+          <div class="b4 border_r">
             <!-- 有几种情况的不同表现方 -->
             <div style="">
               <div class="mt10">待退货确认</div>
@@ -179,6 +180,7 @@
               <span>已拒绝</span>
               <i class="ico_explain"></i>
             </div> -->
+          </div>
           </td>
           <td class="a5">
             589.00
@@ -259,7 +261,7 @@
   </div>
 </template>
 <script>
-  /* eslint-disable indent,no-trailing-spaces,semi-spacing,no-unused-vars,space-infix-ops,no-multi-spaces */
+  /* eslint-disable indent,no-trailing-spaces,semi-spacing,no-unused-vars,space-infix-ops,no-multi-spaces,quotes,no-undef,space-before-blocks,semi,no-eval */
 
   export default {
     name: '',
@@ -272,6 +274,7 @@
         Agreeshow: false,
         Refuseshow: false,
         TowAgreeshow: false,
+        resultye: '',
         // 搜索参数
         search_params: { orderType: '', status: sessionStorage.getItem('statusFlag'), startTime: sessionStorage.getItem('startTime'), endTime: sessionStorage.getItem('endTime'), condition: '' }
       }
@@ -285,6 +288,30 @@
     get_good_info () {
       let that = this
       that.is_Success = false
+      that.$.ajax({
+        type: 'get',
+        url: this.localbase + 'm2c.scm/dealerorder/dealerorderlist',
+        data: {
+          dealerId: 'JXS42ACB6D352E9417FBBCF03908219AAF1',
+        },
+        success: function (res) {
+          var resultData = res.content;
+          that.resultye= resultData;
+          console.log(resultData);
+//        for (var i = 0 ; i < resultData.length ; i++) {
+//          var goodshtml = "";
+//          for (var j = 0; j <resultData[i].goodsList.length ; j++){
+//            var images=eval("("+resultData[i].goodsList[j].goodsImage+")");
+////            goodshtml += "<div class=\"a1_img mr10 fl\"><img src='" + images[0] + "'/></div>";
+////            goodshtml += "<div>";
+////            goodshtml += "<div class=\"wose wid\">"+resultData[i].goodsList[j].goodsName + "</div>";
+////            goodshtml += " <div class=\"blue\">"+resultData[i].goodsList[j].skuName + "</div>";
+////            goodshtml += "  </div>";
+//          }
+//          that.$("#a1").html(goodshtml);
+//        }
+        }
+      })
     },
     refuseshow () {
       var that = this
@@ -501,7 +528,9 @@
         }
         .a4{
           width:10% ;
-          .a4_btn{
+          
+        }
+        .a4_btn{
             border: 1px solid #CCCCCC;
             border-radius: 2px;
             padding-left: 20px;
@@ -518,7 +547,6 @@
             background: url(../../../assets/images/ico_explain.png) no-repeat center;
             display: inline-block;
           }
-        }
         .a5{
           width: 10%;
         }
@@ -530,6 +558,25 @@
         }
         .a8{
           width:10% ;
+        }
+        .b1{
+        	width: 40%;
+        	display: table-cell;
+        }
+        .b2{
+        	width: 400px;
+        	display: table-cell;
+        	text-align: center;
+        }
+        .b3{
+        	width: 300px;
+        	display: table-cell;
+        	text-align: center;
+        }
+        .b4{
+        	width: 400px;
+        	display: table-cell;
+        	text-align: center;
         }
         thead{
           background: #DFE9F6;
