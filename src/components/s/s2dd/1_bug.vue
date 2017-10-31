@@ -139,7 +139,7 @@
         </tr>
         </thead>
         <!-- 在tbody上v-for循环 -->
-        <tbody v-for="resu in resultye">
+        <tbody v-for="data1 in resultData">
         <tr>
           <td colspan="8" class="bt clear">
             <div class="fl">
@@ -148,19 +148,19 @@
                         <label  for="classify1" class="fl mt10">
                         </label>
                       </span>
-              <span class="ml10">订货号：</span><span>{{resu.dealerOrderId}}</span>
+              <span class="ml10">订货号：</span><span>{{data1.dealerOrderId}}</span>
             </div>
             <div class="fr detail">查看详情</div>
           </td>
         </tr>
         <!-- 按照设计，同一个买家多个商品，则循环a1~a4,第一行a5~a8加上属性rowspan="2"需要js做控制，请与设计协商 -->
         <tr class="content clear">
-         <td colspan="4" class="clear">
+         <td colspan="4" class="clear" v-for="goodsinfo in data1.goodsList">
           <div class="b1 fl" id="a1">
             <div class="a1_img mr10 fl"><img /></div>
             <div class="fl">
-              <div class="wose wid">冬季新款侧开叉高领毛衣女不规则套头针织衫宽松.</div>
-              <div class="blue">规格：蓝色，L</div>
+              <div class="wose wid">{{goodsinfo.goodsName}}</div>
+              <div class="blue">规格：{{goodsinfo.skuName}}</div>
             </div>
           </div>
           <div class="b2" id="a2">
@@ -274,7 +274,7 @@
         Agreeshow: false,
         Refuseshow: false,
         TowAgreeshow: false,
-        resultye: '',
+        resultData: '',
         // 搜索参数
         search_params: { orderType: '', status: sessionStorage.getItem('statusFlag'), startTime: sessionStorage.getItem('startTime'), endTime: sessionStorage.getItem('endTime'), condition: '' }
       }
@@ -295,21 +295,7 @@
           dealerId: 'JXS42ACB6D352E9417FBBCF03908219AAF1',
         },
         success: function (res) {
-          var resultData = res.content;
-          that.resultye= resultData;
-          console.log(resultData);
-//        for (var i = 0 ; i < resultData.length ; i++) {
-//          var goodshtml = "";
-//          for (var j = 0; j <resultData[i].goodsList.length ; j++){
-//            var images=eval("("+resultData[i].goodsList[j].goodsImage+")");
-////            goodshtml += "<div class=\"a1_img mr10 fl\"><img src='" + images[0] + "'/></div>";
-////            goodshtml += "<div>";
-////            goodshtml += "<div class=\"wose wid\">"+resultData[i].goodsList[j].goodsName + "</div>";
-////            goodshtml += " <div class=\"blue\">"+resultData[i].goodsList[j].skuName + "</div>";
-////            goodshtml += "  </div>";
-//          }
-//          that.$("#a1").html(goodshtml);
-//        }
+          that.resultData = res.content;
         }
       })
     },
@@ -528,7 +514,7 @@
         }
         .a4{
           width:10% ;
-          
+
         }
         .a4_btn{
             border: 1px solid #CCCCCC;
