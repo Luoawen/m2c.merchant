@@ -129,13 +129,13 @@
                   <label for="classify" class="fl mt10"></label>
                 </span>
             <span class="ml10">商品信息</span></td>
-          <td>单价/元</td>
-          <td>数量</td>
-          <td>售后状态</td>
-          <td>订单总额/元</td>
-          <td>下单时间</td>
-          <td>收货人</td>
-          <td>订货单状态</td>
+          <td class="a2">单价/元</td>
+          <td class="a3">数量</td>
+          <td class="a4">售后状态</td>
+          <td class="a5">订单总额/元</td>
+          <td class="a6">下单时间</td>
+          <td class="a7">收货人</td>
+          <td class="a8">订货单状态</td>
         </tr>
         </thead>
         <!-- 在tbody上v-for循环 -->
@@ -153,81 +153,53 @@
             <div class="fr detail">查看详情</div>
           </td>
         </tr>
-        <!-- 按照设计，同一个买家多个商品，则循环a1~a4,第一行a5~a8加上属性rowspan="2"需要js做控制，请与设计协商 -->
         <tr class="content clear">
-          <td colspan="4" class="clear"  >
-            <div class="b1 fl" id="a1">
-              <div class="a1_img mr10 fl"><img /></div>
-              <div class="fl">
-                <div class="wose wid">冬季新款侧开叉高领毛衣女不规则套头针织衫宽松.</div>
-                <div class="blue">规格：蓝色，L</div>
+         <td colspan="8" class="clear">
+            <div class="cont col-sm-8 border_r" style="width:60%;">
+              <div class="a1" id="a1" style="width:50%;">
+                <div class="a1_img mr10 fl"><img /></div>
+                <div class="fl">
+                  <div class="wose wid">冬季新款侧开叉高领毛衣女不规则套头针织衫宽松.</div>
+                  <div class="blue">规格：蓝色，L</div>
+                </div>
+              </div>
+              <div class="a2" id="a2" style="width: 14%;">
+                299.00
+              </div>
+              <div class="a3" id="a3" style="width: 14%;">
+                1
+              </div>
+              <div class="a4 " style="width:20%">
+                <!-- 有几种情况的不同表现方 -->
+                <div style="">
+                  <div class="mt10">待退货确认</div>
+                  <div class="mt5"><button class="a4_btn" @click="agreeshow">同意</button></div>
+                  <div class="mt5"><button class="a4_btn" @click="refuseshow">拒绝</button></div>
+                </div>
+                <!-- <div>
+                  <span>已拒绝</span>
+                  <i class="ico_explain"></i>
+                </div> -->
               </div>
             </div>
-            <div class="b2" id="a2">
-              299.00
-            </div>
-            <div class="b3" id="a3">
-              1
-            </div>
-            <div class="b4 border_r">
-              <!-- 有几种情况的不同表现方 -->
-              <div style="">
-                <div class="mt10">待退货确认</div>
-                <div class="mt5"><button class="a4_btn" @click="agreeshow">同意</button></div>
-                <div class="mt5"><button class="a4_btn" @click="refuseshow">拒绝</button></div>
+            <div class="cont col-sm-4" style="width:40%;">
+              <div class="a5" style="width:25%;">
+                589.00
               </div>
-              <!-- <div>
-                <span>已拒绝</span>
-                <i class="ico_explain"></i>
-              </div> -->
-            </div>
-          </td>
-          <td class="a5" rowspan="2">
-            589.00
-          </td>
-          <td class="a6">
-            2017-10-1023:22:37
-          </td>
-          <td class="a7">
-            <div>肖悦悦</div>
-            <div>13845678763</div>
-          </td>
-          <!-- 代发货和交易关闭时字体为红色，请注意 -->
-          <td class="a8">
-            <span>待付款</span>
-            <!-- <span class="red_fh">待发货</span>
-            <span class="red_fh">待发货</span> -->
-          </td>
-        </tr>
-        <tr class="content clear">
-          <td colspan="4" class="clear"  >
-            <div class="b1 fl" id="a1">
-              <div class="a1_img mr10 fl"><img /></div>
-              <div class="fl">
-                <div class="wose wid">冬季新款侧开叉高领毛衣女不规则套头针织衫宽松.</div>
-                <div class="blue">规格：蓝色，L</div>
+              <div class="a6" style="width:25%;">
+                2017-10-1023:22:37
+              </div>
+              <div class="a7" style="width:25%">
+                <div>肖悦悦</div>
+                <div>13845678763</div>
+              </div>
+              <div class="a8" style="width:10%">
+                <span>待付款</span>
+                <!-- <span class="red_fh">待发货</span>
+                <span class="red_fh">待发货</span> -->
               </div>
             </div>
-            <div class="b2" id="a2">
-              299.00
-            </div>
-            <div class="b3" id="a3">
-              1
-            </div>
-            <div class="b4 border_r">
-              <!-- 有几种情况的不同表现方 -->
-              <div style="">
-                <div class="mt10">待退货确认</div>
-                <div class="mt5"><button class="a4_btn" @click="agreeshow">同意</button></div>
-                <div class="mt5"><button class="a4_btn" @click="refuseshow">拒绝</button></div>
-              </div>
-              <!-- <div>
-                <span>已拒绝</span>
-                <i class="ico_explain"></i>
-              </div> -->
-            </div>
           </td>
-
         </tr>
         </tbody>
       </table>
@@ -310,24 +282,24 @@
       }
     },
     methods: {
-      // 获取全部订单信息
-      agreeshow () {
-        var that = this;
-        that.Agreeshow = true;
-      },
-      get_good_info () {
-        let that = this
-        that.is_Success = false
-        that.$.ajax({
-          type: 'get',
-          url: this.localbase + 'm2c.scm/dealerorder/dealerorderlist',
-          data: {
-            dealerId: 'JXS42ACB6D352E9417FBBCF03908219AAF1',
-          },
-          success: function (res) {
-            var resultData = res.content;
-            that.resultye= resultData;
-            console.log(resultData);
+    // 获取全部订单信息
+  agreeshow () {
+    var that = this;
+    that.Agreeshow = true;
+  },
+    get_good_info () {
+      let that = this
+      that.is_Success = false
+      that.$.ajax({
+        type: 'get',
+        url: this.localbase + 'm2c.scm/dealerorder/dealerorderlist',
+        data: {
+          dealerId: 'JXS42ACB6D352E9417FBBCF03908219AAF1',
+        },
+        success: function (res) {
+          var resultData = res.content;
+          that.resultye= resultData;
+          console.log(resultData);
 //        for (var i = 0 ; i < resultData.length ; i++) {
 //          var goodshtml = "";
 //          for (var j = 0; j <resultData[i].goodsList.length ; j++){
@@ -340,32 +312,32 @@
 //          }
 //          that.$("#a1").html(goodshtml);
 //        }
-          }
-        })
-      },
-      refuseshow () {
-        var that = this
-        that.Refuseshow = true
-      },
-      towAgreeshow () {
-        var that = this
-        that.TowAgreeshow = true
-      },
-
-      timeBox () {
-        this.is_Success = true
-      },
-      search () {
-        this.get_good_info()
-      },
-      Advancedsearch () {
-        var that = this;
-        that.Advancedshow = true
-      }
+        }
+      })
     },
-    mounted () {
+    refuseshow () {
+      var that = this
+      that.Refuseshow = true
+    },
+    towAgreeshow () {
+      var that = this
+      that.TowAgreeshow = true
+    },
+
+    timeBox () {
+      this.is_Success = true
+    },
+    search () {
       this.get_good_info()
+    },
+    Advancedsearch () {
+      var that = this;
+      that.Advancedshow = true
     }
+  },
+  mounted () {
+    this.get_good_info()
+  }
   }
 
 </script>
@@ -549,64 +521,72 @@
         border: 1px solid #e5e5e5;
         .a1{
           width:30%;
+          display: inline-block;
         }
         .a2{
           width: 10%;
+          display: inline-block;
         }
         .a3{
           width: 10%;
+          display: inline-block;
         }
         .a4{
           width:10% ;
+          display: inline-block;
 
         }
         .a4_btn{
-          border: 1px solid #CCCCCC;
-          border-radius: 2px;
-          padding-left: 20px;
-          padding-right: 20px;
-          line-height: 24px;
-          height: 24px;
-          font-size: 12px;
-          color: #333333;
-          background: initial;
-        }
-        .ico_explain{
-          width: 16px;
-          height: 16px;
-          background: url(../../../assets/images/ico_explain.png) no-repeat center;
-          display: inline-block;
-        }
+            border: 1px solid #CCCCCC;
+            border-radius: 2px;
+            padding-left: 20px;
+            padding-right: 20px;
+            line-height: 24px;
+            height: 24px;
+            font-size: 12px;
+            color: #333333;
+            background: initial;
+          }
+          .ico_explain{
+            width: 16px;
+            height: 16px;
+            background: url(../../../assets/images/ico_explain.png) no-repeat center;
+            display: inline-block;
+          }
         .a5{
           width: 10%;
+          display: inline-block;
         }
         .a6{
           width:10% ;
+          display: inline-block;
         }
         .a7{
           width:10% ;
+          display: inline-block;
         }
         .a8{
           width:10% ;
+          display: inline-block;
         }
         .b1{
-          width: 40%;
-          display: table-cell;
+        	width: 40%;
+        	 display: inline-block;
         }
         .b2{
-          width: 400px;
-          display: table-cell;
-          text-align: center;
+        	width: 400px;
+        	display: table-cell;
+        	text-align: center;
         }
         .b3{
-          width: 300px;
-          display: table-cell;
-          text-align: center;
+        	width: 300px;
+        	display: table-cell;
+        	text-align: center;
         }
         .b4{
-          width: 400px;
-          display: table-cell;
-          text-align: center;
+        	width: 400px;
+        	display: table-cell;
+        	text-align: center;
         }
         thead{
           background: #DFE9F6;
@@ -625,6 +605,9 @@
             box-shadow: 0 -1px 0 0 #E5E5E5;
             padding-top: 20px;
             padding-bottom: 20px;
+            .cont{
+
+            }
             td{
               padding-bottom: 10px;
             }
@@ -830,6 +813,9 @@
   }
   .border_r{
     border-right: 1px solid #e5e5e5;
+  }
+  .border_b{
+    border-bottom: 1px solid #e5e5e5;
   }
   .input_check {
     position: absolute;
