@@ -50,7 +50,7 @@
           <button type="submit" class="btn btn-info btn-lg save"
                   @click="isAdd == true?add_address():modify_address()">保存
           </button>
-          <button type="submit" class="btn btn-default btn-lg" @click="cancel()">取消</button>
+         <!-- <button type="submit" class="btn btn-default btn-lg" @click="cancel()">取消</button>-->
         </div>
       </div>
     </form>
@@ -298,11 +298,11 @@
         }
         that.city_show = true
         that.area_show = true
-        if (that.search_params.detail > 50) {
+        if (that.search_params.detail.length > 50) {
           that.show_tip('详细地址长度在1-50字符以内')
           return
         }
-        if (that.search_params.person > 10) {
+        if (that.search_params.person.length > 10) {
           that.show_tip('联系人姓名长度在1-10字符以内')
           return
         }
@@ -397,27 +397,17 @@
         }
         that.city_show = true
         that.area_show = true
-        if (that.search_params.detail > 50) {
+        if (that.search_params.detail.length > 50) {
           that.show_tip('详细地址长度在1-50字符以内')
           return
         }
-        if (that.search_params.person > 10) {
+        if (that.search_params.person.length > 10) {
           that.show_tip('联系人姓名长度在1-10字符以内')
           return
         }
         if (!that.search_params.tel) {
           that.show_tip('联系电话不能为空')
         }
-        that.$.ajax({
-          type: 'get',
-          url: this.localbase + 'm2c.scm/after/sale/address',
-          data: {
-            dealerId: that.dealerId
-          },
-          success: function (res) {
-            that.addressId = res.content.addressId
-          }
-        })
         that.$.ajax({
           type: 'put',
           url: this.localbase + 'm2c.scm/after/sale/address',
