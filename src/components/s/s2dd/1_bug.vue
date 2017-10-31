@@ -156,20 +156,20 @@
         <tr class="content clear">
          <td colspan="8" class="clear">
             <div class="cont col-sm-8 border_r" style="width:60%;">
-              <div class="a1" id="a1" style="width:50%;">
+              <div class="a1 fl" id="a1" style="width:50%;">
                 <div class="a1_img mr10 fl"><img /></div>
                 <div class="fl">
                   <div class="wose wid">冬季新款侧开叉高领毛衣女不规则套头针织衫宽松.</div>
                   <div class="blue">规格：蓝色，L</div>
                 </div>
               </div>
-              <div class="a2" id="a2" style="width: 14%;">
+              <div class="a2 fl mt20" id="a2" style="width: 14%;">
                 299.00
               </div>
-              <div class="a3" id="a3" style="width: 14%;">
+              <div class="a3 fl mt20" id="a3" style="width: 18%;text-align: center;padding-right: 40px;">
                 1
               </div>
-              <div class="a4 " style="width:20%">
+              <div class="a4 fl mt20" style="width:14%;text-align:center;">
                 <!-- 有几种情况的不同表现方 -->
                 <div style="">
                   <div class="mt10">待退货确认</div>
@@ -186,10 +186,10 @@
               <div class="a5" style="width:25%;">
                 589.00
               </div>
-              <div class="a6" style="width:25%;">
+              <div class="a6" style="width:28%;">
                 2017-10-1023:22:37
               </div>
-              <div class="a7" style="width:25%">
+              <div class="a7" style="width:28%">
                 <div>肖悦悦</div>
                 <div>13845678763</div>
               </div>
@@ -763,6 +763,9 @@
   }
   .mt10{
     margin-top: 10px;
+  }
+  .mt20{
+    margin-top: 20px;
   }
   .ml10{
     margin-left: 10px;
