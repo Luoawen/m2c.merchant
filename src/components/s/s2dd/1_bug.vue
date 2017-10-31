@@ -155,17 +155,18 @@
         </tr>
         <!-- 按照设计，同一个买家多个商品，则循环a1~a4,第一行a5~a8加上属性rowspan="2"需要js做控制，请与设计协商 -->
         <tr class="content clear">
-          <td class="a1 clear">
+          <div>
+          <td class="a1 clear" id="a1">
             <div class="a1_img mr10 fl"><img /></div>
             <div>
               <div class="wose wid">冬季新款侧开叉高领毛衣女不规则套头针织衫宽松.</div>
               <div class="blue">规格：蓝色，L</div>
             </div>
           </td>
-          <td class="a2">
+          <td class="a2" id="a2">
             299.00
           </td>
-          <td class="a3">
+          <td class="a3" id="a3">
             1
           </td>
           <td class="a4 border_r">
@@ -180,6 +181,7 @@
               <i class="ico_explain"></i>
             </div> -->
           </td>
+          </div>
           <td class="a5">
             589.00
           </td>
@@ -259,7 +261,7 @@
   </div>
 </template>
 <script>
-  /* eslint-disable indent,no-trailing-spaces,semi-spacing,no-unused-vars,space-infix-ops,no-multi-spaces */
+  /* eslint-disable indent,no-trailing-spaces,semi-spacing,no-unused-vars,space-infix-ops,no-multi-spaces,quotes,no-undef,space-before-blocks,semi,no-eval */
 
   export default {
     name: '',
@@ -285,6 +287,28 @@
     get_good_info () {
       let that = this
       that.is_Success = false
+      that.$.ajax({
+        type: 'get',
+        url: this.localbase + 'm2c.scm/dealerorder/dealerorderlist',
+        data: {
+          dealerId: 'JXS42ACB6D352E9417FBBCF03908219AAF1',
+        },
+        success: function (res) {
+          var resultData = res.content;
+          for (var i = 0 ; i < resultData.length ; i++) {
+            var goodshtml = "";
+            for (var j = 0; j <resultData[i].goodsList.length ; j++){
+              var images=eval("("+resultData[i].goodsList[j].goodsImage+")");
+              goodshtml += "<div class=\"a1_img mr10 fl\"><img src='" + images[0] + "'/></div>";
+              goodshtml += "<div>";
+              goodshtml += "<div class=\"wose wid\">"+resultData[i].goodsList[j].goodsName + "</div>";
+              goodshtml += " <div class=\"blue\">"+resultData[i].goodsList[j].skuName + "</div>";
+              goodshtml += "  </div>";
+            }
+            that.$("#a1").html(goodshtml);
+          }
+        }
+      })
     },
     refuseshow () {
       var that = this
