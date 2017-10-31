@@ -182,7 +182,7 @@
               </div> -->
             </div>
           </td>
-          <td class="a5">
+          <td class="a5" rowspan="2">
             589.00
           </td>
           <td class="a6">
@@ -198,6 +198,36 @@
             <!-- <span class="red_fh">待发货</span>
             <span class="red_fh">待发货</span> -->
           </td>
+        </tr>
+        <tr class="content clear">
+          <td colspan="4" class="clear"  >
+            <div class="b1 fl" id="a1">
+              <div class="a1_img mr10 fl"><img /></div>
+              <div class="fl">
+                <div class="wose wid">冬季新款侧开叉高领毛衣女不规则套头针织衫宽松.</div>
+                <div class="blue">规格：蓝色，L</div>
+              </div>
+            </div>
+            <div class="b2" id="a2">
+              299.00
+            </div>
+            <div class="b3" id="a3">
+              1
+            </div>
+            <div class="b4 border_r">
+              <!-- 有几种情况的不同表现方 -->
+              <div style="">
+                <div class="mt10">待退货确认</div>
+                <div class="mt5"><button class="a4_btn" @click="agreeshow">同意</button></div>
+                <div class="mt5"><button class="a4_btn" @click="refuseshow">拒绝</button></div>
+              </div>
+              <!-- <div>
+                <span>已拒绝</span>
+                <i class="ico_explain"></i>
+              </div> -->
+            </div>
+          </td>
+
         </tr>
         </tbody>
       </table>
