@@ -155,7 +155,7 @@
         </tr>
         <!-- 按照设计，同一个买家多个商品，则循环a1~a4,第一行a5~a8加上属性rowspan="2"需要js做控制，请与设计协商 -->
         <tr class="content clear">
-          <div>
+          <div id="test">
           <td class="a1 clear" id="a1">
             <div class="a1_img mr10 fl"><img /></div>
             <div>
@@ -163,10 +163,10 @@
               <div class="blue">规格：蓝色，L</div>
             </div>
           </td>
-          <td class="a2" id="a2">
+          <td class="a2">
             299.00
           </td>
-          <td class="a3" id="a3">
+          <td class="a3">
             1
           </td>
           <td class="a4 border_r">
@@ -299,13 +299,36 @@
             var goodshtml = "";
             for (var j = 0; j <resultData[i].goodsList.length ; j++){
               var images=eval("("+resultData[i].goodsList[j].goodsImage+")");
-              goodshtml += "<div class=\"a1_img mr10 fl\"><img src='" + images[0] + "'/></div>";
-              goodshtml += "<div>";
-              goodshtml += "<div class=\"wose wid\">"+resultData[i].goodsList[j].goodsName + "</div>";
-              goodshtml += " <div class=\"blue\">"+resultData[i].goodsList[j].skuName + "</div>";
-              goodshtml += "  </div>";
+//              goodshtml += "<td class=\"a1 clear\" id=\"a1\">";
+//              goodshtml += "<div class=\"a1_img mr10 fl\"><img src='" + images[0] + "'/></div>";
+//              goodshtml += "<div></td>";
+//              goodshtml += "<div class=\"wose wid\">"+resultData[i].goodsList[j].goodsName + "</div>";
+//              goodshtml += " <div class=\"blue\">"+resultData[i].goodsList[j].skuName + "</div>";
+//              goodshtml += "  </div>";
+//              goodshtml += "<td class=\"a2\">"+resultData[i].goodsList[j].discountPrice+"</td>";
+//              goodshtml += "<td class=\"a3\">"+resultData[i].goodsList[j].sellNum+"</td>";
+              goodshtml += " <td class=\"a1 clear\" id=\"a1\">";
+              goodshtml += " <div class=\"a1_img mr10 fl\"><img /><img src='\" + images[0] + \"'/></div>";
+              goodshtml += " <div>";
+              goodshtml += "  <div class=\"wose wid\">冬季新款侧开叉高领毛衣女不规则套头针织衫宽松.</div>";
+              goodshtml += " <div class=\"blue\">规格：蓝色，L</div>";
+              goodshtml += "</div>";
+              goodshtml += "</td>";
+              goodshtml += "<td class=\"a2\">";
+              goodshtml += " 299.00";
+              goodshtml += " </td>";
+              goodshtml += " <td class=\"a3\">";
+              goodshtml += " 1";
+              goodshtml += " </td>";
+              goodshtml += " <td class=\"a4 border_r\">";
+              goodshtml += " <div style=''>";
+              goodshtml += " <div class=\"mt10\">待退货确认</div>";
+              goodshtml += " <div class=\"mt5\"><button class=\"a4_btn\" @click=\"agreeshow\">同意</button></div>";
+              goodshtml += "<div class=\"mt5\"><button class=\"a4_btn\" @click=\"refuseshow\">拒绝</button></div>";
+              goodshtml += "</div>";
+              goodshtml += " </td>";
             }
-            that.$("#a1").html(goodshtml);
+            that.$("#test").html(goodshtml);
           }
         }
       })
