@@ -1,6 +1,6 @@
 <template>
   <div class="sz">
-    <router-link :to="{ name:'formworkadd', query: {addModify: true} }" class="btn btn-info pull-right add btn-lg">新增</router-link>
+    <router-link :to="{ name:'formworkadd', query: {addModify: 'true'} }" class="btn btn-info pull-right add btn-lg">新增</router-link>
     <template v-for="(formwork,index) in formworks">
       <table class="table table-bordered">
         <thead>
@@ -21,7 +21,7 @@
             <td>续费/元</td>
           </tr>
           <tr v-for="(postageModelRule,index) in formwork.postageModelRules">
-            <th scope="row">{{postageModelRule.address==''?'全国（默认运费）':postageModelRule.address}}</th>
+            <th scope="row">{{postageModelRule.defaultFlag==0 ?'全国（默认运费）':postageModelRule.address}}</th>
             <td>{{formwork.chargeType==1?postageModelRule.firstPiece:postageModelRule.firstWeight}}</td>
             <td>{{postageModelRule.firstPostage}}</td>
             <td>{{formwork.chargeType==1?postageModelRule.continuedPiece:postageModelRule.continuedWeight}}</td>
@@ -61,7 +61,7 @@ export default {
           } else {
             that.show_tip(result.errorMessage)
           }
-          
+
         }
       })
     },

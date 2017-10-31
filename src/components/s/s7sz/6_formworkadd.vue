@@ -52,7 +52,7 @@
                   <td></td>
                 </tr>
                 <tr v-for="(addRow,index) in addRows" v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} 
+                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}}
                     <a @click="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
@@ -60,7 +60,7 @@
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/> 
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/>
                             {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
@@ -74,7 +74,7 @@
                           </div>
                         </div>
                       </div>
-                      
+
                     </div>
                   </td>
                   <td>
@@ -186,7 +186,7 @@
                           </div>
                         </div>
                       </div>
-                      
+
                     </div>
                   </td>
                   <td>
@@ -293,7 +293,7 @@
                     <div class="test-div">
                       <div class="bigArea" v-for="(item,index) in datas">
                         <div class="left">
-                          <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/> 
+                          <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/>
                           {{item.name}}
                         </div>
                         <div class="pro" v-for="(pro,index) in item.subs">
@@ -309,7 +309,7 @@
                         </div>
                       </div>
                     </div>
-                    
+
                   </div>
                 </td>
                 <td>
@@ -597,7 +597,7 @@
               }
             }
           }
-          
+
         }
       },
 // 市被选时对应省被选中,
@@ -639,7 +639,7 @@
                 let point2=0
                 for(let n=0;n<that.datas.length;n++){
                     if(that.datas[i].subs[j].parent==that.datas[n].code){
-                      
+
                       for(let f=0;f<that.datas[n].subs.length;f++){
                           for(let y = 0; y < that.addRows[that.index].IdArr.length; y++){
                             if(that.addRows[that.index].IdArr[y]==that.datas[n].subs[f].code){
@@ -647,9 +647,9 @@
                             }
                           }
                       }
-                      if(point2==0){ 
+                      if(point2==0){
                          that.addRows[that.index].areaIdArr.splice(that.$.inArray(that.datas[n].code, that.addRows[that.index].areaIdArr), 1)
-                      }   
+                      }
                     }
                 }
 
@@ -705,8 +705,8 @@
         var el = event.target
         that.$(el).parent('.pro').find('.cityWrap').toggle()
       },
-//点击保存
-      save(){
+      // 点击保存
+      save () {
         let that = this
         console.log(that.$route.query.modelId)
         if (that.addModify === 'add'){
@@ -725,7 +725,7 @@
               firstPiece: that.addRows[i].firstPiece,
               firstPostage: that.addRows[i].firstPostage,
               firstWeight: that.addRows[i].firstWeight,
-              defaultFlag: that.addRows[that.index].address == '' ? 0 : 1
+              defaultFlag: that.addRows[that.index].address === '' ? 0 : 1
             }
             that.postageModelRules.push(that.postageModelRule)
           }
@@ -743,7 +743,7 @@
               firstPiece: that.addRows[i].firstPiece,
               firstPostage: that.addRows[i].firstPostage,
               firstWeight: that.addRows[i].firstWeight,
-              defaultFlag: that.addRows[that.index].address == '' ? 0 : 1
+              defaultFlag: that.addRows[that.index].address === '' ? 0 : 1
             }
             that.postageModelRules.push(that.postageModelRule)
           }
@@ -780,8 +780,7 @@
           that.datas = result.content.subs
         }
       })
-      if (that.$route.query.addModify === true) {
-        console.log('add')
+      if (that.$route.query.addModify === 'true') {
         that.addModify = 'add'
         that.$.ajax({
           type: 'get',
