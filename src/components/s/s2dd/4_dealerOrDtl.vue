@@ -1,5 +1,5 @@
 <template>
-  <div class="detail">
+  <div class="detail poi1">
     <div class="nav clear">
       <span :class="{active:showactive}" @click="customerdetail"><a>订货单详情</a></span>
       <span :class="{active:showactive02}" @click="customerfreight"><a>发货详情</a></span>
@@ -10,10 +10,10 @@
       <a>
       	<i class="ico_print"></i>
       	<span class="dy">打印</span>
-      </a> 
+      </a>
       <button type="button" class="fah">发货</button>
       </span>
-      
+
     </div>
     <!-- 订货单详情 -->
     <div v-show="showactive" class="customerdetail_container">
@@ -124,7 +124,7 @@
             <td class="a5">单价/元</td>
             <td class="a5">商品金额/元</td>
             <td class="a6">
-            	<!--<span>运费</span>           	
+            	<!--<span>运费</span>
             	<i class="ico_compile"></i>-->
             	<!--点击ico_compile后会出现input-->
             	<input class="form-control a6_input" />
@@ -175,12 +175,12 @@
         </div>
       </div>
 
-      <table class="mt20 detail_table">	
+      <table class="mt20 detail_table">
         <thead>
         	<tr class="fh">
       		<td colspan="2">待发货 2    已发货 0</td>
       		<td>
-      			<button class="fah fr mr10">发货</button>
+      			<button class="fah fr mr10" @click="deliver">发货</button>
       		</td>
       	</tr>
         <tr>
@@ -202,9 +202,101 @@
         		<td>2</td>
         	</tr>
         </tbody>
+        <tbody class="deliver_tb">
+          <tr>
+            <td colspan="3">
+            <div class="mt10 mb10">
+              <span class="mr20 tit_tb">配送方式</span>
+              <span></span>
+              <span class="ml20">
+              <span class="mr20 tit_tb">物流公司</span>
+              <span></span>
+              </span>
+            </div>
+            <div class="mt10 mb10">
+              <span class="mr20 tit_tb">物流单号</span>
+              <span></span>
+            </div>
+            <div class="mt10 mb10">
+              <span class="mr20 tit_tb">备注</span>
+              <span>1</span>
+            </div>
+            </td>
+          </tr>
+        </tbody>
       </table>
 
     </div>
+  	<!--发货弹层-->
+  	<div class="poi2 deliver col-sm-12" v-show="Deliver===true">
+    <div class="poi1">
+      <i class="poi2 ico_close02" @click="Deliver=false"></i>
+      <div class="deliver_tit">发货信息</div>
+      <div class="deliver_type01 mt20 mb10 clear">
+        <span class="mr20 tit01 fl">
+        <span class="redcolor">*</span>
+        <span>配送方式</span>
+        </span>
+        <span class="tit02 fl mr20">
+          <span class="fl mr10">
+            <input  type="checkbox" id="classify" class="input_check">
+            <label  for="classify" class="mt5"></label>
+          </span>
+          <span class="fl">
+            物流发货
+          </span>
+        </span>
+        <span class="tit02 fl">
+          <span class="fl mr10">
+            <input  type="checkbox" id="classify2" class="input_check">
+            <label  for="classify2" class="mt5"></label>
+          </span>
+          <span class="fl ml20">
+            自有物流
+          </span>
+        </span>
+        <div class="tit03 clear">若有自己的配送车队，可选自有物流</div>
+      </div>
+      <div class="deliver_type01 mt20 mb10 clear">
+        <div class="">
+        <span class="mr20 tit01 fl">
+        <span class="redcolor">*</span>
+        <span>物流公司</span>
+        </span>
+        <span>
+          <select class="form-control deliver_input fl" placeholder="请选择" >
+            <option value=""></option>
+          </select>
+        </span>
+        </div>
+        <div class="">
+        <span class="mr20 tit01 fl">
+        <span class="redcolor">*</span>
+        <span>备注</span>
+        </span>
+        <span>
+          <input class="form-control deliver_input" placeholder="选填" />
+        </span>
+      </div>
+      </div>
+      <div class="deliver_type01 mt20 mb10 clear">
+        <div class="">
+        <span class="mr20 tit01 fl">
+        <span class="redcolor">*</span>
+        <span>物流单号</span>
+        </span>
+        <span>
+          <input class="form-control deliver_input" placeholder="请填写" />
+        </span>
+      </div>
+      </div>
+      <div class="deliver_type01 mt20 mb10 clear">
+        <button class="deliversure btn01 mr20 ml20">确定发货</button>
+        <button class="btn01 deliverdel" @click="Deliver=false">取消</button>
+        <span class="ml20 redcolor bz">请仔细填写发货信息，一旦确定，不可修改！</span>
+      </div>
+      </div>
+  	</div>
     <!-- 操作记录 -->
     <div v-show="showactive03">
         <table id="logTable" style="table-layout:fixed"></table>
@@ -222,6 +314,7 @@
         showactive: true,
         showactive02: false,
         showactive03: false,
+        Deliver: false,
         strOrderStatus: '',
         dealerOrderId: '',
         createdDate: '',
@@ -252,6 +345,10 @@
         that.showactive03 = true;
         that.showactive02 = false;
         that.showactive = false;
+      },
+      deliver () {
+        var that = this
+        that.Deliver = true
       },
       //列表
       getDealerOrderInfo () {
@@ -434,6 +531,73 @@
     margin-left: 48px;
     margin-top: 130px;
     background-color: #fff;
+    .deliver{
+    	background: #fff;
+    	height: 358px;
+      top: 0px;
+      left: 0px;
+      padding-top: 21px;
+      padding-left: 23px;
+      .ico_close02{
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+        background: url(../../../assets/images/ico_close02.png);
+        top: 0px;
+        right: 0px;
+      }
+      .deliver_tit{
+        font-size: 18px;
+        color: #333333;
+      }
+      .deliver_type01{
+        padding-left: 20px;
+        .bz{
+          font-size: 12px;
+        }
+        .btn01{
+          border-radius: 2px;
+          line-height: 30px;
+          height: 30px;
+          padding-left: 30px;
+          padding-right: 30px;
+          border: none;
+        }
+        .deliversure{
+          background: #0086FF;
+          color: #fff;
+        }
+        .deliverdel{
+          background: #fff;
+          border: 1px solid #CCCCCC;
+          border-radius: 2px;
+          color: #444;
+        }
+        .tit01{
+          /*display: inline-block;*/
+          width: 120px;
+          display: inline-block;
+          line-height: 30px;
+          text-align: right;
+        }
+        .tit02{
+          span{
+            display: inline-block;
+            line-height: 30px;
+          }
+        }
+        .tit03{
+          font-size: 12px;
+          color: #999999;
+          margin-left: 80px;
+          }
+          .deliver_input{
+            width: 30%;
+            height: 40px;
+          }
+      }
+
+    }
     .fah{
     		background: #0086FF;
 				border-radius: 2px;
@@ -489,7 +653,15 @@
         margin-top: 20px;
         .fh{
     		background: #fff;
-    	}
+    	 }
+       .deliver_tb{
+         background: #fff;
+         .tit_tb{
+           display: inline-block;
+           width: 80px;
+           text-align: right;
+         }
+       }
         td{
           padding-left: 20px;
         }
@@ -676,22 +848,22 @@
   }
   .input_check {
     position: absolute;
-    width: 20px;
-    height: 20px;
+    width: 17px;
+    height: 17px;
     visibility: hidden;
   }
   .input_check + label {
     display: inline-block;
-    width: 15px;
-    height: 15px;
+    width: 17px;
+    height: 17px;
     border-radius: 2px;
-    background:url(../../../assets/images/ico_default01.png) no-repeat center;
+    background:url(../../../assets/images/ico_radio_default.png) no-repeat center;
   }
   .input_check:checked + label {
     display: inline-block;
-    width: 15px;
-    height: 15px;
-    background:url(../../../assets/images/ico_select.png) no-repeat center;
+    width: 17px;
+    height: 17px;
+    background:url(../../../assets/images/ico_radio_select.png) no-repeat center;
   }
 
 </style>
