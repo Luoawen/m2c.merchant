@@ -139,7 +139,7 @@
         </tr>
         </thead>
         <!-- 在tbody上v-for循环 -->
-        <tbody v-for="data1 in resultData">
+        <tbody v-for="resu in resultye">
         <tr>
           <td colspan="8" class="bt clear">
             <div class="fl">
@@ -148,39 +148,39 @@
                         <label  for="classify1" class="fl mt10">
                         </label>
                       </span>
-              <span class="ml10">订货号：</span><span>{{data1.dealerOrderId}}</span>
+              <span class="ml10">订货号：</span><span>{{resu.dealerOrderId}}</span>
             </div>
             <div class="fr detail">查看详情</div>
           </td>
         </tr>
         <!-- 按照设计，同一个买家多个商品，则循环a1~a4,第一行a5~a8加上属性rowspan="2"需要js做控制，请与设计协商 -->
         <tr class="content clear">
-         <td colspan="4" class="clear" v-for="goodsinfo in data1.goodsList">
-          <div class="b1 fl" id="a1">
-            <div class="a1_img mr10 fl"><img /></div>
-            <div class="fl">
-              <div class="wose wid">{{goodsinfo.goodsName}}</div>
-              <div class="blue">规格：{{goodsinfo.skuName}}</div>
+          <td colspan="4" class="clear"  >
+            <div class="b1 fl" id="a1">
+              <div class="a1_img mr10 fl"><img /></div>
+              <div class="fl">
+                <div class="wose wid">冬季新款侧开叉高领毛衣女不规则套头针织衫宽松.</div>
+                <div class="blue">规格：蓝色，L</div>
+              </div>
             </div>
-          </div>
-          <div class="b2" id="a2">
-            299.00
-          </div>
-          <div class="b3" id="a3">
-            1
-          </div>
-          <div class="b4 border_r">
-            <!-- 有几种情况的不同表现方 -->
-            <div style="">
-              <div class="mt10">待退货确认</div>
-              <div class="mt5"><button class="a4_btn" @click="agreeshow">同意</button></div>
-              <div class="mt5"><button class="a4_btn" @click="refuseshow">拒绝</button></div>
+            <div class="b2" id="a2">
+              299.00
             </div>
-            <!-- <div>
-              <span>已拒绝</span>
-              <i class="ico_explain"></i>
-            </div> -->
-          </div>
+            <div class="b3" id="a3">
+              1
+            </div>
+            <div class="b4 border_r">
+              <!-- 有几种情况的不同表现方 -->
+              <div style="">
+                <div class="mt10">待退货确认</div>
+                <div class="mt5"><button class="a4_btn" @click="agreeshow">同意</button></div>
+                <div class="mt5"><button class="a4_btn" @click="refuseshow">拒绝</button></div>
+              </div>
+              <!-- <div>
+                <span>已拒绝</span>
+                <i class="ico_explain"></i>
+              </div> -->
+            </div>
           </td>
           <td class="a5">
             589.00
@@ -274,54 +274,68 @@
         Agreeshow: false,
         Refuseshow: false,
         TowAgreeshow: false,
-        resultData: '',
+        resultye: '',
         // 搜索参数
         search_params: { orderType: '', status: sessionStorage.getItem('statusFlag'), startTime: sessionStorage.getItem('startTime'), endTime: sessionStorage.getItem('endTime'), condition: '' }
       }
     },
     methods: {
-    // 获取全部订单信息
-  agreeshow () {
-    var that = this;
-    that.Agreeshow = true;
-  },
-    get_good_info () {
-      let that = this
-      that.is_Success = false
-      that.$.ajax({
-        type: 'get',
-        url: this.localbase + 'm2c.scm/dealerorder/dealerorderlist',
-        data: {
-          dealerId: 'JXS42ACB6D352E9417FBBCF03908219AAF1',
-        },
-        success: function (res) {
-          that.resultData = res.content;
-        }
-      })
-    },
-    refuseshow () {
-      var that = this
-      that.Refuseshow = true
-    },
-    towAgreeshow () {
-      var that = this
-      that.TowAgreeshow = true
-    },
+      // 获取全部订单信息
+      agreeshow () {
+        var that = this;
+        that.Agreeshow = true;
+      },
+      get_good_info () {
+        let that = this
+        that.is_Success = false
+        that.$.ajax({
+          type: 'get',
+          url: this.localbase + 'm2c.scm/dealerorder/dealerorderlist',
+          data: {
+            dealerId: 'JXS42ACB6D352E9417FBBCF03908219AAF1',
+          },
+          success: function (res) {
+            var resultData = res.content;
+            that.resultye= resultData;
+            console.log(resultData);
+//        for (var i = 0 ; i < resultData.length ; i++) {
+//          var goodshtml = "";
+//          for (var j = 0; j <resultData[i].goodsList.length ; j++){
+//            var images=eval("("+resultData[i].goodsList[j].goodsImage+")");
+////            goodshtml += "<div class=\"a1_img mr10 fl\"><img src='" + images[0] + "'/></div>";
+////            goodshtml += "<div>";
+////            goodshtml += "<div class=\"wose wid\">"+resultData[i].goodsList[j].goodsName + "</div>";
+////            goodshtml += " <div class=\"blue\">"+resultData[i].goodsList[j].skuName + "</div>";
+////            goodshtml += "  </div>";
+//          }
+//          that.$("#a1").html(goodshtml);
+//        }
+          }
+        })
+      },
+      refuseshow () {
+        var that = this
+        that.Refuseshow = true
+      },
+      towAgreeshow () {
+        var that = this
+        that.TowAgreeshow = true
+      },
 
-    timeBox () {
-      this.is_Success = true
+      timeBox () {
+        this.is_Success = true
+      },
+      search () {
+        this.get_good_info()
+      },
+      Advancedsearch () {
+        var that = this;
+        that.Advancedshow = true
+      }
     },
-    search () {
+    mounted () {
       this.get_good_info()
-    },
-    Advancedsearch () {
-      var that = this;
-      that.Advancedshow = true
     }
-  },
-  mounted () {
-    this.get_good_info()
-  }
   }
 
 </script>
@@ -517,22 +531,22 @@
 
         }
         .a4_btn{
-            border: 1px solid #CCCCCC;
-            border-radius: 2px;
-            padding-left: 20px;
-            padding-right: 20px;
-            line-height: 24px;
-            height: 24px;
-            font-size: 12px;
-            color: #333333;
-            background: initial;
-          }
-          .ico_explain{
-            width: 16px;
-            height: 16px;
-            background: url(../../../assets/images/ico_explain.png) no-repeat center;
-            display: inline-block;
-          }
+          border: 1px solid #CCCCCC;
+          border-radius: 2px;
+          padding-left: 20px;
+          padding-right: 20px;
+          line-height: 24px;
+          height: 24px;
+          font-size: 12px;
+          color: #333333;
+          background: initial;
+        }
+        .ico_explain{
+          width: 16px;
+          height: 16px;
+          background: url(../../../assets/images/ico_explain.png) no-repeat center;
+          display: inline-block;
+        }
         .a5{
           width: 10%;
         }
@@ -546,23 +560,23 @@
           width:10% ;
         }
         .b1{
-        	width: 40%;
-        	display: table-cell;
+          width: 40%;
+          display: table-cell;
         }
         .b2{
-        	width: 400px;
-        	display: table-cell;
-        	text-align: center;
+          width: 400px;
+          display: table-cell;
+          text-align: center;
         }
         .b3{
-        	width: 300px;
-        	display: table-cell;
-        	text-align: center;
+          width: 300px;
+          display: table-cell;
+          text-align: center;
         }
         .b4{
-        	width: 400px;
-        	display: table-cell;
-        	text-align: center;
+          width: 400px;
+          display: table-cell;
+          text-align: center;
         }
         thead{
           background: #DFE9F6;
