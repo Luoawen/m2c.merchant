@@ -94,17 +94,21 @@ Vue.use(Element)
     let href = window.location.href
     if (href.includes('m2c2017dev')) { // 开发环境
       // Vue.prototype.base = 'http://api.m2c2017dev.com:80/'
-      Vue.prototype.base = 'http://api.m2c2017dev.com:80/'
       Vue.prototype.localbase = 'http://api.m2c2017dev.com:80/'
+      Vue.prototype.base = 'http://api.m2c2017dev.com:80/'
     } else if (href.includes('m2c2017test')) { // 测试环境
       Vue.prototype.base = 'http://api.m2c2017test.com:80/'
       Vue.prototype.localbase = 'http://api.m2c2017test.com:80/'
-    } else if (href.includes('localhost')) { // 本地环境
+    }
+    else if (href.includes('m2c2017local')) { // 本地环境
       Vue.prototype.base = 'http://api.m2c2017local.com:80/'
-      Vue.prototype.bases = 'http://api.m2c2017local.com/'
       Vue.prototype.localbase = 'http://api.m2c2017local.com:80/'
-    } else { // 演示环境
-      //
+    }
+    else if (href.includes('localhost')) { // 本地环境
+      Vue.prototype.base = 'http://api.m2c2017local.com:80/'
+      Vue.prototype.localbase = 'http://api.m2c2017local.com:80/'
+    }
+    else { // 演示环境
       Vue.prototype.base = 'http://api.m2c2017.com:80/'
     }
   }
