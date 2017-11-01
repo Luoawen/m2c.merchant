@@ -22,10 +22,10 @@ import './assets/css/manage.css'
 // import 'addressCheckbox/js/RegionalChoice.js'
 // import 'addressCheckbox/css.css'
 // 导入ueditor相关
-// import '../static/UE/ueditor.config.js'
-// import '../static/UE/ueditor.all.js'
-// import '../static/UE/lang/zh-cn/zh-cn.js'
-// import '../static/UE/ueditor.parse.min.js'
+import '../static/UE/ueditor.config.js'
+import '../static/UE/ueditor.all.js'
+import '../static/UE/lang/zh-cn/zh-cn.js'
+import '../static/UE/ueditor.parse.min.js'
 
 Vue.use(VueResource)
 Vue.use(Vuex)

@@ -408,6 +408,10 @@
         if (!that.search_params.tel) {
           that.show_tip('联系电话不能为空')
         }
+        if (!((/^1[34578]\d{9}$/).test(that.search_params.tel.trim()))) {
+          that.show_tip('请输入正确的联系电话')
+          return
+        }
         that.$.ajax({
           type: 'put',
           url: this.localbase + 'm2c.scm/after/sale/address',

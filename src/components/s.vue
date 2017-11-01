@@ -576,6 +576,33 @@ body {
       font-size: 14px;
       color: #333333;
     }
+    .ico_msg{
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+      background: url(../assets/images/ico_msg.png);
+      cursor: pointer;
+      position: relative;
+      font-style: normal;
+    }
+    .ico_msg:hover .ico-tit{
+      display: block;
+    }
+    .ico-tit{
+      display: none;
+      color: #333;
+      font-size: 12px;
+      position:absolute;
+      border: 1px solid #F5BD23;
+      box-shadow: 0 0 4px 0 rgba(0,0,0,0.10);
+      border-radius: 2px;
+      width: 228px;
+      min-height: 82px;
+      background: #fff;
+      padding: 10px;
+      top: 20px;
+      left: -100px;
+    }
   }
 }
 </style>
