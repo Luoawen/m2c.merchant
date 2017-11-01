@@ -155,7 +155,9 @@
         </tr>
         <tr class="content clear">
          <td colspan="8" class="clear">
-            <div class="cont col-sm-8 border_r" style="width:60%;">
+
+            <div class="cont col-sm-8 " style="width:60%;">
+              <div class="fl border_r" style="width:100%;">
               <div class="a1 fl" id="a1" style="width:50%;">
                 <div class="a1_img mr10 fl"><img /></div>
                 <div class="fl">
@@ -181,6 +183,7 @@
                   <i class="ico_explain"></i>
                 </div> -->
               </div>
+            </div>
             </div>
             <div class="cont col-sm-4" style="width:40%;">
               <div class="a5" style="width:25%;">
