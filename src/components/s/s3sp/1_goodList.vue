@@ -5,7 +5,7 @@
         <div role="tabpanel" class="tab-pane fade in active" aria-labelledby="home-tab">
           <div class="goods_search" style="width: 100%; height: 40px;">
             <div  style="float: left">
-              商品分类:<el-cascader  :options="goodsClassifys" v-model="selectedOptions1" change-on-select :props="goodsClassifyProps"></el-cascader>
+              商品分类:<el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="selectedOptions1" change-on-select :props="goodsClassifyProps"></el-cascader>
             </div><!--商品分类-->
             <div style="float: left">
               商品状态:
@@ -99,7 +99,8 @@
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','a')">详情</el-dropdown-item>
                         <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_soldout','a')">下架</el-dropdown-item>
-                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_edit','a')">编辑</el-dropdown-item>
+                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_edit','a')">编辑
+                          </el-dropdown-item>
                         <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_delete','a')">删除</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
@@ -309,7 +310,7 @@
           </el-pagination>
         </div>
       </el-tab-pane>
-      <el-button type="primary"><router-link :to="{name:'goodAddModify'}" style="color:#fff;">新增</router-link></el-button>
+      <el-button type="primary"><router-link :to="{name:'goodAddModify',query:{isAdd:'add'}}" style="color:#fff;">新增</router-link></el-button>
     </el-tabs>
   </div>
 </template>
@@ -553,10 +554,7 @@
         } else if (action === '_soldout') {
           that.soldGoods(row,to)
         } else if (action === '_edit') {
-          this.$message({
-            message: '编辑还未开发',
-            type: 'success'
-          });
+          that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:row.goodInfo}});
         } else if (action === '_delete') {
           that.goodsCheckStore();
         }
