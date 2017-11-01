@@ -414,28 +414,6 @@
           }
         })
       },
-      secondClassifyShow1 () {
-        let that = this
-        that.dLabel1 = true
-        that.dLabel2 = true
-      },
-      secondClassifyShow2 () {
-        let that = this
-        that.dLabel1 = true
-        that.dLabel2 = true
-        that.dLabel3 = true
-      },
-      outHide1 () {
-        let that = this
-        that.dLabel1 = false
-      },
-      overShow1 () {
-        let that = this
-        that.dLabel1 = true
-      },
-      firstClassifyShow1 () {
-        this.dLabel1 = true
-      },
       // 商品分类
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
@@ -466,19 +444,6 @@
         }
         this.formats.push(newRow)
       },
-      // 改变单多规则
-      changeValue ($event) {
-        let that = this
-        if(that.valueswitch2 === false){
-          that.valueswitch2 = true
-          that.single = false
-          that.couplue = true
-        } else if(that.valueswitch2 === true) {
-          that.valueswitch2 = false
-          that.single = true
-          that.couplue = false
-        }
-      },
       // 搜索建议
       querySearch(queryString, cb) {
         var restaurants = this.restaurants;
@@ -491,15 +456,6 @@
           return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
         };
       },
-      loadAll() {
-        return [
-          // { "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
-          // { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
-          // { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" },
-          // { "value": "泷千家(天山西路店)", "address": "天山西路438号" },
-          // { "value": "南拳妈妈龙虾盖浇饭", "address": "普陀区金沙江路1699号鑫乐惠美食广场A13" }
-        ];
-      },
       handleSelect(item) {
         console.log(item);
       }
@@ -507,26 +463,18 @@
     mounted(){
       let that = this
       that.goodsClassify()
-      that.restaurants=[
-          { "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
-          { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
-          { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" },
-          { "value": "泷千家(天山西路店)", "address": "天山西路438号" },
-          { "value": "南拳妈妈龙虾盖浇饭", "address": "普陀区金沙江路1699号鑫乐惠美食广场A13" }
-        ]
-      alert("规格值"+that.restaurants)
       // 获取规格值
-      // that.$.ajax({
-      //   type: 'get',
-      //   url: that.localbase + 'm2c.scm/goods/spec/value',
-      //   data:{
-      //     token: sessionStorage.getItem('mToken'),
-      //     dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
-      //   },
-      //   success: function (result) {
-      //     that.restaurants = result.content
-      //   }
-      // })
+      that.$.ajax({
+        type: 'get',
+        url: that.localbase + 'm2c.scm/goods/spec/value',
+        data:{
+          token: sessionStorage.getItem('mToken'),
+          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
+        },
+        success: function (result) {
+          that.restaurants = result.content
+        }
+      })
       // 获取规格
       that.$.ajax({
         type: 'get',
