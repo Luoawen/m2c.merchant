@@ -25,11 +25,11 @@
       </div>
       <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
         <div class="dropdown">
-          <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">品牌状态
+          <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">{{brandStatusName}}
             <span class="icon arrowsIcon"></span>
           </div>
           <ul class="dropdown-menu" aria-labelledby="dLabel1">
-            <li @click="get_comment_info1()">全部<i class="icon rightIcon"></i></li>
+            <li @click="get_comment_info1(0)">全部<i class="icon rightIcon"></i></li>
             <li @click="get_comment_info1(1)">申请中<i class="icon rightIcon"></i></li>
             <li @click="get_comment_info1(2)">审核不通过<i class="icon rightIcon"></i></li>
           </ul>
@@ -160,7 +160,8 @@
         province_show: false,
         city_show: false,
         modifyLocal: '',
-        isBrandApprove: false
+        isBrandApprove: false,
+        brandStatusName: '品牌状态'
       }
     },
     watch: {
@@ -608,7 +609,16 @@
       // 获取审核列表
       get_comment_info1 (n) {
         let that = this
-        that.search_approve.approveStatus = n
+        if (n === '' || n === undefined) {
+          that.brandStatusName = '品牌状态'
+        } else if (n === 0) {
+          that.brandStatusName = '全部'
+        } else if (n === 1) {
+          that.brandStatusName = '申请中'
+        } else {
+          that.brandStatusName = '审批不通过'
+        }
+        that.search_approve.approveStatus = n === 0 ? '' : n
         this.$("[data-toggle='popover']").popover('hide')
         that.$('#table1').bootstrapTable('destroy').bootstrapTable({
           cache: false,
@@ -697,6 +707,7 @@
       that.city_show = false
       that.isBrandApprove = false
       that.rejectShow = false
+      that.brandStatusName = '品牌状态'
     }
   }
 </script>
