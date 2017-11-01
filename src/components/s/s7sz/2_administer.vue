@@ -652,8 +652,9 @@
             valign: 'middle',
             formatter: function (x, y) {
               return y.approveStatus === 1 ? '审批中' : `
-              <div class="color_default">审批不通过
-                <i></i>
+              <div class="color_default" style="position:relative;">审批不通过
+                <img src="../../../assets/images/ico_msg.png" width='20' height='20'  />
+                <div style="position:absolute;position: absolute;border: 1px solid #F5BD23;box-shadow: 0 0 4px 0 rgba(0,0,0,0.10);border-radius: 2px;width: 228px;min-height: 82px;background: #fff;padding: 10px;">审核未通过原因我是审核未通过原因</div>
                 <p>` + y.rejectReason + `</p>
               </div>
               `
@@ -863,6 +864,12 @@
           }
         }
     }
+}
+.ico_msg{
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: url(../../../assets/images/ico_msg.png);
 }
 /*详情*/
 #myTabContent{position:relative;}
