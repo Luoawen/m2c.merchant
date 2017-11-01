@@ -8,13 +8,13 @@
     <div id="myTabContent" class="tab-content">
       <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
         <div class="search_cell">
-          <span>申请时间<i class="glyphicon glyphicon-calendar" @click="is_Success=!is_Success"></i></span>
+          <span class="zIndex2" @click="is_Success=!is_Success">申请时间<i class="icon timeIcon"></i></span>
           <div class="time" v-if="is_Success">
             <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
           </div>
         </div>
         <div class="search">
-          <input type="text" class="inp" placeholder="输入商家名称/商家ID/品牌名称" v-model="search_params.condition"><i class="glyphicon glyphicon-search"></i>
+          <input type="text" class="inp" placeholder="输入品牌名称" v-model="search_params.condition"><i class="icon searchIcon"></i>
         </div>
         <div class="search_cell">
           <button class="btn search_button" @click="get_comment_info">搜索</button>
@@ -25,23 +25,23 @@
       </div>
       <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
         <div class="dropdown">
-          <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">品牌状态
-            <span class="caret"></span>
+          <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">{{brandStatusName}}
+            <span class="icon arrowsIcon"></span>
           </div>
           <ul class="dropdown-menu" aria-labelledby="dLabel1">
-            <li @click="get_comment_info1()">全部<i class="glyphicon glyphicon-menu-right"></i></li>
-            <li @click="get_comment_info1(1)">申请中<i class="glyphicon glyphicon-menu-right"></i></li>
-            <li @click="get_comment_info1(2)">审核不通过<i class="glyphicon glyphicon-menu-right"></i></li>
+            <li @click="get_comment_info1(0)">全部<i class="icon rightIcon"></i></li>
+            <li @click="get_comment_info1(1)">申请中<i class="icon rightIcon"></i></li>
+            <li @click="get_comment_info1(2)">审核不通过<i class="icon rightIcon"></i></li>
           </ul>
         </div>
         <div class="search_cell">
-          <span>申请时间<i class="glyphicon glyphicon-calendar" @click="is_Success2=!is_Success2"></i></span>
+          <span class="zIndex2" @click="is_Success2=!is_Success2">申请时间<i class="icon timeIcon"></i></span>
           <div class="time" v-if="is_Success2">
             <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
           </div>
         </div>
         <div class="search">
-          <input type="text" class="inp" placeholder="输入商家名称/商家ID/品牌名称"><i class="glyphicon glyphicon-search"></i>
+          <input type="text" class="inp" placeholder="输入品牌名称"><i class="glyphicon glyphicon-search"></i>
         </div>
         <div class="comment_info">
           <table id="table1" style="table-layout:fixed"></table>
@@ -51,19 +51,21 @@
       <div class="goodInfo" v-if="goodInfoShow">
         <p>品牌名称：{{goodInfo.brandName==''?'--':goodInfo.brandName}}</p>
         <p>英文名称：{{goodInfo.brandNameEn==''?'--':goodInfo.brandNameEn}}</p>
-        <p>品牌区域：{{goodInfo.firstAreaName==''?'--':goodInfo.firstAreaName}},
-          {{goodInfo.twoAreaName==''?'--':goodInfo.twoAreaName}},
-          {{goodInfo.threeAreaName==''?'--':goodInfo.threeAreaName}}</p>
+        <p>品牌区域：{{goodInfo.firstAreaName==''?'':goodInfo.firstAreaName}}
+          {{goodInfo.twoAreaName=='' ? '': ','+ goodInfo.twoAreaName}}
+          {{goodInfo.threeAreaName==''? '': ',' + goodInfo.threeAreaName}}</p>
         <div>品牌LOGO：
           <img :src="goodInfo.brandLogo"/>
         </div>
-        <p v-show="goodInfo.rejectReason!==''">拒绝原因：{{goodInfo.rejectReason}}</p>
+        <div v-show="isBrandApprove">
+          <p v-show="goodInfo.rejectReason!==''">拒绝原因：{{goodInfo.rejectReason}}</p>
+        </div>
         <button @click="goodInfoShow=!goodInfoShow">返回</button>
       </div>
       <!--删除-->
       <div class="delectGoodBg" v-if="delectGoodBg"></div>
       <div class="delectGoodWrap" v-if="delectGoodBg">
-        <div class="delectGoodCon" v-if="delectGood">
+      <div class="delectGoodCon" v-if="delectGood">
           <p>是否删除品牌</p>
           <button class="blueBtn" @click="delete_confirm()">确定</button>
           <button class="defultBtn" @click="delectGoodHide()">取消</button>
@@ -157,7 +159,9 @@
         city_all_search: [],
         province_show: false,
         city_show: false,
-        modifyLocal: ''
+        modifyLocal: '',
+        isBrandApprove: false,
+        brandStatusName: '品牌状态'
       }
     },
     watch: {
@@ -222,6 +226,7 @@
         that.goodInfoShow = false
         that.modifyLocal = 1
         that.get_comment_info()
+        that.isBrandApprove = false
       },
       brandApproveQuery () {
         let that = this
@@ -229,6 +234,7 @@
         that.goodInfoShow = false
         that.modifyLocal = 2
         that.get_comment_info1()
+        that.isBrandApprove = true
       },
       area () {
         let that = this
@@ -261,6 +267,8 @@
         let that = this
         that.area()
         that.reset_add_modify_params_bind()
+        that.province_show = false
+        that.city_show = false
         that.$.ajax({
           type: 'get',
           url: that.localbase + 'm2c.scm/brand/approve/id',
@@ -268,9 +276,7 @@
             token: sessionStorage.getItem('mToken')
           },
           success: function (result) {
-            // that.reset_add_modify_params_bind()
             that.add_modify_params.approveId = result.content
-            // console.warn(that.add_modify_params.brandId)
             that.changeGoodShow = true
             that.handle_toggle = 'add'
           }
@@ -405,8 +411,13 @@
               dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName
             }, that.add_modify_params, that.touxiang_change ? {brandLogo: that.add_modify_params_imgurl} : {}),
             success: function (result) {
-              that.get_comment_info1()
-              that.changeGoodShow = false
+              if (result.status === '200' || result.status === 200) {
+                that.get_comment_info1()
+                that.changeGoodShow = false
+              } else {
+                that.show_tip(result.errorMessage)
+                return
+              }
             }
           })
         })
@@ -598,7 +609,16 @@
       // 获取审核列表
       get_comment_info1 (n) {
         let that = this
-        that.search_approve.approveStatus = n
+        if (n === '' || n === undefined) {
+          that.brandStatusName = '品牌状态'
+        } else if (n === 0) {
+          that.brandStatusName = '全部'
+        } else if (n === 1) {
+          that.brandStatusName = '申请中'
+        } else {
+          that.brandStatusName = '审批不通过'
+        }
+        that.search_approve.approveStatus = n === 0 ? '' : n
         this.$("[data-toggle='popover']").popover('hide')
         that.$('#table1').bootstrapTable('destroy').bootstrapTable({
           cache: false,
@@ -642,9 +662,11 @@
             valign: 'middle',
             formatter: function (x, y) {
               return y.approveStatus === 1 ? '审批中' : `
-              <div class="color_default">审批不通过
-                <i></i>
-                <p>` + y.rejectReason + `</p>
+              <div class="color_default" style="position:relative;">审批不通过
+                <i class="ico_msg">
+                <div class="ico-tit">` + y.rejectReason + `</div>
+              </i>
+
               </div>
               `
             }
@@ -683,6 +705,9 @@
       that.modifyLocal = 1
       that.province_show = false
       that.city_show = false
+      that.isBrandApprove = false
+      that.rejectShow = false
+      that.brandStatusName = '品牌状态'
     }
   }
 </script>
@@ -853,6 +878,12 @@
         }
     }
 }
+.ico_msg{
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: url(../../../assets/images/ico_msg.png);
+}
 /*详情*/
 #myTabContent{position:relative;}
 .goodInfo{position:absolute;top:0;left:0;width:100%;height:840px;padding-top:40px;background:#fff;z-index:99;}
@@ -867,5 +898,13 @@
 .defultBtn{background:#ccc;}
 /*修改/新增*/
 .changeGoodInfo input,.changeGoodInfo select{width:200px;line-height:40px;color:#666;}
-.glyphicon{width:40px;height:24px;z-index:11;}
+.zIndex2{z-index:21;}
+.sz .tab-content .tab-pane .search_cell .time{top:50px;}
+.icon{width:40px;height:40px;z-index:11;display:inline-block;}
+.timeIcon{background:url(../../../assets/images/ico_calendar@2x.png) no-repeat center bottom;background-size:19px 20px;}
+.searchIcon{background:url(../../../assets/images/ico_search.png) no-repeat center center;background-size:20px 20px;}
+.arrowsIcon{background:url(../../../assets/images/ico_arrows_default.png) no-repeat center center;background-size:20px 20px;
+float: right;margin-top:20px;margin-right:10px;}
+.rightIcon{background:url(../../../assets/images/ico_arrows_packup.png) no-repeat center center;background-size:20px 20px;
+float: right;margin-top:-2px;width:20px;height:20px;}
 </style>

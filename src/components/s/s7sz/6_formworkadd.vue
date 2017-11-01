@@ -52,7 +52,7 @@
                   <td></td>
                 </tr>
                 <tr v-for="(addRow,index) in addRows" v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} 
+                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}}
                     <a @click="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
@@ -60,7 +60,7 @@
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/> 
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/>
                             {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
@@ -74,7 +74,7 @@
                           </div>
                         </div>
                       </div>
-                      
+
                     </div>
                   </td>
                   <td>
@@ -105,7 +105,7 @@
                   <td>{{add_postageModelRule_w.address==''?'全国（ 默认运费）':add_postageModelRule_w.address}}
                     <!-- <a v-if="index!=0" @click="addressCheckBox(index,$event)">编辑 </a> -->
                   <!--地区选择-->
-                    <div class="cityBox">
+                    <!-- <div class="cityBox">
                       <h4> 选择地区 <a class="close"
                                   @click="cityBoxHide"> X </a></h4>
                       <div class="test-div">
@@ -132,7 +132,7 @@
                         </div>
                       </div>
                     </div>
-                  </td>
+                  </td> -->
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
@@ -153,7 +153,7 @@
                           style="width:50px;height:30px;"
                           v-model="add_postageModelRule_w.continuedPostage">
                   </td>
-                  <td> <!--<a v-if="index!=0" @click="delectRule(index)">删除</a>--></td>
+                  <td> <a v-if="index!=0" @click="delectRule1(index)">删除</a></td>
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
@@ -186,7 +186,7 @@
                           </div>
                         </div>
                       </div>
-                      
+
                     </div>
                   </td>
                   <td>
@@ -219,7 +219,7 @@
         <div class="form-group">
           <label class="col-sm-2 control-label"> 模板说明： </label>
           <div class="col-sm-6">
-<textarea class="form-control"
+          <textarea class="form-control"
           cols="80"
           rows="7"
           placeholder="1-200字符"
@@ -258,165 +258,163 @@
               </thead>
               <!-- modify -->
               <tbody v-if="addModify==='modify'">
-              <tr v-for="(add_postageModelRule,index) in formwork.postageModelRules">
-                  <td scope="row"> {{add_postageModelRule.address}}<a v-if="index!=0" @click="addressCheckBox(index,$event)">编辑 </a>
-                  </td>
-                  <td>
-                    <input type="text"
-                           style="width:50px;height:30px;"
-                           v-model="add_postageModelRule.firstPiece">
-                  </td>
-                  <td>
-                    <input type="text"
-                           style="width:50px;height:30px;"
-                           v-model="add_postageModelRule.firstPostage">
-                  </td>
-                  <td>
-                    <input type="text"
-                           style="width:50px;height:30px;"
-                           v-model="add_postageModelRule.continuedPiece">
-                  </td>
-                  <td>
-                    <input type="text"
-                           style="width:50px;height:30px;"
-                           v-model="add_postageModelRule.continuedPostage">
-                  </td>
-                  <td></td>
-              </tr>
-              <tr v-for="(addRow,index) in addRows"
-                  v-if="addRows.length!==0">
-                <td class="relative">{{addRow.address = '' ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
-                  编辑 </a>
-                  <!--地区选择-->
-                  <div class="cityBox">
-                    <h4> 选择地区 <a class="close" @click="cityBoxHide"> X </a></h4>
-                    <div class="test-div">
-                      <div class="bigArea" v-for="(item,index) in datas">
-                        <div class="left">
-                          <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/> 
-                          {{item.name}}
-                        </div>
-                        <div class="pro" v-for="(pro,index) in item.subs">
-                          <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
-                          <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
-                          <div class="cityWrap">
-                            <div class="city" v-for="(city,index) in pro.subs">
-                              <input type="checkbox"
-                                     v-model="addRow.cityList" :value="city.code"
-                                     @click="chooseCity(city,$event)"/> {{city.name}}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                  </div>
-                </td>
-                <td>
-                  <input type="text"
-                         style="width:50px;height:30px;"
-                         v-model="addRow.firstWeight">
-                </td>
-                <td>
-                  <input type="text"
-                         style="width:50px;height:30px;"
-                         v-model="addRow.firstPostage">
-                </td>
-                <td>
-                  <input type="text"
-                         style="width:50px;height:30px;"
-                         v-model="addRow.continuedWeight">
-                </td>
-                <td>
-                  <input type="text"
-                         style="width:50px;height:30px;"
-                         v-model="addRow.continuedPostage">
-                </td>
-                <td @click="delectRule(index)"> 删除</td>
-              </tr>
-              </tbody>
-              <!-- add -->
-              <tbody v-if="addModify==='add'">
-              <tr>
-                <td v-model="add_postageModelRule.address"> 全国（ 默认运费）</td>
-                <td>
-                  <input type="text"
-                         style="width:50px;height:30px;"
-                         v-model="add_postageModelRule.firstPiece"/>
-                </td>
-                <td>
-                  <input type="text"
-                         style="width:50px;height:30px;"
-                         v-model="add_postageModelRule.firstPostage"/>
-                </td>
-                <td>
-                  <input type="text"
-                         style="width:50px;height:30px;"
-                         v-model="add_postageModelRule.continuedPiece"/>
-                </td>
-                <td>
-                  <input type="text"
-                         style="width:50px;height:30px;"
-                         v-model="add_postageModelRule.continuedPostage"/>
-                </td>
-                <td></td>
-              </tr>
-              <tr v-for="(addRow,index) in addRows"
-                  v-if="addRows.length!==0">
-                <td class="relative">{{addRow.address = '' ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
-                  编辑 </a>
-                  <!--地区选择-->
-                  <div class="cityBox">
-                    <h4> 选择地区 <a class="close"
-                                 @click="cityBoxHide"> X </a></h4>
+                  <tr v-for="(add_postageModelRule,index) in formwork.postageModelRules">
+                    <td>{{add_postageModelRule.address==''?'全国（ 默认运费）':add_postageModelRule.address}}</td>
+                    <td>
+                      <input type="text"
+                            style="width:50px;height:30px;"
+                            v-model="add_postageModelRule.firstPiece">
+                    </td>
+                    <td>
+                      <input type="text"
+                            style="width:50px;height:30px;"
+                            v-model="add_postageModelRule.firstPostage">
+                    </td>
+                    <td>
+                      <input type="text"
+                            style="width:50px;height:30px;"
+                            v-model="add_postageModelRule.continuedPiece">
+                    </td>
+                    <td>
+                      <input type="text"
+                            style="width:50px;height:30px;"
+                            v-model="add_postageModelRule.continuedPostage">
+                    </td>
+                    <td><a v-if="index!=0" @click="delectRule1(index)">删除</a></td>
+                </tr>
+                <tr v-for="(addRow,index) in addRows"
+                    v-if="addRows.length!==0">
+                  <td class="relative">{{addRow.address = '' ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
+                    编辑 </a>
+                    <!--地区选择-->
+                    <div class="cityBox">
+                      <h4> 选择地区 <a class="close" @click="cityBoxHide"> X </a></h4>
                       <div class="test-div">
-                        <div class="bigArea"
-                             v-for="(item,index) in datas">
+                        <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox"
-                                   v-model="addRow.areaIdArr" :value="item.code"
-                                   @click="chooseArea(item.code,$event)"/> {{item.name}}
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/> 
+                            {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox"
-                                   v-model="addRow.IdArr" :value="pro.code"
-                                   @click="choosePro(pro,$event)"/>
+                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
                             <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
                             <div class="cityWrap">
-                              <div class="city"
-                                   v-for="(city,index) in pro.subs">
+                              <div class="city" v-for="(city,index) in pro.subs">
                                 <input type="checkbox"
-                                       v-model="addRow.cityList" :value="city.code"
-                                       @click="chooseCity(city,$event)"/> {{city.name}}
+                                      v-model="addRow.cityList" :value="city.code"
+                                      @click="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                  </div>
-                </td>
-                <td>
-                  <input type="text"
-                         style="width:50px;height:30px;"
-                         v-model="addRow.firstWeight">
-                </td>
-                <td>
-                  <input type="text"
-                         style="width:50px;height:30px;"
-                         v-model="addRow.firstPostage">
-                </td>
-                <td>
-                  <input type="text"
-                         style="width:50px;height:30px;"
-                         v-model="addRow.continuedWeight">
-                </td>
-                <td>
-                  <input type="text"
-                         style="width:50px;height:30px;"
-                         v-model="addRow.continuedPostage">
-                </td>
-                <td @click="delectRule(index)"> 删除</td>
-              </tr>
+                    </div>
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.firstPiece">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.firstPostage">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.continuedPiece">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.continuedPostage">
+                  </td>
+                  <td @click="delectRule(index)"> 删除</td>
+                </tr>
+              </tbody>
+              <!-- add -->
+              <tbody v-if="addModify==='add'">
+                <tr>
+                   <td v-model="add_postageModelRule.address"> 全国（ 默认运费）</td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="add_postageModelRule.firstPiece"/>
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="add_postageModelRule.firstPostage"/>
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="add_postageModelRule.continuedPiece"/>
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="add_postageModelRule.continuedPostage"/>
+                  </td>
+                  <td></td>
+                </tr>
+                <tr v-for="(addRow,index) in addRows"
+                    v-if="addRows.length!==0">
+                  <td class="relative">{{addRow.address = '' ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
+                    编辑 </a>
+                    <!--地区选择-->
+                    <div class="cityBox">
+                      <h4> 选择地区 <a class="close"
+                                  @click="cityBoxHide"> X </a></h4>
+                        <div class="test-div">
+                          <div class="bigArea"
+                              v-for="(item,index) in datas">
+                            <div class="left">
+                              <input type="checkbox"
+                                    v-model="addRow.areaIdArr" :value="item.code"
+                                    @click="chooseArea(item.code,$event)"/> {{item.name}}
+                            </div>
+                            <div class="pro" v-for="(pro,index) in item.subs">
+                              <input type="checkbox"
+                                    v-model="addRow.IdArr" :value="pro.code"
+                                    @click="choosePro(pro,$event)"/>
+                              <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                              <div class="cityWrap">
+                                <div class="city"
+                                    v-for="(city,index) in pro.subs">
+                                  <input type="checkbox"
+                                        v-model="addRow.cityList" :value="city.code"
+                                        @click="chooseCity(city,$event)"/> {{city.name}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.firstWeight">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.firstPostage">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.continuedWeight">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="addRow.continuedPostage">
+                  </td>
+                  <td @click="delectRule(index)"> 删除</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -597,7 +595,7 @@
               }
             }
           }
-          
+
         }
       },
 // 市被选时对应省被选中,
@@ -639,7 +637,7 @@
                 let point2=0
                 for(let n=0;n<that.datas.length;n++){
                     if(that.datas[i].subs[j].parent==that.datas[n].code){
-                      
+
                       for(let f=0;f<that.datas[n].subs.length;f++){
                           for(let y = 0; y < that.addRows[that.index].IdArr.length; y++){
                             if(that.addRows[that.index].IdArr[y]==that.datas[n].subs[f].code){
@@ -647,9 +645,9 @@
                             }
                           }
                       }
-                      if(point2==0){ 
+                      if(point2==0){
                          that.addRows[that.index].areaIdArr.splice(that.$.inArray(that.datas[n].code, that.addRows[that.index].areaIdArr), 1)
-                      }   
+                      }
                     }
                 }
 
@@ -687,6 +685,12 @@
       {
         this.addRows.splice(index, 1)
       },
+// 删除行
+      delectRule1(index)
+      {
+        // console.warn(this.formwork.postageModelRules)
+        this.formwork.postageModelRules.splice(index, 1)
+      },
 // 显示地区选择盒子
       addressCheckBox(index, $event)
       {
@@ -705,8 +709,8 @@
         var el = event.target
         that.$(el).parent('.pro').find('.cityWrap').toggle()
       },
-//点击保存
-      save(){
+      // 点击保存
+      save () {
         let that = this
         console.log(that.$route.query.modelId)
         if (that.addModify === 'add'){
@@ -725,7 +729,7 @@
               firstPiece: that.addRows[i].firstPiece,
               firstPostage: that.addRows[i].firstPostage,
               firstWeight: that.addRows[i].firstWeight,
-              defaultFlag: that.addRows[that.index].address == '' ? 0 : 1
+              defaultFlag: that.addRows[that.index].address === '' ? 0 : 1
             }
             that.postageModelRules.push(that.postageModelRule)
           }
@@ -743,7 +747,7 @@
               firstPiece: that.addRows[i].firstPiece,
               firstPostage: that.addRows[i].firstPostage,
               firstWeight: that.addRows[i].firstWeight,
-              defaultFlag: that.addRows[that.index].address == '' ? 0 : 1
+              defaultFlag: that.addRows[that.index].address === '' ? 0 : 1
             }
             that.postageModelRules.push(that.postageModelRule)
           }
@@ -780,8 +784,7 @@
           that.datas = result.content.subs
         }
       })
-      if (that.$route.query.addModify === true) {
-        console.log('add')
+      if (that.$route.query.addModify === 'true') {
         that.addModify = 'add'
         that.$.ajax({
           type: 'get',
