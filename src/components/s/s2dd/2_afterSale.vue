@@ -1,5 +1,5 @@
 <template>
-  <div role="tabpanel" class="tab-pane fade in active"  aria-labelledby="home-tab">
+  <div role="tabpanel" class="tab-pane fade in active"  aria-labelledby="home-tab" style="margin-top: 20px;width: 100%;margin-top: 130px;margin-left: 20px;">
     <div class="goods_search" style="width: 100%; height: 40px;">
       <div  style="float: left">
         售后期望:
