@@ -169,10 +169,10 @@
               <div class="a3 fl mt20" id="a3" style="width: 18%;text-align: center;padding-right: 40px;">
                 1
               </div>
-              <div class="a4 fl mt20" style="width:14%;text-align:center;">
+              <div class="a4 fl mt10" style="width:14%;text-align:center;">
                 <!-- 有几种情况的不同表现方 -->
                 <div style="">
-                  <div class="mt10">待退货确认</div>
+                  <div class="">待退货确认</div>
                   <div class="mt5"><button class="a4_btn" @click="agreeshow">同意</button></div>
                   <div class="mt5"><button class="a4_btn" @click="refuseshow">拒绝</button></div>
                 </div>
@@ -186,10 +186,10 @@
               <div class="a5" style="width:25%;">
                 589.00
               </div>
-              <div class="a6" style="width:28%;">
+              <div class="a6 mt10" style="width:28%;">
                 2017-10-1023:22:37
               </div>
-              <div class="a7" style="width:28%">
+              <div class="a7 mt10" style="width:28%">
                 <div>肖悦悦</div>
                 <div>13845678763</div>
               </div>
@@ -609,7 +609,7 @@
 
             }
             td{
-              padding-bottom: 10px;
+              /*padding-bottom: 10px;*/
             }
           }
           .a1_img{
