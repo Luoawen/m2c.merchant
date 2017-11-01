@@ -35,7 +35,7 @@
           </ul>
         </div>
         <div class="search_cell">
-          <span>申请时间<i class="glyphicon glyphicon-calendar" @click="is_Success2=!is_Success2"></i></span>
+          <span class="zIndex2" @click="is_Success2=!is_Success2">申请时间<i class="icon timeIcon"></i></span>
           <div class="time" v-if="is_Success2">
             <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
           </div>
