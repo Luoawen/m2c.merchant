@@ -28,7 +28,7 @@
               </div>
               <div>
                 <span class="tit01">订单总额:</span>
-                <span class="ml20">{{orderDetail.orderTotalMoney}}元（含运费<span>{{orderDetail.backFreight}}</span>元）</span>
+                <span class="ml20">{{orderDetail.orderTotalMoney/100}}元（含运费<span>{{orderDetail.backFreight/100}}</span>元）</span>
               </div>
             </div>
             <div class="col-sm-4 detail_cen">
@@ -38,7 +38,7 @@
               </div>
               <div>
                 <span class="tit01">售后金额:</span>
-                <span class="ml20 redcolor">{{orderDetail.backMoney}}元（含运费{{orderDetail.backFreight}}元）</span>
+                <span class="ml20 redcolor">{{orderDetail.backMoney/100}}元（含运费{{orderDetail.backFreight/100}}元）</span>
               </div>
               <div>
                 <span class="tit01">申请时间:</span>
@@ -76,10 +76,10 @@
                 </div>
               </td>
               <td class="a2">-</td>
-              <td class="a3">{{orderDetail.goodsInfo.price}}</td>
+              <td class="a3">{{orderDetail.goodsInfo.price/100}}</td>
               <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
-              <td class="a5">{{orderDetail.goodsInfo.totalPrice}}</td>
-              <td class="a5">{{orderDetail.backMoney}}</td>
+              <td class="a5">{{orderDetail.goodsInfo.totalPrice/100}}</td>
+              <td class="a5">{{orderDetail.backMoney/100}}</td>
               <td class="a6">
                 <!--状态，0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
