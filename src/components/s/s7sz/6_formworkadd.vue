@@ -38,16 +38,17 @@
                 <tr>
                   <td v-model="add_postageModelRule_w.address"> 全国（ 默认运费）</td>
                   <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstWeight">
+                    <input type="text"
+                           style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstWeight" @blur="checkDefaultNumber(add_postageModelRule_w.firstWeight,'firstWeight',add_postageModelRule_w)">
                   </td>
                   <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstPostage">
+                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstPostage" @blur="checkDefaultNumber(add_postageModelRule_w.firstPostage,'firstPostage',add_postageModelRule_w)">
                   </td>
                   <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedWeight">
+                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedWeight" @blur="checkDefaultNumber(add_postageModelRule_w.continuedWeight,'continuedWeight',add_postageModelRule_w)">
                   </td>
                   <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedPostage">
+                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedPostage" @blur="checkDefaultNumber(add_postageModelRule_w.continuedPostage,'continuedPostage',add_postageModelRule_w)">
                   </td>
                   <td></td>
                 </tr>
@@ -80,22 +81,22 @@
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.firstWeight">
+                          v-model="addRow.firstWeight" @blur="checkNumber(addRow.firstWeight,index,'firstWeight',addRows)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.firstPostage">
+                          v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.continuedWeight">
+                          v-model="addRow.continuedWeight" @blur="checkNumber(addRow.continuedWeight,index,'continuedWeight',addRows)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.continuedPostage">
+                          v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
                   </td>
                   <td @click="delectRule(index)"> 删除</td>
                 </tr>
@@ -136,22 +137,22 @@
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="add_postageModelRule_w.firstWeight">
+                          v-model="add_postageModelRule_w.firstWeight" @blur="checkNumber(add_postageModelRule_w.firstWeight,index,'firstWeight',formwork.postageModelRules)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="add_postageModelRule_w.firstPostage">
+                          v-model="add_postageModelRule_w.firstPostage" @blur="checkNumber(add_postageModelRule_w.firstPostage,index,'firstPostage',formwork.postageModelRules)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="add_postageModelRule_w.continuedWeight">
+                          v-model="add_postageModelRule_w.continuedWeight" @blur="checkNumber(add_postageModelRule_w.continuedWeight,index,'continuedWeight',formwork.postageModelRules)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="add_postageModelRule_w.continuedPostage">
+                          v-model="add_postageModelRule_w.continuedPostage" @blur="checkNumber(add_postageModelRule_w.continuedPostage,index,'continuedPostage',formwork.postageModelRules)">
                   </td>
                   <td> <a v-if="index!=0" @click="delectRule1(index)">删除</a></td>
                 </tr>
@@ -192,22 +193,22 @@
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.firstWeight">
+                          v-model="addRow.firstWeight" @blur="checkNumber(addRow.firstWeight,index,'firstWeight',addRows)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.firstPostage">
+                          v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.continuedWeight">
+                          v-model="addRow.continuedWeight" @blur="checkNumber(addRow.continuedWeight,index,'continuedWeight',addRows)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.continuedPostage">
+                          v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
                   </td>
                   <td @click="delectRule(index)"> 删除</td>
                 </tr>
@@ -263,22 +264,22 @@
                     <td>
                       <input type="text"
                             style="width:50px;height:30px;"
-                            v-model="add_postageModelRule.firstPiece">
+                            v-model="add_postageModelRule.firstPiece" @blur="checkInteger(add_postageModelRule.firstPiece,index,'firstPiece',formwork.postageModelRules)">
                     </td>
                     <td>
                       <input type="text"
                             style="width:50px;height:30px;"
-                            v-model="add_postageModelRule.firstPostage">
+                            v-model="add_postageModelRule.firstPostage" @blur="checkNumber(add_postageModelRule.firstPostage,index,'firstPostage',formwork.postageModelRules)">
                     </td>
                     <td>
                       <input type="text"
                             style="width:50px;height:30px;"
-                            v-model="add_postageModelRule.continuedPiece">
+                            v-model="add_postageModelRule.continuedPiece" @blur="checkInteger(add_postageModelRule.continuedPiece,index,'continuedPiece',formwork.postageModelRules)">
                     </td>
                     <td>
                       <input type="text"
                             style="width:50px;height:30px;"
-                            v-model="add_postageModelRule.continuedPostage">
+                            v-model="add_postageModelRule.continuedPostage" @blur="checkNumber(add_postageModelRule.continuedPostage,index,'continuedPostage',formwork.postageModelRules)">
                     </td>
                     <td><a v-if="index!=0" @click="delectRule1(index)">删除</a></td>
                 </tr>
@@ -292,7 +293,7 @@
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/> 
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/>
                             {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
@@ -313,22 +314,22 @@
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.firstPiece">
+                          v-model="addRow.firstPiece" @blur="checkInteger(addRow.firstPiece,index,'firstPiece',addRows)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.firstPostage">
+                          v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.continuedPiece">
+                          v-model="addRow.continuedPiece" @blur="checkInteger(addRow.continuedPiece,index,'continuedPiece',addRows)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.continuedPostage">
+                          v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
                   </td>
                   <td @click="delectRule(index)"> 删除</td>
                 </tr>
@@ -340,22 +341,22 @@
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="add_postageModelRule.firstPiece"/>
+                          v-model="add_postageModelRule.firstPiece" @blur="checkDefaultInteger(add_postageModelRule.firstPiece,'firstPiece',add_postageModelRule)"/>
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="add_postageModelRule.firstPostage"/>
+                          v-model="add_postageModelRule.firstPostage" @blur="checkDefaultNumber(add_postageModelRule.firstPostage,'firstPostage',add_postageModelRule)"/>
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="add_postageModelRule.continuedPiece"/>
+                          v-model="add_postageModelRule.continuedPiece" @blur="checkDefaultInteger(add_postageModelRule.continuedPiece,'continuedPiece',add_postageModelRule)"/>
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="add_postageModelRule.continuedPostage"/>
+                          v-model="add_postageModelRule.continuedPostage" @blur="checkDefaultNumber(add_postageModelRule.continuedPostage,'continuedPostage',add_postageModelRule)"/>
                   </td>
                   <td></td>
                 </tr>
@@ -396,22 +397,22 @@
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.firstWeight">
+                          v-model="addRow.firstPiece" @blur="checkInteger(addRow.firstPiece,index,'firstPiece',addRows)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.firstPostage">
+                          v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.continuedWeight">
+                          v-model="addRow.continuedPiece" @blur="checkInteger(addRow.continuedPiece,index,'continuedPiece',addRows)">
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.continuedPostage">
+                          v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
                   </td>
                   <td @click="delectRule(index)"> 删除</td>
                 </tr>
@@ -506,6 +507,42 @@
       }
     },
     methods: {
+      checkNumber (val, index, arr, list) {
+        setTimeout(() => {
+          if (val && $.isNumeric(val)) {
+            val = Number(val).toFixed(2)
+          } else {
+            val = ''
+          }
+          list[index][arr] = val
+        }, 0)
+      },
+      checkInteger (val, index, arr, list) {
+        setTimeout(() => {
+          var re = /^[0-9]+$/
+          if (!re.test(val)) {
+            list[index][arr] = ''
+          }
+        }, 0)
+      },
+      checkDefaultNumber (val, arr, obj) {
+        setTimeout(() => {
+          if (val && $.isNumeric(val)) {
+            val = Number(val).toFixed(2)
+          } else {
+            val = ''
+          }
+          obj[arr] = val
+        }, 0)
+      },
+      checkDefaultInteger (val, arr, obj) {
+        setTimeout(() => {
+          var re = /^[0-9]+$/
+          if (!re.test(val)) {
+            obj[arr] = ''
+          }
+        }, 0)
+      },
 // 选中大区时同时选中所有省市
       chooseArea(n, $event) {
         let that = this
@@ -579,7 +616,6 @@
           }
           that.addRows[that.index].address.splice(that.$.inArray(n.name, that.addRows[that.index].address), 1)
           that.addRows[that.index].IdArr.splice(that.$.inArray(n.code, that.addRows[that.index].IdArr), 1)
-
           let point=0
           for (var i = 0; i < that.datas.length; i++) {
             if(that.datas[i].code==n.parent){
@@ -688,7 +724,6 @@
 // 删除行
       delectRule1(index)
       {
-        // console.warn(this.formwork.postageModelRules)
         this.formwork.postageModelRules.splice(index, 1)
       },
 // 显示地区选择盒子
@@ -712,29 +747,72 @@
       // 点击保存
       save () {
         let that = this
-        console.log(that.$route.query.modelId)
-        if (that.addModify === 'add'){
+        if (that.formwork.modelName === undefined || that.formwork.modelName.trim() === '') {
+          that.show_tip('请输入模板名称')
+          return
+        }
+        if (that.formwork.chargeType === undefined || that.formwork.chargeType === '') {
+          that.show_tip('请选择计费方式')
+          return
+        }
+        if (that.addModify === 'add') {
           if (that.formwork.chargeType == 1) {
             that.postageModelRules.push(that.add_postageModelRule)
           } else {
             that.postageModelRules.push(that.add_postageModelRule_w)
           }
-          for (var i = 0; i < that.addRows.length; i++) {
-            that.postageModelRule = {
-              address: that.addRows[i].address.join(),
-              cityCode: that.addRows[i].cityList.join(),
-              continuedPiece: that.addRows[i].continuedPiece,
-              continuedPostage: that.addRows[i].continuedPostage,
-              continuedWeight: that.addRows[i].continuedWeight,
-              firstPiece: that.addRows[i].firstPiece,
-              firstPostage: that.addRows[i].firstPostage,
-              firstWeight: that.addRows[i].firstWeight,
-              defaultFlag: that.addRows[that.index].address === '' ? 0 : 1
+          //console.log(that.postageModelRules)
+          for (var i = 0; i < that.postageModelRules.length; i++) {
+            if (that.formwork.chargeType === 1) {
+              if (that.postageModelRules[i].firstPiece === '' || that.postageModelRules[i].firstPostage === '' || that.postageModelRules[i].continuedPiece === '' || that.postageModelRules[i].continuedPostage === '') {
+                that.postageModelRules = []
+                that.show_tip('运费计算规则不能为空')
+                return
+              }
+            } else {
+              if (that.postageModelRules[i].firstWeight === '' || that.postageModelRules[i].firstPostage === '' || that.postageModelRules[i].continuedWeight === '' || that.postageModelRules[i].continuedPostage === '') {
+                that.postageModelRules = []
+                that.show_tip('运费计算规则不能为空')
+                return
+              }
             }
-            that.postageModelRules.push(that.postageModelRule)
+          }
+          if (that.addRows.length > 0) {
+            for (var i = 0; i < that.addRows.length; i++) {
+              if (that.addRows[i].address === undefined || that.addRows[i].address === '' || that.addRows[i].address.length === 0) {
+                that.postageModelRules = []
+                that.show_tip('请添加地区')
+                return
+              }
+              if (that.formwork.chargeType == 1) {
+                if (that.addRows[i].firstPiece === '' || that.addRows[i].firstPostage === '' || that.addRows[i].continuedPiece === '' || that.addRows[i].continuedPostage === '') {
+                  that.postageModelRules = []
+                  that.show_tip('运费计算规则不能为空')
+                  return
+                }
+              } else {
+                if (that.addRows[i].firstWeight === '' || that.addRows[i].firstPostage === '' || that.addRows[i].continuedWeight === '' || that.addRows[i].continuedPostage === '') {
+                  that.postageModelRules = []
+                  that.show_tip('运费计算规则不能为空')
+                  return
+                }
+              }
+              that.postageModelRule = {
+                address: that.addRows[i].address.join(),
+                cityCode: that.addRows[i].cityList.join(),
+                continuedPiece: that.addRows[i].continuedPiece,
+                continuedPostage: that.addRows[i].continuedPostage,
+                continuedWeight: that.addRows[i].continuedWeight,
+                firstPiece: that.addRows[i].firstPiece,
+                firstPostage: that.addRows[i].firstPostage,
+                firstWeight: that.addRows[i].firstWeight,
+                defaultFlag: 1
+              }
+              that.postageModelRules.push(that.postageModelRule)
+            }
           }
         } else {
-          for(var i=0; i<that.formwork.postageModelRules.length; i++){
+          for (var i=0; i<that.formwork.postageModelRules.length; i++){
             that.postageModelRules.push(that.formwork.postageModelRules[i])
           }
           for (var i = 0; i < that.addRows.length; i++) {
@@ -765,6 +843,7 @@
             modelDescription: that.formwork.modelDescription
           },
           success: function (result) {
+            that.postageModelRules = []
             if (result.status === 200) {
               that.show_tip('保存成功')
               that.$goRoute({path: 'formwork'})
@@ -797,7 +876,6 @@
           }
         })
       } else {
-        console.log('modify')
         that.addModify = 'modify'
         that.$.ajax({
           type: 'get',
@@ -807,7 +885,6 @@
           },
           success: function (result) {
             that.formwork = result.content
-            console.warn(that.formwork.postageModelRules)
           }
         })
       }

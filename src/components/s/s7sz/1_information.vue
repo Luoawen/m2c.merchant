@@ -34,7 +34,7 @@
         <div class="form-group nopad">
               <div class="col-sm-8">
                 <input type="file" id="m11yhgl_img_input" style="display:none" @change="upload_img()">
-                <div class="img_up"> 
+                <div class="img_up">
                   <img width='100px' height='100px' v-show='imgshow' id="m11yhgl_img" v-bind:src="storeinformation.imgUrl">
                 </div>
                 <span class="upload" onclick="document.querySelector('#m11yhgl_img_input').click()">
@@ -50,7 +50,9 @@
 </template>
 
 <script>
-export default {
+  /* eslint-disable quotes */
+
+  export default {
   name: '',
   data () {
     return {
@@ -148,9 +150,25 @@ export default {
     // 修改店铺信息1
     modifyDealerMess (callback) {
       let that = this
+      if (that.storeinformation.appellation == null || that.storeinformation.appellation.trim() == '' || that.storeinformation.appellation.length > 50){
+        alert("请输入店铺名称")
+        return
+      }
+      if (that.storeinformation.imgUrl == null || that.storeinformation.imgUrl.trim() == '' || that.storeinformation.imgUrl.length > 100){
+        alert("请选择图片")
+        return
+      }
+      if (that.storeinformation.service == null || that.storeinformation.service.trim() == ''){
+        alert("请输入客服电话")
+        return
+      }
+      var methodStr = "post";
+      if (typeof (that.storeinformation.shopId) != 'undefined' && that.storeinformation.shopId != '') {
+        methodStr = "put";
+      }
       that.modify_imgStep(function () {
         that.$.ajax({
-          type: 'put',
+          type: methodStr,
           url: that.localbase + 'm2c.scm/shop/sys/shopInfo',
           data: {
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
