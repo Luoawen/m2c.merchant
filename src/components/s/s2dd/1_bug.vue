@@ -3,21 +3,20 @@
     <div class="poi1">
       <div class="dropdown">
         <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">
-          <select v-model="search_params.orderType" name="orderType" >
-            <option value="" selected>订单状态</option>
-            <option value="">全部</option>
-            <option value="1">待付款</option>
-            <option value="2">待发货</option>
-            <option value="3">待收货</option>
+          <select v-model="searchParams.orderStatus" >
+            <option value="" selected>全部</option>
+            <option value="0">待付款</option>
+            <option value="1">待发货</option>
+            <option value="2">待收货</option>
+            <option value="3">确认收货</option>
             <option value="4">交易完成</option>
-            <option value="5">交易关闭</option>
           </select>
         </div>
       </div>
       <div class="dropdown">
         <div id="dLabel2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="state">
-          <select v-model="search_params.status" name="status" >
-            <option value="" selected>售后状态</option>0,1申请换货,2,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
+          <select v-model="searchParams.afterSellStatus" >
+            <option value="" selected>全部</option>
             <option value="0">申请退货</option>
             <option value="1">申请换货</option>
             <option value="2">申请退款</option>
@@ -35,17 +34,18 @@
       </div>
       <div class="search_cell">
 
-        <span>下单时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span><router-link :to="{ name : 'dealerOrDtl', query: {orderId: '20171018142052LOKIJN',dealerOrderId: '20171026161652LOKIXX0'}}">xineeeee</router-link>
+        <span>下单时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span>
         <div class="time" v-show="is_Success">
-          <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
+          <input type="date" class="form-control search_input search_input_date_l start" v-model="searchParams.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="searchParams.endTIme">
         </div>
 
       </div>
       <div class="search">
-        <input type="text" class="inp" value=""  v-model="search_params.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码">
+        <input type="text" class="inp" v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码">
         <i class="glyphicon glyphicon-search" id="searchIco" @click="search()"></i>
       </div>
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
+      <button type="button"class="btn"  @click="search()">查询</button>
       <button type="button" class="btn btn-default pull-right operation">批量操作</button>
       <!-- 高级搜索 -->
       <div class="poi2 Advanced_s" v-show="Advancedshow===true">
@@ -55,30 +55,51 @@
             <div class="col-sm-6 left">
               <div class="clear mt10 mb20">
                 <span class="bt fl ">关键词</span>
-                <input class="form-control fl " placeholder="输入商品名称/订单号/支付单号/收货人号码" />
+                <input class="form-control fl " placeholder="输入商品名称/订单号/支付单号/收货人号码" v-model="searchParams.condition"/>
               </div>
               <div class="clear mt10 mb20">
                 <span class="bt fl ">订单状态</span>
-                <select class="form-control fl ">
-                  <option value="">全部</option>
+                <select class="form-control fl " v-model="searchParams.orderStatus">
+                  <option value="" selected>全部</option>
+                  <option value="0">待付款</option>
+                  <option value="1">待发货</option>
+                  <option value="2">待收货</option>
+                  <option value="3">确认收货</option>
+                  <option value="4">交易完成</option>
                 </select>
               </div>
               <div class="clear mt10 mb20">
                 <span class="bt fl ">售后状态</span>
-                <select class="form-control fl ">
-                  <option value="">全部</option>
+                <select class="form-control fl " v-model="searchParams.afterSellStatus">
+                  <option value="" selected>全部</option>
+                  <option value="0">申请退货</option>
+                  <option value="1">申请换货</option>
+                  <option value="2">申请退款</option>
+                  <option value="3">商家拒绝申请</option>
+                  <option value="4">商家同意申请</option>
+                  <option value="5">客户寄出</option>
+                  <option value="6">商家收到</option>
+                  <option value="7">商家寄出</option>
+                  <option value="8">客户收到</option>
+                  <option value="9">同意退款</option>
+                  <option value="10">确认退款</option>
+                  <option value="11">交易关闭</option>
                 </select>
               </div>
               <div class="clear mt10 mb20">
                 <span class="bt fl ">广告位</span>
-                <select class="form-control fl ">
-                  <option value="">全部</option>
+                <select class="form-control fl " v-model="searchParams.hasMedia">
+                  <option value="" selected>全部</option>
+                  <option value="1" >有</option>
+                  <option value="0" >无</option>
                 </select>
               </div>
               <div class="clear mt10 mb20">
                 <span class="bt fl ">开发票</span>
-                <select class="form-control fl ">
+                <select class="form-control fl " v-model="searchParams.invoice">
                   <option value="">全部</option>
+                  <option value="0" >个人</option>
+                  <option value="1" >公司</option>
                 </select>
               </div>
             </div>
@@ -86,34 +107,38 @@
               <div class="clear mt10 mb20">
                 <span class="bt fl ">下单时间</span>
                 <span class="clear">
-                  <span class="fl"><input class="form-control time" type="date"/></span>
+                  <span class="fl"><input class="form-control time" type="date" v-model="searchParams.startTime"/></span>
                   <span class="fl mr10" style="display:inline-block;line-height:40px;">~</span>
-                  <span class="fl"><input class="form-control time" type="date"/></span>
+                  <span class="fl"><input class="form-control time" type="date" v-model="searchParams.endTime"/></span>
                 </span>
               </div>
               <div class="clear mt10 mb20">
                 <span class="bt fl ">评论状态</span>
-                <select class="form-control fl ">
-                  <option value="">全部</option>
+                <select class="form-control fl " v-model="searchParams.commentStatus">
+                  <option value="" selected>全部</option>
+                  <option value="1">有</option>
+                  <option value="0">无</option>
                 </select>
               </div>
               <div class="clear mt10 mb20">
                 <span class="bt fl ">订单类型</span>
-                <select class="form-control fl ">
-                  <option value="">全部</option>
+                <select class="form-control fl " v-model="searchParams.orderClassify">
+                  <option value="" selected>全部</option>
                 </select>
               </div>
               <div class="clear mt10 mb20">
                 <span class="bt fl ">支付方式</span>
-                <select class="form-control fl ">
-                  <option value="">全部</option>
+                <select class="form-control fl " v-model="searchParams.payWay">
+                  <option value="" selected>全部</option>
+                  <option value="1" >支付宝</option>
+                  <option value="2" >微信</option>
                 </select>
               </div>
             </div>
           </div>
           <div class="footer clear">
-            <button class="footerbtn sort" @click="Advancedshow=false">搜索</button>
-            <button class="footerbtn ml20 czt" >重置</button>
+            <button class="footerbtn sort" @click="search()">搜索</button>
+            <button class="footerbtn ml20 czt" @click="clearAll()">重置</button>
           </div>
         </div>
       </div>
@@ -139,44 +164,43 @@
         </tr>
         </thead>
         <!-- 在tbody上v-for循环 -->
-        <tbody v-for="resu in resultye">
+        <tbody v-for="(item,index) in resultdata">
         <tr>
           <td colspan="8" class="bt clear">
             <div class="fl">
                       <span  class="mt10">
-                        <input  type="checkbox" id="classify1" class="input_check">
-                        <label  for="classify1" class="fl mt10">
+                        <input  type="checkbox" :id="'aa'+index" class="input_check" :value="item.dealerOrderId">
+                        <label  :for="'aa'+index" class="fl mt10">
                         </label>
                       </span>
-              <span class="ml10">订货号：</span><span>{{resu.dealerOrderId}}</span>
+              <span class="ml10">订货号：</span><span>{{item.dealerOrderId}}</span>
             </div>
-            <div class="fr detail">查看详情</div>
+            <div class="fr detail" @click="gotoDetail(item.dealerOrderId)">查看详情</div>
           </td>
         </tr>
-        <tr class="content clear">
+        <tr class="content clear" >
          <td colspan="8" class="clear">
-
-            <div class="cont col-sm-8 " style="width:60%;">
-              <div class="fl border_r" style="width:100%;min-height:100px">
+            <div class="cont col-sm-8 " style="width:60%;" >
+              <div class="fl border_r" style="width:100%;min-height:100px"  v-for="goodsItem in item.goodsList">
               <div class="a1 fl" id="a1" style="width:50%;">
-                <div class="a1_img mr10 fl"><img /></div>
+                <div class="a1_img mr10 fl"><img :src="JSON.parse(goodsItem.goodsImage == ''? '[]': goodsItem.goodsImage)[0]"/></div>
                 <div class="fl">
-                  <div class="wose wid">冬季新款侧开叉高领毛衣女不规则套头针织衫宽松.</div>
-                  <div class="blue">规格：蓝色，L</div>
+                  <div class="wose wid">{{goodsItem.goodsName}}</div>
+                  <div class="blue">规格：{{goodsItem.skuName}}</div>
                 </div>
               </div>
               <div class="a2 fl mt20" id="a2" style="width: 14%;">
-                299.00
+                {{goodsItem.discountPrice/100}}
               </div>
               <div class="a3 fl mt20" id="a3" style="width: 18%;text-align: center;padding-right: 40px;">
-                1
+                {{goodsItem.sellNum}}
               </div>
               <div class="a4 fl mt10" style="width:14%;text-align:center;">
                 <!-- 有几种情况的不同表现方 -->
                 <div style="">
-                  <div class="">待退货确认</div>
-                  <div class="mt5"><button class="a4_btn" @click="agreeshow">同意</button></div>
-                  <div class="mt5"><button class="a4_btn" @click="refuseshow">拒绝</button></div>
+                  <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :'--'}}</div>
+                  <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.afStatus, goodsItem.skuId)" v-show="goodsItem.afStatus==0">同意</button></div>
+                  <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.skuId)" v-show="goodsItem.afStatus==0">拒绝</button></div>
                 </div>
                 <!-- <div>
                   <span>已拒绝</span>
@@ -185,21 +209,20 @@
               </div>
             </div>
             </div>
+
             <div class="cont col-sm-4" style="width:40%;">
               <div class="a5" style="width:25%;">
-                589.00
+                {{(item.goodsMoney + item.orderFreight - item.dealerDiscount - item.plateDiscount)/100}}
               </div>
               <div class="a6 mt10" style="width:28%;">
-                2017-10-1023:22:37
+                {{date_format(new Date(item.createdDate), 'yyyy-MM-dd hh:mm:ss')}}
               </div>
               <div class="a7 mt10" style="width:28%">
-                <div>肖悦悦</div>
-                <div>13845678763</div>
+                <div>{{item.revPerson}}</div>
+                <div>{{item.revPhone}}</div>
               </div>
               <div class="a8" style="width:10%">
-                <span>待付款</span>
-                <!-- <span class="red_fh">待发货</span>
-                <span class="red_fh">待发货</span> -->
+                <span>{{item.orderStatus==0?'待付款': item.orderStatus==1? '等发货' : item.orderStatus==2?'待收货' : item.orderStatus==3 ? '完成' : item.orderStatus==4 ? '交易完成' : item.orderStatus==5?'交易关闭': '--'}}</span>
               </div>
             </div>
           </td>
@@ -208,13 +231,13 @@
       </table>
       <div class="block" style="margin: 20px;float: right">
         <el-pagination
-          @size-change="goodsCommentHandleSizeChange"
-          @current-change="goodsCommentHandleCurrentChange"
-          :current-page="goodsCommentCurrentPage"
+          @size-change="handleSizeChange"
+          @current-change="handlePageChange"
+          :current-page="pageIndex"
           :page-sizes="[5, 10, 20, 30]"
-          :page-size="goodsCommentPageRows"
+          :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="goodsCommentTotalCount">
+          :total="totalCount">
         </el-pagination>
       </div>
     </div>
@@ -279,46 +302,50 @@
         Agreeshow: false,
         Refuseshow: false,
         TowAgreeshow: false,
-        resultye: '',
+        resultdata: [],
+        pageSize: 5,
+        pageIndex: 1,
+        totalCount: 0,
+        dealerId: 'JXS42ACB6D352E9417FBBCF03908219AAF1',//JSON.parse(sessionStorage.getItem('mUser')).dealerId
         // 搜索参数
-        search_params: { orderType: '', status: sessionStorage.getItem('statusFlag'), startTime: sessionStorage.getItem('startTime'), endTime: sessionStorage.getItem('endTime'), condition: '' }
+        searchParams: { orderStatus: '', afterSellStatus: '', startTime: '', endTime: '', condition: '',orderClassify:'', payWay:'', hasMedia:'', invoice: '',commentStatus:''}
       }
     },
     methods: {
     // 获取全部订单信息
-  agreeshow () {
-    var that = this;
-    that.Agreeshow = true;
-  },
-    get_good_info () {
+      agreeShow () {
+      var that = this;
+      that.Agreeshow = true;
+    },
+    getDealerOrders () {
       let that = this
       that.is_Success = false
       that.$.ajax({
         type: 'get',
         url: this.localbase + 'm2c.scm/dealerorder/dealerorderlist',
+        //url: 'http://localhost:8080/m2c.scm/dealerorder/dealerorderlist',
         data: {
-          dealerId: 'JXS42ACB6D352E9417FBBCF03908219AAF1',
+          dealerId: that.dealerId
+          ,orderStatus: that.searchParams.orderStatus
+          ,afterSellStatus: that.searchParams.afterSellStatus
+          ,startTime: that.searchParams.startTime
+          ,endTime: that.searchParams.endTime
+          ,condition: that.searchParams.condition
+          ,payWay: that.searchParams.payWay
+          ,invoice: that.searchParams.invoice
+          ,commentStatus: that.searchParams.commentStatus
+          ,pageNum: that.pageIndex
+          ,rows: that.pageSize
         },
         success: function (res) {
           var resultData = res.content;
-          that.resultye= resultData;
-          console.log(resultData);
-//        for (var i = 0 ; i < resultData.length ; i++) {
-//          var goodshtml = "";
-//          for (var j = 0; j <resultData[i].goodsList.length ; j++){
-//            var images=eval("("+resultData[i].goodsList[j].goodsImage+")");
-////            goodshtml += "<div class=\"a1_img mr10 fl\"><img src='" + images[0] + "'/></div>";
-////            goodshtml += "<div>";
-////            goodshtml += "<div class=\"wose wid\">"+resultData[i].goodsList[j].goodsName + "</div>";
-////            goodshtml += " <div class=\"blue\">"+resultData[i].goodsList[j].skuName + "</div>";
-////            goodshtml += "  </div>";
-//          }
-//          that.$("#a1").html(goodshtml);
-//        }
+          that.totalCount = res.totalCount;
+          that.resultdata= resultData;
+          console.log(res);
         }
       })
     },
-    refuseshow () {
+    refuseShow () {
       var that = this
       that.Refuseshow = true
     },
@@ -331,15 +358,52 @@
       this.is_Success = true
     },
     search () {
-      this.get_good_info()
+        let that=this;
+      that.pageIndex = 1;
+      this.getDealerOrders()
     },
     Advancedsearch () {
       var that = this;
       that.Advancedshow = true
     }
+    ,handleSizeChange (sz) {
+        let that = this;
+        that.pageSize = sz;
+        that.getDealerOrders();
+      }
+      ,handlePageChange (sz) {
+        let that = this;
+        that.pageIndex = sz;
+        that.getDealerOrders();
+      }
+      ,gotoDetail(dealerOrId) {
+        let that = this
+        var path='dealerOrDtl';
+          sessionStorage.setItem('dealerOrderId', dealerOrId)
+          that.$goRoute({path: path})
+      }
+      ,clearAll() {
+        let that = this;
+        that.Advancedshow = false
+        that.searchParams.orderStatus= '';
+        that.searchParams.afterSellStatus='';
+        that.searchParams.startTime= '';
+        that.searchParams.endTime= '';
+        that.searchParams.condition= '';
+        that.searchParams.orderClassify='';
+        that.searchParams.payWay='';
+        that.searchParams.hasMedia='';
+        that.searchParams.invoice='';
+        that.searchParams.commentStatus='';
+        that.searchParams.orderStatus1='';
+        that.searchParams.afterSellStatus='';
+        that.searchParams.condition1= '';
+        that.searchParams.startTime1= '';
+        that.searchParams.endTime1= '';
+      }
   },
   mounted () {
-    this.get_good_info()
+    this.getDealerOrders()
   }
   }
 
