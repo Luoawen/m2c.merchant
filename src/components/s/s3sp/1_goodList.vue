@@ -554,7 +554,9 @@
         } else if (action === '_soldout') {
           that.soldGoods(row,to)
         } else if (action === '_edit') {
-          that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:row.goodInfo}});
+          let goodsId = row.goodsId
+          console.log(goodsId)
+          that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId}});
         } else if (action === '_delete') {
           that.goodsCheckStore();
         }
