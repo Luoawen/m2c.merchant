@@ -39,16 +39,16 @@
                   <td v-model="add_postageModelRule_w.address"> 全国（ 默认运费）</td>
                   <td>
                     <input type="text"
-                           style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstWeight" @blur="checkDefaultNumber(add_postageModelRule_w.firstWeight,'firstWeight')">
+                           style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstWeight" @blur="checkDefaultNumber(add_postageModelRule_w.firstWeight,'firstWeight',add_postageModelRule_w)">
                   </td>
                   <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstPostage" @blur="checkDefaultNumber(add_postageModelRule_w.firstPostage,'firstPostage')">
+                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstPostage" @blur="checkDefaultNumber(add_postageModelRule_w.firstPostage,'firstPostage',add_postageModelRule_w)">
                   </td>
                   <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedWeight" @blur="checkDefaultNumber(add_postageModelRule_w.continuedWeight,'continuedWeight')">
+                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedWeight" @blur="checkDefaultNumber(add_postageModelRule_w.continuedWeight,'continuedWeight',add_postageModelRule_w)">
                   </td>
                   <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedPostage" @blur="checkDefaultNumber(add_postageModelRule_w.continuedPostage,'continuedPostage')">
+                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedPostage" @blur="checkDefaultNumber(add_postageModelRule_w.continuedPostage,'continuedPostage',add_postageModelRule_w)">
                   </td>
                   <td></td>
                 </tr>
@@ -264,22 +264,22 @@
                     <td>
                       <input type="text"
                             style="width:50px;height:30px;"
-                            v-model="add_postageModelRule.firstPiece" @blur="checkInteger(add_postageModelRule_w.firstPiece,index,'firstPiece',formwork.postageModelRules)">
+                            v-model="add_postageModelRule.firstPiece" @blur="checkInteger(add_postageModelRule.firstPiece,index,'firstPiece',formwork.postageModelRules)">
                     </td>
                     <td>
                       <input type="text"
                             style="width:50px;height:30px;"
-                            v-model="add_postageModelRule.firstPostage" @blur="checkNumber(add_postageModelRule_w.firstPostage,index,'firstPostage',formwork.postageModelRules)">
+                            v-model="add_postageModelRule.firstPostage" @blur="checkNumber(add_postageModelRule.firstPostage,index,'firstPostage',formwork.postageModelRules)">
                     </td>
                     <td>
                       <input type="text"
                             style="width:50px;height:30px;"
-                            v-model="add_postageModelRule.continuedPiece" @blur="checkInteger(add_postageModelRule_w.continuedPiece,index,'continuedPiece',formwork.postageModelRules)">
+                            v-model="add_postageModelRule.continuedPiece" @blur="checkInteger(add_postageModelRule.continuedPiece,index,'continuedPiece',formwork.postageModelRules)">
                     </td>
                     <td>
                       <input type="text"
                             style="width:50px;height:30px;"
-                            v-model="add_postageModelRule.continuedPostage" @blur="checkNumber(add_postageModelRule_w.continuedPostage,index,'continuedPostage',formwork.postageModelRules)">
+                            v-model="add_postageModelRule.continuedPostage" @blur="checkNumber(add_postageModelRule.continuedPostage,index,'continuedPostage',formwork.postageModelRules)">
                     </td>
                     <td><a v-if="index!=0" @click="delectRule1(index)">删除</a></td>
                 </tr>
@@ -341,22 +341,22 @@
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="add_postageModelRule.firstPiece" @blur="checkDefaultInteger(add_postageModelRule_w.firstPiece,'firstPiece')"/>
+                          v-model="add_postageModelRule.firstPiece" @blur="checkDefaultInteger(add_postageModelRule.firstPiece,'firstPiece',add_postageModelRule)"/>
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="add_postageModelRule.firstPostage" @blur="checkDefaultNumber(add_postageModelRule_w.firstPostage,'firstPostage')"/>
+                          v-model="add_postageModelRule.firstPostage" @blur="checkDefaultNumber(add_postageModelRule.firstPostage,'firstPostage',add_postageModelRule)"/>
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="add_postageModelRule.continuedPiece" @blur="checkDefaultInteger(add_postageModelRule_w.continuedPiece,'continuedPiece')"/>
+                          v-model="add_postageModelRule.continuedPiece" @blur="checkDefaultInteger(add_postageModelRule.continuedPiece,'continuedPiece',add_postageModelRule)"/>
                   </td>
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="add_postageModelRule.continuedPostage" @blur="checkDefaultNumber(add_postageModelRule_w.continuedPostage,'continuedPostage')"/>
+                          v-model="add_postageModelRule.continuedPostage" @blur="checkDefaultNumber(add_postageModelRule.continuedPostage,'continuedPostage',add_postageModelRule)"/>
                   </td>
                   <td></td>
                 </tr>
@@ -397,7 +397,7 @@
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.firstWeight" @blur="checkNumber(addRow.firstWeight,index,'firstWeight',addRows)">
+                          v-model="addRow.firstPiece" @blur="checkInteger(addRow.firstPiece,index,'firstPiece',addRows)">
                   </td>
                   <td>
                     <input type="text"
@@ -407,7 +407,7 @@
                   <td>
                     <input type="text"
                           style="width:50px;height:30px;"
-                          v-model="addRow.continuedWeight" @blur="checkNumber(addRow.continuedWeight,index,'continuedWeight',addRows)">
+                          v-model="addRow.continuedPiece" @blur="checkInteger(addRow.continuedPiece,index,'continuedPiece',addRows)">
                   </td>
                   <td>
                     <input type="text"
@@ -525,23 +525,21 @@
           }
         }, 0)
       },
-      checkDefaultNumber (val, obj) {
-        let that = this
+      checkDefaultNumber (val, arr, obj) {
         setTimeout(() => {
           if (val && $.isNumeric(val)) {
             val = Number(val).toFixed(2)
           } else {
             val = ''
           }
-          that.add_postageModelRule_w[obj] = val
+          obj[arr] = val
         }, 0)
       },
-      checkDefaultInteger (val, obj) {
-        let that = this
+      checkDefaultInteger (val, arr, obj) {
         setTimeout(() => {
           var re = /^[0-9]+$/
           if (!re.test(val)) {
-            that.add_postageModelRule[obj] = ''
+            obj[arr] = ''
           }
         }, 0)
       },
@@ -764,6 +762,7 @@
           } else {
             that.postageModelRules.push(that.add_postageModelRule_w)
           }
+          console.log(that.postageModelRules)
           for (var i = 0; i < that.postageModelRules.length; i++) {
             if (that.formwork.chargeType === 1) {
               if (that.postageModelRules[i].firstPiece === '' || that.postageModelRules[i].firstPostage === '' || that.postageModelRules[i].continuedPiece === '' || that.postageModelRules[i].continuedPostage === '') {
