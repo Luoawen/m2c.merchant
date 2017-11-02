@@ -784,7 +784,7 @@
                 that.show_tip('请添加地区')
                 return
               }
-              if (that.formwork.chargeType === 1) {
+              if (that.formwork.chargeType == 1) {
                 if (that.addRows[i].firstPiece === '' || that.addRows[i].firstPostage === '' || that.addRows[i].continuedPiece === '' || that.addRows[i].continuedPostage === '') {
                   that.postageModelRules = []
                   that.show_tip('运费计算规则不能为空')
