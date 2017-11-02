@@ -292,7 +292,7 @@
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/> 
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/>
                             {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
@@ -712,14 +712,64 @@
       // 点击保存
       save () {
         let that = this
-        console.log(that.$route.query.modelId)
-        if (that.addModify === 'add'){
-          if (that.formwork.chargeType == 1) {
+        if (that.formwork.modelName === undefined || that.formwork.modelName.trim() === '') {
+          that.show_tip('请输入模板名称')
+          return
+        }
+        if (that.formwork.chargeType === undefined || that.formwork.chargeType === '') {
+          that.show_tip('请选择计费方式')
+          return
+        }
+        if (that.addModify === 'add') {
+          if (that.formwork.chargeType === 1) {
             that.postageModelRules.push(that.add_postageModelRule)
           } else {
             that.postageModelRules.push(that.add_postageModelRule_w)
           }
+          var reg = /^[1-9]*$/
+          var regx = /^\+?(\d*\.\d{1,2})$/
           for (var i = 0; i < that.addRows.length; i++) {
+            if (that.formwork.chargeType === 1) {
+              if (that.addRows[i].firstPiece === '') {
+                that.show_tip('请输入首件')
+                return
+              }
+              if (reg.test(that.addRows[i].firstPiece) === false) {
+                that.show_tip('首件为大于0的正数字')
+              }
+              if (that.addRows[i].firstPostage === '') {
+                that.show_tip('请输入首运费')
+                return
+              }
+              if (that.addRows[i].continuedPiece === '') {
+                that.show_tip('请输入续件')
+                return
+              }
+              if (that.addRows[i].continuedPostage === '') {
+                that.show_tip('请输入续费')
+                return
+              }
+            } else {
+              if (that.addRows[i].firstWeight === '') {
+                that.show_tip('请输入首重')
+                return
+              }
+              if (regx.test(that.addRows[i].firstWeight) === false) {
+                that.show_tip('首重为大于0的数字，保留2位小数')
+              }
+              if (that.addRows[i].firstPostage === '') {
+                that.show_tip('请输入首运费')
+                return
+              }
+              if (that.addRows[i].continuedWeight === '') {
+                that.show_tip('请输入续重')
+                return
+              }
+              if (that.addRows[i].continuedPostage === '') {
+                that.show_tip('请输入续费')
+                return
+              }
+            }
             that.postageModelRule = {
               address: that.addRows[i].address.join(),
               cityCode: that.addRows[i].cityList.join(),
