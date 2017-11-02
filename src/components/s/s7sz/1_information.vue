@@ -150,7 +150,6 @@
     // 修改店铺信息1
     modifyDealerMess (callback) {
       let that = this
-      alert(that.storeinformation.appellation)
       if (that.storeinformation.appellation == null || that.storeinformation.appellation.trim() == '' || that.storeinformation.appellation.length > 50){
         alert("请输入店铺名称")
         return
