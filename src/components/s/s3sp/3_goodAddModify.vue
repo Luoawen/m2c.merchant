@@ -400,8 +400,8 @@
         }
         that.$.ajax({
           type: that.handle_toggle === 'add' ? 'post' : 'put',
-          //url: that.localbase + 'm2c.scm/goods/approve',
-          url: 'http://10.0.40.23:8080/m2c.scm/goods/approve',
+          url: that.localbase + 'm2c.scm/goods/approve',
+          // url: 'http://10.0.40.23:8080/m2c.scm/goods/approve',
           data:Object.assign(a,that.data),
           success: function (result) {
             if (result.status === 200) {

@@ -616,7 +616,6 @@
           }
           that.addRows[that.index].address.splice(that.$.inArray(n.name, that.addRows[that.index].address), 1)
           that.addRows[that.index].IdArr.splice(that.$.inArray(n.code, that.addRows[that.index].IdArr), 1)
-
           let point=0
           for (var i = 0; i < that.datas.length; i++) {
             if(that.datas[i].code==n.parent){
@@ -757,12 +756,12 @@
           return
         }
         if (that.addModify === 'add') {
-          if (that.formwork.chargeType === 1) {
+          if (that.formwork.chargeType == 1) {
             that.postageModelRules.push(that.add_postageModelRule)
           } else {
             that.postageModelRules.push(that.add_postageModelRule_w)
           }
-          console.log(that.postageModelRules)
+          //console.log(that.postageModelRules)
           for (var i = 0; i < that.postageModelRules.length; i++) {
             if (that.formwork.chargeType === 1) {
               if (that.postageModelRules[i].firstPiece === '' || that.postageModelRules[i].firstPostage === '' || that.postageModelRules[i].continuedPiece === '' || that.postageModelRules[i].continuedPostage === '') {
