@@ -555,8 +555,12 @@
           that.soldGoods(row,to)
         } else if (action === '_edit') {
           let goodsId = row.goodsId
-          console.log(goodsId)
-          that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId}});
+          if(row.approveStatus==''||row.approveStatus==undefined){
+            that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId}});
+          }else{
+            let approveStatus = row.approveStatus
+            that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId,approveStatus:approveStatus}});
+          }
         } else if (action === '_delete') {
           that.goodsCheckStore();
         }

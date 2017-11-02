@@ -376,7 +376,7 @@
         for(var i=0;i<that.goodsGuaranteeList.length;i++){
           for( var j=0;j<that.goodsGuarantCheck.length;j++){
             if(that.goodsGuaranteeList[i].guaranteeDesc==that.goodsGuarantCheck[j]){
-              that.goodsGuarantee.push(that.goodsGuaranteeList[i])
+              that.goodsGuarantee.push(that.goodsGuaranteeList[i].guaranteeId)
             }
           }
         }
@@ -385,7 +385,6 @@
             that.goodsSKUs[k].serviceRate=that.serviceRate
           }
         }
-        //console.log(that.goodsGuarantee)
         let a={
           token: sessionStorage.getItem('mToken'),
           goodsId: that.goodsId,
@@ -393,10 +392,10 @@
           dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName,
           goodsSKUs: JSON.stringify(that.goodsSKUs),
           goodsSpecifications: JSON.stringify(that.goodsSpecifications),
-          goodsMainImages:JSON.stringify(that.goodsMainImages),
+          goodsMainImages:that.goodsMainImages.jion(),
           goodsDesc:that.defaultMsg,
           goodsBrandName:that.goodsBrandName,
-          goodsGuarantee:JSON.stringify(that.goodsGuarantee)
+          goodsGuarantee:that.goodsGuarantee.jion()
         }
         that.$.ajax({
           type: that.handle_toggle === 'add' ? 'post' : 'put',
@@ -408,7 +407,7 @@
               that.show_tip('保存成功')
             } else {
               that.show_tip(result.errorMessage)
-              that.goodsGuarantee=[]
+              that.goodsGuarantee=''
             }
           }
         })
@@ -514,8 +513,12 @@
               }
             })
         }
-        if(that.$.inArray(state1,that.goodsSpecifications[index].itemValue)===-1){
-          that.goodsSpecifications[index].itemValue.push(state1)
+        let array = that.goodsSpecifications[index].itemValue
+        let state2 = {spec_name:state1}
+        if(JSON.stringify(array).indexOf(JSON.stringify(state2))===-1){
+          // that.goodsSpecifications[index].itemValue.push(state1)
+          that.$set(that.goodsSpecifications[index].itemValue,'spec_name',state1)
+          console.log(that.goodsSpecifications[index].itemValue)
           that.clearValue(index)
           that.mapValue()
         }else{
@@ -687,17 +690,32 @@
           }
         })
       } else {
-        that.$.ajax({
-          type: 'get',
-          url: that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId,
-          data: {
-            token: sessionStorage.getItem('mToken')
-          },
-          success: function (result) {
-            that.data = result.content
-            console.warn(that.data)
-          }
-        })
+        if(that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined){
+          that.$.ajax({
+            type: 'get',
+            url: that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId,
+            data: {
+              token: sessionStorage.getItem('mToken')
+            },
+            success: function (result) {
+              that.data = result.content
+              console.warn(that.data)
+            }
+          })
+        }else{
+          that.$.ajax({
+            type: 'get',
+            url: that.localbase + 'm2c.scm/goods/approve/' + that.$route.query.goodsId,
+            data: {
+              token: sessionStorage.getItem('mToken')
+            },
+            success: function (result) {
+              that.data = result.content
+              console.warn(that.data)
+            }
+          })
+        }
+        
       }
     }
   }
