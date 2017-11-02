@@ -8,13 +8,13 @@
     <div id="myTabContent" class="tab-content">
       <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
         <div class="search_cell">
-          <span>申请时间<i class="glyphicon glyphicon-calendar" @click="is_Success=!is_Success"></i></span>
+          <span class="zIndex2" @click="is_Success=!is_Success">申请时间<i class="icon timeIcon"></i></span>
           <div class="time" v-if="is_Success">
             <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
           </div>
         </div>
         <div class="search">
-          <input type="text" class="inp" placeholder="输入品牌名称" v-model="search_params.condition"><i class="glyphicon glyphicon-search"></i>
+          <input type="text" class="inp" placeholder="输入品牌名称" v-model="search_params.condition"><i class="icon searchIcon"></i>
         </div>
         <div class="search_cell">
           <button class="btn search_button" @click="get_comment_info">搜索</button>
@@ -25,17 +25,17 @@
       </div>
       <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
         <div class="dropdown">
-          <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">品牌状态
-            <span class="caret"></span>
+          <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">{{brandStatusName}}
+            <span class="icon arrowsIcon"></span>
           </div>
           <ul class="dropdown-menu" aria-labelledby="dLabel1">
-            <li @click="get_comment_info1()">全部<i class="glyphicon glyphicon-menu-right"></i></li>
-            <li @click="get_comment_info1(1)">申请中<i class="glyphicon glyphicon-menu-right"></i></li>
-            <li @click="get_comment_info1(2)">审核不通过<i class="glyphicon glyphicon-menu-right"></i></li>
+            <li @click="get_comment_info1(0)">全部<i class="icon rightIcon"></i></li>
+            <li @click="get_comment_info1(1)">申请中<i class="icon rightIcon"></i></li>
+            <li @click="get_comment_info1(2)">审核不通过<i class="icon rightIcon"></i></li>
           </ul>
         </div>
         <div class="search_cell">
-          <span>申请时间<i class="glyphicon glyphicon-calendar" @click="is_Success2=!is_Success2"></i></span>
+          <span class="zIndex2" @click="is_Success2=!is_Success2">申请时间<i class="icon timeIcon"></i></span>
           <div class="time" v-if="is_Success2">
             <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
           </div>
@@ -160,7 +160,8 @@
         province_show: false,
         city_show: false,
         modifyLocal: '',
-        isBrandApprove: false
+        isBrandApprove: false,
+        brandStatusName: '品牌状态'
       }
     },
     watch: {
@@ -608,7 +609,16 @@
       // 获取审核列表
       get_comment_info1 (n) {
         let that = this
-        that.search_approve.approveStatus = n
+        if (n === '' || n === undefined) {
+          that.brandStatusName = '品牌状态'
+        } else if (n === 0) {
+          that.brandStatusName = '全部'
+        } else if (n === 1) {
+          that.brandStatusName = '申请中'
+        } else {
+          that.brandStatusName = '审批不通过'
+        }
+        that.search_approve.approveStatus = n === 0 ? '' : n
         this.$("[data-toggle='popover']").popover('hide')
         that.$('#table1').bootstrapTable('destroy').bootstrapTable({
           cache: false,
@@ -653,9 +663,10 @@
             formatter: function (x, y) {
               return y.approveStatus === 1 ? '审批中' : `
               <div class="color_default" style="position:relative;">审批不通过
-                <img src="../../../assets/images/ico_msg.png" width='20' height='20'  />
-                <div style="position:absolute;position: absolute;border: 1px solid #F5BD23;box-shadow: 0 0 4px 0 rgba(0,0,0,0.10);border-radius: 2px;width: 228px;min-height: 82px;background: #fff;padding: 10px;">审核未通过原因我是审核未通过原因</div>
-                <p>` + y.rejectReason + `</p>
+                <i class="ico_msg">
+                <div class="ico-tit">` + y.rejectReason + `</div>
+              </i>
+
               </div>
               `
             }
@@ -695,6 +706,8 @@
       that.province_show = false
       that.city_show = false
       that.isBrandApprove = false
+      that.rejectShow = false
+      that.brandStatusName = '品牌状态'
     }
   }
 </script>
@@ -885,5 +898,13 @@
 .defultBtn{background:#ccc;}
 /*修改/新增*/
 .changeGoodInfo input,.changeGoodInfo select{width:200px;line-height:40px;color:#666;}
-.glyphicon{width:40px;height:24px;z-index:11;}
+.zIndex2{z-index:21;}
+.sz .tab-content .tab-pane .search_cell .time{top:50px;}
+.icon{width:40px;height:40px;z-index:11;display:inline-block;}
+.timeIcon{background:url(../../../assets/images/ico_calendar@2x.png) no-repeat center bottom;background-size:19px 20px;}
+.searchIcon{background:url(../../../assets/images/ico_search.png) no-repeat center center;background-size:20px 20px;}
+.arrowsIcon{background:url(../../../assets/images/ico_arrows_default.png) no-repeat center center;background-size:20px 20px;
+float: right;margin-top:20px;margin-right:10px;}
+.rightIcon{background:url(../../../assets/images/ico_arrows_packup.png) no-repeat center center;background-size:20px 20px;
+float: right;margin-top:-2px;width:20px;height:20px;}
 </style>

@@ -1,19 +1,19 @@
 <template>
-  <div role="tabpanel" class="tab-pane fade in active"  aria-labelledby="home-tab">
+  <div role="tabpanel" class="tab-pane fade in active"  aria-labelledby="home-tab" style="margin-top: 20px;width: 100%;margin-top: 130px;margin-left: 20px;">
     <div class="goods_search" style="width: 100%; height: 40px;">
       <div  style="float: left">
         售后期望:
-          <el-select v-model="search_params.expectation" placeholder="请选择售后期望">
-            <el-option v-for="item in expectations" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
+        <el-select v-model="search_params.expectation" placeholder="请选择售后期望">
+          <el-option v-for="item in expectations" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
       </div><!-- 售后期望-->
       <div style="float: left">
         售后状态:
-          <el-select v-model="search_params.afterSaleStatus" placeholder="请选择售后状态">
-            <el-option v-for="item in afterSales" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
+        <el-select v-model="search_params.afterSaleStatus" placeholder="请选择售后状态">
+          <el-option v-for="item in afterSales" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
       </div><!--售后状态-->
       <div style="float: left">
         媒体信息:
@@ -23,7 +23,7 @@
         </el-select>
       </div><!--售后状态-->
       <div class="ops_time" style="float:left;width: 540px;">申请时间:
-      <el-date-picker  v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+        <el-date-picker  v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
         </el-date-picker>
         -
         <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
@@ -48,7 +48,7 @@
         <el-table-column
           label="商品信息"
           width="200">
-          <template slot-scope="scope"><img v-bind:src="JSON.parse(scope.row.goodsInfo.goodsImage)[0]" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsInfo.goodsName}}</span></template>
+          <template slot-scope="scope"><img v-bind:src="scope.row.goodsInfo.goodsImage" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsInfo.goodsName}}</span></template>
         </el-table-column>
         <el-table-column
           prop="afterSellOrderId"
@@ -70,12 +70,12 @@
           label="售后状态"
           width="200"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{scope.row.status==0?'申请退货':scope.row.status==1?'申请换货':scope.row.status==2?'申请退款':scope.row.status==3?'拒绝':scope.row.status==4?'同意':scope.row.status==5?'客户寄出':scope.row.status==6?'商家收到':scope.row.status==7?'商家寄出':scope.row.status==8?'客户收到':scope.row.status==9?'同意退款':'-'}}</span></template>
+          <template slot-scope="scope"><span>{{scope.row.status==0?'申请退货':scope.row.status==1?'申请换货':scope.row.status==2?'申请退款':scope.row.status==3?'拒绝':scope.row.status==4?'同意(退换货)':scope.row.status==5?'客户寄出':scope.row.status==6?'商家收到':scope.row.status==7?'商家寄出':scope.row.status==8?'客户收到':scope.row.status==9?'同意退款':scope.row.status==10?'确认退款':scope.row.status==11?'交易关闭':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="申请时间"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span >{{handleDate(scope.row.createDate)}}</span></template>
+          <template slot-scope="scope"><span >{{date_format(new Date(scope.row.createDate), 'yyyy-MM-dd hh:mm:ss')  }}</span></template>
         </el-table-column>
         <el-table-column
           label="操作"
@@ -146,7 +146,7 @@
           label: '拒绝'
         }, {
           value: '4',
-          label: '同意'
+          label: '同意(退换货)'
         }, {
           value: '5',
           label: '客户寄出'
@@ -162,6 +162,12 @@
         }, {
           value: '9',
           label: '同意退款'
+        }, {
+          value: '10',
+          label: '确认退款'
+        }, {
+          value: '11',
+          label: '交易关闭'
         }],
         afterSaleStatus:'',//售后状态
         mediaStatus:[{
@@ -181,165 +187,42 @@
     },
     methods: {
       // 获取全部订单信息
-      get_good_info () {
-        let that = this;
-        that.is_Success = false;
-        that.$('#table').bootstrapTable('destroy').bootstrapTable({
-          method: 'get',
-          url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselllist',
-          queryParams: function (params) {
-            return Object.assign({}, {
-              token: sessionStorage.getItem('mToken'),
-              isEncry: false,
-            //  dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-              rows: params.limit,                     // 每页多少条数据
-              pageNumber: params.offset / params.limit + 1    // 请求第几页
-            }, that.search_params)
-          },
-          pagination: true,
-          pageNumber: 1,
-          pageSize: 10,
-          pageList: [5, 10, 20, 100],
-          striped: true,
-          showExport: true,
-          exportDataType: 'selected',
-          queryParamsType: 'limit',
-          sidePagination: 'server',
-          contentType: 'application/x-www-form-urlencoded',
-          responseHandler: function (result) {
-            console.log(result)
-            return {
-              total: result.totalCount,    // 总页数
-              rows: result.content         // 数据
-            }
-          },
-          columns: [{
-            checkbox: true,
-            valign: 'middle'
-          }, {
-            title: '商品信息',
-            events: 'handle',
-            width: '150',
-            formatter: function (x, y) {
-              return "<image src='" + JSON.parse(y.goodsInfo.goodsImage)[0] + "' width='50'></image>" + y.goodsInfo.goodsName + y.goodsInfo.skuName
-            },
-            align: 'center',
-            valign: 'middle'
-          }, {
-            field: 'afterSellOrderId',
-            title: '单号',
-            align: 'center',
-            valign: 'middle',
-            width: '155'
-          }, {
-            title: '售后期望',
-            align: 'center',
-            valign: 'middle',
-            width: '155',
-            formatter: function (x, y) {
-              return y.orderType === 0 ? '换货' : y.orderType === 1 ? '退货' : y.orderType === 2 ? '仅退款' : '-'
-            }
-          }, {
-            field: 'backMoney',
-            title: '售后总金额/元',
-            align: 'center',
-            valign: 'middle',
-            width: '155',
-            formatter: function (x, y) {
-              return y.backMoney / 100
-            }
-          }, {
-            title: '售后状态',
-            align: 'center',
-            valign: 'middle',
-            width: '80',
-            //0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
-            formatter: function (x, y) {
-              return y.status === 0 ? '申请退货' : y.status === 1 ? '申请换货' : y.status === 2 ? '申请退款' : y.status === 3 ? '拒绝' : y.status === 4 ? '同意' : y.status === 5 ? '客户寄出' : y.status === 6 ? '商家收到' : y.status === 7 ? '商家寄出' : y.status === 8 ? '客户收到' : y.status === 9 ? '同意退款' : '-'
-            }
-          }, {
-            title: '申请时间',
-            align: 'center',
-            valign: 'middle',
-            width: '155',
-            formatter: function (x, y) {
-              let d = new Date(y.createDate)
-              return that.date_format(d, 'yyyy-MM-dd hh:mm:ss')
-            }
-          }, {
-            title: '操作',
-            align: 'center',
-            valign: 'middle',
-            width: '80',
-            formatter: function (x, y) {
-              return '<a href=#>详情</a>'
-            }
-          }]
-        })
-      },
-      timeBox () {
-        this.is_Success = true
-      },
-      search () {
-        this.get_good_info()
-      },
-
-       orderStore () {
-      let that = this
-      that.$.ajax({
-        type: 'get',
-        url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselllist',
-        data: {
-          token: sessionStorage.getItem('mToken'),
-          isEncry: false,
-          /*dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,*/
-          dealerId:'JXS42ACB6D352E9417FBBCF03908219AAF1',
-          rows: that.pageRows,                     // 每页多少条数据
-          pageNum: that.currentPage,    // 请求第几页*/
-          orderType:that.search_params.expectation,
-          status:that.search_params.afterSaleStatus,
-          condition:that.search_params.condition,
-          startTime:that.search_params.startTime,
-          endTime:that.search_params.endTime
-        },
-        success: function (result) {
-          if (result.status === 200){
-            // 获取商品列表
-
-            that.orderStoreData = result.content
-            that.totalCount = result.totalCount
-          }
-        }
-      })
-    }
-      ,exportSaleOrder () {
+      orderStore () {
         let that = this
-        let strHref = this.base + 'm2c.scm//order/export/saleafter?'
-        let strParam = "dealerId=" + JSON.parse(sessionStorage.getItem('mUser')).dealerId
-        that.$.each(that.search_params, function (i, n) {
-          strParam +=  "&" + i + "=" + n;
-        });
-        window.open(strHref + strParam, '_export')
+        that.$.ajax({
+          type: 'get',
+          url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselllist',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            isEncry: false,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            rows: that.pageRows,                     // 每页多少条数据
+            pageNum: that.currentPage,    // 请求第几页*/
+            orderType:that.search_params.expectation,
+            status:that.search_params.afterSaleStatus,
+            condition:that.search_params.condition,
+            startTime:that.search_params.startTime,
+            endTime:that.search_params.endTime
+          },
+          success: function (result) {
+            if (result.status === 200){
+              // 获取商品列表
+
+              that.orderStoreData = result.content
+              that.totalCount = result.totalCount
+            }
+          }
+        })
       }
       ,handleSizeChange(val) {
-      let that = this
-      that.goodsStorePageRows=val
-      that.goodsStore();
-    }
+        let that = this
+        that.goodsStorePageRows=val
+        that.goodsStore();
+      }
       ,handleCurrentChange(val) {
-      let that = this
-      that.goodsStoreCurrentPage=val
-      that.goodsStore();
-    }
-      ,handleDate (input){
-        var d = new Date(input);
-        var year = d.getFullYear();
-        var month = d.getMonth() + 1;
-        var day = d.getDate() <10 ? '0' + d.getDate() : '' + d.getDate();
-        var hour = d.getHours();
-        var minutes = d.getMinutes();
-        var seconds = d.getSeconds();
-        return  year+ '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + seconds;
+        let that = this
+        that.goodsStoreCurrentPage=val
+        that.goodsStore();
       }
       ,handleCommand (index,row,action) {
         let that = this
@@ -357,7 +240,7 @@
 
 </script>
 <style lang="scss" scoped>
-.sp{
+  .sp{
     width: 1583px;
     height: 84px;
     margin-left: 48px;
@@ -460,44 +343,44 @@
       margin-right: 15px;
     }
     .good_info {
-        background: #fff;
-        margin-top: 10px;
-        padding: 10px;
-        position: relative;
-        .bootstrap-table {
-          margin: 0;
+      background: #fff;
+      margin-top: 10px;
+      padding: 10px;
+      position: relative;
+      .bootstrap-table {
+        margin: 0;
+      }
+      [tableexport-id] {
+        width: 120px;
+        height: 25px;
+        color: #fff;
+        line-height: 25px;
+        border-radius: 2px;
+        border: none;
+        margin-bottom: 12px;
+        position: absolute;
+        top: 10px;
+        left: 134px;
+        background: #F56C6C;
+      }
+      .public_button {
+        width: 120px;
+        height: 25px;
+        color: #fff;
+        border-radius: 2px;
+        border: none;
+      }
+      .print_order {
+        background: #18DCF6;
+      }
+      //表格样式
+      table {
+        td {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
-        [tableexport-id] {
-          width: 120px;
-          height: 25px;
-          color: #fff;
-          line-height: 25px;
-          border-radius: 2px;
-          border: none;
-          margin-bottom: 12px;
-          position: absolute;
-          top: 10px;
-          left: 134px;
-          background: #F56C6C;
-        }
-        .public_button {
-          width: 120px;
-          height: 25px;
-          color: #fff;
-          border-radius: 2px;
-          border: none;
-        }
-        .print_order {
-          background: #18DCF6;
-        }
-        //表格样式
-        table {
-          td {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-          }
-        }
+      }
     }
-}
+  }
 </style>
