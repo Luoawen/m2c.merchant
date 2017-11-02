@@ -727,7 +727,6 @@
 // 删除行
       delectRule1(index)
       {
-        // console.warn(this.formwork.postageModelRules)
         this.formwork.postageModelRules.splice(index, 1)
       },
 // 显示地区选择盒子
@@ -768,25 +767,34 @@
           for (var i = 0; i < that.postageModelRules.length; i++) {
             if (that.formwork.chargeType === 1) {
               if (that.postageModelRules[i].firstPiece === '' || that.postageModelRules[i].firstPostage === '' || that.postageModelRules[i].continuedPiece === '' || that.postageModelRules[i].continuedPostage === '') {
+                that.postageModelRules = []
                 that.show_tip('运费计算规则不能为空')
                 return
               }
             } else {
               if (that.postageModelRules[i].firstWeight === '' || that.postageModelRules[i].firstPostage === '' || that.postageModelRules[i].continuedWeight === '' || that.postageModelRules[i].continuedPostage === '') {
+                that.postageModelRules = []
                 that.show_tip('运费计算规则不能为空')
                 return
               }
             }
           }
-          if (that.addRows.length > 0){
+          if (that.addRows.length > 0) {
             for (var i = 0; i < that.addRows.length; i++) {
+              if (that.addRows[i].address === undefined || that.addRows[i].address === '' || that.addRows[i].address.length === 0) {
+                that.postageModelRules = []
+                that.show_tip('请添加地区')
+                return
+              }
               if (that.formwork.chargeType === 1) {
                 if (that.addRows[i].firstPiece === '' || that.addRows[i].firstPostage === '' || that.addRows[i].continuedPiece === '' || that.addRows[i].continuedPostage === '') {
+                  that.postageModelRules = []
                   that.show_tip('运费计算规则不能为空')
                   return
                 }
               } else {
                 if (that.addRows[i].firstWeight === '' || that.addRows[i].firstPostage === '' || that.addRows[i].continuedWeight === '' || that.addRows[i].continuedPostage === '') {
+                  that.postageModelRules = []
                   that.show_tip('运费计算规则不能为空')
                   return
                 }
@@ -800,7 +808,7 @@
                 firstPiece: that.addRows[i].firstPiece,
                 firstPostage: that.addRows[i].firstPostage,
                 firstWeight: that.addRows[i].firstWeight,
-                defaultFlag: that.addRows[that.index].address === '' ? 0 : 1
+                defaultFlag: 1
               }
               that.postageModelRules.push(that.postageModelRule)
             }
@@ -837,11 +845,11 @@
             modelDescription: that.formwork.modelDescription
           },
           success: function (result) {
+            that.postageModelRules = []
             if (result.status === 200) {
               that.show_tip('保存成功')
               that.$goRoute({path: 'formwork'})
             } else {
-              that.postageModelRules = []
               that.show_tip(result.errorMessage)
             }
           }
@@ -870,7 +878,6 @@
           }
         })
       } else {
-        console.log('modify')
         that.addModify = 'modify'
         that.$.ajax({
           type: 'get',
@@ -880,7 +887,6 @@
           },
           success: function (result) {
             that.formwork = result.content
-            console.warn(that.formwork.postageModelRules)
           }
         })
       }
