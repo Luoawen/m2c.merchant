@@ -159,6 +159,10 @@
         alert("请输入客服电话")
         return
       }
+      if (that.storeinformation.imgUrl == null || that.storeinformation.imgUrl.trim() == ''){
+        alert("请选择图片")
+        return
+      }
       var methodStr = "post";
       if (typeof (that.storeinformation.shopId) != 'undefined' && that.storeinformation.shopId != '') {
         methodStr = "put";
