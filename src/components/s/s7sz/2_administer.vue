@@ -38,16 +38,14 @@
         <div class="search_cell">
           <span class="zIndex2" @click="is_Success2=!is_Success2">申请时间<i class="icon timeIcon"></i></span>
           <div class="time" v-if="is_Success2">
-           <!-- <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
-         -->
-            <el-date-picker v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+            <el-date-picker v-model="search_approve.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
             </el-date-picker>
-            <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+            <el-date-picker v-model="search_approve.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
             </el-date-picker>
           </div>
         </div>
         <div class="search">
-          <input type="text" class="inp" placeholder="输入品牌名称"  v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info1()"></i>
+          <input type="text" class="inp" placeholder="输入品牌名称"  v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info1(search_approve.approveStatus)"></i>
         </div>
         <div class="comment_info">
           <table id="table1" style="table-layout:fixed"></table>
