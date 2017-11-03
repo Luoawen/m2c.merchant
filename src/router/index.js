@@ -22,6 +22,8 @@ const record = r => require.ensure([], () => r(require('@/components/s/s4zj/3_re
 // s5右侧内容
 const marketing = r => require.ensure([], () => r(require('@/components/s/s5yx/marketing')), 's')
 const fullCut = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCut')), 's')
+const fullCutDetail = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCutDetail')), 's')
+const modify = r => require.ensure([], () => r(require('@/components/s/s5yx/modify')), 's')
 // s6右侧内容
 const data = r => require.ensure([], () => r(require('@/components/s/s6sj/data')), 's')
 // s7右侧内容
@@ -93,9 +95,9 @@ export default new Router({
           component: survey
         },
         {
-          path: 'detail',
-          name: 'detail',
-          component: detail
+          path: 'fullCutDetail',
+          name: 'fullCutDetail',
+          component: fullCutDetail
         },
         {
           path: 'record',
@@ -111,6 +113,11 @@ export default new Router({
           path: 'fullCut',
           name: 'fullCut',
           component: fullCut
+        },
+        {
+          path: 'modify',
+          name: 'modify',
+          component: modify
         },
         {
           path: 'data',
