@@ -1,6 +1,6 @@
 <template>
   <div class="m92jsd">
-    <div class="search"></div>
+    <div class="search">
       <div class="search_cell">
         <span>编号</span>
         <input class="form-control search_input" v-model="search_params.full_cut_no" placeholder="满减编号" @blur="formValidator(1)">
@@ -48,15 +48,14 @@
           <option data-v-0c409cb2="" value="1">正常</option>
           <option data-v-0c409cb2="" value="2">无可用</option>
         </select>
-      </div><br/>
+      </div>
       <div class="search_cell">
         <button class="btn button btn-info" @click="goto"  path="/s/fullCut">新增满减</button>
         <button class="btn button btn-warning" @click="resetSearchParams()">重置搜索条件</button>
         <button class="btn button btn-primary" @click="getFullCutList()"  >搜索</button>
       </div>
-    </div>
-
     <table id="table" @click="goto"></table>
+    </div>
 
   </div>
 </template>
@@ -66,8 +65,9 @@
     name: '',
     data () {
       return {
-        // 搜索参数
         // search_params: {orderNo: '', settleBillId: '', dealerKey: '', mediaKey: '', salerKey: '', startTime: '', endTime: ''}
+
+        // 搜索参数
         search_params: {
           full_cut_no: '',
           full_cut_name: '',
@@ -75,8 +75,9 @@
           start_time: '',
           end_time: '',
           full_cut_type: 0,
-          creator_type: 0,
-          use_type: 0
+          creator_type: 2,
+          use_type: 0,
+          creator: JSON.parse(sessionStorage.getItem('mUser')).dealerId
         }
       }
     },
@@ -170,22 +171,13 @@
             }
           },
           columns: [
-            {
-              title: '操作',
-              events: 'handle',
-              align: 'center',
-              valign: 'middle',
-              formatter: function () {
-                return `<a class="color_default" modify="true" path="/m/m93xq" handle="true">详情</a>
-                &nbsp;&nbsp;<a class="color_red" forbid="true" path="/m/m95xg" handle="true">修改</a>`
-              }
-            },
-            {
+
+            /*{
               field: 'fullCutNo',
               title: '编号',
               align: 'center',
               valign: 'middle'
-            },
+            },*/
             {
               field: 'creatorType',
               title: '生成者',
@@ -230,8 +222,18 @@
               title: '生成时间',
               align: 'center',
               valign: 'middle',
-              width: 100
-            }
+              width: 200
+            },
+            {
+              title: '操作',
+              events: 'handle',
+              align: 'center',
+              valign: 'middle',
+              formatter: function () {
+                return `<a class="color_default" modify="true" path="/m/m93xq" handle="true">详情</a>
+                &nbsp;&nbsp;<a class="color_red" forbid="true" path="/m/m95xg" handle="true">修改</a>`
+              }
+            },
           ]
         })
       },
