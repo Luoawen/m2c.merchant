@@ -18,7 +18,6 @@ import 'tableexport'
 import './assets/css/bootstrap3.0.min.css'
 import './assets/css/manage.css'
 
-
 // import 'addressCheckbox/js/RegionalChoice.js'
 // import 'addressCheckbox/css.css'
 // 导入ueditor相关
