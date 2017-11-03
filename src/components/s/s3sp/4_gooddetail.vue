@@ -3,7 +3,7 @@
     <div class="col-sm-12 detail_container">
       <div class="nav">
       <span class="nav_tit" :class="{active:showactive01}" @click="Togactive01"><a>商品详情</a></span>
-      <span class="nav_tit" :class="{active:showactive02}" @click="Togactive02"><a>媒体资源</a></span>
+      <!-- <span class="nav_tit" :class="{active:showactive02}" @click="Togactive02"><a>媒体资源</a></span> -->
       </div>
       <!--商品详情-->
       <div v-show="showactive01" class="g_detail">
@@ -15,36 +15,36 @@
       						商品名称
       					</td>
       					<td class="a2">
-      						<div class="wobse">Hollister 2017年秋季新品荷叶边圆领运动衫 女 Hollister 秋季新品荷叶边圆领运动</div>
+      						<div class="wobse">{{data.goodsName}}</div>
       					</td>
       					<td class="a3">
       						商品副标题
       					</td>
-      					<td class="a4">Hollister 2017年秋季新品荷叶边圆领运动衫 女 Hollister 秋季新品荷叶边圆领运动</td>
+      					<td class="a4">{{data.goodsSubTitle}}</td>
       				</tr>
       				<tr>
       					<td class="a1">
       						商品分类
       					</td>
       					<td class="a2">
-      						<div class="wobse">服装；女装；裙子</div>
+      						<div class="wobse">{{data.goodsClassify}}</div>
       					</td>
       					<td class="a3">
       						商品品牌
       					</td>
-      					<td class="a4">Hollister</td>
+      					<td class="a4">{{data.goodsBrandName}}</td>
       				</tr>
       				<tr>
       					<td class="a1">
       						计量单位
       					</td>
       					<td class="a2">
-      						<div class="wobse">件</div>
+      						<div class="wobse">{{data.goodsUnitName}}</div>
       					</td>
       					<td class="a3">
       						最小起订量
       					</td>
-      					<td class="a4">0</td>
+      					<td class="a4">{{data.goodsMinQuantity}}</td>
       				</tr>
       				<tr>
       					<td class="a1">
@@ -56,14 +56,14 @@
       					<td class="a3">
       						商品条形码
       					</td>
-      					<td class="a4">69523456754</td>
+      					<td class="a4">{{data.goodsBarCode}}</td>
       				</tr>
       				<tr>
       					<td class="a1">
       						关键词
       					</td>
       					<td class="a2" colspan="3">
-      						<div class="wobse"></div>
+      						<div class="wobse">{{goodsKeyWord}}</div>
       					</td>
       				</tr>
       				<tr>
@@ -71,50 +71,112 @@
       						商品保障
       					</td>
       					<td class="a2" colspan="3">
-      						<div class="wobse"></div>
+      						<div class="wobse">{{goodsGuarantee}}</div>
       					</td>
       				</tr>
       		</table>
       		<div class="tit0 mt20 mb20 clear"><b>商品规格</b></div>
-      		<table class="tab_detail02">
-      			<thead>
-      				<tr>
-      					<td>规格</td>
-      					<td>库存</td>
-      					<td>重量/kg（个）</td>
-      					<td>拍获价/元</td>
-      					<td>市场价/元</td>
-      					<td>供货价/元</td>
-      					<td>商品编码</td>
-      				</tr>
-      			</thead>
-      			<tbody>
-      				<tr>
-      					<td></td>
-      					<td></td>
-      					<td></td>
-      					<td></td>
-      					<td></td>
-      					<td></td>
-      					<td></td>
-      				</tr>
-      			</tbody>
-      		</table>
+					<template v-if="data.skuFlag==0">
+						<table class="tab_detail02">
+							<thead>
+								<tr>
+									<td>规格</td>
+									<td>库存</td>
+									<td>重量/kg（个）</td>
+									<td>拍获价/元</td>
+									<td>市场价/元</td>
+									<td>{{countMode==1?'供货价':'服务费率/%'}}</td>
+									<td>商品编码</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="(good,index) in goodsSKUs">
+									<td>无</td>
+									<td>{{good.availableNum}}</td>
+									<td>{{good.weight}}</td>
+									<td>{{good.photographPrice}}</td>
+									<td>{{good.marketPrice}}</td>
+									<td v-if="countMode==1">{{good.supplyPrice}}</td>
+            			<td v-if="countMode==2">{{serviceRate}}</td>
+									<td>{{good.goodsCode}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</template>
+      		<template v-if="data.skuFlag==1">
+						<table class="tab_detail02">
+							<thead>
+								<tr>
+									<td>规格</td>
+									<td>规格值</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="(item,index) in goodsSpecifications">
+									<td>{{item.itemName}}</td>
+									<td>
+										<template v-for="tag in item.itemValue">{{tag.spec_name+"  &nbsp; "}}</template>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<table class="tab_detail02">
+							<thead>
+								<tr>
+									<td>规格值</td>
+									<td>对外展示</td>
+									<td>*库存</td>
+									<td>*重量/kg（个）</td>
+									<td>*拍获价/元</td>
+									<td>市场价/元</td>
+									<td>{{countMode==1?'供货价':'服务费率/%'}}</td>
+									<td>商品编码</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="(good,index) in goodsSKUs">
+            			<td>{{good.skuName}}</td>
+									<td>
+										<el-switch disabled
+											v-model="good.showStatus==2"
+											active-color="#13ce66"
+											inactive-color="#ccc">
+										</el-switch>
+									</td>
+									<td>{{good.availableNum}}</td>
+									<td>{{good.weight}}</td>
+									<td>{{good.photographPrice}}</td>
+									<td>{{good.marketPrice}}</td>
+									<td v-if="countMode==1">{{good.supplyPrice}}</td>
+            			<td v-if="countMode==2">{{serviceRate}}</td>
+									<td>{{good.goodsCode}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</template>
       		<div class="tit0 mt20 mb20 clear"><b>商品详情</b></div>
       		<div class="div_detail">
       			<div class="clear">
       				<span class="tit01 fl">商品主图</span>
-      				<span class="t_img fl"><img /><img /><img /></span>
+      				<span class="t_img fl">
+								<template v-for="file in fileList">
+									<img :src='file'/>
+								</template>
+							</span>
       			</div>
       			<div class="clear mt20">
       				<span class="tit01 fl">图文详情</span>
-      				<span class="t_img02 fl"><img /><img /></span>
+							<span class="t_img fl">
+      				<div id="editor-container">
+								<UE :config=config ref="ue"></UE>
+							</div>
+							</span>
       			</div>
       		</div>
       	</div>
       </div>
       <!--媒体资源-->
-      <div v-show="showactive02" class="media_resources">
+      <!-- <div v-show="showactive02" class="media_resources">
       	<table class="tab_detail03">
       		<thead>
       			<tr>
@@ -124,7 +186,6 @@
       				<td>详情</td>
       			</tr>
       		</thead>
-      		<!--注意循环tbody-->
       		<tbody>
       			<tr>
       				<td>万豪酒店集团</td>
@@ -165,51 +226,96 @@
       			</tr>
       		</tbody>
       	</table>
-      </div>
+      </div> -->
     </div>
   <!--返回-->
   <div class="return poi3">
-  	<button class="r_fh">返回</button>
+  	<button class="r_fh" @click="goBack()">返回</button>
   </div>
   </div>
 </template>
 
 <script>
+	import UE from '../../../subcomponents/ue.vue'
   export default {
-    name: '',
+		name: '',
+		components: {UE},
     data () {
       return {
-			showactive01: true,
-			showactive02: false,
-			showback: false,
-			showopen: true,
+				showactive01: true,
+				showactive02: false,
+				showback: false,
+				showopen: true,
+				goodsId: this.$route.query.goodsId,
+				data:'',
+				goodsSpecifications:[],
+				goodsSKUs:[],
+				fileList:[],
+				config: {
+					initialFrameWidth: 700,
+					initialFrameHeight: 300
+				},
+				goodsKeyWord:'',
+				goodsGuarantee:''
       }
     },
     methods: {
-    Togactive01 () {
-			var that = this
-			that.showactive01 = true 
-			that.showactive02 = false
-		},
-		Togactive02 () {
-			var that = this
-			that.showactive02 = true 
-			that.showactive01 = false
-		},
-		Showtab () {
-			var that = this
-			that.showback = true
-			that.showopen = false
-		},
-		Showtab02 () {
-			var that = this
-			that.showopen = true
-			that.showback = false
-		}
+			goBack(){
+        this.$router.go(-1)
+      },
+			Togactive01 () {
+				var that = this
+				that.showactive01 = true 
+				that.showactive02 = false
+			},
+			Togactive02 () {
+				var that = this
+				that.showactive02 = true 
+				that.showactive01 = false
+			},
+			Showtab () {
+				var that = this
+				that.showback = true
+				that.showopen = false
+			},
+			Showtab02 () {
+				var that = this
+				that.showopen = true
+				that.showback = false
+			}
     },
     mounted () {
-
-
+			let that = this
+			// 获取商家结算模式
+      that.$.ajax({
+        type: 'get',
+        url: that.localbase + 'm2c.scm/dealer/sys/' + JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+        data:{
+          token: sessionStorage.getItem('mToken')
+        },
+        success: function (result) {
+          that.countMode = result.content.countMode
+        }
+      })
+			that.$.ajax({
+				type: 'get',
+				url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId:that.localbase + 'm2c.scm/goods/approve/' + that.$route.query.goodsId,
+				//url:that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId,
+				data:{
+					token: sessionStorage.getItem('mToken')
+				},
+				success: function (result) {
+					that.data = result.content
+					that.data.skuFlag = result.content.skuFlag.toString()
+					that.goodsSpecifications = result.content.goodsSpecifications
+					that.goodsSKUs = result.content.goodsSKUs
+					that.fileList = result.content.goodsMainImages
+					that.$refs.ue.setUEContent(result.content.goodsDesc)
+					that.goodsKeyWord = result.content.goodsKeyWord.join("/")
+					that.goodsGuarantee = result.content.goodsGuarantee.join("/")
+					console.log(that.goodsGuarantee)
+				}
+			})
     }
   }
 </script>
@@ -310,7 +416,7 @@
   			}
   		}
   		.tab_detail02{
-  			margin: auto;
+  			margin: 20px auto;
   			width: 95%;
   			thead{
   				background: #DFE9F6;
