@@ -37,7 +37,10 @@
 				<div path='/s/detail' class="content_s">收支明细</div>
 				<div path='/s/record' class="content_s">提现记录</div>
 			</div>
-      <div class="public_nav" path='/s/marketing'><i class="nav_sale"></i>营销</div>
+      <div class="public_nav" @click="slide" ><i class="nav_marketing"></i>营销</div>
+      <div class="content_container">
+				<div path='/s/marketing' class="content_s">工具</div>
+			</div>
       <div class="public_nav" path='/s/data'><i class="nav_data"></i>数据</div>
       <div class="public_nav" @click="slide"><i class="nav_setting"></i>设置</div>
       <div class="content_container">
@@ -497,8 +500,8 @@ body {
       .nav_asset_m {
         background: url(../assets/images/ico_sidebar06.png) no-repeat;
       }
-      .nav_sale {
-        background: url(../assets/images/ico_sell.png) no-repeat;
+      .nav_marketing {
+        background: url(../assets/images/nav_marketing.png) no-repeat;
       }
       .nav_data {
         background: url(../assets/images/ico_sidebar05.png) no-repeat;
