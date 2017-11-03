@@ -103,7 +103,7 @@
               </tbody>
               <tbody v-if="addModify==='modify'">
                 <tr v-for="(add_postageModelRule_w,index) in formwork.postageModelRules">
-                  <td>{{add_postageModelRule_w.address==''?'全国（ 默认运费）':add_postageModelRule_w.address}}
+                  <td>{{add_postageModelRule_w.address=='' || add_postageModelRule_w.address==null ?'全国（ 默认运费）':add_postageModelRule_w.address}}
                     <!-- <a v-if="index!=0" @click="addressCheckBox(index,$event)">编辑 </a> -->
                   <!--地区选择-->
                     <!-- <div class="cityBox">
@@ -158,7 +158,7 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address = '' ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
+                  <td class="relative">{{addRow.address == 0 ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
                     编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
@@ -260,7 +260,7 @@
               <!-- modify -->
               <tbody v-if="addModify==='modify'">
                   <tr v-for="(add_postageModelRule,index) in formwork.postageModelRules">
-                    <td>{{add_postageModelRule.address==''?'全国（ 默认运费）':add_postageModelRule.address}}</td>
+                    <td>{{add_postageModelRule.address=='' || add_postageModelRule.address== null ?'全国（ 默认运费）':add_postageModelRule.address}}</td>
                     <td>
                       <input type="text"
                             style="width:50px;height:30px;"
@@ -285,7 +285,7 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address = '' ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
+                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
                     编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
@@ -362,7 +362,7 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address = '' ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
+                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
                     编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
@@ -885,6 +885,7 @@
           },
           success: function (result) {
             that.formwork = result.content
+            console.log(that.formwork)
           }
         })
       }
