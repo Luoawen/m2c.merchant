@@ -391,6 +391,7 @@
           goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
           goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString()
         }
+        console.log(a.goodsMainImages)
         that.$.ajax({
           type: that.handle_toggle === 'add' ? 'post' : 'put',
           url: that.localbase + 'm2c.scm/goods/approve',

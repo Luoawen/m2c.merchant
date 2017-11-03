@@ -562,7 +562,7 @@
             that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId,approveStatus:approveStatus}});
           }
         } else if (action === '_delete') {
-          that.goodsCheckStore();
+          that.deleteGoods(row,to);
         }
       }
       ,goodsDeleteStore () {
