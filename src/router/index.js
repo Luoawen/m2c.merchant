@@ -15,6 +15,7 @@ const dealerOrDtl = r => require.ensure([], () => r(require('@/components/s/s2dd
 const goodList = r => require.ensure([], () => r(require('@/components/s/s3sp/1_goodList')), 's')
 const goodAppraise = r => require.ensure([], () => r(require('@/components/s/s3sp/2_goodAppraise')), 's')
 const goodAddModify = r => require.ensure([], () => r(require('@/components/s/s3sp/3_goodAddModify')), 's')
+const gooddetail = r => require.ensure([], () => r(require('@/components/s/s3sp/4_gooddetail')), 's')
 // s4右侧内容
 const survey = r => require.ensure([], () => r(require('@/components/s/s4zj/1_survey')), 's')
 const detail = r => require.ensure([], () => r(require('@/components/s/s4zj/2_detail')), 's')
@@ -86,6 +87,11 @@ export default new Router({
           path: 'goodAddModify',
           name: 'goodAddModify',
           component: goodAddModify
+        },
+        {
+          path: 'gooddetail',
+          name: 'gooddetail',
+          component: gooddetail
         },
         {
           path: 'survey',

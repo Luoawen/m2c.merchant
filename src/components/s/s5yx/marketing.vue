@@ -54,7 +54,7 @@
         <button class="btn button btn-warning" @click="resetSearchParams()">重置搜索条件</button>
         <button class="btn button btn-primary" @click="getFullCutList()"  >搜索</button>
       </div>
-    </div>
+    <!-- </div> -->
 
     <table id="table" @click="goto"></table>
 
