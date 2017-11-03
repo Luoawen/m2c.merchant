@@ -1,6 +1,6 @@
 <template>
   <div class="m92jsd">
-    <div class="search">
+    <div class="search"></div>
       <div class="search_cell">
         <span>编号</span>
         <input class="form-control search_input" v-model="search_params.full_cut_no" placeholder="满减编号" @blur="formValidator(1)">
