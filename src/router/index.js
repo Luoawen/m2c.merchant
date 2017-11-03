@@ -21,6 +21,7 @@ const detail = r => require.ensure([], () => r(require('@/components/s/s4zj/2_de
 const record = r => require.ensure([], () => r(require('@/components/s/s4zj/3_record')), 's')
 // s5右侧内容
 const marketing = r => require.ensure([], () => r(require('@/components/s/s5yx/marketing')), 's')
+const fullCut = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCut')), 's')
 // s6右侧内容
 const data = r => require.ensure([], () => r(require('@/components/s/s6sj/data')), 's')
 // s7右侧内容
@@ -105,6 +106,11 @@ export default new Router({
           path: 'marketing',
           name: 'marketing',
           component: marketing
+        },
+        {
+          path: 'fullCut',
+          name: 'fullCut',
+          component: fullCut
         },
         {
           path: 'data',
