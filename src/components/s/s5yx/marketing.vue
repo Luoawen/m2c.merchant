@@ -75,8 +75,9 @@
           start_time: '',
           end_time: '',
           full_cut_type: 0,
-          creator_type: 0,
-          use_type: 0
+          creator_type: 2,
+          use_type: 0,
+          creator: JSON.parse(sessionStorage.getItem('mUser')).dealerId
         }
       }
     },
