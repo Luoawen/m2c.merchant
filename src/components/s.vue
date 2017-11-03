@@ -605,6 +605,7 @@ body {
       padding: 10px;
       top: 20px;
       left: -100px;
+      word-break:break-all;
     }
   }
 }

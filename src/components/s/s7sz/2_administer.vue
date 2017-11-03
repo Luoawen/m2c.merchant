@@ -49,16 +49,16 @@
       </div>
       <!--详情-->
       <div class="goodInfo" v-if="goodInfoShow">
-        <p>品牌名称：{{goodInfo.brandName==''?'--':goodInfo.brandName}}</p>
-        <p>英文名称：{{goodInfo.brandNameEn==''?'--':goodInfo.brandNameEn}}</p>
-        <p>品牌区域：{{goodInfo.firstAreaName==''?'':goodInfo.firstAreaName}}
+        <p><span>品牌名称：</span>{{goodInfo.brandName==''?'--':goodInfo.brandName}}</p>
+        <p><span>英文名称：</span>{{goodInfo.brandNameEn==''?'--':goodInfo.brandNameEn}}</p>
+        <p><span>品牌区域：</span>{{goodInfo.firstAreaName==''?'':goodInfo.firstAreaName}}
           {{goodInfo.twoAreaName=='' ? '': ','+ goodInfo.twoAreaName}}
           {{goodInfo.threeAreaName==''? '': ',' + goodInfo.threeAreaName}}</p>
-        <div>品牌LOGO：
+        <div><span>品牌LOGO：</span>
           <img :src="goodInfo.brandLogo"/>
         </div>
         <div v-show="isBrandApprove">
-          <p v-show="goodInfo.rejectReason!==''">拒绝原因：{{goodInfo.rejectReason}}</p>
+          <p class="goodInfop" v-show="goodInfo.rejectReason!==''"><span>拒绝原因：</span>{{goodInfo.rejectReason}}</p>
         </div>
         <button @click="goodInfoShow=!goodInfoShow">返回</button>
       </div>
@@ -662,7 +662,7 @@
             valign: 'middle',
             formatter: function (x, y) {
               return y.approveStatus === 1 ? '审批中' : `
-              <div class="color_default" style="position:relative;">审批不通过
+              <div class="color_default">审批不通过
                 <i class="ico_msg">
                 <div class="ico-tit">` + y.rejectReason + `</div>
               </i>
@@ -887,9 +887,17 @@
 /*详情*/
 #myTabContent{position:relative;}
 .goodInfo{position:absolute;top:0;left:0;width:100%;height:840px;padding-top:40px;background:#fff;z-index:99;}
-.goodInfo p,.goodInfo div,.goodInfo button{margin-left:40px;margin-top:20px;}
+.goodInfo p,.goodInfo div,.goodInfo button{margin-left:80px;margin-top:20px;}
 .goodInfo div img{width:60px;height:60px; display:inline-block;}
 .goodInfo button{width:150px;height:50px;border:1px solid #ccc; text-align: center;}
+.goodInfo .goodInfop
+{
+  width:300px;
+  word-break:break-all;
+}
+.goodInfo .goodInfop span{
+  margin-left: -80px; display:inline-block;width:80px;
+}
 /*删除*/
 .delectGoodBg{position:absolute;top:0;left:0;width:100%;height:880px;background:rgba(0,0,0,0.6);z-index:99;}
 .delectGoodWrap{position:absolute;width:380px;height:280px;padding:10px;border-radius:10px;top:50%;left:50%;margin-left:-200px;background:#fff;z-index:99;}
