@@ -63,8 +63,8 @@
     <el-row :gutter="20">
       <el-col :span="4">商品保障</el-col>
       <el-col :span="20">
-        <el-checkbox-group v-model="goodsGuarantCheck" @change="handleCheckedCitiesChange()">
-          <el-checkbox v-for="(guarantee,index) in goodsGuaranteeList" :key="guarantee.guaranteeId" :label="guarantee.guaranteeDesc" :value="guarantee"></el-checkbox>
+        <el-checkbox-group v-model="goodsGuarantCheck">
+          <el-checkbox v-for="(guarantee,index) in goodsGuaranteeList" :key="guarantee.guaranteeId" :label="guarantee.guaranteeId">{{guarantee.guaranteeDesc}}</el-checkbox>
         </el-checkbox-group>
       </el-col>
     </el-row>
@@ -76,8 +76,8 @@
     <el-row :gutter="20">
       <el-col :span="3">商品规格</el-col>
       <el-col :span="21">
-        <el-radio v-model="data.skuFlag" label="0">单一规格</el-radio>
-        <el-radio v-model="data.skuFlag" label="1">多规格</el-radio>
+        <el-radio v-model="data.skuFlag" label="0" id="skuFlag0">单一规格</el-radio>
+        <el-radio v-model="data.skuFlag" label="1" id="skuFlag1">多规格</el-radio>
       </el-col>
     </el-row>
     <div class="tabPane" v-if="data.skuFlag==0">
@@ -145,8 +145,8 @@
                 v-for="tag in item.itemValue"
                 closable
                 :disable-transitions="false"
-                @close="handleClose(tag,index)">
-                {{tag}}
+                @close="handleClose(tag.spec_name,index)">
+                {{tag.spec_name}}
               </el-tag>
               <el-autocomplete
                 class="inline-input"
@@ -161,7 +161,7 @@
           </tr>
         </tbody>
       </table>
-      <el-button type="primary" @click="addRow" v-if="goodsSpecifications.length<3">添加规格</el-button>
+      <el-button type="primary" @click="addRow" v-if="goodsSpecifications.length<3 && handle_toggle=='add'" >添加规格</el-button>
       <table>
         <thead>
           <tr>
@@ -180,7 +180,7 @@
             <td>{{good.skuName}}</td>
             <td>
               <el-switch
-                v-model="good.showStatus"
+                v-model="good.showStatus==2"
                 active-color="#13ce66"
                 inactive-color="#ccc">
               </el-switch>
@@ -322,7 +322,7 @@
           children: 'subClassify',
           label:'classifyName',
         },
-        selectedOptions1: [''],
+        selectedOptions1: [],
         dLabel1: false,
         dLabel2: false,
         dLabel3: false,
@@ -368,24 +368,16 @@
       },
       // 取消
       goBack(){
-        this.$route.go(-1)
+        this.$router.push({name:'goodList'})
       },
       // 提交保存或修改
       save () {
         let that = this
-        for(var i=0;i<that.goodsGuaranteeList.length;i++){
-          for( var j=0;j<that.goodsGuarantCheck.length;j++){
-            if(that.goodsGuaranteeList[i].guaranteeDesc==that.goodsGuarantCheck[j]){
-              that.goodsGuarantee.push(that.goodsGuaranteeList[i])
-            }
-          }
-        }
         if(that.countMode!=1){
           for(var k=0;k<that.goodsSKUs.length;i++){
             that.goodsSKUs[k].serviceRate=that.serviceRate
           }
         }
-        //console.log(that.goodsGuarantee)
         let a={
           token: sessionStorage.getItem('mToken'),
           goodsId: that.goodsId,
@@ -393,16 +385,17 @@
           dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName,
           goodsSKUs: JSON.stringify(that.goodsSKUs),
           goodsSpecifications: JSON.stringify(that.goodsSpecifications),
-          goodsMainImages:JSON.stringify(that.goodsMainImages),
+          goodsMainImages:that.goodsMainImages.length==0?'':that.goodsMainImages.toString(),
           goodsDesc:that.defaultMsg,
           goodsBrandName:that.goodsBrandName,
-          goodsGuarantee:JSON.stringify(that.goodsGuarantee)
+          goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
+          goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString()
         }
         that.$.ajax({
           type: that.handle_toggle === 'add' ? 'post' : 'put',
           url: that.localbase + 'm2c.scm/goods/approve',
           // url: 'http://10.0.40.23:8080/m2c.scm/goods/approve',
-          data:Object.assign(a,that.data),
+          data:Object.assign(that.data,a),
           success: function (result) {
             if (result.status === 200) {
               that.show_tip('保存成功')
@@ -443,16 +436,22 @@
       mapValue () {
         let that = this
         that.goodsSKUs=[]
-        //for(var l=0;l<that.goodsSpecifications.length;l++){
           if(that.goodsSpecifications.length==1 || that.goodsSpecifications[1].itemValue.length==0){
             for(var x=0;x<that.goodsSpecifications[0].itemValue.length;x++){
-              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[x] + '"}' + ')'))
+              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[x].spec_name + '"}' + ')'))
             }
           }else{
-            var p = []
+            if(that.goodsSpecifications.length=2){
+              var p = [[],[]]
+            } else{
+            var p = [[],[],[]]
+            } // 此定义不利于拓展，暂时没想到更好的方法
             for(var k=0;k<that.goodsSpecifications.length;k++){
-              //console.log(that.goodsSpecifications[k].itemValue)
-              p.push(that.goodsSpecifications[k].itemValue)
+              for(var y=0;y<that.goodsSpecifications[k].itemValue.length;y++){
+                //console.log(that.goodsSpecifications[k].itemValue[y].spec_name)
+                p[k].push(that.goodsSpecifications[k].itemValue[y].spec_name)
+              }
+              //p.push(that.goodsSpecifications[k].itemValue.spec_name)
             }
             console.warn(p)
             var arr = js(p[0],p[1])
@@ -480,12 +479,11 @@
               console.log(arr)
             }
           }
-        //}
       },
       // 取消添加规格值
       clearValue (index) {
         let that = this
-        console.log(index)
+        //console.log(index)
         that.goodsSpecifications[index].state1=""
       },
       // 添加规格值
@@ -514,8 +512,12 @@
               }
             })
         }
-        if(that.$.inArray(state1,that.goodsSpecifications[index].itemValue)===-1){
-          that.goodsSpecifications[index].itemValue.push(state1)
+        let array = that.goodsSpecifications[index].itemValue
+        let state2 = {spec_name:state1}
+        if(JSON.stringify(array).indexOf(JSON.stringify(state2))===-1){
+          that.goodsSpecifications[index].itemValue.push(state2)
+          //that.$set(that.goodsSpecifications[index],'itemValue',state2)
+          console.log(that.goodsSpecifications[index])
           that.clearValue(index)
           that.mapValue()
         }else{
@@ -558,7 +560,8 @@
       },
       // 规格小标签移除
       handleClose(tag,index) {
-        this.goodsSpecifications[index].itemValue.splice(this.goodsSpecifications[index].itemValue.indexOf(tag), 1)
+        let specName={spec_name:tag}
+        this.goodsSpecifications[index].itemValue.splice(this.goodsSpecifications[index].itemValue.indexOf(specName), 1)
         this.mapValue()
       },
       // 删除规格行
@@ -687,15 +690,36 @@
           }
         })
       } else {
+        that.goodsId=that.$route.query.goodsId
         that.$.ajax({
           type: 'get',
-          url: that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId,
+          url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId:that.localbase + 'm2c.scm/goods/approve/' + that.$route.query.goodsId,
           data: {
             token: sessionStorage.getItem('mToken')
           },
           success: function (result) {
             that.data = result.content
-            console.warn(that.data)
+            for(let i=0,len=that.goodsGuaranteeList.length;i<len;i++){
+              for(let j=0,len=result.content.goodsGuarantee.length;j<len;j++){
+                if(result.content.goodsGuarantee[j]===that.goodsGuaranteeList[i].guaranteeDesc){
+                  that.goodsGuarantCheck.push(that.goodsGuaranteeList[i].guaranteeId)
+                }
+              }
+            }
+            console.log(that.goodsGuarantCheck)
+            that.data.skuFlag = result.content.skuFlag.toString()
+            that.goodsSpecifications = result.content.goodsSpecifications
+            that.goodsSKUs = result.content.goodsSKUs
+            for(var i=0;i<result.content.goodsMainImages.length;i++){
+              that.fileList.push(eval('(' + '{url:"'+ result.content.goodsMainImages[i] + '"}' + ')'))
+            }
+            if(result.content.skuFlag==1){
+              that.$('#skuFlag0').hide()
+            }else{
+              that.$('#skuFlag1').hide()
+            }
+            that.selectedOptions1 = result.content.goodsClassifyIds
+            // console.warn(that.selectedOptions1)
           }
         })
       }
