@@ -362,6 +362,10 @@
       // 修改保存
       change_confirm () {
         let that = this
+        if (that.add_modify_params.brandName === '') {
+          that.show_tip('品牌名称不能为空')
+          return
+        }
         // that.reset_add_modify_params_bind()
         that.add_modify_imgStep(function () {
           // 根据国家的code获取省份名字

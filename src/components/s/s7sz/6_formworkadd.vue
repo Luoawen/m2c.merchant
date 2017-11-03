@@ -66,7 +66,7 @@
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
                             <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
-                            <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                            <span> {{pro.name}} <i>v</i></span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
                                 <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click="chooseCity(city,$event)"/> {{city.name}}
@@ -739,7 +739,7 @@
         this.$('.table').find('.cityBox').hide()
       },
 // 显示市级盒子
-      cityShow(index, $event){
+      cityShow (index, $event) {
         let that = this
         var el = event.target
         that.$(el).parent('.pro').find('.cityWrap').toggle()
@@ -960,7 +960,6 @@
     margin-left: 12px;
     position: relative;
   }
-
   .pro span {
     width: 64px;
   }
@@ -982,7 +981,9 @@
     background: #fff;
     z-index: 2;
   }
-
+  .cityBox .bigArea .pro:hover .cityWrap{
+    display: block;
+  }
   .cityWrap .city {
     display: inline-block;
     float: left;
