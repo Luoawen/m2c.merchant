@@ -10,15 +10,16 @@
         <div class="search_cell">
           <span class="zIndex2" @click="is_Success=!is_Success">申请时间<i class="icon timeIcon"></i></span>
           <div class="time" v-if="is_Success">
-            <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
+            <el-date-picker v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+            </el-date-picker>
+            <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+            </el-date-picker>
           </div>
         </div>
         <div class="search">
-          <input type="text" class="inp" placeholder="输入品牌名称" v-model="search_params.condition"><i class="icon searchIcon"></i>
+          <input type="text" class="inp" placeholder="输入品牌名称" v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info"></i>
         </div>
-        <div class="search_cell">
-          <button class="btn search_button" @click="get_comment_info">搜索</button>
-        </div>
+
         <div class="comment_info">
           <table id="table" style="table-layout:fixed"></table>
         </div>
@@ -37,11 +38,16 @@
         <div class="search_cell">
           <span class="zIndex2" @click="is_Success2=!is_Success2">申请时间<i class="icon timeIcon"></i></span>
           <div class="time" v-if="is_Success2">
-            <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
+           <!-- <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
+         -->
+            <el-date-picker v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+            </el-date-picker>
+            <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+            </el-date-picker>
           </div>
         </div>
         <div class="search">
-          <input type="text" class="inp" placeholder="输入品牌名称"><i class="glyphicon glyphicon-search"></i>
+          <input type="text" class="inp" placeholder="输入品牌名称"  v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info1()"></i>
         </div>
         <div class="comment_info">
           <table id="table1" style="table-layout:fixed"></table>
@@ -227,6 +233,7 @@
         that.modifyLocal = 1
         that.get_comment_info()
         that.isBrandApprove = false
+        that.search_params = []
       },
       brandApproveQuery () {
         let that = this
@@ -235,6 +242,7 @@
         that.modifyLocal = 2
         that.get_comment_info1()
         that.isBrandApprove = true
+        that.search_params = []
       },
       area () {
         let that = this
@@ -555,6 +563,7 @@
       // 获取商品库列表
       get_comment_info () {
         let that = this
+        that.is_Success = false
         this.$("[data-toggle='popover']").popover('hide')
         that.$('#table').bootstrapTable('destroy').bootstrapTable({
           cache: false,
@@ -613,6 +622,7 @@
       // 获取审核列表
       get_comment_info1 (n) {
         let that = this
+        that.is_Success2 = false
         if (n === '' || n === undefined) {
           that.brandStatusName = '品牌状态'
         } else if (n === 0) {
@@ -911,7 +921,7 @@
 /*修改/新增*/
 .changeGoodInfo input,.changeGoodInfo select{width:200px;line-height:40px;color:#666;}
 .zIndex2{z-index:21;}
-.sz .tab-content .tab-pane .search_cell .time{top:50px;}
+.sz .tab-content .tab-pane .search_cell .time{top:50px;left:14px;width:450px;}
 .icon{width:40px;height:40px;z-index:11;display:inline-block;}
 .timeIcon{background:url(../../../assets/images/ico_calendar@2x.png) no-repeat center bottom;background-size:19px 20px;}
 .searchIcon{background:url(../../../assets/images/ico_search.png) no-repeat center center;background-size:20px 20px;}
