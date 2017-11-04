@@ -180,7 +180,7 @@
             <td>{{good.skuName}}</td>
             <td>
               <el-switch
-                v-model="good.showStatus==2"
+                v-model="good.showStatus"
                 active-color="#13ce66"
                 inactive-color="#ccc">
               </el-switch>
@@ -237,7 +237,7 @@
         <el-upload
           :action="uploadUrl" name="img"
           list-type="picture-card" :on-success="success" :data="upLoadData" :file-list="fileList"
-          :on-preview="handlePictureCardPreview" show-file-list :limit=5
+          :on-preview="handlePictureCardPreview" show-file-list :limit=5 :before-upload="beforeAvatarUpload"
           :on-remove="handleRemove" >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -391,6 +391,7 @@
           goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
           goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString()
         }
+        console.log(a.goodsSKUs)
         that.$.ajax({
           type: that.handle_toggle === 'add' ? 'post' : 'put',
           url: that.localbase + 'm2c.scm/goods/approve',
@@ -562,6 +563,13 @@
         }
         console.warn("url="+that.goodsMainImages)
       },
+      beforeAvatarUpload(file) {
+        const isMA = file.size < 409600;
+        if (!isMA) {
+          this.$message.error('上传图片大小不能超过 400Kb!');
+        }
+        return isMA;
+      },
       // 规格小标签移除
       handleClose(tag,index) {
         let that =this
@@ -655,7 +663,7 @@
       // 获取商品品牌
       that.$.ajax({
         type: 'get',
-        url: that.localbase + 'm2c.scm/brand',
+        url: that.localbase + 'm2c.scm/brand/choice',
         data:{
           token: sessionStorage.getItem('mToken'),
           dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
