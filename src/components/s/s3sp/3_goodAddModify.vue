@@ -153,7 +153,7 @@
                 v-model="item.state1"
                 :fetch-suggestions="querySearch"
                 placeholder="请输入内容"
-                @select="handleSelect"
+                @select="handleSelect" :key="item.state1"
               ></el-autocomplete>
               <el-button type="primary" @click="specValueClick(item.state1,index)">确定</el-button>
               <el-button @click="clearValue(item.state1,index)">取消</el-button>
@@ -402,7 +402,7 @@
         console.log(a.goodsSKUs)
         that.$.ajax({
           type: that.handle_toggle === 'add' ? 'post' : 'put',
-          url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/goods':that.localbase + 'm2c.scm/goods/approve',
+          url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/goods' : that.localbase + 'm2c.scm/goods/approve',
           data:Object.assign(that.data,a),
           success: function (result) {
             if (result.status === 200) {
@@ -500,7 +500,7 @@
         let that = this
         let arr = that.restaurants
         let state = {value:state1}
-        //console.log(that.restaurants)
+        console.log("state1警告"+state1)
         if(JSON.stringify(arr).indexOf(JSON.stringify(state))===-1){
           alert(0)
             that.$.ajax({
@@ -525,7 +525,6 @@
         let state2 = {spec_name:state1}
         if(JSON.stringify(array).indexOf(JSON.stringify(state2))===-1){
           that.goodsSpecifications[index].itemValue.push(state2)
-          //that.$set(that.goodsSpecifications[index],'itemValue',state2)
           console.log(that.goodsSpecifications[index])
           that.clearValue(index)
           that.mapValue()
