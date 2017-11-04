@@ -554,7 +554,14 @@
       },
       // 照片墙
       handleRemove(file, fileList) {
-        console.log(file, fileList);
+        let that = this
+        console.log("删除文件"+file.response.content.url)
+        for(var i=0;i<that.goodsMainImages.length;i++){
+          if(file.response.content.url=that.goodsMainImages[i]){
+            that.goodsMainImages.splice(i,1)
+            console.log("剩余文件"+that.goodsMainImages)
+          }
+        }
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url
