@@ -256,7 +256,8 @@
 					initialFrameHeight: 300
 				},
 				goodsKeyWord:'',
-				goodsGuarantee:''
+				goodsGuarantee:'',
+				countMode:''
       }
     },
     methods: {

@@ -148,7 +148,7 @@
                 @close="handleClose(tag.spec_name,index)">
                 {{tag.spec_name}}
               </el-tag>
-              <el-autocomplete
+              <!-- <el-autocomplete
                 class="inline-input"
                 v-model="item.state1"
                 :fetch-suggestions="querySearch"
@@ -156,7 +156,7 @@
                 @select="handleSelect"
               ></el-autocomplete>
               <el-button type="primary" @click="specValueClick(item.state1,index)">确定</el-button>
-              <el-button @click="clearValue(item.state1,index)">取消</el-button>
+              <el-button @click="clearValue(item.state1,index)">取消</el-button> -->
             </td>
           </tr>
         </tbody>
@@ -328,7 +328,9 @@
         dLabel2: false,
         dLabel3: false,
         goodsBrandName:'',
-        setUp:{}
+        setUp:{},
+        2:true,
+        1:false
       }
     },
     created() {},
@@ -399,7 +401,7 @@
         console.log(a.goodsSKUs)
         that.$.ajax({
           type: that.handle_toggle === 'add' ? 'post' : 'put',
-          url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/goods':that.localbase + 'm2c.scm/approve/goods',
+          url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/goods':that.localbase + 'm2c.scm/goods/approve',
           data:Object.assign(that.data,a),
           success: function (result) {
             if (result.status === 200) {
