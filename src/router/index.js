@@ -24,7 +24,7 @@ const record = r => require.ensure([], () => r(require('@/components/s/s4zj/3_re
 const marketing = r => require.ensure([], () => r(require('@/components/s/s5yx/marketing')), 's')
 const fullCut = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCut')), 's')
 const fullCutDetail = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCutDetail')), 's')
-const modify = r => require.ensure([], () => r(require('@/components/s/s5yx/modify')), 's')
+const fullCutModify = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCutModify')), 's')
 // s6右侧内容
 const data = r => require.ensure([], () => r(require('@/components/s/s6sj/data')), 's')
 // s7右侧内容
@@ -76,6 +76,11 @@ export default new Router({
           component: details
         },
         {
+          path: 'detail',
+          name: 'detail',
+          component: detail
+        },
+        {
           path: 'goodList',
           name: 'goodList',
           component: goodList
@@ -121,9 +126,9 @@ export default new Router({
           component: fullCut
         },
         {
-          path: 'modify',
-          name: 'modify',
-          component: modify
+          path: 'fullCutModify',
+          name: 'fullCutModify',
+          component: fullCutModify
         },
         {
           path: 'data',
