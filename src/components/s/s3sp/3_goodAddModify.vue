@@ -386,16 +386,14 @@
           goodsSKUs: JSON.stringify(that.goodsSKUs),
           goodsSpecifications: JSON.stringify(that.goodsSpecifications),
           goodsMainImages:that.goodsMainImages.length==0?'':that.goodsMainImages.toString(),
-          goodsDesc:that.defaultMsg,
+          goodsDesc:that.$refs.ue.getUEContent(),
           goodsBrandName:that.goodsBrandName,
           goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
           goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString()
         }
-        console.log(a.goodsMainImages)
         that.$.ajax({
           type: that.handle_toggle === 'add' ? 'post' : 'put',
           url: that.localbase + 'm2c.scm/goods/approve',
-          // url: 'http://10.0.40.23:8080/m2c.scm/goods/approve',
           data:Object.assign(that.data,a),
           success: function (result) {
             if (result.status === 200) {
@@ -557,13 +555,23 @@
         let that = this
         that.dialogImageUrl = file.url
         that.dialogVisible = 1>0
-        that.goodsMainImages.push(file.response.content.url)
+        if(file.response.content.url==''||file.response.content.url==undefined){
+          that.show_tip("上传失败,请重新上传")
+        }else{
+          that.goodsMainImages.push(file.response.content.url)
+        }
+        console.warn("url="+that.goodsMainImages)
       },
       // 规格小标签移除
       handleClose(tag,index) {
-        let specName={spec_name:tag}
-        this.goodsSpecifications[index].itemValue.splice(this.goodsSpecifications[index].itemValue.indexOf(specName), 1)
-        this.mapValue()
+        let that =this
+        if(that.handle_toggle=='add'){
+          let specName={spec_name:tag}
+          that.goodsSpecifications[index].itemValue.splice(that.goodsSpecifications[index].itemValue.indexOf(specName), 1)
+          that.mapValue()
+        }else{
+          that.show_tip("已有规格不能移除")
+        }
       },
       // 删除规格行
       delect (index) {
@@ -711,6 +719,7 @@
             that.data.skuFlag = result.content.skuFlag.toString()
             that.goodsSpecifications = result.content.goodsSpecifications
             that.goodsSKUs = result.content.goodsSKUs
+            that.$refs.ue.setUEContent(result.content.goodsDesc)
             for(var i=0;i<result.content.goodsMainImages.length;i++){
               that.fileList.push(eval('(' + '{url:"'+ result.content.goodsMainImages[i] + '"}' + ')'))
             }

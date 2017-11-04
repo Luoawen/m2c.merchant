@@ -1,9 +1,9 @@
 <template>
   <div class="m92jsd">
-    <div class="search"></div>
+    <div class="search "   >
       <div class="search_cell">
         <span>编号</span>
-        <input class="form-control search_input" v-model="search_params.full_cut_no" placeholder="满减编号" @blur="formValidator(1)">
+        <input class="form-control search_input  " v-model="search_params.full_cut_no" placeholder="满减编号" @blur="formValidator(1)">
       </div>
       <div class="search_cell">
         <span>满减名称</span>
@@ -54,7 +54,7 @@
         <button class="btn button btn-warning" @click="resetSearchParams()">重置搜索条件</button>
         <button class="btn button btn-primary" @click="getFullCutList()"  >搜索</button>
       </div>
-    <!-- </div> -->
+    </div>
 
     <table id="table" @click="goto"></table>
 
@@ -75,8 +75,9 @@
           start_time: '',
           end_time: '',
           full_cut_type: 0,
-          creator_type: 0,
-          use_type: 0
+          creator_type: 2,
+          use_type: 0,
+          creator: JSON.parse(sessionStorage.getItem('mUser')).dealerId
         }
       }
     },
@@ -176,8 +177,8 @@
               align: 'center',
               valign: 'middle',
               formatter: function () {
-                return `<a class="color_default" modify="true" path="/m/m93xq" handle="true">详情</a>
-                &nbsp;&nbsp;<a class="color_red" forbid="true" path="/m/m95xg" handle="true">修改</a>`
+                return `<a class="color_default" modify="true" path="/s/fullCutDetail" handle="true">详情</a>
+                &nbsp;&nbsp;<a class="color_red" forbid="true" path="/s/modify" handle="true">修改</a>`
               }
             },
             {
