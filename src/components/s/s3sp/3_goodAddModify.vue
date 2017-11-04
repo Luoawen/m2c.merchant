@@ -450,19 +450,21 @@
               that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[x].spec_name + '"}' + ')'))
             }
           }else{
-            if(that.goodsSpecifications.length=2){
+            if(that.goodsSpecifications.length==2){
               var p = [[],[]]
-            } else{
-            var p = [[],[],[]]
-            } // 此定义不利于拓展，暂时没想到更好的方法
-            for(var k=0;k<that.goodsSpecifications.length;k++){
-              for(var y=0;y<that.goodsSpecifications[k].itemValue.length;y++){
-                //console.log(that.goodsSpecifications[k].itemValue[y].spec_name)
-                p[k].push(that.goodsSpecifications[k].itemValue[y].spec_name)
+              for(var k=0;k<that.goodsSpecifications.length;k++){
+                for(var y=0;y<that.goodsSpecifications[k].itemValue.length;y++){
+                  p[k].push(that.goodsSpecifications[k].itemValue[y].spec_name)
+                }
               }
-              //p.push(that.goodsSpecifications[k].itemValue.spec_name)
-            }
-            console.warn(p)
+            } else if(that.goodsSpecifications.length==3){
+              var p = [[],[],[]]
+              for(var k=0;k<that.goodsSpecifications.length;k++){
+                for(var y=0;y<that.goodsSpecifications[k].itemValue.length;y++){
+                  p[k].push(that.goodsSpecifications[k].itemValue[y].spec_name)
+                }
+              }
+            } // 此定义不利于拓展，暂时没想到更好的方法
             var arr = js(p[0],p[1])
             var b = true
             var index = 2;
