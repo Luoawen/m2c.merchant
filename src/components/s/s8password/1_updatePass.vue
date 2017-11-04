@@ -1,7 +1,7 @@
 s<template>
   <div class="sz">
     <form class="form-horizontal">
-      <div class="form-group">
+      <div class="form-group" v-show="isSuccess">
         <label class="col-sm-3 control-label">已向手机号{{userPhone}}发送验证码</label>
       </div>
       <div class="form-group">
@@ -10,7 +10,10 @@ s<template>
           <input type="text" class="form-control" id="verifyCode" placeholder="6位数字">
         </div>
         <div class="col-sm-3">
-          <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode">获取验证码</button>
+          <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="!show">
+            <span v-show="show">获取验证码</span>
+            <span v-show="!show" class="count">{{count}} s</span>
+          </button>
         </div>
       </div>
       <div class="form-group">
@@ -60,7 +63,11 @@ s<template>
         // 售后id
         addressId: '',
         dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-        userPhone: JSON.parse(sessionStorage.getItem('mUser')).mobile
+        userPhone: JSON.parse(sessionStorage.getItem('mUser')).mobile,
+        show: true,
+        count: sessionStorage.getItem('total') == null ? 60 : sessionStorage.getItem('total'),
+        total: '',
+        isSuccess: false
       }
     },
     created () {
@@ -68,6 +75,32 @@ s<template>
     watch: {
     },
     methods: {
+      timekeeping () {
+        let that = this
+        // 把按钮设置为不可以点击
+        // 把按钮设置为不可以点击
+        that.show = false
+        var interval = setInterval(function () { // 每秒读取一次cookie
+          // 从cookie 中读取剩余倒计时
+          that.total = sessionStorage.getItem('total')
+          // 在发送按钮显示剩余倒计时
+          that.count = that.total
+          // 把剩余总倒计时减掉1
+          that.total--
+          if (that.total <= 0) { // 剩余倒计时为零，则显示 重新发送，可点击
+            // 清除定时器
+            clearInterval(interval)
+            // 删除cookie
+            sessionStorage.removeItem('total')
+            // 显示重新发送 把发送按钮设置为可点击
+            that.show = true
+            that.isSuccess = false
+          } else { // 剩余倒计时不为零
+            // 重新写入总倒计时
+            sessionStorage.setItem('total', that.total)
+          }
+        }, 1000)
+      },
       sendVerficode () {
         let that = this
         that.$.ajax({
@@ -81,6 +114,9 @@ s<template>
           success: function (result) {
             if (result.status === 200) {
               alert('已发送短信注意查收')
+              that.isSuccess = true
+              sessionStorage.setItem('total', 60)
+              that.timekeeping()
             } else {
               alert(result.errorMessage)
             }
@@ -127,6 +163,15 @@ s<template>
       }
     },
     mounted () {
+      let that = this
+      if (sessionStorage.getItem('total') !== undefined && sessionStorage.getItem('total') !== 'NaN' && sessionStorage.getItem('total') !== 'null' && sessionStorage.getItem('total') !== null && sessionStorage.getItem('total') !== '') { // cookie存在倒计时
+        that.show = false
+        that.isSuccess = true
+        that.total = sessionStorage.getItem('total')
+        that.timekeeping()
+      } else { // cookie 没有倒计时
+        that.show = true
+      }
     }
   }
 </script>
