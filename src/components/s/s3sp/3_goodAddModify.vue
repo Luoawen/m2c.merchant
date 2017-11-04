@@ -255,10 +255,10 @@
         </div>
       </el-col>
     </el-row>
-    <el-row>
+    <el-row v-if="handle_toggle=='add'">
       <el-col :span="24"><h4>设置上架</h4></el-col>
     </el-row>
-    <el-row :gutter="20">
+    <el-row :gutter="20" v-if="handle_toggle=='add'">
       <el-col :span="3">*设置上架</el-col>
       <el-col :span="21">
         <el-radio v-model="data.goodsShelves" label="1">手动上架</el-radio>
@@ -267,7 +267,8 @@
         <p>平台审核通过，商品自动上架，无需商家操作</p>
       </el-col>
     </el-row>
-    <el-button type="primary" @click="save">提交审核</el-button>
+    <el-button v-if="handle_toggle=='add'" type="primary" @click="save">提交审核</el-button>
+    <el-button v-if="handle_toggle!='add'" type="primary" @click="save">保存修改</el-button>
     <el-button @click="goBack">取消</el-button>
   </div>
 </template>
@@ -373,9 +374,13 @@
       // 提交保存或修改
       save () {
         let that = this
-        if(that.countMode!=1){
-          for(var k=0;k<that.goodsSKUs.length;i++){
+        for(var k=0;k<that.goodsSKUs.length;k++){
+          that.goodsSKUs[k].marketPrice=that.goodsSKUs[k].marketPrice*100
+          that.goodsSKUs[k].photographPrice=that.goodsSKUs[k].photographPrice*100
+          if(that.countMode!=1){
             that.goodsSKUs[k].serviceRate=that.serviceRate
+          }else{
+            that.goodsSKUs[k].supplyPrice=that.goodsSKUs[k].supplyPrice*100
           }
         }
         let a={
@@ -394,7 +399,7 @@
         console.log(a.goodsSKUs)
         that.$.ajax({
           type: that.handle_toggle === 'add' ? 'post' : 'put',
-          url: that.localbase + 'm2c.scm/goods/approve',
+          url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/goods':that.localbase + 'm2c.scm/approve/goods',
           data:Object.assign(that.data,a),
           success: function (result) {
             if (result.status === 200) {
@@ -403,6 +408,7 @@
               that.show_tip(result.errorMessage)
               that.goodsGuarantee=[]
             }
+            that.$router.push({name:"goodList"})
           }
         })
       },
@@ -716,8 +722,8 @@
           },
           success: function (result) {
             that.data = result.content
-            for(let i=0,len=that.goodsGuaranteeList.length;i<len;i++){
-              for(let j=0,len=result.content.goodsGuarantee.length;j<len;j++){
+            for(var i=0,len=that.goodsGuaranteeList.length;i<len;i++){
+              for(var j=0,len=result.content.goodsGuarantee.length;j<len;j++){
                 if(result.content.goodsGuarantee[j]===that.goodsGuaranteeList[i].guaranteeDesc){
                   that.goodsGuarantCheck.push(that.goodsGuaranteeList[i].guaranteeId)
                 }
@@ -727,6 +733,14 @@
             that.data.skuFlag = result.content.skuFlag.toString()
             that.goodsSpecifications = result.content.goodsSpecifications
             that.goodsSKUs = result.content.goodsSKUs
+            for(var p=0;p<result.content.goodsSKUs.length;p++){
+              that.goodsSKUs[p].marketPrice=result.content.goodsSKUs[p].marketPrice/100
+              that.goodsSKUs[p].photographPrice=result.content.goodsSKUs[p].photographPrice/100
+              if(result.content.goodsSKUs[p].supplyPrice!=''){
+                that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice/100
+              }
+              //that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice/100
+            }
             that.$refs.ue.setUEContent(result.content.goodsDesc)
             for(var i=0;i<result.content.goodsMainImages.length;i++){
               that.fileList.push(eval('(' + '{url:"'+ result.content.goodsMainImages[i] + '"}' + ')'))
