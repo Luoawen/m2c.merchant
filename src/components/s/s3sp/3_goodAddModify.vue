@@ -148,7 +148,7 @@
                 @close="handleClose(tag.spec_name,index)">
                 {{tag.spec_name}}
               </el-tag>
-              <!-- <el-autocomplete
+              <el-autocomplete
                 class="inline-input"
                 v-model="item.state1"
                 :fetch-suggestions="querySearch"
@@ -156,7 +156,7 @@
                 @select="handleSelect"
               ></el-autocomplete>
               <el-button type="primary" @click="specValueClick(item.state1,index)">确定</el-button>
-              <el-button @click="clearValue(item.state1,index)">取消</el-button> -->
+              <el-button @click="clearValue(item.state1,index)">取消</el-button>
             </td>
           </tr>
         </tbody>
@@ -180,7 +180,7 @@
             <td>{{good.skuName}}</td>
             <td>
               <el-switch
-                v-model="good.showStatus"
+                v-model="good.show"
                 active-color="#13ce66"
                 inactive-color="#ccc">
               </el-switch>
@@ -379,6 +379,7 @@
         for(var k=0;k<that.goodsSKUs.length;k++){
           that.goodsSKUs[k].marketPrice=that.goodsSKUs[k].marketPrice*100
           that.goodsSKUs[k].photographPrice=that.goodsSKUs[k].photographPrice*100
+          that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
           if(that.countMode!=1){
             that.goodsSKUs[k].serviceRate=that.serviceRate
           }else{

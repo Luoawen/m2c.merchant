@@ -138,7 +138,7 @@
             			<td>{{good.skuName}}</td>
 									<td>
 										<el-switch disabled
-											v-model="good.showStatus==2"
+											v-model="good.show"
 											active-color="#13ce66"
 											inactive-color="#ccc">
 										</el-switch>
