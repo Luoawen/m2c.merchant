@@ -51,7 +51,7 @@
       						运费模板
       					</td>
       					<td class="a2">
-      						<div class="wobse">按件计费模板1</div>
+      						<div class="wobse">{{data.modelName}}</div>
       					</td>
       					<td class="a3">
       						商品条形码
@@ -167,8 +167,8 @@
       			<div class="clear mt20">
       				<span class="tit01 fl">图文详情</span>
 							<span class="t_img fl">
-      				<div id="editor-container">
-								<UE :config=config ref="ue"></UE>
+      				<div v-html="info">
+								{{info}}
 							</div>
 							</span>
       			</div>
@@ -236,10 +236,8 @@
 </template>
 
 <script>
-	import UE from '../../../subcomponents/ue.vue'
   export default {
 		name: '',
-		components: {UE},
     data () {
       return {
 				showactive01: true,
@@ -251,13 +249,10 @@
 				goodsSpecifications:[],
 				goodsSKUs:[],
 				fileList:[],
-				config: {
-					initialFrameWidth: 700,
-					initialFrameHeight: 300
-				},
 				goodsKeyWord:'',
 				goodsGuarantee:'',
-				countMode:''
+				countMode:'',
+				info:''
       }
     },
     methods: {
@@ -311,7 +306,7 @@
 					that.goodsSpecifications = result.content.goodsSpecifications
 					that.goodsSKUs = result.content.goodsSKUs
 					that.fileList = result.content.goodsMainImages
-					that.$refs.ue.setUEContent(result.content.goodsDesc)
+					that.info=result.content.goodsDesc
 					that.goodsKeyWord = result.content.goodsKeyWord.join("/")
 					that.goodsGuarantee = result.content.goodsGuarantee.join("/")
 					console.log(that.goodsGuarantee)
