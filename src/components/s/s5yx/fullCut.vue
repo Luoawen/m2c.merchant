@@ -225,7 +225,7 @@
     <!-- 弹框背景遮罩层s -->
     <div   v-show="modalShadow"   class="modal-backdrop fade in" style="z-index:1;"></div> 
     <!-- 弹框背景遮罩层e -->
-    <!--作用范围商品筛选弹框s-->
+    <!--作用范围  商品筛选弹框s-->
     <div class="modal fade frame_layer01" id="choose_goods"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
       <div class="modal-dialog frame" style="background:#fff;">
         <div class="frame_total ">
@@ -264,10 +264,9 @@
                   <div>
                     <div class="goodsInfoText" >{{goods.dealerName}}</div>
                     <div><b>{{goods.goodsPrice/100}}元</b></div>
-                    <div class="pickSpecificationsStyle"   v-show="hasSpecificationsStyle"  @click.stop="ChooseSpecification(goods)">请选规格</div>
                   </div>
                 </div>
-                <div class="fc" v-show="goods.isCheck"></div>
+                <div class="fc" v-show="goods.isCheck"><div class="pickSpecificationsStyle"   v-show="hasSpecificationsStyle"  @click.stop="ChooseSpecification(goods)">请选规格</div></div>
                 <div class="fcimg" v-show="goods.isCheck"></div>
               </div>
             </div>
@@ -288,7 +287,7 @@
         </div>
       </div>
     </div>
-    <!--作用范围商品筛选弹框e-->
+    <!--作用范围 商品筛选弹框e-->
     <!--作用范围 商品规格选择弹窗s-->
     <div :class='["frame_layer",goods_sku_show?"frame_layer_show":""]'    class="modal fade frame_layer01"  id="specificationChoose"  style="z-index:99999;" role="dialog" aria-labelledby="myModalLabel" aira-hidden= "true">
       <div class="specification_container ">
@@ -856,10 +855,7 @@
             data: JSON.stringify(rebody),
             success: function (result) {
               if (result.status === 200) {
-                console.log('status:', result.status)
-                // that.$router.push({path: '/m/m92mj'})
                   that.$router.push({path: '/s/marketing'})
-                
               }
             }
           })
@@ -1024,7 +1020,6 @@
       closeBox ($event) {
           var that = this
           let el=$event.target
-          console.log(el)
           that.$(el).parents('#choose_goods').modal("hide")
           that.modalShadow =false
       },
@@ -1033,7 +1028,7 @@
         var that = this
         that.modalShadow =true
         that.$('#choose_goods').modal({'show':true ,'backdrop':false})
-        console.log(that.$('#choose_goods'))
+        console.dir(that.$('#choose_goods'))
         that.goods_query_item.goodsClassifyId = ''
         that.goods_query_item.condition = ''
         that.goods_query_item.dealerId = JSON.parse(sessionStorage.getItem('mUser')).dealerId;
@@ -1055,7 +1050,7 @@
             rows: that.goods_query_item.rows
           },
           success: function (result) {
-            console.log(result);
+            console.log("goodesChoose选择商品范围 ------",result);
             for (var i = 0; i < result.content.length; i++) {
               result.content[i].isRemoved = 0
               result.content[i].isChoosed = 0
@@ -1086,7 +1081,7 @@
       openGoodsSku (goods,index,$event) {
         var that = this 
         let el = $event.target
-         // 需求1：判断商品能否直接选中（有规格 需要选择规格skuFlag=1  没有规格 skuFlag=0可以直接选中
+         // 需求1：判断商品能否直接选中（有规格 需要选择规格skuFlag=1  没有规格skuFlag=0可以直接选中
                 // 如果是单规格产品
         // if(that.goodsResult.content[index].skuSingleFlag=1){
         //       // 把商品列表可以被选中的状态为不可选(去掉样式)
@@ -1113,11 +1108,9 @@
         var that = this
         // 模态框弹出
         that.$('#specificationChoose').modal({'show':true ,'backdrop':false})
-  
        for (var i = 0; i < goods.goodsSkuList.length; i++){
-            //if(goods.goodsSkuList[i].goodsSkuNum<=0){goodsSkuInventory
             if(goods.goodsSkuList[i].goodsSkuInventory<=0){
-                // 库存不能小于等于0  做校验   checkbox  input  设置 disable属性
+                // 库存不能小于等于0   checkbox &input  设置 disable属性
                 goods.goodsSkuList[i].disabled = true;                
             }
        }
@@ -1145,12 +1138,14 @@
             choose_sku_list.push(choose_sku)
           }
         }
+        var _goodsId = '';
         // 遍历是否被选中
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           if (that.goodsResult.content[i].goodsId == goodsInfo.goodsId) {
             if (choose_sku_list.length > 0) {
               that.goodsResult.content[i].isChoosed = 1
               that.goodsResult.content[i].skuFlag = 1;
+              _goodsId = goodsInfo.goodsId;
             }
             else {
               that.goodsResult.content[i].isChoosed = 0
@@ -1160,7 +1155,13 @@
             that.goodsResult.content[i].chooseSkuList = choose_sku_list
           }
         }
-        that.chooseGoodsList = []
+        // need delete something
+        for(var i = that.chooseGoodsList.length - 1; i > -1 ; i--) {
+          if (that.chooseGoodsList[i].goodsId == _goodsId) {
+            that.chooseGoodsList.splice(i, 1);
+          }
+        }
+        //that.chooseGoodsList1 = []
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           if (that.goodsResult.content[i].isChoosed == 1) {
             var choose_goods = {}
@@ -1171,13 +1172,17 @@
             that.chooseGoodsList.push(choose_goods)
           }
         }
-        console.log(choose_goods)
+        
+
+        console.log('选择商品列表',choose_goods)
         that.goods_sku_show = false
+        
+        
          let el=$event.target
         that.$(el).parents('#specificationChoose').modal("hide")
       },
       deleteGoods (index, goods) {
-        var that = this
+         var that = this
         that.chooseGoodsList.splice(index, 1)
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           if (that.goodsResult.content[i].goodsId == goods.goodsId) {
@@ -1222,6 +1227,22 @@
       //拼接选中商品IDs
       makeGoodsIds () {
         var that = this
+               //定义 数组合并去重 （没有成功..）
+        //       Array.prototype.unique = function() {  
+        //     var newArr = [];  
+        //     for (var i = 0; i < this.length; i++) {  
+        //         // if(newArr.indexOf(this[i]) == -1)
+        //         console.log(JSON.stringify(newArr))
+        //         if(JSON.stringify(newArr).indexOf(JSON.stringify(this[i])) ==-1)
+        //         {  
+        //             newArr.push(this[i]);  
+        //         }  
+        //     }  
+        //     console.log('-----',this)
+        //     return newArr;  
+        // };  
+       //that.chooseGoodsList=that.chooseGoodsList.concat(that.chooseGoodsList1).unique()
+        console.log("--合并后的的chooseGoodsList--",that.chooseGoodsList)
         that.params.goods_ids = []
         that.params.sku_list = []
         for (var i = 0; i < that.chooseGoodsList.length; i++) {
@@ -1246,7 +1267,7 @@
           goods_item.skuList = goods_item_sku_list
           that.params.goods_ids.push(goods_item)
         }
-        // console.log("goods_ids:"+JSON.stringify(that.params.goods_ids))
+        console.log("goods_ids:"+JSON.stringify(that.params.goods_ids))
         that.$('#choose_goods').modal('hide')
         that.modalShadow =false
       },
@@ -1348,7 +1369,7 @@
           }
         }
         that.$('#classify_dialog').modal('hide')
-        console.log("that.params.goods_classifys:"+JSON.stringify(that.params.goods_classifys))
+        // console.log("that.params.goods_classifys:"+JSON.stringify(that.params.goods_classifys))
       },
       deleteClassify (index, classify) {
         var that = this
@@ -1558,7 +1579,6 @@
       },
         addProductsItems (goods) {
         let that = this
-        console.log("hhhh")
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           if (that.goodsResult.content[i].goodsId == goods.goodsId) {
             that.goodsResult.content[i].isRemoved = 1
@@ -1877,15 +1897,15 @@
   .color_g{
     color:rgba(119,119,119,1);
   }
-  // .fc{
-  //   width: 100%;
-  //   height: 100%;
-  //   position: absolute;
-  //   left: 0px;top: 0px;
-  //   background:#6C83BC;
-  //   opacity:0.5;
-  //   display:block
-  // }
+  .fc{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0px;top: 0px;
+    background:#6C83BC;
+    opacity:0.5;
+    display:block
+  }
   .fcimg{
     background: url(../../../assets/images/icon-selected3.png) no-repeat center;
     display: block;
