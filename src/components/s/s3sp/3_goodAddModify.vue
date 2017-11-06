@@ -757,6 +757,7 @@
             that.$refs.ue.setUEContent(result.content.goodsDesc)
             for(var i=0;i<result.content.goodsMainImages.length;i++){
               that.fileList.push(eval('(' + '{url:"'+ result.content.goodsMainImages[i] + '"}' + ')'))
+              that.goodsMainImages.push(result.content.goodsMainImages[i])
             }
             if(result.content.skuFlag==1){
               that.$('#skuFlag0').hide()
@@ -764,7 +765,6 @@
               that.$('#skuFlag1').hide()
             }
             that.selectedOptions1 = result.content.goodsClassifyIds
-            // console.warn(that.selectedOptions1)
           }
         })
       }
