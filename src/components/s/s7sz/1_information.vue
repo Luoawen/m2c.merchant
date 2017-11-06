@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-model="http://www.w3.org/1999/xhtml">
   <div class="message">
     <h4>店铺信息</h4>
     <div class="shop">
@@ -20,6 +20,12 @@
             <label class="col-sm-2 control-label">客服电话：</label>
             <div class="col-sm-8">
               <input type="text" class="form-control" id="inputEmail3" placeholder="请填写" v-model="storeinformation.service">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">发票信息：</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" cols="80" rows="7" placeholder="1-200字符" v-model="storeinformation.shopReceipt" style="resize:none;"></textarea>
             </div>
           </div>
           <div class="form-group">
@@ -61,7 +67,7 @@
       modify_params_imgurl: '',
       // 上传头像标识
       touxiang_change: false,
-      storeinformation: {appellation: '', introduce: '', service: '', imgUrl: '', shopId: ''}
+      storeinformation: {appellation: '', introduce: '', service: '', imgUrl: '', shopId: '' , shopReceipt: ''}
     }
   },
   created () {
@@ -143,14 +149,15 @@
           that.storeinformation.introduce = res.content.shopIntroduce
           that.storeinformation.service = res.content.customerServiceTel
           that.storeinformation.imgUrl = res.content.shopIcon
+          alert(that.storeinformation.imgUrl)
           that.storeinformation.shopId = res.content.shopId
+          that.storeinformation.shopReceipt = res.content.shopReceipt
         }
       })
     },
     // 修改店铺信息1
     modifyDealerMess (callback) {
       let that = this
-      alert(that.storeinformation.appellation)
       if (that.storeinformation.appellation == null || that.storeinformation.appellation.trim() == '' || that.storeinformation.appellation.length > 50){
         alert("请输入店铺名称")
         return
@@ -177,7 +184,8 @@
             shopName: that.storeinformation.appellation,
             shopIntroduce: that.storeinformation.introduce,
             customerServiceTel: that.storeinformation.service,
-            shopIcon: that.storeinformation.imgUrl
+            shopIcon: that.storeinformation.imgUrl,
+            shopReceipt: that.storeinformation.shopReceipt
           },
           success: function (res) {
             if (res.status === 200) {
