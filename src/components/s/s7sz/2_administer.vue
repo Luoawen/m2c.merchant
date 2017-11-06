@@ -30,9 +30,9 @@
             <span class="icon arrowsIcon"></span>
           </div>
           <ul class="dropdown-menu" aria-labelledby="dLabel1">
-            <li @click="get_comment_info1(0)">全部<i class="icon rightIcon"></i></li>
-            <li @click="get_comment_info1(1)">申请中<i class="icon rightIcon"></i></li>
-            <li @click="get_comment_info1(2)">审核不通过<i class="icon rightIcon"></i></li>
+            <li @click="get_comment_info1(0)">全部</li>
+            <li @click="get_comment_info1(1)">申请中</li>
+            <li @click="get_comment_info1(2)">审核不通过</li>
           </ul>
         </div>
         <div class="search_cell">
@@ -561,6 +561,10 @@
       // 获取商品库列表
       get_comment_info () {
         let that = this
+        if (that.search_params.startTime > that.search_params.endTime) {
+          that.show_tip('开始时间不能大于结束时间')
+          return
+        }
         that.is_Success = false
         this.$("[data-toggle='popover']").popover('hide')
         that.$('#table').bootstrapTable('destroy').bootstrapTable({
@@ -620,6 +624,10 @@
       // 获取审核列表
       get_comment_info1 (n) {
         let that = this
+        if (that.search_approve.startTime > that.search_approve.endTime) {
+          that.show_tip('开始时间不能大于结束时间')
+          return
+        }
         that.is_Success2 = false
         if (n === '' || n === undefined) {
           that.brandStatusName = '品牌状态'
@@ -889,6 +897,36 @@
           }
         }
     }
+}
+.nav-tabs{
+  .active{
+    border-bottom: 2px solid #0086FF;
+  }
+  li{
+    font-size: 16px;
+    width: 129px;
+    height: 50px;
+    display: inline-block;
+    text-align: center;
+    line-height: 48px;
+    a{
+      line-height: 48px;
+      display: inline-block;
+       cursor: initial;
+       background-color: initial;
+       border: initial;
+       border-bottom-color: initial;
+      padding: initial;
+      color:#444;
+    }
+    a:active,a:focus,a:hover{
+      color: #0086FF;
+      cursor: initial;
+      background-color:initial;
+      border: initial;
+      border-bottom-color: initial;
+    }
+  }
 }
 .ico_msg{
   width: 16px;
