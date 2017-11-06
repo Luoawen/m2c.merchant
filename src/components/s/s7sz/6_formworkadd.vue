@@ -54,7 +54,7 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows" v-if="addRows.length!==0">
                   <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}}
-                    <a @click="addressCheckBox(index,$event)"> 编辑 </a>
+                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
                       <h4> 选择地区 <a class="close" @click="cityBoxHide"> X </a></h4>
@@ -285,7 +285,7 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
+                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
                     编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
@@ -869,6 +869,9 @@
     },
     mounted(){
       let that = this
+      that.$(window).click(function(){
+        that.$(window).find('.cityBox').hide()
+      })
       that.$.ajax({
         type: 'get',
         url: that.localbase + 'm2c.operate/address/getinner.web',
