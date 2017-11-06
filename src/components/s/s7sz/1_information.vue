@@ -7,31 +7,31 @@
           <div class="form-group">
             <label class="col-sm-2 control-label">店铺名称：</label>
             <div class="col-sm-6">
-              <input type="text" class="form-control" id="inputEmail3" placeholder="1-20字符" v-model="storeinformation.appellation">
+              <input type="text" class="form-control" maxlength="20" id="inputEmail3" placeholder="1-20字符" v-model="storeinformation.appellation">
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label">店铺介绍：</label>
             <div class="col-sm-10">
-              <textarea class="form-control" cols="80" rows="7" placeholder="1-200字符" v-model="storeinformation.introduce" style="resize:none;"></textarea>
+              <textarea class="form-control" cols="80" rows="7" maxlength="200" placeholder="1-200字符" v-model="storeinformation.introduce" style="resize:none;"></textarea>
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label">客服电话：</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" id="inputEmail3" placeholder="请填写" v-model="storeinformation.service">
+              <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d-]/g,'') " ng-pattern="/[^a-zA-Z]/" maxlength="20" id="inputEmail3" placeholder="请填写" v-model="storeinformation.service">
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label">发票信息：</label>
             <div class="col-sm-10">
-              <textarea class="form-control" cols="80" rows="7" placeholder="1-200字符" v-model="storeinformation.shopReceipt" style="resize:none;"></textarea>
+              <textarea class="form-control" cols="80" rows="7" placeholder="1-200字符"  maxlength="200" v-model="storeinformation.shopReceipt" style="resize:none;"></textarea>
             </div>
           </div>
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-info btn-lg save" @click="modifyDealerMess()">保存</button>
-            <button type="submit" class="btn btn-default btn-lg">取消</button>
+            <!--<button type="submit" class="btn btn-default btn-lg">取消</button>-->
             </div>
           </div>
         </form>
@@ -41,7 +41,7 @@
               <div class="col-sm-8">
                 <input type="file" id="m11yhgl_img_input" style="display:none" @change="upload_img()">
                 <div class="img_up">
-                  <img width='100px' height='100px' v-show='imgshow' id="m11yhgl_img" v-bind:src="storeinformation.imgUrl">
+                  <img width='100px' height='100px' v-show='imgshow' id="m11yhgl_img" v-model:src="storeinformation.imgUrl">
                 </div>
                 <span class="upload" onclick="document.querySelector('#m11yhgl_img_input').click()">
                   <div style="color:#337ab7;cursor:pointer;display:inline;">
@@ -90,7 +90,7 @@
       let target = event.target
       let objUrl = this.getObjectURL(target.files[0])
       let size = target.files[0].size
-      if (size >= 1024000 * 10) this.show_tip('图片超过10M了哦')
+      if (size >= 1024000 * 1) this.show_tip('图片超过1M了哦')
       else {
         if (objUrl) {
           // this.img_url = objUrl
@@ -149,7 +149,7 @@
           that.storeinformation.introduce = res.content.shopIntroduce
           that.storeinformation.service = res.content.customerServiceTel
           that.storeinformation.imgUrl = res.content.shopIcon
-          alert(that.storeinformation.imgUrl)
+          that.$("#m11yhgl_img")[0].src = res.content.shopIcon
           that.storeinformation.shopId = res.content.shopId
           that.storeinformation.shopReceipt = res.content.shopReceipt
         }
@@ -166,7 +166,7 @@
         alert("请输入客服电话")
         return
       }
-      if (that.storeinformation.imgUrl == null || that.storeinformation.imgUrl.trim() == ''){
+      if (that.$("#m11yhgl_img")[0].src == null || that.$("#m11yhgl_img")[0].src.trim() == ''){
         alert("请选择图片")
         return
       }
