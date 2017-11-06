@@ -11,7 +11,7 @@
               <p v-if="formwork.goodsUserNum==0">已有{{formwork.goodsUserNum}}个商品使用 </p>
               <router-link v-if="formwork.goodsUserNum!=0" :to="{name:'goodList'}">已有{{formwork.goodsUserNum}}个商品使用 </router-link></th>
             <th class="act"><router-link :to="{ name:'formworkadd', query: {addModify: false, modelId: formwork.modelId} }">编辑</router-link></th>
-            <th><a @click="delectModel(formwork.modelId)" v-if="formwork.goodsUserNum==0">删除</a></th>
+            <th><a @click="/*delectModel(formwork.modelId)*/deleteShow(formwork.modelId)"  v-if="formwork.goodsUserNum==0">删除</a></th>
           </tr>
         </thead>
         <tbody>
@@ -31,11 +31,29 @@
           </tr>
         </tbody>
       </table>
+
+
+
     </template>
+    <!--是否删除  弹框-->
+    <div class="agreetc_content" v-show="Agreeshow===true" >
+      <div class="agreetc_header">
+        <span>提示</span>
+        <span class="fr" @click="Agreeshow=false">X</span>
+      </div>
+      <div class="agreetc_body">是否同意退货申请？</div>
+      <div class="agreetc_footer">
+        <button type="button" class="btn save" >确认</button>
+        <button type="button" class="btn cancel" @click="Agreeshow=false">取消</button>
+      </div>
+    </div>
   </div>
+
 </template>
 <script>
 export default {
+  deleteShow:'',
+  Agreeshow: false,
   name: '',
   data () {
     return {
@@ -47,6 +65,10 @@ export default {
     this.getTemplate()
   },
   methods: {
+    deleteShow (modelId) {
+      var that = this;
+      that.Agreeshow = true;
+    },
     delectModel (n) {
       // alert((sessionStorage.getItem('mUser')).dealerId)
       let that = this
@@ -119,5 +141,79 @@ export default {
         }
       }
     }
+}
+
+.agreetc_content,.refuse_content,.TowAgreeshow_content {
+  width: 400px;
+  height: 280px;
+  background: #fff;
+  z-index: 9999;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -200px;
+  margin-top: -180px;
+  background: #FFFFFF;
+  border-radius: 4px;
+  .agreetc_header, .refuse_header {
+    width: 100%;
+    height: 50px;
+    background: #DFE9F6;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 16px;
+    span {
+      display: inline-block;
+      line-height: 50px;
+    }
+  }
+}
+.agreetc_header,.refuse_header{
+  width:100%;
+  height: 50px;
+  background: #DFE9F6;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 16px;
+  span{
+    display: inline-block;
+    line-height: 50px;
+  }
+}
+.fr{
+  float: right;
+}
+.agreetc_body{
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #FFFFFF;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 20px;
+  color: #333333;
+  line-height: 150px;
+}
+.agreetc_footer,.refuse_footer{
+  height: 80px;
+  padding-top: 10px;
+  padding-left: 50%;
+  .btn {
+    width: 80px;
+    height: 30px;
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+  }
+  .save {
+    margin-left: -110px;
+    background: #0086FF;
+  }
+  .cancel {
+    margin-left: 40px;
+    background: #FFF;
+    border: 1px solid #CCCCCC;
+    color: #444;
+  }
+
 }
 </style>
