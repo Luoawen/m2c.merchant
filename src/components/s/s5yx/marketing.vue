@@ -1,7 +1,7 @@
 <template>
-  <div class="m92jsd">
-    <div class="search "   >
-      <div class="search_cell">
+  <div class="marketing">
+    <div class="search " >
+      <div class="search_cell ">
         <span>编号</span>
         <input class="form-control search_input  " v-model="search_params.full_cut_no" placeholder="满减编号" @blur="formValidator(1)">
       </div>
@@ -23,9 +23,10 @@
         <input type="date" class="form-control search_input search_input_date_l" v-model="search_params.start_time" :max="search_params.end_time">
         ~
         <input type="date" class="form-control search_input search_input_date_r" v-model="search_params.end_time" :min="search_params.start_time">
-      </div><span @click="sevenDay()">最近7天</span><br/>
+      </div><span @click="sevenDay()">最近7天</span>
+      </br>
       <div class="search_cell">
-        <span>形式</span>
+          <span>形式</span>
         <select data-v-0c409cb2="" class="form-control search_input" v-model="search_params.full_cut_type">
             <option data-v-0c409cb2="" value="0">全部</option>
             <option data-v-0c409cb2="" value="1">减钱</option>
@@ -178,7 +179,7 @@
               valign: 'middle',
               formatter: function () {
                 return `<a class="color_default" modify="true" path="/s/fullCutDetail" handle="true">详情</a>
-                &nbsp;&nbsp;<a class="color_red" forbid="true" path="/s/modify" handle="true">修改</a>`
+                &nbsp;&nbsp;<a class="color_red" forbid="true" path="/s/fullCutModify" handle="true">修改</a>`
               }
             },
             {
@@ -284,4 +285,26 @@
   #handle{display:flex}
   #handle.in{z-index:2000}
 }
+
+ .btn_table:link,.btn_table:visited,.btn_table:hover,.btn_table:active{color:white !important}
+  .btn_table{height:26px !important;line-height:26px !important;padding-top:0 !important;padding-bottom:0 !important;}
+  .m{padding-top:140px}
+  // 搜索框的样式
+  .search{
+    /*
+    search_input:正常的input框/select框
+    search_input_date_l:左侧日期选择框
+    search_input_date_r:右侧日期选择框
+    */
+    margin-left:30px;min-width:500px;
+    span:first-child{margin-right:10px}
+    .search_cell{display:inline-block;margin-top:10px;margin-right:30px;}
+    .search_input{display:inline-block;vertical-align:middle;border-radius:0;width:130px;}
+    .search_input_date_l{width:160px;margin-right:5px}
+    .search_input_date_r{width:160px;margin-left:5px}
+    .search_button{border-radius:0;padding-left:20px;padding-right:20px;background-color:#60AEF6;width:130px;height:34px;color:white}
+    .area_select{width:90px;display:inline-block;vertical-align:middle;border-radius:0;margin-right:5px;}
+    .search_input,.search_button,.area_select{height:26px;line-height:26px;padding-top:0;padding-bottom:0;}
+  }
+  
 </style>
