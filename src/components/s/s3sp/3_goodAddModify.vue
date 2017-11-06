@@ -153,7 +153,7 @@
                 v-model="item.state1"
                 :fetch-suggestions="querySearch"
                 placeholder="请输入内容"
-                @select="handleSelect" :key="item.state1"
+                @select="handleSelect"
               ></el-autocomplete>
               <el-button type="primary" @click="specValueClick(item.state1,index)">确定</el-button>
               <el-button @click="clearValue(item.state1,index)">取消</el-button>
@@ -504,7 +504,6 @@
         let state = {value:state1}
         console.log("state1警告"+state1)
         if(JSON.stringify(arr).indexOf(JSON.stringify(state))===-1){
-          alert(0)
             that.$.ajax({
               type: 'post',
               url: that.localbase + 'm2c.scm/goods/spec/value',
