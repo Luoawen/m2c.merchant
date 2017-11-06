@@ -19,13 +19,13 @@ s<template>
       <div class="form-group">
         <label class="col-sm-2 control-label">*新密码：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="newPass" placeholder="8位数字密码">
+          <input type="text" class="form-control" id="newPass" maxlength="16" placeholder="8-16位数字密码">
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">*再次确认：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="confirmNewPass" placeholder="8位数字密码">
+          <input type="text" class="form-control" id="confirmNewPass" maxlength="16" placeholder="8-16位数字密码">
         </div>
       </div>
       <div class="form-group">
@@ -130,6 +130,18 @@ s<template>
           alert('验证码长度必须6位')
           return false
         }
+        $('#newPass').bind('input propertychange',function(){ //添加监听input值的改变事件
+          let tvalmum;
+          //统计input输入字段的长度
+          tvalnum = $(this).val().length;
+          //如果大于8个字直接进行字符串截取
+          if(tvalnum>16){
+            var tval = $(this).val();
+            tval = tval.substring(8,16);
+            $(this).val(tval);
+            that.show_tip('长度超过限制！');
+          }
+        });
         let pass = that.$('#newPass').val()
         if (pass.length < 8 || pass.length > 16) {
           alert('密码长度8-16位')
