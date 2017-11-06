@@ -66,7 +66,7 @@
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
                             <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
-                            <span> {{pro.name}} <i>v</i></span>
+                            <span> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
                                 <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click="chooseCity(city,$event)"/> {{city.name}}
@@ -121,7 +121,7 @@
                             <input type="checkbox"
                                   v-model="addRow.IdArr" :value="pro.code"
                                   @click="choosePro(pro,$event)"/>
-                            <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                            <span @click="cityShow(index,$event)"> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
                                 <input type="checkbox"
@@ -176,7 +176,7 @@
                             <input type="checkbox"
                                   v-model="addRow.IdArr" :value="pro.code"
                                   @click="choosePro(pro,$event)"/>
-                            <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                            <span @click="cityShow(index,$event)"> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
                                 <input type="checkbox"
@@ -298,7 +298,7 @@
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
                             <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
-                            <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                            <span @click="cityShow(index,$event)"> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
                                 <input type="checkbox"
@@ -380,7 +380,7 @@
                               <input type="checkbox"
                                     v-model="addRow.IdArr" :value="pro.code"
                                     @click="choosePro(pro,$event)"/>
-                              <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                              <span @click="cityShow(index,$event)"> {{pro.name}} </span>
                               <div class="cityWrap">
                                 <div class="city"
                                     v-for="(city,index) in pro.subs">
