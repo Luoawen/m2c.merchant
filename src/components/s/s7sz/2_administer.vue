@@ -890,6 +890,36 @@
         }
     }
 }
+.nav-tabs{
+  .active{
+    border-bottom: 2px solid #0086FF;
+  }
+  li{
+    font-size: 16px;
+    width: 129px;
+    height: 50px;
+    display: inline-block;
+    text-align: center;
+    line-height: 48px;
+    a{
+      line-height: 48px;
+      display: inline-block;
+       cursor: initial;
+       background-color: initial;
+       border: initial;
+       border-bottom-color: initial;
+      padding: initial;
+      color:#444;
+    }
+    a:active,a:focus,a:hover{
+      color: #0086FF;
+      cursor: initial;
+      background-color:initial;
+      border: initial;
+      border-bottom-color: initial;
+    }
+  }
+}
 .ico_msg{
   width: 16px;
   height: 16px;
