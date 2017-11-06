@@ -561,6 +561,10 @@
       // 获取商品库列表
       get_comment_info () {
         let that = this
+        if (that.search_params.startTime > that.search_params.endTime) {
+          that.show_tip('开始时间不能大于结束时间')
+          return
+        }
         that.is_Success = false
         this.$("[data-toggle='popover']").popover('hide')
         that.$('#table').bootstrapTable('destroy').bootstrapTable({
@@ -620,6 +624,10 @@
       // 获取审核列表
       get_comment_info1 (n) {
         let that = this
+        if (that.search_approve.startTime > that.search_approve.endTime) {
+          that.show_tip('开始时间不能大于结束时间')
+          return
+        }
         that.is_Success2 = false
         if (n === '' || n === undefined) {
           that.brandStatusName = '品牌状态'
