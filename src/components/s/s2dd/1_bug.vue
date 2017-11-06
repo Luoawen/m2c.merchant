@@ -171,6 +171,8 @@
                       <span  class="mt10">
                         <input  type="checkbox" :id="'aa'+index" class="input_check" :value="item.dealerOrderId">
                         <label  :for="'aa'+index" class="fl mt10">
+
+
                         </label>
                       </span>
               <span class="ml10">订货号：</span><span>{{item.dealerOrderId}}</span>
