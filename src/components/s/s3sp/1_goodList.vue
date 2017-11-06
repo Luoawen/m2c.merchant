@@ -53,8 +53,8 @@
               </el-table-column>
               <el-table-column
                 label="商品信息"
-                width="200">
-                <template slot-scope="scope"><img v-bind:src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsName}}</span></template>
+                width="300">
+                <template slot-scope="scope"><img v-bind:src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;"/><span class="ellipsis">{{scope.row.goodsName}}</span></template>
               </el-table-column>
               <el-table-column
                 prop="goodsClassify"
@@ -826,4 +826,7 @@
   /*修改/新增*/
   .changeGoodInfo input,.changeGoodInfo select{width:200px;line-height:40px;color:#666;}
   .glyphicon{width:40px;height:24px;z-index:11;}
+  span.ellipsis{width:190px;margin-left:10px;overflow: hidden;display:inline-block;
+text-overflow:ellipsis;
+white-space: nowrap;}
 </style>

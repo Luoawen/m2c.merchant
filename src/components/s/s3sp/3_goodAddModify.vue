@@ -3,272 +3,294 @@
     <el-row>
       <el-col :span="24"><h4>基本信息</h4></el-col>
     </el-row>
-    <el-row :gutter="20">
-      <el-col :span="4"><i class="Danger">*</i>商品名称</el-col>
-      <el-col :span="7"><el-input v-model="data.goodsName" placeholder="请输入内容"></el-input></el-col>
-      <el-col :span="4" :offset="2">商品副标题</el-col>
-      <el-col :span="7"><el-input v-model="data.goodsSubTitle" placeholder="请输入内容"></el-input></el-col>
-    </el-row>
-    <el-row :gutter="20" style="z-index:2;">
-      <el-col :span="4"><i class="Danger">*</i>商品分类</el-col>
-      <el-col :span="7" style="height:40px;z-index:2;">
-        <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="selectedOptions1" change-on-select :props="goodsClassifyProps" @change="handleChange"></el-cascader>
-      </el-col>
-      <el-col :span="4" :offset="2"><i class="Danger">*</i>商品品牌</el-col>
-      <el-col :span="7">
-        <el-select v-model="data.goodsBrandId" placeholder="请选择">
-          <el-option
-            v-for="item in brands"
-            :key="item.brandId"
-            :label="item.brandName"
-            :value="item.brandId">
-          </el-option>
-        </el-select>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="4"><i class="Danger">*</i>计量单位</el-col>
-      <el-col :span="7">
-        <el-select v-model="data.goodsUnitId" placeholder="请选择">
-          <el-option
-            v-for="item in units"
-            :key="item.unitId"
-            :label="item.unitName"
-            :value="item.unitId">
-          </el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="4" :offset="2"><i class="Danger">*</i>最小起订量</el-col>
-      <el-col :span="7"><el-input v-model="data.goodsMinQuantity" placeholder="请输入内容"></el-input></el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="4"><i class="Danger">*</i>运费模板</el-col>
-      <el-col :span="7">
-        <el-select v-model="data.goodsPostageId" placeholder="请选择">
-          <el-option
-            v-for="item in models"
-            :key="item.modelId"
-            :label="item.modelName"
-            :value="item.modelId">
-          </el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="4" :offset="2">商品条形码</el-col>
-      <el-col :span="7"><el-input v-model="data.goodsBarCode" placeholder="请输入内容"></el-input></el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="4">关键词</el-col>
-      <el-col :span="7"><el-input v-model="data.goodsKeyWord" placeholder="请输入内容"></el-input></el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="4">商品保障</el-col>
-      <el-col :span="20">
-        <el-checkbox-group v-model="goodsGuarantCheck">
-          <el-checkbox v-for="(guarantee,index) in goodsGuaranteeList" :key="guarantee.guaranteeId" :label="guarantee.guaranteeId">{{guarantee.guaranteeDesc}}</el-checkbox>
-        </el-checkbox-group>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col>
-        <h4>商品规格</h4>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="3">商品规格</el-col>
-      <el-col :span="21">
-        <el-radio v-model="data.skuFlag" label="0" id="skuFlag0">单一规格</el-radio>
-        <el-radio v-model="data.skuFlag" label="1" id="skuFlag1">多规格</el-radio>
-      </el-col>
-    </el-row>
-    <div class="tabPane" v-if="data.skuFlag==0">
-      <table>
-        <thead>
-          <tr>
-            <th>规格</th>
-            <th>*库存</th>
-            <th>*重量/kg（个）</th>
-            <th>*拍获价/元</th>
-            <th>市场价/元</th>
-            <th>{{countMode==1?'供货价':'服务费率/%'}}</th>
-            <th>商品编码</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(good,index) in goodsSKUs">
-            <td>无</td>
-            <td>
-              <el-input v-model="good.availableNum" placeholder="请输入内容"></el-input>
-            </td>
-            <td>
-              <el-input v-model="good.weight" placeholder="请输入内容"></el-input>
-            </td>
-            <td>
-              <el-input v-model="good.photographPrice" placeholder="请输入内容"></el-input>
-            </td>
-            <td>
-              <el-input v-model="good.marketPrice" placeholder="请输入内容"></el-input>
-            </td>
-            <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容"></el-input></td>
-            <td v-if="countMode==2">{{serviceRate}}</td>
-            <td>
-              <el-input v-model="good.goodsCode" placeholder="请输入内容"></el-input>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="tabPane" v-if="data.skuFlag==1">
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>规格</th>
-            <th>规格值(鼠标选中或者“回车”可保存新增的规格值)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item,index) in goodsSpecifications">
-            <td><span @click="delect(index)" v-if="goodsSpecifications.length>1">移除</span></td>
-            <td>
-              <el-select v-model="item.itemName" placeholder="请选择"><!--这里需要后台返回规格Id-->
-                <el-option
-                  v-for="item in stantards"
-                  :key="item.stantardName"
-                  :label="item.stantardName"
-                  :value="item.stantardName">
-                </el-option>
-              </el-select>
-            </td>
-            <td>
-              <el-tag
-                :key="tag"
-                v-for="tag in item.itemValue"
-                closable
-                :disable-transitions="false"
-                @close="handleClose(tag.spec_name,index)">
-                {{tag.spec_name}}
-              </el-tag>
-              <el-autocomplete
-                class="inline-input"
-                v-model="item.state1"
-                :fetch-suggestions="querySearch"
-                placeholder="请输入内容"
-                @select="handleSelect"
-              ></el-autocomplete>
-              <el-button type="primary" @click="specValueClick(item.state1,index)">确定</el-button>
-              <el-button @click="clearValue(item.state1,index)">取消</el-button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <el-button type="primary" @click="addRow" v-if="goodsSpecifications.length<3 && handle_toggle=='add'" >添加规格</el-button>
-      <table>
-        <thead>
-          <tr>
-            <th>规格值</th>
-            <th>对外展示</th>
-            <th>*库存</th>
-            <th>*重量/kg（个）</th>
-            <th>*拍获价/元</th>
-            <th>市场价/元</th>
-            <th>{{countMode==1?'供货价':'服务费率/%'}}</th>
-            <th>商品编码</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(good,index) in goodsSKUs">
-            <td>{{good.skuName}}</td>
-            <td>
-              <el-switch
-                v-model="good.show"
-                active-color="#13ce66"
-                inactive-color="#ccc">
-              </el-switch>
-            </td>
-            <td>
-              <el-input v-model="good.availableNum" placeholder="请输入内容"></el-input>
-            </td>
-            <td>
-              <el-input v-model="good.weight" placeholder="请输入内容"></el-input>
-            </td>
-            <td>
-              <el-input v-model="good.photographPrice" placeholder="请输入内容"></el-input>
-            </td>
-            <td>
-              <el-input v-model="good.marketPrice" placeholder="请输入内容"></el-input>
-            </td>
-            <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容"></el-input></td>
-            <td v-if="countMode==2">{{serviceRate}}</td>
-            <td>
-              <el-input v-model="good.goodsCode" placeholder="请输入内容"></el-input>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2">批量设置</td>
-            <td>
-              <el-input v-model="setUp.availableNum" placeholder="请输入内容"></el-input>
-            </td>
-            <td>
-              <el-input v-model="setUp.weight" placeholder="请输入内容"></el-input>
-            </td>
-            <td>
-              <el-input v-model="setUp.photographPrice" placeholder="请输入内容"></el-input>
-            </td>
-            <td>
-              <el-input v-model="setUp.marketPrice" placeholder="请输入内容"></el-input>
-            </td>
-            <td v-if="countMode==1">{{serviceRate}}</td>
-            <td v-if="countMode==2">
-              <el-input v-model="setUp.supplyPrice" placeholder="请输入内容"></el-input>
-            </td>
-            <td>
-              <el-button @click="setUpSure">确定</el-button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <el-row>
-      <el-col :span="24"><h4>商品详情</h4></el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="3">商品主图</el-col>
-      <el-col :span="21">
-        <el-upload
-          :action="uploadUrl" name="img"
-          list-type="picture-card" :on-success="success" :data="upLoadData" :file-list="fileList"
-          :on-preview="handlePictureCardPreview" show-file-list :limit=5 :before-upload="beforeAvatarUpload"
-          :on-remove="handleRemove" >
-          <i class="el-icon-plus"></i>
-        </el-upload>
-        <el-dialog v-model="dialogVisible" size="tiny">
-          <img width="100%" :src="dialogImageUrl" alt="">
-        </el-dialog>
-        <p class="marginTop20">最多上传5张主图，可以通过拖曳图片调整顺序</p>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="3">图文详情</el-col>
-      <el-col :span="21" style="height:400px;">
-        <div id="editor-container">
-          <UE :defaultMsg=defaultMsg :config=config ref="ue"></UE>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row v-if="handle_toggle=='add'">
-      <el-col :span="24"><h4>设置上架</h4></el-col>
-    </el-row>
-    <el-row :gutter="20" v-if="handle_toggle=='add'">
-      <el-col :span="3">*设置上架</el-col>
-      <el-col :span="21">
-        <el-radio v-model="data.goodsShelves" label="1">手动上架</el-radio>
-        <p>平台审核通过后，商家需手动上架商品</p>
-        <el-radio v-model="data.goodsShelves" label="2">审核通过立即上架</el-radio>
-        <p>平台审核通过，商品自动上架，无需商家操作</p>
-      </el-col>
-    </el-row>
-    <el-button v-if="handle_toggle=='add'" type="primary" @click="save">提交审核</el-button>
-    <el-button v-if="handle_toggle!='add'" type="primary" @click="save">保存修改</el-button>
+    <el-form :model="data" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <el-row :gutter="20">
+        <el-col :span="11">
+          <el-form-item label="商品名称" prop="goodsName">
+            <el-input v-model="data.goodsName" placeholder="1-50字符"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11">
+          <el-form-item label="商品副标题" prop="goodsSubTitle">
+            <el-input v-model="data.goodsSubTitle" placeholder="1-100字符"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" style="z-index:2;">
+        <el-col :span="11" style="height:40px;z-index:2;">
+          <el-form-item label="商品分类" prop="selectedOptions1">
+            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="selectedOptions1" change-on-select :props="goodsClassifyProps" @change="handleChange"></el-cascader>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11">
+          <el-form-item label="商品品牌" prop="goodsBrandId">
+            <el-select v-model="data.goodsBrandId" placeholder="请选择">
+              <el-option
+                v-for="item in brands"
+                :key="item.brandId"
+                :label="item.brandName"
+                :value="item.brandId">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="11">
+          <el-form-item label="计量单位" prop="goodsUnitId">
+            <el-select v-model="data.goodsUnitId" placeholder="请选择">
+              <el-option
+                v-for="item in units"
+                :key="item.unitId"
+                :label="item.unitName"
+                :value="item.unitId">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11">
+          <el-form-item label="最小起订量" prop="goodsMinQuantity">
+            <el-input v-model="data.goodsMinQuantity" placeholder="请输入内容"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="11">
+          <el-form-item label="运费模板" prop="goodsPostageId">
+            <el-select v-model="data.goodsPostageId" placeholder="请选择">
+              <el-option
+                v-for="item in models"
+                :key="item.modelId"
+                :label="item.modelName"
+                :value="item.modelId">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11">
+          <el-form-item label="商品条形码">
+            <el-input v-model="data.goodsBarCode" placeholder="请输入内容"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="11">
+          <el-form-item label="关键词">
+            <el-input v-model="data.goodsKeyWord" placeholder="请输入内容"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-form-item label="商品保障">
+          <el-checkbox-group v-model="goodsGuarantCheck">
+            <el-checkbox v-for="(guarantee,index) in goodsGuaranteeList" :key="guarantee.guaranteeId" :label="guarantee.guaranteeId">{{guarantee.guaranteeDesc}}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+      <el-row>
+        <el-col>
+          <h4>商品规格</h4>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="3">商品规格</el-col>
+        <el-col :span="21">
+          <el-radio v-model="data.skuFlag" label="0" id="skuFlag0">单一规格</el-radio>
+          <el-radio v-model="data.skuFlag" label="1" id="skuFlag1" @change="clearGoodsSKUs">多规格</el-radio>
+        </el-col>
+      </el-row>
+      <div class="tabPane" v-if="data.skuFlag==0">
+        <table>
+          <thead>
+            <tr>
+              <th>规格</th>
+              <th>*库存</th>
+              <th>*重量/kg（个）</th>
+              <th>*拍获价/元</th>
+              <th>市场价/元</th>
+              <th>{{countMode==1?'供货价':'服务费率/%'}}</th>
+              <th>商品编码</th>
+            </tr>
+          </thead>
+            <tbody>
+              <tr v-for="(good,index) in goodsSKUs">
+                <td>无</td>
+                <td>
+                    <el-input v-model="good.availableNum" placeholder="请输入内容" type="number"></el-input>
+                </td>
+                <td>
+                    <el-input v-model="good.weight" placeholder="请输入内容" type="number"></el-input>
+                </td>
+                <td>
+                    <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number"></el-input>
+                </td>
+                <td>
+                  <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number"></el-input>
+                </td>
+                <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number"></el-input></td>
+                <td v-if="countMode==2">{{serviceRate}}</td>
+                <td>
+                  <el-input v-model="good.goodsCode" placeholder="请输入内容"></el-input>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+
+      <div class="tabPane" v-if="data.skuFlag==1">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>规格</th>
+              <th>规格值(鼠标选中或者“回车”可保存新增的规格值)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item,index) in goodsSpecifications">
+              <td><span @click="delect(index)" v-if="goodsSpecifications.length>1">移除</span></td>
+              <td>
+                <el-select v-model="item.itemName" placeholder="请选择"><!--这里需要后台返回规格Id-->
+                  <el-option
+                    v-for="item in stantards"
+                    :key="item.stantardName"
+                    :label="item.stantardName"
+                    :value="item.stantardName">
+                  </el-option>
+                </el-select>
+              </td>
+              <td>
+                <el-tag
+                  :key="tag"
+                  v-for="tag in item.itemValue"
+                  closable
+                  :disable-transitions="false"
+                  @close="handleClose(tag.spec_name,index)">
+                  {{tag.spec_name}}
+                </el-tag>
+                <el-autocomplete
+                  class="inline-input"
+                  v-model="item.state1"
+                  :fetch-suggestions="querySearch"
+                  placeholder="请输入内容"
+                  @select="handleSelect"
+                ></el-autocomplete>
+                <el-button type="primary" @click="specValueClick(item.state1,index)">确定</el-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <el-button type="primary" @click="addRow" v-if="goodsSpecifications.length<3 && handle_toggle=='add'" >添加规格</el-button>
+        <table>
+          <thead>
+            <tr>
+              <th>规格值</th>
+              <th>对外展示</th>
+              <th>*库存</th>
+              <th>*重量/kg（个）</th>
+              <th>*拍获价/元</th>
+              <th>市场价/元</th>
+              <th>{{countMode==1?'供货价':'服务费率/%'}}</th>
+              <th>商品编码</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(good,index) in goodsSKUs">
+              <td>{{good.skuName}}</td>
+              <td>
+                <el-switch
+                  v-model="good.show"
+                  active-color="#13ce66"
+                  inactive-color="#ccc">
+                </el-switch>
+              </td>
+              <td>
+                <el-input v-model="good.availableNum" placeholder="请输入内容"></el-input>
+              </td>
+              <td>
+                <el-input v-model="good.weight" placeholder="请输入内容"></el-input>
+              </td>
+              <td>
+                <el-input v-model="good.photographPrice" placeholder="请输入内容"></el-input>
+              </td>
+              <td>
+                <el-input v-model="good.marketPrice" placeholder="请输入内容"></el-input>
+              </td>
+              <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容"></el-input></td>
+              <td v-if="countMode==2">{{serviceRate}}</td>
+              <td>
+                <el-input v-model="good.goodsCode" placeholder="请输入内容"></el-input>
+              </td>
+            </tr>
+            <tr v-if="goodsSKUs.length!=0">
+              <td colspan="2">批量设置</td>
+              <td>
+                <el-input v-model="setUp.availableNum" placeholder="请输入内容"></el-input>
+              </td>
+              <td>
+                <el-input v-model="setUp.weight" placeholder="请输入内容"></el-input>
+              </td>
+              <td>
+                <el-input v-model="setUp.photographPrice" placeholder="请输入内容"></el-input>
+              </td>
+              <td>
+                <el-input v-model="setUp.marketPrice" placeholder="请输入内容"></el-input>
+              </td>
+              <td v-if="countMode==1">{{serviceRate}}</td>
+              <td v-if="countMode==2">
+                <el-input v-model="setUp.supplyPrice" placeholder="请输入内容"></el-input>
+              </td>
+              <td>
+                <el-button @click="setUpSure">确定</el-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <el-row>
+        <el-col :span="24"><h4>商品详情</h4></el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="3">商品主图</el-col>
+        <el-col :span="21">
+          <el-upload
+            :action="uploadUrl" name="img"
+            list-type="picture-card" :on-success="success" :data="upLoadData" :file-list="fileList"
+            :on-preview="handlePictureCardPreview" show-file-list :limit=5 :before-upload="beforeAvatarUpload"
+            :on-remove="handleRemove" >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog v-model="dialogVisible" size="tiny">
+            <img width="100%" :src="dialogImageUrl" alt="">
+          </el-dialog>
+          <p class="marginTop20">最多上传5张主图，可以通过拖曳图片调整顺序</p>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="3">图文详情</el-col>
+        <el-col :span="21" style="height:400px;">
+          <div id="editor-container">
+            <UE :defaultMsg=defaultMsg :config=config ref="ue"></UE>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row v-if="handle_toggle=='add'">
+        <el-col :span="24"><h4>设置上架</h4></el-col>
+      </el-row>
+      <el-row :gutter="20" v-if="handle_toggle=='add'">
+        <el-col :span="3">*设置上架</el-col>
+        <el-col :span="21">
+          <el-radio v-model="data.goodsShelves" label="1">手动上架</el-radio>
+          <p>平台审核通过后，商家需手动上架商品</p>
+          <el-radio v-model="data.goodsShelves" label="2">审核通过立即上架</el-radio>
+          <p>平台审核通过，商品自动上架，无需商家操作</p>
+        </el-col>
+      </el-row>
+
+    <el-button v-if="handle_toggle=='add'" type="primary" @click="save('ruleForm')">提交审核</el-button>
+    <el-button v-if="handle_toggle!='add'" type="primary" @click="save('ruleForm')">保存修改</el-button>
     <el-button @click="goBack">取消</el-button>
   </div>
 </template>
@@ -278,19 +300,71 @@
     components: {UE},
     data() {
       return {
+        ruleForm: {
+          name:'',
+          goodsName: '',
+          goodsSubTitle: '',
+          selectedOptions1: '',
+          goodsBrandId: '',
+          goodsUnitId: '',
+          type: [],
+          goodsMinQuantity: '',
+          goodsPostageId: ''
+        },
+        rules: {
+          selectedOptions1: [
+            { required: true, message: '请选择商品分类', trigger: 'change' }
+          ],
+          goodsName: [
+            { required: true, message: '请输入商品名称', trigger: 'blur' },
+            { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
+          ],
+          goodsSubTitle: [
+            { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
+          ],
+          goodsBrandId: [
+            { required: true, message: '请选择商品品牌', trigger: 'change' }
+          ],
+          goodsUnitId: [
+            { required: true, message: '请选择计量单位', trigger: 'change' }
+          ],
+          goodsMinQuantity: [
+            { required: true, message: '请输入最小起订量', trigger: 'blur' }
+          ],
+          goodsPostageId: [
+            { required: true, message: '请选择运费模板', trigger: 'change' }
+          ],
+          
+        },
+        goodRuleForm:{
+          availableNum:'',
+          photographPrice:'',
+          weight:''
+        },
+        goodRules:{
+          availableNum: [
+            { required: true, message: '请输入库存量', trigger: 'blur'}
+          ],
+          photographPrice: [
+            { required: true, message: '请输入拍获价', trigger: 'blur',type: 'number' }
+          ],
+          weight: [
+            { required: true, message: '请输入重量', trigger: 'blur',type: 'number' }
+          ]
+        },
         countMode:'', // 商家结算方式 1：按供货价 2：按服务费率
         radio: '1',
         goods: [],
-        good: {availableNum: '', weight: '', photographPrice: '', marketPrice:'', supplyPrice: ''},
+        // good: {availableNum: '', weight: '', photographPrice: '', marketPrice:'', supplyPrice: ''},
         restaurants: [],
         goodsGuaranteeList:[], // 获取保障详情
         goodsGuarantCheck:[],
         serviceRate:'',
-        goodsSKUs:[{skuName: '', showStatus: '', availableNum: '', weight: '', photographPrice: '', marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}],
+        goodsSKUs:[{skuName: '', showStatus: '', marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}],
         goodsSpecifications:[{itemValue:[],state1:''}],
         goodsMainImages:[],
         goodsGuarantee:[],
-        data: {skuFlag: '0' ,goodsName:'',goodsMinQuantity:'',goodsBarCode:'',goodsKeyWord:'',goodsShelves:'1',goodsClassifyId:''},
+        data: {skuFlag: '0' ,goodsMinQuantity:'',goodsBarCode:'',goodsKeyWord:'',goodsShelves:'1',goodsClassifyId:''},
         value:'',
         dynamicTags: [],
         dialogImageUrl: '',
@@ -357,6 +431,10 @@
       }
     },
     methods: {
+      clearGoodsSKUs(){
+        let that = this
+        that.goodsSKUs=[]
+      },
       // 批量设置
       setUpSure(){
         let that = this
@@ -374,44 +452,51 @@
         this.$router.push({name:'goodList'})
       },
       // 提交保存或修改
-      save () {
+      save (formName) {
         let that = this
-        for(var k=0;k<that.goodsSKUs.length;k++){
-          that.goodsSKUs[k].marketPrice=that.goodsSKUs[k].marketPrice*100
-          that.goodsSKUs[k].photographPrice=that.goodsSKUs[k].photographPrice*100
-          that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
-          if(that.countMode!=1){
-            that.goodsSKUs[k].serviceRate=that.serviceRate
-          }else{
-            that.goodsSKUs[k].supplyPrice=that.goodsSKUs[k].supplyPrice*100
-          }
-        }
-        let a={
-          token: sessionStorage.getItem('mToken'),
-          goodsId: that.goodsId,
-          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-          dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName,
-          goodsSKUs: JSON.stringify(that.goodsSKUs),
-          goodsSpecifications: JSON.stringify(that.goodsSpecifications),
-          goodsMainImages:that.goodsMainImages.length==0?'':that.goodsMainImages.toString(),
-          goodsDesc:that.$refs.ue.getUEContent(),
-          goodsBrandName:that.goodsBrandName,
-          goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
-          goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString()
-        }
-        console.log(a.goodsSKUs)
-        that.$.ajax({
-          type: that.handle_toggle === 'add' ? 'post' : 'put',
-          url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/goods' : that.localbase + 'm2c.scm/goods/approve',
-          data:Object.assign(that.data,a),
-          success: function (result) {
-            if (result.status === 200) {
-              that.show_tip('保存成功')
-              that.$router.push({name:"goodList"})
-            } else {
-              that.show_tip(result.errorMessage)
-              that.goodsGuarantee=[]
+        that.$refs[formName].validate((valid) => {
+          if (valid) {
+            for(var k=0;k<that.goodsSKUs.length;k++){
+            that.goodsSKUs[k].marketPrice=that.goodsSKUs[k].marketPrice*100
+            that.goodsSKUs[k].photographPrice=that.goodsSKUs[k].photographPrice*100
+            that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
+            if(that.countMode!=1){
+              that.goodsSKUs[k].serviceRate=that.serviceRate
+            }else{
+              that.goodsSKUs[k].supplyPrice=that.goodsSKUs[k].supplyPrice*100
             }
+          }
+          let a={
+            token: sessionStorage.getItem('mToken'),
+            goodsId: that.goodsId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName,
+            goodsSKUs: JSON.stringify(that.goodsSKUs),
+            goodsSpecifications: JSON.stringify(that.goodsSpecifications),
+            goodsMainImages:that.goodsMainImages.length==0?'':that.goodsMainImages.toString(),
+            goodsDesc:that.$refs.ue.getUEContent(),
+            goodsBrandName:that.goodsBrandName,
+            goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
+            goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString()
+          }
+          console.log(a.goodsSKUs)
+          that.$.ajax({
+            type: that.handle_toggle === 'add' ? 'post' : 'put',
+            url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/goods' : that.localbase + 'm2c.scm/goods/approve',
+            data:Object.assign(that.data,a),
+            success: function (result) {
+              if (result.status === 200) {
+                that.show_tip('保存成功')
+                that.$router.push({name:"goodList"})
+              } else {
+                that.show_tip(result.errorMessage)
+                that.goodsGuarantee=[]
+              }
+            }
+          })
+          } else {
+            console.log('error submit!!');
+            return false;
           }
         })
       },
