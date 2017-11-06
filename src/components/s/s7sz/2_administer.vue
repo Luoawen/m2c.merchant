@@ -30,9 +30,9 @@
             <span class="icon arrowsIcon"></span>
           </div>
           <ul class="dropdown-menu" aria-labelledby="dLabel1">
-            <li @click="get_comment_info1(0)">全部<i class="icon rightIcon"></i></li>
-            <li @click="get_comment_info1(1)">申请中<i class="icon rightIcon"></i></li>
-            <li @click="get_comment_info1(2)">审核不通过<i class="icon rightIcon"></i></li>
+            <li @click="get_comment_info1(0)">全部</li>
+            <li @click="get_comment_info1(1)">申请中</li>
+            <li @click="get_comment_info1(2)">审核不通过</li>
           </ul>
         </div>
         <div class="search_cell">
