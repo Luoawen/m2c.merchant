@@ -444,6 +444,14 @@
             </button>
           </div>
         </div>
+        <div class="delectSizeWrap" v-show="delectBg">
+          <div class="delectSizeCon">
+            <p>是否删除运费模板</p>
+            <button class="blueBtn" @click="delete_confirm()">确定</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="defultBtn" @click="deleteUnit()">取消</button>
+            <a class="colseDelectBox" @click="deleteUnit()"><span class="	glyphicon glyphicon-remove"></span></a>
+          </div>
+        </div>
       </template>
     </form>
   </div>
@@ -464,6 +472,7 @@
               continuedPostage: ''
             }]
         },
+        delectBg:'',
         addRows: [],
         addModify: 'add', // 判断是否是新增按钮进入
         chargeType: 0, // 按件还是按重
@@ -715,6 +724,10 @@
           continuedPostage: ''
         }
         this.addRows.push(newRow)
+      },
+      isdelete(){
+        let that = this;
+        that.delectBg = true;
       },
 // 删除行
       delectRule(index)
