@@ -321,16 +321,16 @@
         goodsClassifyProps: {
           value: 'classifyId',
           children: 'subClassify',
-          label:'classifyName',
+          label: 'classifyName',
         },
         selectedOptions1: [],
         dLabel1: false,
         dLabel2: false,
         dLabel3: false,
-        goodsBrandName:'',
+        goodsBrandName: '',
         setUp:{},
-        2:true,
-        1:false
+        2: true,
+        1: false
       }
     },
     created() {},
@@ -498,11 +498,14 @@
         that.goodsSpecifications[index].state1=""
       },
       // 添加规格值
-      specValueClick (state1,index) {
+      specValueClick (state1, index) {
         let that = this
+        if (state1 === '' || state1.trim() === '') {
+          that.show_tip('规格值不能为空')
+          return
+        }
         let arr = that.restaurants
         let state = {value:state1}
-        console.log("state1警告"+state1)
         if(JSON.stringify(arr).indexOf(JSON.stringify(state))===-1){
             that.$.ajax({
               type: 'post',
