@@ -7,7 +7,9 @@
           <tr class="active">
             <th>模板名称</th>
             <th>{{formwork.modelName}}</th>
-            <th class="some">已有{{formwork.goodsUserNum}}个商品使用 <router-link v-if="formwork.goodsUserNum!=0">&gt;</router-link></th>
+            <th class="some">
+              <p v-if="formwork.goodsUserNum==0">已有{{formwork.goodsUserNum}}个商品使用 </p>
+              <router-link v-if="formwork.goodsUserNum!=0" :to="{name:'goodList'}">已有{{formwork.goodsUserNum}}个商品使用 </router-link></th>
             <th class="act"><router-link :to="{ name:'formworkadd', query: {addModify: false, modelId: formwork.modelId} }">编辑</router-link></th>
             <th><a @click="delectModel(formwork.modelId)" v-if="formwork.goodsUserNum==0">删除</a></th>
           </tr>
