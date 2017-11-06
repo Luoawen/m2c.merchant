@@ -456,10 +456,10 @@
       ,handleTabClick (tab, event) {//tab切换
         let that = this
 
-        that.goodsStorePageRows=2
+        that.goodsStorePageRows=5
         that.goodsStoreCurrentPage= 1
         that.goodsStoreTotalCount=0
-        that.goodsCheckStorePageRows=2,
+        that.goodsCheckStorePageRows=5,
         that.goodsCheckStoreCurrentPage= 1,
         that.goodsCheckStoreTotalCount=0,
         that.goodsDelStorePageRows=5,
@@ -589,7 +589,7 @@
           that.soldGoods(row,to)
         } else if (action === '_soldup') {
           that.soldupGoods(row,to)
-        } 
+        }
         else if (action === '_edit') {
           let goodsId = row.goodsId
           if(row.approveStatus==''||row.approveStatus==undefined){
@@ -628,12 +628,12 @@
       ,goodsDelStoreHandleSizeChange(val) {
         let that = this
         that.goodsDelStorePageRows=val
-        that.goodsCheckStore();
+        that.goodsDeleteStore();
       }
       ,goodsDelStoreHandleCurrentChange(val) {
         let that = this
         that.goodsDelStoreCurrentPage=val
-        that.goodsCheckStore();
+        that.goodsDeleteStore();
       }
   },
     mounted () {
