@@ -68,10 +68,15 @@
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-                prop="goodsPrice"
                 label="拍货价/元"
                 show-overflow-tooltip>
+                <template slot-scope="scope"><span>{{scope.row.goodsPrice/100}}</span></template>
               </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="goodsPrice"-->
+                <!--label="拍货价/元"-->
+                <!--show-overflow-tooltip>-->
+              <!--</el-table-column>-->
               <el-table-column
                 prop="stockNum"
                 label="库存"
