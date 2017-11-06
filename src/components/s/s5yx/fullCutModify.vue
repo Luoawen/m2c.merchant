@@ -283,7 +283,7 @@
                 <div>
                   <div>{{goods.dealerName}}</div>
                   <div>{{goods.goodsPrice/100}}</div>
-                </div>
+                </div>  
                 <div class="fc" v-show="goods.isRemoved">
                 </div>
                 <div class="fcimg" v-show="goods.isRemoved"></div>
@@ -830,7 +830,7 @@
       }
     },
     methods: {
-      goto (path) {},
+      // goto (path) {},
       itemback () {
         window.history.go(-1)
       },
@@ -949,7 +949,7 @@
             success: function (result) {
               if (result.status == 200) {
                 console.log('status:', result.status)
-                that.$router.push({path: '/m/m92mj'})
+                that.$router.push({path: '/s/marketing'})
               }
             }
           })

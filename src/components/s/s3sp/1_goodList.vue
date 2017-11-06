@@ -98,6 +98,7 @@
                       </span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','a')">详情</el-dropdown-item>
+                        <el-dropdown-item v-if="scope.row.goodsStatus==1" @click.native="handleCommand(scope.$index, scope.row,'_soldup','a')">上架</el-dropdown-item>
                         <el-dropdown-item v-if="scope.row.goodsStatus!=1" @click.native="handleCommand(scope.$index, scope.row,'_soldout','a')">下架</el-dropdown-item>
                         <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_edit','a')">编辑
                           </el-dropdown-item>
@@ -305,7 +306,7 @@
           </el-pagination>
         </div>
       </el-tab-pane>
-      <el-button type="primary"><router-link :to="{name:'goodAddModify',query:{isAdd:'add'}}" style="color:#fff;">新增</router-link></el-button>
+      <el-button type="primary" @click="newGoods">新增</el-button>
     </el-tabs>
   </div>
 </template>
@@ -365,7 +366,26 @@
       }
     },
     methods: {
-       goodsClassify () {//商品分类树
+      // 点击新增时校验店铺信息是否存在
+      newGoods () {
+        let that = this
+        that.$.ajax({
+          type: 'GET',
+          url: that.localbase + 'm2c.scm/shop/sys/shopInfo',
+          data: {
+            dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            token: sessionStorage.getItem('mToken')
+          },
+          success: function (result) {
+            if(result.content==""){
+              that.show_tip("店铺信息不存在！")
+            }else{
+              that.$router.push({name:'goodAddModify',query:{isAdd:'add'}})
+            }
+          }
+        })
+      },
+    goodsClassify () {//商品分类树
       let that = this
       that.$.ajax({
         type: 'GET',
@@ -396,6 +416,22 @@
             }
           }
         })
+      },
+      soldupGoods (row,to){//上架商品
+        let that = this
+          that.$.ajax({
+            type: 'put',
+            url: that.localbase + 'm2c.scm/goods/up/shelf/' + row.goodsId,
+            data: {},
+            success: function (result) {
+              if (result.status == 200){
+                that.show_tip("操作成功")
+                that.goodsStore()
+              } else {
+                that.show_tip('上架异常')
+              }
+            }
+          })
       }
       ,soldGoods (row,to){//下架商品
         let that = this
@@ -551,7 +587,10 @@
           }
         } else if (action === '_soldout') {
           that.soldGoods(row,to)
-        } else if (action === '_edit') {
+        } else if (action === '_soldup') {
+          that.soldupGoods(row,to)
+        } 
+        else if (action === '_edit') {
           let goodsId = row.goodsId
           if(row.approveStatus==''||row.approveStatus==undefined){
             that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId}});
