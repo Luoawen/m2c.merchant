@@ -7,11 +7,12 @@
       <!--<button type="button" class="btn btn-info pull-right operation">修改地址</button>-->
       <!--<button type="button">修改运费</button>-->
       <span class="fr" v-show="showactive">
-      <a>
+      <a v-show="!bModify">
       	<i class="ico_print"></i>
       	<span class="dy">打印</span>
       </a>
-      <button type="button" class="fah">发货</button>
+      <button type="button" class="fah" v-show="!bModify" @click="Deliver=true">发货</button>
+        <button type="button" class="fah" v-show="bModify" @click="saveDealerOrder()">保存</button>
       </span>
 
     </div>
@@ -20,7 +21,7 @@
       <!-- 拒绝结果，做法根据后台返回数据判断v-show -->
       <!-- <div class="detail_tit02">顾客发起售后申请，请处理</div> -->
       <!--待收货状态会出现收货单，请注意-->
-      <div class="detail_tit">售后单：<span>3454345，23453245</span></div>
+      <div class="detail_tit" v-show="showAfter">售后单：<span>{{strSaleAfterNo}}</span></div>
       <div class="detail_top mt20 clear">
         <div class="col-sm-9 detail_cen">
           <div>
@@ -58,30 +59,36 @@
           <span class="tit01">收货信息</span>
           <span class="ml20">
           	<span>{{recvAddr}}</span>
-          	<i class="ico_compile"></i>
+          	<i class="ico_compile" v-show="!bModify" @click="modifyFreight(true)"></i>
           </span>
         </div>
         	<!--点击ico_compile后出现编辑地址-->
-        <div class="clear">
+        <div class="clear" v-show="bModify">
         		<span class="tit01 fl"></span>
           	<span class="ml20 fl">
           	<span class="fl mr20">
-          		<select class="bj_select form-control">
+          		<select class="bj_select form-control" v-model="provinceCode">
           			<option></option>
           		</select>
           	</span>
           	<span  class="fl mr20">
-          		<select class="bj_select form-control">
+          		<select class="bj_select form-control" v-model="cityCode">
           			<option></option>
           		</select>
           	</span>
           	<span  class="fl mr20">
-          		<select class="bj_select form-control">
+          		<select class="bj_select form-control" v-model="areaCode">
           			<option></option>
           		</select>
           	</span>
           	<span class="fl mr20">
-          		<input class="bj02_select form-control" />
+          		<input class="bj02_select form-control" v-model="streetAddr"/>
+          	</span>
+              <span class="fl mr20">
+          		<input class="bj_select form-control" v-model="revPerson"/>
+          	</span>
+              <span class="fl mr20">
+          		<input class="bj_select form-control" v-model="phone"/>
           	</span>
           	</span>
         </div>
@@ -109,25 +116,25 @@
             <td class="a6">运费</td>
           </tr>
         </thead>
-        <tbody id="goodsTabBody">
+        <tbody id="goodsTabBody" v-for="(goods,index) in goodses">
         	<tr>
         		<td class="a1 clear">
-        			<div class="a1_img mr10 fl"><img /></div>
+        			<div class="a1_img mr10 fl"><img :src="JSON.parse(goods.goodsImage == ''? '[]': goods.goodsImage)[0]" /></div>
             	<div>
-              <div class="wose wid mt10">冬季新款侧开叉高领毛衣女不规则套头针织衫宽松.</div>
-              <div class="blue">规格：蓝色，L</div>
+              <div class="wose wid mt10">{{goods.goodsName}}</div>
+              <div class="blue">规格：{{goods.skuName}}</div>
             	</div>
         		</td>
-            <td class="a2">广告位信息</td>
-            <td class="a3">数量</td>
-            <td class="a4">单位</td>
-            <td class="a5">单价/元</td>
-            <td class="a5">商品金额/元</td>
+            <td class="a2">{{goods.mediaResId}}</td>
+            <td class="a3">{{goods.sellNum}}</td>
+            <td class="a4">{{goods.unitName}}</td>
+            <td class="a5">{{goods.price/100}}</td>
+            <td class="a5">{{goods.totalPrice/100}}</td>
             <td class="a6">
-            	<!--<span>运费</span>
-            	<i class="ico_compile"></i>-->
+            	<span :id="'spanFreight' + index" v-show="!bModify">{{goods.freight}}</span>
+            	<i class="ico_compile" @click="modifyFreight(true)" v-show="!bModify"></i>
             	<!--点击ico_compile后会出现input-->
-            	<input class="form-control a6_input" />
+            	<input class="form-control a6_input" :id="'freight'+ index" v-show="bModify" v-model="goods.freight" type="number"/>
             </td>
         	</tr>
         </tbody>
@@ -142,11 +149,11 @@
 							<div>订单总额</div>
         		</td>
         		<td class="pr40">
-        			<div>1</div>
-							<div>1</div>
-							<div>1</div>
-							<div>1</div>
-							<div class="redcolor" style="font-size: 18px;">1</div>
+        			<div>{{totalData.totalOrderPrice/100}}</div>
+							<div>{{totalData.totalFreight/100}}</div>
+							<div>{{totalData.plateformDiscount/100}}</div>
+							<div>{{totalData.dealerDiscount/100}}</div>
+							<div class="redcolor" style="font-size: 18px;">{{totalData.orderPrice/100}}</div>
         		</td>
         	</tr>
         </tbody>
@@ -180,7 +187,7 @@
         	<tr class="fh">
       		<td colspan="2">待发货 2    已发货 0</td>
       		<td>
-      			<button class="fah fr mr10" @click="deliver">发货</button>
+      			<button class="fah fr mr10" @click="deliver" v-show="orderStatus==0">发货</button>
       		</td>
       	</tr>
         <tr>
@@ -189,17 +196,17 @@
           <td class="a3">待发货数</td>
         </tr>
         </thead>
-        <tbody id="sendTabBody">
+        <tbody id="sendTabBody" v-for="(goods,index) in goodses">
         	<tr>
         		<td class="a1 clear">
-        			<div class="a1_img mr10 fl"><img /></div>
+        			<div class="a1_img mr10 fl"><img :src="JSON.parse(goods.goodsImage == ''? '[]': goods.goodsImage)[0]"/></div>
             	<div>
-              <div class="wose wid mt20">冬季新款侧开叉高领毛衣女不规则套头针织衫宽松.</div>
-              <div class="blue">规格：蓝色，L</div>
+              <div class="wose wid mt20">{{goods.goodsName}}</div>
+              <div class="blue">规格：{{goods.skuName}}</div>
             	</div>
         		</td>
-        		<td>1</td>
-        		<td>2</td>
+        		<td>{{goods.sellNum}}</td>
+        		<td>{{orderStatus==0? goods.sellNum : 0}}</td>
         	</tr>
         </tbody>
         <tbody class="deliver_tb">
@@ -215,11 +222,11 @@
             </div>
             <div class="mt10 mb10">
               <span class="mr20 tit_tb">物流单号</span>
-              <span></span>
+              <span>{{orderStatus==2? '':'-'}}</span>
             </div>
             <div class="mt10 mb10">
               <span class="mr20 tit_tb">备注</span>
-              <span>1</span>
+              <span>{{orderStatus==2? '':'-'}}</span>
             </div>
             </td>
           </tr>
@@ -239,7 +246,7 @@
         </span>
         <span class="tit02 fl mr20">
           <span class="fl mr10">
-            <input  type="checkbox" id="classify" class="input_check">
+            <input  type="checkbox" id="classify" class="input_check" @click="expressCheck(0)">
             <label  for="classify" class="mt5"></label>
           </span>
           <span class="fl">
@@ -248,7 +255,7 @@
         </span>
         <span class="tit02 fl">
           <span class="fl mr10">
-            <input  type="checkbox" id="classify2" class="input_check">
+            <input  type="checkbox" id="classify2" class="input_check" @click="expressCheck(1)">
             <label  for="classify2" class="mt5"></label>
           </span>
           <span class="fl ml20">
@@ -258,14 +265,14 @@
         <div class="tit03 clear">若有自己的配送车队，可选自有物流</div>
       </div>
       <div class="deliver_type01 mt20 mb10 clear">
-        <div class="">
+        <div class=""  v-show="expressWay != 1">
         <span class="mr20 tit01 fl">
         <span class="redcolor">*</span>
         <span>物流公司</span>
         </span>
         <span>
-          <select class="form-control deliver_input fl" placeholder="请选择" >
-            <option value=""></option>
+          <select class="form-control deliver_input fl" placeholder="请选择" v-model="expressCode">
+            <option v-for="item in shipments" v-bind:value="item.expressCode">{{item.expressName}}</option>
           </select>
         </span>
         </div>
@@ -275,9 +282,18 @@
         <span>备注</span>
         </span>
         <span>
-          <input class="form-control deliver_input" placeholder="选填" />
+          <input class="form-control deliver_input" placeholder="选填" v-model="expressNote"/>
         </span>
-      </div>
+        </div>
+        <div class="" v-show="expressWay == 1">
+        <span class="mr20 tit01 fl">
+        <span class="redcolor">*</span>
+        <span>配送人</span>
+        </span>
+          <span>
+          <input class="form-control deliver_input" v-model="expressPerson"/>
+        </span>
+        </div>
       </div>
       <div class="deliver_type01 mt20 mb10 clear">
         <div class="">
@@ -286,12 +302,23 @@
         <span>物流单号</span>
         </span>
         <span>
-          <input class="form-control deliver_input" placeholder="请填写" />
+          <input class="form-control deliver_input" placeholder="请填写" v-model="expressNo"/>
         </span>
+        </div>
+
+          <div class="" v-show="expressWay == 1">
+        <span class="mr20 tit01 fl">
+        <span class="redcolor">*</span>
+        <span>配送人电话</span>
+        </span>
+            <span>
+          <input class="form-control deliver_input" v-model="expressPhone"/>
+        </span>
+          </div>
       </div>
-      </div>
+
       <div class="deliver_type01 mt20 mb10 clear">
-        <button class="deliversure btn01 mr20 ml20">确定发货</button>
+        <button class="deliversure btn01 mr20 ml20" @click="deliverDealerOrder()">确定发货</button>
         <button class="btn01 deliverdel" @click="Deliver=false">取消</button>
         <span class="ml20 redcolor bz">请仔细填写发货信息，一旦确定，不可修改！</span>
       </div>
@@ -314,8 +341,10 @@
         showactive: true,
         showactive02: false,
         showactive03: false,
+        showAfter: false,
         Deliver: false,
         strOrderStatus: '',
+        orderStatus: 0,
         dealerOrderId: '',
         createdDate: '',
         payWay: '',
@@ -323,7 +352,26 @@
         payTime: '',
         recvAddr: '',
         invoiceInfo: '',
-        noted: ''
+        noted: '',
+        goodses: [],
+        totalData: {},
+        bModify: false,
+        province: '',
+        provinceCode: '',
+        city: '',
+        cityCode: '',
+        area: '',
+        areaCode: '',
+        streetAddr: '',
+        revPerson: '',
+        phone: '',
+        strSaleAfterNo: ''
+        ,shipments: []
+        ,expressNote: ''
+        ,expressNo: ''
+        ,expressName: ''
+        ,expressCode: ''
+        ,expressWay: 0
       }
     },
     methods: {
@@ -349,20 +397,35 @@
       deliver () {
         var that = this
         that.Deliver = true
-      },
+      }
+      ,expressCheck(val) {
+        let that = this;
+        that.expressWay = val;
+        if (val==1) {
+          that.$("#classify2").checked=true;
+          that.$("#classify2").attr("checked", true);
+          that.$("#classify").checked=false;
+          that.$("#classify").attr("checked", false);
+        }
+        else {
+          that.$("#classify2").attr("checked", false);
+          that.$("#classify").attr("checked", true);
+        }
+        console.log(that.$("#classify2").val());
+      }
       //列表
-      getDealerOrderInfo () {
+      ,getDealerOrderInfo () {
         let that = this;
         that.$.ajax({
-          url: that.base + 'm2c.scm/order/dealer/orderdetail',
-          //url: 'http://localhost:8080/m2c.scm/order/dealer/orderdetail',
+          //url: that.base + 'm2c.scm/order/dealer/orderdetail',
+          url: 'http://localhost:8080/m2c.scm/order/dealer/orderdetail',
           type: 'get',
           cache: false,
           pagination: true,
           data: {
             token: sessionStorage.getItem('mToken'),
             orderNo: that.$route.query.orderId,
-            dealerOrderId: that.$route.query.dealerOrderId
+            dealerOrderId: sessionStorage.getItem('dealerOrderId')
           },
           success: function (result) {
             console.log(result)
@@ -373,22 +436,36 @@
         })
 
         that.get_log_info();
+        that.shipment();
       },
 
       setReturnData: function (data) {
         let that = this;
           that.goodsMoney = data.orderPrice;
           that.orderFreight = data.orderFreight;
+        that.orderStatus = data.orderStatus;
           that.strOrderStatus = data.orderStatus === 0? '未支付': data.orderStatus === 1? '待发货': data.orderStatus === 2? '待收货': data.orderStatus === 3? '确认收货': data.orderStatus === 4? '交易完成': '关闭';
           that.dealerOrderId = that.$route.query.dealerOrderId;
           var d = new Date(data.createdDate);
           that.createdDate = that.date_format(d, 'yyyy-MM-dd hh:mm:ss');
           that.payWay = data.payWay;
           that.payNo = data.payNo;
+        that.provinceCode = data.provinceCode;
+        that.cityCode = data.cityCode;
+        that.areaCode = data.areaCode;
           if (data.payDate != null) {
             d = new Date(data.payDate)
             that.payTime  = that.date_format(d, 'yyyy-MM-dd hh:mm:ss');
           }
+          that.city = data.city;
+          that.cityCode = data.cityCode;
+          that.province = data.province;
+          that.provinceCode = data.provinceCode;
+        that.area = data.areaCounty;
+        that.areaCode = data.areaCode;
+        that.phone = data.revPhone;
+        that.revPerson = data.revPerson;
+        that.streetAddr = data.streetAddr;
 
           that.recvAddr = data.province + data.city + data.areaCounty + data.streetAddr + " " + data.revPerson + " " + data.revPhone;
           if (data.invoiceType != -1) {
@@ -403,36 +480,13 @@
       },
       setGoodsTable: function (goodses, totalData) {
         let that = this;
-        var tbodyHtml = '';
-        var sendHtml = '';
-//      for (var i in goodses) {
-//        tbodyHtml +='<tr style="background: #F4F5FA;box-shadow: 0 1px 0 0 #E5E5E5;"><td class="a1"><div class="a1tab fl" style="float: left;padding-left: 20px;padding-top: 20px;padding-bottom:20px;margin-right: 10px;"><img style="width:50px;height:50px;" src="' + JSON.parse(goodses[i].goodsImage)[0] + '" width="80"/></div>'; //' + JSON.parse(goodses[i].goodsImage)[0] + '
-//        tbodyHtml +='<div style="margin-top: 20px;margin-bottom: 20px;font-size: 14px;"><div style="height: 40px;">'+ goodses[i].goodsName+ '</div>';
-//        tbodyHtml +='<div style="font-size: 12px;color: #999999;">' + goodses[i].skuName + '</div></div></td>';
-//
-//        sendHtml +='<tr><td class="a1"><div class="a1tab fl"><img src="' + JSON.parse(goodses[i].goodsImage)[0] + '" width="80"/></div>';
-//        sendHtml +='<div><div>'+ goodses[i].goodsName+ '</div>';
-//        sendHtml +='<div>' + goodses[i].skuName + '</div></div></td>';
-//        sendHtml +='<td class="a3">' +goodses[i].sellNum + '</td>';
-//        sendHtml +='<td class="a3">' +goodses[i].sellNum + '</td></tr>';
-//
-//        tbodyHtml +='<td class="a2" style="padding-left: 20px;">' + goodses[i].mediaResId + '</td>';
-//        tbodyHtml +='<td class="a3" style="padding-left: 20px;">' +goodses[i].sellNum + '</td>';
-//        tbodyHtml +='<td class="a4" style="padding-left: 20px;">' +goodses[i].unitName + '</td>';
-//        tbodyHtml +='<td class="a5" style="padding-left: 20px;">' +goodses[i].price/100 + '</td>';
-//        tbodyHtml +='<td class="a5" style="padding-left: 20px;">' +goodses[i].totalPrice/100 +'</td>';
-//        tbodyHtml +='<td class="a6" style="padding-left: 20px;">' +goodses[i].freight/100 +'<i style="width: 16px;height: 16px;background: url(../../../assets/images/ico_compile.png);display: inline-block;margin-left: 10px;">'+ '</td>';
-//        tbodyHtml +='</tr>';
-//      }
-
-//      tbodyHtml +='<tr><td colspan="6" class="a1">商品总额</td><td>'+ totalData.totalOrderPrice/100 +'</td></tr>';
-//      tbodyHtml +='<tr><td colspan="6" class="a1">运费</td><td>'+ totalData.totalFreight/100 +'</td></tr>';
-//      tbodyHtml +='<tr><td colspan="6" class="a1">平台优惠</td><td>'+ totalData.plateformDiscount/100 +'</td></tr>';
-//      tbodyHtml +='<tr><td colspan="6" class="a1">商家优惠</td><td>'+ totalData.dealerDiscount/100 +'</td></tr>';
-//      tbodyHtml +='<tr><td colspan="6" class="a1">订单总额</td><td>'+ totalData.orderPrice/100 +'</td></tr>';
-//      that.$("#goodsTabBody").html(tbodyHtml);
-//
-//      that.$("#sendTabBody").html(sendHtml);
+        that.goodses = goodses;
+        that.totalData = totalData;
+        that.goodses.forEach(function(val, index) {
+          val.freight = val.freight/100;
+          if(typeof(val.mediaResId)=='undefined' || val.mediaResId==null ||  val.mediaResId=='')
+            val.mediaResId = '-';
+        });
       },
       get_log_info () {
         let that = this
@@ -491,11 +545,103 @@
             width: '120'
           }]
         })
+      },
+      modifyFreight (isModify) {
+        let that = this;
+        that.bModify = isModify;
+      },
+      deliverDealerOrder(){
+        // 发货请求
+        let that=this;
+        that.$.ajax({
+          url: that.base + 'm2c.scm/order/dealer/sendOrder',
+          //url: 'http://localhost:8080/m2c.scm/order/dealer/sendOrder',
+          type: 'put',
+          cache: false,
+          pagination: true,
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            expressNo: that.expressNo,
+            expressName: that.expressName,
+            expressNote: that.expressNote,
+            expressPerson: that.expressPerson,
+            expressPhone: that.expressPhone,
+            expressWay: that.expressWay,
+            expressCode: that.expressCode,
+            dealerOrderId: that.dealerOrderId
+          },
+          success: function (result) {
+            //console.log(result)
+            if (result.status === 200) {
+              that.Deliver = false;
+              that.customerdetail();
+              that.getDealerOrderInfo();
+              that.show_tip('发货成功！');
+            }
+          }
+        })
+      },
+      saveDealerOrder  () {
+        // 保存 修改收货地址 运费
+        let that = this;
+        var freightStr='';
+        that.goodses.forEach(function(val, index) {
+          if (index > 0)
+            freightStr += ',';
+          freightStr += (val.skuId + ':' + val.freight);
+        });
+        freightStr = '{' + freightStr + '}';
+        // 发请求
+        that.$.ajax({
+          url: that.base + 'm2c.scm/order/dealer/addrfreight',
+          //url: 'http://localhost:8080/m2c.scm/dealerorder/addrfreight',
+          type: 'put',
+          cache: false,
+          pagination: true,
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            province: that.province,
+            provCode: that.provinceCode,
+            city: that.city,
+            cityCode: that.cityCode,
+            area: that.area,
+            areaCode: that.areaCode,
+            revPerson: that.revPerson,
+            phone: that.phone,
+            dealerOrderId: that.dealerOrderId,
+            freights: freightStr
+          },
+          success: function (result) {
+            //console.log(result)
+            if (result.status === 200) {
+              that.bModify = false;
+              that.getDealerOrderInfo();
+              that.show_tip('修改成功！');
+            }
+          }
+        })
       }
-    },
-    mounted () {
+      ,shipment(){
+        let that = this
+        that.$.ajax({
+          type: 'GET',
+          url: this.base + 'm2c.scm/order/dealer/express',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            isEncry: false
+          },
+          success: function (result) {
+            //console.log("shipment:" + result);
+            if (result.status === 200){
+              // 物流列表
+              that.shipments= result.content
+            }
+          }
+        })
+      }
+    }
+    ,mounted () {
       this.getDealerOrderInfo();
-      //this.getDealerGoods();
     }
   }
 </script>
@@ -764,7 +910,7 @@
           }
           }
           .bj02_select{
-          	width: 380px;
+          	width: 350px;
           	height: 40px;
           	line-height: 40px;
           }

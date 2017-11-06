@@ -6,21 +6,19 @@
         <div class="col-sm-3">
           <select class="form-control area_select col-sm-1" v-model="search_params.province"
                   id="search_params_province_select" style="margin-bottom:5px;">
-            <option value=""></option>
+           <!-- <option value=""></option>-->
             <option v-for="(cell,index) in province_all_search" :key="index" :value="cell.code">
               {{cell.name}}
             </option>
           </select>
           <select class="form-control area_select col-sm-1" v-model="search_params.city" id="search_params_city_select"
                   style="margin-bottom:5px;" v-if="city_show">
-            <option value=""></option>
             <option v-for="(cell,index) in city_all_search" :key="index" :value="cell.code">
               {{cell.name}}
             </option>
           </select>
           <select class="form-control area_select col-sm-1" v-model="search_params.regionCode"
                   id="search_params_regionCode_select" v-if="area_show">
-            <option value=""></option>
             <option v-for="(cell,index) in area_all_search" :key="index" :value="cell.code">
               {{cell.name}}
             </option>

@@ -98,7 +98,8 @@
                       </span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','a')">详情</el-dropdown-item>
-                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_soldout','a')">下架</el-dropdown-item>
+                        <el-dropdown-item v-if="scope.row.goodsStatus==1" @click.native="handleCommand(scope.$index, scope.row,'_soldup','a')">上架</el-dropdown-item>
+                        <el-dropdown-item v-if="scope.row.goodsStatus!=1" @click.native="handleCommand(scope.$index, scope.row,'_soldout','a')">下架</el-dropdown-item>
                         <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_edit','a')">编辑
                           </el-dropdown-item>
                         <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_delete','a')">删除</el-dropdown-item>
@@ -163,7 +164,7 @@
               <el-table-column
                 label="商品信息"
                 width="200">
-                <template slot-scope="scope"><img v-bind:src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsName}}</span></template>
+                <template slot-scope="scope"><img :src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsName}}</span></template>
               </el-table-column>
               <el-table-column
                 prop="goodsClassify"
@@ -277,11 +278,6 @@
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            label="状态"
-            show-overflow-tooltip>
-            <template slot-scope="scope"><span >{{scope.row.goodsStatus==1?'仓库':scope.row.goodsStatus==2?'出售中':scope.row.goodsStatus==3?'已售罄':''}}</span></template>
-          </el-table-column>
-          <el-table-column
             label="操作"
             show-overflow-tooltip>
             <template slot-scope="scope">
@@ -310,7 +306,7 @@
           </el-pagination>
         </div>
       </el-tab-pane>
-      <el-button type="primary"><router-link :to="{name:'goodAddModify',query:{isAdd:'add'}}" style="color:#fff;">新增</router-link></el-button>
+      <el-button type="primary" @click="newGoods">新增</el-button>
     </el-tabs>
   </div>
 </template>
@@ -370,7 +366,26 @@
       }
     },
     methods: {
-       goodsClassify () {//商品分类树
+      // 点击新增时校验店铺信息是否存在
+      newGoods () {
+        let that = this
+        that.$.ajax({
+          type: 'GET',
+          url: that.localbase + 'm2c.scm/shop/sys/shopInfo',
+          data: {
+            dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            token: sessionStorage.getItem('mToken')
+          },
+          success: function (result) {
+            if(result.content==""){
+              that.show_tip("店铺信息不存在！")
+            }else{
+              that.$router.push({name:'goodAddModify',query:{isAdd:'add'}})
+            }
+          }
+        })
+      },
+    goodsClassify () {//商品分类树
       let that = this
       that.$.ajax({
         type: 'GET',
@@ -386,7 +401,7 @@
         let that = this
         that.$.ajax({
           type: 'DELETE',
-          url: that.localbase + 'm2c.scm/goods/' + row.goodsId,
+          url: to === 'a' ? that.localbase + 'm2c.scm/goods/' + row.goodsId:that.localbase + 'm2c.scm/goods/approve/' + row.goodsId,
           data: {},
           success: function (result) {
             if (result.status === 200){
@@ -401,6 +416,22 @@
             }
           }
         })
+      },
+      soldupGoods (row,to){//上架商品
+        let that = this
+          that.$.ajax({
+            type: 'put',
+            url: that.localbase + 'm2c.scm/goods/up/shelf/' + row.goodsId,
+            data: {},
+            success: function (result) {
+              if (result.status == 200){
+                that.show_tip("操作成功")
+                that.goodsStore()
+              } else {
+                that.show_tip('上架异常')
+              }
+            }
+          })
       }
       ,soldGoods (row,to){//下架商品
         let that = this
@@ -425,10 +456,10 @@
       ,handleTabClick (tab, event) {//tab切换
         let that = this
 
-        that.goodsStorePageRows=2
+        that.goodsStorePageRows=5
         that.goodsStoreCurrentPage= 1
         that.goodsStoreTotalCount=0
-        that.goodsCheckStorePageRows=2,
+        that.goodsCheckStorePageRows=5,
         that.goodsCheckStoreCurrentPage= 1,
         that.goodsCheckStoreTotalCount=0,
         that.goodsDelStorePageRows=5,
@@ -547,16 +578,28 @@
       ,handleCommand (index,row,action,to) {
         let that = this
         if (action === '_detail') {
-          this.$message({
-            message: '详情还未开发',
-            type: 'success'
-          });
+          let goodsId = row.goodsId
+          if(to=='a'){
+            that.$router.push({name:'gooddetail',query:{goodsId:row.goodsId}});
+          }else{
+            let approveStatus = row.approveStatus
+            that.$router.push({name:'gooddetail',query:{goodsId:goodsId,approveStatus:approveStatus}});
+          }
         } else if (action === '_soldout') {
           that.soldGoods(row,to)
-        } else if (action === '_edit') {
-          that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:row.goodInfo}});
+        } else if (action === '_soldup') {
+          that.soldupGoods(row,to)
+        }
+        else if (action === '_edit') {
+          let goodsId = row.goodsId
+          if(row.approveStatus==''||row.approveStatus==undefined){
+            that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId}});
+          }else{
+            let approveStatus = row.approveStatus
+            that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId,approveStatus:approveStatus}});
+          }
         } else if (action === '_delete') {
-          that.goodsCheckStore();
+          that.deleteGoods(row,to);
         }
       }
       ,goodsDeleteStore () {
@@ -585,12 +628,12 @@
       ,goodsDelStoreHandleSizeChange(val) {
         let that = this
         that.goodsDelStorePageRows=val
-        that.goodsCheckStore();
+        that.goodsDeleteStore();
       }
       ,goodsDelStoreHandleCurrentChange(val) {
         let that = this
         that.goodsDelStoreCurrentPage=val
-        that.goodsCheckStore();
+        that.goodsDeleteStore();
       }
   },
     mounted () {

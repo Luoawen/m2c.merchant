@@ -15,12 +15,16 @@ const dealerOrDtl = r => require.ensure([], () => r(require('@/components/s/s2dd
 const goodList = r => require.ensure([], () => r(require('@/components/s/s3sp/1_goodList')), 's')
 const goodAppraise = r => require.ensure([], () => r(require('@/components/s/s3sp/2_goodAppraise')), 's')
 const goodAddModify = r => require.ensure([], () => r(require('@/components/s/s3sp/3_goodAddModify')), 's')
+const gooddetail = r => require.ensure([], () => r(require('@/components/s/s3sp/4_gooddetail')), 's')
 // s4右侧内容
 const survey = r => require.ensure([], () => r(require('@/components/s/s4zj/1_survey')), 's')
 const detail = r => require.ensure([], () => r(require('@/components/s/s4zj/2_detail')), 's')
 const record = r => require.ensure([], () => r(require('@/components/s/s4zj/3_record')), 's')
 // s5右侧内容
 const marketing = r => require.ensure([], () => r(require('@/components/s/s5yx/marketing')), 's')
+const fullCut = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCut')), 's')
+const fullCutDetail = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCutDetail')), 's')
+const fullCutModify = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCutModify')), 's')
 // s6右侧内容
 const data = r => require.ensure([], () => r(require('@/components/s/s6sj/data')), 's')
 // s7右侧内容
@@ -72,6 +76,11 @@ export default new Router({
           component: details
         },
         {
+          path: 'detail',
+          name: 'detail',
+          component: detail
+        },
+        {
           path: 'goodList',
           name: 'goodList',
           component: goodList
@@ -87,14 +96,19 @@ export default new Router({
           component: goodAddModify
         },
         {
+          path: 'gooddetail',
+          name: 'gooddetail',
+          component: gooddetail
+        },
+        {
           path: 'survey',
           name: 'survey',
           component: survey
         },
         {
-          path: 'detail',
-          name: 'detail',
-          component: detail
+          path: 'fullCutDetail',
+          name: 'fullCutDetail',
+          component: fullCutDetail
         },
         {
           path: 'record',
@@ -105,6 +119,16 @@ export default new Router({
           path: 'marketing',
           name: 'marketing',
           component: marketing
+        },
+        {
+          path: 'fullCut',
+          name: 'fullCut',
+          component: fullCut
+        },
+        {
+          path: 'fullCutModify',
+          name: 'fullCutModify',
+          component: fullCutModify
         },
         {
           path: 'data',

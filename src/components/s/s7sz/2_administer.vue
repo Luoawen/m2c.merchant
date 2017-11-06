@@ -10,15 +10,16 @@
         <div class="search_cell">
           <span class="zIndex2" @click="is_Success=!is_Success">申请时间<i class="icon timeIcon"></i></span>
           <div class="time" v-if="is_Success">
-            <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
+            <el-date-picker v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+            </el-date-picker>
+            <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+            </el-date-picker>
           </div>
         </div>
         <div class="search">
-          <input type="text" class="inp" placeholder="输入品牌名称" v-model="search_params.condition"><i class="icon searchIcon"></i>
+          <input type="text" class="inp" placeholder="输入品牌名称" v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info"></i>
         </div>
-        <div class="search_cell">
-          <button class="btn search_button" @click="get_comment_info">搜索</button>
-        </div>
+
         <div class="comment_info">
           <table id="table" style="table-layout:fixed"></table>
         </div>
@@ -37,11 +38,14 @@
         <div class="search_cell">
           <span class="zIndex2" @click="is_Success2=!is_Success2">申请时间<i class="icon timeIcon"></i></span>
           <div class="time" v-if="is_Success2">
-            <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
+            <el-date-picker v-model="search_approve.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+            </el-date-picker>
+            <el-date-picker v-model="search_approve.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+            </el-date-picker>
           </div>
         </div>
         <div class="search">
-          <input type="text" class="inp" placeholder="输入品牌名称"><i class="glyphicon glyphicon-search"></i>
+          <input type="text" class="inp" placeholder="输入品牌名称"  v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info1(search_approve.approveStatus)"></i>
         </div>
         <div class="comment_info">
           <table id="table1" style="table-layout:fixed"></table>
@@ -49,16 +53,16 @@
       </div>
       <!--详情-->
       <div class="goodInfo" v-if="goodInfoShow">
-        <p>品牌名称：{{goodInfo.brandName==''?'--':goodInfo.brandName}}</p>
-        <p>英文名称：{{goodInfo.brandNameEn==''?'--':goodInfo.brandNameEn}}</p>
-        <p>品牌区域：{{goodInfo.firstAreaName==''?'':goodInfo.firstAreaName}}
+        <p><span>品牌名称：</span>{{goodInfo.brandName==''?'--':goodInfo.brandName}}</p>
+        <p><span>英文名称：</span>{{goodInfo.brandNameEn==''?'--':goodInfo.brandNameEn}}</p>
+        <p><span>品牌区域：</span>{{goodInfo.firstAreaName==''?'':goodInfo.firstAreaName}}
           {{goodInfo.twoAreaName=='' ? '': ','+ goodInfo.twoAreaName}}
           {{goodInfo.threeAreaName==''? '': ',' + goodInfo.threeAreaName}}</p>
-        <div>品牌LOGO：
+        <div><span>品牌LOGO：</span>
           <img :src="goodInfo.brandLogo"/>
         </div>
         <div v-show="isBrandApprove">
-          <p v-show="goodInfo.rejectReason!==''">拒绝原因：{{goodInfo.rejectReason}}</p>
+          <p class="goodInfop" v-show="goodInfo.rejectReason!==''"><span>拒绝原因：</span>{{goodInfo.rejectReason}}</p>
         </div>
         <button @click="goodInfoShow=!goodInfoShow">返回</button>
       </div>
@@ -227,6 +231,7 @@
         that.modifyLocal = 1
         that.get_comment_info()
         that.isBrandApprove = false
+        that.search_params = []
       },
       brandApproveQuery () {
         let that = this
@@ -235,6 +240,7 @@
         that.modifyLocal = 2
         that.get_comment_info1()
         that.isBrandApprove = true
+        that.search_params = []
       },
       area () {
         let that = this
@@ -362,6 +368,10 @@
       // 修改保存
       change_confirm () {
         let that = this
+        if (that.add_modify_params.brandName === '') {
+          that.show_tip('品牌名称不能为空')
+          return
+        }
         // that.reset_add_modify_params_bind()
         that.add_modify_imgStep(function () {
           // 根据国家的code获取省份名字
@@ -551,6 +561,7 @@
       // 获取商品库列表
       get_comment_info () {
         let that = this
+        that.is_Success = false
         this.$("[data-toggle='popover']").popover('hide')
         that.$('#table').bootstrapTable('destroy').bootstrapTable({
           cache: false,
@@ -609,6 +620,7 @@
       // 获取审核列表
       get_comment_info1 (n) {
         let that = this
+        that.is_Success2 = false
         if (n === '' || n === undefined) {
           that.brandStatusName = '品牌状态'
         } else if (n === 0) {
@@ -662,7 +674,7 @@
             valign: 'middle',
             formatter: function (x, y) {
               return y.approveStatus === 1 ? '审批中' : `
-              <div class="color_default" style="position:relative;">审批不通过
+              <div class="color_default">审批不通过
                 <i class="ico_msg">
                 <div class="ico-tit">` + y.rejectReason + `</div>
               </i>
@@ -887,9 +899,17 @@
 /*详情*/
 #myTabContent{position:relative;}
 .goodInfo{position:absolute;top:0;left:0;width:100%;height:840px;padding-top:40px;background:#fff;z-index:99;}
-.goodInfo p,.goodInfo div,.goodInfo button{margin-left:40px;margin-top:20px;}
+.goodInfo p,.goodInfo div,.goodInfo button{margin-left:80px;margin-top:20px;}
 .goodInfo div img{width:60px;height:60px; display:inline-block;}
 .goodInfo button{width:150px;height:50px;border:1px solid #ccc; text-align: center;}
+.goodInfo .goodInfop
+{
+  width:300px;
+  word-break:break-all;
+}
+.goodInfo .goodInfop span{
+  margin-left: -80px; display:inline-block;width:80px;
+}
 /*删除*/
 .delectGoodBg{position:absolute;top:0;left:0;width:100%;height:880px;background:rgba(0,0,0,0.6);z-index:99;}
 .delectGoodWrap{position:absolute;width:380px;height:280px;padding:10px;border-radius:10px;top:50%;left:50%;margin-left:-200px;background:#fff;z-index:99;}
@@ -899,7 +919,7 @@
 /*修改/新增*/
 .changeGoodInfo input,.changeGoodInfo select{width:200px;line-height:40px;color:#666;}
 .zIndex2{z-index:21;}
-.sz .tab-content .tab-pane .search_cell .time{top:50px;}
+.sz .tab-content .tab-pane .search_cell .time{top:50px;left:14px;width:450px;}
 .icon{width:40px;height:40px;z-index:11;display:inline-block;}
 .timeIcon{background:url(../../../assets/images/ico_calendar@2x.png) no-repeat center bottom;background-size:19px 20px;}
 .searchIcon{background:url(../../../assets/images/ico_search.png) no-repeat center center;background-size:20px 20px;}
