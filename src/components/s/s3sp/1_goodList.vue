@@ -514,9 +514,13 @@
             }
           }
         })
-      }
-      ,goodsStoreSearch (){
+      },
+      goodsStoreSearch () {
         let that = this
+        if (that.search_goods_params.startTime > that.search_goods_params.endTime) {
+          that.show_tip('开始时间不能大于结束时间')
+          return
+        }
         that.goodsStore()
       }
       ,goodsStoreHandleSizeChange(val) {
@@ -531,6 +535,10 @@
       }
       ,exportSearch (){
         let that = this
+        if (that.search_goods_params.startTime > that.search_goods_params.endTime) {
+          that.show_tip('开始时间不能大于结束时间')
+          return
+        }
         let url=that.localbase + 'm2c.scm/goods/export?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+'&goodsClassifyId='+that.search_goods_params.goodsClassifyId+'&goodsStatus='+that.search_goods_params.goodsStatus+'&condition='+that.search_goods_params.condition+'&startTime='+that.search_goods_params.startTime+'&endTime='+that.search_goods_params.endTime;
         window.location.href=url
       }
@@ -563,6 +571,10 @@
       }
       ,goodsCheckStoreSearch (){
         let that = this
+        if (that.search_goodsCheck_params.startTime > that.search_goodsCheck_params.endTime) {
+          that.show_tip('开始时间不能大于结束时间')
+          return
+        }
         that.goodsCheckStore()
       }
       ,goodsCheckStoreHandleSizeChange(val) {
