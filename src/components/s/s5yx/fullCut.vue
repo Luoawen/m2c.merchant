@@ -223,7 +223,7 @@
     </div>
     <!--弹框-->
     <!-- 弹框背景遮罩层s -->
-    <div   v-show="modalShadow"   class="modal-backdrop fade in" style="z-index:1;"></div> 
+    <div   v-show="modalShadow"   class="modal-backdrop fade in" style="z-index:1;"></div>
     <!-- 弹框背景遮罩层e -->
     <!--作用范围  商品筛选弹框s-->
     <div class="modal fade frame_layer01" id="choose_goods"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
@@ -327,7 +327,7 @@
           </div>
         </div>
         <div class="specification_footer">
-          <button type="button" class="btn save"  data-dismiss="modal">取消</button> 
+          <button type="button" class="btn save"  data-dismiss="modal">取消</button>
           <button type="button" class="btn cancel" @click="goodsSkuChoose(goodsInfo,$event)">确认</button>
         </div>
       </div>
@@ -487,7 +487,7 @@
       <div class="modal-dialog shop_goodchoose"       style="margin:20px 0px;">
         <div class="frame_total ">
           <div class="modal-header">
-            <div class="modal-title text-center wid100 " @click="changeTab('goods')"> 
+            <div class="modal-title text-center wid100 " @click="changeTab('goods')">
             <span>选择商品</span>
             </div>
             <!-- <div class="modal-title text-center wid50 fl" :class="tab_flag == 'shop' ? 'active' : ''" @click="changeTab('shop')">
@@ -1045,7 +1045,7 @@
           data: {
             goodsClassifyId: that.goods_query_item.goodsClassifyId,
             condition: that.goods_query_item.condition,
-            dealerId: that.goods_query_item.dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
             pageNum: that.goods_query_item.pageNum,
             rows: that.goods_query_item.rows
           },
@@ -1079,7 +1079,7 @@
         that.modalShadow = true
       },
       openGoodsSku (goods,index,$event) {
-        var that = this 
+        var that = this
         let el = $event.target
         //单规格的情况不显示可选规格选项
         if(goods.skuSingleFlag == 0){
@@ -1107,12 +1107,12 @@
        for (var i = 0; i < goods.goodsSkuList.length; i++){
             if(goods.goodsSkuList[i].goodsSkuInventory<=0){
                 // 库存不能小于等于0   checkbox &input  设置 disable属性
-                goods.goodsSkuList[i].disabled = true;                
+                goods.goodsSkuList[i].disabled = true;
             }
        }
        that.goodsInfo = goods
-      },   
-         //  点击格选择弹框确认后将数据保存起来 
+      },
+         //  点击格选择弹框确认后将数据保存起来
        goodsSkuChoose (goodsInfo,$event) {
         let that = this
         // 定义空数组  遍历弹框里的规格列表（条件为checkbox被选中且现有库存数量大于0）
@@ -1169,7 +1169,7 @@
             that.chooseGoodsList.push(choose_goods)
           }
         }
-        
+
         console.log('选择商品列表',choose_goods)
         that.goods_sku_show = false
          let el=$event.target
@@ -1222,37 +1222,37 @@
       makeGoodsIds () {
         var that = this
                //定义 数组合并去重 （没有成功..）
-        //       Array.prototype.unique = function() {  
-        //     var newArr = [];  
-        //     for (var i = 0; i < this.length; i++) {  
+        //       Array.prototype.unique = function() {
+        //     var newArr = [];
+        //     for (var i = 0; i < this.length; i++) {
         //         // if(newArr.indexOf(this[i]) == -1)
         //         console.log(JSON.stringify(newArr))
         //         if(JSON.stringify(newArr).indexOf(JSON.stringify(this[i])) ==-1)
-        //         {  
-        //             newArr.push(this[i]);  
-        //         }  
-        //     }  
+        //         {
+        //             newArr.push(this[i]);
+        //         }
+        //     }
         //     console.log('-----',this)
-        //     return newArr;  
-        // };  
+        //     return newArr;
+        // };
        //that.chooseGoodsList=that.chooseGoodsList.concat(that.chooseGoodsList1).unique()
         console.log("--合并后的的chooseGoodsList--",that.chooseGoodsList)
         that.params.goods_ids = []
         that.params.sku_list = []
         for (var i = 0; i < that.chooseGoodsList.length; i++) {
-          var goods_item = {}          
+          var goods_item = {}
           var goods_item_sku_list = []
           for(var g = 0; g < that.chooseGoodsList[i].chooseSkuList.length; g++){
             var goods_item_sku = {}
             var goodsSku_item = {}
             goods_item_sku.skuId = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuId
-            goods_item_sku.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum            
+            goods_item_sku.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum
             goods_item_sku_list.push(goods_item_sku)
 
             goodsSku_item.skuId = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuId
             goodsSku_item.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum
             goodsSku_item.goodsId = that.chooseGoodsList[i].goodsId;
-            
+
             that.params.sku_list.push(goodsSku_item)
           }
           goods_item.goodsId = that.chooseGoodsList[i].goodsId
@@ -1884,7 +1884,7 @@
     right: 5px;
     top:70%;
     }
-   
+
   .wid50{width: 50%}
   .clear{clear: both;overflow: hidden;}
   .fl{float: left;}
@@ -1953,7 +1953,7 @@
         mix-width: 1100px;
         background: rgba(255, 255, 255, 1);
         padding: 10px 0 30px 30px;
-      //  background: #ccc; 
+      //  background: #ccc;
         margin-bottom: 10px;
         font-size: 10px;
         a {
@@ -2285,7 +2285,7 @@
           width: 100%;
           height: 100%;
           position: relative;
-        
+
         }
         .tc_shop {
           font-size: 9px;
