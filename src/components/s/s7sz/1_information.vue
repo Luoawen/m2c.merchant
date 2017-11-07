@@ -30,7 +30,7 @@
           </div>
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-info btn-lg save" @click="modifyDealerMess()">保存</button>
+            <el-button type="submit"  @click="modifyDealerMess()">保存</el-button>
             <!--<button type="submit" class="btn btn-default btn-lg">取消</button>-->
             </div>
           </div>
