@@ -459,7 +459,6 @@
               }else{
                 that.sukShow = false
               }
-              alert(that.goodsSKUs[0].show)
               that.goodsSKUs[k].marketPrice=that.goodsSKUs[k].marketPrice*100
               that.goodsSKUs[k].photographPrice=that.goodsSKUs[k].photographPrice*100
               that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
