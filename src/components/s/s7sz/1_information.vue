@@ -30,7 +30,7 @@
           </div>
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-info btn-lg save" @click="modifyDealerMess()">保存</button>
+            <el-button type="submit"  @click="modifyDealerMess()">保存</el-button>
             <!--<button type="submit" class="btn btn-default btn-lg">取消</button>-->
             </div>
           </div>
@@ -159,15 +159,15 @@
     modifyDealerMess (callback) {
       let that = this
       if (that.storeinformation.appellation == null || that.storeinformation.appellation.trim() == '' || that.storeinformation.appellation.length > 50){
-        alert("请输入店铺名称")
+        that.show_tip("请输入店铺名称")
         return
       }
       if (that.storeinformation.service == null || that.storeinformation.service.trim() == ''){
-        alert("请输入客服电话")
+        that.show_tip("请输入客服电话")
         return
       }
       if (that.$("#m11yhgl_img")[0].src == null || that.$("#m11yhgl_img")[0].src.trim() == ''){
-        alert("请选择图片")
+        that.show_tip("请选择图片")
         return
       }
       var methodStr = "post";
