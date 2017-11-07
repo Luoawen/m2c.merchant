@@ -18,8 +18,8 @@
       </el-row>
       <el-row :gutter="20" style="z-index:2;">
         <el-col :span="11" style="height:40px;z-index:2;">
-          <el-form-item label="商品分类" prop="selectedOptions1">
-            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="selectedOptions1" change-on-select :props="goodsClassifyProps" @change="handleChange"></el-cascader>
+          <el-form-item label="商品分类" prop="goodsClassifyId">
+            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="data.goodsClassifys" change-on-select :props="goodsClassifyProps" @change="handleChange"></el-cascader>
           </el-form-item>
         </el-col>
         <el-col :span="11">
@@ -301,18 +301,16 @@
     data() {
       return {
         ruleForm: {
-          name:'',
           goodsName: '',
           goodsSubTitle: '',
-          selectedOptions1: '',
+          goodsClassifyId: '',
           goodsBrandId: '',
           goodsUnitId: '',
-          type: [],
           goodsMinQuantity: '',
           goodsPostageId: ''
         },
         rules: {
-          selectedOptions1: [
+          goodsClassifyId: [
             { required: true, message: '请选择商品分类', trigger: 'change' }
           ],
           goodsName: [
@@ -335,22 +333,6 @@
             { required: true, message: '请选择运费模板', trigger: 'change' }
           ],
           
-        },
-        goodRuleForm:{
-          availableNum:'',
-          photographPrice:'',
-          weight:''
-        },
-        goodRules:{
-          availableNum: [
-            { required: true, message: '请输入库存量', trigger: 'blur'}
-          ],
-          photographPrice: [
-            { required: true, message: '请输入拍获价', trigger: 'blur',type: 'number' }
-          ],
-          weight: [
-            { required: true, message: '请输入重量', trigger: 'blur',type: 'number' }
-          ]
         },
         countMode:'', // 商家结算方式 1：按供货价 2：按服务费率
         radio: '1',
@@ -504,7 +486,7 @@
       handleChange(children) {
         let that = this
         that.data.goodsClassifyId = children[children.length-1]
-        console.log(that.data.goodsClassifyId)
+        //that.data.goodsClassifys = children.toString()
         if(that.countMode!=1){
           // 根据分类id获取分类名
           that.$.ajax({
@@ -516,7 +498,8 @@
             },
             success: function (result) {
               that.serviceRate = result.content
-              console.log(that.serviceRate)
+              that.data.goodsClassifys = children.toString()
+              console.log(that.data.goodsClassifys)
             }
           })
         }

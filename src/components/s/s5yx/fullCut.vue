@@ -266,7 +266,7 @@
                     <div><b>{{goods.goodsPrice/100}}元</b></div>
                   </div>
                 </div>
-                <div class="fc" v-show="goods.isCheck"><div class="pickSpecificationsStyle"   v-show="hasSpecificationsStyle"  @click.stop="ChooseSpecification(goods)">请选规格</div></div>
+                <div class="fc" v-show="goods.isCheck"><div class="pickSpecificationsStyle"   v-show="hasSpecificationsStyle"   @click.stop="ChooseSpecification(goods)">请选规格</div></div>
                 <div class="fcimg" v-show="goods.isCheck"></div>
               </div>
             </div>
@@ -320,7 +320,7 @@
                   {{sku.goodsSkuName}}
                 </td>
                 <td>{{sku.goodsSkuInventory}}</td>
-                <td><input class="form-control set_num fl ml10"       v-model="sku.goodsSkuNum" :disabled="sku.disabled"/></td>
+                <td><input class="form-control set_num fl ml10"   min="0"  v-model="sku.goodsSkuNum" :disabled="sku.disabled"/></td>
               </tr>
               </tbody>
             </table>
@@ -849,7 +849,7 @@
           }
           that.$.ajax({
             url: that.base + 'm2c.market/fullcut/creation',
-//            url: 'http://localhost:8080/m2c.market/fullcut/creation',
+      //            url: 'http://localhost:8080/m2c.market/fullcut/creation',
             contentType: 'application/json', // 必须有
             type: 'post',
             data: JSON.stringify(rebody),
@@ -1081,14 +1081,10 @@
       openGoodsSku (goods,index,$event) {
         var that = this 
         let el = $event.target
-         // 需求1：判断商品能否直接选中（有规格 需要选择规格skuFlag=1  没有规格skuFlag=0可以直接选中
-                // 如果是单规格产品
-        // if(that.goodsResult.content[index].skuSingleFlag=1){
-        //       // 把商品列表可以被选中的状态为不可选(去掉样式)
-        //           var hhh =that.$(el).children('.fcimg').removeClass('.fcImg')
-        //     // 规格选择弹框
-        // }
-        // 可以直接选中的情况
+        //单规格的情况不显示可选规格选项
+        if(goods.skuSingleFlag == 0){
+          that.hasSpecificationsStyle = false;
+        }
         // 把样式改成被选中状态  并且push到chooseGoodsList中
         that.goodsResult.content[index].isCheck = true
         that.chooseGoodsList.push(that.goodsResult.content[index])
@@ -1124,7 +1120,9 @@
         for (var i = 0; i < goodsInfo.goodsSkuList.length; i++){
           if(goodsInfo.goodsSkuList[i].goodsSkuNum>goodsInfo.goodsSkuList[i].goodsSkuInventory){
                    that.show_tip("参与满减库存应不大于现有库存")
-                  
+          }
+          if(goodsInfo.goodsSkuList[i].goodsSkuNum < 0){
+                   that.show_tip("参与满减库存应不小于0")
           }
           if (goodsInfo.goodsSkuList[i].isCheck == true && goodsInfo.goodsSkuList[i].goodsSkuNum > 0) {
            // 定义一个空对象     将要数据收集起来
@@ -1161,7 +1159,6 @@
             that.chooseGoodsList.splice(i, 1);
           }
         }
-        //that.chooseGoodsList1 = []
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           if (that.goodsResult.content[i].isChoosed == 1) {
             var choose_goods = {}
@@ -1173,11 +1170,8 @@
           }
         }
         
-
         console.log('选择商品列表',choose_goods)
         that.goods_sku_show = false
-        
-        
          let el=$event.target
         that.$(el).parents('#specificationChoose').modal("hide")
       },
@@ -1881,8 +1875,10 @@
     width: 60px;
     height: 30px;
     line-height: 30px;
-     text-align: center;
-    border:1px  #cccccc  solid;
+    text-align: center;
+    color:green;
+    border:1px  #BBD2F1  solid;
+    background:#ccc;
     border-radius:5px;
     position: absolute;
     right: 5px;
