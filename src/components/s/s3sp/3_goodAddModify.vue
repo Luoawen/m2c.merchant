@@ -551,7 +551,7 @@
               var arr = Array()
               for(var i=0;i<arr1.length;i++){
                   for(var j=0;j<arr2.length;j++){
-                      arr.push(arr1[i]+" "+arr2[j])
+                      arr.push(arr1[i]+','+arr2[j])
                   }
               }
               return arr
