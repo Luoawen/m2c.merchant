@@ -97,7 +97,7 @@
                         </div>
                     </div>
                     <div class="range">
-                        <p>作用范围：<span v-text="item.rangeType===0?'全场':item.rangeType===1?'商家':item.rangeType===2?'商品':item.rangeType===3?'品类':''"></span></p>
+                        <p>作用范围：<span v-text="item.rangeType===0?'全店':item.rangeType===1?'商家':item.rangeType===2?'商品':item.rangeType===3?'品类':''"></span></p>
                         <div class="goods" v-if="item.rangeType===2" >
                           <p>已选<span>{{item.suitableRangeList.length}}</span>件商品</p>
                           <ul>
