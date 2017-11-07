@@ -332,7 +332,7 @@
           goodsPostageId: [
             { required: true, message: '请选择运费模板', trigger: 'change' }
           ],
-          
+
         },
         countMode:'', // 商家结算方式 1：按供货价 2：按服务费率
         radio: '1',
@@ -585,7 +585,6 @@
               },
               success: function (result) {
                 if(result.status==200){
-                  that.show_tip("添加规格值成功")
                   that.getValue()
                 }else{
                   that.show_tip(result.errorMessage)
