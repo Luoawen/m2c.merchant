@@ -25,9 +25,9 @@
           <tr v-for="(postageModelRule,index) in formwork.postageModelRules">
             <th scope="row">{{postageModelRule.defaultFlag==0 ?'全国（默认运费）':postageModelRule.address}}</th>
             <td>{{formwork.chargeType==1?postageModelRule.firstPiece:postageModelRule.firstWeight}}</td>
-            <td>{{postageModelRule.firstPostage}}</td>
+            <td>{{postageModelRule.firstPostage/100}}</td>
             <td>{{formwork.chargeType==1?postageModelRule.continuedPiece:postageModelRule.continuedWeight}}</td>
-            <td>{{postageModelRule.continuedPostage}}</td>
+            <td>{{postageModelRule.continuedPostage/100}}</td>
           </tr>
         </tbody>
       </table>
