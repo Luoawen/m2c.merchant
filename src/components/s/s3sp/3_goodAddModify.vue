@@ -454,8 +454,9 @@
         that.$refs[formName].validate((valid) => {
           if (valid) {
             for(var k=0;k<that.goodsSKUs.length;k++){
-              if(that.goodsSKUs[k].availableNum==''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].width==''||that.goodsSKUs[k].width==undefined||that.goodsSKUs[k].photographPrice==''||that.goodsSKUs[k].photographPrice==undefined){
+              if(that.goodsSKUs[k].availableNum==''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].weight==''||that.goodsSKUs[k].weight==undefined||that.goodsSKUs[k].photographPrice==''||that.goodsSKUs[k].photographPrice==undefined){
                 that.sukShow = true
+                return
               }else{
                 that.sukShow = false
               }
@@ -468,8 +469,9 @@
                 that.goodsSKUs[k].supplyPrice=that.goodsSKUs[k].supplyPrice*100
               }
             }
-            if(that.goodsMainImages.length==0){
+            if(that.goodsMainImages.length<=0){
               that.imgShowList = true
+              return
             }
           let a={
             token: sessionStorage.getItem('mToken'),
