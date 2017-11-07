@@ -11,7 +11,7 @@
               <p v-if="formwork.goodsUserNum==0">已有{{formwork.goodsUserNum}}个商品使用 </p>
               <router-link v-if="formwork.goodsUserNum!=0" :to="{name:'goodList'}">已有{{formwork.goodsUserNum}}个商品使用 </router-link></th>
             <th class="act"><router-link :to="{ name:'formworkadd', query: {addModify: false, modelId: formwork.modelId} }">编辑</router-link></th>
-            <th><a @click="/*delectModel(formwork.modelId)*/deleteShow(formwork.modelId)"  v-if="formwork.goodsUserNum==0">删除</a></th>
+            <th><a  @click="showdelete(formwork.modelId)"  v-if="formwork.goodsUserNum==0">删除</a></th>
           </tr>
         </thead>
         <tbody>
@@ -36,15 +36,15 @@
 
     </template>
     <!--是否删除  弹框-->
-    <div class="agreetc_content" v-show="Agreeshow===true" >
+    <div class="agreetc_content" v-show="deleteShow" >
       <div class="agreetc_header">
         <span>提示</span>
-        <span class="fr" @click="Agreeshow=false">X</span>
+        <span class="fr" @click="deleteShow=false">X</span>
       </div>
-      <div class="agreetc_body">是否同意退货申请？</div>
+      <div class="agreetc_body">是否删除运费模板？</div>
       <div class="agreetc_footer">
-        <button type="button" class="btn save" >确认</button>
-        <button type="button" class="btn cancel" @click="Agreeshow=false">取消</button>
+        <button type="button" class="btn save" @click = "deleted()">确认</button>
+        <button type="button" class="btn cancel" @click="deleteShow=false">取消</button>
       </div>
     </div>
   </div>
@@ -52,12 +52,13 @@
 </template>
 <script>
 export default {
-  deleteShow:'',
-  Agreeshow: false,
+
   name: '',
   data () {
     return {
       formworks: [],
+      formworkId:'',
+      deleteShow:false,
       dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
     }
   },
@@ -65,9 +66,15 @@ export default {
     this.getTemplate()
   },
   methods: {
-    deleteShow (modelId) {
+    showdelete (modelId) {
       var that = this;
-      that.Agreeshow = true;
+      that.formworkId = modelId;
+      that.deleteShow = true;
+    },
+    deleted(){
+        var that = this;
+        that.delectModel (that.formworkId)
+        that.deleteShow = false
     },
     delectModel (n) {
       // alert((sessionStorage.getItem('mUser')).dealerId)
