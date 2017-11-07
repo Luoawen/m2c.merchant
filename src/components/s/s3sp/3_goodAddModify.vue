@@ -19,7 +19,7 @@
       <el-row :gutter="20" style="z-index:2;">
         <el-col :span="11" style="height:40px;z-index:2;">
           <el-form-item label="商品分类" prop="goodsClassifyId">
-            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="data.goodsClassifys" change-on-select :props="goodsClassifyProps" @change="handleChange"></el-cascader>
+            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="data.goodsClassifyIds" change-on-select :props="goodsClassifyProps" @change="handleChange"></el-cascader>
           </el-form-item>
         </el-col>
         <el-col :span="11">
@@ -97,7 +97,7 @@
       <el-row :gutter="20">
         <el-col :span="3">商品规格</el-col>
         <el-col :span="21">
-          <el-radio v-model="data.skuFlag" label="0" id="skuFlag0">单一规格</el-radio>
+          <el-radio v-model="data.skuFlag" label="0" id="skuFlag0" @change="clearSKU">单一规格</el-radio>
           <el-radio v-model="data.skuFlag" label="1" id="skuFlag1" @change="clearGoodsSKUs">多规格</el-radio>
         </el-col>
       </el-row>
@@ -137,6 +137,7 @@
               </tr>
             </tbody>
         </table>
+        <i v-if="sukShow" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为空</i>
       </div>
 
       <div class="tabPane" v-if="data.skuFlag==1">
@@ -152,12 +153,12 @@
             <tr v-for="(item,index) in goodsSpecifications">
               <td><span @click="delect(index)" v-if="goodsSpecifications.length>1">移除</span></td>
               <td>
-                <el-select v-model="item.itemName" placeholder="请选择"><!--这里需要后台返回规格Id-->
+                <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item)"><!--这里需要后台返回规格Id-->
                   <el-option
                     v-for="item in stantards"
-                    :key="item.stantardName"
+                    :key="item.stantardId"
                     :label="item.stantardName"
-                    :value="item.stantardName">
+                    :value="item.stantardId">
                   </el-option>
                 </el-select>
               </td>
@@ -248,12 +249,13 @@
             </tr>
           </tbody>
         </table>
+        <i v-if="sukShow" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为空</i>
       </div>
       <el-row>
         <el-col :span="24"><h4>商品详情</h4></el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="3">商品主图</el-col>
+        <el-col :span="3"><i style="color:red;">* </i>商品主图</el-col>
         <el-col :span="21">
           <el-upload
             :action="uploadUrl" name="img"
@@ -265,6 +267,7 @@
           <el-dialog v-model="dialogVisible" size="tiny">
             <img width="100%" :src="dialogImageUrl" alt="">
           </el-dialog>
+          <i v-if="imgShowList" style="color:red; font-style:normal;">商品主图不能为空</i>
           <p class="marginTop20">最多上传5张主图，可以通过拖曳图片调整顺序</p>
         </el-col>
       </el-row>
@@ -280,7 +283,7 @@
         <el-col :span="24"><h4>设置上架</h4></el-col>
       </el-row>
       <el-row :gutter="20" v-if="handle_toggle=='add'">
-        <el-col :span="3">*设置上架</el-col>
+        <el-col :span="3"><i style="color:red;">* </i>设置上架</el-col>
         <el-col :span="21">
           <el-radio v-model="data.goodsShelves" label="1">手动上架</el-radio>
           <p>平台审核通过后，商家需手动上架商品</p>
@@ -288,7 +291,6 @@
           <p>平台审核通过，商品自动上架，无需商家操作</p>
         </el-col>
       </el-row>
-
     <el-button v-if="handle_toggle=='add'" type="primary" @click="save('ruleForm')">提交审核</el-button>
     <el-button v-if="handle_toggle!='add'" type="primary" @click="save('ruleForm')">保存修改</el-button>
     <el-button @click="goBack">取消</el-button>
@@ -334,6 +336,8 @@
           ],
 
         },
+        sukShow:false, // 商品库不能为空
+        imgShowList:false, // 商品主图不能为空
         countMode:'', // 商家结算方式 1：按供货价 2：按服务费率
         radio: '1',
         goods: [],
@@ -342,7 +346,7 @@
         goodsGuaranteeList:[], // 获取保障详情
         goodsGuarantCheck:[],
         serviceRate:'',
-        goodsSKUs:[{skuName: '', showStatus: '', marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}],
+        goodsSKUs:[{skuName: '', showStatus: false, marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}],
         goodsSpecifications:[{itemValue:[],state1:''}],
         goodsMainImages:[],
         goodsGuarantee:[],
@@ -370,7 +374,7 @@
         units: [], // 计量单位列表
         modelId: '', // 模板ID
         models: [], // 模板列表
-        stantardId: '',
+        standardId: '',
         stantards: [], // 规格
         classifyId: '',
         goodsClassifys:[],
@@ -413,6 +417,17 @@
       }
     },
     methods: {
+      stantardIdChange(item){
+        let that=this
+        that.standardId=item.standardId
+        console.warn("stantardId="+that.standardId)
+        that.getValue()
+      },
+      // 清空单规格内值
+      clearSKU(){
+        let that = this
+        that.goodsSKUs=[{skuName: '', showStatus: false, marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}]
+      },
       clearGoodsSKUs(){
         let that = this
         that.goodsSKUs=[]
@@ -439,15 +454,24 @@
         that.$refs[formName].validate((valid) => {
           if (valid) {
             for(var k=0;k<that.goodsSKUs.length;k++){
-            that.goodsSKUs[k].marketPrice=that.goodsSKUs[k].marketPrice*100
-            that.goodsSKUs[k].photographPrice=that.goodsSKUs[k].photographPrice*100
-            that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
-            if(that.countMode!=1){
-              that.goodsSKUs[k].serviceRate=that.serviceRate
-            }else{
-              that.goodsSKUs[k].supplyPrice=that.goodsSKUs[k].supplyPrice*100
+              if(that.goodsSKUs[k].availableNum==''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].width==''||that.goodsSKUs[k].width==undefined||that.goodsSKUs[k].photographPrice==''||that.goodsSKUs[k].photographPrice==undefined){
+                that.sukShow = true
+              }else{
+                that.sukShow = false
+              }
+              alert(that.goodsSKUs[0].show)
+              that.goodsSKUs[k].marketPrice=that.goodsSKUs[k].marketPrice*100
+              that.goodsSKUs[k].photographPrice=that.goodsSKUs[k].photographPrice*100
+              that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
+              if(that.countMode!=1){
+                that.goodsSKUs[k].serviceRate=that.serviceRate
+              }else{
+                that.goodsSKUs[k].supplyPrice=that.goodsSKUs[k].supplyPrice*100
+              }
             }
-          }
+            if(that.goodsMainImages.length==0){
+              that.imgShowList = true
+            }
           let a={
             token: sessionStorage.getItem('mToken'),
             goodsId: that.goodsId,
@@ -559,12 +583,6 @@
             }
           }
       },
-      // 取消添加规格值
-      clearValue (index) {
-        let that = this
-        //console.log(index)
-        that.goodsSpecifications[index].state1=""
-      },
       // 添加规格值
       specValueClick (state1, index) {
         let that = this
@@ -578,10 +596,12 @@
             that.$.ajax({
               type: 'post',
               url: that.localbase + 'm2c.scm/goods/spec/value',
+              //url:'http://10.0.40.23:8080/m2c.scm/goods/spec/value',
               data: {
                 token: sessionStorage.getItem('mToken'),
                 dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-                specValue: state1
+                specValue: state1,
+                standardId: that.standardId
               },
               success: function (result) {
                 if(result.status==200){
@@ -626,13 +646,11 @@
       // 照片墙
       handleRemove(file, fileList) {
         let that = this
-        console.log("删除文件"+file.response.content.url)
-        for(var i=0;i<that.goodsMainImages.length;i++){
-          if(file.response.content.url=that.goodsMainImages[i]){
-            that.goodsMainImages.splice(i,1)
-            console.log("剩余文件"+that.goodsMainImages)
-          }
+        that.goodsMainImages=[]
+        for(var i=0;i<fileList.length;i++){
+          that.goodsMainImages.push(fileList[i].url)
         }
+        console.warn("goodsMainImages="+that.goodsMainImages)
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url
@@ -645,9 +663,12 @@
         if(file.response.content.url==''||file.response.content.url==undefined){
           that.show_tip("上传失败,请重新上传")
         }else{
-          that.goodsMainImages.push(file.response.content.url)
+          that.goodsMainImages=[]
+          for(var i=0;i<fileList.length;i++){
+            that.goodsMainImages.push(fileList[i].url)
+          }
         }
-        console.warn("url="+that.goodsMainImages)
+        console.warn("goodsMainImages="+that.goodsMainImages)
       },
       beforeAvatarUpload(file) {
         const isMA = file.size < 409600;
@@ -700,7 +721,8 @@
           url: that.localbase + 'm2c.scm/goods/spec/value',
           data:{
             token: sessionStorage.getItem('mToken'),
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            standardId: that.standardId
           },
           success: function (result) {
             that.restaurants = result.content
@@ -809,29 +831,30 @@
                 }
               }
             }
-            console.log(that.goodsGuarantCheck)
             that.data.skuFlag = result.content.skuFlag.toString()
             that.goodsSpecifications = result.content.goodsSpecifications
             that.goodsSKUs = result.content.goodsSKUs
+            that.data.goodsMinQuantity = result.content.goodsMinQuantity.toString()
+            console.log("that.data.goodsMinQuantity="+that.data.goodsMinQuantity)
             for(var p=0;p<result.content.goodsSKUs.length;p++){
               that.goodsSKUs[p].marketPrice=result.content.goodsSKUs[p].marketPrice/100
               that.goodsSKUs[p].photographPrice=result.content.goodsSKUs[p].photographPrice/100
               if(result.content.goodsSKUs[p].supplyPrice!=''){
                 that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice/100
               }
-              //that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice/100
             }
-            that.$refs.ue.setUEContent(result.content.goodsDesc)
+
             for(var i=0;i<result.content.goodsMainImages.length;i++){
               that.fileList.push(eval('(' + '{url:"'+ result.content.goodsMainImages[i] + '"}' + ')'))
               that.goodsMainImages.push(result.content.goodsMainImages[i])
             }
+            console.log("that.fileList="+that.fileList)
             if(result.content.skuFlag==1){
               that.$('#skuFlag0').hide()
             }else{
               that.$('#skuFlag1').hide()
             }
-            that.selectedOptions1 = result.content.goodsClassifyIds
+            that.$refs.ue.setUEContent(result.content.goodsDesc)
           }
         })
       }
