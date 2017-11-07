@@ -57,7 +57,7 @@
                     <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
@@ -75,7 +75,7 @@
                           </div>
                         </div>
                       </div>
-
+                      <el-button @click="sureCheckCity($event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -499,6 +499,11 @@
       }
     },
     methods: {
+      cityBoxShow(index,$event){
+        let that = this
+        var el = event.target
+        that.$(el).parents('.table').find('.cityBox').eq(index).show()
+      },
       checkNumber (val, index, arr, list) {
         setTimeout(() => {
           if (val && $.isNumeric(val)) {
@@ -535,6 +540,16 @@
           }
         }, 0)
       },
+      // 处理address数组为字符串
+      sureCheckCity($event){
+        let that = this
+        let el = $event.target
+        console.log(that.addRows[that.index].address.toString())
+        for(var i=0;i<that.that.addRows[that.index].address.length;i++){
+
+        }
+        that.addRows[that.index].address.toString()
+      },
 // 选中大区时同时选中所有省市
       chooseArea(n, $event) {
         let that = this
@@ -545,7 +560,8 @@
               for (var j = 0; j < that.datas[i].subs.length; j++) {
                 // (that.addRows).push(that.datas[i].subs[j].code)
                 that.addRows[that.index].IdArr.push(that.datas[i].subs[j].code)
-                that.addRows[that.index].address.push(that.datas[i].subs[j].name)
+                that.addRows[that.index].address.push(eval('(' + '{proName:"'+ that.datas[i].subs[j].name + '"}' + ')'))
+                
                 that.addRows[that.index].proList.push(that.datas[i].subs[j].code)
                 for (var k = 0; k < that.datas[i].subs[j].subs.length; k++) {
                   if (that.datas[i].subs[j].subs[k].parent === that.datas[i].subs[j].code) {
@@ -565,7 +581,7 @@
                   }
                 }
                 that.addRows[that.index].IdArr.splice(that.$.inArray(that.datas[i].subs[j].code, that.addRows[that.index].IdArr), 1)
-                that.addRows[that.index].address.splice(that.datas[i].subs[j].name, 1)
+                that.addRows[that.index].address.splice(eval('(' + '{proName:"'+ that.datas[i].subs[j].name + '"}' + ')'), 1)
               }
             }
           }
@@ -577,7 +593,8 @@
         let el = event.target
         if (el.checked) {
           that.addRows[that.index].IdArr.push(n.code)
-          that.addRows[that.index].address.push(n.name)
+          //that.addRows[that.index].address.push(n.name)
+          that.addRows[that.index].address.push(eval('(' + '{proName:"'+ n.name + '"}' + ')'))
           for (var i = 0; i < that.datas.length; i++) {
             for (var j = 0; j < that.datas[i].subs.length; j++) {
               if (that.datas[i].subs[j].code === n.code) {
@@ -606,7 +623,7 @@
               }
             }
           }
-          that.addRows[that.index].address.splice(that.$.inArray(n.name, that.addRows[that.index].address), 1)
+          that.addRows[that.index].address.splice(that.$.inArray(eval('(' + '{proName:"'+ n.name + '"}' + ')'), that.addRows[that.index].address), 1)
           that.addRows[that.index].IdArr.splice(that.$.inArray(n.code, that.addRows[that.index].IdArr), 1)
           let point=0
           for (var i = 0; i < that.datas.length; i++) {
@@ -642,8 +659,8 @@
                 }
                 if (that.$.inArray(that.datas[i].subs[j].name, that.addRows[that.index].address) == -1) {
                   that.addRows[that.index].address.push(that.datas[i].subs[j].name)
-                  that.addRows[that.index].address.push(city.name)
                 }
+                that.addRows[that.index].address.push(city.name)
               }
             }
           }
@@ -679,7 +696,7 @@
                       }
                     }
                 }
-
+                that.addRows[that.index].address.splice(that.$.inArray(city.name, that.addRows[that.index].address), 1)
               }
             }
           }
@@ -854,7 +871,7 @@
     mounted(){
       let that = this
       that.$(window).click(function(){
-        that.$(window).find('.cityBox').hide()
+        that.$('.addMess').find('.cityBox').hide()
       })
       that.$.ajax({
         type: 'get',
