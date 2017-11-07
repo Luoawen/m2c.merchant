@@ -57,19 +57,19 @@
                     <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click="cityBoxHide"> X </a></h4>
+                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/>
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
                             {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
+                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
                             <span> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click="chooseCity(city,$event)"/> {{city.name}}
+                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
@@ -158,30 +158,23 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address == 0 ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
+                  <td class="relative">{{addRow.address == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
                     编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close"
-                                  @click="cityBoxHide"> X </a></h4>
+                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
-                        <div class="bigArea"
-                            v-for="(item,index) in datas">
+                        <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox"
-                                  v-model="addRow.areaIdArr" :value="item.code"
-                                  @click="chooseArea(item.code,$event)"/>{{item.name}}
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
+                            {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox"
-                                  v-model="addRow.IdArr" :value="pro.code"
-                                  @click="choosePro(pro,$event)"/>
-                            <span @click="cityShow(index,$event)"> {{pro.name}} </span>
+                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                            <span> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox"
-                                      v-model="addRow.cityList" :value="city.code"
-                                      @click="chooseCity(city,$event)"/> {{city.name}}
+                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
@@ -289,21 +282,19 @@
                     编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click="cityBoxHide"> X </a></h4>
+                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/>
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
                             {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
-                            <span @click="cityShow(index,$event)"> {{pro.name}} </span>
+                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                            <span> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox"
-                                      v-model="addRow.cityList" :value="city.code"
-                                      @click="chooseCity(city,$event)"/> {{city.name}}
+                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
@@ -362,36 +353,28 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
+                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
                     编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close"
-                                  @click="cityBoxHide"> X </a></h4>
-                        <div class="test-div">
-                          <div class="bigArea"
-                              v-for="(item,index) in datas">
-                            <div class="left">
-                              <input type="checkbox"
-                                    v-model="addRow.areaIdArr" :value="item.code"
-                                    @click="chooseArea(item.code,$event)"/> {{item.name}}
-                            </div>
-                            <div class="pro" v-for="(pro,index) in item.subs">
-                              <input type="checkbox"
-                                    v-model="addRow.IdArr" :value="pro.code"
-                                    @click="choosePro(pro,$event)"/>
-                              <span @click="cityShow(index,$event)"> {{pro.name}} </span>
-                              <div class="cityWrap">
-                                <div class="city"
-                                    v-for="(city,index) in pro.subs">
-                                  <input type="checkbox"
-                                        v-model="addRow.cityList" :value="city.code"
-                                        @click="chooseCity(city,$event)"/> {{city.name}}
-                                </div>
+                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                      <div class="test-div">
+                        <div class="bigArea" v-for="(item,index) in datas">
+                          <div class="left">
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
+                            {{item.name}}
+                          </div>
+                          <div class="pro" v-for="(pro,index) in item.subs">
+                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                            <span> {{pro.name}} </span>
+                            <div class="cityWrap">
+                              <div class="city" v-for="(city,index) in pro.subs">
+                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
                         </div>
+                      </div>
                     </div>
                   </td>
                   <td>
@@ -659,6 +642,7 @@
                 }
                 if (that.$.inArray(that.datas[i].subs[j].name, that.addRows[that.index].address) == -1) {
                   that.addRows[that.index].address.push(that.datas[i].subs[j].name)
+                  that.addRows[that.index].address.push(city.name)
                 }
               }
             }
