@@ -238,8 +238,8 @@
               <td>
                 <el-input v-model="setUp.marketPrice" placeholder="请输入内容"></el-input>
               </td>
-              <td v-if="countMode==1">{{serviceRate}}</td>
-              <td v-if="countMode==2">
+              <td v-if="countMode==2">{{serviceRate}}</td>
+              <td v-if="countMode==1">
                 <el-input v-model="setUp.supplyPrice" placeholder="请输入内容"></el-input>
               </td>
               <td>
