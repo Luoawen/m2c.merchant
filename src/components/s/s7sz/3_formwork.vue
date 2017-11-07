@@ -211,6 +211,7 @@ export default {
     border-radius: 2px;
     color: #fff;
   }
+
   .save {
     margin-left: -110px;
     background: #0086FF;
