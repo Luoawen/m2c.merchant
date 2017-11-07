@@ -135,10 +135,6 @@
                   <i class="icon_dele" @click="deleteExchangeGoods(index, exchange)"></i>
                 </li>
               </ul>
-              <!-- 在之前的地方有选择过 能够全部显示 暂时不用 -->
-              <!-- <div class="more">
-                <a @click="goods_exchange_all_show = true" v-show="exchangeGoodsList.length > 0">查看全部商品></a>
-              </div> -->
             </div>
             <div class="set">
               <span>
@@ -164,9 +160,7 @@
               <span class="wid70 fl">作用范围</span>
               <select class="form-control range_of_action fl" v-model="params.range_type" @change="rangeSelect(params.range_type)">
                 <option value="0">全店</option>
-                <!-- <option value="1">商家</option> -->
                 <option value="2">商品</option>
-                <!-- <option value="3">品类</option> -->
               </select>
               <a v-show="rang_type_show.goods" @click="openGoodsChoose">点我选择商品</a>
               <a v-show="rang_type_show.all" @click="openFullRange">设置需要单独排除，不参与这次满减的商品</a>
@@ -179,9 +173,6 @@
                   <i class="icon_dele" @click="deleteGoods(index, choose)"></i>
                 </li>
               </ul>
-              <div class="more">
-                <a @click="openGoodsAll()" v-show="chooseGoodsList.length > 0">查看全部商品</a>
-              </div>
             </div>
             <div class="shop" v-show="rang_type_show.shop" >
               <p>已选<span>{{chooseShopList.length}}</span>件商家</p>
@@ -204,9 +195,6 @@
                     <i class="icon_dele" @click="deleteRemoveGoods(index, goods)"></i>
                   </li>
                 </ul>
-                <div class="more">
-                  <a @click="goods_remove_all_show = true" v-show="removeGoodsList.length > 0">查看全部商品></a>
-                </div>
               </div>
             </div>
           </div>
@@ -234,17 +222,6 @@
               <div type="button" class="guanb"    @click.stop="closeBox($event)"    aria-hidden="true" style="right:-20px;"></div>
             </h5>
           </div>
-          <!-- <div class="tc_shop">
-            <div>已选择<span><span style="color:red;">{{chooseGoodsList.length}}件</span></span>商品</div>
-            <div class="tc_shop_box">
-              <span class="tc_shop_span"  v-for="(choose, index) in chooseGoodsList">
-                <span style="position: relative;display:inline-block;width:100%;height:100%;">
-                  <span>{{choose.goodsName}}</span>
-                  <i class="i_delet" @click="deleteGoods(index, choose)"></i>
-                </span>
-              </span>
-            </div>
-          </div> -->
           <div class="search">
             <div class="search_tit">选择商品：</div>
             <div class="clear">
@@ -533,7 +510,7 @@
                 <div class="fcimg" v-show="goods.isRemoved"></div>
               </div>
             </div>
-            <div class="page">
+            <!-- <div class="page">
               <button>上一页</button>
               <span>{{goodsResult.pageNumber}}</span>/
               <span>{{goodsResult.pageCount}}</span>
@@ -541,7 +518,7 @@
               <span>到</span>
               <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="goods_query_item.pageNum"/>
               <span>页</span>
-            </div>
+            </div> -->
           </div>
           <!--商家-->
           <div class="shop_body" :style="tab_flag == 'shop' ? '' : 'display:none;'">

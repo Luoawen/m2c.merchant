@@ -194,7 +194,7 @@
             <div class="modal-title text-center wid100 "  @click="changeTab('goods')">
              <span>选择商品</span>
             </div>
-            <div  class="guanb" data-dismiss="modal" aria-hidden="true"></div>
+            <div  class="guanb"  @click.stop="closeBox($event)"  aria-hidden="true"></div>
           </div>
           <!--商品条件-->
           <div class="shop_choose_sort clear" :style="tab_flag == 'goods' ? '' : 'display:none;'">
@@ -234,7 +234,7 @@
                 <div class="fcimg" v-show="goods.isRemoved"></div>
               </div>
             </div>
-            <div class="page">
+            <!-- <div class="page">
               <button>上一页</button>
               <span>{{goodsResult.pageNumber}}</span>/
               <span>{{goodsResult.pageCount}}</span>
@@ -242,7 +242,7 @@
               <span>到</span>
               <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="goods_query_item.pageNum"/>
               <span>页</span>
-            </div>
+            </div> -->
           </div>
           <!--商家-->
           <div class="shop_body" :style="tab_flag == 'shop' ? '' : 'display:none;'">
@@ -255,7 +255,7 @@
                 <div class="fcimg" v-show="shop.isRemoved"></div>
               </div>
             </div>
-            <div class="page">
+            <!-- <div class="page">
               <button>上一页</button>
               <span>{{shopResult.pageNumber}}</span>/
               <span>{{shopResult.pageCount}}</span>
@@ -263,7 +263,7 @@
               <span>到</span>
               <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="shop_query_item.pageNum"/>
               <span>页</span>
-            </div>
+            </div> -->
           </div>
           <div class="footer">
             <button type="button" class="btn save" data-dismiss="modal" @click="cancelRemove()">取消</button>
@@ -580,14 +580,13 @@
       }
     },
     methods: {
-      // goto (path) {},
       itemback () {
         window.history.go(-1)
       },
          closeBox ($event) {
           var that = this
           let el=$event.target
-          that.$(el).parents('#choose_goods').modal("hide")
+          that.$(el).parents('#full_range_dialog').modal("hide")
           that.modalShadow =false
       },
       chcekSkuNum () {
@@ -753,7 +752,7 @@
       // 点击选择全场
       openFullRange () {
         var that = this
-         that.modalShadow = true
+        that.modalShadow = true
         that.$('#full_range_dialog').modal({'show':true ,'backdrop':false})
         that.goods_query_item.goodsClassifyId = ''
         that.goods_query_item.condition = ''
@@ -1149,12 +1148,12 @@
         }
         that.removeGoodsList = []
         that.removeShopList = []
-        that.$('#choose_goods').modal({'show':true ,'backdrop':false})
+        that.$('#choose_goods').modal({'hide':true ,'backdrop':false})
         that.modalShadow =false
       },
       makeRemoveIds () {
         let that = this
-        
+        that.modalShadow =false
         that.$('#full_range_dialog').modal('hide')
         console.log('removeShopList:', JSON.stringify(that.removeShopList))
         console.log('removeGoodsList:', JSON.stringify(that.removeGoodsList))
