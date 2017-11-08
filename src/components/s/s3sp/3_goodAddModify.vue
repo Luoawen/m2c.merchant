@@ -50,7 +50,7 @@
         </el-col>
         <el-col :span="11">
           <el-form-item label="最小起订量" prop="goodsMinQuantity">
-            <el-input v-model="data.goodsMinQuantity" placeholder="请输入内容"></el-input>
+            <el-input v-model="data.goodsMinQuantity" placeholder="请输入内容" type="number"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -179,6 +179,7 @@
                   @select="handleSelect"
                 ></el-autocomplete>
                 <el-button type="primary" @click="specValueClick(item.state1,index)">确定</el-button>
+                <i style="color:red; font-style:normal;" v-if="standardIdShow">请先选择规格</i>
               </td>
             </tr>
           </tbody>
@@ -256,7 +257,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="3"><i style="color:red;">* </i>商品主图</el-col>
-        <el-col :span="21">
+        <el-col :span="21" ref="dragImg" id="dragImg">
           <el-upload
             :action="uploadUrl" name="img"
             list-type="picture-card" :on-success="success" :data="upLoadData" :file-list="fileList"
@@ -301,6 +302,20 @@
   export default {
     components: {UE},
     data() {
+      // 校验最小起订量不能为非整数
+        var checkGoodsMinQuantity = (rule, value, callback) => {
+          var reg = /^[1-9]\d*$/;
+          if (!value) {
+            return callback(new Error('最小起订量不能为空'));
+          }
+          setTimeout(() => {
+            if (!reg.test(value)) {
+              callback(new Error('必须为正整数'));
+            } else {
+              callback();
+            }
+          }, 1000);
+        };
       return {
         ruleForm: {
           goodsName: '',
@@ -329,13 +344,14 @@
             { required: true, message: '请选择计量单位', trigger: 'change' }
           ],
           goodsMinQuantity: [
-            { required: true, message: '请输入最小起订量', trigger: 'blur' }
+            { validator: checkGoodsMinQuantity, trigger: 'blur' }
           ],
           goodsPostageId: [
             { required: true, message: '请选择运费模板', trigger: 'change' }
           ],
 
         },
+        standardIdShow:false,// 规格不能为空
         sukShow:false, // 商品库不能为空
         imgShowList:false, // 商品主图不能为空
         countMode:'', // 商家结算方式 1：按供货价 2：按服务费率
@@ -346,7 +362,7 @@
         goodsGuaranteeList:[], // 获取保障详情
         goodsGuarantCheck:[],
         serviceRate:'',
-        goodsSKUs:[{skuName: '', showStatus: false, marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}],
+        goodsSKUs:[{show:true,skuName: '', showStatus: true, marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}],
         goodsSpecifications:[{itemValue:[],state1:''}],
         goodsMainImages:[],
         goodsGuarantee:[],
@@ -422,11 +438,12 @@
         that.standardId=item.standardId
         console.warn("stantardId="+that.standardId)
         that.getValue()
+        that.standardIdShow = false
       },
       // 清空单规格内值
       clearSKU(){
         let that = this
-        that.goodsSKUs=[{skuName: '', showStatus: false, marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}]
+        that.goodsSKUs=[{show:true,skuName: '', showStatus: true, marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}]
       },
       clearGoodsSKUs(){
         let that = this
@@ -540,7 +557,7 @@
         that.goodsSKUs=[]
           if(that.goodsSpecifications.length==1 || that.goodsSpecifications[1].itemValue.length==0){
             for(var x=0;x<that.goodsSpecifications[0].itemValue.length;x++){
-              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[x].spec_name + '"}' + ')'))
+              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[x].spec_name + '",show:true}' + ')'))
             }
           }else{
             if(that.goodsSpecifications.length==2){
@@ -570,7 +587,7 @@
               }
             }
             for(var i =0;i<arr.length;i++){
-              that.goodsSKUs.push(eval('(' + '{skuName:"'+ arr[i] + '"}' + ')'))
+              that.goodsSKUs.push(eval('(' + '{skuName:"'+ arr[i] + '",show:true}' + ')'))
             }
             function js(arr1,arr2){
               var arr = Array()
@@ -587,42 +604,46 @@
       // 添加规格值
       specValueClick (state1, index) {
         let that = this
-        if (state1 === '' || state1.trim() === '') {
-          that.show_tip('规格值不能为空')
-          return
-        }
-        let arr = that.restaurants
-        let state = {value:state1}
-        if(JSON.stringify(arr).indexOf(JSON.stringify(state))===-1){
-            that.$.ajax({
-              type: 'post',
-              url: that.localbase + 'm2c.scm/goods/spec/value',
-              //url:'http://10.0.40.23:8080/m2c.scm/goods/spec/value',
-              data: {
-                token: sessionStorage.getItem('mToken'),
-                dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-                specValue: state1,
-                standardId: that.standardId
-              },
-              success: function (result) {
-                if(result.status==200){
-                  that.getValue()
-                }else{
-                  that.show_tip(result.errorMessage)
-                }
-              }
-            })
-        }
-        let array = that.goodsSpecifications[index].itemValue
-        let state2 = {spec_name:state1}
-        if(JSON.stringify(array).indexOf(JSON.stringify(state2))===-1){
-          that.goodsSpecifications[index].itemValue.push(state2)
-          console.log(that.goodsSpecifications[index])
-          that.clearValue(index)
-          that.mapValue()
+        if(that.standardId==''||that.standardId==undefined){
+          that.standardIdShow = true
         }else{
-          that.show_tip("该规格值已添加")
+          if (state1 === '' || state1.trim() === '') {
+            that.show_tip('规格值不能为空')
+            return
+          }
+          let arr = that.restaurants
+          let state = {value:state1}
+          if(JSON.stringify(arr).indexOf(JSON.stringify(state))===-1){
+              that.$.ajax({
+                type: 'post',
+                url: that.localbase + 'm2c.scm/goods/spec/value',
+                //url:'http://10.0.40.23:8080/m2c.scm/goods/spec/value',
+                data: {
+                  token: sessionStorage.getItem('mToken'),
+                  dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+                  specValue: state1,
+                  standardId: that.standardId
+                },
+                success: function (result) {
+                  if(result.status==200){
+                    that.getValue()
+                  }else{
+                    that.show_tip(result.errorMessage)
+                  }
+                }
+              })
+          }
+          let array = that.goodsSpecifications[index].itemValue
+          let state2 = {spec_name:state1}
+          if(JSON.stringify(array).indexOf(JSON.stringify(state2))===-1){
+            that.goodsSpecifications[index].itemValue.push(state2)
+            console.log(that.goodsSpecifications[index])
+            that.mapValue()
+          }else{
+            that.show_tip("该规格值已添加")
+          }
         }
+        
       },
       // 获取商品分类
       goodsClassify () {//商品分类树
@@ -667,6 +688,37 @@
           that.goodsMainImages=[]
           for(var i=0;i<fileList.length;i++){
             that.goodsMainImages.push(fileList[i].url)
+          }
+          var con = document.getElementById('dragImg').getElementsByTagName("ul");
+          var lis = document.getElementById('dragImg').getElementsByTagName('li');
+          for (var i = 0; i < lis.length; i++) {
+            lis[i].draggable = true; //每个li都设置可拖拽属性
+            lis[i].flag = false;
+            lis[i].ondragstart = function(){
+              this.flag = true; //鼠标拖拽li时设置flag为true
+            }
+            lis[i].ondragend = function(){
+              this.flag = false;
+              //alert(that.goodsMainImages)
+            }
+          };
+          con.ondragenter = function(e) {
+            e.preventDefault();
+          }
+          con.ondragover = function(e) {
+            e.preventDefault(); //阻止默认事件，否则不会触发ondrop事件
+          }
+          con.ondragleave = function(e) {
+            e.preventDefault();
+          }
+          con.ondrop = function(e) {
+            e.preventDefault();
+            alert(0)
+            for (var i = 0; i < lis.length; i++) {
+              if(lis[i].flag){ //如果flag为真，则添加一个li至box里
+                con.appendChild(lis[i]);
+              }
+            };
           }
         }
         console.warn("goodsMainImages="+that.goodsMainImages)
