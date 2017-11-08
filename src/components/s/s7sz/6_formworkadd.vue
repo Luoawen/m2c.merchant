@@ -513,7 +513,7 @@
       },
       checkNumber (val, index, arr, list) {
         setTimeout(() => {
-          if (val && $.isNumeric(val)) {
+          if (val && $.isNumeric(val) && val > 0) {
             val = Number(val).toFixed(2)
           } else {
             val = ''
@@ -531,7 +531,7 @@
       },
       checkDefaultNumber (val, arr, obj) {
         setTimeout(() => {
-          if (val && $.isNumeric(val)) {
+          if (val && $.isNumeric(val) && val > 0) {
             val = Number(val).toFixed(2)
           } else {
             val = ''
