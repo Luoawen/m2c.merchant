@@ -670,12 +670,10 @@
         let that = this
         for(var i=0;i<that.goodsMainImages.length;i++){
           if(file.url==that.goodsMainImages[i]){
-            alert(0)
             that.goodsMainImages.splice(i,1)
           }
           if(file.response.content!=undefined){
             if(file.response.content.url==that.goodsMainImages[i]){
-              alert(0)
               that.goodsMainImages.splice(i,1)
             }
           }
