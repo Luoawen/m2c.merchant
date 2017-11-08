@@ -935,6 +935,7 @@
 .nav-tabs{
   .active{
     border-bottom: 2px solid #0086FF;
+    a{color:#0086FF;}
   }
   li{
     font-size: 16px;
