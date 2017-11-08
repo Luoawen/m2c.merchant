@@ -468,6 +468,7 @@
         address: [], // 选中的省/市名对象
         addressName: '', // 选中的省/市名
         postageModelRules: [], // 运费规则
+        modelRules: [],
         modelId: '', // 模板id
         add_postageModelRule: {
           address: '',
@@ -892,6 +893,11 @@
             }
             that.postageModelRules.push(that.postageModelRule)
           }
+        }
+
+        for (var i = 0; i < that.postageModelRules.length; i++) {
+          that.postageModelRules[i].continuedPostage = parseFloat(that.postageModelRules[i].continuedPostage * 100).toFixed(2)
+          that.postageModelRules[i].firstPostage = parseFloat(that.postageModelRules[i].firstPostage * 100).toFixed(2)
         }
         that.$.ajax({
           type: that.addModify === 'add' ? 'post' : 'put',
