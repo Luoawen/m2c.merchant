@@ -304,7 +304,7 @@
     data() {
       // 校验最小起订量不能为非整数
         var checkGoodsMinQuantity = (rule, value, callback) => {
-          var reg = /^[1-9]\d*$/;
+          var reg = /^[0-9]\d*$/;
           if (!value) {
             return callback(new Error('最小起订量不能为空'));
           }
