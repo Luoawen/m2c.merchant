@@ -344,7 +344,7 @@
             { required: true, message: '请选择计量单位', trigger: 'change' }
           ],
           goodsMinQuantity: [
-            { validator: checkGoodsMinQuantity, trigger: 'blur' }
+            {required: true, validator: checkGoodsMinQuantity, trigger: 'blur' }
           ],
           goodsPostageId: [
             { required: true, message: '请选择运费模板', trigger: 'change' }
@@ -668,9 +668,17 @@
       // 照片墙
       handleRemove(file, fileList) {
         let that = this
-        that.goodsMainImages=[]
-        for(var i=0;i<fileList.length;i++){
-          that.goodsMainImages.push(fileList[i].url)
+        for(var i=0;i<that.goodsMainImages.length;i++){
+          if(file.url==that.goodsMainImages[i]){
+            alert(0)
+            that.goodsMainImages.splice(i,1)
+          }
+          if(file.response.content!=undefined){
+            if(file.response.content.url==that.goodsMainImages[i]){
+              alert(0)
+              that.goodsMainImages.splice(i,1)
+            }
+          }
         }
         console.warn("goodsMainImages="+that.goodsMainImages)
       },
@@ -685,10 +693,8 @@
         if(file.response.content.url==''||file.response.content.url==undefined){
           that.show_tip("上传失败,请重新上传")
         }else{
-          that.goodsMainImages=[]
-          for(var i=0;i<fileList.length;i++){
-            that.goodsMainImages.push(fileList[i].url)
-          }
+          that.goodsMainImages.push(file.response.content.url)
+          console.log("goodsMainImages="+that.goodsMainImages)
           var con = document.getElementById('dragImg').getElementsByTagName("ul");
           var lis = document.getElementById('dragImg').getElementsByTagName('li');
           for (var i = 0; i < lis.length; i++) {
@@ -702,7 +708,6 @@
               //alert(that.goodsMainImages)
             }
           };
-          console.log("con="+con)
           con.ondragenter = function(e) {
             e.preventDefault();
             alert(1)
