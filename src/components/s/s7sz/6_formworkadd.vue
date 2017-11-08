@@ -158,11 +158,12 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
-                    编辑 </a>
+                    <!--地区选择-->
+                    <td class="relative">{{addressName.length == 0 ? '未添加地区' : addressName}}
+                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
@@ -180,7 +181,7 @@
                           </div>
                         </div>
                       </div>
-
+                      <el-button @click="sureCheckCity($event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -278,11 +279,12 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
-                    编辑 </a>
+                  <!--地区选择-->
+                    <td class="relative">{{addressName.length == 0 ? '未添加地区' : addressName}}
+                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
@@ -300,6 +302,7 @@
                           </div>
                         </div>
                       </div>
+                      <el-button @click="sureCheckCity($event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -353,11 +356,12 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
-                    编辑 </a>
+                  <!--地区选择-->
+                    <td class="relative">{{addressName.length == 0 ? '未添加地区' : addressName}}
+                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
@@ -375,6 +379,7 @@
                           </div>
                         </div>
                       </div>
+                      <el-button @click="sureCheckCity($event)">确认</el-button>
                     </div>
                   </td>
                   <td>
