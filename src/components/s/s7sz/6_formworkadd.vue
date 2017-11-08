@@ -53,7 +53,7 @@
                   <td></td>
                 </tr>
                 <tr v-for="(addRow,index) in addRows" v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}}
+                  <td class="relative">{{addressName.length == 0 ? '未添加地区' : addressName}}
                     <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
@@ -465,9 +465,9 @@
         cityList: [], // 市id
         proList: [], // 省id暂存盒子
         cityLength: [], // 比对省下市是否全选
-        address: [], // 选中的省/市名
+        address: [], // 选中的省/市名对象
+        addressName: '', // 选中的省/市名
         postageModelRules: [], // 运费规则
-        modelRules: [],
         modelId: '', // 模板id
         add_postageModelRule: {
           address: '',
@@ -545,11 +545,15 @@
       sureCheckCity($event){
         let that = this
         let el = $event.target
-        console.log(that.addRows[that.index].address.toString())
-        for(var i=0;i<that.that.addRows[that.index].address.length;i++){
-
+        let proName = []
+        for(var i=0;i<that.addRows[that.index].address.length;i++){
+          if(that.addRows[that.index].address[i].cityName.length==0){
+            proName.push(that.addRows[that.index].address[i].proName)
+          }else{
+            proName.push(that.addRows[that.index].address[i].proName+"("+that.addRows[that.index].address[i].cityName.toString()+")")
+          }
         }
-        that.addRows[that.index].address.toString()
+        that.addressName=proName.toString()
       },
 // 选中大区时同时选中所有省市
       chooseArea(n, $event) {
@@ -561,8 +565,7 @@
               for (var j = 0; j < that.datas[i].subs.length; j++) {
                 // (that.addRows).push(that.datas[i].subs[j].code)
                 that.addRows[that.index].IdArr.push(that.datas[i].subs[j].code)
-                that.addRows[that.index].address.push(eval('(' + '{proName:"'+ that.datas[i].subs[j].name + '"}' + ')'))
-
+                that.addRows[that.index].address.push(eval('(' + '{proName:"'+ that.datas[i].subs[j].name + '",cityName:[]}' + ')'))
                 that.addRows[that.index].proList.push(that.datas[i].subs[j].code)
                 for (var k = 0; k < that.datas[i].subs[j].subs.length; k++) {
                   if (that.datas[i].subs[j].subs[k].parent === that.datas[i].subs[j].code) {
@@ -581,9 +584,14 @@
                     that.addRows[that.index].cityList.splice(that.$.inArray(that.datas[i].subs[j].subs[k].code, that.addRows[that.index].cityList), 1)
                   }
                 }
-                that.addRows[that.index].IdArr.splice(that.$.inArray(that.datas[i].subs[j].code, that.addRows[that.index].IdArr), 1)
-                that.addRows[that.index].address.splice(eval('(' + '{proName:"'+ that.datas[i].subs[j].name + '"}' + ')'), 1)
+                for(var x=0;x<that.addRows[that.index].address.length;x++){
+                  if(that.datas[i].subs[j].name===that.addRows[that.index].address[x].proName){
+                    that.addRows[that.index].address.splice(x, 1)
+                    that.addRows[that.index].IdArr.splice(x, 1)
+                  }
+                }
               }
+              
             }
           }
         }
@@ -595,7 +603,7 @@
         if (el.checked) {
           that.addRows[that.index].IdArr.push(n.code)
           //that.addRows[that.index].address.push(n.name)
-          that.addRows[that.index].address.push(eval('(' + '{proName:"'+ n.name + '"}' + ')'))
+          that.addRows[that.index].address.push(eval('(' + '{proName:"'+ n.name + '",cityName:[]}' + ')'))
           for (var i = 0; i < that.datas.length; i++) {
             for (var j = 0; j < that.datas[i].subs.length; j++) {
               if (that.datas[i].subs[j].code === n.code) {
@@ -624,8 +632,12 @@
               }
             }
           }
-          that.addRows[that.index].address.splice(that.$.inArray(eval('(' + '{proName:"'+ n.name + '"}' + ')'), that.addRows[that.index].address), 1)
-          that.addRows[that.index].IdArr.splice(that.$.inArray(n.code, that.addRows[that.index].IdArr), 1)
+          for(var x=0;x<that.addRows[that.index].address.length;x++){
+            if(n.name===that.addRows[that.index].address[x].proName){
+              that.addRows[that.index].address.splice(x, 1)
+              that.addRows[that.index].IdArr.splice(x, 1)
+            }
+          }
           let point=0
           for (var i = 0; i < that.datas.length; i++) {
             if(that.datas[i].code==n.parent){
@@ -658,10 +670,30 @@
                 if (that.$.inArray(city.parent, that.addRows[that.index].IdArr) == -1) {
                   that.addRows[that.index].IdArr.push(city.parent)
                 }
-                if (that.$.inArray(that.datas[i].subs[j].name, that.addRows[that.index].address) == -1) {
-                  that.addRows[that.index].address.push(that.datas[i].subs[j].name)
+                let flag = false
+                for(var x=0;x<that.addRows[that.index].address.length;x++){
+                  if(that.datas[i].subs[j].name==that.addRows[that.index].address[x].proName){
+                    //有省名
+                    that.addRows[that.index].address[x].cityName.push(city.name)
+                    let flag1 = 0
+                    for (let m = 0; m < that.datas[i].subs[j].subs.length; m++) {
+                      for (let p = 0; p < that.addRows[that.index].address[x].cityName.length; p++) {
+                        if (that.datas[i].subs[j].subs[m].name == that.addRows[that.index].address[x].cityName[p]) {
+                          flag1++ //检测省内被选中的市还剩几个
+                        }
+                      }
+                    }
+                    // if(flag1=that.datas[i].subs[j].subs.length){ //如果被选中的市与该省所有市数量相等 则清空address对应省下的市名
+                    //   that.addRows[that.index].address[x].cityName=[]
+                    // }
+                    flag = true
+                    break
+                  }
                 }
-                that.addRows[that.index].address.push(city.name)
+                if(!flag){
+                  //没有省名
+                  that.addRows[that.index].address.push(eval('(' + '{proName:"'+ that.datas[i].subs[j].name + '",cityName:["'+city.name+'"]}' + ')'))
+                }
               }
             }
           }
@@ -673,18 +705,34 @@
                 for (let m = 0; m < that.datas[i].subs[j].subs.length; m++) {
                   for (let p = 0; p < that.addRows[that.index].cityList.length; p++) {
                     if (that.datas[i].subs[j].subs[m].code == that.addRows[that.index].cityList[p]) {
-                      point++
+                      point++ //检测省内被选中的市还剩几个
                     }
                   }
                 }
-                if (point==1) {
-                  that.addRows[that.index].IdArr.splice(that.$.inArray(city.parent, that.addRows[that.index].IdArr), 1)
-                  that.addRows[that.index].address.splice(that.$.inArray(that.datas[i].subs[j].name, that.addRows[that.index].address), 1)
+                if (point==1) { // 如果城市是省内被选中的最后一个
+                  // that.addRows[that.index].IdArr.splice(that.$.inArray(city.parent, that.addRows[that.index].IdArr), 1)
+                  // that.addRows[that.index].address.splice(that.$.inArray(that.datas[i].subs[j].name, that.addRows[that.index].address), 1)
+                  for(var x=0;x<that.addRows[that.index].address.length;x++){
+                    if(that.datas[i].subs[j].name===that.addRows[that.index].address[x].proName){
+                      that.addRows[that.index].address.splice(x, 1)
+                      that.addRows[that.index].IdArr.splice(x, 1)
+                    }
+                  }
+                }else{
+                  for(var x=0;x<that.addRows[that.index].address.length;x++){
+                    if(that.datas[i].subs[j].name===that.addRows[that.index].address[x].proName){
+                      for(var y=0;y<that.addRows[that.index].address[x].cityName.length;y++){
+                        if(city.name==that.addRows[that.index].address[x].cityName[y]){
+                          that.addRows[that.index].address[x].cityName.splice(y, 1)
+                        }
+                      }
+                    }
+                  }
                 }
+                // 检测大区内剩余省还剩几个 
                 let point2=0
                 for(let n=0;n<that.datas.length;n++){
                     if(that.datas[i].subs[j].parent==that.datas[n].code){
-
                       for(let f=0;f<that.datas[n].subs.length;f++){
                           for(let y = 0; y < that.addRows[that.index].IdArr.length; y++){
                             if(that.addRows[that.index].IdArr[y]==that.datas[n].subs[f].code){
@@ -697,7 +745,7 @@
                       }
                     }
                 }
-                that.addRows[that.index].address.splice(that.$.inArray(city.name, that.addRows[that.index].address), 1)
+                //that.addRows[that.index].address.splice(that.$.inArray(city.name, that.addRows[that.index].address), 1)
               }
             }
           }
@@ -845,22 +893,6 @@
             that.postageModelRules.push(that.postageModelRule)
           }
         }
-
-        for (var i = 0; i < that.postageModelRules.length; i++) {
-          that.postageModelRule = {
-            address: that.postageModelRules[i].address,
-            cityCode: that.postageModelRules[i].cityCode,
-            continuedPiece: that.postageModelRules[i].continuedPiece,
-            continuedPostage: that.postageModelRules[i].continuedPostage * 100,
-            continuedWeight: that.postageModelRules[i].continuedWeight,
-            firstPiece: that.postageModelRules[i].firstPiece,
-            firstPostage: that.postageModelRules[i].firstPostage * 100,
-            firstWeight: that.postageModelRules[i].firstWeight,
-            defaultFlag: that.postageModelRules[i].defaultFlag
-          }
-          that.modelRules.push(that.postageModelRule)
-        }
-
         that.$.ajax({
           type: that.addModify === 'add' ? 'post' : 'put',
           url: that.localbase + 'm2c.scm/postage',
@@ -868,7 +900,7 @@
             token: sessionStorage.getItem('mToken'),
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
             modelId: that.addModify === 'add' ? that.modelId : that.$route.query.modelId,
-            postageModelRules: JSON.stringify(that.modelRules),
+            postageModelRules: JSON.stringify(that.postageModelRules),
             modelName: that.formwork.modelName,
             chargeType: that.formwork.chargeType,
             modelDescription: that.formwork.modelDescription
