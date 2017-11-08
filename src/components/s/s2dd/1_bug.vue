@@ -201,13 +201,13 @@
                 <!-- 有几种情况的不同表现方 -->
                 <div style="">
                   <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :'--'}}</div>
-                  <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.afStatus, goodsItem.skuId)" v-show="goodsItem.afStatus==0">同意</button></div>
+                  <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.afStatus, goodsItem.skuId)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
                   <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.skuId)" v-show="goodsItem.afStatus==0">拒绝</button></div>
                 </div>
-                <!-- <div>
+                <div v-show="goodsItem.afStatus==3">
                   <span>已拒绝</span>
                   <i class="ico_explain"></i>
-                </div> -->
+                </div>
               </div>
             </div>
             </div>
@@ -253,9 +253,9 @@
         <span>提示</span>
         <span class="fr" @click="Agreeshow=false">X</span>
       </div>
-      <div class="agreetc_body">是否同意退货申请？</div>
+      <div class="agreetc_body">确认同意{{afStatus==0?'退货':afStatus==1?'换货':afStatus==2?'退款' : '--'}}申请？</div>
       <div class="agreetc_footer">
-        <button type="button" class="btn save" >确认</button>
+        <button type="button" class="btn save" @click="agreeApply()">确认</button>
         <button type="button" class="btn cancel" @click="Agreeshow=false">取消</button>
       </div>
     </div>
@@ -308,23 +308,27 @@
         pageSize: 5,
         pageIndex: 1,
         totalCount: 0,
-        dealerId: 'JXS42ACB6D352E9417FBBCF03908219AAF1',//JSON.parse(sessionStorage.getItem('mUser')).dealerId
+        dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,//'JXS42ACB6D352E9417FBBCF03908219AAF1',
         // 搜索参数
         searchParams: { orderStatus: '', afterSellStatus: '', startTime: '', endTime: '', condition: '',orderClassify:'', payWay:'', hasMedia:'', invoice: '',commentStatus:''}
+        ,afStatus : -2
+        ,strSkuId : ''
       }
     },
     methods: {
     // 获取全部订单信息
-      agreeShow () {
+      agreeShow (_afStatus, strSkuId) {
       var that = this;
       that.Agreeshow = true;
+      that.afStatus=_afStatus;
+      that.strSkuId = strSkuId;
     },
     getDealerOrders () {
       let that = this
       that.is_Success = false
       that.$.ajax({
         type: 'get',
-        url: this.localbase + 'm2c.scm/dealerorder/dealerorderlist',
+        url: that.localbase + 'm2c.scm/dealerorder/dealerorderlist',
         //url: 'http://localhost:8080/m2c.scm/dealerorder/dealerorderlist',
         data: {
           dealerId: that.dealerId
@@ -402,6 +406,23 @@
         that.searchParams.condition1= '';
         that.searchParams.startTime1= '';
         that.searchParams.endTime1= '';
+      }
+      ,agreeApply() {
+        let that = this;
+        that.$.ajax({
+          type: 'put',
+          url: that.localbase + 'm2c.scm/order/dealer/agree-apply-sale',
+          //url: 'http://localhost:8080/m2c.scm/dealerorder/dealerorderlist',
+          data: {
+            dealerId: that.dealerId
+            ,orderStatus: that.afStatus
+            ,afterSellStatus: that.strSkuId
+          },
+          success: function (res) {
+            var resultData = res.content;
+            that.Agreeshow = false;
+          }
+        });
       }
   },
   mounted () {
