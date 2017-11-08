@@ -4,7 +4,7 @@
       <div class="form-group">
         <label class="col-sm-2 control-label"> 运费模板名称： </label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" placeholder="1-20字符" v-model="formwork.modelName">
+          <input type="text" class="form-control" placeholder="1-20字符" v-model="formwork.modelName" maxlength="20">
         </div>
       </div>
       <div class="form-group">
@@ -218,7 +218,7 @@
           rows="7"
           placeholder="1-200字符"
           style="resize:none;"
-          v-model="formwork.modelDescription"> </textarea></div>
+          v-model="formwork.modelDescription" maxlength="200"> </textarea></div>
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
@@ -591,7 +591,7 @@
                   }
                 }
               }
-              
+
             }
           }
         }
@@ -729,7 +729,7 @@
                     }
                   }
                 }
-                // 检测大区内剩余省还剩几个 
+                // 检测大区内剩余省还剩几个
                 let point2=0
                 for(let n=0;n<that.datas.length;n++){
                     if(that.datas[i].subs[j].parent==that.datas[n].code){
@@ -951,6 +951,12 @@
           },
           success: function (result) {
             that.formwork = result.content
+            if (that.formwork.postageModelRules.length > 0) {
+              for (var i = 0; i < that.formwork.postageModelRules.length; i++) {
+                that.formwork.postageModelRules[i].firstPostage = that.formwork.postageModelRules[i].firstPostage / 100
+                that.formwork.postageModelRules[i].continuedPostage = that.formwork.postageModelRules[i].continuedPostage / 100
+              }
+            }
             console.log(that.formwork)
           }
         })
