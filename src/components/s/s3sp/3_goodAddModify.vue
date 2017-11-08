@@ -124,12 +124,12 @@
                     <el-input v-model="good.weight" placeholder="请输入内容" type="number"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number"></el-input>
+                    <el-input v-model="good.photographPrice/100" placeholder="请输入内容" type="number"></el-input>
                 </td>
                 <td>
-                  <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number"></el-input>
+                  <el-input v-model="good.marketPrice/100" placeholder="请输入内容" type="number"></el-input>
                 </td>
-                <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number"></el-input></td>
+                <td v-if="countMode==1"><el-input v-model="good.supplyPrice/100" placeholder="请输入内容" type="number"></el-input></td>
                 <td v-if="countMode==2">{{serviceRate}}</td>
                 <td>
                   <el-input v-model="good.goodsCode" placeholder="请输入内容"></el-input>
@@ -138,6 +138,7 @@
             </tbody>
         </table>
         <i v-if="sukShow" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为空</i>
+        <i v-if="sukShow1" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为负数</i>
       </div>
 
       <div class="tabPane" v-if="data.skuFlag==1">
@@ -251,6 +252,7 @@
           </tbody>
         </table>
         <i v-if="sukShow" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为空</i>
+        <i v-if="sukShow1" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为负数</i>
       </div>
       <el-row>
         <el-col :span="24"><h4>商品详情</h4></el-col>
@@ -299,12 +301,13 @@
 </template>
 <script>
   import UE from '../../../subcomponents/ue.vue'
+  import validatorUtils from '../../../commonutils/validatorUtils'
   export default {
     components: {UE},
     data() {
       // 校验最小起订量不能为非整数
         var checkGoodsMinQuantity = (rule, value, callback) => {
-          var reg = /^[0-9]\d*$/;
+          var reg = /^[1-9]\d*$/;
           if (!value) {
             return callback(new Error('最小起订量不能为空'));
           }
@@ -353,6 +356,7 @@
         },
         standardIdShow:false,// 规格不能为空
         sukShow:false, // 商品库不能为空
+        sukShow1:false, // 商品库不能为负数
         imgShowList:false, // 商品主图不能为空
         countMode:'', // 商家结算方式 1：按供货价 2：按服务费率
         radio: '1',
@@ -471,19 +475,25 @@
         that.$refs[formName].validate((valid) => {
           if (valid) {
             for(var k=0;k<that.goodsSKUs.length;k++){
+              console.log(that.goodsSKUs[k].availableNum)
               if(that.goodsSKUs[k].availableNum==''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].weight==''||that.goodsSKUs[k].weight==undefined||that.goodsSKUs[k].photographPrice==''||that.goodsSKUs[k].photographPrice==undefined){
                 that.sukShow = true
                 return
               }else{
                 that.sukShow = false
-              }
-              that.goodsSKUs[k].marketPrice=that.goodsSKUs[k].marketPrice*100
-              that.goodsSKUs[k].photographPrice=that.goodsSKUs[k].photographPrice*100
-              that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
-              if(that.countMode!=1){
-                that.goodsSKUs[k].serviceRate=that.serviceRate
-              }else{
-                that.goodsSKUs[k].supplyPrice=that.goodsSKUs[k].supplyPrice*100
+                if (validatorUtils.isNumericD(that.goodsSKUs[k].availableNum)&&validatorUtils.isNumericD(that.goodsSKUs[k].weight)&&validatorUtils.isNumericD(that.goodsSKUs[k].photographPrice)&&validatorUtils.isNumericD(that.goodsSKUs[k].supplyPrice)&&validatorUtils.isNumericD(that.goodsSKUs[k].marketPrice)) {
+                  that.sukShow1 = false
+                  that.goodsSKUs[k].marketPrice=that.goodsSKUs[k].marketPrice*100
+                  that.goodsSKUs[k].photographPrice=that.goodsSKUs[k].photographPrice*100
+                  that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
+                  if(that.countMode!=1){
+                    that.goodsSKUs[k].serviceRate=that.serviceRate
+                  }else{
+                    that.goodsSKUs[k].supplyPrice=that.goodsSKUs[k].supplyPrice*100
+                  }
+                } else {
+                  that.sukShow1 = true
+                }
               }
             }
             if(that.goodsMainImages.length<=0){
@@ -896,13 +906,13 @@
             that.goodsSKUs = result.content.goodsSKUs
             that.data.goodsMinQuantity = result.content.goodsMinQuantity.toString()
             console.log("that.data.goodsMinQuantity="+that.data.goodsMinQuantity)
-            for(var p=0;p<result.content.goodsSKUs.length;p++){
-              that.goodsSKUs[p].marketPrice=result.content.goodsSKUs[p].marketPrice/100
-              that.goodsSKUs[p].photographPrice=result.content.goodsSKUs[p].photographPrice/100
-              if(result.content.goodsSKUs[p].supplyPrice!=''){
-                that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice/100
-              }
-            }
+            // for(var p=0;p<result.content.goodsSKUs.length;p++){
+            //   that.goodsSKUs[p].marketPrice=result.content.goodsSKUs[p].marketPrice/100
+            //   that.goodsSKUs[p].photographPrice=result.content.goodsSKUs[p].photographPrice/100
+            //   if(result.content.goodsSKUs[p].supplyPrice!=''){
+            //     that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice/100
+            //   }
+            // }
 
             for(var i=0;i<result.content.goodsMainImages.length;i++){
               that.fileList.push(eval('(' + '{url:"'+ result.content.goodsMainImages[i] + '"}' + ')'))
