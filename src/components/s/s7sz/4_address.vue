@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label"><span style="color: red">*</span>联系电话：</label>
+        <label class="col-sm-2 control-label">联系电话：</label>
         <div class="col-sm-3">
           <input type="text" class="form-control" id="input3" placeholder="请填写" v-model="search_params.tel">
         </div>
@@ -305,13 +305,11 @@
           that.show_tip('联系人姓名长度在1-10字符以内')
           return
         }
-        if (!that.search_params.tel.trim()) {
-          that.show_tip('联系电话不能为空')
-          return
-        }
-        if (!validatorUtils.isMobile(that.search_params.tel.trim()) && !validatorUtils.isTel(that.search_params.tel.trim())) {
-          that.show_tip('请输入正确的联系电话')
-          return
+        if (that.search_params.tel.trim() != '') {
+          if (!validatorUtils.isMobile(that.search_params.tel.trim()) && !validatorUtils.isTel(that.search_params.tel.trim())) {
+            that.show_tip('请输入正确的联系电话')
+            return
+          }
         }
         that.$.ajax({
           type: 'post',
@@ -408,12 +406,11 @@
           that.show_tip('联系人姓名长度在1-10字符以内')
           return
         }
-        if (!that.search_params.tel.trim()) {
-          that.show_tip('联系电话不能为空')
-        }
-        if (!validatorUtils.isMobile(that.search_params.tel.trim()) && !validatorUtils.isTel(that.search_params.tel.trim())) {
-          that.show_tip('请输入正确的联系电话')
-          return
+        if (that.search_params.tel.trim() != '') {
+          if (!validatorUtils.isMobile(that.search_params.tel.trim()) && !validatorUtils.isTel(that.search_params.tel.trim())) {
+            that.show_tip('请输入正确的联系电话')
+            return
+          }
         }
         that.$.ajax({
           type: 'put',
