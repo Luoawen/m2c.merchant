@@ -186,70 +186,15 @@
         <button style="margin-left: 100px;" @click="itemback">返回</button>
       </p>
     </div>
-    <!-- 作用范围为品类弹框s-->
-    <div class="modal fade category_layer" id="classify_dialog"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
-      <div class="modal-dialog category_goodchoose">
-        <div class="frame_total" style="position:relative;height:100%">
-          <div class="modal-header">
-            <div class="modal-title">
-              <span>品类选择</span>
-              <div class="guanb" data-dismiss="modal" aria-hidden="true"></div>
-            </div>
-          </div>
-          <div class="modal-body">
-            <div>
-              <div v-for="(classify,index) in classifyList" :key="index">
-                <span class="wrapper">
-                  <span class="triangle" :classifyId="classify.classifyId" @click="expandClassify()"></span>
-                  <span>
-                    <input class="input_check" type="checkbox" :id="'classify_'+index" @click="setClassify(classify.classifyId)" v-model="rangeClassifyList" :value="classify.classifyId">
-                    <label :for="'classify_'+index"></label>
-                  </span>
-                  <span class="tit">{{classify.classifyName}}</span>
-                </span>
-                <div style="padding-left:30px;display:none;" :forClassifyId="classify.classifyId" v-for="(classify2,index) in classify.subClassify">
-                  <span class="wrapper">
-                    <span class="triangle" :classifyId="classify2.classifyId" @click="expandClassify()"></span>
-                    <span>
-                      <input class="input_check" type="checkbox" :id="classify.classifyId+'_'+index" @click="setClassify(classify2.classifyId)" v-model="rangeClassifyList" :value="classify2.classifyId">
-                      <label :for="classify.classifyId+'_'+index"></label>
-                    </span>
-                    <span class="tit">{{classify2.classifyName}}</span>
-                  </span>
-                  <div style="padding-left:30px;display:none;" :forClassifyId="classify2.classifyId" v-for="(classify3,index) in classify2.subClassify">
-                  <span class="wrapper">
-                    <span class="triangle" ></span>
-                    <span>
-                      <input class="input_check" type="checkbox" :id="classify3.classifyId+'_'+index" @click="setClassify(classify3.classifyId)" v-model="rangeClassifyList" :value="classify3.classifyId">
-                      <label :for="classify3.classifyId+'_'+index"></label>
-                    </span>
-                    <span class="tit">{{classify3.classifyName}}</span>
-                  </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="footer">
-            <button type="button" class="btn gravity" @click="resetClassify()">重选</button>
-            <button type="button" class="btn confirm" @click="makeClassifyIds()">确认</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 作用范围为品类弹框 e-->
-    <!--作用范围为全场的商品商家筛选弹窗s-->
+    <!--作用范围为全店的商品商家筛选弹窗s-->
     <div class="modal fade frame_layer01" id="full_range_dialog"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
       <div class="modal-dialog shop_goodchoose" style="margin:20px 0px;">
         <div class="frame_total ">
           <div class="modal-header">
-            <div class="modal-title text-center wid50 fl" :class="tab_flag == 'goods' ? 'active' : ''" @click="changeTab('goods')">
-              <a>选择商品</a>
+            <div class="modal-title text-center wid100 "  @click="changeTab('goods')">
+             <span>选择商品</span>
             </div>
-            <div class="modal-title text-center wid50 fl" :class="tab_flag == 'shop' ? 'active' : ''" @click="changeTab('shop')">
-              <a>选择商家</a>
-            </div>
-            <div  class="guanb" data-dismiss="modal" aria-hidden="true"></div>
+            <div  class="guanb"  @click.stop="closeBox($event)"  aria-hidden="true"></div>
           </div>
           <!--商品条件-->
           <div class="shop_choose_sort clear" :style="tab_flag == 'goods' ? '' : 'display:none;'">
@@ -289,7 +234,7 @@
                 <div class="fcimg" v-show="goods.isRemoved"></div>
               </div>
             </div>
-            <div class="page">
+            <!-- <div class="page">
               <button>上一页</button>
               <span>{{goodsResult.pageNumber}}</span>/
               <span>{{goodsResult.pageCount}}</span>
@@ -297,7 +242,7 @@
               <span>到</span>
               <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="goods_query_item.pageNum"/>
               <span>页</span>
-            </div>
+            </div> -->
           </div>
           <!--商家-->
           <div class="shop_body" :style="tab_flag == 'shop' ? '' : 'display:none;'">
@@ -310,7 +255,7 @@
                 <div class="fcimg" v-show="shop.isRemoved"></div>
               </div>
             </div>
-            <div class="page">
+            <!-- <div class="page">
               <button>上一页</button>
               <span>{{shopResult.pageNumber}}</span>/
               <span>{{shopResult.pageCount}}</span>
@@ -318,7 +263,7 @@
               <span>到</span>
               <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="shop_query_item.pageNum"/>
               <span>页</span>
-            </div>
+            </div> -->
           </div>
           <div class="footer">
             <button type="button" class="btn save" data-dismiss="modal" @click="cancelRemove()">取消</button>
@@ -327,7 +272,7 @@
         </div>
       </div>
     </div>
-    <!--作用范围为全场的商品商家筛选弹窗e-->
+    <!--作用范围为全店的商品商家筛选弹窗e-->
     <!--作用范围商家筛选弹框s-->
     <div class="modal fade frame_layer01" id="choose_shop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
       <div class="modal-dialog frame" style="background:#fff;">
@@ -426,58 +371,6 @@
       </div>
     </div>
     <!--作用范围商品筛选弹框e-->
-    <!--商品筛选品类弹框s-->
-    <div class="goods_category_layer" :class='["frame_layer",goods_classify_show?"frame_layer_show":""]' style="z-index:99999;" >
-      <div class="modal-dialog category_goodchoose">
-        <div class="shop_choose_center">
-          <div class="modal-header">
-            <div class="modal-title text-center">
-              <span>品类选择</span>
-              <div class="guanb" data-dismiss="modal" aria-hidden="true" @click="goods_classify_show=false"></div>
-            </div>
-          </div>
-          <div class="modal-body">
-            <div>
-              <div v-for="(classify,index) in classifyList" :key="index">
-                <span class="wrapper" >
-                  <span class="triangle" :classifyId="'goods_'+classify.classifyId" @click="expandClassify()"></span>
-                  <span>
-                    <input class="input_check" type="checkbox" :id="'goods_classify_'+index" @click="setGoodsClassify(classify.classifyId)" v-model="goodsClassifyList" :value="classify.classifyId">
-                    <label :for="'goods_classify_'+index"></label>
-                  </span>
-                  <span class="tit">{{classify.classifyName}}</span>
-                </span>
-                <div style="padding-left:30px;display:none;" :forClassifyId="'goods_'+classify.classifyId" v-for="(classify2,index) in classify.subClassify">
-                  <span class="wrapper">
-                    <span class="triangle" :classifyId="'goods_'+classify2.classifyId" @click="expandClassify()"></span>
-                    <span>
-                      <input class="input_check" type="checkbox" :id="'goods_'+classify.classifyId+'_'+index" @click="setGoodsClassify(classify2.classifyId)" v-model="goodsClassifyList" :value="classify2.classifyId">
-                      <label :for="'goods_'+classify.classifyId+'_'+index"></label>
-                    </span>
-                    <span class="tit">{{classify2.classifyName}}</span>
-                  </span>
-                  <div style="padding-left:30px;display:none;" :forClassifyId="'goods_'+classify2.classifyId" v-for="(classify3,index) in classify2.subClassify">
-                  <span class="wrapper">
-                    <span class="triangle" ></span>
-                    <span>
-                      <input class="input_check" type="checkbox" :id="'goods_'+classify3.classifyId+'_'+index" @click="setGoodsClassify(classify3.classifyId)" v-model="goodsClassifyList" :value="classify3.classifyId">
-                      <label :for="'goods_'+classify3.classifyId+'_'+index"></label>
-                    </span>
-                    <span class="tit">{{classify3.classifyName}}</span>
-                  </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="footer">
-            <button type="button" class="btn gravity" @click="resetGoodsClassify()">重选</button>
-            <button type="button" class="btn confirm" @click="makeGoodsClassify()">确认</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--商品筛选品类弹框e-->
     <!--商品商家筛选按钮弹窗s-->
     <div :class='["frame_layer",goods_shop_show?"frame_layer_show":""]' style="z-index:9999;" >
       <div class="modal-dialog frame shop_choose_container">
@@ -607,31 +500,6 @@
       </div>
     </div>
     <!--商家筛选已选商家全部弹窗e-->
-    <!--品类筛选已选品类全部弹窗s-->
-    <div :class='["frame_layer",classify_all_show?"frame_layer_show":""]' style="z-index:9999;" >
-      <div class="modal-dialog frame shop_choose_container">
-        <div class="shop_choose_center">
-          <div class="modal-header">
-            <h5 class="modal-title text-center">
-              已选择品类
-              <div class="guanb"  @click="classify_all_show=false"   ></div>
-            </h5>
-          </div>
-          <div class="modal-body">
-            <div class="shop_choose_total" >
-              <div class="shop_choose_s" >
-                    <span v-for="classify in params.goods_classifys">
-                    <span class="shop_choose_tit">
-                        <span>{{classify.classifyName}}</span>
-                    </span>
-                    </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--品类筛选已选品类全部弹窗e-->
     <!--全场排除已排除的商品全部弹窗s-->
     <div :class='["frame_layer",goods_remove_all_show?"frame_layer_show":""]' style="z-index:9999;" >
       <div class="modal-dialog frame shop_choose_container">
@@ -657,128 +525,9 @@
       </div>
     </div>
     <!--全场排除已排除的商品全部弹窗e-->
-    <!--全场排除已排除的商家全部弹窗s-->
-    <div :class='["frame_layer",shop_remove_all_show?"frame_layer_show":""]' style="z-index:9999;" >
-      <div class="modal-dialog frame shop_choose_container">
-        <div class="shop_choose_center">
-          <div class="modal-header">
-            <h5 class="modal-title text-center">
-              已选择品类
-              <div class="guanb"  @click="shop_remove_all_show=false"   ></div>
-            </h5>
-          </div>
-          <div class="modal-body">
-            <div class="shop_choose_total" >
-              <div class="shop_choose_s" >
-                    <span v-for="shop in removeShopList">
-                    <span class="shop_choose_tit">
-                        <span>{{shop.dealerName}}</span>
-                    </span>
-                    </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--全场排除已排除的商家全部弹窗e-->
-    <!--单独成本设置选择商家s-->
-    <div class="modal fade" id="shop_cost_choose"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
-      <div class="modal-dialog shopchoose"  style="margin:20px 0px;">
-        <div class="">
-          <div class="modal-content frame_total">
-            <div class="modal-header">
-              <h5 class="modal-title text-center ">
-                选择商家</h5>
-              <div class="guanb" data-dismiss="modal" aria-hidden="true"></div>
-            </div>
-            <div class="modal-body">
-              <div class="shop_choose_sort clear">
-                <div class="fl">
-                  <input placeholder="请输入商家名称进行搜索" class="form-control sort_input fl" v-model="shop_query_item.dealerName"/>
-                  <button class="sort" @click="shopSelect()">搜索</button>
-                </div>
-                <div class="ml28 fl">
-                  <label class="fl">商家分类列表</label>
-                  <select class="form-control sort_select fl" v-model="shop_query_item.dealerClassify">
-                    <option value="">全部</option>
-                    <option v-for="shopClassify in shopClassifyList" :value="shopClassify.dealerClassifyId">
-                      {{shopClassify.dealerClassifyName}}
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div class="shop_body">
-                <div class="shop_choose">
-                  <div class="shop_choosebox fl" v-for="shop in shopResult.content" style="position:relative;" @mouseenter="shop.isCostShow = true" @mouseleave="shop.isCostShow = false">
-                    <div @click="openShopCost(shop.dealerId, shop.cost.platform, shop.cost.dealer)">
-                      <div class="tit">{{shop.shopName}}</div>
-                      <div class="img"><img :src="shop.shopIcon" /></div>
-                    </div>
-                    <div class="set_cd" v-show="shop.isCost&&shop.isCostShow">
-                      <span>平台承担:</span>
-                      <span>{{shop.cost.platform}}%</span>
-                      <span>商家承担:</span>
-                      <span>{{shop.cost.dealer}}%</span>
-                    </div>
-                    <div class="fc" v-show="shop.isCost" @click="openShopCost(shop.dealerId, shop.cost.platform, shop.cost.dealer)">
-                    </div>
-                    <div class="fcimg" v-show="shop.isCost" @click="openShopCost(shop.dealerId, shop.cost.platform, shop.cost.dealer)"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="page">
-              <button>上一页</button>
-              <span>{{shopResult.pageNumber}}</span>/
-              <span>{{shopResult.pageCount}}</span>
-              <button>下一页</button>
-              <span>到</span>
-              <input style="width:24px;height:24px;display: inline-block;font-size:9px;" v-model="shop_query_item.pageNum"/>
-              <span>页</span>
-            </div>
-            <div class="modal-footer footer">
-              <button type="button" class="btn save" data-dismiss="modal">取消</button>
-              <button type="button" class="btn cancel" data-dismiss="modal">确认</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--单独成本设置选择商家e-->
-    <!--单独成本设置s-->
-    <div :class='["frame_layer",shop_cost_show?"frame_layer_show":""]' style="z-index:99999;" >
-      <div class="modal-dialog separate_cost">
-        <div class="separate_set">
-          <div class="modal-header">
-            <h5 class="modal-title text-center">
-              单独成本设置
-              <div  class="guanb" @click="shop_cost_show=false"></div>
-            </h5>
-          </div>
-          <div class="modal-body">
-            <div class="separate_tit">单独成本设置(数字0-100)</div>
-            <div class="separate_input clear">
-              <span class="wid150 clear">
-                <label class="fl">平台承担</label>
-                <input class="form-control set_num fl ml10" v-model="shopCost.platform" @blur="dealerCostBlur('platform')"/>
-                <span class="fl ml10">%</span>
-              </span>
-              <span class="wid150 clear ">
-                <label class="fl">商家承担</label>
-                <input class="form-control set_num fl ml10" v-model="shopCost.dealer" @blur="dealerCostBlur('dealer')"/>
-                <span class="fl ml10">%</span>
-              </span>
-            </div>
-          </div>
-          <div class="footer">
-            <button type="button" class="btn save" @click="shop_cost_show=false">取消</button>
-            <button type="button" class="btn cancel" @click="addDealerCost(shopCost.dealerId, shopCost.platform, shopCost.dealer)" >确认</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--单独成本设置e-->
+    <!-- 遮罩层s -->
+    <div   v-show="modalShadow"   class="modal-backdrop fade in" style="z-index:1;"></div> 
+    <!-- 遮罩层e -->
   </div>
 </template>
 
@@ -787,6 +536,7 @@
     name: '',
     data () {
       return {
+        modalShadow : false ,
         item: '',
         goodsIds: '',
         tab_flag: 'goods',
@@ -830,9 +580,14 @@
       }
     },
     methods: {
-      // goto (path) {},
       itemback () {
         window.history.go(-1)
+      },
+         closeBox ($event) {
+          var that = this
+          let el=$event.target
+          that.$(el).parents('#full_range_dialog').modal("hide")
+          that.modalShadow =false
       },
       chcekSkuNum () {
         let that = this
@@ -955,29 +710,6 @@
           })
         }
       },
-      changeTab (str) {
-        var that = this
-        that.tab_flag = str
-      },
-      // 单独商家成本设置商家选择弹窗
-      openShopCostChoose () {
-        var that = this
-        that.$('#shop_cost_choose').modal('show')
-        that.shop_query_item.dealerName = ''
-        that.shop_query_item.dealerClassify = ''
-        that.shop_query_item.dealerId = ''
-        that.shop_query_item.pageNum = 1
-        that.shopSelect()
-        that.shopClassifySelect()
-      },
-      // 单独商家成本设置弹窗
-      openShopCost (dealerId, platform, dealer) {
-        var that = this
-        that.shop_cost_show = true
-        that.shopCost.dealerId = dealerId
-        that.shopCost.platform = platform
-        that.shopCost.dealer = dealer
-      },
       dealerCostBlur (flag) {
         var that = this
         if (flag === 'platform') {
@@ -1020,7 +752,8 @@
       // 点击选择全场
       openFullRange () {
         var that = this
-        that.$('#full_range_dialog').modal('show')
+        that.modalShadow = true
+        that.$('#full_range_dialog').modal({'show':true ,'backdrop':false})
         that.goods_query_item.goodsClassifyId = ''
         that.goods_query_item.condition = ''
         that.goods_query_item.dealerId = ''
@@ -1047,6 +780,7 @@
       openGoodsChoose () {
         var that = this
         that.$('#choose_goods').modal({'show':true ,'backdrop':false})
+        that.modalShadow =true
         that.goods_query_item.goodsClassifyId = ''
         that.goods_query_item.condition = ''
         that.goods_query_item.dealerId = ''
@@ -1244,7 +978,8 @@
             }
           }
         }
-        that.$('#classify_dialog').modal('hide')
+         that.$('#classify_dialog').modal({'show':true ,'backdrop':false})
+         that.modalShadow =false
         console.log('that.rangeClassifyList:' + JSON.stringify(that.rangeClassifyList))
         console.log('that.params.goods_classifys:' + JSON.stringify(that.params.goods_classifys))
       },
@@ -1263,7 +998,8 @@
       makeGoodsIds () {
         var that = this
         console.log('chooseGoodsList:' + JSON.stringify(that.chooseGoodsList))
-        that.$('#choose_goods').modal('hide')
+        that.$('#choose_goods').modal({'show':true ,'backdrop':false})
+        
       },
       // 作用范围 选择商品
       goodsSelect () {
@@ -1412,10 +1148,12 @@
         }
         that.removeGoodsList = []
         that.removeShopList = []
-        that.$('#full_range_dialog').modal('hide')
+        that.$('#choose_goods').modal({'hide':true ,'backdrop':false})
+        that.modalShadow =false
       },
       makeRemoveIds () {
         let that = this
+        that.modalShadow =false
         that.$('#full_range_dialog').modal('hide')
         console.log('removeShopList:', JSON.stringify(that.removeShopList))
         console.log('removeGoodsList:', JSON.stringify(that.removeGoodsList))

@@ -53,8 +53,8 @@
               </el-table-column>
               <el-table-column
                 label="商品信息"
-                width="200">
-                <template slot-scope="scope"><img v-bind:src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsName}}</span></template>
+                width="300">
+                <template slot-scope="scope"><img v-bind:src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;"/><span class="ellipsis">{{scope.row.goodsName}}</span></template>
               </el-table-column>
               <el-table-column
                 prop="goodsClassify"
@@ -71,6 +71,7 @@
                 prop="goodsPrice"
                 label="拍货价/元"
                 show-overflow-tooltip>
+                <template slot-scope="scope"><span >{{scope.row.goodsPrice/100}}</span></template>
               </el-table-column>
               <el-table-column
                 prop="stockNum"
@@ -181,6 +182,7 @@
                 prop="goodsPrice"
                 label="拍货价/元"
                 show-overflow-tooltip>
+                <template slot-scope="scope"><span >{{scope.row.goodsPrice/100}}</span></template>
               </el-table-column>
               <el-table-column
                 prop="stockNum"
@@ -266,6 +268,7 @@
             prop="goodsPrice"
             label="拍货价/元"
             show-overflow-tooltip>
+            <template slot-scope="scope"><span >{{scope.row.goodsPrice/100}}</span></template>
           </el-table-column>
           <el-table-column
             prop="stockNum"
@@ -456,10 +459,10 @@
       ,handleTabClick (tab, event) {//tab切换
         let that = this
 
-        that.goodsStorePageRows=2
+        that.goodsStorePageRows=5
         that.goodsStoreCurrentPage= 1
         that.goodsStoreTotalCount=0
-        that.goodsCheckStorePageRows=2,
+        that.goodsCheckStorePageRows=5,
         that.goodsCheckStoreCurrentPage= 1,
         that.goodsCheckStoreTotalCount=0,
         that.goodsDelStorePageRows=5,
@@ -514,9 +517,13 @@
             }
           }
         })
-      }
-      ,goodsStoreSearch (){
+      },
+      goodsStoreSearch () {
         let that = this
+        if (that.search_goods_params.startTime > that.search_goods_params.endTime) {
+          that.show_tip('开始时间不能大于结束时间')
+          return
+        }
         that.goodsStore()
       }
       ,goodsStoreHandleSizeChange(val) {
@@ -531,6 +538,10 @@
       }
       ,exportSearch (){
         let that = this
+        if (that.search_goods_params.startTime > that.search_goods_params.endTime) {
+          that.show_tip('开始时间不能大于结束时间')
+          return
+        }
         let url=that.localbase + 'm2c.scm/goods/export?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+'&goodsClassifyId='+that.search_goods_params.goodsClassifyId+'&goodsStatus='+that.search_goods_params.goodsStatus+'&condition='+that.search_goods_params.condition+'&startTime='+that.search_goods_params.startTime+'&endTime='+that.search_goods_params.endTime;
         window.location.href=url
       }
@@ -563,6 +574,10 @@
       }
       ,goodsCheckStoreSearch (){
         let that = this
+        if (that.search_goodsCheck_params.startTime > that.search_goodsCheck_params.endTime) {
+          that.show_tip('开始时间不能大于结束时间')
+          return
+        }
         that.goodsCheckStore()
       }
       ,goodsCheckStoreHandleSizeChange(val) {
@@ -589,7 +604,7 @@
           that.soldGoods(row,to)
         } else if (action === '_soldup') {
           that.soldupGoods(row,to)
-        } 
+        }
         else if (action === '_edit') {
           let goodsId = row.goodsId
           if(row.approveStatus==''||row.approveStatus==undefined){
@@ -628,12 +643,12 @@
       ,goodsDelStoreHandleSizeChange(val) {
         let that = this
         that.goodsDelStorePageRows=val
-        that.goodsCheckStore();
+        that.goodsDeleteStore();
       }
       ,goodsDelStoreHandleCurrentChange(val) {
         let that = this
         that.goodsDelStoreCurrentPage=val
-        that.goodsCheckStore();
+        that.goodsDeleteStore();
       }
   },
     mounted () {
@@ -826,4 +841,7 @@
   /*修改/新增*/
   .changeGoodInfo input,.changeGoodInfo select{width:200px;line-height:40px;color:#666;}
   .glyphicon{width:40px;height:24px;z-index:11;}
+  span.ellipsis{width:190px;margin-left:10px;overflow: hidden;display:inline-block;
+text-overflow:ellipsis;
+white-space: nowrap;}
 </style>

@@ -135,10 +135,6 @@
                   <i class="icon_dele" @click="deleteExchangeGoods(index, exchange)"></i>
                 </li>
               </ul>
-              <!-- 在之前的地方有选择过 能够全部显示 暂时不用 -->
-              <!-- <div class="more">
-                <a @click="goods_exchange_all_show = true" v-show="exchangeGoodsList.length > 0">查看全部商品></a>
-              </div> -->
             </div>
             <div class="set">
               <span>
@@ -164,9 +160,7 @@
               <span class="wid70 fl">作用范围</span>
               <select class="form-control range_of_action fl" v-model="params.range_type" @change="rangeSelect(params.range_type)">
                 <option value="0">全店</option>
-                <!-- <option value="1">商家</option> -->
                 <option value="2">商品</option>
-                <!-- <option value="3">品类</option> -->
               </select>
               <a v-show="rang_type_show.goods" @click="openGoodsChoose">点我选择商品</a>
               <a v-show="rang_type_show.all" @click="openFullRange">设置需要单独排除，不参与这次满减的商品</a>
@@ -179,9 +173,6 @@
                   <i class="icon_dele" @click="deleteGoods(index, choose)"></i>
                 </li>
               </ul>
-              <div class="more">
-                <a @click="openGoodsAll()" v-show="chooseGoodsList.length > 0">查看全部商品</a>
-              </div>
             </div>
             <div class="shop" v-show="rang_type_show.shop" >
               <p>已选<span>{{chooseShopList.length}}</span>件商家</p>
@@ -204,9 +195,6 @@
                     <i class="icon_dele" @click="deleteRemoveGoods(index, goods)"></i>
                   </li>
                 </ul>
-                <div class="more">
-                  <a @click="goods_remove_all_show = true" v-show="removeGoodsList.length > 0">查看全部商品></a>
-                </div>
               </div>
             </div>
           </div>
@@ -223,7 +211,7 @@
     </div>
     <!--弹框-->
     <!-- 弹框背景遮罩层s -->
-    <div   v-show="modalShadow"   class="modal-backdrop fade in" style="z-index:1;"></div> 
+    <div   v-show="modalShadow"   class="modal-backdrop fade in" style="z-index:1;"></div>
     <!-- 弹框背景遮罩层e -->
     <!--作用范围  商品筛选弹框s-->
     <div class="modal fade frame_layer01" id="choose_goods"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
@@ -234,17 +222,6 @@
               <div type="button" class="guanb"    @click.stop="closeBox($event)"    aria-hidden="true" style="right:-20px;"></div>
             </h5>
           </div>
-          <!-- <div class="tc_shop">
-            <div>已选择<span><span style="color:red;">{{chooseGoodsList.length}}件</span></span>商品</div>
-            <div class="tc_shop_box">
-              <span class="tc_shop_span"  v-for="(choose, index) in chooseGoodsList">
-                <span style="position: relative;display:inline-block;width:100%;height:100%;">
-                  <span>{{choose.goodsName}}</span>
-                  <i class="i_delet" @click="deleteGoods(index, choose)"></i>
-                </span>
-              </span>
-            </div>
-          </div> -->
           <div class="search">
             <div class="search_tit">选择商品：</div>
             <div class="clear">
@@ -266,7 +243,7 @@
                     <div><b>{{goods.goodsPrice/100}}元</b></div>
                   </div>
                 </div>
-                <div class="fc" v-show="goods.isCheck"><div class="pickSpecificationsStyle"   v-show="hasSpecificationsStyle"  @click.stop="ChooseSpecification(goods)">请选规格</div></div>
+                <div class="fc" v-show="goods.isCheck"><div class="pickSpecificationsStyle"   v-show="hasSpecificationsStyle"   @click.stop="ChooseSpecification(goods)">请选规格</div></div>
                 <div class="fcimg" v-show="goods.isCheck"></div>
               </div>
             </div>
@@ -320,14 +297,14 @@
                   {{sku.goodsSkuName}}
                 </td>
                 <td>{{sku.goodsSkuInventory}}</td>
-                <td><input class="form-control set_num fl ml10"       v-model="sku.goodsSkuNum" :disabled="sku.disabled"/></td>
+                <td><input class="form-control set_num fl ml10"   min="0"  v-model="sku.goodsSkuNum" :disabled="sku.disabled"/></td>
               </tr>
               </tbody>
             </table>
           </div>
         </div>
         <div class="specification_footer">
-          <button type="button" class="btn save"  data-dismiss="modal">取消</button> 
+          <button type="button" class="btn save"  data-dismiss="modal">取消</button>
           <button type="button" class="btn cancel" @click="goodsSkuChoose(goodsInfo,$event)">确认</button>
         </div>
       </div>
@@ -487,7 +464,7 @@
       <div class="modal-dialog shop_goodchoose"       style="margin:20px 0px;">
         <div class="frame_total ">
           <div class="modal-header">
-            <div class="modal-title text-center wid100 " @click="changeTab('goods')"> 
+            <div class="modal-title text-center wid100 " @click="changeTab('goods')">
             <span>选择商品</span>
             </div>
             <!-- <div class="modal-title text-center wid50 fl" :class="tab_flag == 'shop' ? 'active' : ''" @click="changeTab('shop')">
@@ -533,7 +510,7 @@
                 <div class="fcimg" v-show="goods.isRemoved"></div>
               </div>
             </div>
-            <div class="page">
+            <!-- <div class="page">
               <button>上一页</button>
               <span>{{goodsResult.pageNumber}}</span>/
               <span>{{goodsResult.pageCount}}</span>
@@ -541,7 +518,7 @@
               <span>到</span>
               <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="goods_query_item.pageNum"/>
               <span>页</span>
-            </div>
+            </div> -->
           </div>
           <!--商家-->
           <div class="shop_body" :style="tab_flag == 'shop' ? '' : 'display:none;'">
@@ -849,7 +826,7 @@
           }
           that.$.ajax({
             url: that.base + 'm2c.market/fullcut/creation',
-//            url: 'http://localhost:8080/m2c.market/fullcut/creation',
+      //            url: 'http://localhost:8080/m2c.market/fullcut/creation',
             contentType: 'application/json', // 必须有
             type: 'post',
             data: JSON.stringify(rebody),
@@ -1045,7 +1022,7 @@
           data: {
             goodsClassifyId: that.goods_query_item.goodsClassifyId,
             condition: that.goods_query_item.condition,
-            dealerId: that.goods_query_item.dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
             pageNum: that.goods_query_item.pageNum,
             rows: that.goods_query_item.rows
           },
@@ -1079,16 +1056,12 @@
         that.modalShadow = true
       },
       openGoodsSku (goods,index,$event) {
-        var that = this 
+        var that = this
         let el = $event.target
-         // 需求1：判断商品能否直接选中（有规格 需要选择规格skuFlag=1  没有规格skuFlag=0可以直接选中
-                // 如果是单规格产品
-        // if(that.goodsResult.content[index].skuSingleFlag=1){
-        //       // 把商品列表可以被选中的状态为不可选(去掉样式)
-        //           var hhh =that.$(el).children('.fcimg').removeClass('.fcImg')
-        //     // 规格选择弹框
-        // }
-        // 可以直接选中的情况
+        //单规格的情况不显示可选规格选项
+        if(goods.skuSingleFlag == 0){
+          that.hasSpecificationsStyle = false;
+        }
         // 把样式改成被选中状态  并且push到chooseGoodsList中
         that.goodsResult.content[index].isCheck = true
         that.chooseGoodsList.push(that.goodsResult.content[index])
@@ -1111,12 +1084,12 @@
        for (var i = 0; i < goods.goodsSkuList.length; i++){
             if(goods.goodsSkuList[i].goodsSkuInventory<=0){
                 // 库存不能小于等于0   checkbox &input  设置 disable属性
-                goods.goodsSkuList[i].disabled = true;                
+                goods.goodsSkuList[i].disabled = true;
             }
        }
        that.goodsInfo = goods
-      },   
-         //  点击格选择弹框确认后将数据保存起来 
+      },
+         //  点击格选择弹框确认后将数据保存起来
        goodsSkuChoose (goodsInfo,$event) {
         let that = this
         // 定义空数组  遍历弹框里的规格列表（条件为checkbox被选中且现有库存数量大于0）
@@ -1124,7 +1097,9 @@
         for (var i = 0; i < goodsInfo.goodsSkuList.length; i++){
           if(goodsInfo.goodsSkuList[i].goodsSkuNum>goodsInfo.goodsSkuList[i].goodsSkuInventory){
                    that.show_tip("参与满减库存应不大于现有库存")
-                  
+          }
+          if(goodsInfo.goodsSkuList[i].goodsSkuNum < 0){
+                   that.show_tip("参与满减库存应不小于0")
           }
           if (goodsInfo.goodsSkuList[i].isCheck == true && goodsInfo.goodsSkuList[i].goodsSkuNum > 0) {
            // 定义一个空对象     将要数据收集起来
@@ -1161,7 +1136,6 @@
             that.chooseGoodsList.splice(i, 1);
           }
         }
-        //that.chooseGoodsList1 = []
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           if (that.goodsResult.content[i].isChoosed == 1) {
             var choose_goods = {}
@@ -1172,12 +1146,9 @@
             that.chooseGoodsList.push(choose_goods)
           }
         }
-        
 
         console.log('选择商品列表',choose_goods)
         that.goods_sku_show = false
-        
-        
          let el=$event.target
         that.$(el).parents('#specificationChoose').modal("hide")
       },
@@ -1228,37 +1199,37 @@
       makeGoodsIds () {
         var that = this
                //定义 数组合并去重 （没有成功..）
-        //       Array.prototype.unique = function() {  
-        //     var newArr = [];  
-        //     for (var i = 0; i < this.length; i++) {  
+        //       Array.prototype.unique = function() {
+        //     var newArr = [];
+        //     for (var i = 0; i < this.length; i++) {
         //         // if(newArr.indexOf(this[i]) == -1)
         //         console.log(JSON.stringify(newArr))
         //         if(JSON.stringify(newArr).indexOf(JSON.stringify(this[i])) ==-1)
-        //         {  
-        //             newArr.push(this[i]);  
-        //         }  
-        //     }  
+        //         {
+        //             newArr.push(this[i]);
+        //         }
+        //     }
         //     console.log('-----',this)
-        //     return newArr;  
-        // };  
+        //     return newArr;
+        // };
        //that.chooseGoodsList=that.chooseGoodsList.concat(that.chooseGoodsList1).unique()
         console.log("--合并后的的chooseGoodsList--",that.chooseGoodsList)
         that.params.goods_ids = []
         that.params.sku_list = []
         for (var i = 0; i < that.chooseGoodsList.length; i++) {
-          var goods_item = {}          
+          var goods_item = {}
           var goods_item_sku_list = []
           for(var g = 0; g < that.chooseGoodsList[i].chooseSkuList.length; g++){
             var goods_item_sku = {}
             var goodsSku_item = {}
             goods_item_sku.skuId = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuId
-            goods_item_sku.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum            
+            goods_item_sku.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum
             goods_item_sku_list.push(goods_item_sku)
 
             goodsSku_item.skuId = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuId
             goodsSku_item.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum
             goodsSku_item.goodsId = that.chooseGoodsList[i].goodsId;
-            
+
             that.params.sku_list.push(goodsSku_item)
           }
           goods_item.goodsId = that.chooseGoodsList[i].goodsId
@@ -1881,14 +1852,16 @@
     width: 60px;
     height: 30px;
     line-height: 30px;
-     text-align: center;
-    border:1px  #cccccc  solid;
+    text-align: center;
+    color:green;
+    border:1px  #BBD2F1  solid;
+    background:#ccc;
     border-radius:5px;
     position: absolute;
     right: 5px;
     top:70%;
     }
-   
+
   .wid50{width: 50%}
   .clear{clear: both;overflow: hidden;}
   .fl{float: left;}
@@ -1957,7 +1930,7 @@
         mix-width: 1100px;
         background: rgba(255, 255, 255, 1);
         padding: 10px 0 30px 30px;
-      //  background: #ccc; 
+      //  background: #ccc;
         margin-bottom: 10px;
         font-size: 10px;
         a {
@@ -2289,7 +2262,7 @@
           width: 100%;
           height: 100%;
           position: relative;
-        
+
         }
         .tc_shop {
           font-size: 9px;

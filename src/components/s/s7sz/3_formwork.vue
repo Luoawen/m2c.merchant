@@ -7,9 +7,11 @@
           <tr class="active">
             <th>模板名称</th>
             <th>{{formwork.modelName}}</th>
-            <th class="some">已有{{formwork.goodsUserNum}}个商品使用 <router-link v-if="formwork.goodsUserNum!=0">&gt;</router-link></th>
+            <th class="some">
+              <p v-if="formwork.goodsUserNum==0">已有{{formwork.goodsUserNum}}个商品使用 </p>
+              <router-link v-if="formwork.goodsUserNum!=0" :to="{name:'goodList'}">已有{{formwork.goodsUserNum}}个商品使用 </router-link></th>
             <th class="act"><router-link :to="{ name:'formworkadd', query: {addModify: false, modelId: formwork.modelId} }">编辑</router-link></th>
-            <th><a @click="delectModel(formwork.modelId)" v-if="formwork.goodsUserNum==0">删除</a></th>
+            <th><a  @click="showdelete(formwork.modelId)"  v-if="formwork.goodsUserNum==0">删除</a></th>
           </tr>
         </thead>
         <tbody>
@@ -23,21 +25,40 @@
           <tr v-for="(postageModelRule,index) in formwork.postageModelRules">
             <th scope="row">{{postageModelRule.defaultFlag==0 ?'全国（默认运费）':postageModelRule.address}}</th>
             <td>{{formwork.chargeType==1?postageModelRule.firstPiece:postageModelRule.firstWeight}}</td>
-            <td>{{postageModelRule.firstPostage}}</td>
+            <td>{{postageModelRule.firstPostage/100}}</td>
             <td>{{formwork.chargeType==1?postageModelRule.continuedPiece:postageModelRule.continuedWeight}}</td>
-            <td>{{postageModelRule.continuedPostage}}</td>
+            <td>{{postageModelRule.continuedPostage/100}}</td>
           </tr>
         </tbody>
       </table>
+
+
+
     </template>
+    <!--是否删除  弹框-->
+    <div class="agreetc_content" v-show="deleteShow" >
+      <div class="agreetc_header">
+        <span>提示</span>
+        <span class="fr" @click="deleteShow=false">X</span>
+      </div>
+      <div class="agreetc_body">是否删除运费模板？</div>
+      <div class="agreetc_footer">
+        <button type="button" class="btn save" @click = "deleted()">确认</button>
+        <button type="button" class="btn cancel" @click="deleteShow=false">取消</button>
+      </div>
+    </div>
   </div>
+
 </template>
 <script>
 export default {
+
   name: '',
   data () {
     return {
       formworks: [],
+      formworkId:'',
+      deleteShow:false,
       dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
     }
   },
@@ -45,6 +66,16 @@ export default {
     this.getTemplate()
   },
   methods: {
+    showdelete (modelId) {
+      var that = this;
+      that.formworkId = modelId;
+      that.deleteShow = true;
+    },
+    deleted(){
+        var that = this;
+        that.delectModel (that.formworkId)
+        that.deleteShow = false
+    },
     delectModel (n) {
       // alert((sessionStorage.getItem('mUser')).dealerId)
       let that = this
@@ -117,5 +148,80 @@ export default {
         }
       }
     }
+}
+
+.agreetc_content,.refuse_content,.TowAgreeshow_content {
+  width: 400px;
+  height: 280px;
+  background: #fff;
+  z-index: 9999;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -200px;
+  margin-top: -180px;
+  background: #FFFFFF;
+  border-radius: 4px;
+  .agreetc_header, .refuse_header {
+    width: 100%;
+    height: 50px;
+    background: #DFE9F6;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 16px;
+    span {
+      display: inline-block;
+      line-height: 50px;
+    }
+  }
+}
+.agreetc_header,.refuse_header{
+  width:100%;
+  height: 50px;
+  background: #DFE9F6;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 16px;
+  span{
+    display: inline-block;
+    line-height: 50px;
+  }
+}
+.fr{
+  float: right;
+}
+.agreetc_body{
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #FFFFFF;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 20px;
+  color: #333333;
+  line-height: 150px;
+}
+.agreetc_footer,.refuse_footer{
+  height: 80px;
+  padding-top: 10px;
+  padding-left: 50%;
+  .btn {
+    width: 80px;
+    height: 30px;
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+  }
+
+  .save {
+    margin-left: -110px;
+    background: #0086FF;
+  }
+  .cancel {
+    margin-left: 40px;
+    background: #FFF;
+    border: 1px solid #CCCCCC;
+    color: #444;
+  }
+
 }
 </style>

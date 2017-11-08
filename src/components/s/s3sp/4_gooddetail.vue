@@ -51,7 +51,7 @@
       						运费模板
       					</td>
       					<td class="a2">
-      						<div class="wobse">{{data.modelName}}</div>
+      						<div class="wobse">{{data.goodsPostageName}}</div>
       					</td>
       					<td class="a3">
       						商品条形码

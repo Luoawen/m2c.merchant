@@ -19,13 +19,13 @@ s<template>
       <div class="form-group">
         <label class="col-sm-2 control-label">*新密码：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="newPass" placeholder="8位数字密码">
+          <input type="text" class="form-control" id="newPass" maxlength="16" placeholder="8-16位数字密码">
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">*再次确认：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="confirmNewPass" placeholder="8位数字密码">
+          <input type="text" class="form-control" id="confirmNewPass" maxlength="16" placeholder="8-16位数字密码">
         </div>
       </div>
       <div class="form-group">
@@ -65,7 +65,7 @@ s<template>
         dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
         userPhone: JSON.parse(sessionStorage.getItem('mUser')).mobile,
         show: true,
-        count: sessionStorage.getItem('total') == null ? 60 : sessionStorage.getItem('total'),
+        count: sessionStorage.getItem('total') == null || sessionStorage.getItem('total') == '' ? 60 : sessionStorage.getItem('total'),
         total: '',
         isSuccess: false
       }
@@ -84,7 +84,11 @@ s<template>
           // 从cookie 中读取剩余倒计时
           that.total = sessionStorage.getItem('total')
           // 在发送按钮显示剩余倒计时
-          that.count = that.total
+          if (that.total == 1) {
+            that.count = 60
+          } else {
+            that.count = that.total
+          }
           // 把剩余总倒计时减掉1
           that.total--
           if (that.total <= 0) { // 剩余倒计时为零，则显示 重新发送，可点击
@@ -113,10 +117,10 @@ s<template>
           },
           success: function (result) {
             if (result.status === 200) {
-              alert('已发送短信注意查收')
               that.isSuccess = true
               sessionStorage.setItem('total', 60)
               that.timekeeping()
+              alert('已发送短信注意查收')
             } else {
               alert(result.errorMessage)
             }
@@ -130,6 +134,18 @@ s<template>
           alert('验证码长度必须6位')
           return false
         }
+        $('#newPass').bind('input propertychange',function(){ //添加监听input值的改变事件
+          let tvalmum;
+          //统计input输入字段的长度
+          tvalnum = $(this).val().length;
+          //如果大于8个字直接进行字符串截取
+          if(tvalnum>16){
+            var tval = $(this).val();
+            tval = tval.substring(8,16);
+            $(this).val(tval);
+            that.show_tip('长度超过限制！');
+          }
+        });
         let pass = that.$('#newPass').val()
         if (pass.length < 8 || pass.length > 16) {
           alert('密码长度8-16位')
@@ -152,6 +168,11 @@ s<template>
           },
           success: function (result) {
             if (result.status === 200) {
+              // 删除cookie
+              sessionStorage.removeItem('total')
+              // 显示重新发送 把发送按钮设置为可点击
+              that.show = true
+              that.isSuccess = false
               alert('修改操作成功')
             } else if (result.status === 3) {
               alert('验证码不正确')
@@ -171,6 +192,7 @@ s<template>
         that.timekeeping()
       } else { // cookie 没有倒计时
         that.show = true
+        that.count = 60
       }
     }
   }

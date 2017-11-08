@@ -54,28 +54,28 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows" v-if="addRows.length!==0">
                   <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}}
-                    <a @click="addressCheckBox(index,$event)"> 编辑 </a>
+                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click="cityBoxHide"> X </a></h4>
+                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/>
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
                             {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
-                            <span> {{pro.name}} <i>v</i></span>
+                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                            <span> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click="chooseCity(city,$event)"/> {{city.name}}
+                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-
+                      <el-button @click="sureCheckCity($event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -121,7 +121,7 @@
                             <input type="checkbox"
                                   v-model="addRow.IdArr" :value="pro.code"
                                   @click="choosePro(pro,$event)"/>
-                            <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                            <span @click="cityShow(index,$event)"> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
                                 <input type="checkbox"
@@ -158,30 +158,23 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address == 0 ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
+                  <td class="relative">{{addRow.address == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
                     编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close"
-                                  @click="cityBoxHide"> X </a></h4>
+                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
-                        <div class="bigArea"
-                            v-for="(item,index) in datas">
+                        <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox"
-                                  v-model="addRow.areaIdArr" :value="item.code"
-                                  @click="chooseArea(item.code,$event)"/>{{item.name}}
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
+                            {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox"
-                                  v-model="addRow.IdArr" :value="pro.code"
-                                  @click="choosePro(pro,$event)"/>
-                            <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                            <span> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox"
-                                      v-model="addRow.cityList" :value="city.code"
-                                      @click="chooseCity(city,$event)"/> {{city.name}}
+                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
@@ -285,25 +278,23 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
+                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
                     编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click="cityBoxHide"> X </a></h4>
+                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click="chooseArea(item.code,$event)"/>
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
                             {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click="choosePro(pro,$event)"/>
-                            <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
+                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                            <span> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox"
-                                      v-model="addRow.cityList" :value="city.code"
-                                      @click="chooseCity(city,$event)"/> {{city.name}}
+                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
@@ -362,36 +353,28 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click="addressCheckBox(index,$event)">
+                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
                     编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close"
-                                  @click="cityBoxHide"> X </a></h4>
-                        <div class="test-div">
-                          <div class="bigArea"
-                              v-for="(item,index) in datas">
-                            <div class="left">
-                              <input type="checkbox"
-                                    v-model="addRow.areaIdArr" :value="item.code"
-                                    @click="chooseArea(item.code,$event)"/> {{item.name}}
-                            </div>
-                            <div class="pro" v-for="(pro,index) in item.subs">
-                              <input type="checkbox"
-                                    v-model="addRow.IdArr" :value="pro.code"
-                                    @click="choosePro(pro,$event)"/>
-                              <span @click="cityShow(index,$event)"> {{pro.name}} <i>v</i></span>
-                              <div class="cityWrap">
-                                <div class="city"
-                                    v-for="(city,index) in pro.subs">
-                                  <input type="checkbox"
-                                        v-model="addRow.cityList" :value="city.code"
-                                        @click="chooseCity(city,$event)"/> {{city.name}}
-                                </div>
+                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                      <div class="test-div">
+                        <div class="bigArea" v-for="(item,index) in datas">
+                          <div class="left">
+                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
+                            {{item.name}}
+                          </div>
+                          <div class="pro" v-for="(pro,index) in item.subs">
+                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                            <span> {{pro.name}} </span>
+                            <div class="cityWrap">
+                              <div class="city" v-for="(city,index) in pro.subs">
+                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
                         </div>
+                      </div>
                     </div>
                   </td>
                   <td>
@@ -444,6 +427,14 @@
             </button>
           </div>
         </div>
+        <div class="delectSizeWrap" v-show="delectBg">
+          <div class="delectSizeCon">
+            <p>是否删除运费模板</p>
+            <button class="blueBtn" @click="delete_confirm()">确定</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="defultBtn" @click="deleteUnit()">取消</button>
+            <a class="colseDelectBox" @click="deleteUnit()"><span class="	glyphicon glyphicon-remove"></span></a>
+          </div>
+        </div>
       </template>
     </form>
   </div>
@@ -464,6 +455,7 @@
               continuedPostage: ''
             }]
         },
+        delectBg:'',
         addRows: [],
         addModify: 'add', // 判断是否是新增按钮进入
         chargeType: 0, // 按件还是按重
@@ -475,6 +467,7 @@
         cityLength: [], // 比对省下市是否全选
         address: [], // 选中的省/市名
         postageModelRules: [], // 运费规则
+        modelRules: [],
         modelId: '', // 模板id
         add_postageModelRule: {
           address: '',
@@ -507,6 +500,11 @@
       }
     },
     methods: {
+      cityBoxShow(index,$event){
+        let that = this
+        var el = event.target
+        that.$(el).parents('.table').find('.cityBox').eq(index).show()
+      },
       checkNumber (val, index, arr, list) {
         setTimeout(() => {
           if (val && $.isNumeric(val)) {
@@ -543,6 +541,16 @@
           }
         }, 0)
       },
+      // 处理address数组为字符串
+      sureCheckCity($event){
+        let that = this
+        let el = $event.target
+        console.log(that.addRows[that.index].address.toString())
+        for(var i=0;i<that.that.addRows[that.index].address.length;i++){
+
+        }
+        that.addRows[that.index].address.toString()
+      },
 // 选中大区时同时选中所有省市
       chooseArea(n, $event) {
         let that = this
@@ -553,7 +561,8 @@
               for (var j = 0; j < that.datas[i].subs.length; j++) {
                 // (that.addRows).push(that.datas[i].subs[j].code)
                 that.addRows[that.index].IdArr.push(that.datas[i].subs[j].code)
-                that.addRows[that.index].address.push(that.datas[i].subs[j].name)
+                that.addRows[that.index].address.push(eval('(' + '{proName:"'+ that.datas[i].subs[j].name + '"}' + ')'))
+
                 that.addRows[that.index].proList.push(that.datas[i].subs[j].code)
                 for (var k = 0; k < that.datas[i].subs[j].subs.length; k++) {
                   if (that.datas[i].subs[j].subs[k].parent === that.datas[i].subs[j].code) {
@@ -573,7 +582,7 @@
                   }
                 }
                 that.addRows[that.index].IdArr.splice(that.$.inArray(that.datas[i].subs[j].code, that.addRows[that.index].IdArr), 1)
-                that.addRows[that.index].address.splice(that.datas[i].subs[j].name, 1)
+                that.addRows[that.index].address.splice(eval('(' + '{proName:"'+ that.datas[i].subs[j].name + '"}' + ')'), 1)
               }
             }
           }
@@ -585,7 +594,8 @@
         let el = event.target
         if (el.checked) {
           that.addRows[that.index].IdArr.push(n.code)
-          that.addRows[that.index].address.push(n.name)
+          //that.addRows[that.index].address.push(n.name)
+          that.addRows[that.index].address.push(eval('(' + '{proName:"'+ n.name + '"}' + ')'))
           for (var i = 0; i < that.datas.length; i++) {
             for (var j = 0; j < that.datas[i].subs.length; j++) {
               if (that.datas[i].subs[j].code === n.code) {
@@ -614,7 +624,7 @@
               }
             }
           }
-          that.addRows[that.index].address.splice(that.$.inArray(n.name, that.addRows[that.index].address), 1)
+          that.addRows[that.index].address.splice(that.$.inArray(eval('(' + '{proName:"'+ n.name + '"}' + ')'), that.addRows[that.index].address), 1)
           that.addRows[that.index].IdArr.splice(that.$.inArray(n.code, that.addRows[that.index].IdArr), 1)
           let point=0
           for (var i = 0; i < that.datas.length; i++) {
@@ -651,6 +661,7 @@
                 if (that.$.inArray(that.datas[i].subs[j].name, that.addRows[that.index].address) == -1) {
                   that.addRows[that.index].address.push(that.datas[i].subs[j].name)
                 }
+                that.addRows[that.index].address.push(city.name)
               }
             }
           }
@@ -686,7 +697,7 @@
                       }
                     }
                 }
-
+                that.addRows[that.index].address.splice(that.$.inArray(city.name, that.addRows[that.index].address), 1)
               }
             }
           }
@@ -715,6 +726,10 @@
           continuedPostage: ''
         }
         this.addRows.push(newRow)
+      },
+      isdelete(){
+        let that = this;
+        that.delectBg = true;
       },
 // 删除行
       delectRule(index)
@@ -830,6 +845,22 @@
             that.postageModelRules.push(that.postageModelRule)
           }
         }
+
+        for (var i = 0; i < that.postageModelRules.length; i++) {
+          that.postageModelRule = {
+            address: that.postageModelRules[i].address,
+            cityCode: that.postageModelRules[i].cityCode,
+            continuedPiece: that.postageModelRules[i].continuedPiece,
+            continuedPostage: that.postageModelRules[i].continuedPostage * 100,
+            continuedWeight: that.postageModelRules[i].continuedWeight,
+            firstPiece: that.postageModelRules[i].firstPiece,
+            firstPostage: that.postageModelRules[i].firstPostage * 100,
+            firstWeight: that.postageModelRules[i].firstWeight,
+            defaultFlag: that.postageModelRules[i].defaultFlag
+          }
+          that.modelRules.push(that.postageModelRule)
+        }
+
         that.$.ajax({
           type: that.addModify === 'add' ? 'post' : 'put',
           url: that.localbase + 'm2c.scm/postage',
@@ -837,7 +868,7 @@
             token: sessionStorage.getItem('mToken'),
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
             modelId: that.addModify === 'add' ? that.modelId : that.$route.query.modelId,
-            postageModelRules: JSON.stringify(that.postageModelRules),
+            postageModelRules: JSON.stringify(that.modelRules),
             modelName: that.formwork.modelName,
             chargeType: that.formwork.chargeType,
             modelDescription: that.formwork.modelDescription
@@ -856,6 +887,9 @@
     },
     mounted(){
       let that = this
+      that.$(window).click(function(){
+        that.$('.addMess').find('.cityBox').hide()
+      })
       that.$.ajax({
         type: 'get',
         url: that.localbase + 'm2c.operate/address/getinner.web',
