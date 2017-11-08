@@ -151,7 +151,7 @@
           </thead>
           <tbody>
             <tr v-for="(item,index) in goodsSpecifications">
-              <td><span @click="delect(index)" v-if="goodsSpecifications.length>1">移除</span></td>
+              <td><span @click="delect(index)" v-if="goodsSpecifications.length>1 && handle_toggle=='add'">移除</span></td>
               <td>
                 <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item)"><!--这里需要后台返回规格Id-->
                   <el-option
@@ -702,14 +702,18 @@
               //alert(that.goodsMainImages)
             }
           };
+          console.log("con="+con)
           con.ondragenter = function(e) {
             e.preventDefault();
+            alert(1)
           }
           con.ondragover = function(e) {
             e.preventDefault(); //阻止默认事件，否则不会触发ondrop事件
+            alert(2)
           }
           con.ondragleave = function(e) {
             e.preventDefault();
+            alert(3)
           }
           con.ondrop = function(e) {
             e.preventDefault();
