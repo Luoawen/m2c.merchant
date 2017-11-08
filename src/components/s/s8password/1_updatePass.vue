@@ -7,7 +7,7 @@ s<template>
       <div class="form-group">
         <label class="col-sm-2 control-label">*验证码：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="verifyCode" placeholder="6位数字">
+          <input type="text" class="form-control" id="verifyCode" placeholder="4位数字" maxlength="4">
         </div>
         <div class="col-sm-3">
           <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="!show">
@@ -19,13 +19,13 @@ s<template>
       <div class="form-group">
         <label class="col-sm-2 control-label">*新密码：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="newPass" maxlength="16" placeholder="8-16位数字密码">
+          <input type="text" class="form-control" id="newPass" maxlength="16" placeholder="6-16位数字密码">
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">*再次确认：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="confirmNewPass" maxlength="16" placeholder="8-16位数字密码">
+          <input type="text" class="form-control" id="confirmNewPass" maxlength="16" placeholder="6-16位数字密码">
         </div>
       </div>
       <div class="form-group">
@@ -120,9 +120,9 @@ s<template>
               that.isSuccess = true
               sessionStorage.setItem('total', 60)
               that.timekeeping()
-              alert('已发送短信注意查收')
+              that.show_tip('已发送短信注意查收')
             } else {
-              alert(result.errorMessage)
+              that.show_tip(result.errorMessage)
             }
           }
         })
@@ -131,7 +131,7 @@ s<template>
         let that = this
         let verifyCode = that.$('#verifyCode').val()
         if (verifyCode.length !== 6) {
-          alert('验证码长度必须6位')
+          that.show_tip('验证码长度必须6位')
           return false
         }
         $('#newPass').bind('input propertychange',function(){ //添加监听input值的改变事件
@@ -141,19 +141,19 @@ s<template>
           //如果大于8个字直接进行字符串截取
           if(tvalnum>16){
             var tval = $(this).val();
-            tval = tval.substring(8,16);
+            tval = tval.substring(6,16);
             $(this).val(tval);
             that.show_tip('长度超过限制！');
           }
         });
         let pass = that.$('#newPass').val()
-        if (pass.length < 8 || pass.length > 16) {
-          alert('密码长度8-16位')
+        if (pass.length < 6 || pass.length > 16) {
+          that.show_tip('密码长度6-16位')
           return false
         }
         let confirmNewPass = that.$('#confirmNewPass').val()
         if (confirmNewPass !== pass) {
-          alert('两次密码不一致')
+          that.show_tip('两次密码不一致')
           return false
         }
         that.$.ajax({
@@ -173,11 +173,11 @@ s<template>
               // 显示重新发送 把发送按钮设置为可点击
               that.show = true
               that.isSuccess = false
-              alert('修改操作成功')
+              that.show_tip('修改操作成功')
             } else if (result.status === 3) {
-              alert('验证码不正确')
+              that.show_tip('验证码不正确')
             } else {
-              alert('修改失败')
+              that.show_tip('修改失败')
             }
           }
         })
