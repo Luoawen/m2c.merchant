@@ -69,7 +69,7 @@
       <!--删除-->
       <div class="delectGoodBg" v-if="delectGoodBg"></div>
       <div class="delectGoodWrap" v-if="delectGoodBg">
-      <div class="delectGoodCon" v-if="delectGood">
+     <!-- <div class="delectGoodCon" v-if="delectGood">
           <p>是否删除品牌</p>
           <button class="blueBtn" @click="delete_confirm()">确定</button>
           <button class="defultBtn" @click="delectGoodHide()">取消</button>
@@ -80,6 +80,29 @@
           <button class="blueBtn" @click="deleteApprove_confirm()">确定</button>
           <button class="defultBtn" @click="delectApproveHide()">取消</button>
           <a class="colseDelectBox" @click="delectApproveHide()"></a>
+        </div>-->
+        <div class="delectGoodCon" v-if="delectGood" >
+          <div class="agreetc_header">
+            <span>提示</span>
+            <span class="fr" @click="delectGoodHide()">X</span>
+          </div>
+          <div class="agreetc_body">是否删除品牌</div>
+          <div class="agreetc_footer">
+            <button type="button" class="btn save" @click = "delete_confirm()">确认</button>
+            <button type="button" class="btn cancel" @click="delectGoodHide()">取消</button>
+          </div>
+        </div>
+
+        <div class="delectGoodCon" v-if="delectApprove" >
+          <div class="agreetc_header">
+            <span>提示</span>
+            <span class="fr" @click="delectApproveHide()">X</span>
+          </div>
+          <div class="agreetc_body">是否删除品牌审核</div>
+          <div class="agreetc_footer">
+            <button type="button" class="btn save" @click = "deleteApprove_confirm()">确认</button>
+            <button type="button" class="btn cancel" @click="delectApproveHide()">取消</button>
+          </div>
         </div>
       </div>
       <!--修改/新增-->
@@ -449,8 +472,13 @@
             token: sessionStorage.getItem('mToken')
           },
           success: function (result) {
+            if(result.status == 200){
+            that.show_tip("删除成功")
             that.delectApproveHide()
             that.get_comment_info1()
+            }else{
+              that.show_tip(result.errorMessage)
+            }
           }
         })
       },
@@ -465,8 +493,14 @@
             token: sessionStorage.getItem('mToken')
           },
           success: function (result) {
-            that.delectGoodHide()
-            that.get_comment_info()
+            if(result.status == 200){
+              that.delectGoodHide()
+              that.get_comment_info()
+            }else{
+              that.show_tip(result.errorMessage)
+              that.delectGoodHide()
+              that.get_comment_info()
+            }
           }
         })
       },
@@ -949,9 +983,83 @@
   margin-left: -80px; display:inline-block;width:80px;
 }
 /*删除*/
-.delectGoodBg{position:absolute;top:0;left:0;width:100%;height:880px;background:rgba(0,0,0,0.6);z-index:99;}
-.delectGoodWrap{position:absolute;width:380px;height:280px;padding:10px;border-radius:10px;top:50%;left:50%;margin-left:-200px;background:#fff;z-index:99;}
-.delectGoodWrap p{line-height:50px;}
+.delectGoodCon {
+  width: 400px;
+  height: 280px;
+  background: #fff;
+  z-index: 9999;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -200px;
+  margin-top: -180px;
+  background: #FFFFFF;
+  border-radius: 4px;
+  .agreetc_header, .refuse_header {
+    width: 100%;
+    height: 50px;
+    background: #DFE9F6;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 16px;
+    span {
+      display: inline-block;
+      line-height: 50px;
+    }
+  }
+}
+
+.agreetc_header, .refuse_header {
+  width: 100%;
+  height: 50px;
+  background: #DFE9F6;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 16px;
+  span {
+    display: inline-block;
+    line-height: 50px;
+  }
+}
+.fr{
+  float: right;
+}
+.agreetc_body{
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #FFFFFF;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 20px;
+  color: #333333;
+  line-height: 150px;
+}
+.agreetc_footer,.refuse_footer {
+  height: 80px;
+  padding-top: 10px;
+  padding-left: 50%;
+  .btn {
+    width: 80px;
+    height: 30px;
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+  }
+
+  .save {
+    margin-left: -110px;
+    background: #0086FF;
+  }
+  .cancel {
+    margin-left: 40px;
+    background: #FFF;
+    border: 1px solid #CCCCCC;
+    color: #444;
+  }
+}
+/*.delectGoodBg{position:absolute;top:0;left:0;width:100%;height:880px;background:rgba(0,0,0,0.6);z-index:99;}*/
+/*.delectGoodWrap{position:absolute;width:380px;height:280px;padding:10px;border-radius:10px;top:50%;left:50%;margin-left:-200px;background:#fff;z-index:99;}*/
+/*.delectGoodWrap p{line-height:50px;}*/
 .blueBtn,.defultBtn{background:rgb(96, 174, 246);width:80px;height:30px;border-radius:4px;text-align: center;color:#fff;}
 .defultBtn{background:#ccc;}
 /*修改/新增*/

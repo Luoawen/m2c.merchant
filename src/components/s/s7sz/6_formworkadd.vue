@@ -467,6 +467,7 @@
         cityLength: [], // 比对省下市是否全选
         address: [], // 选中的省/市名
         postageModelRules: [], // 运费规则
+        modelRules: [],
         modelId: '', // 模板id
         add_postageModelRule: {
           address: '',
@@ -561,7 +562,7 @@
                 // (that.addRows).push(that.datas[i].subs[j].code)
                 that.addRows[that.index].IdArr.push(that.datas[i].subs[j].code)
                 that.addRows[that.index].address.push(eval('(' + '{proName:"'+ that.datas[i].subs[j].name + '"}' + ')'))
-                
+
                 that.addRows[that.index].proList.push(that.datas[i].subs[j].code)
                 for (var k = 0; k < that.datas[i].subs[j].subs.length; k++) {
                   if (that.datas[i].subs[j].subs[k].parent === that.datas[i].subs[j].code) {
@@ -844,6 +845,22 @@
             that.postageModelRules.push(that.postageModelRule)
           }
         }
+
+        for (var i = 0; i < that.postageModelRules.length; i++) {
+          that.postageModelRule = {
+            address: that.postageModelRules[i].address,
+            cityCode: that.postageModelRules[i].cityCode,
+            continuedPiece: that.postageModelRules[i].continuedPiece,
+            continuedPostage: that.postageModelRules[i].continuedPostage * 100,
+            continuedWeight: that.postageModelRules[i].continuedWeight,
+            firstPiece: that.postageModelRules[i].firstPiece,
+            firstPostage: that.postageModelRules[i].firstPostage * 100,
+            firstWeight: that.postageModelRules[i].firstWeight,
+            defaultFlag: that.postageModelRules[i].defaultFlag
+          }
+          that.modelRules.push(that.postageModelRule)
+        }
+
         that.$.ajax({
           type: that.addModify === 'add' ? 'post' : 'put',
           url: that.localbase + 'm2c.scm/postage',
@@ -851,7 +868,7 @@
             token: sessionStorage.getItem('mToken'),
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
             modelId: that.addModify === 'add' ? that.modelId : that.$route.query.modelId,
-            postageModelRules: JSON.stringify(that.postageModelRules),
+            postageModelRules: JSON.stringify(that.modelRules),
             modelName: that.formwork.modelName,
             chargeType: that.formwork.chargeType,
             modelDescription: that.formwork.modelDescription

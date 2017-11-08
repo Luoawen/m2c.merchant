@@ -372,6 +372,8 @@
         ,expressName: ''
         ,expressCode: ''
         ,expressWay: 0
+        ,expressPhone: ''
+        ,expressPerson: ''
       }
     },
     methods: {
@@ -417,8 +419,8 @@
       ,getDealerOrderInfo () {
         let that = this;
         that.$.ajax({
-          //url: that.base + 'm2c.scm/order/dealer/orderdetail',
-          url: 'http://localhost:8080/m2c.scm/order/dealer/orderdetail',
+          url: that.base + 'm2c.scm/order/dealer/orderdetail',
+          //url: 'http://localhost:8080/m2c.scm/order/dealer/orderdetail',
           type: 'get',
           cache: false,
           pagination: true,
