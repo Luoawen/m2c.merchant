@@ -201,7 +201,7 @@
                 <!-- 有几种情况的不同表现方 -->
                 <div style="">
                   <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :'--'}}</div>
-                  <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.afStatus, goodsItem.skuId)" v-show="goodsItem.afStatus<=2">同意</button></div>
+                  <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.afStatus, goodsItem.skuId)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
                   <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.skuId)" v-show="goodsItem.afStatus==0">拒绝</button></div>
                 </div>
                 <div v-show="goodsItem.afStatus==3">
