@@ -166,8 +166,8 @@
         that.show_tip("请输入客服电话")
         return
       }
-      if (that.$("#m11yhgl_img")[0].src.indexOf("undifined") == -1 ) {
-        that.show_tip('请选则图片');
+      if (that.$("#m11yhgl_img")[0].src.indexOf("undifined") != -1 ) {
+        that.show_tip('上传图片不成功')
         return
       }
       if (that.$("#m11yhgl_img")[0].src == null || that.$("#m11yhgl_img")[0].src.trim() == ''){
