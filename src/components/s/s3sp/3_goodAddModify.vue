@@ -124,12 +124,12 @@
                     <el-input v-model="good.weight" placeholder="请输入内容" type="number"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="good.photographPrice/100" placeholder="请输入内容" type="number"></el-input>
+                    <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number"></el-input>
                 </td>
                 <td>
-                  <el-input v-model="good.marketPrice/100" placeholder="请输入内容" type="number"></el-input>
+                  <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number"></el-input>
                 </td>
-                <td v-if="countMode==1"><el-input v-model="good.supplyPrice/100" placeholder="请输入内容" type="number"></el-input></td>
+                <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number"></el-input></td>
                 <td v-if="countMode==2">{{serviceRate}}</td>
                 <td>
                   <el-input v-model="good.goodsCode" placeholder="请输入内容"></el-input>
@@ -475,7 +475,6 @@
         that.$refs[formName].validate((valid) => {
           if (valid) {
             for(var k=0;k<that.goodsSKUs.length;k++){
-              console.log(that.goodsSKUs[k].availableNum)
               if(that.goodsSKUs[k].availableNum==''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].weight==''||that.goodsSKUs[k].weight==undefined||that.goodsSKUs[k].photographPrice==''||that.goodsSKUs[k].photographPrice==undefined){
                 that.sukShow = true
                 return
@@ -483,51 +482,51 @@
                 that.sukShow = false
                 if (validatorUtils.isNumericD(that.goodsSKUs[k].availableNum)&&validatorUtils.isNumericD(that.goodsSKUs[k].weight)&&validatorUtils.isNumericD(that.goodsSKUs[k].photographPrice)&&validatorUtils.isNumericD(that.goodsSKUs[k].supplyPrice)&&validatorUtils.isNumericD(that.goodsSKUs[k].marketPrice)) {
                   that.sukShow1 = false
-                  that.goodsSKUs[k].marketPrice=that.goodsSKUs[k].marketPrice*100
-                  that.goodsSKUs[k].photographPrice=that.goodsSKUs[k].photographPrice*100
+                  that.goodsSKUs[k].marketPrice=parseFloat(that.goodsSKUs[k].marketPrice*100).toFixed(2)
+                  that.goodsSKUs[k].photographPrice=parseFloat(that.goodsSKUs[k].photographPrice*100).toFixed(2)
                   that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
                   if(that.countMode!=1){
                     that.goodsSKUs[k].serviceRate=that.serviceRate
                   }else{
-                    that.goodsSKUs[k].supplyPrice=that.goodsSKUs[k].supplyPrice*100
+                    that.goodsSKUs[k].supplyPrice=parseFloat(that.goodsSKUs[k].supplyPrice*100).toFixed(2)
                   }
+                  if(that.goodsMainImages.length<=0){
+                    that.imgShowList = true
+                    return
+                  }
+                  let a={
+                    token: sessionStorage.getItem('mToken'),
+                    goodsId: that.goodsId,
+                    dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+                    dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName,
+                    goodsSKUs: JSON.stringify(that.goodsSKUs),
+                    goodsSpecifications: JSON.stringify(that.goodsSpecifications),
+                    goodsMainImages:that.goodsMainImages.length==0?'':that.goodsMainImages.toString(),
+                    goodsDesc:that.$refs.ue.getUEContent(),
+                    goodsBrandName:that.goodsBrandName,
+                    goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
+                    goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString()
+                  }
+                  console.log(a.goodsSKUs)
+                  that.$.ajax({
+                    type: that.handle_toggle === 'add' ? 'post' : 'put',
+                    url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/goods' : that.localbase + 'm2c.scm/goods/approve',
+                    data:Object.assign(that.data,a),
+                    success: function (result) {
+                      if (result.status === 200) {
+                        that.show_tip('保存成功')
+                        that.$router.push({name:"goodList"})
+                      } else {
+                        that.show_tip(result.errorMessage)
+                        that.goodsGuarantee=[]
+                      }
+                    }
+                  })
                 } else {
                   that.sukShow1 = true
                 }
               }
             }
-            if(that.goodsMainImages.length<=0){
-              that.imgShowList = true
-              return
-            }
-          let a={
-            token: sessionStorage.getItem('mToken'),
-            goodsId: that.goodsId,
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-            dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName,
-            goodsSKUs: JSON.stringify(that.goodsSKUs),
-            goodsSpecifications: JSON.stringify(that.goodsSpecifications),
-            goodsMainImages:that.goodsMainImages.length==0?'':that.goodsMainImages.toString(),
-            goodsDesc:that.$refs.ue.getUEContent(),
-            goodsBrandName:that.goodsBrandName,
-            goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
-            goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString()
-          }
-          console.log(a.goodsSKUs)
-          that.$.ajax({
-            type: that.handle_toggle === 'add' ? 'post' : 'put',
-            url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/goods' : that.localbase + 'm2c.scm/goods/approve',
-            data:Object.assign(that.data,a),
-            success: function (result) {
-              if (result.status === 200) {
-                that.show_tip('保存成功')
-                that.$router.push({name:"goodList"})
-              } else {
-                that.show_tip(result.errorMessage)
-                that.goodsGuarantee=[]
-              }
-            }
-          })
           } else {
             console.log('error submit!!');
             return false;
@@ -906,14 +905,13 @@
             that.goodsSKUs = result.content.goodsSKUs
             that.data.goodsMinQuantity = result.content.goodsMinQuantity.toString()
             console.log("that.data.goodsMinQuantity="+that.data.goodsMinQuantity)
-            // for(var p=0;p<result.content.goodsSKUs.length;p++){
-            //   that.goodsSKUs[p].marketPrice=result.content.goodsSKUs[p].marketPrice/100
-            //   that.goodsSKUs[p].photographPrice=result.content.goodsSKUs[p].photographPrice/100
-            //   if(result.content.goodsSKUs[p].supplyPrice!=''){
-            //     that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice/100
-            //   }
-            // }
-
+            for(var p=0;p<result.content.goodsSKUs.length;p++){
+              that.goodsSKUs[p].marketPrice=result.content.goodsSKUs[p].marketPrice/100
+              that.goodsSKUs[p].photographPrice=result.content.goodsSKUs[p].photographPrice/100
+              if(result.content.goodsSKUs[p].supplyPrice!=''){
+                that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice/100
+              }
+            }
             for(var i=0;i<result.content.goodsMainImages.length;i++){
               that.fileList.push(eval('(' + '{url:"'+ result.content.goodsMainImages[i] + '"}' + ')'))
               that.goodsMainImages.push(result.content.goodsMainImages[i])
