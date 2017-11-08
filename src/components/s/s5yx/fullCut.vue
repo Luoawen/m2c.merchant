@@ -6,7 +6,7 @@
         <div class="base wrap">
           <div class="set">
             <span class="wid70">满减名称：</span>
-            <input type="text" class="form-control set_name" placeholder="1-11个字符" maxlength="11" v-model="params.full_cut_name" @blur="formValidator(1)">
+            <input type="text" id='fullCutName' class="form-control set_name" placeholder="1-11个字符" maxlength="11" v-model="params.full_cut_name" @blur="formValidator(1)">
             <div class="set_bz" style="color: red;" v-show="tip_show.name">名称为最多11位汉字数字英文,不能为空</div>
           </div>
           <div class="set">
@@ -231,7 +231,7 @@
               </div>
             </div>
           </div>
-          <!--有 问题点 -->
+          <!--问题点 -->
           <div class="goods_body">
             <div class="merchant fl" v-for="(goods, index) in goodsResult.content" :key="index" >
               <div @click="openGoodsSku(goods, index,$event)">
@@ -243,7 +243,7 @@
                     <div><b>{{goods.goodsPrice/100}}元</b></div>
                   </div>
                 </div>
-                <div class="fc" v-show="goods.isCheck"><div class="pickSpecificationsStyle"   v-show="hasSpecificationsStyle"   @click.stop="ChooseSpecification(goods)">请选规格</div></div>
+                <div class="fc" v-show="goods.isCheck"><div class="pickSpecificationsStyle"  v-show="goods.skuSingleFlag == 1"   @click.stop="ChooseSpecification(goods)">请选规格</div></div>
                 <div class="fcimg" v-show="goods.isCheck"></div>
               </div>
             </div>
@@ -551,7 +551,7 @@
     <!--作用范围为全店的商品商家筛选弹窗e-->
     <!--换购商品筛选弹窗s-->
     <div class="modal fade frame_layer01" id="goods_exchange_dialog"   role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051; ">
-      <div class="modal-dialog shop_goodchoose" style="margin:20px 0px;">
+      <div class="modal-dialog shop_goodchoose" style="margin:10% 30%;">
         <div class="frame_total ">
           <div class="modal-header">
             <div class="modal-title text-center">
@@ -567,7 +567,7 @@
             </div>
           </div>
           <!--商品-->
-          <div class="shop_body">
+          <div class="shop_body" style="overflow:auto;">
             <div class="good_choose">
               <div class="merchant fl" style="position: relative;" v-for="(goods, index) in goodsResult.content" @click="addExchangeGoods(goods)">
                 <h6>{{goods.goodsName}}</h6>
@@ -581,7 +581,7 @@
                 <div class="fcimg" v-show="goods.isExchange"></div>
               </div>
             </div>
-            <div class="page">
+            <!-- <div class="page">
               <button>上一页</button>
               <span>{{goodsResult.pageNumber}}</span>/
               <span>{{goodsResult.pageCount}}</span>
@@ -589,7 +589,7 @@
               <span>到</span>
               <input style="" class="rb" v-model="goods_query_item.pageNum"/>
               <span>页</span>
-            </div>
+            </div> -->
           </div>
           <div class="footer">
             <button type="button" class="btn save" data-dismiss="modal" @click="cancelExchange()">取消</button>
@@ -844,6 +844,8 @@
         if (flag == 0 || flag == 1) {
           if (!/^[\u4e00-\u9fa5a-zA-Z0-9]{1,11}$/.test(that.params.full_cut_name)) {
             that.tip_show.name = true
+            //输入NG的情况  定位到该处
+            that.$("#fullCutName").focus().select();
             return false
           } else{
             that.tip_show.name = false
@@ -1005,14 +1007,14 @@
         var that = this
         that.modalShadow =true
         that.$('#choose_goods').modal({'show':true ,'backdrop':false})
-        console.dir(that.$('#choose_goods'))
+        console.dir('---choose_goods------',that.$('#choose_goods'))
         that.goods_query_item.goodsClassifyId = ''
         that.goods_query_item.condition = ''
         that.goods_query_item.dealerId = JSON.parse(sessionStorage.getItem('mUser')).dealerId;
         that.goods_query_item.pageNum = 1
         that.goodsChoose()
       },
-      // 作用范围 选择商品(数据渲染展示)
+      // 作用范围 选择商品
       goodsChoose () {
         var that = this
         that.$.ajax({
@@ -1029,21 +1031,25 @@
           success: function (result) {
             console.log("goodesChoose选择商品范围 ------",result);
             for (var i = 0; i < result.content.length; i++) {
+              //遍历获取到的数据 result.content(result.content外包含页码) 绑定属性
               result.content[i].isRemoved = 0
               result.content[i].isChoosed = 0
               result.content[i].isExchange = 0
               result.content[i].chooseSkuList = []
+       //遍历选择商品列表 同 result.content 的goodsId 匹配  匹配到就将isChoosed 设置为1 并将  chooseGoodsList里的chooseSkuList 赋值给  result.content 的chooseSkuList(选择规格列表)
               for (var j = 0; j < that.chooseGoodsList.length; j++) {
                 if (result.content[i].goodsId == that.chooseGoodsList[j].goodsId) {
                   result.content[i].isChoosed = 1
                   result.content[i].chooseSkuList = that.chooseGoodsList[j].chooseSkuList
                 }
               }
+              // 遍历移除商品列表  同 result.content 的goodsId 匹配  有匹配到就将isRemoved设置为1
               for (var j = 0; j < that.removeGoodsList.length; j++) {
                 if (result.content[i].goodsId == that.removeGoodsList[j].goodsId) {
                   result.content[i].isRemoved = 1
                 }
               }
+              //遍历exchangeGoodsList  同上 
               for (var j = 0; j < that.exchangeGoodsList.length; j++) {
                 if (result.content[i].goodsId == that.exchangeGoodsList[j].goodsId) {
                   result.content[i].isExchange = 1
@@ -1058,23 +1064,24 @@
       openGoodsSku (goods,index,$event) {
         var that = this 
         let el = $event.target
-        //单规格的情况不显示可选规格选项
-        if(goods.skuSingleFlag == 0){
-          that.hasSpecificationsStyle = false;
+        // 把根据样式被选中状态  并且push到chooseGoodsList中
+        if(that.goodsResult.content[index].isCheck == true){
+         that.goodsResult.content[index].isCheck = false
+        }else{
+          that.goodsResult.content[index].isCheck = true
         }
-        // 把样式改成被选中状态  并且push到chooseGoodsList中
-        that.goodsResult.content[index].isCheck = true
+        // that.goodsResult.content[index].isCheck = true
         that.chooseGoodsList.push(that.goodsResult.content[index])
-          //  知道获取的checkbox是哪个 和数量
-        for (var i = 0; i < goods.goodsSkuList.length; i++) {
-          for (var g = 0; g < goods.chooseSkuList.length; g++) {
-            if (goods.goodsSkuList[i].goodsSkuId == goods.chooseSkuList[g].goodsSkuId) {
-                goods.goodsSkuList[i].isCheck = true
-                goods.goodsSkuList[i].goodsSkuNum = goods.chooseSkuList[g].goodsSkuNum
-            }
-          }
-        }
-        that.goodsInfo = goods
+          //  知道获取的checkbox是哪个和数量
+        // for (var i = 0; i < goods.goodsSkuList.length; i++) {
+        //   for (var g = 0; g < goods.chooseSkuList.length; g++) {
+        //     if (goods.goodsSkuList[i].goodsSkuId == goods.chooseSkuList[g].goodsSkuId) {
+        //         goods.goodsSkuList[i].isCheck = true
+        //         goods.goodsSkuList[i].goodsSkuNum = goods.chooseSkuList[g].goodsSkuNum
+        //     }
+        //   }
+        // }
+        // that.goodsInfo = goods
       },
       // 打开规格选择弹框
       ChooseSpecification (goods) {
@@ -1146,7 +1153,6 @@
             that.chooseGoodsList.push(choose_goods)
           }
         }
-        
         console.log('选择商品列表',choose_goods)
         that.goods_sku_show = false
          let el=$event.target
@@ -1196,7 +1202,7 @@
         that.goods_shop_show = false
       },
       //拼接选中商品IDs
-      makeGoodsIds () {
+      makeGoodsIds () {   
         var that = this
                //定义 数组合并去重 （没有成功..）
         //       Array.prototype.unique = function() {  

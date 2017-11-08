@@ -180,15 +180,6 @@
               align: 'center',
               valign: 'middle'
             },
-            // {
-            //   field: 'creatorType',
-            //   title: '生成者',
-            //   align: 'center',
-            //   valign: 'middle',
-            //   formatter: function (x, y) {
-            //     return y.creatorType === 1 ? '平台' : y.creatorType === 2 ? '商家' : ''
-            //   }
-            // },
             {
               field: 'fullCutName',
               title: '名称',
@@ -234,6 +225,7 @@
         // let that = this
         sessionStorage.setItem('full_cut_id', row.fullCutId)
         this.goto(event)
+          console.log('-row---',row)
         // let array = []
         // array.push(row.fullCutId)
         // sessionStorage.setItem('Array', JSON.stringify(array))
