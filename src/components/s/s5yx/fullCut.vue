@@ -1049,7 +1049,7 @@
                   result.content[i].isRemoved = 1
                 }
               }
-              //遍历exchangeGoodsList  同上 
+              //遍历exchangeGoodsList  同上
               for (var j = 0; j < that.exchangeGoodsList.length; j++) {
                 if (result.content[i].goodsId == that.exchangeGoodsList[j].goodsId) {
                   result.content[i].isExchange = 1
@@ -1066,13 +1066,13 @@
         let el = $event.target
         // 把根据样式被选中状态  并且push到chooseGoodsList中
         if(that.goodsResult.content[index].isCheck == true){
-         that.goodsResult.content[index].isCheck = false
+          that.goodsResult.content[index].isCheck = false
         }else{
           that.goodsResult.content[index].isCheck = true
         }
         // that.goodsResult.content[index].isCheck = true
         that.chooseGoodsList.push(that.goodsResult.content[index])
-          //  知道获取的checkbox是哪个和数量
+        //  知道获取的checkbox是哪个和数量
         // for (var i = 0; i < goods.goodsSkuList.length; i++) {
         //   for (var g = 0; g < goods.chooseSkuList.length; g++) {
         //     if (goods.goodsSkuList[i].goodsSkuId == goods.chooseSkuList[g].goodsSkuId) {
@@ -1153,10 +1153,6 @@
             that.chooseGoodsList.push(choose_goods)
           }
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> local_hey
         console.log('选择商品列表',choose_goods)
         that.goods_sku_show = false
          let el=$event.target
@@ -1206,7 +1202,7 @@
         that.goods_shop_show = false
       },
       //拼接选中商品IDs
-      makeGoodsIds () {   
+      makeGoodsIds () {
         var that = this
                //定义 数组合并去重 （没有成功..）
         //       Array.prototype.unique = function() {
