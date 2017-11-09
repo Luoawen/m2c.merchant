@@ -4,7 +4,7 @@
       <div class="form-group">
         <label class="col-sm-2 control-label"> 运费模板名称： </label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" placeholder="1-20字符" v-model="formwork.modelName">
+          <input type="text" class="form-control" placeholder="1-20字符" v-model="formwork.modelName" maxlength="20">
         </div>
       </div>
       <div class="form-group">
@@ -158,11 +158,12 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
-                    编辑 </a>
+                    <!--地区选择-->
+                    <td class="relative">{{addressName.length == 0 ? '未添加地区' : addressName}}
+                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
@@ -180,7 +181,7 @@
                           </div>
                         </div>
                       </div>
-
+                      <el-button @click="sureCheckCity($event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -218,7 +219,7 @@
           rows="7"
           placeholder="1-200字符"
           style="resize:none;"
-          v-model="formwork.modelDescription"> </textarea></div>
+          v-model="formwork.modelDescription" maxlength="200"> </textarea></div>
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
@@ -278,11 +279,12 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
-                    编辑 </a>
+                  <!--地区选择-->
+                    <td class="relative">{{addressName.length == 0 ? '未添加地区' : addressName}}
+                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
@@ -300,6 +302,7 @@
                           </div>
                         </div>
                       </div>
+                      <el-button @click="sureCheckCity($event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -353,11 +356,12 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
-                    编辑 </a>
+                  <!--地区选择-->
+                    <td class="relative">{{addressName.length == 0 ? '未添加地区' : addressName}}
+                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
@@ -375,6 +379,7 @@
                           </div>
                         </div>
                       </div>
+                      <el-button @click="sureCheckCity($event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -468,6 +473,7 @@
         address: [], // 选中的省/市名对象
         addressName: '', // 选中的省/市名
         postageModelRules: [], // 运费规则
+        modelRules: [],
         modelId: '', // 模板id
         add_postageModelRule: {
           address: '',
@@ -507,7 +513,7 @@
       },
       checkNumber (val, index, arr, list) {
         setTimeout(() => {
-          if (val && $.isNumeric(val)) {
+          if (val && $.isNumeric(val) && val > 0) {
             val = Number(val).toFixed(2)
           } else {
             val = ''
@@ -525,7 +531,7 @@
       },
       checkDefaultNumber (val, arr, obj) {
         setTimeout(() => {
-          if (val && $.isNumeric(val)) {
+          if (val && $.isNumeric(val) && val > 0) {
             val = Number(val).toFixed(2)
           } else {
             val = ''
@@ -591,7 +597,7 @@
                   }
                 }
               }
-              
+
             }
           }
         }
@@ -729,7 +735,7 @@
                     }
                   }
                 }
-                // 检测大区内剩余省还剩几个 
+                // 检测大区内剩余省还剩几个
                 let point2=0
                 for(let n=0;n<that.datas.length;n++){
                     if(that.datas[i].subs[j].parent==that.datas[n].code){
@@ -893,6 +899,11 @@
             that.postageModelRules.push(that.postageModelRule)
           }
         }
+
+        for (var i = 0; i < that.postageModelRules.length; i++) {
+          that.postageModelRules[i].continuedPostage = parseFloat(that.postageModelRules[i].continuedPostage * 100).toFixed(2)
+          that.postageModelRules[i].firstPostage = parseFloat(that.postageModelRules[i].firstPostage * 100).toFixed(2)
+        }
         that.$.ajax({
           type: that.addModify === 'add' ? 'post' : 'put',
           url: that.localbase + 'm2c.scm/postage',
@@ -951,6 +962,12 @@
           },
           success: function (result) {
             that.formwork = result.content
+            if (that.formwork.postageModelRules.length > 0) {
+              for (var i = 0; i < that.formwork.postageModelRules.length; i++) {
+                that.formwork.postageModelRules[i].firstPostage = that.formwork.postageModelRules[i].firstPostage / 100
+                that.formwork.postageModelRules[i].continuedPostage = that.formwork.postageModelRules[i].continuedPostage / 100
+              }
+            }
             console.log(that.formwork)
           }
         })
