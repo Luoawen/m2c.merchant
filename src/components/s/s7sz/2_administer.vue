@@ -52,6 +52,7 @@
         </div>
       </div>
       <!--详情-->
+      <em class="bread" v-if="goodInfoShow">> 商品详情</em>
       <div class="goodInfo" v-if="goodInfoShow">
         <p><span>品牌名称：</span>{{goodInfo.brandName==''?'--':goodInfo.brandName}}</p>
         <p><span>英文名称：</span>{{goodInfo.brandNameEn==''?'--':goodInfo.brandNameEn}}</p>
@@ -106,6 +107,8 @@
         </div>
       </div>
       <!--修改/新增-->
+      <em class="bread" v-if="changeGoodShow && handle_toggle=='add'">> 新增商品</em>
+      <em class="bread" v-if="changeGoodShow && handle_toggle!='add'">> 修改商品</em>
       <div class="goodInfo changeGoodInfo" v-if="changeGoodShow">
         <p>品牌名称：<input type="text" v-model="add_modify_params.brandName" /></p>
         <p>英文名称：<input type="text" v-model="add_modify_params.brandNameEn" /></p>
@@ -971,7 +974,8 @@
 }
 /*详情*/
 #myTabContent{position:relative;}
-.goodInfo{position:absolute;top:0;left:0;width:100%;height:840px;padding-top:40px;background:#fff;z-index:99;}
+em.bread{position:fixed; top:80px;left:367px;font-style:normal;color:#333;z-index:9999;}
+.goodInfo{position:absolute;top:-50px;left:0;width:100%;height:840px;padding-top:40px;background:#fff;z-index:99;}
 .goodInfo p,.goodInfo div,.goodInfo button{margin-left:80px;margin-top:20px;}
 .goodInfo div img{width:60px;height:60px; display:inline-block;}
 .goodInfo button{width:150px;height:50px;border:1px solid #ccc; text-align: center;}
