@@ -179,6 +179,7 @@
                   :fetch-suggestions="querySearch"
                   placeholder="请输入内容"
                   @select="handleSelect(item.standardId)"
+                  @keyup.enter.native="specValueClick(item.state1,index)"
                 ></el-autocomplete>
                 <el-button type="primary" @click="specValueClick(item.state1,index)">确定</el-button>
                 <i style="color:red; font-style:normal;" v-if="standardIdShow">请先选择规格</i>
@@ -497,7 +498,7 @@
                 }
               }
             }
-            
+
             if(that.goodsMainImages.length<=0){
               that.imgShowList = true
               return
@@ -655,7 +656,7 @@
             that.show_tip("该规格值已添加")
           }
         }
-        
+
       },
       // 获取商品分类
       goodsClassify () {//商品分类树
@@ -730,18 +731,18 @@
           // con.ondragenter = function(e) {
           //   alert(1)
           //   e.preventDefault();
-            
+
           // }
           con.ondragover = function(e) {
             alert(2)
             e.preventDefault();
-            
+
           }
           // con.ondragleave = function(e) {
           //   alert(3)
           //   e.preventDefault();
           // }
-          
+
         }
         console.warn("goodsMainImages="+that.goodsMainImages)
       },
