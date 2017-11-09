@@ -556,7 +556,16 @@
           if(that.addRows[that.index].address[i].cityName.length==0){
             proName.push(that.addRows[that.index].address[i].proName)
           }else{
-            proName.push(that.addRows[that.index].address[i].proName+"("+that.addRows[that.index].address[i].cityName.toString()+")")
+            var res = [];
+            var json = {};
+            for(var j=0;j<that.addRows[that.index].address[i].cityName.length;j++){
+              if(!json[that.addRows[that.index].address[i].cityName[j]]){
+              res.push(that.addRows[that.index].address[i].cityName[j]);
+              json[that.addRows[that.index].address[i].cityName[j]] = 1;
+              }
+            }
+            console.log(res)
+            proName.push(that.addRows[that.index].address[i].proName+"("+res.toString()+")")
           }
         }
         that.addressName=proName.toString()
@@ -689,9 +698,9 @@
                         }
                       }
                     }
-                    // if(flag1=that.datas[i].subs[j].subs.length){ //如果被选中的市与该省所有市数量相等 则清空address对应省下的市名
-                    //   that.addRows[that.index].address[x].cityName=[]
-                    // }
+                    if(flag1==that.datas[i].subs[j].subs.length){ //如果被选中的市与该省所有市数量相等 则清空address对应省下的市名
+                      that.addRows[that.index].address[x].cityName=[]
+                    }
                     flag = true
                     break
                   }
@@ -708,6 +717,17 @@
           for (let i = 0; i < that.datas.length; i++) {
             for (let j = 0; j < that.datas[i].subs.length; j++) {
               if (that.datas[i].subs[j].code === city.parent) {
+                for(var a=0;a<that.addRows[that.index].address.length;a++){
+                  if(that.datas[i].subs[j].name===that.addRows[that.index].address[a].proName){
+                    for (let c = 0; c < that.datas[i].subs[j].subs.length; c++) {
+                      for (let b = 0; b < that.addRows[that.index].cityList.length; b++) {
+                        if (that.datas[i].subs[j].subs[c].code == that.addRows[that.index].cityList[b]) {
+                          that.addRows[that.index].address[a].cityName.push(that.datas[i].subs[j].subs[c].name)
+                        }
+                      }
+                    }
+                  }
+                }
                 for (let m = 0; m < that.datas[i].subs[j].subs.length; m++) {
                   for (let p = 0; p < that.addRows[that.index].cityList.length; p++) {
                     if (that.datas[i].subs[j].subs[m].code == that.addRows[that.index].cityList[p]) {
@@ -926,10 +946,34 @@
             }
           }
         })
-      }
+      },
+      // 数组去重
+      // unique (){
+      //   var res = []
+      //   var json = {}
+      //   for(var i = 0; i < this.length; i++){
+      //     if(!json[this[i]]){
+      //     res.push(this[i])
+      //     json[this[i]] = 1
+      //     }
+      //   }
+      //   return res
+      // }
     },
     mounted(){
       let that = this
+      // 数组去重
+      // Array.prototype.unique = function(){
+      //   var res = [];
+      //   var json = {};
+      //   for(var i = 0; i < this.length; i++){
+      //     if(!json[this[i]]){
+      //     res.push(this[i]);
+      //     json[this[i]] = 1;
+      //     }
+      //   }
+      //   return res;
+      // }
       that.$(window).click(function(){
         that.$('.addMess').find('.cityBox').hide()
       })
