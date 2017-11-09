@@ -56,7 +56,7 @@
 </template>
 
 <script>
-  /* eslint-disable quotes */
+  /* eslint-disable quotes,eqeqeq,space-unary-ops */
 
   export default {
   name: '',
@@ -166,8 +166,8 @@
         that.show_tip("请输入客服电话")
         return
       }
-      alert('-->'+ that.$("#m11yhgl_img")[0].src)
-      if (that.$("#m11yhgl_img")[0].src.indexOf("undifined") != -1 ) {
+      var pic = that.$("#m11yhgl_img")[0].src
+      if (pic.indexOf('undifined') > -1) {
         that.show_tip('上传图片不成功')
         return
       }
@@ -197,7 +197,7 @@
               that.show_tip('修改成功')
               that.getDealerMess()
             } else {
-              that.show_tip('修改失败')
+              that.show_tip(res.errorMessage)
             }
           }
         })
