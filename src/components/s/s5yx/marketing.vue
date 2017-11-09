@@ -35,14 +35,6 @@
         </select>
       </div>
       <div class="search_cell">
-        <span>生成者</span>&nbsp;&nbsp;&nbsp;
-        <select data-v-0c409cb2="" class="form-control search_input" v-model="search_params.creator_type">
-            <option data-v-0c409cb2="" value="0">全部</option>
-            <option data-v-0c409cb2="" value="1">平台</option>
-            <option data-v-0c409cb2="" value="2">商户</option>
-        </select>
-      </div>
-      <div class="search_cell">
         <span>使用情况</span>
         <select data-v-0c409cb2="" class="form-control search_input" v-model="search_params.use_type">
           <option data-v-0c409cb2="" value="0">全部</option>
@@ -189,15 +181,6 @@
               valign: 'middle'
             },
             {
-              field: 'creatorType',
-              title: '生成者',
-              align: 'center',
-              valign: 'middle',
-              formatter: function (x, y) {
-                return y.creatorType === 1 ? '平台' : y.creatorType === 2 ? '商家' : ''
-              }
-            },
-            {
               field: 'fullCutName',
               title: '名称',
               align: 'center',
@@ -242,6 +225,7 @@
         // let that = this
         sessionStorage.setItem('full_cut_id', row.fullCutId)
         this.goto(event)
+          console.log('-row---',row)
         // let array = []
         // array.push(row.fullCutId)
         // sessionStorage.setItem('Array', JSON.stringify(array))

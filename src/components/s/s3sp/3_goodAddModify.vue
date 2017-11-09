@@ -19,7 +19,7 @@
       <el-row :gutter="20" style="z-index:2;">
         <el-col :span="11" style="height:40px;z-index:2;">
           <el-form-item label="商品分类" prop="goodsClassifyId">
-            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="data.goodsClassifys" change-on-select :props="goodsClassifyProps" @change="handleChange"></el-cascader>
+            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="data.goodsClassifyIds" :props="goodsClassifyProps" @change="handleChange"></el-cascader>
           </el-form-item>
         </el-col>
         <el-col :span="11">
@@ -50,7 +50,7 @@
         </el-col>
         <el-col :span="11">
           <el-form-item label="最小起订量" prop="goodsMinQuantity">
-            <el-input v-model="data.goodsMinQuantity" placeholder="请输入内容"></el-input>
+            <el-input v-model="data.goodsMinQuantity" placeholder="请输入内容" type="number"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -97,7 +97,7 @@
       <el-row :gutter="20">
         <el-col :span="3">商品规格</el-col>
         <el-col :span="21">
-          <el-radio v-model="data.skuFlag" label="0" id="skuFlag0">单一规格</el-radio>
+          <el-radio v-model="data.skuFlag" label="0" id="skuFlag0" @change="clearSKU">单一规格</el-radio>
           <el-radio v-model="data.skuFlag" label="1" id="skuFlag1" @change="clearGoodsSKUs">多规格</el-radio>
         </el-col>
       </el-row>
@@ -137,6 +137,8 @@
               </tr>
             </tbody>
         </table>
+        <i v-if="sukShow" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为空</i>
+        <i v-if="sukShow1" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为负数</i>
       </div>
 
       <div class="tabPane" v-if="data.skuFlag==1">
@@ -150,14 +152,14 @@
           </thead>
           <tbody>
             <tr v-for="(item,index) in goodsSpecifications">
-              <td><span @click="delect(index)" v-if="goodsSpecifications.length>1">移除</span></td>
+              <td><span @click="delect(index)" v-if="goodsSpecifications.length>1 && handle_toggle=='add'">移除</span></td>
               <td>
-                <el-select v-model="item.itemName" placeholder="请选择"><!--这里需要后台返回规格Id-->
+                <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item)">
                   <el-option
                     v-for="item in stantards"
-                    :key="item.stantardName"
+                    :key="item.stantardId"
                     :label="item.stantardName"
-                    :value="item.stantardName">
+                    :value="item.stantardId">
                   </el-option>
                 </el-select>
               </td>
@@ -173,11 +175,14 @@
                 <el-autocomplete
                   class="inline-input"
                   v-model="item.state1"
+                  @focus='query(item.standardId)'
                   :fetch-suggestions="querySearch"
                   placeholder="请输入内容"
-                  @select="handleSelect"
+                  @select="handleSelect(item.standardId)"
+                  @keyup.enter.native="specValueClick(item.state1,index)"
                 ></el-autocomplete>
                 <el-button type="primary" @click="specValueClick(item.state1,index)">确定</el-button>
+                <i style="color:red; font-style:normal;" v-if="standardIdShow">请先选择规格</i>
               </td>
             </tr>
           </tbody>
@@ -248,13 +253,15 @@
             </tr>
           </tbody>
         </table>
+        <i v-if="sukShow" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为空</i>
+        <i v-if="sukShow1" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为负数</i>
       </div>
       <el-row>
         <el-col :span="24"><h4>商品详情</h4></el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="3">商品主图</el-col>
-        <el-col :span="21">
+        <el-col :span="3"><i style="color:red;">* </i>商品主图</el-col>
+        <el-col :span="21" ref="dragImg" id="dragImg">
           <el-upload
             :action="uploadUrl" name="img"
             list-type="picture-card" :on-success="success" :data="upLoadData" :file-list="fileList"
@@ -265,6 +272,7 @@
           <el-dialog v-model="dialogVisible" size="tiny">
             <img width="100%" :src="dialogImageUrl" alt="">
           </el-dialog>
+          <i v-if="imgShowList" style="color:red; font-style:normal;">商品主图不能为空</i>
           <p class="marginTop20">最多上传5张主图，可以通过拖曳图片调整顺序</p>
         </el-col>
       </el-row>
@@ -280,7 +288,7 @@
         <el-col :span="24"><h4>设置上架</h4></el-col>
       </el-row>
       <el-row :gutter="20" v-if="handle_toggle=='add'">
-        <el-col :span="3">*设置上架</el-col>
+        <el-col :span="3"><i style="color:red;">* </i>设置上架</el-col>
         <el-col :span="21">
           <el-radio v-model="data.goodsShelves" label="1">手动上架</el-radio>
           <p>平台审核通过后，商家需手动上架商品</p>
@@ -288,7 +296,6 @@
           <p>平台审核通过，商品自动上架，无需商家操作</p>
         </el-col>
       </el-row>
-
     <el-button v-if="handle_toggle=='add'" type="primary" @click="save('ruleForm')">提交审核</el-button>
     <el-button v-if="handle_toggle!='add'" type="primary" @click="save('ruleForm')">保存修改</el-button>
     <el-button @click="goBack">取消</el-button>
@@ -296,9 +303,24 @@
 </template>
 <script>
   import UE from '../../../subcomponents/ue.vue'
+  import validatorUtils from '../../../commonutils/validatorUtils'
   export default {
     components: {UE},
     data() {
+      // 校验最小起订量不能为非整数
+        var checkGoodsMinQuantity = (rule, value, callback) => {
+          var reg = /^[1-9]\d*$/;
+          if (!value) {
+            return callback(new Error('最小起订量不能为空'));
+          }
+          setTimeout(() => {
+            if (!reg.test(value)) {
+              callback(new Error('必须为正整数'));
+            } else {
+              callback();
+            }
+          }, 1000);
+        };
       return {
         ruleForm: {
           goodsName: '',
@@ -327,13 +349,17 @@
             { required: true, message: '请选择计量单位', trigger: 'change' }
           ],
           goodsMinQuantity: [
-            { required: true, message: '请输入最小起订量', trigger: 'blur' }
+            {required: true, validator: checkGoodsMinQuantity, trigger: 'blur' }
           ],
           goodsPostageId: [
             { required: true, message: '请选择运费模板', trigger: 'change' }
           ],
 
         },
+        standardIdShow:false,// 规格不能为空
+        sukShow:false, // 商品库不能为空
+        sukShow1:false, // 商品库不能为负数
+        imgShowList:false, // 商品主图不能为空
         countMode:'', // 商家结算方式 1：按供货价 2：按服务费率
         radio: '1',
         goods: [],
@@ -342,7 +368,7 @@
         goodsGuaranteeList:[], // 获取保障详情
         goodsGuarantCheck:[],
         serviceRate:'',
-        goodsSKUs:[{skuName: '', showStatus: '', marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}],
+        goodsSKUs:[{show:true,skuName: '', showStatus: true, marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}],
         goodsSpecifications:[{itemValue:[],state1:''}],
         goodsMainImages:[],
         goodsGuarantee:[],
@@ -370,7 +396,7 @@
         units: [], // 计量单位列表
         modelId: '', // 模板ID
         models: [], // 模板列表
-        stantardId: '',
+        standardId: '',
         stantards: [], // 规格
         classifyId: '',
         goodsClassifys:[],
@@ -391,6 +417,17 @@
     },
     created() {},
     watch: {
+      // 监听goodsMainImages的长度
+      'goodsMainImages.length':{
+        handler: function (val, oldVal) {
+          let that = this
+          if (val == 5) {
+            var div = document.getElementById('dragImg').lastChild();
+            console.log(div)
+          }
+        },
+        deep: true
+      },
       // 根据品牌ID获取品牌名
       'data.goodsBrandId': {
         handler: function (val, oldVal) {
@@ -413,6 +450,18 @@
       }
     },
     methods: {
+      stantardIdChange(item){
+        let that=this
+        that.standardId=item.standardId
+        console.warn("stantardId="+that.standardId)
+        that.getValue()
+        that.standardIdShow = false
+      },
+      // 清空单规格内值
+      clearSKU(){
+        let that = this
+        that.goodsSKUs=[{show:true,skuName: '', showStatus: true, marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}]
+      },
       clearGoodsSKUs(){
         let that = this
         that.goodsSKUs=[]
@@ -438,44 +487,60 @@
         let that = this
         that.$refs[formName].validate((valid) => {
           if (valid) {
-            for(var k=0;k<that.goodsSKUs.length;k++){
-            that.goodsSKUs[k].marketPrice=that.goodsSKUs[k].marketPrice*100
-            that.goodsSKUs[k].photographPrice=that.goodsSKUs[k].photographPrice*100
-            that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
-            if(that.countMode!=1){
-              that.goodsSKUs[k].serviceRate=that.serviceRate
-            }else{
-              that.goodsSKUs[k].supplyPrice=that.goodsSKUs[k].supplyPrice*100
+            if(that.goodsMainImages.length<=0){
+              that.imgShowList = true
+              return
             }
-          }
-          let a={
-            token: sessionStorage.getItem('mToken'),
-            goodsId: that.goodsId,
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-            dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName,
-            goodsSKUs: JSON.stringify(that.goodsSKUs),
-            goodsSpecifications: JSON.stringify(that.goodsSpecifications),
-            goodsMainImages:that.goodsMainImages.length==0?'':that.goodsMainImages.toString(),
-            goodsDesc:that.$refs.ue.getUEContent(),
-            goodsBrandName:that.goodsBrandName,
-            goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
-            goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString()
-          }
-          console.log(a.goodsSKUs)
-          that.$.ajax({
-            type: that.handle_toggle === 'add' ? 'post' : 'put',
-            url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/goods' : that.localbase + 'm2c.scm/goods/approve',
-            data:Object.assign(that.data,a),
-            success: function (result) {
-              if (result.status === 200) {
-                that.show_tip('保存成功')
-                that.$router.push({name:"goodList"})
-              } else {
-                that.show_tip(result.errorMessage)
-                that.goodsGuarantee=[]
+            for(var k=0;k<that.goodsSKUs.length;k++){
+              if(that.goodsSKUs[k].availableNum==''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].weight==''||that.goodsSKUs[k].weight==undefined||that.goodsSKUs[k].photographPrice==''||that.goodsSKUs[k].photographPrice==undefined){
+                that.sukShow = true
+                return
+              }else{
+                that.sukShow = false
+                if (validatorUtils.isNumericD(that.goodsSKUs[k].availableNum.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].weight.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].photographPrice.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].supplyPrice.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].marketPrice.toString())) {
+                  that.sukShow1 = false
+                  that.goodsSKUs[k].marketPrice=parseFloat(that.goodsSKUs[k].marketPrice*100).toFixed(2)
+                  that.goodsSKUs[k].photographPrice=parseFloat(that.goodsSKUs[k].photographPrice*100).toFixed(2)
+                  that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
+                  if(that.countMode!=1){
+                    that.goodsSKUs[k].serviceRate=that.serviceRate
+                  }else{
+                    that.goodsSKUs[k].supplyPrice=parseFloat(that.goodsSKUs[k].supplyPrice*100).toFixed(2)
+                  }
+                } else {
+                  that.sukShow1 = true
+                  return
+                }
               }
             }
-          })
+            let a={
+              token: sessionStorage.getItem('mToken'),
+              goodsId: that.goodsId,
+              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+              dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName,
+              goodsSKUs: JSON.stringify(that.goodsSKUs),
+              goodsSpecifications: JSON.stringify(that.goodsSpecifications),
+              goodsMainImages:that.goodsMainImages.length==0?'':that.goodsMainImages.toString(),
+              goodsDesc:that.$refs.ue.getUEContent(),
+              goodsBrandName:that.goodsBrandName,
+              goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
+              goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString()
+            }
+            console.log(a.goodsSKUs)
+            that.$.ajax({
+              type: that.handle_toggle === 'add' ? 'post' : 'put',
+              url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/goods' : that.localbase + 'm2c.scm/goods/approve',
+              data:Object.assign(that.data,a),
+              success: function (result) {
+                if (result.status === 200) {
+                  that.show_tip('保存成功')
+                  that.$router.push({name:"goodList"})
+                } else {
+                  that.show_tip(result.errorMessage)
+                  that.goodsGuarantee=[]
+                }
+              }
+            })
           } else {
             console.log('error submit!!');
             return false;
@@ -512,10 +577,18 @@
       // 获取多规格交叉属性
       mapValue () {
         let that = this
+        let goodSkuList = that.goodsSKUs
         that.goodsSKUs=[]
           if(that.goodsSpecifications.length==1 || that.goodsSpecifications[1].itemValue.length==0){
-            for(var x=0;x<that.goodsSpecifications[0].itemValue.length;x++){
-              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[x].spec_name + '"}' + ')'))
+            for(var j=0;j<that.goodsSpecifications[0].itemValue.length;j++){
+              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[j].spec_name + '",show:true}' + ')'))
+            }
+            for(var a=0;a<goodSkuList.length;a++){
+              for(var b=0;b<that.goodsSKUs.length;b++){
+                if(goodSkuList[a].skuName==that.goodsSKUs[b].skuName){
+                  that.goodsSKUs[b] = goodSkuList[a]
+                }
+              }
             }
           }else{
             if(that.goodsSpecifications.length==2){
@@ -545,63 +618,70 @@
               }
             }
             for(var i =0;i<arr.length;i++){
-              that.goodsSKUs.push(eval('(' + '{skuName:"'+ arr[i] + '"}' + ')'))
+              that.goodsSKUs.push(eval('(' + '{skuName:"'+ arr[i] + '",show:true}' + ')'))
             }
             function js(arr1,arr2){
               var arr = Array()
               for(var i=0;i<arr1.length;i++){
-                  for(var j=0;j<arr2.length;j++){
-                      arr.push(arr1[i]+','+arr2[j])
-                  }
+                for(var j=0;j<arr2.length;j++){
+                  arr.push(arr1[i]+','+arr2[j])
+                }
               }
               return arr
               console.log(arr)
             }
+            for(var a=0;a<goodSkuList.length;a++){
+              for(var b=0;b<that.goodsSKUs.length;b++){
+                if(goodSkuList[a].skuName==that.goodsSKUs[b].skuName){
+                  that.goodsSKUs[b] = goodSkuList[a]
+                }
+              }
+            }
           }
-      },
-      // 取消添加规格值
-      clearValue (index) {
-        let that = this
-        //console.log(index)
-        that.goodsSpecifications[index].state1=""
       },
       // 添加规格值
       specValueClick (state1, index) {
         let that = this
-        if (state1 === '' || state1.trim() === '') {
-          that.show_tip('规格值不能为空')
-          return
-        }
-        let arr = that.restaurants
-        let state = {value:state1}
-        if(JSON.stringify(arr).indexOf(JSON.stringify(state))===-1){
-            that.$.ajax({
-              type: 'post',
-              url: that.localbase + 'm2c.scm/goods/spec/value',
-              data: {
-                token: sessionStorage.getItem('mToken'),
-                dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-                specValue: state1
-              },
-              success: function (result) {
-                if(result.status==200){
-                  that.getValue()
-                }else{
-                  that.show_tip(result.errorMessage)
-                }
-              }
-            })
-        }
-        let array = that.goodsSpecifications[index].itemValue
-        let state2 = {spec_name:state1}
-        if(JSON.stringify(array).indexOf(JSON.stringify(state2))===-1){
-          that.goodsSpecifications[index].itemValue.push(state2)
-          console.log(that.goodsSpecifications[index])
-          that.clearValue(index)
-          that.mapValue()
+        if(that.standardId==''||that.standardId==undefined){
+          that.standardIdShow = true
         }else{
-          that.show_tip("该规格值已添加")
+          if (state1 === '' || state1.trim() === '') {
+            that.show_tip('规格值不能为空')
+            return
+          }
+          let arr = that.restaurants
+          let state = {value:state1}
+          if(JSON.stringify(arr).indexOf(JSON.stringify(state))===-1){
+              that.$.ajax({
+                type: 'post',
+                url: that.localbase + 'm2c.scm/goods/spec/value',
+                //url:'http://10.0.40.23:8080/m2c.scm/goods/spec/value',
+                data: {
+                  token: sessionStorage.getItem('mToken'),
+                  dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+                  specValue: state1,
+                  standardId: that.standardId
+                },
+                success: function (result) {
+                  if(result.status==200){
+                    that.getValue()
+                  }else{
+                    that.show_tip(result.errorMessage)
+                  }
+                }
+              })
+          }
+          let array = that.goodsSpecifications[index].itemValue
+          let state2 = {spec_name:state1}
+          if(JSON.stringify(array).indexOf(JSON.stringify(state2))===-1){
+            that.goodsSpecifications[index].itemValue.push(state2)
+            console.log(that.goodsSpecifications[index])
+            that.mapValue()
+          }else{
+            that.show_tip("该规格值已添加")
+          }
         }
+
       },
       // 获取商品分类
       goodsClassify () {//商品分类树
@@ -612,7 +692,7 @@
           data: {parentClassifyId:-1},
           success: function (result) {
             that.goodsClassifys=result.content;
-            that.goodsClassifys.unshift({"parentClassifyId":'',"classifyId":'',"serviceRate":'',"classifyName":"全部" });
+            //that.goodsClassifys.unshift({"parentClassifyId":'',"classifyId":'',"serviceRate":'',"classifyName":"全部" });
           }
         })
       },
@@ -626,13 +706,17 @@
       // 照片墙
       handleRemove(file, fileList) {
         let that = this
-        console.log("删除文件"+file.response.content.url)
         for(var i=0;i<that.goodsMainImages.length;i++){
-          if(file.response.content.url=that.goodsMainImages[i]){
+          if(file.url==that.goodsMainImages[i]){
             that.goodsMainImages.splice(i,1)
-            console.log("剩余文件"+that.goodsMainImages)
+          }
+          if(file.response.content!=undefined){
+            if(file.response.content.url==that.goodsMainImages[i]){
+              that.goodsMainImages.splice(i,1)
+            }
           }
         }
+        console.warn("goodsMainImages="+that.goodsMainImages)
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url
@@ -646,8 +730,46 @@
           that.show_tip("上传失败,请重新上传")
         }else{
           that.goodsMainImages.push(file.response.content.url)
+          console.log("goodsMainImages="+that.goodsMainImages)
+          var con = document.getElementById('dragImg').getElementsByTagName("ul");
+          var lis = document.getElementById('dragImg').getElementsByTagName('li');
+          for (var i = 0; i < lis.length; i++) {
+            lis[i].draggable = true; //每个li都设置可拖拽属性
+            lis[i].flag = false;
+            lis[i].ondragstart = function(){
+              this.flag = true; //鼠标拖拽li时设置flag为true
+            }
+            lis[i].ondragend = function(){
+              this.flag = false;
+              //alert(that.goodsMainImages)
+            }
+          };
+          console.log(con)
+          con.ondrop = function(e) {
+            alert(0)
+            for (var i = 0; i < lis.length; i++) {
+              if(lis[i].flag){ //如果flag为真，则添加一个li至box里
+                con.appendChild(lis[i]);
+              }
+            };
+          }
+          // con.ondragenter = function(e) {
+          //   alert(1)
+          //   e.preventDefault();
+
+          // }
+          con.ondragover = function(e) {
+            alert(2)
+            e.preventDefault();
+
+          }
+          // con.ondragleave = function(e) {
+          //   alert(3)
+          //   e.preventDefault();
+          // }
+
         }
-        console.warn("url="+that.goodsMainImages)
+        console.warn("goodsMainImages="+that.goodsMainImages)
       },
       beforeAvatarUpload(file) {
         const isMA = file.size < 409600;
@@ -678,14 +800,24 @@
         this.goodsSpecifications.push(newRow)
       },
       // 搜索建议
+      query(item){
+        console.log(item)
+        this.standardId = item
+        this.getValue()
+      },
       querySearch(queryString, cb) {
-        var restaurants = this.restaurants
-        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        let that = this
+        var restaurants = that.restaurants
+        var results = queryString ? restaurants.filter(that.createFilter(queryString)) : restaurants;
         // 调用 callback 返回建议列表的数据
         cb(results);
       },
       createFilter(queryString) {
         return (restaurant) => {
+          // $nextTick(() => {
+          //   let that = this
+          //   that.getValue()
+          // })
           return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
         }
       },
@@ -700,7 +832,8 @@
           url: that.localbase + 'm2c.scm/goods/spec/value',
           data:{
             token: sessionStorage.getItem('mToken'),
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            standardId: that.standardId
           },
           success: function (result) {
             that.restaurants = result.content
@@ -809,29 +942,28 @@
                 }
               }
             }
-            console.log(that.goodsGuarantCheck)
             that.data.skuFlag = result.content.skuFlag.toString()
             that.goodsSpecifications = result.content.goodsSpecifications
             that.goodsSKUs = result.content.goodsSKUs
+            that.data.goodsMinQuantity = result.content.goodsMinQuantity.toString()
             for(var p=0;p<result.content.goodsSKUs.length;p++){
               that.goodsSKUs[p].marketPrice=result.content.goodsSKUs[p].marketPrice/100
               that.goodsSKUs[p].photographPrice=result.content.goodsSKUs[p].photographPrice/100
               if(result.content.goodsSKUs[p].supplyPrice!=''){
                 that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice/100
               }
-              //that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice/100
             }
-            that.$refs.ue.setUEContent(result.content.goodsDesc)
             for(var i=0;i<result.content.goodsMainImages.length;i++){
               that.fileList.push(eval('(' + '{url:"'+ result.content.goodsMainImages[i] + '"}' + ')'))
               that.goodsMainImages.push(result.content.goodsMainImages[i])
             }
+            console.log("that.fileList="+that.fileList)
             if(result.content.skuFlag==1){
               that.$('#skuFlag0').hide()
             }else{
               that.$('#skuFlag1').hide()
             }
-            that.selectedOptions1 = result.content.goodsClassifyIds
+            that.$refs.ue.setUEContent(result.content.goodsDesc)
           }
         })
       }

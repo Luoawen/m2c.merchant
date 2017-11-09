@@ -162,7 +162,7 @@
                 </div>
               </div>
               <div>
-                <p>已排除<span>{{removeShopList.length}}</span>商家</p>
+                <!-- <p>已排除<span>{{removeShopList.length}}</span>商家</p> -->
                 <ul>
                   <li v-for="(shop, index) in removeShopList">
                     <div>{{shop.shopName}}</div>
@@ -188,13 +188,13 @@
     </div>
     <!--作用范围为全店的商品商家筛选弹窗s-->
     <div class="modal fade frame_layer01" id="full_range_dialog"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
-      <div class="modal-dialog shop_goodchoose" style="margin:20px 0px;">
+      <div class="modal-dialog shop_goodchoose" style="margin:10% 35%;">
         <div class="frame_total ">
           <div class="modal-header">
             <div class="modal-title text-center wid100 "  @click="changeTab('goods')">
              <span>选择商品</span>
             </div>
-            <div  class="guanb" data-dismiss="modal" aria-hidden="true"></div>
+            <div  class="guanb"  @click.stop="closeBox1($event)"  aria-hidden="true"></div>
           </div>
           <!--商品条件-->
           <div class="shop_choose_sort clear" :style="tab_flag == 'goods' ? '' : 'display:none;'">
@@ -234,7 +234,7 @@
                 <div class="fcimg" v-show="goods.isRemoved"></div>
               </div>
             </div>
-            <div class="page">
+            <!-- <div class="page">
               <button>上一页</button>
               <span>{{goodsResult.pageNumber}}</span>/
               <span>{{goodsResult.pageCount}}</span>
@@ -242,7 +242,7 @@
               <span>到</span>
               <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="goods_query_item.pageNum"/>
               <span>页</span>
-            </div>
+            </div> -->
           </div>
           <!--商家-->
           <div class="shop_body" :style="tab_flag == 'shop' ? '' : 'display:none;'">
@@ -255,7 +255,7 @@
                 <div class="fcimg" v-show="shop.isRemoved"></div>
               </div>
             </div>
-            <div class="page">
+            <!-- <div class="page">
               <button>上一页</button>
               <span>{{shopResult.pageNumber}}</span>/
               <span>{{shopResult.pageCount}}</span>
@@ -263,7 +263,7 @@
               <span>到</span>
               <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="shop_query_item.pageNum"/>
               <span>页</span>
-            </div>
+            </div> -->
           </div>
           <div class="footer">
             <button type="button" class="btn save" data-dismiss="modal" @click="cancelRemove()">取消</button>
@@ -323,7 +323,7 @@
         <div class="frame_total ">
           <div class="modal-header">
             <h5 class="modal-title text-center">
-              <div type="button" class="guanb" data-dismiss="modal" aria-hidden="true" style="right:-20px;"></div>
+              <div type="button" class="guanb"  @click.stop="closeBox($event)"   data-dismiss="modal" aria-hidden="true" style="right:-20px;"></div>
             </h5>
           </div>
           <div class="search">
@@ -342,10 +342,9 @@
                   <h6>{{goods.goodsName}}</h6>
                   <img class="fl" :src="goods.goodsImageUrl"/>
                   <div>
-                    <div>供应商</div>
-                    <div><b>{{goods.dealerName}}</b></div>
-                    <div>价格</div>
-                    <div><b>{{goods.goodsPrice/100}}元</b></div>
+                    <!-- <div>供应商</div> -->
+                    <div class="dealerName"><b>{{goods.dealerName}}</b></div>
+                    <div>价格<b>{{goods.goodsPrice/100}}元</b></div>
                   </div>
                 </div>
                 <div class="fc" v-show="goods.isChoosed == 1">
@@ -353,7 +352,7 @@
                 <div class="fcimg" v-show="goods.isChoosed == 1"></div>
               </div>
             </div>
-            <div class="page">
+            <!-- <div class="page">
               <button>上一页</button>
               <span>{{goodsResult.pageNumber}}</span>/
               <span>{{goodsResult.pageCount}}</span>
@@ -361,10 +360,10 @@
               <span>到</span>
               <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="goods_query_item.pageNum"/>
               <span>页</span>
-            </div>
+            </div> -->
           </div>
           <div class="footer">
-            <button type="button" class="btn save" data-dismiss="modal" >取消</button>
+            <button type="button" class="btn save" @click="closeBox($event)" >取消</button>
             <button type="button" class="btn cancel" @click="makeGoodsIds()">保存</button>
           </div>
         </div>
@@ -580,11 +579,16 @@
       }
     },
     methods: {
-      // goto (path) {},
       itemback () {
         window.history.go(-1)
       },
-         closeBox ($event) {
+         closeBox1 ($event) {
+          var that = this
+          let el=$event.target
+          that.$(el).parents('#full_range_dialog').modal("hide")
+          that.modalShadow =false
+      },
+       closeBox ($event) {
           var that = this
           let el=$event.target
           that.$(el).parents('#choose_goods').modal("hide")
@@ -753,7 +757,7 @@
       // 点击选择全场
       openFullRange () {
         var that = this
-         that.modalShadow = true
+        that.modalShadow = true
         that.$('#full_range_dialog').modal({'show':true ,'backdrop':false})
         that.goods_query_item.goodsClassifyId = ''
         that.goods_query_item.condition = ''
@@ -780,8 +784,8 @@
       // 打开 作用范围 选择商品弹窗
       openGoodsChoose () {
         var that = this
-        that.$('#choose_goods').modal({'show':true ,'backdrop':false})
         that.modalShadow =true
+        that.$('#choose_goods').modal({'show':true ,'backdrop':false})
         that.goods_query_item.goodsClassifyId = ''
         that.goods_query_item.condition = ''
         that.goods_query_item.dealerId = ''
@@ -809,9 +813,11 @@
         that.shop_query_item.pageNum = 1
         that.shopSelect()
       },
-      openGoodsSku (goods) {
+      openGoodsSku (goods,index,$event) {
         var that = this
         that.goods_sku_show = true
+      that.goodsResult.content[index].isCheck = true
+        that.chooseGoodsList.push(that.goodsResult.content[index])
         for (var i = 0; i < goods.goodsSkuList.length; i++) {
           if (goods.isChoosed == 0) {
             goods.goodsSkuList[i].isCheck = true
@@ -999,7 +1005,8 @@
       makeGoodsIds () {
         var that = this
         console.log('chooseGoodsList:' + JSON.stringify(that.chooseGoodsList))
-        that.$('#choose_goods').modal({'show':true ,'backdrop':false})
+        that.$('#choose_goods').modal('hide')
+        that.modalShadow =false
         
       },
       // 作用范围 选择商品
@@ -1033,6 +1040,11 @@
                   result.content[i].isRemoved = 1
                 }
               }
+              //  for (var j = 0; j < that.exchangeGoodsList.length; j++) {
+              //   if (result.content[i].goodsId == that.exchangeGoodsList[j].goodsId) {
+              //     result.content[i].isExchange = 1
+              //   }
+              // }
             }
             that.goodsResult = result
           }
@@ -1122,23 +1134,6 @@
           }
         }
       },
-      addRemoveShop (shop) {
-        let that = this
-        for (var i = 0; i < that.shopResult.content.length; i++) {
-          if (that.shopResult.content[i].dealerId == shop.dealerId) {
-            that.shopResult.content[i].isRemoved = 1
-          }
-        }
-        that.removeShopList = []
-        for (var i = 0; i < that.shopResult.content.length; i++) {
-          if (that.shopResult.content[i].isRemoved == 1) {
-            var removeShop = {}
-            removeShop.dealerId = that.shopResult.content[i].dealerId
-            removeShop.shopName = that.shopResult.content[i].shopName
-            that.removeShopList.push(removeShop)
-          }
-        }
-      },
       cancelRemove(){
         let that = this
         for (var i = 0; i < that.goodsResult.content.length; i++) {
@@ -1149,12 +1144,13 @@
         }
         that.removeGoodsList = []
         that.removeShopList = []
-        that.$('#choose_goods').modal({'show':true ,'backdrop':false})
         that.modalShadow =false
+        that.$('#choose_goods').modal({'hide':true ,'backdrop':false})
+      
       },
       makeRemoveIds () {
         let that = this
-        
+        that.modalShadow =false
         that.$('#full_range_dialog').modal('hide')
         console.log('removeShopList:', JSON.stringify(that.removeShopList))
         console.log('removeGoodsList:', JSON.stringify(that.removeGoodsList))
@@ -1319,6 +1315,13 @@
 </script>
 
 <style lang="scss" scoped>
+//  商户名称显示两行 超出部分省略
+.dealerName{
+display: -webkit-box; 
+-webkit-line-clamp: 2; 
+-webkit-box-orient: vertical; 
+overflow: hidden;
+}
 .frame_layer{
   display:none;
 }
@@ -1942,6 +1945,7 @@
       padding-top: 20px;
       padding-bottom: 20px;
       padding-left: 20px;
+      overflow: auto;
       .shop_choose {
         height: 255px;
         .shop_choosebox {

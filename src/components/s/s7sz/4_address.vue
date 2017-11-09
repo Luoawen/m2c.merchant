@@ -2,7 +2,7 @@
   <div class="sz">
     <form class="form-horizontal" action="" method="post" v-on:submit.prevent>
       <div class="form-group search_cell">
-        <label class="col-sm-2 control-label">售后地址：</label>
+        <label class="col-sm-2 control-label"><span style="color: red">*</span>售后地址：</label>
         <div class="col-sm-3">
           <select class="form-control area_select col-sm-1" v-model="search_params.province"
                   id="search_params_province_select" style="margin-bottom:5px;">
@@ -28,13 +28,13 @@
       <div class="form-group">
         <label class="col-sm-2 control-label">详细地址：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="input1" placeholder="1-50字符" v-model="search_params.detail">
+          <input type="text" class="form-control" id="input1" placeholder="1-50字符" v-model="search_params.detail" maxlength="50">
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">联系人姓名：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="input2" placeholder="1-10字符" v-model="search_params.person">
+          <input type="text" class="form-control" id="input2" placeholder="1-10字符" v-model="search_params.person"maxlength="10">
         </div>
       </div>
       <div class="form-group">
@@ -55,6 +55,7 @@
   </div>
 </template>
 <script>
+  import validatorUtils from '../../../commonutils/validatorUtils'
   export default {
     data () {
       return {
@@ -296,17 +297,19 @@
         }
         that.city_show = true
         that.area_show = true
-        if (that.search_params.detail.length > 50) {
+        if (that.search_params.detail.trim().length > 50) {
           that.show_tip('详细地址长度在1-50字符以内')
           return
         }
-        if (that.search_params.person.length > 10) {
+        if (that.search_params.person.trim().length > 10) {
           that.show_tip('联系人姓名长度在1-10字符以内')
           return
         }
-        if (!that.search_params.tel) {
-          that.show_tip('联系电话不能为空')
-          return
+        if (that.search_params.tel.trim() != '') {
+          if (!validatorUtils.isMobile(that.search_params.tel.trim()) && !validatorUtils.isTel(that.search_params.tel.trim())) {
+            that.show_tip('请输入正确的联系电话')
+            return
+          }
         }
         that.$.ajax({
           type: 'post',
@@ -395,20 +398,19 @@
         }
         that.city_show = true
         that.area_show = true
-        if (that.search_params.detail.length > 50) {
+        if (that.search_params.detail.trim().length > 50) {
           that.show_tip('详细地址长度在1-50字符以内')
           return
         }
-        if (that.search_params.person.length > 10) {
+        if (that.search_params.person.trim().length > 10) {
           that.show_tip('联系人姓名长度在1-10字符以内')
           return
         }
-        if (!that.search_params.tel) {
-          that.show_tip('联系电话不能为空')
-        }
-        if (!((/^1[34578]\d{9}$/).test(that.search_params.tel.trim()))) {
-          that.show_tip('请输入正确的联系电话')
-          return
+        if (that.search_params.tel.trim() != '') {
+          if (!validatorUtils.isMobile(that.search_params.tel.trim()) && !validatorUtils.isTel(that.search_params.tel.trim())) {
+            that.show_tip('请输入正确的联系电话')
+            return
+          }
         }
         that.$.ajax({
           type: 'put',

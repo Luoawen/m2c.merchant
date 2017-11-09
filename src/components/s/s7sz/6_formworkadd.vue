@@ -4,7 +4,7 @@
       <div class="form-group">
         <label class="col-sm-2 control-label"> 运费模板名称： </label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" placeholder="1-20字符" v-model="formwork.modelName">
+          <input type="text" class="form-control" placeholder="1-20字符" v-model="formwork.modelName" maxlength="20">
         </div>
       </div>
       <div class="form-group">
@@ -53,7 +53,7 @@
                   <td></td>
                 </tr>
                 <tr v-for="(addRow,index) in addRows" v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}}
+                  <td class="relative">{{addRow.address == '' ? '未添加地区' : addRow.address}}
                     <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
@@ -158,11 +158,12 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
-                    编辑 </a>
+                    <!--地区选择-->
+                    <td class="relative">{{addRow.address == '' ? '未添加地区' : addRow.address}}
+                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
@@ -180,7 +181,7 @@
                           </div>
                         </div>
                       </div>
-
+                      <el-button @click="sureCheckCity($event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -218,7 +219,7 @@
           rows="7"
           placeholder="1-200字符"
           style="resize:none;"
-          v-model="formwork.modelDescription"> </textarea></div>
+          v-model="formwork.modelDescription" maxlength="200"> </textarea></div>
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
@@ -278,11 +279,12 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
-                    编辑 </a>
+                  <!--地区选择-->
+                    <td class="relative">{{addRow.address == '' ? '未添加地区' : addRow.address}}
+                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
@@ -300,6 +302,7 @@
                           </div>
                         </div>
                       </div>
+                      <el-button @click="sureCheckCity($event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -353,11 +356,12 @@
                 </tr>
                 <tr v-for="(addRow,index) in addRows"
                     v-if="addRows.length!==0">
-                  <td class="relative">{{addRow.address.length == 0 ? '未添加地区' : addRow.address}} <a @click.stop="addressCheckBox(index,$event)">
-                    编辑 </a>
+                  <!--地区选择-->
+                    <td class="relative">{{addRow.address == '' ? '未添加地区' : addRow.address}}
+                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                     <!--地区选择-->
                     <div class="cityBox">
-                      <h4> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
@@ -375,6 +379,7 @@
                           </div>
                         </div>
                       </div>
+                      <el-button @click="sureCheckCity($event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -465,8 +470,10 @@
         cityList: [], // 市id
         proList: [], // 省id暂存盒子
         cityLength: [], // 比对省下市是否全选
-        address: [], // 选中的省/市名
+        address: '', // 选中的省/市名对象
+        addressName: [], // 选中的省/市名
         postageModelRules: [], // 运费规则
+        modelRules: [],
         modelId: '', // 模板id
         add_postageModelRule: {
           address: '',
@@ -506,7 +513,7 @@
       },
       checkNumber (val, index, arr, list) {
         setTimeout(() => {
-          if (val && $.isNumeric(val)) {
+          if (val && $.isNumeric(val) && val > 0) {
             val = Number(val).toFixed(2)
           } else {
             val = ''
@@ -524,7 +531,7 @@
       },
       checkDefaultNumber (val, arr, obj) {
         setTimeout(() => {
-          if (val && $.isNumeric(val)) {
+          if (val && $.isNumeric(val) && val > 0) {
             val = Number(val).toFixed(2)
           } else {
             val = ''
@@ -544,11 +551,25 @@
       sureCheckCity($event){
         let that = this
         let el = $event.target
-        console.log(that.addRows[that.index].address.toString())
-        for(var i=0;i<that.that.addRows[that.index].address.length;i++){
-
+        let proName = []
+        for(var i=0;i<that.addRows[that.index].addressName.length;i++){
+          if(that.addRows[that.index].addressName[i].cityName.length==0){
+            proName.push(that.addRows[that.index].addressName[i].proName)
+          }else{
+            var res = [];
+            var json = {};
+            for(var j=0;j<that.addRows[that.index].addressName[i].cityName.length;j++){
+              if(!json[that.addRows[that.index].addressName[i].cityName[j]]){
+              res.push(that.addRows[that.index].addressName[i].cityName[j]);
+              json[that.addRows[that.index].addressName[i].cityName[j]] = 1;
+              }
+            }
+            console.log(res)
+            proName.push(that.addRows[that.index].addressName[i].proName+"("+res.toString()+")")
+          }
         }
-        that.addRows[that.index].address.toString()
+        that.addRows[that.index].address=proName.toString()
+        console.log(that.addRows[that.index].address)
       },
 // 选中大区时同时选中所有省市
       chooseArea(n, $event) {
@@ -560,8 +581,7 @@
               for (var j = 0; j < that.datas[i].subs.length; j++) {
                 // (that.addRows).push(that.datas[i].subs[j].code)
                 that.addRows[that.index].IdArr.push(that.datas[i].subs[j].code)
-                that.addRows[that.index].address.push(eval('(' + '{proName:"'+ that.datas[i].subs[j].name + '"}' + ')'))
-                
+                that.addRows[that.index].addressName.push(eval('(' + '{proName:"'+ that.datas[i].subs[j].name + '",cityName:[]}' + ')'))
                 that.addRows[that.index].proList.push(that.datas[i].subs[j].code)
                 for (var k = 0; k < that.datas[i].subs[j].subs.length; k++) {
                   if (that.datas[i].subs[j].subs[k].parent === that.datas[i].subs[j].code) {
@@ -580,9 +600,14 @@
                     that.addRows[that.index].cityList.splice(that.$.inArray(that.datas[i].subs[j].subs[k].code, that.addRows[that.index].cityList), 1)
                   }
                 }
-                that.addRows[that.index].IdArr.splice(that.$.inArray(that.datas[i].subs[j].code, that.addRows[that.index].IdArr), 1)
-                that.addRows[that.index].address.splice(eval('(' + '{proName:"'+ that.datas[i].subs[j].name + '"}' + ')'), 1)
+                for(var x=0;x<that.addRows[that.index].addressName.length;x++){
+                  if(that.datas[i].subs[j].name===that.addRows[that.index].addressName[x].proName){
+                    that.addRows[that.index].addressName.splice(x, 1)
+                    that.addRows[that.index].IdArr.splice(x, 1)
+                  }
+                }
               }
+
             }
           }
         }
@@ -594,7 +619,7 @@
         if (el.checked) {
           that.addRows[that.index].IdArr.push(n.code)
           //that.addRows[that.index].address.push(n.name)
-          that.addRows[that.index].address.push(eval('(' + '{proName:"'+ n.name + '"}' + ')'))
+          that.addRows[that.index].addressName.push(eval('(' + '{proName:"'+ n.name + '",cityName:[]}' + ')'))
           for (var i = 0; i < that.datas.length; i++) {
             for (var j = 0; j < that.datas[i].subs.length; j++) {
               if (that.datas[i].subs[j].code === n.code) {
@@ -623,8 +648,12 @@
               }
             }
           }
-          that.addRows[that.index].address.splice(that.$.inArray(eval('(' + '{proName:"'+ n.name + '"}' + ')'), that.addRows[that.index].address), 1)
-          that.addRows[that.index].IdArr.splice(that.$.inArray(n.code, that.addRows[that.index].IdArr), 1)
+          for(var x=0;x<that.addRows[that.index].addressName.length;x++){
+            if(n.name===that.addRows[that.index].addressName[x].proName){
+              that.addRows[that.index].addressName.splice(x, 1)
+              that.addRows[that.index].IdArr.splice(x, 1)
+            }
+          }
           let point=0
           for (var i = 0; i < that.datas.length; i++) {
             if(that.datas[i].code==n.parent){
@@ -657,10 +686,30 @@
                 if (that.$.inArray(city.parent, that.addRows[that.index].IdArr) == -1) {
                   that.addRows[that.index].IdArr.push(city.parent)
                 }
-                if (that.$.inArray(that.datas[i].subs[j].name, that.addRows[that.index].address) == -1) {
-                  that.addRows[that.index].address.push(that.datas[i].subs[j].name)
+                let flag = false
+                for(var x=0;x<that.addRows[that.index].addressName.length;x++){
+                  if(that.datas[i].subs[j].name==that.addRows[that.index].addressName[x].proName){
+                    //有省名
+                    that.addRows[that.index].addressName[x].cityName.push(city.name)
+                    let flag1 = 0
+                    for (let m = 0; m < that.datas[i].subs[j].subs.length; m++) {
+                      for (let p = 0; p < that.addRows[that.index].addressName[x].cityName.length; p++) {
+                        if (that.datas[i].subs[j].subs[m].name == that.addRows[that.index].addressName[x].cityName[p]) {
+                          flag1++ //检测省内被选中的市还剩几个
+                        }
+                      }
+                    }
+                    if(flag1==that.datas[i].subs[j].subs.length){ //如果被选中的市与该省所有市数量相等 则清空addressName对应省下的市名
+                      that.addRows[that.index].addressName[x].cityName=[]
+                    }
+                    flag = true
+                    break
+                  }
                 }
-                that.addRows[that.index].address.push(city.name)
+                if(!flag){
+                  //没有省名
+                  that.addRows[that.index].addressName.push(eval('(' + '{proName:"'+ that.datas[i].subs[j].name + '",cityName:["'+city.name+'"]}' + ')'))
+                }
               }
             }
           }
@@ -669,21 +718,48 @@
           for (let i = 0; i < that.datas.length; i++) {
             for (let j = 0; j < that.datas[i].subs.length; j++) {
               if (that.datas[i].subs[j].code === city.parent) {
-                for (let m = 0; m < that.datas[i].subs[j].subs.length; m++) {
-                  for (let p = 0; p < that.addRows[that.index].cityList.length; p++) {
-                    if (that.datas[i].subs[j].subs[m].code == that.addRows[that.index].cityList[p]) {
-                      point++
+                for(var a=0;a<that.addRows[that.index].addressName.length;a++){
+                  if(that.datas[i].subs[j].name===that.addRows[that.index].addressName[a].proName){
+                    for (let c = 0; c < that.datas[i].subs[j].subs.length; c++) {
+                      for (let b = 0; b < that.addRows[that.index].cityList.length; b++) {
+                        if (that.datas[i].subs[j].subs[c].code == that.addRows[that.index].cityList[b]) {
+                          that.addRows[that.index].addressName[a].cityName.push(that.datas[i].subs[j].subs[c].name)
+                        }
+                      }
                     }
                   }
                 }
-                if (point==1) {
-                  that.addRows[that.index].IdArr.splice(that.$.inArray(city.parent, that.addRows[that.index].IdArr), 1)
-                  that.addRows[that.index].address.splice(that.$.inArray(that.datas[i].subs[j].name, that.addRows[that.index].address), 1)
+                for (let m = 0; m < that.datas[i].subs[j].subs.length; m++) {
+                  for (let p = 0; p < that.addRows[that.index].cityList.length; p++) {
+                    if (that.datas[i].subs[j].subs[m].code == that.addRows[that.index].cityList[p]) {
+                      point++ //检测省内被选中的市还剩几个
+                    }
+                  }
                 }
+                if (point==1) { // 如果城市是省内被选中的最后一个
+                  // that.addRows[that.index].IdArr.splice(that.$.inArray(city.parent, that.addRows[that.index].IdArr), 1)
+                  // that.addRows[that.index].addressName.splice(that.$.inArray(that.datas[i].subs[j].name, that.addRows[that.index].addressName), 1)
+                  for(var x=0;x<that.addRows[that.index].addressName.length;x++){
+                    if(that.datas[i].subs[j].name===that.addRows[that.index].addressName[x].proName){
+                      that.addRows[that.index].addressName.splice(x, 1)
+                      that.addRows[that.index].IdArr.splice(x, 1)
+                    }
+                  }
+                }else{
+                  for(var x=0;x<that.addRows[that.index].addressName.length;x++){
+                    if(that.datas[i].subs[j].name===that.addRows[that.index].addressName[x].proName){
+                      for(var y=0;y<that.addRows[that.index].addressName[x].cityName.length;y++){
+                        if(city.name==that.addRows[that.index].addressName[x].cityName[y]){
+                          that.addRows[that.index].addressName[x].cityName.splice(y, 1)
+                        }
+                      }
+                    }
+                  }
+                }
+                // 检测大区内剩余省还剩几个
                 let point2=0
                 for(let n=0;n<that.datas.length;n++){
                     if(that.datas[i].subs[j].parent==that.datas[n].code){
-
                       for(let f=0;f<that.datas[n].subs.length;f++){
                           for(let y = 0; y < that.addRows[that.index].IdArr.length; y++){
                             if(that.addRows[that.index].IdArr[y]==that.datas[n].subs[f].code){
@@ -696,7 +772,7 @@
                       }
                     }
                 }
-                that.addRows[that.index].address.splice(that.$.inArray(city.name, that.addRows[that.index].address), 1)
+                //that.addRows[that.index].addressName.splice(that.$.inArray(city.name, that.addRows[that.index].addressName), 1)
               }
             }
           }
@@ -712,7 +788,8 @@
 // 新增行
       addRow(){
         let newRow = {
-          address: [],
+          addressName: [],
+          address:'',
           areaIdArr: [],
           IdArr: [],
           cityList: [],
@@ -812,7 +889,7 @@
                 }
               }
               that.postageModelRule = {
-                address: that.addRows[i].address.join(),
+                address: that.addRows[i].address,
                 cityCode: that.addRows[i].cityList.join(),
                 continuedPiece: that.addRows[i].continuedPiece,
                 continuedPostage: that.addRows[i].continuedPostage,
@@ -831,7 +908,7 @@
           }
           for (var i = 0; i < that.addRows.length; i++) {
             that.postageModelRule = {
-              address: that.addRows[i].address.join(),
+              address: that.addRows[i].address,
               cityCode: that.addRows[i].cityList.join(),
               continuedPiece: that.addRows[i].continuedPiece,
               continuedPostage: that.addRows[i].continuedPostage,
@@ -843,6 +920,11 @@
             }
             that.postageModelRules.push(that.postageModelRule)
           }
+        }
+
+        for (var i = 0; i < that.postageModelRules.length; i++) {
+          that.postageModelRules[i].continuedPostage = parseFloat(that.postageModelRules[i].continuedPostage * 100).toFixed(2)
+          that.postageModelRules[i].firstPostage = parseFloat(that.postageModelRules[i].firstPostage * 100).toFixed(2)
         }
         that.$.ajax({
           type: that.addModify === 'add' ? 'post' : 'put',
@@ -902,6 +984,12 @@
           },
           success: function (result) {
             that.formwork = result.content
+            if (that.formwork.postageModelRules.length > 0) {
+              for (var i = 0; i < that.formwork.postageModelRules.length; i++) {
+                that.formwork.postageModelRules[i].firstPostage = that.formwork.postageModelRules[i].firstPostage / 100
+                that.formwork.postageModelRules[i].continuedPostage = that.formwork.postageModelRules[i].continuedPostage / 100
+              }
+            }
             console.log(that.formwork)
           }
         })
