@@ -67,18 +67,24 @@
         		<span class="tit01 fl"></span>
           	<span class="ml20 fl">
           	<span class="fl mr20">
-          		<select class="bj_select form-control" v-model="provinceCode">
-          			<option></option>
+          		<select class="bj_select form-control" v-model="provinceCode" id="province_select">
+          			<option v-for="(cell,index) in province_all_search" :key="index" :value="cell.code">
+                  {{cell.name}}
+                </option>
           		</select>
           	</span>
           	<span  class="fl mr20">
-          		<select class="bj_select form-control" v-model="cityCode">
-          			<option></option>
+          		<select class="bj_select form-control" v-model="cityCode" id="city_select">
+          			<option v-for="(cell,index) in city_all_search" :key="index" :value="cell.code">
+                  {{cell.name}}
+                </option>
           		</select>
           	</span>
           	<span  class="fl mr20">
-          		<select class="bj_select form-control" v-model="areaCode">
-          			<option></option>
+          		<select class="bj_select form-control" v-model="areaCode" id="area_select">
+          			<option v-for="(cell,index) in area_all_search" :key="index" :value="cell.code">
+                  {{cell.name}}
+                </option>
           		</select>
           	</span>
           	<span class="fl mr20">
@@ -122,7 +128,7 @@
         			<div class="a1_img mr10 fl"><img :src="JSON.parse(goods.goodsImage == ''? '[]': goods.goodsImage)[0]" /></div>
             	<div>
               <div class="wose wid mt10">{{goods.goodsName}}</div>
-              <div class="blue">规格：{{goods.skuName}}</div>
+              <div class="blue">规格：{{goods.skuName == ''?'默认':goods.skuName}}</div>
             	</div>
         		</td>
             <td class="a2">{{goods.mediaResId}}</td>
@@ -185,7 +191,7 @@
       <table class="mt20 detail_table">
         <thead>
         	<tr class="fh">
-      		<td colspan="2">待发货 2    已发货 0</td>
+      		<td colspan="2">{{}}</td>
       		<td>
       			<button class="fah fr mr10" @click="deliver" v-show="orderStatus==0">发货</button>
       		</td>
@@ -202,7 +208,7 @@
         			<div class="a1_img mr10 fl"><img :src="JSON.parse(goods.goodsImage == ''? '[]': goods.goodsImage)[0]"/></div>
             	<div>
               <div class="wose wid mt20">{{goods.goodsName}}</div>
-              <div class="blue">规格：{{goods.skuName}}</div>
+              <div class="blue">规格：{{goods.skuName == ''?'默认':goods.skuName}}</div>
             	</div>
         		</td>
         		<td>{{goods.sellNum}}</td>
@@ -244,24 +250,11 @@
         <span class="redcolor">*</span>
         <span>配送方式</span>
         </span>
-        <span class="tit02 fl mr20">
-          <span class="fl mr10">
-            <input  type="checkbox" id="classify" class="input_check" @click="expressCheck(0)">
-            <label  for="classify" class="mt5"></label>
-          </span>
-          <span class="fl">
-            物流发货
-          </span>
-        </span>
-        <span class="tit02 fl">
-          <span class="fl mr10">
-            <input  type="checkbox" id="classify2" class="input_check" @click="expressCheck(1)">
-            <label  for="classify2" class="mt5"></label>
-          </span>
-          <span class="fl ml20">
-            自有物流
-          </span>
-        </span>
+
+        <template>
+          <el-radio v-model="expressWay" label="0" @click="expressCheck(0)" >物流发货</el-radio>
+          <el-radio v-model="expressWay" label="1" @click="expressCheck(1)">自有物流</el-radio>
+        </template>
         <div class="tit03 clear">若有自己的配送车队，可选自有物流</div>
       </div>
       <div class="deliver_type01 mt20 mb10 clear">
@@ -271,8 +264,8 @@
         <span>物流公司</span>
         </span>
         <span>
-          <select class="form-control deliver_input fl" placeholder="请选择" v-model="expressCode">
-            <option v-for="item in shipments" v-bind:value="item.expressCode">{{item.expressName}}</option>
+          <select class="form-control deliver_input fl" placeholder="请选择" v-model="expressCode" id="ship_select">
+            <option v-for="(item,index) in shipments" :key="index" :value="item.expressCode">{{item.expressName}}</option>
           </select>
         </span>
         </div>
@@ -331,7 +324,10 @@
   </div>
 </template>
 <script>
+  import ElCheckbox from "../../../../node_modules/element-ui/packages/checkbox/src/checkbox.vue";
+
   export default {
+    components: {ElCheckbox},
     name: '',
     data () {
       return {
@@ -371,9 +367,74 @@
         ,expressNo: ''
         ,expressName: ''
         ,expressCode: ''
-        ,expressWay: 0
+        ,expressWay: '0'
         ,expressPhone: ''
         ,expressPerson: ''
+        ,province_all_search: []
+        // 可选的城市(供搜索使用)
+        ,city_all_search: []
+        // 所有的区(供搜索使用)
+        ,area_all_search: []
+      }
+    },
+    watch: {
+      // 查询时监控省份
+      'provinceCode': {
+        handler (code, oldCode) {
+          let that = this
+          if (code === '' || code === undefined) {
+            that.city_show = false
+            that.area_show = false
+            return
+          }
+          if (code !== oldCode) {
+            // // console.log('(查询)省份选择变化,新的省份code:' + code + ',旧的省份code:' + oldCode)
+            that.$.ajax({
+              url: that.base + 'm2c.support/regn/cits',
+              data: {
+                token: sessionStorage.getItem('mToken'),
+                province: code
+              },
+              success: function (result) {
+                // console.log('(查询)获得的市信息列表: ', result)
+                that.city_all_search = result.content
+                that.city_show = true
+                that.area_show = false
+                if (that.isModify === true) {
+                  that.area_show = true
+                  that.isModify = false
+                }
+              }
+            })
+          }
+        },
+        deep: true
+      },
+      // 查询时监控城市
+      'cityCode': {
+        handler (code, oldCode) {
+          let that = this
+          if (code === '' || code === undefined) {
+            that.area_show = false
+            return
+          }
+          if (code !== oldCode) {
+            // // console.log('(查询)城市选择变化,新的城市code:' + code + ',旧的城市code:' + oldCode)
+            that.$.ajax({
+              url: that.base + 'm2c.support/regn/areas',
+              data: {
+                token: sessionStorage.getItem('mToken'),
+                city: code
+              },
+              success: function (result) {
+                // console.log('(查询)获得的区域信息列表: ', result)
+                that.area_all_search = result.content
+                //that.area_show = true
+              }
+            })
+          }
+        },
+        deep: true
       }
     },
     methods: {
@@ -403,16 +464,6 @@
       ,expressCheck(val) {
         let that = this;
         that.expressWay = val;
-        if (val==1) {
-          that.$("#classify2").checked=true;
-          that.$("#classify2").attr("checked", true);
-          that.$("#classify").checked=false;
-          that.$("#classify").attr("checked", false);
-        }
-        else {
-          that.$("#classify2").attr("checked", false);
-          that.$("#classify").attr("checked", true);
-        }
         console.log(that.$("#classify2").val());
       }
       //列表
@@ -427,7 +478,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             orderNo: that.$route.query.orderId,
-            dealerOrderId: sessionStorage.getItem('dealerOrderId')
+            dealerOrderId: that.dealerOrderId
           },
           success: function (result) {
             console.log(result)
@@ -447,7 +498,7 @@
           that.orderFreight = data.orderFreight;
         that.orderStatus = data.orderStatus;
           that.strOrderStatus = data.orderStatus === 0? '未支付': data.orderStatus === 1? '待发货': data.orderStatus === 2? '待收货': data.orderStatus === 3? '确认收货': data.orderStatus === 4? '交易完成': '关闭';
-          that.dealerOrderId = that.$route.query.dealerOrderId;
+          //that.dealerOrderId = dealerOrderId;
           var d = new Date(data.createdDate);
           that.createdDate = that.date_format(d, 'yyyy-MM-dd hh:mm:ss');
           that.payWay = data.payWay;
@@ -495,7 +546,7 @@
         that.is_Success = false
         that.$('#logTable').bootstrapTable('destroy').bootstrapTable({
           method: 'get',
-          url: that.base + 'm2c.scm/order/logs/' + that.$route.query.dealerOrderId,
+          url: that.base + 'm2c.scm/order/logs/' + that.dealerOrderId,
           //url: 'http://localhost:8080/m2c.scm/order/logs/' + that.$route.query.dealerOrderId,
           queryParams: function (params) {
             return Object.assign({}, {
@@ -555,6 +606,16 @@
       deliverDealerOrder(){
         // 发货请求
         let that=this;
+        let select = document.querySelector('#ship_select')
+        if (select !== null) {
+          let options = select.options
+          let index = select.selectedIndex
+          if (index === -1) {
+            //that.expressName = ''
+          } else {
+            that.expressName = options[index].text
+          }
+        }
         that.$.ajax({
           url: that.base + 'm2c.scm/order/dealer/sendOrder',
           //url: 'http://localhost:8080/m2c.scm/order/dealer/sendOrder',
@@ -573,12 +634,15 @@
             dealerOrderId: that.dealerOrderId
           },
           success: function (result) {
-            //console.log(result)
+            console.log(result);
             if (result.status === 200) {
               that.Deliver = false;
               that.customerdetail();
               that.getDealerOrderInfo();
               that.show_tip('发货成功！');
+            }
+            else {
+              that.show_tip('发货失败！');
             }
           }
         })
@@ -586,6 +650,41 @@
       saveDealerOrder  () {
         // 保存 修改收货地址 运费
         let that = this;
+        let select = document.querySelector('#province_select')
+        if (select !== null) {
+          let options = select.options
+          let index = select.selectedIndex
+          if (index === -1) {
+            that.show_tip("请选择省份");
+            return;
+          } else {
+            that.province = options[index].text
+          }
+        }
+        select = document.querySelector('#city_select')
+        if (select !== null) {
+          let options = select.options
+          let index = select.selectedIndex
+          if (index === -1) {
+            that.show_tip("请选择城市");
+            return;
+          } else {
+            that.city = options[index].text
+          }
+        }
+
+        select = document.querySelector('#area_select')
+        if (select !== null) {
+          let options = select.options
+          let index = select.selectedIndex
+          if (index === -1) {
+            that.show_tip("请选择地区");
+            return;
+          } else {
+            that.area = options[index].text
+          }
+        }
+
         var freightStr='';
         that.goodses.forEach(function(val, index) {
           if (index > 0)
@@ -610,6 +709,7 @@
             areaCode: that.areaCode,
             revPerson: that.revPerson,
             phone: that.phone,
+            street: that.streetAddr,
             dealerOrderId: that.dealerOrderId,
             freights: freightStr
           },
@@ -643,7 +743,19 @@
       }
     }
     ,mounted () {
-      this.getDealerOrderInfo();
+      let that = this;
+      that.dealerOrderId = that.$route.query.dealerOrderId;
+      that.getDealerOrderInfo();
+      that.$.ajax({
+        url: that.base + 'm2c.support/regn/provs',
+        data: {
+          token: sessionStorage.getItem('mToken')
+        },
+        success: function (result) {
+          // // console.log('获得的省份信息列表: ', result)
+          that.province_all_search = result.content;
+        }
+      })
     }
   }
 </script>
