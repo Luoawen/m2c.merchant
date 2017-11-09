@@ -422,8 +422,10 @@
         handler: function (val, oldVal) {
           let that = this
           if (val == 5) {
-            var div = document.getElementById('dragImg').lastChild();
-            console.log(div)
+            that.$nextTick(function(){
+              var div = that.$("#dragImg").find("div").find("div")
+              div.hide()
+            })
           }
         },
         deep: true
