@@ -1048,7 +1048,7 @@
             for (var i = 0; i < result.content.length; i++) {
               //遍历获取到的数据 result.content(result.content外包含页码) 绑定属性
               result.content[i].isRemoved = 0
-              result.content[i].isChoosed = 0
+              result.content[i].isChoosed = 0 
               result.content[i].isExchange = 0
               result.content[i].chooseSkuList = []
        //遍历选择商品列表 同 result.content 的goodsId 匹配  匹配到就将isChoosed 设置为1 并将  chooseGoodsList里的chooseSkuList 赋值给  result.content 的chooseSkuList(选择规格列表)
@@ -1226,25 +1226,6 @@
       //拼接选中商品IDs
       makeGoodsIds () {
         var that = this
-<<<<<<< HEAD
-               //定义 数组合并去重 （没有成功..）
-        //       Array.prototype.unique = function() {
-        //     var newArr = [];
-        //     for (var i = 0; i < this.length; i++) {
-        //         // if(newArr.indexOf(this[i]) == -1)
-        //         console.log(JSON.stringify(newArr))
-        //         if(JSON.stringify(newArr).indexOf(JSON.stringify(this[i])) ==-1)
-        //         {
-        //             newArr.push(this[i]);
-        //         }
-        //     }
-        //     console.log('-----',this)
-        //     return newArr;
-        // };
-       //that.chooseGoodsList=that.chooseGoodsList.concat(that.chooseGoodsList1).unique()
-        console.log("--合并后的的chooseGoodsList--",that.chooseGoodsList)
-=======
->>>>>>> local_hey
         that.params.goods_ids = []
         that.params.sku_list = []
         for (var i = 0; i < that.chooseGoodsList.length; i++) {
