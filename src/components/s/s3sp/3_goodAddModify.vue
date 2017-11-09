@@ -481,7 +481,7 @@
                 return
               }else{
                 that.sukShow = false
-                if (validatorUtils.isNumericD(that.goodsSKUs[k].availableNum)&&validatorUtils.isNumericD(that.goodsSKUs[k].weight)&&validatorUtils.isNumericD(that.goodsSKUs[k].photographPrice)&&validatorUtils.isNumericD(that.goodsSKUs[k].supplyPrice)&&validatorUtils.isNumericD(that.goodsSKUs[k].marketPrice)) {
+                if (validatorUtils.isNumericD(that.goodsSKUs[k].availableNum.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].weight.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].photographPrice.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].supplyPrice.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].marketPrice.toString())) {
                   that.sukShow1 = false
                   that.goodsSKUs[k].marketPrice=parseFloat(that.goodsSKUs[k].marketPrice*100).toFixed(2)
                   that.goodsSKUs[k].photographPrice=parseFloat(that.goodsSKUs[k].photographPrice*100).toFixed(2)
