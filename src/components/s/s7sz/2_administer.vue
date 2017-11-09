@@ -493,7 +493,8 @@
             token: sessionStorage.getItem('mToken')
           },
           success: function (result) {
-            if(result.status == 200){
+            if(result.status ==  -1 || result == 200){
+              tnat.show_tip('删除成功')
               that.delectGoodHide()
               that.get_comment_info()
             }else{
