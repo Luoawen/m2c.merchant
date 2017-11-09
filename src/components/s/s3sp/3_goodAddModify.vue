@@ -417,6 +417,17 @@
     },
     created() {},
     watch: {
+      // 监听goodsMainImages的长度
+      'goodsMainImages.length':{
+        handler: function (val, oldVal) {
+          let that = this
+          if (val == 5) {
+            var div = document.getElementById('dragImg').lastChild();
+            console.log(div)
+          }
+        },
+        deep: true
+      },
       // 根据品牌ID获取品牌名
       'data.goodsBrandId': {
         handler: function (val, oldVal) {
@@ -476,6 +487,10 @@
         let that = this
         that.$refs[formName].validate((valid) => {
           if (valid) {
+            if(that.goodsMainImages.length<=0){
+              that.imgShowList = true
+              return
+            }
             for(var k=0;k<that.goodsSKUs.length;k++){
               if(that.goodsSKUs[k].availableNum==''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].weight==''||that.goodsSKUs[k].weight==undefined||that.goodsSKUs[k].photographPrice==''||that.goodsSKUs[k].photographPrice==undefined){
                 that.sukShow = true
@@ -497,11 +512,6 @@
                   return
                 }
               }
-            }
-
-            if(that.goodsMainImages.length<=0){
-              that.imgShowList = true
-              return
             }
             let a={
               token: sessionStorage.getItem('mToken'),
