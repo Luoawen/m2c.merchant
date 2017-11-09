@@ -177,7 +177,7 @@
                       </span>
               <span class="ml10">订货号：</span><span>{{item.dealerOrderId}}</span>
             </div>
-            <div class="fr detail" @click="gotoDetail(item.dealerOrderId)">查看详情</div>
+            <div class="fr detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</div>
           </td>
         </tr>
         <tr class="content clear" >
@@ -382,11 +382,12 @@
         that.pageIndex = sz;
         that.getDealerOrders();
       }
-      ,gotoDetail(dealerOrId) {
+      ,gotoDetail(dealerOrId, orderId) {
         let that = this
         var path='dealerOrDtl';
-          sessionStorage.setItem('dealerOrderId', dealerOrId)
-          that.$goRoute({path: path})
+        //sessionStorage.setItem('dealerOrderId', dealerOrId);
+        that.$router.push({name : path,query: {dealerOrderId: dealerOrId, orderId:orderId}})
+        //that.$goRoute({name:'dealerOrDtl',});
       }
       ,clearAll() {
         let that = this;
@@ -573,7 +574,7 @@
       .inp{
         width: 380px;
         height: 39px;
-        color: #ccc;
+        color: #333333;
         padding-left: 10px;
       }
       i{
