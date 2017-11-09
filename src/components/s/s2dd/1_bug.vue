@@ -46,7 +46,7 @@
       </div>
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
       <button type="button"class="btn"  @click="search()">查询</button>
-      <button type="button" class="btn btn-default pull-right operation">批量操作</button>
+      <button type="button" class="btn btn-default pull-right operation">批量导出</button>
       <!-- 高级搜索 -->
       <div class="poi2 Advanced_s" v-show="Advancedshow===true">
         <div class="">
@@ -363,6 +363,8 @@
         let that=this;
       that.pageIndex = 1;
       this.getDealerOrders()
+      that.Advancedshow = false
+      
     },
     Advancedsearch () {
       var that = this;
@@ -386,7 +388,6 @@
       }
       ,clearAll() {
         let that = this;
-        that.Advancedshow = false
         that.searchParams.orderStatus= '';
         that.searchParams.afterSellStatus='';
         that.searchParams.startTime= '';
