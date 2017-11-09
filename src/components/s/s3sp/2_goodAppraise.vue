@@ -1,39 +1,94 @@
 <template>
   <div class="sp">
     <div class="dropdown">
-      <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">回复状态
+      <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">{{replyStatusName}}
         <span class="caret"></span>
       </div>
       <ul class="dropdown-menu" aria-labelledby="dLabel1">
-        <li @click="replyStatus()">全部<i class="glyphicon glyphicon-menu-right"></i></li>
+        <li @click="replyStatus(0)">全部</li>
         <li v-for="(cell,index) in replyStatuses" @click="replyStatus(cell.replyStatus)">
           {{cell.replyStatus==2?"已回复":cell.replyStatus==1?"未回复":"全部"}}
-          <i class="glyphicon glyphicon-menu-right"></i>
         </li>
       </ul>
     </div>
     <div class="dropdown">
-      <div id="dLabel2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="state">评级星级
+      <div id="dLabel2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="state">{{levelName}}
         <span class="caret"></span>
       </div>
-      <ul class="dropdown-menu" aria-labelledby="dLabel2">
-        <li @click="level()">全部<i class="glyphicon glyphicon-menu-right"></i></li>
+      <ul class="dropdown-menu" aria-labelledby="dLabel1">
+        <li @click="level(0)">全部</li>
         <li v-for="(cell,index) in leveles" @click="level(cell.level)">
           {{cell.level==5?"5星":cell.level==4?"4星":cell.level==3?"3星":cell.level==2?"2星":cell.level==1?"1星":"全部"}}
-          <i class="glyphicon glyphicon-menu-right"></i>
         </li>
       </ul>
     </div>
     <div class="search_cell">
-        <span>评论时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span>
-        <div class="time" v-show="is_Success">
-          <input type="date" class="form-control search_input search_input_date_l start" v-model="search_params.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="search_params.endTime">
-        </div>
+      <span class="zIndex2" @click="is_Success=!is_Success">评论时间<i class="icon timeIcon"></i></span>
+      <div class="time" v-if="is_Success">
+        <el-date-picker v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+        </el-date-picker>
+        <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" @change="get_comment_info()">
+        </el-date-picker>
+      </div>
     </div>
     <div class="search">
-      <input type="text" class="inp" placeholder="输入商品名称 / 订单号 / 顾客姓名/ 顾客手机号 / 商家名称 / 商家ID" v-model="search_params.condition"><i class="glyphicon glyphicon-search" @click="get_comment_info"></i>
+      <input type="text" class="inp" placeholder="输入商品名称 / 订单号 / 顾客姓名/ 顾客手机号" v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info()"></i>
     </div>
-    <span >高级搜索</span>
+    <span class="ml10 gjsort" @click="advancedSearch">高级搜索</span>
+    <div class="poi2 Advanced_s" v-show="advancedShow">
+      <div class="">
+        <div class="titbt">高级搜索</div>
+        <div class="clear">
+          <div class="col-sm-6 left">
+            <div class="clear mt10 mb20">
+              <span class="bt fl ">关键词</span>
+              <input class="form-control fl " placeholder="输入商品名称 / 订单号 / 顾客姓名/ 顾客手机号" v-model="search_params.condition"/>
+            </div>
+            <div class="clear mt10 mb20">
+              <span class="bt fl ">回复状态</span>
+              <select class="form-control fl " v-model="search_params.replyStatus">
+                <option value="" selected>全部</option>
+                <option value="2">已回复</option>
+                <option value="1">未回复</option>
+              </select>
+            </div>
+            <div class="clear mt10 mb20">
+              <span class="bt fl ">图片情况</span>
+              <select class="form-control fl " v-model="search_params.imageStatus">
+                <option value="" selected>全部</option>
+                <option value="2">有图</option>
+                <option value="1">无图</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6 right">
+            <div class="clear mt10 mb20">
+              <span class="bt fl ">评价时间</span>
+              <span class="clear">
+                  <span class="fl"><input class="form-control time" type="date" v-model="search_params.startTime"/></span>
+                  <span class="fl mr10" style="display:inline-block;line-height:40px;">~</span>
+                  <span class="fl"><input class="form-control time" type="date" v-model="search_params.endTime"/></span>
+                </span>
+            </div>
+            <div class="clear mt10 mb20">
+              <span class="bt fl ">评价星级</span>
+              <select class="form-control fl " v-model="search_params.starLevel">
+                <option value="" selected>全部</option>
+                <option value="1">1星</option>
+                <option value="2">2星</option>
+                <option value="3">3星</option>
+                <option value="4">4星</option>
+                <option value="5">5星</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="footer clear">
+          <button class="footerbtn sort" @click="get_comment_info()">搜索</button>
+          <button class="footerbtn ml20 czt" @click="clearAll()">重置</button>
+        </div>
+      </div>
+    </div>
     <div class="comment_info  clear" style="background:#fff;">
       <table class="comment_table col-sm-12" id="table" style="table-layout:fixed">
         <thead>
@@ -132,7 +187,7 @@
       return {
         is_Success: false,
         // 搜索参数
-        search_params: {condition: '', replyStatus: '', starLevel: '', startTime: '', endTime: ''},
+        search_params: {condition: '', replyStatus: '', starLevel: '', startTime: '', endTime: '', imageStatus: ''},
         reply_params: {commentId: '', replyContent: ''},
         replyStatuses: [{replyStatus: 1}, {replyStatus: 2}], // 回复状态
         leveles: [{level: 1}, {level: 2}, {level: 3}, {level: 4}, {level: 5}], // 评价星级
@@ -141,10 +196,27 @@
         commentId: '',
         goodsCommentCurrentPage: 1,
         goodsCommentPageRows: 5,
-        goodsCommentTotalCount: 0
+        goodsCommentTotalCount: 0,
+        replyStatusName: '回复状态',
+        levelName: '评价星级',
+        advancedShow: false
       }
     },
     methods: {
+      clearAll () {
+        let that = this
+        that.advancedShow = false
+        that.search_params.condition = ''
+        that.search_params.replyStatus = ''
+        that.search_params.starLevel = ''
+        that.search_params.endTime = ''
+        that.search_params.startTime = ''
+        that.search_params.imageStatus = ''
+      },
+      advancedSearch () {
+        let that = this
+        that.advancedShow = true
+      },
       goodsCommentHandleSizeChange (val) {
         let that = this
         that.goodsCommentPageRows = val
@@ -179,18 +251,47 @@
       // 回复状态
       replyStatus (n) {
         let that = this
+        if (n === '' || n === undefined) {
+          that.replyStatusName = '回复状态'
+        } else if (n === 0) {
+          that.replyStatusName = '全部'
+        } else if (n === 1) {
+          that.replyStatusName = '未回复'
+        } else {
+          that.replyStatusName = '已回复'
+        }
         that.search_params.replyStatus = n
         that.get_comment_info()
       },
       // 评价星级
       level (n) {
         let that = this
+        if (n === '' || n === undefined) {
+          that.levelName = '评价星级'
+        } else if (n === 0) {
+          that.levelName = '全部'
+        } else if (n === 1) {
+          that.levelName = '1星'
+        } else if (n === 2) {
+          that.levelName = '2星'
+        } else if (n === 3) {
+          that.levelName = '3星'
+        } else if (n === 4) {
+          that.levelName = '4星'
+        } else if (n === 5) {
+          that.levelName = '5星'
+        }
         that.search_params.starLevel = n
         that.get_comment_info()
       },
       // 获取结算单列表
       get_comment_info () {
         let that = this
+        if (that.search_params.startTime > that.search_params.endTime) {
+          that.show_tip('开始时间不能大于结束时间')
+          return
+        }
+        that.is_Success = false
         that.$.ajax({
           url: that.base + 'm2c.scm/goods/comment',
           cache: false,
@@ -203,6 +304,7 @@
             startTime: that.search_params.startTime,
             endTime: that.search_params.endTime,
             condition: that.search_params.condition,
+            imageStatus: that.search_params.imageStatus,
             rows: that.goodsCommentPageRows,                          // 每页多少条数据
             pageNum: that.goodsCommentCurrentPage     // 请求第几页
           },
@@ -518,11 +620,11 @@
         }
       }
       .time{
-        width: 330px;
+        width: 600px;
         height: 61px;
         position: absolute;
-        left: -123px;
-        top: 19px;
+        left: 0px;
+        top: 50px;
         z-index: 10;
         .form-control{
           width: 139px;
@@ -618,5 +720,68 @@
 .modal-open{
   #add_modify,#modify_status,#bind_img,#delete{display:flex}
   #add_modify.in,#modify_status.in,#bind_img.in,#hptc.in{z-index:2000}
+}
+.zIndex2{z-index:21;}
+.icon{width:40px;height:40px;z-index:11;display:inline-block;}
+.timeIcon{background:url(../../../assets/images/ico_calendar@2x.png) no-repeat center bottom;background-size:19px 20px;}
+.searchIcon{background:url(../../../assets/images/ico_search.png) no-repeat center center;background-size:20px 20px;}
+.Advanced_s{
+  width: 90%;
+  min-height: 430px;
+  background: #fff;
+  z-index: 99;
+  top: 0px;
+  left: 200px;
+  padding:20px;
+  .left,.right{
+    .bt{
+      display: inline-block;
+      width: 80px;
+      line-height: 40px;
+      text-align: right;
+      padding-right: 10px;
+    }
+    input,select{
+      width: 75%;
+      height: 40px;
+      line-height: 40px;
+    }
+    .time{
+      width: 165px;
+      margin-right: 10px;
+
+    }
+  }
+  .titbt{
+    font-size: 18px;
+    color: #333333;
+  }
+  .footer{
+    padding-left: 30px;
+    .footerbtn{
+      border: 1px solid #CCCCCC;
+      border-radius: 2px;
+      width: 80px;
+      height: 30px;
+      line-height: 30px;
+      font-size: 14px;
+      color: #333333;
+      text-align: center;
+    }
+    .sort{
+      background: #0086FF;
+      border-radius: 2px;
+      color: #FFFFFF;
+    }
+    .czt{
+      background: #fff;
+    }
+  }
+}
+.poi2{
+  position: absolute;
+}
+.mb20{
+  margin-bottom: 20px;
 }
 </style>

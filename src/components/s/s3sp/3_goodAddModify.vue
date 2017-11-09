@@ -19,7 +19,7 @@
       <el-row :gutter="20" style="z-index:2;">
         <el-col :span="11" style="height:40px;z-index:2;">
           <el-form-item label="商品分类" prop="goodsClassifyId">
-            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="data.goodsClassifyIds" change-on-select :props="goodsClassifyProps" @change="handleChange"></el-cascader>
+            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="data.goodsClassifyIds" :props="goodsClassifyProps" @change="handleChange"></el-cascader>
           </el-form-item>
         </el-col>
         <el-col :span="11">
@@ -154,7 +154,7 @@
             <tr v-for="(item,index) in goodsSpecifications">
               <td><span @click="delect(index)" v-if="goodsSpecifications.length>1 && handle_toggle=='add'">移除</span></td>
               <td>
-                <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item)"><!--这里需要后台返回规格Id-->
+                <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item)">
                   <el-option
                     v-for="item in stantards"
                     :key="item.stantardId"
@@ -179,6 +179,7 @@
                   :fetch-suggestions="querySearch"
                   placeholder="请输入内容"
                   @select="handleSelect(item.standardId)"
+                  @keyup.enter.native="specValueClick(item.state1,index)"
                 ></el-autocomplete>
                 <el-button type="primary" @click="specValueClick(item.state1,index)">确定</el-button>
                 <i style="color:red; font-style:normal;" v-if="standardIdShow">请先选择规格</i>
@@ -416,6 +417,17 @@
     },
     created() {},
     watch: {
+      // 监听goodsMainImages的长度
+      'goodsMainImages.length':{
+        handler: function (val, oldVal) {
+          let that = this
+          if (val == 5) {
+            var div = document.getElementById('dragImg').lastChild();
+            console.log(div)
+          }
+        },
+        deep: true
+      },
       // 根据品牌ID获取品牌名
       'data.goodsBrandId': {
         handler: function (val, oldVal) {
@@ -475,13 +487,17 @@
         let that = this
         that.$refs[formName].validate((valid) => {
           if (valid) {
+            if(that.goodsMainImages.length<=0){
+              that.imgShowList = true
+              return
+            }
             for(var k=0;k<that.goodsSKUs.length;k++){
               if(that.goodsSKUs[k].availableNum==''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].weight==''||that.goodsSKUs[k].weight==undefined||that.goodsSKUs[k].photographPrice==''||that.goodsSKUs[k].photographPrice==undefined){
                 that.sukShow = true
                 return
               }else{
                 that.sukShow = false
-                if (validatorUtils.isNumericD(that.goodsSKUs[k].availableNum)&&validatorUtils.isNumericD(that.goodsSKUs[k].weight)&&validatorUtils.isNumericD(that.goodsSKUs[k].photographPrice)&&validatorUtils.isNumericD(that.goodsSKUs[k].supplyPrice)&&validatorUtils.isNumericD(that.goodsSKUs[k].marketPrice)) {
+                if (validatorUtils.isNumericD(that.goodsSKUs[k].availableNum.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].weight.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].photographPrice.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].supplyPrice.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].marketPrice.toString())) {
                   that.sukShow1 = false
                   that.goodsSKUs[k].marketPrice=parseFloat(that.goodsSKUs[k].marketPrice*100).toFixed(2)
                   that.goodsSKUs[k].photographPrice=parseFloat(that.goodsSKUs[k].photographPrice*100).toFixed(2)
@@ -496,11 +512,6 @@
                   return
                 }
               }
-            }
-            
-            if(that.goodsMainImages.length<=0){
-              that.imgShowList = true
-              return
             }
             let a={
               token: sessionStorage.getItem('mToken'),
@@ -566,10 +577,18 @@
       // 获取多规格交叉属性
       mapValue () {
         let that = this
+        let goodSkuList = that.goodsSKUs
         that.goodsSKUs=[]
           if(that.goodsSpecifications.length==1 || that.goodsSpecifications[1].itemValue.length==0){
-            for(var x=0;x<that.goodsSpecifications[0].itemValue.length;x++){
-              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[x].spec_name + '",show:true}' + ')'))
+            for(var j=0;j<that.goodsSpecifications[0].itemValue.length;j++){
+              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[j].spec_name + '",show:true}' + ')'))
+            }
+            for(var a=0;a<goodSkuList.length;a++){
+              for(var b=0;b<that.goodsSKUs.length;b++){
+                if(goodSkuList[a].skuName==that.goodsSKUs[b].skuName){
+                  that.goodsSKUs[b] = goodSkuList[a]
+                }
+              }
             }
           }else{
             if(that.goodsSpecifications.length==2){
@@ -604,12 +623,19 @@
             function js(arr1,arr2){
               var arr = Array()
               for(var i=0;i<arr1.length;i++){
-                  for(var j=0;j<arr2.length;j++){
-                      arr.push(arr1[i]+','+arr2[j])
-                  }
+                for(var j=0;j<arr2.length;j++){
+                  arr.push(arr1[i]+','+arr2[j])
+                }
               }
               return arr
               console.log(arr)
+            }
+            for(var a=0;a<goodSkuList.length;a++){
+              for(var b=0;b<that.goodsSKUs.length;b++){
+                if(goodSkuList[a].skuName==that.goodsSKUs[b].skuName){
+                  that.goodsSKUs[b] = goodSkuList[a]
+                }
+              }
             }
           }
       },
@@ -655,7 +681,7 @@
             that.show_tip("该规格值已添加")
           }
         }
-        
+
       },
       // 获取商品分类
       goodsClassify () {//商品分类树
@@ -666,7 +692,7 @@
           data: {parentClassifyId:-1},
           success: function (result) {
             that.goodsClassifys=result.content;
-            that.goodsClassifys.unshift({"parentClassifyId":'',"classifyId":'',"serviceRate":'',"classifyName":"全部" });
+            //that.goodsClassifys.unshift({"parentClassifyId":'',"classifyId":'',"serviceRate":'',"classifyName":"全部" });
           }
         })
       },
@@ -730,18 +756,18 @@
           // con.ondragenter = function(e) {
           //   alert(1)
           //   e.preventDefault();
-            
+
           // }
           con.ondragover = function(e) {
             alert(2)
             e.preventDefault();
-            
+
           }
           // con.ondragleave = function(e) {
           //   alert(3)
           //   e.preventDefault();
           // }
-          
+
         }
         console.warn("goodsMainImages="+that.goodsMainImages)
       },

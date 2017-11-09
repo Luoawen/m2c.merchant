@@ -4,7 +4,7 @@
       <div class="dropdown">
         <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">
           <select v-model="searchParams.orderStatus" >
-            <option value="" selected>全部</option>
+            <option value="" selected>订单状态</option>
             <option value="0">待付款</option>
             <option value="1">待发货</option>
             <option value="2">待收货</option>
@@ -16,7 +16,7 @@
       <div class="dropdown">
         <div id="dLabel2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="state">
           <select v-model="searchParams.afterSellStatus" >
-            <option value="" selected>全部</option>
+            <option value="" selected>售后状态</option>
             <option value="0">申请退货</option>
             <option value="1">申请换货</option>
             <option value="2">申请退款</option>
@@ -36,7 +36,7 @@
 
         <span>下单时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span>
         <div class="time" v-show="is_Success">
-          <input type="date" class="form-control search_input search_input_date_l start" v-model="searchParams.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="searchParams.endTIme">
+          <input type="date" class="form-control search_input search_input_date_l start" v-model="searchParams.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="searchParams.endTime">
         </div>
 
       </div>
@@ -46,7 +46,7 @@
       </div>
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
       <button type="button"class="btn"  @click="search()">查询</button>
-      <button type="button" class="btn btn-default pull-right operation">批量操作</button>
+      <button type="button" class="btn btn-default pull-right operation">批量导出</button>
       <!-- 高级搜索 -->
       <div class="poi2 Advanced_s" v-show="Advancedshow===true">
         <div class="">
@@ -177,7 +177,7 @@
                       </span>
               <span class="ml10">订货号：</span><span>{{item.dealerOrderId}}</span>
             </div>
-            <div class="fr detail" @click="gotoDetail(item.dealerOrderId)">查看详情</div>
+            <div class="fr detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</div>
           </td>
         </tr>
         <tr class="content clear" >
@@ -367,6 +367,8 @@
         let that=this;
       that.pageIndex = 1;
       this.getDealerOrders()
+      that.Advancedshow = false
+      
     },
     Advancedsearch () {
       var that = this;
@@ -382,15 +384,15 @@
         that.pageIndex = sz;
         that.getDealerOrders();
       }
-      ,gotoDetail(dealerOrId) {
+      ,gotoDetail(dealerOrId, orderId) {
         let that = this
         var path='dealerOrDtl';
-          sessionStorage.setItem('dealerOrderId', dealerOrId)
-          that.$goRoute({path: path})
+        //sessionStorage.setItem('dealerOrderId', dealerOrId);
+        that.$router.push({name : path,query: {dealerOrderId: dealerOrId, orderId:orderId}})
+        //that.$goRoute({name:'dealerOrDtl',});
       }
       ,clearAll() {
         let that = this;
-        that.Advancedshow = false
         that.searchParams.orderStatus= '';
         that.searchParams.afterSellStatus='';
         that.searchParams.startTime= '';
@@ -573,7 +575,7 @@
       .inp{
         width: 380px;
         height: 39px;
-        color: #ccc;
+        color: #333333;
         padding-left: 10px;
       }
       i{
