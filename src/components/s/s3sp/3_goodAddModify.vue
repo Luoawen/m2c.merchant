@@ -19,7 +19,7 @@
       <el-row :gutter="20" style="z-index:2;">
         <el-col :span="11" style="height:40px;z-index:2;">
           <el-form-item label="商品分类" prop="goodsClassifyId">
-            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="data.goodsClassifyIds" change-on-select :props="goodsClassifyProps" @change="handleChange"></el-cascader>
+            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="data.goodsClassifyIds" :props="goodsClassifyProps" @change="handleChange"></el-cascader>
           </el-form-item>
         </el-col>
         <el-col :span="11">
@@ -154,7 +154,7 @@
             <tr v-for="(item,index) in goodsSpecifications">
               <td><span @click="delect(index)" v-if="goodsSpecifications.length>1 && handle_toggle=='add'">移除</span></td>
               <td>
-                <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item)"><!--这里需要后台返回规格Id-->
+                <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item)">
                   <el-option
                     v-for="item in stantards"
                     :key="item.stantardId"
@@ -566,24 +566,19 @@
       // 获取多规格交叉属性
       mapValue () {
         let that = this
+        let goodSkuList = that.goodsSKUs
         that.goodsSKUs=[]
           if(that.goodsSpecifications.length==1 || that.goodsSpecifications[1].itemValue.length==0){
             for(var j=0;j<that.goodsSpecifications[0].itemValue.length;j++){
               that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[j].spec_name + '",show:true}' + ')'))
             }
-            // let res = [];
-            // let json = {};
-            // for(var x=0;x<goodsSKUsList.length;x++){
-            //   if(!json[goodsSKUsList[x].skuName]){
-            //     res.push(goodsSKUsList[x]);
-            //     json[goodsSKUsList[x]] = 1;
-            //   }
-            // }
-            // for(var a=0;a<res.length;a++){
-            //   console.log('res='+res)
-            //   that.goodsSKUs.push(eval('(' + '{skuName:"'+ res[a].skuName + '",show:true}' + ')'))
-            //   console.log('that.goodsSKUs='+that.goodsSKUs)
-            // }
+            for(var a=0;a<goodSkuList.length;a++){
+              for(var b=0;b<that.goodsSKUs.length;b++){
+                if(goodSkuList[a].skuName==that.goodsSKUs[b].skuName){
+                  that.goodsSKUs[b] = goodSkuList[a]
+                }
+              }
+            }
           }else{
             if(that.goodsSpecifications.length==2){
               var p = [[],[]]
@@ -611,26 +606,25 @@
                   break;
               }
             }
-            for(var i =0;i<res.length;i++){
-              that.goodsSKUs.push(eval('(' + '{skuName:"'+ res[i] + '",show:true}' + ')'))
+            for(var i =0;i<arr.length;i++){
+              that.goodsSKUs.push(eval('(' + '{skuName:"'+ arr[i] + '",show:true}' + ')'))
             }
             function js(arr1,arr2){
               var arr = Array()
               for(var i=0;i<arr1.length;i++){
-                  for(var j=0;j<arr2.length;j++){
-                      arr.push(arr1[i]+','+arr2[j])
-                      var res = [];
-                      var json = {};
-                      for(var j=0;j<arr.length;j++){
-                        if(!json[arr[j]]){
-                        res.push(arr[j]);
-                        json[arr[j]] = 1;
-                        }
-                      }
-                  }
+                for(var j=0;j<arr2.length;j++){
+                  arr.push(arr1[i]+','+arr2[j])
+                }
               }
-              return res
-              console.log(res)
+              return arr
+              console.log(arr)
+            }
+            for(var a=0;a<goodSkuList.length;a++){
+              for(var b=0;b<that.goodsSKUs.length;b++){
+                if(goodSkuList[a].skuName==that.goodsSKUs[b].skuName){
+                  that.goodsSKUs[b] = goodSkuList[a]
+                }
+              }
             }
           }
       },
@@ -687,7 +681,7 @@
           data: {parentClassifyId:-1},
           success: function (result) {
             that.goodsClassifys=result.content;
-            that.goodsClassifys.unshift({"parentClassifyId":'',"classifyId":'',"serviceRate":'',"classifyName":"全部" });
+            //that.goodsClassifys.unshift({"parentClassifyId":'',"classifyId":'',"serviceRate":'',"classifyName":"全部" });
           }
         })
       },
