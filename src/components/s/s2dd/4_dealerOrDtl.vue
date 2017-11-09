@@ -324,10 +324,7 @@
   </div>
 </template>
 <script>
-  import ElCheckbox from "../../../../node_modules/element-ui/packages/checkbox/src/checkbox.vue";
-
   export default {
-    components: {ElCheckbox},
     name: '',
     data () {
       return {
