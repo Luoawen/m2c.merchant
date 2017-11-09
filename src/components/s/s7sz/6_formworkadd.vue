@@ -565,7 +565,7 @@
               }
             }
             console.log(res)
-            proName.push(that.addRows[that.index].address[i].proName+"("+that.addRows[that.index].address[i].cityName.toString()+")")
+            proName.push(that.addRows[that.index].address[i].proName+"("+res.toString()+")")
           }
         }
         that.addressName=proName.toString()
