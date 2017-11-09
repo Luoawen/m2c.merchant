@@ -4,7 +4,7 @@
       <div class="dropdown">
         <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">
           <select v-model="searchParams.orderStatus" >
-            <option value="" selected>全部</option>
+            <option value="" selected>订单状态</option>
             <option value="0">待付款</option>
             <option value="1">待发货</option>
             <option value="2">待收货</option>
@@ -16,7 +16,7 @@
       <div class="dropdown">
         <div id="dLabel2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="state">
           <select v-model="searchParams.afterSellStatus" >
-            <option value="" selected>全部</option>
+            <option value="" selected>售后状态</option>
             <option value="0">申请退货</option>
             <option value="1">申请换货</option>
             <option value="2">申请退款</option>
@@ -36,7 +36,7 @@
 
         <span>下单时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span>
         <div class="time" v-show="is_Success">
-          <input type="date" class="form-control search_input search_input_date_l start" v-model="searchParams.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="searchParams.endTIme">
+          <input type="date" class="form-control search_input search_input_date_l start" v-model="searchParams.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="searchParams.endTime">
         </div>
 
       </div>

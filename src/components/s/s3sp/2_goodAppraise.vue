@@ -27,12 +27,12 @@
       <div class="time" v-if="is_Success">
         <el-date-picker v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
         </el-date-picker>
-        <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+        <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" @change="get_comment_info()">
         </el-date-picker>
       </div>
     </div>
     <div class="search">
-      <input type="text" class="inp" placeholder="输入商品名称 / 订单号 / 顾客姓名/ 顾客手机号" v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info"></i>
+      <input type="text" class="inp" placeholder="输入商品名称 / 订单号 / 顾客姓名/ 顾客手机号" v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info()"></i>
     </div>
     <span class="ml10 gjsort" @click="advancedSearch">高级搜索</span>
     <div class="poi2 Advanced_s" v-show="advancedShow">
@@ -287,6 +287,11 @@
       // 获取结算单列表
       get_comment_info () {
         let that = this
+        if (that.search_params.startTime > that.search_params.endTime) {
+          that.show_tip('开始时间不能大于结束时间')
+          return
+        }
+        that.is_Success = false
         that.$.ajax({
           url: that.base + 'm2c.scm/goods/comment',
           cache: false,

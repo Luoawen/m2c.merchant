@@ -44,7 +44,7 @@ module.exports = {
         include: [
           resolve('src'),
           resolve('test'),
-          resolve('node_modules/element-ui/packages')
+          resolve('node_modules/_element-ui@2.0.0@element-ui/src/mixins/emitter')
         ]    
       },
       {
