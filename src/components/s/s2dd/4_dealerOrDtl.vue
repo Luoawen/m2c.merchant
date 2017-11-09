@@ -691,7 +691,7 @@
         freightStr = '{' + freightStr + '}';
         // 发请求
         that.$.ajax({
-          url: that.base + 'm2c.scm/order/dealer/addrfreight',
+          url: that.base + 'm2c.scm/dealerorder/dealer/addrfreight',
           //url: 'http://localhost:8080/m2c.scm/dealerorder/addrfreight',
           type: 'put',
           cache: false,
