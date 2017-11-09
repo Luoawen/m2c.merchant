@@ -1008,11 +1008,26 @@
         that.modalShadow =true
         that.$('#choose_goods').modal({'show':true ,'backdrop':false})
         console.dir('---choose_goods------',that.$('#choose_goods'))
+           // 1.把保存的數據遍历一遍  將狀態放到弹框中
+          console.log('我是that.params.goods_ids',that.params.goods_ids.length)
+          if(that.params.goods_ids.length >0 ){
+           for(var h =0 ; h < that.goodsResult.content.length;h++){
+              for(var k =0 ;k < that.goodsResult.content.length;k++ ){
+                  if(that.goodsResult.content[h].goodsId == that.params.goods_ids[k].goodsId){
+                that.goodsResult.content[h].isCheck = true
+                that.goodsResult.content[h].isChoosed = 0
+             }else{
+               return;
+                }
+              }
+             }
+          }
         that.goods_query_item.goodsClassifyId = ''
         that.goods_query_item.condition = ''
         that.goods_query_item.dealerId = JSON.parse(sessionStorage.getItem('mUser')).dealerId;
         that.goods_query_item.pageNum = 1
         that.goodsChoose()
+
       },
       // 作用范围 选择商品
       goodsChoose () {
@@ -1064,24 +1079,30 @@
       openGoodsSku (goods,index,$event) {
         var that = this 
         let el = $event.target
-        // 把根据样式被选中状态  并且push到chooseGoodsList中
-        if(that.goodsResult.content[index].isCheck == true){
-         that.goodsResult.content[index].isCheck = false
+        if(that.goodsResult.content[index].isCheck == undefined || that.goodsResult.content[index].isCheck == false){
+           that.goodsResult.content[index].isCheck = true
+            that.chooseGoodsList.push(that.goodsResult.content[index])
+            console.log(" that.chooseGoodsList")
         }else{
-          that.goodsResult.content[index].isCheck = true
+          for(var i = 0; i<that.chooseGoodsList.length;i++){
+            if(that.goodsResult.content[index].goodsId == that.chooseGoodsList[i].goodsId){
+              that.deleteGoods(i,goods)
+             break;
+            }
+          }
+           that.goodsResult.content[index].isCheck =false
         }
-        // that.goodsResult.content[index].isCheck = true
-        that.chooseGoodsList.push(that.goodsResult.content[index])
+       console.log('我是isCheck',that.goodsResult.content[index].isCheck)
           //  知道获取的checkbox是哪个和数量
-        // for (var i = 0; i < goods.goodsSkuList.length; i++) {
-        //   for (var g = 0; g < goods.chooseSkuList.length; g++) {
-        //     if (goods.goodsSkuList[i].goodsSkuId == goods.chooseSkuList[g].goodsSkuId) {
-        //         goods.goodsSkuList[i].isCheck = true
-        //         goods.goodsSkuList[i].goodsSkuNum = goods.chooseSkuList[g].goodsSkuNum
-        //     }
-        //   }
-        // }
-        // that.goodsInfo = goods
+        for (var i = 0; i < goods.goodsSkuList.length; i++) {
+          for (var g = 0; g < goods.chooseSkuList.length; g++) {
+            if (goods.goodsSkuList[i].goodsSkuId == goods.chooseSkuList[g].goodsSkuId) {
+                goods.goodsSkuList[i].isCheck = true
+                goods.goodsSkuList[i].goodsSkuNum = goods.chooseSkuList[g].goodsSkuNum
+            }
+          }
+        }
+        that.goodsInfo = goods
       },
       // 打开规格选择弹框
       ChooseSpecification (goods) {
@@ -1166,13 +1187,14 @@
             that.goodsResult.content[i].isChoosed = 0
             that.goodsResult.content[i].chooseSkuList = []
             for (var g = 0; g < that.goodsResult.content.length; g++) {
-              that.goodsResult.content[g].isCheck = false
+              // that.goodsResult.content[g].isCheck = false
               that.goodsResult.content[g].goodsSkuNum = 0
             }
           }
         }
         for (var j = 0; j < that.params.goods_ids.length; j++) {
-          if (that.params.goods_ids[i].goodsId == goods.goodsId) {
+          console.log('--參數222----',that.params.goods_ids[j].goodsId)
+          if (that.params.goods_ids[j].goodsId == goods.goodsId) {
             that.params.goods_ids.splice(j, 1)
           }
         }
@@ -1204,22 +1226,6 @@
       //拼接选中商品IDs
       makeGoodsIds () {   
         var that = this
-               //定义 数组合并去重 （没有成功..）
-        //       Array.prototype.unique = function() {  
-        //     var newArr = [];  
-        //     for (var i = 0; i < this.length; i++) {  
-        //         // if(newArr.indexOf(this[i]) == -1)
-        //         console.log(JSON.stringify(newArr))
-        //         if(JSON.stringify(newArr).indexOf(JSON.stringify(this[i])) ==-1)
-        //         {  
-        //             newArr.push(this[i]);  
-        //         }  
-        //     }  
-        //     console.log('-----',this)
-        //     return newArr;  
-        // };  
-       //that.chooseGoodsList=that.chooseGoodsList.concat(that.chooseGoodsList1).unique()
-        console.log("--合并后的的chooseGoodsList--",that.chooseGoodsList)
         that.params.goods_ids = []
         that.params.sku_list = []
         for (var i = 0; i < that.chooseGoodsList.length; i++) {
