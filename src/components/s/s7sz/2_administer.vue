@@ -12,12 +12,12 @@
           <div class="time" v-if="is_Success">
             <el-date-picker v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
             </el-date-picker>
-            <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+            <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" @change="get_comment_info()">
             </el-date-picker>
           </div>
         </div>
         <div class="search">
-          <input type="text" class="inp" placeholder="输入品牌名称" v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info"></i>
+          <input type="text" class="inp" placeholder="输入品牌名称" v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info()"></i>
         </div>
 
         <div class="comment_info">
@@ -40,7 +40,7 @@
           <div class="time" v-if="is_Success2">
             <el-date-picker v-model="search_approve.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
             </el-date-picker>
-            <el-date-picker v-model="search_approve.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+            <el-date-picker v-model="search_approve.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" @change="get_comment_info1(search_approve.approveStatus)">
             </el-date-picker>
           </div>
         </div>
