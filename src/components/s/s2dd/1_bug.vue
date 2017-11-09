@@ -573,7 +573,7 @@
       .inp{
         width: 380px;
         height: 39px;
-        color: #ccc;
+        color: #333333;
         padding-left: 10px;
       }
       i{
