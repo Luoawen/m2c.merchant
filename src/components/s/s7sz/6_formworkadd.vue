@@ -946,34 +946,10 @@
             }
           }
         })
-      },
-      // 数组去重
-      // unique (){
-      //   var res = []
-      //   var json = {}
-      //   for(var i = 0; i < this.length; i++){
-      //     if(!json[this[i]]){
-      //     res.push(this[i])
-      //     json[this[i]] = 1
-      //     }
-      //   }
-      //   return res
-      // }
+      }
     },
     mounted(){
       let that = this
-      // 数组去重
-      // Array.prototype.unique = function(){
-      //   var res = [];
-      //   var json = {};
-      //   for(var i = 0; i < this.length; i++){
-      //     if(!json[this[i]]){
-      //     res.push(this[i]);
-      //     json[this[i]] = 1;
-      //     }
-      //   }
-      //   return res;
-      // }
       that.$(window).click(function(){
         that.$('.addMess').find('.cityBox').hide()
       })

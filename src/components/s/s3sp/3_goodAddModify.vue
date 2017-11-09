@@ -568,9 +568,22 @@
         let that = this
         that.goodsSKUs=[]
           if(that.goodsSpecifications.length==1 || that.goodsSpecifications[1].itemValue.length==0){
-            for(var x=0;x<that.goodsSpecifications[0].itemValue.length;x++){
-              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[x].spec_name + '",show:true}' + ')'))
+            for(var j=0;j<that.goodsSpecifications[0].itemValue.length;j++){
+              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[j].spec_name + '",show:true}' + ')'))
             }
+            // let res = [];
+            // let json = {};
+            // for(var x=0;x<goodsSKUsList.length;x++){
+            //   if(!json[goodsSKUsList[x].skuName]){
+            //     res.push(goodsSKUsList[x]);
+            //     json[goodsSKUsList[x]] = 1;
+            //   }
+            // }
+            // for(var a=0;a<res.length;a++){
+            //   console.log('res='+res)
+            //   that.goodsSKUs.push(eval('(' + '{skuName:"'+ res[a].skuName + '",show:true}' + ')'))
+            //   console.log('that.goodsSKUs='+that.goodsSKUs)
+            // }
           }else{
             if(that.goodsSpecifications.length==2){
               var p = [[],[]]
@@ -598,18 +611,26 @@
                   break;
               }
             }
-            for(var i =0;i<arr.length;i++){
-              that.goodsSKUs.push(eval('(' + '{skuName:"'+ arr[i] + '",show:true}' + ')'))
+            for(var i =0;i<res.length;i++){
+              that.goodsSKUs.push(eval('(' + '{skuName:"'+ res[i] + '",show:true}' + ')'))
             }
             function js(arr1,arr2){
               var arr = Array()
               for(var i=0;i<arr1.length;i++){
                   for(var j=0;j<arr2.length;j++){
                       arr.push(arr1[i]+','+arr2[j])
+                      var res = [];
+                      var json = {};
+                      for(var j=0;j<arr.length;j++){
+                        if(!json[arr[j]]){
+                        res.push(arr[j]);
+                        json[arr[j]] = 1;
+                        }
+                      }
                   }
               }
-              return arr
-              console.log(arr)
+              return res
+              console.log(res)
             }
           }
       },
