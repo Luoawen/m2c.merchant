@@ -130,8 +130,8 @@ s<template>
       modify_pass () {
         let that = this
         let verifyCode = that.$('#verifyCode').val()
-        if (verifyCode.length !== 6) {
-          that.show_tip('验证码长度必须6位')
+        if (verifyCode.length !== 4) {
+          that.show_tip('验证码长度必须4位')
           return false
         }
         $('#newPass').bind('input propertychange',function(){ //添加监听input值的改变事件
