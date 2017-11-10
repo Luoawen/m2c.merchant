@@ -108,7 +108,7 @@
           </div>
           <div class="range">
             <p>作用范围：
-              <span v-text="item.rangeType === 0? '全场' : item.rangeType === 1 ? '商家' : item.rangeType === 2 ? '商品' : item.rangeType === 3 ? '品类' : ''"></span>
+              <span v-text="item.rangeType === 0? '全店' : item.rangeType === 1 ? '商家' : item.rangeType === 2 ? '商品' : item.rangeType === 3 ? '品类' : ''"></span>
               <a class="ml10" v-show="item.rangeType === 2" @click="openGoodsChoose">点我选择商品</a>
               <a class="ml10" v-show="item.rangeType === 0" @click="openFullRange">设置需要单独排除，不参与这次满减的商品</a>
             </p>
@@ -150,14 +150,14 @@
             </div>
             <div class="all" v-if="item.rangeType === 0" >
               <div>
-                <p>已排除<span>{{removeGoodsList.length}}</span>商品</p>
+                <p>已排除<span>{{item.removeRangeList.length}}</span>商品</p>
                 <ul>
-                  <li v-for="(goods, index) in removeGoodsList">
-                    <div>{{goods.goodsName}}</div>
+                  <li v-for="(goods, index) in item.removeRangeList">
+                    <div>{{goods.name}}</div>
                     <i class="icon_dele" @click="deleteRemoveGoods(index, goods)"></i>
                   </li>
                 </ul>
-                <div class="more" v-show="removeGoodsList.length > 8">
+                <div class="more" v-show="item.removeRangeList.length > 8">
                   <a @click="goods_remove_all_show = true">查看全部商品></a>
                 </div>
               </div>
@@ -343,7 +343,7 @@
                   <img class="fl" :src="goods.goodsImageUrl"/>
                   <div>
                     <!-- <div>供应商</div> -->
-                    <div class="dealerName"><b>{{goods.dealerName}}</b></div>
+                    <div ><b >{{goods.dealerName}}</b></div>
                     <div>价格<b>{{goods.goodsPrice/100}}元</b></div>
                   </div>
                 </div>
@@ -499,7 +499,7 @@
       </div>
     </div>
     <!--商家筛选已选商家全部弹窗e-->
-    <!--全场排除已排除的商品全部弹窗s-->
+    <!--全店排除已排除的商品全部弹窗s-->
     <div :class='["frame_layer",goods_remove_all_show?"frame_layer_show":""]' style="z-index:9999;" >
       <div class="modal-dialog frame shop_choose_container">
         <div class="shop_choose_center">
@@ -523,7 +523,7 @@
         </div>
       </div>
     </div>
-    <!--全场排除已排除的商品全部弹窗e-->
+    <!--全店排除已排除的商品全部弹窗e-->
     <!-- 遮罩层s -->
     <div   v-show="modalShadow"   class="modal-backdrop fade in" style="z-index:1;"></div> 
     <!-- 遮罩层e -->
@@ -754,7 +754,7 @@
         that.shop_cost_show = false
         console.log('dealerCostList:' + JSON.stringify(that.dealerCostList))
       },
-      // 点击选择全场
+      // 点击选择全店
       openFullRange () {
         var that = this
         that.modalShadow = true
@@ -1648,7 +1648,7 @@ overflow: hidden;
       }
     }
   }
-  /*全场*/
+  /*全店*/
   .frame_layer01 {
     .frame {
       width: 890px;
