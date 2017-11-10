@@ -19,13 +19,13 @@ s<template>
       <div class="form-group">
         <label class="col-sm-2 control-label">*新密码：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="newPass" maxlength="16" placeholder="6-16位数字密码">
+          <input type="password" class="form-control" id="newPass" maxlength="16" placeholder="6-16位数字密码">
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">*再次确认：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="confirmNewPass" maxlength="16" placeholder="6-16位数字密码">
+          <input type="password" class="form-control" id="confirmNewPass" maxlength="16" placeholder="6-16位数字密码">
         </div>
       </div>
       <div class="form-group">
