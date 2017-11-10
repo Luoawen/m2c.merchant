@@ -258,12 +258,16 @@ body{
 	color: #666;
 }
 .good_bs08{
-	width: 100%;
+  width: 7rem;
+  margin:0 auto;
+}
+.good_bs08 p{
+  font-size:0.24rem;
 }
 .good_bs08 img{
-	width: 100%;
+	width: 7rem;
 	vertical-align:top;
-	margin-top: -0.04rem;
+  margin:0.1rem auto;
 }
 .foot{
 	width: 100%;

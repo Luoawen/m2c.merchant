@@ -20,14 +20,19 @@ $(function () {
       $('.tit1').text(data.content.goodsSubTitle)
       // 商品价格
       $('.tit2').text('￥' + (data.content.goodsSKUs[0].photographPrice / 100))
-      htm = []
-      // 满减促销
-      for (var i = 0; i < data.content.fullCuts.length; i++) {
-        for (var j = 0; j < data.content.fullCuts[i].itemNames.length; j++) {
-          htm.push('<div class="tit3"><span>满减</span>' + data.content.fullCuts[i].itemNames[j].itemName + '</div>')
+
+      if (data.content.fullCuts == '') {
+        $('.good_bs02').hide()
+      } else {
+        htm = []
+        // 满减促销
+        for (var i = 0; i < data.content.fullCuts.length; i++) {
+          for (var j = 0; j < data.content.fullCuts[i].itemNames.length; j++) {
+            htm.push('<div class="tit3"><span>满减</span>' + data.content.fullCuts[i].itemNames[j].itemName + '</div>')
+          }
         }
+        $('#cuts').html(htm.join(''))
       }
-      $('#cuts').html(htm.join(''))
       htm = []
       // 商品保障
       for (var i = 0; i < data.content.goodsGuarantee.length; i++) {
@@ -52,6 +57,7 @@ $(function () {
         }
         $('#level').html(htm.join(''))
       }
+      $('.good_bs08').html(data.content.desc)
     }
   })
   $.ajax({
