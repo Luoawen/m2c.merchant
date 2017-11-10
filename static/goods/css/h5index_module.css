@@ -74,7 +74,7 @@ body{
 	height: 0.3rem;
 	border: 1px solid #FFC085;
 	font-size: 0.2rem;
-	color: #FE8D22; 
+	color: #FE8D22;
 	text-align: center;
 	line-height: 0.3rem;
 	margin-right: 0.2rem;
@@ -99,7 +99,7 @@ body{
 	padding-top: 0.28rem;
 	border-top: 1px solid rgb(240, 240, 240);
 	clear: both;
-	overflow: hidden;
+	/*overflow: hidden;*/
 }
 .labelPromotion{
 	width: 0.3rem;
@@ -216,9 +216,14 @@ body{
 .good_bs06{
 	/*width: 7.5rem;*/
 	padding-left: 0.3rem;
-	overflow-x: scroll;
+	overflow-y: hidden;
 	padding-top: 0.28rem;
 	height: 3.5rem;
+}
+.good_bs06 .ul{
+  width: 1000%;
+  overflow-x: scroll;
+  height: 4rem;
 }
 .good_bs06 .imgtit{
 	width: 2rem;
