@@ -52,7 +52,7 @@
         </div>
       </div>
       <!--详情-->
-      <em class="bread" v-if="goodInfoShow">> 商品详情</em>
+      <em class="bread" v-if="goodInfoShow">> 品牌详情</em>
       <div class="goodInfo" v-if="goodInfoShow">
         <p><span>品牌名称：</span>{{goodInfo.brandName==''?'--':goodInfo.brandName}}</p>
         <p><span>英文名称：</span>{{goodInfo.brandNameEn==''?'--':goodInfo.brandNameEn}}</p>
@@ -107,8 +107,8 @@
         </div>
       </div>
       <!--修改/新增-->
-      <em class="bread" v-if="changeGoodShow && handle_toggle=='add'">> 新增商品</em>
-      <em class="bread" v-if="changeGoodShow && handle_toggle!='add'">> 修改商品</em>
+      <em class="bread" v-if="changeGoodShow && handle_toggle=='add'">> 新增品牌</em>
+      <em class="bread" v-if="changeGoodShow && handle_toggle!='add'">> 修改品牌</em>
       <div class="goodInfo changeGoodInfo" v-if="changeGoodShow">
         <p>品牌名称：<input type="text" v-model="add_modify_params.brandName" /></p>
         <p>英文名称：<input type="text" v-model="add_modify_params.brandNameEn" /></p>
