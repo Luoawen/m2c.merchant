@@ -11,7 +11,7 @@
       	<i class="ico_print"></i>
       	<span class="dy">打印</span>
       </a>
-      <button type="button" class="fah" v-show="!bModify" @click="Deliver=true">发货</button>
+      <button type="button" class="fah" v-show="!bModify && orderStatus == 1" @click="Deliver=true">发货</button>
         <button type="button" class="fah" v-show="bModify" @click="saveDealerOrder()">保存</button>
       </span>
 
@@ -191,7 +191,7 @@
       <table class="mt20 detail_table">
         <thead>
         	<tr class="fh">
-      		<td colspan="2">{{}}</td>
+      		<td colspan="2">{{orderStatus === 1 ? '待发货数：' + expressNum : orderStatus === 2 ? '待发货数：' + expressNum:'--'}}</td>
       		<td>
       			<button class="fah fr mr10" @click="deliver" v-show="orderStatus==0">发货</button>
       		</td>
@@ -372,6 +372,7 @@
         ,city_all_search: []
         // 所有的区(供搜索使用)
         ,area_all_search: []
+        ,expressNum:0
       }
     },
     watch: {
@@ -532,10 +533,13 @@
         let that = this;
         that.goodses = goodses;
         that.totalData = totalData;
+        that.expressNum = 0;
         that.goodses.forEach(function(val, index) {
           val.freight = val.freight/100;
           if(typeof(val.mediaResId)=='undefined' || val.mediaResId==null ||  val.mediaResId=='')
             val.mediaResId = '-';
+
+          that.expressNum +=val.sellNum;
         });
       },
       get_log_info () {
@@ -598,7 +602,8 @@
       },
       modifyFreight (isModify) {
         let that = this;
-        that.bModify = isModify;
+        if(that.orderStatus <= 1)
+          that.bModify = isModify;
       },
       deliverDealerOrder(){
         // 发货请求
