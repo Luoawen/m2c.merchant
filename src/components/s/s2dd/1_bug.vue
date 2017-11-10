@@ -149,9 +149,9 @@
         <tr>
           <td class="a1">
                 <span class=" mt10">
-                  <!-- type="checkbox" :id="'classify_'+index" @click="setClassify(classify.classifyId)" v-model="rangeClassifyList" :value="classify.classifyId" -->
-                  <input class="input_check" type="checkbox" id="classify" />
-                  <label for="classify" class="fl mt10"></label>
+                  <!--<input class="input_check" type="checkbox" id="classify" />
+                  <label for="classify" class="fl mt10"></label>-->
+                  <el-checkbox @change="checkAll" id="ck_all"></el-checkbox>
                 </span>
             <span class="ml10">商品信息</span></td>
           <td class="a2">单价/元</td>
@@ -169,13 +169,12 @@
           <td colspan="8" class="bt clear">
             <div class="fl">
                       <span  class="mt10">
-                        <input  type="checkbox" :id="'aa'+index" class="input_check" :value="item.dealerOrderId">
+                        <!--<input  type="checkbox" :id="'aa'+index" class="input_check" :value="item.dealerOrderId">
                         <label  :for="'aa'+index" class="fl mt10">
-
-
-                        </label>
+                        </label>-->
+                        <el-checkbox @change="checkClick(index)" :label="'订货号：' + item.dealerOrderId" :name="'ck'+index"></el-checkbox>
                       </span>
-              <span class="ml10">订货号：</span><span>{{item.dealerOrderId}}</span>
+              <!--<span class="ml10">订货号：</span><span>{{item.dealerOrderId}}</span>-->
             </div>
             <div class="fr detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</div>
           </td>
@@ -224,7 +223,7 @@
                 <div>{{item.revPhone}}</div>
               </div>
               <div class="a8" style="width:10%">
-                <span>{{item.orderStatus==0?'待付款': item.orderStatus==1? '等发货' : item.orderStatus==2?'待收货' : item.orderStatus==3 ? '完成' : item.orderStatus==4 ? '交易完成' : item.orderStatus==5?'交易关闭': '--'}}</span>
+                <span>{{item.orderStatus==0?'待付款': item.orderStatus==1? '待发货' : item.orderStatus==2?'待收货' : item.orderStatus==3 ? '完成' : item.orderStatus==4 ? '交易完成' : item.orderStatus==5?'交易关闭': '--'}}</span>
               </div>
             </div>
           </td>
@@ -297,6 +296,7 @@
     name: '',
     data () {
       return {
+        isIndeterminate: true,
         amout: '',
         number: '',
         is_Success: false,
@@ -305,6 +305,7 @@
         Refuseshow: false,
         TowAgreeshow: false,
         resultdata: [],
+        selDealerOrder:[],
         pageSize: 5,
         pageIndex: 1,
         totalCount: 0,
@@ -368,7 +369,7 @@
       that.pageIndex = 1;
       this.getDealerOrders()
       that.Advancedshow = false
-      
+
     },
     Advancedsearch () {
       var that = this;
@@ -425,6 +426,30 @@
             that.Agreeshow = false;
           }
         });
+      }
+      ,checkClick(index) {
+        let that = this;
+        var dId = that.resultdata[index].dealerOrderId;
+        if(that.$("input[name='ck" + index + "']").prop("checked")) {
+          that.selDealerOrder.push(dId);
+        }
+        else {
+          var ct = -1;
+          for(var i=0; i<that.selDealerOrder.length; i++){
+            if (dId == that.selDealerOrder[i])
+              ct = i;
+          }
+          if (ct != -1)
+          that.selDealerOrder.splice(ct);
+        }
+        //console.log(that.selDealerOrder);
+      }
+      ,checkAll(val) {
+        let that = this;
+        var len = that.resultdata.length;
+        for (var i = 0; i < len; i++) {
+            that.$("input[name='ck" + i + "']").click();
+        }
       }
   },
   mounted () {

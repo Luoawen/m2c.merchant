@@ -97,7 +97,7 @@
 									<td>{{good.photographPrice/100}}</td>
 									<td>{{good.marketPrice/100}}</td>
 									<td v-if="countMode==1">{{good.supplyPrice/100}}</td>
-            			<td v-if="countMode==2">{{good.serviceRate}}</td>
+            			<td v-if="countMode==2">{{data.serviceRate}}</td>
 									<td>{{good.goodsCode}}</td>
 								</tr>
 							</tbody>
@@ -148,7 +148,7 @@
 									<td>{{good.photographPrice/100}}</td>
 									<td>{{good.marketPrice/100}}</td>
 									<td v-if="countMode==1">{{good.supplyPrice/100}}</td>
-            			<td v-if="countMode==2">{{good.serviceRate}}</td>
+            			<td v-if="countMode==2">{{data.serviceRate}}</td>
 									<td>{{good.goodsCode}}</td>
 								</tr>
 							</tbody>
@@ -261,12 +261,12 @@
       },
 			Togactive01 () {
 				var that = this
-				that.showactive01 = true 
+				that.showactive01 = true
 				that.showactive02 = false
 			},
 			Togactive02 () {
 				var that = this
-				that.showactive02 = true 
+				that.showactive02 = true
 				that.showactive01 = false
 			},
 			Showtab () {
@@ -282,17 +282,6 @@
     },
     mounted () {
 			let that = this
-			// 获取商家结算模式
-      that.$.ajax({
-        type: 'get',
-        url: that.localbase + 'm2c.scm/dealer/sys/' + JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-        data:{
-          token: sessionStorage.getItem('mToken')
-        },
-        success: function (result) {
-          that.countMode = result.content.countMode
-        }
-      })
 			that.$.ajax({
 				type: 'get',
 				url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId:that.localbase + 'm2c.scm/goods/approve/' + that.$route.query.goodsId,
@@ -309,7 +298,7 @@
 					that.info=result.content.goodsDesc
 					that.goodsKeyWord = result.content.goodsKeyWord.join("/")
 					that.goodsGuarantee = result.content.goodsGuarantee.join("/")
-					console.log(that.goodsGuarantee)
+          that.countMode = result.content.settlementMode
 				}
 			})
     }
@@ -333,7 +322,7 @@
 			border: 1px solid #CCCCCC;
 			border-radius: 2px;
 			font-size: 14px;
-			color: #333333;	
+			color: #333333;
 			width: 80px;
 			height: 30px;
 			line-height: 30px;
@@ -429,7 +418,7 @@
   			td{
   				text-align: left;
   				padding-left: 30px;
-  				
+
   			}
   		}
   		.div_detail{
@@ -505,7 +494,7 @@
 						}
   				}
   				}
-  				
+
   			}
   		}
   		.tab_detail04{
