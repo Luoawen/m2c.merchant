@@ -187,7 +187,7 @@
                 <div class="a1_img mr10 fl"><img :src="JSON.parse(goodsItem.goodsImage == ''? '[]': goodsItem.goodsImage)[0]"/></div>
                 <div class="fl">
                   <div class="wose wid">{{goodsItem.goodsName}}</div>
-                  <div class="blue">规格：{{goodsItem.skuName}}</div>
+                  <div class="blue" v-if="goodsItem.skuName != ''">规格：{{goodsItem.skuName}}</div>
                 </div>
               </div>
               <div class="a2 fl mt20" id="a2" style="width: 14%;">
