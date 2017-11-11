@@ -11,7 +11,7 @@
       	<i class="ico_print"></i>
       	<span class="dy">打印</span>
       </a>
-      <button type="button" class="fah" v-show="!bModify" @click="Deliver=true">发货</button>
+      <button type="button" class="fah" v-show="!bModify && orderStatus == 1" @click="Deliver=true">发货</button>
         <button type="button" class="fah" v-show="bModify" @click="saveDealerOrder()">保存</button>
       </span>
 
@@ -41,7 +41,7 @@
           <div class="clear">
           	<div class="col-sm-4 pad0">
             <span class="tit01">支付方式</span>
-            <span class="ml20">{{payWay === 1 ? '': payWay === 2 ? '': '-'}}</span>
+            <span class="ml20">{{payWay === 1 ? '支付宝': payWay === 2 ? '微信': '-'}}</span>
            	</div>
            	<div class="col-sm-4 pad0">
             <span class="tit01">支付时间</span>
@@ -137,10 +137,10 @@
             <td class="a5">{{goods.price/100}}</td>
             <td class="a5">{{goods.totalPrice/100}}</td>
             <td class="a6">
-            	<span :id="'spanFreight' + index" v-show="!bModify">{{goods.freight}}</span>
-            	<i class="ico_compile" @click="modifyFreight(true)" v-show="!bModify"></i>
+            	<span :id="'spanFreight' + index" v-show="!fModify">{{goods.freight}}</span>
+            	<i class="ico_compile" @click="modifyFreight1(true)" v-show="!fModify"></i>
             	<!--点击ico_compile后会出现input-->
-            	<input class="form-control a6_input" :id="'freight'+ index" v-show="bModify" v-model="goods.freight" type="number"/>
+            	<input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.freight" type="number"/>
             </td>
         	</tr>
         </tbody>
@@ -150,15 +150,15 @@
         		<td>
         			<div>商品总额</div>
 							<div>运费</div>
-							<div>平台优惠券</div>
-							<div>商家优惠券</div>
+							<div>优惠金额</div>
+							<!--<div>商家优惠券</div>-->
 							<div>订单总额</div>
         		</td>
         		<td class="pr40">
         			<div>{{totalData.totalOrderPrice/100}}</div>
 							<div>{{totalData.totalFreight/100}}</div>
 							<div>{{totalData.plateformDiscount/100}}</div>
-							<div>{{totalData.dealerDiscount/100}}</div>
+							<!--<div>{{totalData.dealerDiscount/100}}</div>-->
 							<div class="redcolor" style="font-size: 18px;">{{totalData.orderPrice/100}}</div>
         		</td>
         	</tr>
@@ -191,7 +191,7 @@
       <table class="mt20 detail_table">
         <thead>
         	<tr class="fh">
-      		<td colspan="2">{{}}</td>
+      		<td colspan="2">{{orderStatus === 1 ? '待发货数：' + expressNum : orderStatus === 2 ? '待发货数：' + expressNum:'--'}}</td>
       		<td>
       			<button class="fah fr mr10" @click="deliver" v-show="orderStatus==0">发货</button>
       		</td>
@@ -349,6 +349,7 @@
         goodses: [],
         totalData: {},
         bModify: false,
+        fModify: false,
         province: '',
         provinceCode: '',
         city: '',
@@ -372,6 +373,7 @@
         ,city_all_search: []
         // 所有的区(供搜索使用)
         ,area_all_search: []
+        ,expressNum:0
       }
     },
     watch: {
@@ -478,7 +480,7 @@
             dealerOrderId: that.dealerOrderId
           },
           success: function (result) {
-            console.log(result)
+
             if (result.status === 200) {
               that.setReturnData(result.content);
             }
@@ -491,6 +493,7 @@
 
       setReturnData: function (data) {
         let that = this;
+
           that.goodsMoney = data.orderPrice;
           that.orderFreight = data.orderFreight;
         that.orderStatus = data.orderStatus;
@@ -500,7 +503,8 @@
           that.createdDate = that.date_format(d, 'yyyy-MM-dd hh:mm:ss');
           that.payWay = data.payWay;
           that.payNo = data.payNo;
-        that.provinceCode = data.provinceCode;
+        that.provinceCode = data.privinceCode;
+        console.warn("data.privinceCode="+that.provinceCode)
         that.cityCode = data.cityCode;
         that.areaCode = data.areaCode;
           if (data.payDate != null) {
@@ -508,11 +512,9 @@
             that.payTime  = that.date_format(d, 'yyyy-MM-dd hh:mm:ss');
           }
           that.city = data.city;
-          that.cityCode = data.cityCode;
           that.province = data.province;
-          that.provinceCode = data.provinceCode;
+          console.log(data.provinceCode)
         that.area = data.areaCounty;
-        that.areaCode = data.areaCode;
         that.phone = data.revPhone;
         that.revPerson = data.revPerson;
         that.streetAddr = data.streetAddr;
@@ -532,10 +534,13 @@
         let that = this;
         that.goodses = goodses;
         that.totalData = totalData;
+        that.expressNum = 0;
         that.goodses.forEach(function(val, index) {
           val.freight = val.freight/100;
           if(typeof(val.mediaResId)=='undefined' || val.mediaResId==null ||  val.mediaResId=='')
             val.mediaResId = '-';
+
+          that.expressNum +=val.sellNum;
         });
       },
       get_log_info () {
@@ -598,7 +603,13 @@
       },
       modifyFreight (isModify) {
         let that = this;
-        that.bModify = isModify;
+        if(that.orderStatus <= 1)
+          that.bModify = isModify;
+      },
+      modifyFreight1 (isModify) {
+        let that = this;
+        if(that.orderStatus <= 1)
+          that.fModify = isModify;
       },
       deliverDealerOrder(){
         // 发货请求
@@ -691,7 +702,7 @@
         freightStr = '{' + freightStr + '}';
         // 发请求
         that.$.ajax({
-          url: that.base + 'm2c.scm/dealerorder/dealer/addrfreight',
+          url: that.base + 'm2c.scm/dealerorder/addrfreight',
           //url: 'http://localhost:8080/m2c.scm/dealerorder/addrfreight',
           type: 'put',
           cache: false,
@@ -749,7 +760,7 @@
           token: sessionStorage.getItem('mToken')
         },
         success: function (result) {
-          // // console.log('获得的省份信息列表: ', result)
+          console.log('获得的省份信息列表: ', result.content)
           that.province_all_search = result.content;
         }
       })

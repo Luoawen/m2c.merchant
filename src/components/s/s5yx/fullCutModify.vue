@@ -157,7 +157,7 @@
                     <i class="icon_dele" @click="deleteRemoveGoods(index, goods)"></i>
                   </li>
                 </ul>
-                <div class="more" v-show="removeGoodsList.length > 8">
+                <div class="more" v-show="item.removeRangeList.length > 8">
                   <a @click="goods_remove_all_show = true">查看全部商品></a>
                 </div>
               </div>
@@ -343,7 +343,7 @@
                   <img class="fl" :src="goods.goodsImageUrl"/>
                   <div>
                     <!-- <div>供应商</div> -->
-                    <div class="dealerName"><b>{{goods.dealerName}}</b></div>
+                    <div ><b >{{goods.dealerName}}</b></div>
                     <div>价格<b>{{goods.goodsPrice/100}}元</b></div>
                   </div>
                 </div>

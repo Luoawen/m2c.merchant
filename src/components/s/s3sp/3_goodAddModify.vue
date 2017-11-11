@@ -118,18 +118,18 @@
               <tr v-for="(good,index) in goodsSKUs">
                 <td>无</td>
                 <td>
-                    <el-input v-model="good.availableNum" placeholder="请输入内容" type="number"></el-input>
+                    <el-input v-model="good.availableNum" placeholder="请输入内容" type="number" @blur="checkInteger(good.availableNum,index,'availableNum',goodsSKUs)"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="good.weight" placeholder="请输入内容" type="number"></el-input>
+                    <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkNumber(good.weight,index,'weight',goodsSKUs)"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number"></el-input>
+                    <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.photographPrice,index,'photographPrice',goodsSKUs)"></el-input>
                 </td>
                 <td>
-                  <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number"></el-input>
+                  <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
                 </td>
-                <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number"></el-input></td>
+                <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.supplyPrice,index,'supplyPrice',goodsSKUs)"></el-input></td>
                 <td v-if="countMode==2">{{serviceRate}}</td>
                 <td>
                   <el-input v-model="good.goodsCode" placeholder="请输入内容"></el-input>
@@ -138,7 +138,8 @@
             </tbody>
         </table>
         <i v-if="sukShow" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为空</i>
-        <i v-if="sukShow1" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为负数</i>
+        <i v-if="sukShow1" style="color:red; font-style:normal;">商品重量/拍获价不能为负数</i>
+        <i v-if="sukShow2" style="color:red; font-style:normal;">商品库存请输入正整数</i>
       </div>
 
       <div class="tabPane" v-if="data.skuFlag==1">
@@ -154,7 +155,7 @@
             <tr v-for="(item,index) in goodsSpecifications">
               <td><span @click="delect(index)" v-if="goodsSpecifications.length>1 && handle_toggle=='add'">移除</span></td>
               <td>
-                <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item)">
+                <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item,index)" :disabled="disabled">
                   <el-option
                     v-for="item in stantards"
                     :key="item.stantardId"
@@ -212,18 +213,18 @@
                 </el-switch>
               </td>
               <td>
-                <el-input v-model="good.availableNum" placeholder="请输入内容"></el-input>
+                  <el-input v-model="good.availableNum" placeholder="请输入内容" type="number" @blur="checkInteger(good.availableNum,index,'availableNum',goodsSKUs)"></el-input>
               </td>
               <td>
-                <el-input v-model="good.weight" placeholder="请输入内容"></el-input>
+                  <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkNumber(good.weight,index,'weight',goodsSKUs)"></el-input>
               </td>
               <td>
-                <el-input v-model="good.photographPrice" placeholder="请输入内容"></el-input>
+                  <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.photographPrice,index,'photographPrice',goodsSKUs)"></el-input>
               </td>
               <td>
-                <el-input v-model="good.marketPrice" placeholder="请输入内容"></el-input>
+                <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
               </td>
-              <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容"></el-input></td>
+              <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.supplyPrice,index,'supplyPrice',goodsSKUs)"></el-input></td>
               <td v-if="countMode==2">{{serviceRate}}</td>
               <td>
                 <el-input v-model="good.goodsCode" placeholder="请输入内容"></el-input>
@@ -254,7 +255,8 @@
           </tbody>
         </table>
         <i v-if="sukShow" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为空</i>
-        <i v-if="sukShow1" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为负数</i>
+        <i v-if="sukShow1" style="color:red; font-style:normal;">商品重量/拍获价不能为负数</i>
+        <i v-if="sukShow2" style="color:red; font-style:normal;">商品库存请输入正整数</i>
       </div>
       <el-row>
         <el-col :span="24"><h4>商品详情</h4></el-col>
@@ -358,7 +360,8 @@
         },
         standardIdShow:false,// 规格不能为空
         sukShow:false, // 商品库不能为空
-        sukShow1:false, // 商品库不能为负数
+        sukShow1:false, // 商品库不能为负数 可为小数
+        sukShow2:false, // 商品库不能为负数
         imgShowList:false, // 商品主图不能为空
         countMode:'', // 商家结算方式 1：按供货价 2：按服务费率
         radio: '1',
@@ -368,8 +371,8 @@
         goodsGuaranteeList:[], // 获取保障详情
         goodsGuarantCheck:[],
         serviceRate:'',
-        goodsSKUs:[{show:true,skuName: '', showStatus: true, marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}],
-        goodsSpecifications:[{itemValue:[],state1:''}],
+        goodsSKUs:[{show:true,skuName: '', showStatus: true, marketPrice:'', goodsCode: '', supplyPrice: ''}],
+        goodsSpecifications:[{itemName:'',itemValue:[],state1:''}],
         goodsMainImages:[],
         goodsGuarantee:[],
         data: {skuFlag: '0' ,goodsMinQuantity:'',goodsBarCode:'',goodsKeyWord:'',goodsShelves:'1',goodsClassifyId:''},
@@ -411,12 +414,12 @@
         dLabel3: false,
         goodsBrandName: '',
         setUp:{},
-        2: true,
-        1: false
+        disabled:false //禁用规格选择
       }
     },
     created() {},
     watch: {
+      // 监听商品分类以获取费率
       // 监听goodsMainImages的长度
       'goodsMainImages.length':{
         handler: function (val, oldVal) {
@@ -452,17 +455,47 @@
       }
     },
     methods: {
-      stantardIdChange(item){
+      //验证是否为数字
+      checkNumber (val, index, arr, list) {
+        setTimeout(() => {
+          if (val && $.isNumeric(val) && val >= 0) {
+            val = Number(val).toFixed(2)
+            this.sukShow1 = false
+          } else {
+            val = ''
+            this.sukShow1 = true
+          }
+          list[index][arr] = val
+        }, 0)
+      },
+      //验证是否为正整数
+      checkInteger (val, index, arr, list) {
+        setTimeout(() => {
+          var re = /^[0-9]\d*$/
+          if (!re.test(val)) {
+            list[index][arr] = ''
+            this.sukShow2 = true
+          }else{
+            this.sukShow2 = false
+          }
+        }, 0)
+      },
+      stantardIdChange(item,index){
         let that=this
         that.standardId=item.standardId
-        console.warn("stantardId="+that.standardId)
+        for(var i=0;i<that.stantards.length;i++){
+          if(that.standardId==that.stantards[i].stantardId){
+            that.goodsSpecifications[index].itemName=that.stantards[i].stantardName
+          }
+        }
+        that.restaurants = []
         that.getValue()
         that.standardIdShow = false
       },
       // 清空单规格内值
       clearSKU(){
         let that = this
-        that.goodsSKUs=[{show:true,skuName: '', showStatus: true, marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}]
+        that.goodsSKUs=[{show:true,skuName: '', showStatus: true, marketPrice:'', goodsCode: '', supplyPrice: ''}]
       },
       clearGoodsSKUs(){
         let that = this
@@ -494,24 +527,16 @@
               return
             }
             for(var k=0;k<that.goodsSKUs.length;k++){
-              if(that.goodsSKUs[k].availableNum==''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].weight==''||that.goodsSKUs[k].weight==undefined||that.goodsSKUs[k].photographPrice==''||that.goodsSKUs[k].photographPrice==undefined){
+              if(that.goodsSKUs[k].availableNum===''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].weight===''||that.goodsSKUs[k].weight==undefined||that.goodsSKUs[k].photographPrice===''||that.goodsSKUs[k].photographPrice==undefined){
                 that.sukShow = true
                 return
               }else{
                 that.sukShow = false
-                if (validatorUtils.isNumericD(that.goodsSKUs[k].availableNum.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].weight.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].photographPrice.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].supplyPrice.toString())&&validatorUtils.isNumericD(that.goodsSKUs[k].marketPrice.toString())) {
-                  that.sukShow1 = false
-                  that.goodsSKUs[k].marketPrice=parseFloat(that.goodsSKUs[k].marketPrice*100).toFixed(2)
-                  that.goodsSKUs[k].photographPrice=parseFloat(that.goodsSKUs[k].photographPrice*100).toFixed(2)
-                  that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
-                  if(that.countMode!=1){
-                    that.goodsSKUs[k].serviceRate=that.serviceRate
-                  }else{
-                    that.goodsSKUs[k].supplyPrice=parseFloat(that.goodsSKUs[k].supplyPrice*100).toFixed(2)
-                  }
-                } else {
-                  that.sukShow1 = true
-                  return
+                that.goodsSKUs[k].marketPrice=parseFloat(that.goodsSKUs[k].marketPrice*100)
+                that.goodsSKUs[k].photographPrice=parseFloat(that.goodsSKUs[k].photographPrice*100)
+                that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
+                if(that.countMode==1){
+                  that.goodsSKUs[k].supplyPrice=parseFloat(that.goodsSKUs[k].supplyPrice*100)
                 }
               }
             }
@@ -679,6 +704,7 @@
             that.goodsSpecifications[index].itemValue.push(state2)
             console.log(that.goodsSpecifications[index])
             that.mapValue()
+            that.goodsSpecifications[index].state1=''
           }else{
             that.show_tip("该规格值已添加")
           }
@@ -805,7 +831,7 @@
       query(item){
         console.log(item)
         this.standardId = item
-        this.getValue()
+        //this.getValue()
       },
       querySearch(queryString, cb) {
         let that = this
@@ -824,7 +850,7 @@
         }
       },
       handleSelect(item) {
-        console.log(item);
+        console.log("item="+item);
       },
       // 获取规格值
       getValue () {
@@ -838,7 +864,11 @@
             standardId: that.standardId
           },
           success: function (result) {
-            that.restaurants = result.content
+            if(result.content==''){
+              that.restaurants = []
+            } else{
+              that.restaurants = result.content
+            }
           }
         })
       }
@@ -936,7 +966,9 @@
             token: sessionStorage.getItem('mToken')
           },
           success: function (result) {
+            that.disabled = true
             that.data = result.content
+            that.serviceRate = result.content.serviceRate
             for(var i=0,len=that.goodsGuaranteeList.length;i<len;i++){
               for(var j=0,len=result.content.goodsGuarantee.length;j<len;j++){
                 if(result.content.goodsGuarantee[j]===that.goodsGuaranteeList[i].guaranteeDesc){

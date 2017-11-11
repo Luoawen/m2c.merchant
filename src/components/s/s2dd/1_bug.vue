@@ -32,21 +32,29 @@
           </select>
         </div>
       </div>
-      <div class="search_cell">
+      <!--<div class="search_cell">
 
         <span>下单时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span>
         <div class="time" v-show="is_Success">
           <input type="date" class="form-control search_input search_input_date_l start" v-model="searchParams.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="searchParams.endTime">
         </div>
 
+      </div>-->
+      <div class="search_cell">
+        <span class="zIndex2" @click="is_Success=!is_Success">下单时间<i class="icon timeIcon"></i></span>
+        <div class="time" v-if="is_Success">
+          <el-date-picker v-model="searchParams.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+          </el-date-picker>
+          <el-date-picker v-model="searchParams.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" @change="search()">
+          </el-date-picker>
+        </div>
       </div>
       <div class="search">
         <input type="text" class="inp" v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码">
-        <i class="glyphicon glyphicon-search" id="searchIco" @click="search()"></i>
+        <i class="icon searchIcon" id="searchIco" @click="search()"></i>
       </div>
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
-      <button type="button"class="btn"  @click="search()">查询</button>
-      <button type="button" class="btn btn-default pull-right operation">批量导出</button>
+      <el-button type="primary" icon="el-icon-download" @click.native="exportSearch()" class="pull-right operation">导出</el-button>
       <!-- 高级搜索 -->
       <div class="poi2 Advanced_s" v-show="Advancedshow===true">
         <div class="">
@@ -148,11 +156,11 @@
         <thead>
         <tr>
           <td class="a1">
-                <span class=" mt10">
-                  <!-- type="checkbox" :id="'classify_'+index" @click="setClassify(classify.classifyId)" v-model="rangeClassifyList" :value="classify.classifyId" -->
-                  <input class="input_check" type="checkbox" id="classify" />
-                  <label for="classify" class="fl mt10"></label>
-                </span>
+              <!--  <span class=" mt10">
+                  &lt;!&ndash;<input class="input_check" type="checkbox" id="classify" />
+                  <label for="classify" class="fl mt10"></label>&ndash;&gt;
+                  <el-checkbox @change="checkAll" id="ck_all"></el-checkbox>
+                </span>-->
             <span class="ml10">商品信息</span></td>
           <td class="a2">单价/元</td>
           <td class="a3">数量</td>
@@ -167,16 +175,15 @@
         <tbody v-for="(item,index) in resultdata">
         <tr>
           <td colspan="8" class="bt clear">
-            <div class="fl">
+      <!--      <div class="fl">
                       <span  class="mt10">
-                        <input  type="checkbox" :id="'aa'+index" class="input_check" :value="item.dealerOrderId">
+                        &lt;!&ndash;<input  type="checkbox" :id="'aa'+index" class="input_check" :value="item.dealerOrderId">
                         <label  :for="'aa'+index" class="fl mt10">
-
-
-                        </label>
+                        </label>&ndash;&gt;
+                        <el-checkbox @change="checkClick(index)" :label="'订货号：' + item.dealerOrderId" :name="'ck'+index"></el-checkbox>
                       </span>
-              <span class="ml10">订货号：</span><span>{{item.dealerOrderId}}</span>
-            </div>
+              &lt;!&ndash;<span class="ml10">订货号：</span><span>{{item.dealerOrderId}}</span>&ndash;&gt;
+            </div>-->
             <div class="fr detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</div>
           </td>
         </tr>
@@ -188,7 +195,7 @@
                 <div class="a1_img mr10 fl"><img :src="JSON.parse(goodsItem.goodsImage == ''? '[]': goodsItem.goodsImage)[0]"/></div>
                 <div class="fl">
                   <div class="wose wid">{{goodsItem.goodsName}}</div>
-                  <div class="blue">规格：{{goodsItem.skuName}}</div>
+                  <div class="blue" v-if="goodsItem.skuName != ''">规格：{{goodsItem.skuName}}</div>
                 </div>
               </div>
               <div class="a2 fl mt20" id="a2" style="width: 14%;">
@@ -224,7 +231,7 @@
                 <div>{{item.revPhone}}</div>
               </div>
               <div class="a8" style="width:10%">
-                <span>{{item.orderStatus==0?'待付款': item.orderStatus==1? '等发货' : item.orderStatus==2?'待收货' : item.orderStatus==3 ? '完成' : item.orderStatus==4 ? '交易完成' : item.orderStatus==5?'交易关闭': '--'}}</span>
+                <span>{{item.orderStatus==0?'待付款': item.orderStatus==1? '待发货' : item.orderStatus==2?'待收货' : item.orderStatus==3 ? '完成' : item.orderStatus==4 ? '交易完成' : item.orderStatus==5?'交易关闭': '--'}}</span>
               </div>
             </div>
           </td>
@@ -297,6 +304,7 @@
     name: '',
     data () {
       return {
+        isIndeterminate: true,
         amout: '',
         number: '',
         is_Success: false,
@@ -305,6 +313,7 @@
         Refuseshow: false,
         TowAgreeshow: false,
         resultdata: [],
+        selDealerOrder:[],
         pageSize: 5,
         pageIndex: 1,
         totalCount: 0,
@@ -351,6 +360,23 @@
         }
       })
     },
+    exportSearch (){
+      let that = this
+      if (that.searchParams.startTime > that.searchParams.endTime) {
+        that.show_tip('开始时间不能大于结束时间')
+        return
+      }
+      let url=that.localbase + 'm2c.scm/order/export/dealerorderlist?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+
+        '&orderStatus='+that.searchParams.orderStatus+
+        '&afterSellStatus='+that.searchParams.afterSellStatus+
+        '&condition='+that.searchParams.condition+
+        '&startTime='+that.searchParams.startTime+
+        '&endTime='+that.searchParams.endTime+
+        '&payWay='+that.searchParams.payWay+
+        '&invoice='+that.searchParams.invoice+
+        '&commentStatus='+that.searchParams.commentStatus;
+      window.location.href=url
+    },
     refuseShow () {
       var that = this
       that.Refuseshow = true
@@ -368,7 +394,7 @@
       that.pageIndex = 1;
       this.getDealerOrders()
       that.Advancedshow = false
-      
+
     },
     Advancedsearch () {
       var that = this;
@@ -425,6 +451,32 @@
             that.Agreeshow = false;
           }
         });
+      }
+      ,checkClick(index) {
+        let that = this;
+        var dId = that.resultdata[index].dealerOrderId;
+        if(that.$("input[name='ck" + index + "']").prop("checked")) {
+          that.selDealerOrder.push(dId);
+        }
+        else {
+          var ct = -1;
+          for(var i=0; i<that.selDealerOrder.length; i++){
+            if (dId == that.selDealerOrder[i])
+              ct = i;
+          }
+          if (ct != -1)
+          that.selDealerOrder.splice(ct);
+        }
+        //console.log(that.selDealerOrder);
+      }
+      ,checkAll(val) {
+        let that = this;
+        var len = that.resultdata.length;
+        for (var i = 0; i < len; i++) {
+          //console.log(typeof(that.$("input[name='ck" + i + "']").prop("checked")));
+          if(that.$("input[name='ck" + i + "']").prop("checked") != val)
+            that.$("input[name='ck" + i + "']").click();
+        }
       }
   },
   mounted () {
@@ -544,11 +596,11 @@
         }
       }
       .time{
-        width: 330px;
+        width: 600px;
         height: 61px;
         position: absolute;
-        left: -123px;
-        top: 19px;
+        left: 0px;
+        top: 55px;
         z-index: 10;
         .form-control{
           width: 139px;
@@ -931,5 +983,8 @@
     height: 15px;
     background:url(../../../assets/images/ico_select.png) no-repeat center;
   }
-
+  .zIndex2{z-index:21;}
+  .icon{width:40px;height:40px;z-index:11;display:inline-block;}
+  .timeIcon{background:url(../../../assets/images/ico_calendar@2x.png) no-repeat center bottom;background-size:19px 20px;}
+  .searchIcon{background:url(../../../assets/images/ico_search.png) no-repeat center center;background-size:20px 20px;}
 </style>

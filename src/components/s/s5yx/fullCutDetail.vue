@@ -110,7 +110,7 @@
                           </div>
                         </div>
                         <div class="goods" v-if="item.rangeType===0" >
-                          <p>排除<span>{{item.removeRangeList.length}}</span>商品</p>
+                          <p>已排除<span>{{item.removeRangeList.length}}</span>商品</p>
                           <ul>
                             <li v-for="range in item.removeRangeList">
                               <div>{{range.name}}</div>
