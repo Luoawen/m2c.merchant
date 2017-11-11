@@ -32,21 +32,29 @@
           </select>
         </div>
       </div>
-      <div class="search_cell">
+      <!--<div class="search_cell">
 
         <span>下单时间<i class="glyphicon glyphicon-calendar" @click="timeBox()"></i></span>
         <div class="time" v-show="is_Success">
           <input type="date" class="form-control search_input search_input_date_l start" v-model="searchParams.startTime"><span class="separator">-</span><input type="date" class="form-control search_input search_input_date_r end" v-model="searchParams.endTime">
         </div>
 
+      </div>-->
+      <div class="search_cell">
+        <span class="zIndex2" @click="is_Success=!is_Success">下单时间<i class="icon timeIcon"></i></span>
+        <div class="time" v-if="is_Success">
+          <el-date-picker v-model="searchParams.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+          </el-date-picker>
+          <el-date-picker v-model="searchParams.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" @change="search()">
+          </el-date-picker>
+        </div>
       </div>
       <div class="search">
         <input type="text" class="inp" v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码">
-        <i class="glyphicon glyphicon-search" id="searchIco" @click="search()"></i>
+        <i class="icon searchIcon" id="searchIco" @click="search()"></i>
       </div>
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
-      <button type="button"class="btn"  @click="search()">查询</button>
-      <button type="button" class="btn btn-default pull-right operation">导出</button>
+      <el-button type="primary" icon="el-icon-download" @click.native="exportSearch()" class="pull-right operation">导出</el-button>
       <!-- 高级搜索 -->
       <div class="poi2 Advanced_s" v-show="Advancedshow===true">
         <div class="">
@@ -352,6 +360,23 @@
         }
       })
     },
+    exportSearch (){
+      let that = this
+      if (that.searchParams.startTime > that.searchParams.endTime) {
+        that.show_tip('开始时间不能大于结束时间')
+        return
+      }
+      let url=that.localbase + 'm2c.scm/order/export/dealerorderlist?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+
+        '&orderStatus='+that.searchParams.orderStatus+
+        '&afterSellStatus='+that.searchParams.afterSellStatus+
+        '&condition='+that.searchParams.condition+
+        '&startTime='+that.searchParams.startTime+
+        '&endTime='+that.searchParams.endTime+
+        '&payWay='+that.searchParams.payWay+
+        '&invoice='+that.searchParams.invoice+
+        '&commentStatus='+that.searchParams.commentStatus;
+      window.location.href=url
+    },
     refuseShow () {
       var that = this
       that.Refuseshow = true
@@ -571,11 +596,11 @@
         }
       }
       .time{
-        width: 330px;
+        width: 600px;
         height: 61px;
         position: absolute;
-        left: -123px;
-        top: 19px;
+        left: 0px;
+        top: 55px;
         z-index: 10;
         .form-control{
           width: 139px;
@@ -958,5 +983,8 @@
     height: 15px;
     background:url(../../../assets/images/ico_select.png) no-repeat center;
   }
-
+  .zIndex2{z-index:21;}
+  .icon{width:40px;height:40px;z-index:11;display:inline-block;}
+  .timeIcon{background:url(../../../assets/images/ico_calendar@2x.png) no-repeat center bottom;background-size:19px 20px;}
+  .searchIcon{background:url(../../../assets/images/ico_search.png) no-repeat center center;background-size:20px 20px;}
 </style>
