@@ -701,6 +701,7 @@
             that.goodsSpecifications[index].itemValue.push(state2)
             console.log(that.goodsSpecifications[index])
             that.mapValue()
+            that.goodsSpecifications[index].state1=''
           }else{
             that.show_tip("该规格值已添加")
           }
@@ -846,7 +847,7 @@
         }
       },
       handleSelect(item) {
-        console.log(item);
+        console.log("item="+item);
       },
       // 获取规格值
       getValue () {
