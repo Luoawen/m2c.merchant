@@ -109,10 +109,10 @@
                             <a>查看全部商品</a>
                           </div>
                         </div>
-                        <div class="goods" v-if="item.rangeType===3" >
-                          <p>已选<span>{{rangeClassifyList.length}}</span>个品类</p>
+                        <div class="goods" v-if="item.rangeType===0" >
+                          <p>排除<span>{{item.removeRangeList.length}}</span>商品</p>
                           <ul>
-                            <li v-for="range in rangeClassifyList">
+                            <li v-for="range in item.removeRangeList">
                               <div>{{range.name}}</div>
                             </li>
                           </ul>

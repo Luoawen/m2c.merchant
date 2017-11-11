@@ -108,7 +108,7 @@
           </div>
           <div class="range">
             <p>作用范围：
-              <span v-text="item.rangeType === 0? '全场' : item.rangeType === 1 ? '商家' : item.rangeType === 2 ? '商品' : item.rangeType === 3 ? '品类' : ''"></span>
+              <span v-text="item.rangeType === 0? '全店' : item.rangeType === 1 ? '商家' : item.rangeType === 2 ? '商品' : item.rangeType === 3 ? '品类' : ''"></span>
               <a class="ml10" v-show="item.rangeType === 2" @click="openGoodsChoose">点我选择商品</a>
               <a class="ml10" v-show="item.rangeType === 0" @click="openFullRange">设置需要单独排除，不参与这次满减的商品</a>
             </p>
@@ -148,12 +148,12 @@
                 <a @click="classify_all_show = true">查看全部品类></a>
               </div>
             </div>
-            <div class="all" v-if="item.rangeType === 0" >
+            <div class="all" v-if="item.rangeType == 0" >
               <div>
-                <p>已排除<span>{{removeGoodsList.length}}</span>商品</p>
+                <p>已排除<span>{{item.removeRangeList.length}}</span>商品</p>
                 <ul>
-                  <li v-for="(goods, index) in removeGoodsList">
-                    <div>{{goods.goodsName}}</div>
+                  <li v-for="(goods, index) in item.removeRangeList">
+                    <div>{{goods.name}}</div>
                     <i class="icon_dele" @click="deleteRemoveGoods(index, goods)"></i>
                   </li>
                 </ul>
@@ -499,7 +499,7 @@
       </div>
     </div>
     <!--商家筛选已选商家全部弹窗e-->
-    <!--全场排除已排除的商品全部弹窗s-->
+    <!--全店排除已排除的商品全部弹窗s-->
     <div :class='["frame_layer",goods_remove_all_show?"frame_layer_show":""]' style="z-index:9999;" >
       <div class="modal-dialog frame shop_choose_container">
         <div class="shop_choose_center">
@@ -523,7 +523,7 @@
         </div>
       </div>
     </div>
-    <!--全场排除已排除的商品全部弹窗e-->
+    <!--全店排除已排除的商品全部弹窗e-->
     <!-- 遮罩层s -->
     <div   v-show="modalShadow"   class="modal-backdrop fade in" style="z-index:1;"></div> 
     <!-- 遮罩层e -->
@@ -754,7 +754,7 @@
         that.shop_cost_show = false
         console.log('dealerCostList:' + JSON.stringify(that.dealerCostList))
       },
-      // 点击选择全场
+      // 点击选择全店
       openFullRange () {
         var that = this
         that.modalShadow = true
@@ -1023,11 +1023,20 @@
             rows: that.goods_query_item.rows
           },
           success: function (result) {
+            that.removeGoodsList.splice(0, that.removeGoodsList.length);
             for (var i = 0; i < result.content.length; i++) {
-              result.content[i].isRemoved = 0
-              result.content[i].isChoosed = 0
-              result.content[i].skuFlag = 0
-              result.content[i].chooseSkuList = []
+            //result.content[i].isRemoved = 0
+          // 通过for循环  将removeRangeList匹配到id的数组都设置为 isRemoved = 1(修改样式)
+              for(var k = 0;k < that.item.removeRangeList.length;++k){
+                result.content[i].isChoosed = 0
+                result.content[i].skuFlag = 0
+                result.content[i].chooseSkuList = []
+                  if(result.content[i].goodsId == that.item.removeRangeList[k].id){
+                    result.content[i].isRemoved = 1
+                    that.removeGoodsList.push(result.content[i])
+                    console.log("--------------------------->",result.content[i].goodsId )
+                  }
+                }
               for (var j = 0; j < that.chooseGoodsList.length; j++) {
                 if (result.content[i].goodsId === that.chooseGoodsList[j].goodsId) {
                   result.content[i].isChoosed = 1
@@ -1040,11 +1049,11 @@
                   result.content[i].isRemoved = 1
                 }
               }
-              //  for (var j = 0; j < that.exchangeGoodsList.length; j++) {
-              //   if (result.content[i].goodsId == that.exchangeGoodsList[j].goodsId) {
-              //     result.content[i].isExchange = 1
-              //   }
-              // }
+               for (var j = 0; j < that.exchangeGoodsList.length; j++) {
+                if (result.content[i].goodsId == that.exchangeGoodsList[j].goodsId) {
+                  result.content[i].isExchange = 1
+                }
+              }
             }
             that.goodsResult = result
           }
@@ -1116,23 +1125,39 @@
         that.$('#choose_shop').modal('hide')
         console.log('chooseShopList:' + JSON.stringify(that.chooseShopList))
       },
-      addRemoveGoods (goods) {
+      addRemoveGoods (goods,$event) {
         let that = this
-        for (var i = 0; i < that.goodsResult.content.length; i++) {
-          if (that.goodsResult.content[i].goodsId == goods.goodsId) {
-            that.goodsResult.content[i].isRemoved = 1
+        console.log("goods",goods)
+        // console.log('that.goodsResult.content===========',that.goodsResult.content)
+        //  console.log('----- goods.isRemoved---------' ,goods.isRemoved )
+        // for (var i = 0; i < that.goodsResult.content.length; i++) {
+        //   if (that.goodsResult.content[i].goodsId == goods.goodsId) {
+        //     that.goodsResult.content[i].isRemoved = 1
+        //   }
+        // }
+        //that.removeGoodsList = []
+        // for (var i = 0; i < that.goodsResult.content.length; i++) {
+        //   if (that.goodsResult.content[i].isRemoved == 1) {
+        //      that.removeGoodsList.push(that.goodsResult.content[i])
+           
+        //   }
+        // }
+
+        if (goods.isRemoved !=1) {
+          goods.isRemoved = 1;
+          that.removeGoodsList.push(goods);
+        }
+        else {
+          goods.isRemoved = 0;
+          for (var i = 0; i < that.removeGoodsList.length; i++) {
+           if (that.removeGoodsList[i].goodsId == goods.goodsId) {
+              that.removeGoodsList.splice(i, 1);
+              break;
+           }
           }
         }
-        that.removeGoodsList = []
-        for (var i = 0; i < that.goodsResult.content.length; i++) {
-          if (that.goodsResult.content[i].isRemoved == 1) {
-            var removeGoods = {}
-            removeGoods.goodsId = that.goodsResult.content[i].goodsId
-            removeGoods.goodsName = that.goodsResult.content[i].goodsName
-            that.removeGoodsList.push(removeGoods)
-            console.log('removeGoodsList:', JSON.stringify(that.removeGoodsList))
-          }
-        }
+        
+         console.log('removeGoodsList:', JSON.stringify(that.removeGoodsList))
       },
       cancelRemove(){
         let that = this
@@ -1151,9 +1176,22 @@
       makeRemoveIds () {
         let that = this
         that.modalShadow =false
-        that.$('#full_range_dialog').modal('hide')
-        console.log('removeShopList:', JSON.stringify(that.removeShopList))
-        console.log('removeGoodsList:', JSON.stringify(that.removeGoodsList))
+        that.$('#full_range_dialog').modal('hide');
+        // that.item.removeRangeList 跟 removeGoodsList 数据结构不一样 导致（template 部分渲染不到）
+        that.item.removeRangeList.splice(0, that.item.removeRangeList.length);
+        for(var i=0; i< that.removeGoodsList.length; i++) {
+          var _goods = {};
+          _goods.id = that.removeGoodsList[i].goodsId;
+          _goods.isChoosed = that.removeGoodsList[i].isChoosed;
+          _goods.name = that.removeGoodsList[i].goodsName;
+          _goods.rangeType = that.removeGoodsList[i].rangeType;
+          _goods.skuFlag = that.removeGoodsList[i].skuFlag;
+          _goods.skuList = that.removeGoodsList[i].skuList;
+          _goods.type = that.removeGoodsList[i].type;
+          that.item.removeRangeList.push(_goods);
+        }
+        console.log('removeRangeList:', JSON.stringify(that.item.removeRangeList))
+        //console.log('removeGoodsList:', JSON.stringify(that.removeGoodsList))
       },
       deleteGoods (index, goods) {
         var that = this
@@ -1183,8 +1221,9 @@
         }
       },
       deleteRemoveGoods (index, goods) {
+        console.log('我获取goods',goods)
         let that = this
-        that.removeGoodsList.splice(index, 1)
+        that.item.removeRangeList.splice(index, 1)
         if (that.goodsResult != '') {
           for (var i = 0; i < that.goodsResult.content.length; i++) {
             if (that.goodsResult.content[i].goodsId === goods.goodsId) {
@@ -1648,7 +1687,7 @@ overflow: hidden;
       }
     }
   }
-  /*全场*/
+  /*全店*/
   .frame_layer01 {
     .frame {
       width: 890px;

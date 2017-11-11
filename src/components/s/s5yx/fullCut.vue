@@ -258,7 +258,7 @@
             </div> -->
           </div>
           <div class="footer">
-            <button type="button" class="btn save" @click="closeBox($event)" >取消</button>
+            <button type="button" class="btn save" @click="cancleMakeGoodsIds($event)" >取消</button>
             <button type="button" class="btn cancel" @click="makeGoodsIds()">保存</button>
           </div>
         </div>
@@ -297,14 +297,14 @@
                   {{sku.goodsSkuName}}
                 </td>
                 <td>{{sku.goodsSkuInventory}}</td>
-                <td><input class="form-control set_num fl ml10"   min="0"  v-model="sku.goodsSkuNum" :disabled="sku.disabled"/></td>
+                <td><input class="form-control set_num fl ml10  goodsSkuNum"   min="0"  v-model="sku.goodsSkuNum" :disabled="sku.disabled"/></td>
               </tr>
               </tbody>
             </table>
           </div>
         </div>
         <div class="specification_footer">
-          <button type="button" class="btn save"  data-dismiss="modal">取消</button>
+          <button type="button" class="btn save"  data-dismiss="modal"  @click="cancleGoodsSkuChoose(goodsInfo,$event)"   >取消</button>
           <button type="button" class="btn cancel" @click="goodsSkuChoose(goodsInfo,$event)">确认</button>
         </div>
       </div>
@@ -461,7 +461,7 @@
     <!--单独成本设置选择商家e-->
     <!--作用范围为全店的商品商家筛选弹窗s-->
     <div class="modal fade frame_layer01" id="full_range_dialog"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
-      <div class="modal-dialog shop_goodchoose"       style="margin:20px 0px;">
+      <div class="modal-dialog shop_goodchoose"    style="margin:10% 30%;">
         <div class="frame_total ">
           <div class="modal-header">
             <div class="modal-title text-center wid100 " @click="changeTab('goods')">
@@ -1002,6 +1002,7 @@
           that.$(el).parents('#choose_goods').modal("hide")
           that.modalShadow =false
       },
+
       // 打开 作用范围 选择商品弹窗
       openGoodsChoose () {
         var that = this
@@ -1093,6 +1094,7 @@
            that.goodsResult.content[index].isCheck =false
         }
        console.log('我是isCheck',that.goodsResult.content[index].isCheck)
+       
           //  知道获取的checkbox是哪个和数量
         for (var i = 0; i < goods.goodsSkuList.length; i++) {
           for (var g = 0; g < goods.chooseSkuList.length; g++) {
@@ -1179,6 +1181,14 @@
          let el=$event.target
         that.$(el).parents('#specificationChoose').modal("hide")
       },
+      cancleGoodsSkuChoose (goodsInfo,$event) {
+            let that = this
+          let el=$event.target
+            //将选中的清空  从数组中清空  然后改变样式
+          goodsInfo.chooseSkuList =[]
+          that.$(el).parents('.specification_footer').siblings('.specification_cen').find('[type=checkbox]').prop('checked',false)
+          that.$(el).parents('.specification_footer').siblings('.specification_cen').find('.goodsSkuNum').val('')
+      },
       deleteGoods (index, goods) {
          var that = this
         that.chooseGoodsList.splice(index, 1)
@@ -1222,6 +1232,19 @@
         var that = this
         that.goods_query_item.dealerId = that.params.creator
         that.goods_shop_show = false
+      },
+      //取消选中商品
+      cancleMakeGoodsIds ($event)  {
+          let that = this
+          // 清空选择商品数组
+          that.chooseGoodsList =[]
+            // 遍历弹框的 改变状态
+            for(var w = 0 ;w<that.goodsResult.content.length;w++){
+              that.goodsResult.content[w].isCheck = false ;
+            }
+        //控制模态框
+        that.$('#choose_goods').modal('hide')
+        that.modalShadow =false
       },
       //拼接选中商品IDs
       makeGoodsIds () {
@@ -1546,6 +1569,7 @@
           }
         })
       },
+      //将数据存储到排除商品列表
       addRemoveGoods (goods) {
         let that = this
         for (var i = 0; i < that.goodsResult.content.length; i++) {
@@ -1559,6 +1583,7 @@
             that.removeGoodsList.push(that.goodsResult.content[i])
           }
         }
+       console.log('移除商品列表',that.removeGoodsList) 
       },
         addProductsItems (goods) {
         let that = this
@@ -1587,17 +1612,16 @@
         that.$('#full_range_dialog').modal('hide')
         that.modalShadow = false
       },
+      // 拼接排除商品的ID
       makeRemoveIds () {
         let that = this
         that.params.remove_goods_ids = []
         that.params.remove_dealer_ids = []
-        var remove_goods = {}
-        var remove_dealer = {}
-        for (var i = 0; i < that.removeGoodsList.length; i++) {
-          remove_goods.goodsId = that.removeGoodsList[i].goodsId
-          remove_goods.goodsName = that.removeGoodsList[i].goodsName
-          that.params.remove_goods_ids.push(remove_goods)
-        }
+        var remove_dealer = []
+        //拿到的移除商品列表push到 要传递的参数中
+        for (var i = 0; i < that.removeGoodsList.length; i++){
+              that.params.remove_goods_ids.push(that.removeGoodsList[i])
+            }
         for (var i = 0; i < that.removeShopList.length; i++) {
           remove_dealer.dealerId = that.removeShopList[i].dealerId
           remove_dealer.shopName = that.removeShopList[i].shopName
@@ -2726,6 +2750,7 @@
         padding-top: 20px;
         padding-bottom: 20px;
         padding-left: 20px;
+        overflow: auto;
         .shop_choose {
           height: 255px;
           .shop_choosebox {
@@ -2910,6 +2935,7 @@
         padding-top: 20px;
         padding-bottom: 20px;
         padding-left: 20px;
+        overflow: auto;
         .shop_choose {
           height: 255px;
           .shop_choosebox {
