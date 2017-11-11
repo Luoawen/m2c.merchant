@@ -448,6 +448,8 @@
         let that = this;
         var len = that.resultdata.length;
         for (var i = 0; i < len; i++) {
+          //console.log(typeof(that.$("input[name='ck" + i + "']").prop("checked")));
+          if(that.$("input[name='ck" + i + "']").prop("checked") != val)
             that.$("input[name='ck" + i + "']").click();
         }
       }
