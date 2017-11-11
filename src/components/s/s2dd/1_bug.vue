@@ -46,7 +46,8 @@
       </div>
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
       <button type="button"class="btn"  @click="search()">查询</button>
-      <button type="button" class="btn btn-default pull-right operation">批量导出</button>
+      <!--<button type="button" class="btn btn-default pull-right operation">导出</button>-->
+      <el-button type="primary" icon="el-icon-download" @click.native="exportSearch()" class="pull-right operation">导出</el-button>
       <!-- 高级搜索 -->
       <div class="poi2 Advanced_s" v-show="Advancedshow===true">
         <div class="">
@@ -148,11 +149,11 @@
         <thead>
         <tr>
           <td class="a1">
-                <span class=" mt10">
-                  <!--<input class="input_check" type="checkbox" id="classify" />
-                  <label for="classify" class="fl mt10"></label>-->
+              <!--  <span class=" mt10">
+                  &lt;!&ndash;<input class="input_check" type="checkbox" id="classify" />
+                  <label for="classify" class="fl mt10"></label>&ndash;&gt;
                   <el-checkbox @change="checkAll" id="ck_all"></el-checkbox>
-                </span>
+                </span>-->
             <span class="ml10">商品信息</span></td>
           <td class="a2">单价/元</td>
           <td class="a3">数量</td>
@@ -167,15 +168,15 @@
         <tbody v-for="(item,index) in resultdata">
         <tr>
           <td colspan="8" class="bt clear">
-            <div class="fl">
+      <!--      <div class="fl">
                       <span  class="mt10">
-                        <!--<input  type="checkbox" :id="'aa'+index" class="input_check" :value="item.dealerOrderId">
+                        &lt;!&ndash;<input  type="checkbox" :id="'aa'+index" class="input_check" :value="item.dealerOrderId">
                         <label  :for="'aa'+index" class="fl mt10">
-                        </label>-->
+                        </label>&ndash;&gt;
                         <el-checkbox @change="checkClick(index)" :label="'订货号：' + item.dealerOrderId" :name="'ck'+index"></el-checkbox>
                       </span>
-              <!--<span class="ml10">订货号：</span><span>{{item.dealerOrderId}}</span>-->
-            </div>
+              &lt;!&ndash;<span class="ml10">订货号：</span><span>{{item.dealerOrderId}}</span>&ndash;&gt;
+            </div>-->
             <div class="fr detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</div>
           </td>
         </tr>
@@ -187,7 +188,7 @@
                 <div class="a1_img mr10 fl"><img :src="JSON.parse(goodsItem.goodsImage == ''? '[]': goodsItem.goodsImage)[0]"/></div>
                 <div class="fl">
                   <div class="wose wid">{{goodsItem.goodsName}}</div>
-                  <div class="blue">规格：{{goodsItem.skuName}}</div>
+                  <div class="blue" v-if="goodsItem.skuName != ''">规格：{{goodsItem.skuName}}</div>
                 </div>
               </div>
               <div class="a2 fl mt20" id="a2" style="width: 14%;">
@@ -352,6 +353,23 @@
         }
       })
     },
+    exportSearch (){
+      let that = this
+      if (that.searchParams.startTime > that.searchParams.endTime) {
+        that.show_tip('开始时间不能大于结束时间')
+        return
+      }
+      let url=that.localbase + 'm2c.scm/order/export/dealerorderlist?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+
+        '&orderStatus='+that.searchParams.orderStatus+
+        '&afterSellStatus='+that.searchParams.afterSellStatus+
+        '&condition='+that.searchParams.condition+
+        '&startTime='+that.searchParams.startTime+
+        '&endTime='+that.searchParams.endTime+
+        '&payWay='+that.searchParams.payWay+
+        '&invoice='+that.searchParams.invoice+
+        '&commentStatus='+that.searchParams.commentStatus;
+      window.location.href=url
+    },
     refuseShow () {
       var that = this
       that.Refuseshow = true
@@ -448,6 +466,8 @@
         let that = this;
         var len = that.resultdata.length;
         for (var i = 0; i < len; i++) {
+          //console.log(typeof(that.$("input[name='ck" + i + "']").prop("checked")));
+          if(that.$("input[name='ck" + i + "']").prop("checked") != val)
             that.$("input[name='ck" + i + "']").click();
         }
       }

@@ -150,15 +150,15 @@
         		<td>
         			<div>商品总额</div>
 							<div>运费</div>
-							<div>平台优惠券</div>
-							<div>商家优惠券</div>
+							<div>优惠金额</div>
+							<!--<div>商家优惠券</div>-->
 							<div>订单总额</div>
         		</td>
         		<td class="pr40">
         			<div>{{totalData.totalOrderPrice/100}}</div>
 							<div>{{totalData.totalFreight/100}}</div>
 							<div>{{totalData.plateformDiscount/100}}</div>
-							<div>{{totalData.dealerDiscount/100}}</div>
+							<!--<div>{{totalData.dealerDiscount/100}}</div>-->
 							<div class="redcolor" style="font-size: 18px;">{{totalData.orderPrice/100}}</div>
         		</td>
         	</tr>

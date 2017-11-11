@@ -258,7 +258,7 @@
             </div> -->
           </div>
           <div class="footer">
-            <button type="button" class="btn save" @click="closeBox($event)" >取消</button>
+            <button type="button" class="btn save" @click="cancleBtn($event)" >取消</button>
             <button type="button" class="btn cancel" @click="makeGoodsIds()">保存</button>
           </div>
         </div>
@@ -287,7 +287,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="sku in goodsInfo.goodsSkuList">
+              <tr v-for="(sku,index) in goodsInfo.goodsSkuList">
                 <td>
                   <input type="checkbox" v-model="sku.isCheck" :disabled="sku.disabled"/>
                   <input type="hidden" name="goodsSkuId" v-model="sku.goodsSkuId"/>
@@ -297,14 +297,14 @@
                   {{sku.goodsSkuName}}
                 </td>
                 <td>{{sku.goodsSkuInventory}}</td>
-                <td><input class="form-control set_num fl ml10"   min="0"  v-model="sku.goodsSkuNum" :disabled="sku.disabled"/></td>
+                <td><input class="form-control set_num fl ml10 "   id="inputListId"  min="0"  v-model="sku.goodsSkuNum" :disabled="sku.disabled"/></td>
               </tr>
               </tbody>
             </table>
           </div>
         </div>
         <div class="specification_footer">
-          <button type="button" class="btn save"  data-dismiss="modal">取消</button>
+          <button type="button" class="btn save"  data-dismiss="modal" @click="cancleGoodsSkuChoose(goodsInfo,$event)" >取消</button>
           <button type="button" class="btn cancel" @click="goodsSkuChoose(goodsInfo,$event)">确认</button>
         </div>
       </div>
@@ -461,7 +461,7 @@
     <!--单独成本设置选择商家e-->
     <!--作用范围为全店的商品商家筛选弹窗s-->
     <div class="modal fade frame_layer01" id="full_range_dialog"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
-      <div class="modal-dialog shop_goodchoose"       style="margin:20px 0px;">
+      <div class="modal-dialog shop_goodchoose"       style="margin:10%  30%;">
         <div class="frame_total ">
           <div class="modal-header">
             <div class="modal-title text-center wid100 " @click="changeTab('goods')">
@@ -1002,6 +1002,15 @@
           that.$(el).parents('#choose_goods').modal("hide")
           that.modalShadow =false
       },
+      cancleBtn ($event,goods) {
+        let that = this
+        //模态框处理
+          let el=$event.target
+          that.$(el).parents('#choose_goods').modal("hide")
+          that.modalShadow =false
+          // 清空选中的数据数据
+          that.chooseGoodsList = []
+      },
       // 打开 作用范围 选择商品弹窗
       openGoodsChoose () {
         var that = this
@@ -1092,7 +1101,7 @@
           }
            that.goodsResult.content[index].isCheck =false
         }
-       console.log('我是isCheck',that.goodsResult.content[index].isCheck)
+      //  console.log('我是isCheck',that.goodsResult.content[index].isCheck)
           //  知道获取的checkbox是哪个和数量
         for (var i = 0; i < goods.goodsSkuList.length; i++) {
           for (var g = 0; g < goods.chooseSkuList.length; g++) {
@@ -1178,6 +1187,19 @@
         that.goods_sku_show = false
          let el=$event.target
         that.$(el).parents('#specificationChoose').modal("hide")
+      },
+      //点击规格弹框取消之后 将选择的规格清空
+      cancleGoodsSkuChoose (goodsInfo,$event) {
+      let that =this
+      let el = $event.target
+     var checboxInputList= that.$(el).parents('.specification_footer').siblings('.specification_cen').find('[type=checkbox]').prop('checked', false)
+      var InputList= that.$(el).parents('.specification_footer').siblings('.specification_cen').find('#inputListId').val('')
+        //  console.log('checboxInputList',checboxInputList)    
+        //  console.log('InputList',InputList)
+        //   console.log('我是goodsinfo',goodsInfo)
+        //  console.log('我是goodsinfo.chooseSkuList',goodsInfo.chooseSkuList.isCheck)
+        //清空推送到要保存的的选择规格数组
+         goodsInfo.chooseSkuList = []
       },
       deleteGoods (index, goods) {
          var that = this
@@ -2830,6 +2852,7 @@
       height: 500px;
       background: #fff;
       position: relative;
+    
       .tit {
         white-space: nowrap;
         display: inline-block;
