@@ -155,7 +155,7 @@
             <tr v-for="(item,index) in goodsSpecifications">
               <td><span @click="delect(index)" v-if="goodsSpecifications.length>1 && handle_toggle=='add'">移除</span></td>
               <td>
-                <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item)">
+                <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item,index)" :disabled="disabled">
                   <el-option
                     v-for="item in stantards"
                     :key="item.stantardId"
@@ -371,8 +371,8 @@
         goodsGuaranteeList:[], // 获取保障详情
         goodsGuarantCheck:[],
         serviceRate:'',
-        goodsSKUs:[{show:true,skuName: '', showStatus: true, marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}],
-        goodsSpecifications:[{itemValue:[],state1:''}],
+        goodsSKUs:[{show:true,skuName: '', showStatus: true, marketPrice:'', goodsCode: '', supplyPrice: ''}],
+        goodsSpecifications:[{itemName:'',itemValue:[],state1:''}],
         goodsMainImages:[],
         goodsGuarantee:[],
         data: {skuFlag: '0' ,goodsMinQuantity:'',goodsBarCode:'',goodsKeyWord:'',goodsShelves:'1',goodsClassifyId:''},
@@ -414,12 +414,12 @@
         dLabel3: false,
         goodsBrandName: '',
         setUp:{},
-        2: true,
-        1: false
+        disabled:false //禁用规格选择
       }
     },
     created() {},
     watch: {
+      // 监听商品分类以获取费率
       // 监听goodsMainImages的长度
       'goodsMainImages.length':{
         handler: function (val, oldVal) {
@@ -458,7 +458,7 @@
       //验证是否为数字
       checkNumber (val, index, arr, list) {
         setTimeout(() => {
-          if (val && $.isNumeric(val) && val > 0) {
+          if (val && $.isNumeric(val) && val >= 0) {
             val = Number(val).toFixed(2)
             this.sukShow1 = false
           } else {
@@ -480,17 +480,22 @@
           }
         }, 0)
       },
-      stantardIdChange(item){
+      stantardIdChange(item,index){
         let that=this
         that.standardId=item.standardId
-        console.warn("stantardId="+that.standardId)
+        for(var i=0;i<that.stantards.length;i++){
+          if(that.standardId==that.stantards[i].stantardId){
+            that.goodsSpecifications[index].itemName=that.stantards[i].stantardName
+          }
+        }
+        that.restaurants = []
         that.getValue()
         that.standardIdShow = false
       },
       // 清空单规格内值
       clearSKU(){
         let that = this
-        that.goodsSKUs=[{show:true,skuName: '', showStatus: true, marketPrice:'', serviceRate: '', goodsCode: '', supplyPrice: ''}]
+        that.goodsSKUs=[{show:true,skuName: '', showStatus: true, marketPrice:'', goodsCode: '', supplyPrice: ''}]
       },
       clearGoodsSKUs(){
         let that = this
@@ -522,7 +527,7 @@
               return
             }
             for(var k=0;k<that.goodsSKUs.length;k++){
-              if(that.goodsSKUs[k].availableNum==''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].weight==''||that.goodsSKUs[k].weight==undefined||that.goodsSKUs[k].photographPrice==''||that.goodsSKUs[k].photographPrice==undefined){
+              if(that.goodsSKUs[k].availableNum===''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].weight===''||that.goodsSKUs[k].weight==undefined||that.goodsSKUs[k].photographPrice===''||that.goodsSKUs[k].photographPrice==undefined){
                 that.sukShow = true
                 return
               }else{
@@ -530,9 +535,7 @@
                 that.goodsSKUs[k].marketPrice=parseFloat(that.goodsSKUs[k].marketPrice*100)
                 that.goodsSKUs[k].photographPrice=parseFloat(that.goodsSKUs[k].photographPrice*100)
                 that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
-                if(that.countMode!=1){
-                  that.goodsSKUs[k].serviceRate=that.serviceRate
-                }else{
+                if(that.countMode==1){
                   that.goodsSKUs[k].supplyPrice=parseFloat(that.goodsSKUs[k].supplyPrice*100)
                 }
               }
@@ -828,7 +831,7 @@
       query(item){
         console.log(item)
         this.standardId = item
-        this.getValue()
+        //this.getValue()
       },
       querySearch(queryString, cb) {
         let that = this
@@ -861,7 +864,11 @@
             standardId: that.standardId
           },
           success: function (result) {
-            that.restaurants = result.content
+            if(result.content==''){
+              that.restaurants = []
+            } else{
+              that.restaurants = result.content
+            }
           }
         })
       }
@@ -959,7 +966,9 @@
             token: sessionStorage.getItem('mToken')
           },
           success: function (result) {
+            that.disabled = true
             that.data = result.content
+            that.serviceRate = result.content.serviceRate
             for(var i=0,len=that.goodsGuaranteeList.length;i<len;i++){
               for(var j=0,len=result.content.goodsGuarantee.length;j<len;j++){
                 if(result.content.goodsGuarantee[j]===that.goodsGuaranteeList[i].guaranteeDesc){
