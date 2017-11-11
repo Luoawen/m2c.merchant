@@ -862,9 +862,10 @@
       display: inline-block;
       position: relative;
       .inp{
+        padding-left:10px;
         width: 380px;
         height: 39px;
-        color: #ccc;
+        color: #666;
       }
       i{
         width: 50px;
