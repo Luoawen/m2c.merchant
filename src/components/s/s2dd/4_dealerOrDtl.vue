@@ -41,7 +41,7 @@
           <div class="clear">
           	<div class="col-sm-4 pad0">
             <span class="tit01">支付方式</span>
-            <span class="ml20">{{payWay === 1 ? '': payWay === 2 ? '': '-'}}</span>
+            <span class="ml20">{{payWay === 1 ? '支付宝': payWay === 2 ? '微信': '-'}}</span>
            	</div>
            	<div class="col-sm-4 pad0">
             <span class="tit01">支付时间</span>
