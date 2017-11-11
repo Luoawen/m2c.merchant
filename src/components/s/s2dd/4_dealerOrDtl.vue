@@ -137,10 +137,10 @@
             <td class="a5">{{goods.price/100}}</td>
             <td class="a5">{{goods.totalPrice/100}}</td>
             <td class="a6">
-            	<span :id="'spanFreight' + index" v-show="!bModify">{{goods.freight}}</span>
-            	<i class="ico_compile" @click="modifyFreight(true)" v-show="!bModify"></i>
+            	<span :id="'spanFreight' + index" v-show="!fModify">{{goods.freight}}</span>
+            	<i class="ico_compile" @click="modifyFreight1(true)" v-show="!fModify"></i>
             	<!--点击ico_compile后会出现input-->
-            	<input class="form-control a6_input" :id="'freight'+ index" v-show="bModify" v-model="goods.freight" type="number"/>
+            	<input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.freight" type="number"/>
             </td>
         	</tr>
         </tbody>
@@ -349,6 +349,7 @@
         goodses: [],
         totalData: {},
         bModify: false,
+        fModify: false,
         province: '',
         provinceCode: '',
         city: '',
@@ -479,7 +480,7 @@
             dealerOrderId: that.dealerOrderId
           },
           success: function (result) {
-            console.log(result)
+
             if (result.status === 200) {
               that.setReturnData(result.content);
             }
@@ -492,6 +493,7 @@
 
       setReturnData: function (data) {
         let that = this;
+
           that.goodsMoney = data.orderPrice;
           that.orderFreight = data.orderFreight;
         that.orderStatus = data.orderStatus;
@@ -501,7 +503,8 @@
           that.createdDate = that.date_format(d, 'yyyy-MM-dd hh:mm:ss');
           that.payWay = data.payWay;
           that.payNo = data.payNo;
-        that.provinceCode = data.provinceCode;
+        that.provinceCode = data.privinceCode;
+        console.warn("data.privinceCode="+that.provinceCode)
         that.cityCode = data.cityCode;
         that.areaCode = data.areaCode;
           if (data.payDate != null) {
@@ -509,11 +512,9 @@
             that.payTime  = that.date_format(d, 'yyyy-MM-dd hh:mm:ss');
           }
           that.city = data.city;
-          that.cityCode = data.cityCode;
           that.province = data.province;
-          that.provinceCode = data.provinceCode;
+          console.log(data.provinceCode)
         that.area = data.areaCounty;
-        that.areaCode = data.areaCode;
         that.phone = data.revPhone;
         that.revPerson = data.revPerson;
         that.streetAddr = data.streetAddr;
@@ -604,6 +605,11 @@
         let that = this;
         if(that.orderStatus <= 1)
           that.bModify = isModify;
+      },
+      modifyFreight1 (isModify) {
+        let that = this;
+        if(that.orderStatus <= 1)
+          that.fModify = isModify;
       },
       deliverDealerOrder(){
         // 发货请求
@@ -754,7 +760,7 @@
           token: sessionStorage.getItem('mToken')
         },
         success: function (result) {
-          // // console.log('获得的省份信息列表: ', result)
+          console.log('获得的省份信息列表: ', result.content)
           that.province_all_search = result.content;
         }
       })
