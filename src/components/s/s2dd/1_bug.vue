@@ -46,7 +46,8 @@
       </div>
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
       <button type="button"class="btn"  @click="search()">查询</button>
-      <button type="button" class="btn btn-default pull-right operation">导出</button>
+      <!--<button type="button" class="btn btn-default pull-right operation">导出</button>-->
+      <el-button type="primary" icon="el-icon-download" @click.native="exportSearch()" class="pull-right operation">导出</el-button>
       <!-- 高级搜索 -->
       <div class="poi2 Advanced_s" v-show="Advancedshow===true">
         <div class="">
@@ -351,6 +352,23 @@
           console.log(res);
         }
       })
+    },
+    exportSearch (){
+      let that = this
+      if (that.searchParams.startTime > that.searchParams.endTime) {
+        that.show_tip('开始时间不能大于结束时间')
+        return
+      }
+      let url=that.localbase + 'm2c.scm/order/export/dealerorderlist?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+
+        '&orderStatus='+that.searchParams.orderStatus+
+        '&afterSellStatus='+that.searchParams.afterSellStatus+
+        '&condition='+that.searchParams.condition+
+        '&startTime='+that.searchParams.startTime+
+        '&endTime='+that.searchParams.endTime+
+        '&payWay='+that.searchParams.payWay+
+        '&invoice='+that.searchParams.invoice+
+        '&commentStatus='+that.searchParams.commentStatus;
+      window.location.href=url
     },
     refuseShow () {
       var that = this
