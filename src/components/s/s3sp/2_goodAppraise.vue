@@ -651,7 +651,7 @@
       .inp{
         width: 500px;
         height: 39px;
-        color: #ccc;
+        color: #444;
       }
       i{
         width: 50px;
