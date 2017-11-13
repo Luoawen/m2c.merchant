@@ -9,7 +9,7 @@
           <i class="problem"></i>
         </div>
         <div class="tit02 clear">
-          <span style="font-size: 30px">{{content.settleAmount/100}}</span>
+          <span style="font-size: 30px">{{content.settleAmount == undefined || '' ? '-' :(content.settleAmount/100).toFixed(2)}}</span>
         </div>
       </div>
       <div class="survey_c_tbox fl mr20">
@@ -18,7 +18,7 @@
           <i class="problem"></i>
         </div>
         <div class="tit02 clear">
-          <span style="font-size: 30px">{{content.tradableingAmount/100 == '' ? 0 : content.totalTradableAmount/100}}</span>
+          <span style="font-size: 30px">{{content.tradableingAmount ==  null ? '-' : (content.tradableingAmount/100).toFixed(2)}}</span>
         </div>
       </div>
       <div class="survey_c_tbox fl mr20">
@@ -27,7 +27,7 @@
           <i class="problem"></i>
         </div>
         <div class="tit02 clear">
-          <span style="font-size: 30px">{{content.totalTradableAmount/100 == '' ? 0 : content.totalTradableAmount/100}}</span>
+          <span style="font-size: 30px">{{platePositisCache == undefined || '' ? '-' : (platePositisCache/100).toFixed(2)}}</span>
         </div>
       </div>
       <div class="survey_c_tbox fl mr20">
@@ -36,7 +36,7 @@
           <i class="problem"></i>
         </div>
         <div class="tit02 clear">
-          <span style="font-size: 30px">{{content.tradableAmount/100}}</span>
+          <span style="font-size: 30px">{{content.tradableAmount == undefined || '' ? '-' :(content.tradableAmount/100).toFixed(2)}}</span>
         </div>
       </div>
 
@@ -49,15 +49,15 @@
         <tr>
           <td><b>提现单号</b></td>
           <td><b>申请金额/元</b></td>
-          <td><b>体现状态</b></td>
+          <td><b>提现状态</b></td>
           <td><b>申请时间</b></td>
         </tr>
         </thead>
         <tbody v-for="item in contents">
         <tr>
           <td>{{item.withdrawalId}}</td>
-          <td>{{item.amount/100}}</td>
-          <td>{{item.wdStatus/100}}</td>
+          <td>{{(item.amount/100).toFixed(2)}}</td>
+          <td>{{item.wdStatus == 0?'处理中':item.wdStatus == 1?'待审批':item.wdStatus == 2?'待转账':item.wdStatus == 3?'不通过':item.wdStatus == 4?'已转账':item.wdStatus == 5?'作废':'-'}}</td>
           <td>{{date_format(new Date(item.createdTime), 'yyyy-MM-dd hh:mm:ss')  }}</td>
         </tr>
         </tbody>
@@ -86,6 +86,7 @@
         dealerName:'',
         contents:'',
         createdTime:'',
+        platePositisCache:''
       }
     },
     methods:{
@@ -116,7 +117,6 @@
             pageNum:that.currentPage,
             rows:that.goodsCheckStorePageRows,
             correlationId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-
           },
           success: function (result) {
             if (result.status === 200){
@@ -124,15 +124,31 @@
             }
           }
         })
+      },
+
+      plateDiposit(){
+        let that = this
+        that.$.ajax({
+          type: 'get',
+          url: this.base + 'm2c.scm/dealer/sys/dealerDeposit',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+          },
+          success: function (result) {
+            if (result.status === 200){
+              that.platePositisCache = result.content
+            }
+          }
+        })
       }
-
-
     },
 
     mounted(){
       let that = this;
       that.amount();
       that.amountList();
+      that.plateDiposit();
     }
 
   }
