@@ -39,6 +39,7 @@ const formworkadd = r => require.ensure([], () => r(require('@/components/s/s7sz
 
 const updatePass = r => require.ensure([], () => r(require('@/components/s/s8password/1_updatePass')), 's')
 const userInfo = r => require.ensure([], () => r(require('@/components/s/s8password/2_userInfo')), 's')
+const cashPass = r => require.ensure([], () => r(require('@/components/s/s8password/cashPass')), 's')
 Vue.use(Router)
 
 export default new Router({
@@ -176,6 +177,11 @@ export default new Router({
           path: 'updatePass',
           name: 'updatePass',
           component: updatePass
+        },
+        {
+          path: 'cashPass',
+          name: 'cashPass',
+          component: cashPass
         },
         {
           path: 'userInfo',

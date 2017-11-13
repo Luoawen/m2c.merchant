@@ -1,7 +1,7 @@
 <template>
   <div class="survey_contaner col-sm-11">
     <div style="height: 10px"></div>
-    <div style="font-size: 20px">&nbsp;&nbsp;<b>我的资产</b></div>
+    <div style="font-size: 20px">&nbsp;&nbsp;<strong>我的资产</strong><a class="ruleShow" @click="ruleShow">结算规则说明</a></div>
     <div class="survey_c_top clear">
       <div class="survey_c_tbox fl mr20">
         <div class="tit">
@@ -36,21 +36,22 @@
           <i class="problem"></i>
         </div>
         <div class="tit02 clear">
-          <span style="font-size: 30px">{{content.tradableAmount == undefined || '' ? '-' :(content.tradableAmount/100).toFixed(2)}}</span>
+          <span style="font-size: 30px">{{content.tradableAmount/100}}</span>
+          <el-button @click="pullMoney()" size="mini" type="primary"> 提现 </el-button>
         </div>
       </div>
 
     </div>
     <div style="height: 20px"></div>
-    <div style="height: 30px"><span style="font-size: 20px;">&nbsp;&nbsp;<b>提现记录</b></span></div>
+    <div style="height: 30px"><span style="font-size: 20px;">&nbsp;&nbsp;<strong>提现记录</strong></span></div>
     <div class="survey_c_cen clear">
       <table  class="col-sm-12 surveytab">
         <thead>
         <tr>
-          <td><b>提现单号</b></td>
-          <td><b>申请金额/元</b></td>
-          <td><b>提现状态</b></td>
-          <td><b>申请时间</b></td>
+          <td><strong>提现单号</strong></td>
+          <td><strong>申请金额/元</strong></td>
+          <td><strong>体现状态</strong></td>
+          <td><strong>申请时间</strong></td>
         </tr>
         </thead>
         <tbody v-for="item in contents">
@@ -72,11 +73,29 @@
         :total="currentPage">
       </el-pagination>
     </div>
+    <!-- 规则 -->
+    <div class="delectSizeBg" v-show="backgroundBg"></div>
+    <div class="delectSizeWrap" v-show="ruleShowBox">
+      <div class="agreetc_header">
+        <span>结算规则</span>
+        <span class="fr" @click="ruleClose">X</span>
+      </div>
+      <div class="delectGoodCon">
+        <h5>待结算金额</h5>
+        <p>1、顾客完成付款后，款项先显示在待结算金额中；</p>
+        <p>2、当日订单总金额不一定等于当日待结算金额；</p>
+        <p>1）下单时间、付款时间可能不在同一天；</p>
+        <p>2）商家退款成功，待结算金额相应扣除；</p>
+        <h5>结算时间、方式</h5>
+        <p>1、订单交易完成（关闭）T+7工作日结算款项到商家可用金额，结算之前款项显示在待结算金额；</p>
+        <p>2、结算后，款项进入商家可用金额的同时结算服务费、活动分摊，商家可用余额可提现。若需要查询单号是否已经结算，可在结算查询中查看结算状态。</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-  export  default {
+  export default {
     name:'',
     data(){
       return{
@@ -86,10 +105,22 @@
         dealerName:'',
         contents:'',
         createdTime:'',
-        platePositisCache:''
+        ruleShowBox: false, //结算规则
+        backgroundBg: false
       }
     },
     methods:{
+      ruleShow () {
+        this.ruleShowBox = true
+        this.backgroundBg = true
+      },
+      ruleClose () {
+        this.ruleShowBox = false
+        this.backgroundBg = false
+      },
+      pullMoney () {
+        
+      },
       amount () {
         let that = this
         that.$.ajax({
@@ -102,6 +133,7 @@
           success: function (result) {
             if (result.status === 200){
               that.content = result.content
+              console.log(that.content)
             }
           }
         })
@@ -154,12 +186,73 @@
   }
 </script>
 <style lang="scss" scoped>
+.delectSizeBg {
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 1500px;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    z-index: 999;
+
+  }
+
+  .delectSizeWrap {
+
+    position: fixed;
+
+    width: 50%;
+
+    height: auto;
+
+    padding: 0;
+
+    //top: 500px;
+
+    left: 50%;
+
+    margin-left: -25%;
+
+    background: #fff;
+
+    z-index: 999;
+
+    margin-top: -25%;
+    .agreetc_header{
+      width:100%;
+      height: 50px;
+      background: #DFE9F6;
+      span{
+        font-size:16px;padding-left:20px;line-height:50px;color:#666;
+      }
+      span.fr{margin-right:20px;cursor:pointer;}
+    }
+    .delectGoodCon{padding:30px;padding-bottom:40px;
+      h5,p{
+        line-height: 24px;
+        font-size: 14px;
+        color: #333333;
+      }
+      h5{
+        line-height: 30px;
+        margin-top:20px;
+      }
+    }
+  }
   .survey_contaner{
     margin: auto;
     background: #FFFFFF;
     margin-left: 30px;
     margin-top: 20px;
     padding: 0!important;
+    a.ruleShow{float:right;margin-right:20px;color:#667991;font-size:14px;}
     .survey_c_top{
       min-height: 120px;
       width: 100%;
