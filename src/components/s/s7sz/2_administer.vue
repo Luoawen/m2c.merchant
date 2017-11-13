@@ -60,7 +60,7 @@
           {{goodInfo.twoAreaName=='' ? '': ','+ goodInfo.twoAreaName}}
           {{goodInfo.threeAreaName==''? '': ',' + goodInfo.threeAreaName}}</p>
         <div><span>品牌LOGO：</span>
-          <img :src="goodInfo.brandLogo"/>
+          <span v-if="goodInfo.brandLogo != ''"><img :src="goodInfo.brandLogo" /></span>
         </div>
         <div v-show="isBrandApprove">
           <p class="goodInfop" v-show="goodInfo.rejectReason!==''"><span>拒绝原因：</span>{{goodInfo.rejectReason}}</p>
