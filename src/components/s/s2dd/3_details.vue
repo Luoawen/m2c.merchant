@@ -65,7 +65,7 @@
             <tbody>
             <tr>
               <td class="a1 clear">
-                <div class="a1tab fl mr20"><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage)[0]"/></div>
+                <div class="a1tab fl mr20"><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage == ''? '[]': orderDetail.goodsInfo.goodsImage)[0]"/></div>
                 <div class="a1tit fl">
                   <div class="wobse top">
                     {{orderDetail.goodsInfo.goodsName}}
@@ -176,7 +176,7 @@
                  label="操作类容">
                </el-table-column>
                <el-table-column
-                 prop="optUser"
+                 prop="optUserStr"
                  label="操作人">
                </el-table-column>
              </el-table>
@@ -222,7 +222,7 @@
       <tbody>
       <tr>
         <td class="a1 clear">
-          <div class="a1tab fl mr20"><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage)[0]" style="width: 60px ;height: 60px"/></div>
+          <div class="a1tab fl mr20"><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage == ''? '[]': orderDetail.goodsInfo.goodsImage)[0]" style="width: 60px ;height: 60px"/></div>
           <div class="a1tit fl">
             <div class="wobse top">
               {{orderDetail.goodsInfo.goodsName}}
@@ -343,6 +343,7 @@
         },
         formLabelWidth: '120px',
         shipments:[],
+        _map: {},
       }
     },
     methods: {
@@ -405,10 +406,26 @@
             pageNum: that.currentPage,    // 请求第几页*/
           },
           success: function (result) {
+            //console.log('fanjc===' + result)
             if (result.status === 200){
               // 获取订单操作列表
-              that.operatingRecords = result.content
-              that.totalCount = result.totalCount
+              that.operatingRecords = result.content;
+              var uIds = '';
+              //that._map = {};
+              var ct = 0;
+              for (var i=0; i< that.operatingRecords.length; i++) {
+                var usId = that.operatingRecords[i].optUser;
+                  that.operatingRecords[i].optUserStr = '--';
+                  if (uIds.indexOf(usId) == -1) {
+                    if (ct>0)
+                      uIds +=',';
+                    ct ++;
+                    uIds += usId;
+                  }
+              }
+              that.totalCount = result.totalCount;
+              console.log('fanjc======' + uIds)
+              that.getUserByIds(uIds);
             }
           }
         })
@@ -431,7 +448,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            afterSellOrderId: that.orderDetail.afterSelldealerOrderId,
+            afterSellOrderId: that.orderDetail.afterSelldealerOrderId
           },
           success: function (result) {
             if (result.status === 200){
@@ -636,6 +653,36 @@
           }
         })
         //dialogVisible = false
+      }
+      ,getUserByIds(ids) {
+        console.log('fanjc======getUserByIds')
+        let that = this;
+        that.$.ajax({
+          type: 'get',
+          url: this.base + 'm2c.users/user/getUserInfoByIds',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            userIds: ids
+          },
+          success: function (result) {
+            //console.log('fanjc======')
+            console.log(result);
+            if (result.status === 200){
+              that._map = {};
+              var sz = result.content.length;
+              for(var i=0; i<sz; i++) {
+                var obj = result.content[i];
+                that._map[obj.userId] = obj.mobile + '[' + obj.userName + ']';
+              }
+              for (var i=0; i< that.operatingRecords.length> 0; i++) {
+                if (typeof(that._map[that.operatingRecords[i].optUser]) != 'undefined')
+                  that.operatingRecords[i].optUserStr = that._map[that.operatingRecords[i].optUser];
+                else
+                  that.operatingRecords[i].optUserStr = that.operatingRecords[i].optUser;
+              }
+            }
+          }
+        });
       }
     },
     mounted () {
