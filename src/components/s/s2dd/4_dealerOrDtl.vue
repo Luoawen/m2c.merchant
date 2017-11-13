@@ -497,7 +497,7 @@
           that.goodsMoney = data.orderPrice;
           that.orderFreight = data.orderFreight;
         that.orderStatus = data.orderStatus;
-          that.strOrderStatus = data.orderStatus === 0? '待付款': data.orderStatus === 1? '待发货': data.orderStatus === 2? '待收货': data.orderStatus === 3? '已完成': data.orderStatus === 4? '交易完成': '交易关闭';
+          that.strOrderStatus = data.orderStatus === 0? '待付款': data.orderStatus === 1? '待发货': data.orderStatus === 2? '待收货': data.orderStatus === 3? '已完成': data.orderStatus === 4? '交易完成': data.orderStatus === 5? '交易关闭': '--';
           //that.dealerOrderId = dealerOrderId;
           var d = new Date(data.createdDate);
           that.createdDate = that.date_format(d, 'yyyy-MM-dd hh:mm:ss');
