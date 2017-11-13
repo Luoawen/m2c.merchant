@@ -175,7 +175,7 @@
               </ul>
             </div>
             <div class="shop" v-show="rang_type_show.shop" >
-              <p>已选<span>{{chooseShopList.length}}</span>件商家</p>
+              <p>已选<span>{{chooseShopList.length}}</span>商家</p>
               <ul>
                 <li v-for="(choose, index) in chooseShopList">
                   <div>{{choose.shopName}}</div>
@@ -243,7 +243,7 @@
                     <div><b>{{goods.goodsPrice/100}}元</b></div>
                   </div>
                 </div>
-                <div class="fc" v-show="goods.isCheck"><div class="pickSpecificationsStyle"  v-show="goods.skuSingleFlag == 1"   @click.stop="ChooseSpecification(goods)">请选规格</div></div>
+                <div class="fc" v-show="goods.isCheck"><div class="pickSpecificationsStyle"  v-show="goods.skuSingleFlag == 1"    :vaule = 'isChooseSpecification'   @click.stop="ChooseSpecification(goods)">{{isChooseSpecification}}</div></div>
                 <div class="fcimg" v-show="goods.isCheck"></div>
               </div>
             </div>
@@ -464,12 +464,9 @@
       <div class="modal-dialog shop_goodchoose"    style="margin:10% 30%;">
         <div class="frame_total ">
           <div class="modal-header">
-            <div class="modal-title text-center wid100 " @click="changeTab('goods')">
+            <div class="modal-title text-center wid100 " >
             <span>选择商品</span>
             </div>
-            <!-- <div class="modal-title text-center wid50 fl" :class="tab_flag == 'shop' ? 'active' : ''" @click="changeTab('shop')">
-              <a>选择商家</a>
-            </div> -->
             <div  class="guanb" data-dismiss="modal"  @click="closeBox($event)" aria-hidden="true"></div>
           </div>
           <!--商品条件-->
@@ -498,14 +495,14 @@
           <!--商品-->
           <div class="shop_body" :style="tab_flag == 'goods' ? '' : 'display:none;'">
             <div class="good_choose">
-              <div class="merchant fl" style="position: relative;" v-for="(goods, index) in goodsResult.content" @click="addRemoveGoods(goods)">
+              <div class="merchant fl" style="position: relative;" v-for="(goods, index) in goodsResult.content" @click="addRemoveGoods(goods,index,$event)">
                 <h6>{{goods.goodsName}}</h6>
                 <img  class="fl" :src="goods.goodsImageUrl"/>
                 <div>
-                  <div>{{goods.dealerName}}</div>
-                  <div>{{goods.goodsPrice/100}}</div>
+                  <div class='goodsInfoText'>{{goods.dealerName}}</div>
+                  <div>{{goods.goodsPrice/100}}元</div>
                 </div>
-                <div class="fc" v-show="goods.isRemoved">
+                <div class="fc" v-show="goods.isRemoved"><div class="pickSpecificationsStyle"  v-show="goods.skuSingleFlag == 1"    :vaule = 'isChooseSpecification'   @click.stop="ChooseSpecification(goods)">{{isChooseSpecification}}</div>
                 </div>
                 <div class="fcimg" v-show="goods.isRemoved"></div>
               </div>
@@ -573,7 +570,7 @@
                 <h6>{{goods.goodsName}}</h6>
                 <img  class="fl" :src="goods.goodsImageUrl"/>
                 <div>
-                  <div>{{goods.dealerName}}</div>
+                  <div class='goodsInfoText'>{{goods.dealerName}}</div>
                   <div>{{goods.goodsPrice/100}}</div>
                 </div>
                 <div class="fc" v-show="goods.isExchange">
@@ -682,6 +679,7 @@
     name: '',
     data () {
       return {
+        isChooseSpecification :'请选规格',
         modalShadow:false,
         showlevel1: true,
         showlevel2: false,
@@ -1155,6 +1153,7 @@
             else {
               that.goodsResult.content[i].isChoosed = 0
               that.goodsResult.content[i].skuFlag = 0;
+              that.isChooseSpecification ='请选规格'
             }
             that.goodsResult.content[i].goodsSkuList = goodsInfo.goodsSkuList
             that.goodsResult.content[i].chooseSkuList = choose_sku_list
@@ -1174,11 +1173,13 @@
             choose_goods.chooseSkuList = that.goodsResult.content[i].chooseSkuList
             choose_goods.skuFlag = that.goodsResult.content[i].skuFlag;
             that.chooseGoodsList.push(choose_goods)
+                that.isChooseSpecification ='已选规格'
           }
         }
         console.log('选择商品列表',choose_goods)
         that.goods_sku_show = false
-         let el=$event.target
+        let el=$event.target
+    
         that.$(el).parents('#specificationChoose').modal("hide")
       },
       cancleGoodsSkuChoose (goodsInfo,$event) {
@@ -1188,8 +1189,10 @@
           goodsInfo.chooseSkuList =[]
           that.$(el).parents('.specification_footer').siblings('.specification_cen').find('[type=checkbox]').prop('checked',false)
           that.$(el).parents('.specification_footer').siblings('.specification_cen').find('.goodsSkuNum').val('')
+          that.isChooseSpecification = '请选规格'
       },
       deleteGoods (index, goods) {
+        // alert("hhfalf")
          var that = this
         that.chooseGoodsList.splice(index, 1)
         for (var i = 0; i < that.goodsResult.content.length; i++) {
@@ -1570,20 +1573,37 @@
         })
       },
       //将数据存储到排除商品列表
-      addRemoveGoods (goods) {
+      addRemoveGoods (goods,index,$event) {
         let that = this
-        for (var i = 0; i < that.goodsResult.content.length; i++) {
-          if (that.goodsResult.content[i].goodsId == goods.goodsId) {
-            that.goodsResult.content[i].isRemoved = 1
+        if(that.goodsResult.content[index].isRemoved == undefined || that.goodsResult.content[index].isRemoved == false){
+           that.goodsResult.content[index].isRemoved = true
+            that.removeGoodsList.push(that.goodsResult.content[index])
+            console.log(" that.chooseGoodsList")
+        }else{
+          for(var i = 0; i<that.removeGoodsList.length;i++){
+            if(that.goodsResult.content[index].goodsId == goods.goodsId){
+              that. deleteRemoveGoods(i,goods)
+              console.log('removeGoodsList',that.removeGoodsList)
+             break;
+            }
           }
+           that.goodsResult.content[index].isRemoved =false
         }
-        that.removeGoodsList = []
-        for (var i = 0; i < that.goodsResult.content.length; i++) {
-          if (that.goodsResult.content[i].isRemoved == 1) {
-            that.removeGoodsList.push(that.goodsResult.content[i])
-          }
-        }
-       console.log('移除商品列表',that.removeGoodsList) 
+
+////
+      //   for (var i = 0; i < that.goodsResult.content.length; i++) {
+      //     if (that.goodsResult.content[i].goodsId == goods.goodsId) {
+      //       that.goodsResult.content[i].isRemoved = 1
+      //     }
+      //   }
+
+      //   that.removeGoodsList = []
+      //   for (var i = 0; i < that.goodsResult.content.length; i++) {
+      //     if (that.goodsResult.content[i].isRemoved == 1) {
+      //       that.removeGoodsList.push(that.goodsResult.content[i])
+      //     }
+      //   }
+      //  console.log('移除商品列表',that.removeGoodsList) 
       },
         addProductsItems (goods) {
         let that = this
@@ -1883,6 +1903,7 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     word-break: break-all;
+    font-size: 12px;
 }
 .pickSpecificationsStyle{
     width: 60px;
