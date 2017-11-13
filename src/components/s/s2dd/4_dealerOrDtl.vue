@@ -12,7 +12,7 @@
       	<span class="dy">打印</span>
       </a>
       <button type="button" class="fah" v-show="!bModify && orderStatus == 1" @click="Deliver=true">发货</button>
-        <button type="button" class="fah" v-show="bModify" @click="saveDealerOrder()">保存</button>
+        <button type="button" class="fah" v-show="bModify||fModify" @click="saveDealerOrder()">保存</button>
       </span>
 
     </div>
@@ -59,7 +59,7 @@
           <span class="tit01">收货信息</span>
           <span class="ml20">
           	<span>{{recvAddr}}</span>
-          	<i class="ico_compile" v-show="!bModify" @click="modifyFreight(true)"></i>
+          	<i class="ico_compile" v-show="orderStatus === 0 ? !bModify : bModify" @click="modifyFreight(true)"></i>
           </span>
         </div>
         	<!--点击ico_compile后出现编辑地址-->
@@ -138,7 +138,7 @@
             <td class="a5">{{goods.totalPrice/100}}</td>
             <td class="a6">
             	<span :id="'spanFreight' + index" v-show="!fModify">{{goods.freight}}</span>
-            	<i class="ico_compile" @click="modifyFreight1(true)" v-show="!fModify"></i>
+            	<i class="ico_compile" @click="modifyFreight1(true)" v-show="orderStatus === 0 ? !fModify : fModify"></i>
             	<!--点击ico_compile后会出现input-->
             	<input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.freight" type="number"/>
             </td>
@@ -319,7 +319,42 @@
   	</div>
     <!-- 操作记录 -->
     <div v-show="showactive03">
-        <table id="logTable" style="table-layout:fixed"></table>
+        <!--<table id="logTable" style="table-layout:fixed"></table>-->
+      <div class="ops_red">
+        <div class="ops_tabs">
+
+          <el-table
+            :data="operatingRecords"
+            style="width: 100%">
+            <el-table-column
+              prop="optTime"
+              label="操作时间">
+              <template slot-scope="scope">{{date_format(new Date(scope.row.optTime), 'yyyy-MM-dd hh:mm:ss')  }}</template>
+            </el-table-column>
+            <el-table-column
+              prop="optContent"
+              label="操作类容">
+            </el-table-column>
+            <el-table-column
+              prop="optUserStr"
+              label="操作人">
+            </el-table-column>
+          </el-table>
+        </div>
+
+        <div class="page_pus" style="margin-top: 20px;float: right;margin-right: 30px;height: 60px;">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 10, 20, 30]"
+            :page-size="pageRows"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount">
+          </el-pagination>
+        </div>
+
+      </div>
     </div>
   </div>
 </template>
@@ -374,6 +409,10 @@
         // 所有的区(供搜索使用)
         ,area_all_search: []
         ,expressNum:0
+        ,pageRows:5
+        ,currentPage: 1
+        ,totalCount:0
+        ,operatingRecords:[]
       }
     },
     watch: {
@@ -497,7 +536,7 @@
           that.goodsMoney = data.orderPrice;
           that.orderFreight = data.orderFreight;
         that.orderStatus = data.orderStatus;
-          that.strOrderStatus = data.orderStatus === 0? '未支付': data.orderStatus === 1? '待发货': data.orderStatus === 2? '待收货': data.orderStatus === 3? '已完成': data.orderStatus === 4? '交易完成': '已关闭';
+          that.strOrderStatus = data.orderStatus === 0? '待付款': data.orderStatus === 1? '待发货': data.orderStatus === 2? '待收货': data.orderStatus === 3? '已完成': data.orderStatus === 4? '交易完成': data.orderStatus === 5? '交易关闭': '--';
           //that.dealerOrderId = dealerOrderId;
           var d = new Date(data.createdDate);
           that.createdDate = that.date_format(d, 'yyyy-MM-dd hh:mm:ss');
@@ -546,10 +585,9 @@
       get_log_info () {
         let that = this
         that.is_Success = false
-        that.$('#logTable').bootstrapTable('destroy').bootstrapTable({
+        /*that.$('#logTable').bootstrapTable('destroy').bootstrapTable({
           method: 'get',
           url: that.base + 'm2c.scm/order/logs/' + that.dealerOrderId,
-          //url: 'http://localhost:8080/m2c.scm/order/logs/' + that.$route.query.dealerOrderId,
           queryParams: function (params) {
             return Object.assign({}, {
               token: sessionStorage.getItem('mToken'),
@@ -599,16 +637,49 @@
             valign: 'middle',
             width: '120'
           }]
-        })
+        })*/
+        that.$.ajax({
+          type: 'get',
+          url: that.base + 'm2c.scm/order/logs/' + that.dealerOrderId,
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            isEncry: false,
+            orderId: that.$route.query.orderId,
+            rows: that.pageRows,                     // 每页多少条数据
+            pageNum: that.currentPage,    // 请求第几页*/
+          },
+          success: function (result) {
+            if (result.status === 200){
+              // 获取订单操作列表
+              that.operatingRecords = result.content;
+              that.totalCount = result.totalCount;
+              var uIds = '';
+              var ct = 0;
+              for (var i=0; i< that.operatingRecords.length; i++) {
+                var usId = that.operatingRecords[i].optUser;
+                that.operatingRecords[i].optUserStr = '--';
+                if (uIds.indexOf(usId) == -1) {
+                  if (ct>0)
+                    uIds +=',';
+                  ct ++;
+                  uIds += usId;
+                }
+              }
+              that.totalCount = result.totalCount;
+              console.log('fanjc======' + uIds)
+              that.getUserByIds(uIds);
+            }
+          }
+        });
       },
       modifyFreight (isModify) {
         let that = this;
-        if(that.orderStatus <= 1)
+        if(that.orderStatus < 1)
           that.bModify = isModify;
       },
       modifyFreight1 (isModify) {
         let that = this;
-        if(that.orderStatus <= 1)
+        if(that.orderStatus < 1)
           that.fModify = isModify;
       },
       deliverDealerOrder(){
@@ -725,6 +796,7 @@
             //console.log(result)
             if (result.status === 200) {
               that.bModify = false;
+              that.fModify = false;
               that.getDealerOrderInfo();
               that.show_tip('修改成功！');
             }
@@ -748,6 +820,46 @@
             }
           }
         })
+      }
+      ,getUserByIds(ids) {
+        console.log('fanjc======getUserByIds')
+        let that = this;
+        that.$.ajax({
+          type: 'get',
+          url: this.base + 'm2c.users/user/getUserInfoByIds',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            userIds: ids
+          },
+          success: function (result) {
+            //console.log('fanjc======')
+            console.log(result);
+            if (result.status === 200){
+              that._map = {};
+              var sz = result.content.length;
+              for(var i=0; i<sz; i++) {
+                var obj = result.content[i];
+                that._map[obj.userId] = obj.mobile + '[' + obj.userName + ']';
+              }
+              for (var i=0; i< that.operatingRecords.length> 0; i++) {
+                if (typeof(that._map[that.operatingRecords[i].optUser]) != 'undefined')
+                  that.operatingRecords[i].optUserStr = that._map[that.operatingRecords[i].optUser];
+                else
+                  that.operatingRecords[i].optUserStr = that.operatingRecords[i].optUser;
+              }
+            }
+          }
+        });
+      }
+      ,handleSizeChange(val) {
+        let that = this
+        that.pageRows=val
+        that.get_log_info();
+      }
+      ,handleCurrentChange(val) {
+        let that = this
+        that.currentPage=val
+        that.get_log_info();
       }
     }
     ,mounted () {

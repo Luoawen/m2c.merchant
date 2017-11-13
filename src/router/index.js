@@ -21,6 +21,7 @@ const survey = r => require.ensure([], () => r(require('@/components/s/s4zj/1_su
 const detail = r => require.ensure([], () => r(require('@/components/s/s4zj/2_detail')), 's')
 const record = r => require.ensure([], () => r(require('@/components/s/s4zj/3_record')), 's')
 const countQuery = r => require.ensure([], () => r(require('@/components/s/s4zj/4_countQuery')), 's')
+const cash = r => require.ensure([], () => r(require('@/components/s/s4zj/5_cash')), 's')
 // s5右侧内容
 const marketing = r => require.ensure([], () => r(require('@/components/s/s5yx/marketing')), 's')
 const fullCut = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCut')), 's')
@@ -38,6 +39,7 @@ const formworkadd = r => require.ensure([], () => r(require('@/components/s/s7sz
 
 const updatePass = r => require.ensure([], () => r(require('@/components/s/s8password/1_updatePass')), 's')
 const userInfo = r => require.ensure([], () => r(require('@/components/s/s8password/2_userInfo')), 's')
+const cashPass = r => require.ensure([], () => r(require('@/components/s/s8password/cashPass')), 's')
 Vue.use(Router)
 
 export default new Router({
@@ -121,6 +123,11 @@ export default new Router({
           name: 'countQuery',
           component: countQuery
         },
+         {
+          path: 'cash',
+          name: 'cash',
+          component: cash
+        },
         {
           path: 'marketing',
           name: 'marketing',
@@ -170,6 +177,11 @@ export default new Router({
           path: 'updatePass',
           name: 'updatePass',
           component: updatePass
+        },
+        {
+          path: 'cashPass',
+          name: 'cashPass',
+          component: cashPass
         },
         {
           path: 'userInfo',

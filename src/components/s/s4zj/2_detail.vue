@@ -40,33 +40,35 @@
         <el-table-column
           label="业务号"
           width="300">
-          <template slot-scope="scope"><span v-if="scope.row.businessType != 4 && scope.row.businessType != 5">{{scope.row.businessId}}</span><span v-if="scope.row.businessType == 4">售后单号&nbsp{{scope.row.correlationBusinessId}}</span><span v-if="scope.row.businessType == 5">售后单号&nbsp{{scope.row.correlationBusinessId}}</span><br/>
+          <template slot-scope="scope"><span v-if="scope.row.businessType != 4 && scope.row.businessType != 5">{{scope.row.businessId}}</span><span v-if="scope.row.businessType == 4">售后单号：&nbsp{{scope.row.correlationBusinessId}}</span><span v-if="scope.row.businessType == 5">售后单号：&nbsp{{scope.row.correlationBusinessId}}</span><br/>
             <span v-if="scope.row.businessType == 4 || scope.row.businessType == 5"  style="font-size:3px;color: lightsteelblue ">{{scope.row.businessId}}</span></template>
         </el-table-column>
         <el-table-column
           label="业务类型"
-          width="200"
+          width="300"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{scope.row.businessType==1?'销售分成':scope.row.businessType==2?'活动分摊':scope.row.businessType==3?'提现':scope.row.businessType==4?'分成退款':scope.row.businessType==5?'分摊退款':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="收入/元"
+          width="300"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>+{{(scope.row.amount/100 > 0?(scope.row.amount)/100:0).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column
           label="支出/元"
-          width="200"
+          width="300"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>-{{(scope.row.amount/100 < 0?(scope.row.amount)/100:0).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span>{{(scope.row.amount/100 < 0?(scope.row.amount)/100:0).toFixed(2)}}</span></template>
         </el-table-column>
-        <el-table-column
+        <!--<el-table-column
           label="商家信息"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{scope.row.platformName}}</span></template>
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column
           label="生成时间"
+          width="400"
           show-overflow-tooltip>
           <template slot-scope="scope"><span >{{scope.row.createDate }}</span></template>
         </el-table-column>
@@ -132,7 +134,7 @@
           label: '活动分摊'
         },{
           value: '3',
-          label: '体现'
+          label: '提现'
         },{
           value: '4',
           label: '分成退款'
