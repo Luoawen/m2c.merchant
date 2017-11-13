@@ -12,7 +12,7 @@
       	<span class="dy">打印</span>
       </a>
       <button type="button" class="fah" v-show="!bModify && orderStatus == 1" @click="Deliver=true">发货</button>
-        <button type="button" class="fah" v-show="bModify" @click="saveDealerOrder()">保存</button>
+        <button type="button" class="fah" v-show="bModify||fModify" @click="saveDealerOrder()">保存</button>
       </span>
 
     </div>
@@ -59,7 +59,7 @@
           <span class="tit01">收货信息</span>
           <span class="ml20">
           	<span>{{recvAddr}}</span>
-          	<i class="ico_compile" v-show="!bModify" @click="modifyFreight(true)"></i>
+          	<i class="ico_compile" v-show="orderStatus === 0 ? !bModify : bModify" @click="modifyFreight(true)"></i>
           </span>
         </div>
         	<!--点击ico_compile后出现编辑地址-->
@@ -138,7 +138,7 @@
             <td class="a5">{{goods.totalPrice/100}}</td>
             <td class="a6">
             	<span :id="'spanFreight' + index" v-show="!fModify">{{goods.freight}}</span>
-            	<i class="ico_compile" @click="modifyFreight1(true)" v-show="!fModify"></i>
+            	<i class="ico_compile" @click="modifyFreight1(true)" v-show="orderStatus === 0 ? !fModify : fModify"></i>
             	<!--点击ico_compile后会出现input-->
             	<input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.freight" type="number"/>
             </td>
@@ -536,7 +536,7 @@
           that.goodsMoney = data.orderPrice;
           that.orderFreight = data.orderFreight;
         that.orderStatus = data.orderStatus;
-          that.strOrderStatus = data.orderStatus === 0? '未支付': data.orderStatus === 1? '待发货': data.orderStatus === 2? '待收货': data.orderStatus === 3? '已完成': data.orderStatus === 4? '交易完成': '已关闭';
+          that.strOrderStatus = data.orderStatus === 0? '待付款': data.orderStatus === 1? '待发货': data.orderStatus === 2? '待收货': data.orderStatus === 3? '已完成': data.orderStatus === 4? '交易完成': data.orderStatus === 5? '交易关闭': '--';
           //that.dealerOrderId = dealerOrderId;
           var d = new Date(data.createdDate);
           that.createdDate = that.date_format(d, 'yyyy-MM-dd hh:mm:ss');
@@ -674,12 +674,12 @@
       },
       modifyFreight (isModify) {
         let that = this;
-        if(that.orderStatus <= 1)
+        if(that.orderStatus < 1)
           that.bModify = isModify;
       },
       modifyFreight1 (isModify) {
         let that = this;
-        if(that.orderStatus <= 1)
+        if(that.orderStatus < 1)
           that.fModify = isModify;
       },
       deliverDealerOrder(){
@@ -796,6 +796,7 @@
             //console.log(result)
             if (result.status === 200) {
               that.bModify = false;
+              that.fModify = false;
               that.getDealerOrderInfo();
               that.show_tip('修改成功！');
             }

@@ -2,7 +2,7 @@
   <div role="tabpanel" class="tab-pane fade in active"  aria-labelledby="home-tab" style="margin-top: 20px;width: 100%;margin-top: 130px;margin-left: 20px;">
     <div class="goods_search" style="width: 100%; height: 40px;">
       <div  style="float: left">
-        提现状态:
+        结算状态:
         <el-select v-model="search_params.SettleStatus" placeholder="请选择结算状态">
           <el-option v-for="item in expectations" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
@@ -16,7 +16,7 @@
         </el-date-picker>
       </div><!--时间-->
       <div class="search" style="width: 350px;float: left">
-        <el-input placeholder="输入提现单号" v-model="search_params.condition" class="input-with-select">
+        <el-input placeholder="输入结算号 / 订货号 / 商家名称" v-model="search_params.condition" class="input-with-select">
           <el-button slot="append" icon="el-icon-search" @click.native="orderStore()"></el-button>
         </el-input>
       </div>
@@ -28,32 +28,61 @@
         tooltip-effect="dark"
         style="width: 100%">
         <el-table-column
-          width="30">
+          width="20">
         </el-table-column>
         <el-table-column
-          label="提现单号"
-          width="400">
-          <template slot-scope="scope"><span >{{scope.row.withdrawalId}}</span></template>
+          label="结算号"
+          width="200">
+          <template slot-scope="scope"><span >{{scope.row.settleId}}</span></template>
         </el-table-column>
         <el-table-column
-          label="申请金额/元"
-          width="400"
+          label="订货号"
+          width="350"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{(scope.row.amount/100).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span><!--{{scope.row.orderType==0?'换货':scope.row.orderType==1?'退货':scope.row.orderType==2?'仅退款':'-'}}-->{{scope.row.dealerOrderId}}</span></template>
         </el-table-column>
         <el-table-column
-          label="提现状态"
-          width="400"
+          label="订货金额/元"
+          width="150"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{scope.row.wdStatus == 0?'处理中':scope.row.wdStatus == 1?'待审批':scope.row.wdStatus == 2?'待转账':scope.row.wdStatus == 3?'不通过':scope.row.wdStatus == 4?'已转账':scope.row.wdStatus == 5?'作废':'-'}}</span></template>
+          <template slot-scope="scope"><span>{{(scope.row.goodsTotalAmount/100).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column
-          label="申请时间"
-          width="400"
+          label="售后金额/元"
+          width="150"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{date_format(new Date(scope.row.createdTime), 'yyyy-MM-dd hh:mm:ss')}}</span></template>
+          <template slot-scope="scope"><span>{{(scope.row.afterSellAmount/100).toFixed(2)}}</span></template>
         </el-table-column>
-
+        <el-table-column
+          label="服务费/元"
+          width="150"
+          show-overflow-tooltip>
+          <template slot-scope="scope"><span>{{scope.row.serviceTotalCharge == undefined ? '-':(scope.row.serviceTotalCharge/100).toFixed(2)}}</span></template>
+        </el-table-column>
+        <el-table-column
+          label="活动分摊/元"
+          width="150"
+          show-overflow-tooltip>
+          <template slot-scope="scope"><span>{{scope.row.activityTotalAmount == undefined ? '-':(scope.row.activityTotalAmount/100).toFixed(2)}}</span></template>
+        </el-table-column>
+        <el-table-column
+          label="结算总额/元"
+          width="150"
+          show-overflow-tooltip>
+          <template slot-scope="scope"><span>{{scope.row.settleTotalAmount == undefined ? '-':(scope.row.settleTotalAmount/100).toFixed(2)}}</span></template>
+        </el-table-column>
+        <el-table-column
+          label="结算状态"
+          width="150"
+          show-overflow-tooltip>
+          <template slot-scope="scope"><span>{{scope.row.SettleStatus==1?'未结算':'已结算'}}</span></template>
+        </el-table-column>
+        <el-table-column
+          label="更新时间"
+          width="200"
+          show-overflow-tooltip>
+          <template slot-scope="scope"><span >{{date_format(new Date(scope.row.updatedTime), 'yyyy-MM-dd hh:mm:ss')  }}</span></template>
+        </el-table-column>
       </el-table>
       <div class="block" style="margin: 20px;float: right">
         <el-pagination
@@ -81,26 +110,12 @@
           value: '',
           label: '全部'
         }, {
-          value: '0',
-          label: '处理中'
-        }, {
           value: '1',
-          label: '待审批'
-        },
-          {
-            value: '2',
-            label: '待转账'
-          },
-          {
-            value: '3',
-            label: '不通过'
-          }, {
-            value: '4',
-            label: '已转装'
-          }, {
-            value: '5',
-            label: '作废'
-          },],
+          label: '未结算'
+        }, {
+          value: '2',
+          label: '已结算'
+        }],
 //        mediaStatus:[{
 //          value: '',
 //          label: '全部'
@@ -122,16 +137,16 @@
         let that = this
         that.$.ajax({
           type: 'get',
-          url: this.base + 'm2c.trading/web/withdrawal/dealer/list',
+          url: this.base + 'm2c.trading/web/settle/dealer/pager.web',
           data: {
             token: sessionStorage.getItem('mToken'),
-            rows: that.pageRows,                     // 每页多少条数据
-            pageNum: that.currentPage,    // 请求第几页*/
-            withdrawalId:that.search_params.condition,
-            wdStatus:that.search_params.SettleStatus,
-            beginTime:that.search_params.startTime,
-            endTime:that.search_params.endTime,
-            correlationId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            pageRows: that.pageRows,                     // 每页多少条数据
+            pageNo: that.currentPage,    // 请求第几页*/
+            keyword:that.search_params.condition,
+            SettleStatus:that.search_params.SettleStatus,
+            startDate:that.search_params.startTime,
+            endDate:that.search_params.endTime
           },
           success: function (result) {
             if (result.status === 200){

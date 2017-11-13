@@ -1,13 +1,18 @@
 <template>
   <div class="sz">
+    <!-- <el-row>
+      <el-col :span="4">
+        <label><i class="redColor">*</i>验证码：</label>
+      </el-col>
+      <el-col :span="6">
+        <label><i class="redColor">*</i>验证码：</label>
+      </el-col>
+    </el-row> -->
     <form class="form-horizontal">
-      <div class="form-group" v-show="isSuccess">
-        <label class="col-sm-3 control-label">已向手机号{{userPhone}}发送验证码</label>
-      </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">*验证码：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="verifyCode" placeholder="4位数字" maxlength="4">
+          <input type="text" class="form-control" id="verifyCode" placeholder="6位数验证码" maxlength="6">
         </div>
         <div class="col-sm-3">
           <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="!show">
@@ -15,17 +20,18 @@
             <span v-show="!show" class="count">{{count}} s</span>
           </button>
         </div>
+        <label v-show="isSuccess" class="col-sm-3 control-label">已向手机号{{userPhone}}发送验证码</label>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label">*新密码：</label>
+        <label class="col-sm-2 control-label">*交易密码：</label>
         <div class="col-sm-3">
-          <input type="password" class="form-control" id="newPass" maxlength="16" placeholder="6-16位数字密码">
+          <input type="password" class="form-control" id="newPass" maxlength="6" placeholder="6位数字密码">
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">*再次确认：</label>
         <div class="col-sm-3">
-          <input type="password" class="form-control" id="confirmNewPass" maxlength="16" placeholder="6-16位数字密码">
+          <input type="password" class="form-control" id="confirmNewPass" maxlength="6" placeholder="6位数字密码">
         </div>
       </div>
       <div class="form-group">
@@ -41,27 +47,6 @@
   export default {
     data () {
       return {
-        name: '',
-        // 搜索参数
-        search_params: {accNo: '', mediaName: '', province: '', proName: '', city: '', cityName: '', regionCode: '', areaName: '', parCate: '', cate: '', cooperWay: '', staff: '', addr: '', regisDateStart: '', regisDateEnd: '', detail: '', person: '', tel: ''},
-        // 所有的省份(供搜索使用)
-        province_all_search: [],
-        // 可选的城市(供搜索使用)
-        city_all_search: [],
-        // 所有的区(供搜索使用)
-        area_all_search: [],
-        // 所有的省份(供新增搜索删除(上)使用)
-        province_all_add_modify_1: [],
-        // 所有的城市(供新增搜索删除(上)使用)
-        city_all_add_modify_1: [],
-        // 所有的省份(供新增搜索删除(下)使用)
-        province_all_add_modify_2: [],
-        // 所有的城市(供新增搜索删除(下)使用)
-        city_all_add_modify_2: [],
-        // 所有的区域(供新增搜索删除(下)使用)
-        area_all_add_modify_2: [],
-        // 售后id
-        addressId: '',
         dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
         userPhone: JSON.parse(sessionStorage.getItem('mUser')).mobile,
         show: true,
@@ -197,3 +182,6 @@
     }
   }
 </script>
+<style scoped>
+
+</style>
