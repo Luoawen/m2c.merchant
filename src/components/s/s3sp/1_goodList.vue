@@ -164,8 +164,8 @@
               </el-table-column>
               <el-table-column
                 label="商品信息"
-                width="200">
-                <template slot-scope="scope"><img :src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsName}}</span></template>
+                width="300">
+                <template slot-scope="scope"><img :src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;"/><span class="ellipsis">{{scope.row.goodsName}}</span></template>
               </el-table-column>
               <el-table-column
                 prop="goodsClassify"
