@@ -175,6 +175,7 @@
         <tbody v-for="(item,index) in resultdata">
         <tr>
           <td colspan="8" class="bt clear">
+            <span class="ml10">订货号：{{item.dealerOrderId}}</span>  <span style="color: #ccc">&nbsp;|</span></span> <span class="ml10" v-show="item.payNo != '' ? true : false">支付单号：{{item.payNo}}</span>
       <!--      <div class="fl">
                       <span  class="mt10">
                         &lt;!&ndash;<input  type="checkbox" :id="'aa'+index" class="input_check" :value="item.dealerOrderId">
