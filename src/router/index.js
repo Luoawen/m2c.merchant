@@ -21,6 +21,7 @@ const survey = r => require.ensure([], () => r(require('@/components/s/s4zj/1_su
 const detail = r => require.ensure([], () => r(require('@/components/s/s4zj/2_detail')), 's')
 const record = r => require.ensure([], () => r(require('@/components/s/s4zj/3_record')), 's')
 const countQuery = r => require.ensure([], () => r(require('@/components/s/s4zj/4_countQuery')), 's')
+const cash = r => require.ensure([], () => r(require('@/components/s/s4zj/5_cash')), 's')
 // s5右侧内容
 const marketing = r => require.ensure([], () => r(require('@/components/s/s5yx/marketing')), 's')
 const fullCut = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCut')), 's')
@@ -120,6 +121,11 @@ export default new Router({
           path: 'countQuery',
           name: 'countQuery',
           component: countQuery
+        },
+         {
+          path: 'cash',
+          name: 'cash',
+          component: cash
         },
         {
           path: 'marketing',
