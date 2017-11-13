@@ -12,7 +12,7 @@
       	<span class="dy">打印</span>
       </a>
       <button type="button" class="fah" v-show="!bModify && orderStatus == 1" @click="Deliver=true">发货</button>
-        <button type="button" class="fah" v-show="bModify" @click="saveDealerOrder()">保存</button>
+        <button type="button" class="fah" v-show="bModify||fModify" @click="saveDealerOrder()">保存</button>
       </span>
 
     </div>
@@ -725,6 +725,7 @@
             //console.log(result)
             if (result.status === 200) {
               that.bModify = false;
+              that.fModify = false;
               that.getDealerOrderInfo();
               that.show_tip('修改成功！');
             }
