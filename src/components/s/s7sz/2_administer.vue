@@ -8,8 +8,8 @@
     <div id="myTabContent" class="tab-content">
       <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
         <div class="search_cell">
-          <span class="zIndex2" @click="is_Success=!is_Success">申请时间<i class="icon timeIcon"></i></span>
-          <div class="time" v-if="is_Success">
+          <span class="zIndex2" @click.stop="is_Success=!is_Success">申请时间<i class="icon timeIcon"></i></span>
+          <div class="time" v-if="is_Success" @click.stop>
             <el-date-picker v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
             </el-date-picker>
             <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" @change="get_comment_info()">
@@ -36,8 +36,8 @@
           </ul>
         </div>
         <div class="search_cell">
-          <span class="zIndex2" @click="is_Success2=!is_Success2">申请时间<i class="icon timeIcon"></i></span>
-          <div class="time" v-if="is_Success2">
+          <span class="zIndex2" @click.stop="is_Success2=!is_Success2">申请时间<i class="icon timeIcon"></i></span>
+          <div class="time" v-if="is_Success2" @click.stop>
             <el-date-picker v-model="search_approve.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
             </el-date-picker>
             <el-date-picker v-model="search_approve.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" @change="get_comment_info1(search_approve.approveStatus)">
@@ -766,6 +766,10 @@
       that.isBrandApprove = false
       that.rejectShow = false
       that.brandStatusName = '品牌状态'
+      that.$(document).click(function () { //点击页面收起所有盒子
+        that.is_Success = false
+        that.is_Success2 = false
+      })
     }
   }
 </script>
