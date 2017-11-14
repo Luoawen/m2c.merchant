@@ -28,7 +28,7 @@
               </div>
               <div>
                 <span class="tit01">订单总额:</span>
-                <span class="ml20">{{orderDetail.orderTotalMoney/100}}元（含运费<span>{{orderDetail.backFreight/100}}</span>元）</span>
+                <span class="ml20">{{orderDetail.orderTotalMoney/100}}元（含运费<span>{{orderDetail.orderFreight/100}}</span>元）</span>
               </div>
             </div>
             <div class="col-sm-4 detail_cen">
@@ -319,6 +319,7 @@
           status:0,
           orderFreight:0,
           backFreight:0
+          ,dealerId:''
         },
         operatingRecords:[],
         logistics:{
@@ -367,6 +368,7 @@
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselldetail',
+          //url: 'http://localhost:8080/m2c.scm/dealerorderafter/dealerorderafterselldetail',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
@@ -377,6 +379,7 @@
             if (result.status === 200){
               // 获取商品详情
               let _content = result.content
+              console.log(_content);
               that.orderDetail.afterSelldealerOrderId = _content.afterSellDealerOrderId
               that.orderDetail.backMoney = _content.backMoney
               that.orderDetail.createdDate = that.date_format(new Date(_content.createdDate), 'yyyy-MM-dd hh:mm:ss')
@@ -389,6 +392,7 @@
               that.orderDetail.reason=_content.reason
               that.orderDetail.status=_content.status
               that.orderDetail.rejectReason=_content.rejectReason
+              that.orderDetail.dealerId = _content.dealerId;
             }
           }
         })
@@ -476,12 +480,13 @@
             that.$.ajax({
               type: 'PUT',
               url: this.base + 'm2c.scm/order/dealer/agree-apply-sale',
+              //url: 'http://localhost:8080/m2c.scm/order/dealer/agree-apply-sale',
               data: {
                 token: sessionStorage.getItem('mToken'),
                 isEncry: false,
-                saleAfterNo:that.orderDetail.afterSellDealerOrderId,
+                saleAfterNo:that.orderDetail.afterSelldealerOrderId,
                 userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
-                skuId:that.orderDetail.goodsInfo.skuId
+                dealerId:that.orderDetail.dealerId
               },
               success: function (result) {
                 if (result.status === 200){
@@ -499,8 +504,8 @@
       }//商户同意售后
       ,handleRejected(){
         let that = this
-        let title= that.orderDetail.orderType==0?'是否拒绝换货申请?':that.orderDetail.orderType==1?'是否拒绝退货申请?':that.orderDetail.orderType==2?'是否拒绝退款申请?':'-'
-        let titleAisle= that.orderDetail.orderType==0?'拒绝申请换货':that.orderDetail.orderType==1?'拒绝申请退货':that.orderDetail.orderType==2?'拒绝申请退款':'-'
+        let title= that.orderDetail.orderType==0?'是否拒绝换货申请?':that.orderDetail.orderType==1?'是否拒绝退货申请?':that.orderDetail.orderType==2?'是否拒绝退款申请?':'-';
+        let titleAisle = that.orderDetail.orderType==0?'拒绝申请换货':that.orderDetail.orderType==1?'拒绝申请退货':that.orderDetail.orderType==2?'拒绝申请退款':'-';
         that.$confirm(title, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -513,15 +518,16 @@
            }).then(({ value }) => {
              that.$.ajax({
                type: 'PUT',
-               url: this.base + 'm2c.scm/order/afersale/refuse',
+               url: this.base + 'm2c.scm/order/dealer/reject-apply-sale',
+               //url: 'http://localhost:8080/m2c.scm/order/dealer/reject-apply-sale',
                data: {
                  token: sessionStorage.getItem('mToken'),
                  isEncry: false,
-                 saleAfterNo:that.orderDetail.afterSellDealerOrderId,
+                 saleAfterNo:that.orderDetail.afterSelldealerOrderId,
                  rejectReason: value,                     // 拒绝原因，中文
-                 rejectReasonCode: 0,    // 拒绝原因编码
+                 rejectReasonCode: 99,    // 拒绝原因编码
                  userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
-                 skuId:that.orderDetail.goodsInfo.skuId
+                 dealerId:that.orderDetail.dealerId
                },
                success: function (result) {
                  if (result.status === 200){
@@ -552,7 +558,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            saleAfterNo:that.orderDetail.afterSellDealerOrderId,
+            saleAfterNo:that.orderDetail.afterSelldealerOrderId,
             userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
             skuId:that.orderDetail.goodsInfo.skuId
           },
@@ -572,7 +578,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            saleAfterNo:that.orderDetail.afterSellDealerOrderId,
+            saleAfterNo:that.orderDetail.afterSelldealerOrderId,
             userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
             skuId:that.orderDetail.goodsInfo.skuId
           },
@@ -592,7 +598,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            saleAfterNo:that.orderDetail.afterSellDealerOrderId,
+            saleAfterNo:that.orderDetail.afterSelldealerOrderId,
             userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
             skuId:that.orderDetail.goodsInfo.skuId
           },
@@ -635,7 +641,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            saleAfterNo:that.orderDetail.afterSellDealerOrderId,
+            saleAfterNo:that.orderDetail.afterSelldealerOrderId,
             userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
             skuId:that.orderDetail.goodsInfo.skuId,
             expressNo:that.shipmentForm.expressNo,
