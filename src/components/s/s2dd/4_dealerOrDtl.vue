@@ -220,19 +220,21 @@
             <td colspan="3">
             <div class="mt10 mb10">
               <span class="mr20 tit_tb">配送方式</span>
-              <span></span>
               <span class="ml20">
-              <span class="mr20 tit_tb">物流公司</span>
-              <span></span>
+              <span>{{orderStatus==2? expressName:'-'}}</span>
               </span>
             </div>
             <div class="mt10 mb10">
               <span class="mr20 tit_tb">物流单号</span>
-              <span>{{orderStatus==2? '':'-'}}</span>
+              <span class="ml20">
+              <span>{{orderStatus==2? expressNo:'-'}}</span>
+              </span>
             </div>
             <div class="mt10 mb10">
               <span class="mr20 tit_tb">备注</span>
-              <span>{{orderStatus==2? '':'-'}}</span>
+              <span class="ml20">
+              <span>{{orderStatus==2? expressNote:'-'}}</span>
+              </span>
             </div>
             </td>
           </tr>
@@ -446,6 +448,23 @@
       },
       customerfreight () {
         var that = this
+        that.$.ajax({
+          url: that.base + 'm2c.scm/order/dealer/sendOrderDetail',
+          //url: 'http://localhost:8080/m2c.scm/dealer/sendOrderDetail',
+          type: 'get',
+          cache: false,
+          pagination: true,
+          data: {
+            dealerOrderId: that.dealerOrderId
+          },
+          success: function (result) {
+            if (result.status === 200) {
+              that.expressNote=result.content.orderDtls[0].expressNote
+              that.expressNo=result.content.orderDtls[0].expressNo
+              that.expressName=result.content.orderDtls[0].expressName
+            }
+          }
+        })
         that.showactive02 = true;
         that.showactive = false;
         that.showactive03 = false;
