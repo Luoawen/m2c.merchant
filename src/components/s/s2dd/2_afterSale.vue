@@ -202,7 +202,8 @@
             status:that.search_params.afterSaleStatus,
             condition:that.search_params.condition,
             startTime:that.search_params.startTime,
-            endTime:that.search_params.endTime
+            endTime:that.search_params.endTime,
+            mediaInfo:that.search_params.hasMedia
           },
           success: function (result) {
             if (result.status === 200){
