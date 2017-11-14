@@ -91,6 +91,19 @@
         <p>2、结算后，款项进入商家可用金额的同时结算服务费、活动分摊，商家可用余额可提现。若需要查询单号是否已经结算，可在结算查询中查看结算状态。</p>
       </div>
     </div>
+    <!-- 是否有交易密码 -->
+    <div class="delectSizeWrap cashPassCon" v-show="cashPassShow">
+      <div class="agreetc_header">
+        <span>提示</span>
+        <span class="fr" @click="cashPassHide">X</span>
+      </div>
+      <div class="tipsCon">
+        <h5>是否设置交易密码</h5>
+        <p>您还未设置交易密码</p>
+        <router-link :to="{name:'cashPass'}"><el-button type="primary">确定</el-button></router-link>
+        <el-button @click="cashPassHide">取消</el-button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -105,8 +118,10 @@
         dealerName:'',
         contents:'',
         createdTime:'',
-        ruleShowBox: false, //结算规则
-        backgroundBg: false
+        ruleShowBox: false, // 结算规则
+        backgroundBg: false, // 弹层背景
+        cashPassShow: false, // 交易密码
+        dealerTradePassword:JSON.parse(sessionStorage.getItem('mUser')).dealerTradePassword,
       }
     },
     methods:{
@@ -119,7 +134,18 @@
         this.backgroundBg = false
       },
       pullMoney () {
-        
+        let that = this
+        if(that.dealerTradePassword!=null){
+          that.$router.push({name:'cash'})
+        }else{
+          that.backgroundBg = true
+          that.cashPassShow = true
+        }
+      },
+      cashPassHide () {
+        let that = this
+        that.backgroundBg = false
+        that.cashPassShow = false
       },
       amount () {
         let that = this
@@ -138,7 +164,6 @@
           }
         })
       },
-
       amountList(){
         let that = this
         that.$.ajax({
@@ -157,7 +182,6 @@
           }
         })
       },
-
       plateDiposit(){
         let that = this
         that.$.ajax({
@@ -175,56 +199,35 @@
         })
       }
     },
-
     mounted(){
       let that = this;
       that.amount();
       that.amountList();
       that.plateDiposit();
     }
-
   }
 </script>
 <style lang="scss" scoped>
 .delectSizeBg {
-
     position: fixed;
-
     top: 0;
-
     left: 0;
-
     width: 100%;
-
     height: 1500px;
-
     background: rgba(0, 0, 0, 0.6);
-
     z-index: 999;
-
   }
-
+  
   .delectSizeWrap {
-
     position: fixed;
-
     width: 50%;
-
     height: auto;
-
     padding: 0;
-
-    //top: 500px;
-
+    top: 200px;
     left: 50%;
-
     margin-left: -25%;
-
     background: #fff;
-
     z-index: 999;
-
-    margin-top: -25%;
     .agreetc_header{
       width:100%;
       height: 50px;
@@ -245,6 +248,25 @@
         margin-top:20px;
       }
     }
+    .tipsCon{
+      padding:30px;text-align: center;
+      h5,p{
+        line-height: 30px;
+        font-size: 14px;
+        color: #333333;
+        //line-height:50px;font-size:20px;color:#333333;
+      }
+      h5{
+        line-height:50px;font-size:20px;
+      }
+      p{margin-bottom:30px;}
+    }
+  }
+  .cashPassCon{
+    width: 30%;
+    left: 50%;
+    margin-left: -15%;
+    
   }
   .survey_contaner{
     margin: auto;
