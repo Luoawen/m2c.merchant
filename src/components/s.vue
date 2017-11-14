@@ -607,6 +607,7 @@ body {
       top: 20px;
       left: -100px;
       word-break:break-all;
+      z-index:3;
     }
   }
 }
