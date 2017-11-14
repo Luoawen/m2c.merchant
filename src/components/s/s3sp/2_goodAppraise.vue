@@ -114,8 +114,8 @@
               <span>{{comment.starLevel}}</span>星
             </td>
             <td class="a3">
-              <a class="ellipsis2" :title="comment.goodsName">{{comment.goodsName}}</a>
-              <div class="tdcolor mt10">规格：{{comment.skuName}}</div>
+              <a class="ellipsis2" :title="comment.goodsName">{{comment.goodsName}}</a><br/><br/>
+              <div class="tdcolor mt10">&nbsp;&nbsp;&nbsp;规格：{{comment.skuName}}</div>
             </td>
             <td class="a4">
               {{comment.orderId}}

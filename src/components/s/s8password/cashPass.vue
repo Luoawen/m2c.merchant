@@ -138,13 +138,14 @@
         }
 				that.$.ajax({
           type: 'post',
-          url: that.base + 'm2c.users/user/dealer/updatePassWord',
+          url: that.base + 'm2c.trading/web/account/dealer/payPassword',
           data: {
             token: sessionStorage.getItem('mToken'),
 						mobile: that.userPhone,
             newPass: that.md5(pass).toLowerCase(),
             verifyCode: verifyCode,
-						codeType: 5
+            correlationType: 2,
+            correlationId: that.dealerId
           },
           success: function (result) {
             if (result.status === 200) {
