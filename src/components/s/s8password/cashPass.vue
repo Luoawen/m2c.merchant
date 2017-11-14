@@ -1,18 +1,10 @@
 <template>
   <div class="sz">
-    <!-- <el-row>
-      <el-col :span="4">
-        <label><i class="redColor">*</i>验证码：</label>
-      </el-col>
-      <el-col :span="6">
-        <label><i class="redColor">*</i>验证码：</label>
-      </el-col>
-    </el-row> -->
     <form class="form-horizontal">
       <div class="form-group">
         <label class="col-sm-2 control-label">*验证码：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="verifyCode" placeholder="6位数验证码" maxlength="6">
+          <input type="text" class="form-control" id="verifyCode" placeholder="4位数验证码" maxlength="4">
         </div>
         <div class="col-sm-3">
           <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="!show">
@@ -141,15 +133,15 @@
           that.show_tip('两次密码不一致')
           return false
         }
-        that.$.ajax({
-          url: that.base + 'm2c.users/user/findPassword',
+				that.$.ajax({
           type: 'post',
+          url: that.base + 'm2c.users/user/dealer/updatePassWord',
           data: {
             token: sessionStorage.getItem('mToken'),
-            codeType: 2,
-            mobile: that.userPhone,
+						mobile: that.userPhone,
             newPass: that.md5(pass).toLowerCase(),
-            verifyCode: verifyCode
+            verifyCode: verifyCode,
+						codeType: 5
           },
           success: function (result) {
             if (result.status === 200) {
@@ -159,6 +151,8 @@
               that.show = true
               that.isSuccess = false
               that.show_tip('修改操作成功')
+              JSON.parse(sessionStorage.getItem('mUser')).dealerTradePassword = that.md5(pass).toLowerCase()
+              that.$router.push({name:'cash'})
             } else if (result.status === 3) {
               that.show_tip('验证码不正确')
             } else {
@@ -166,6 +160,31 @@
             }
           }
         })
+        // that.$.ajax({
+        //   url: that.base + 'm2c.users/user/findPassword',
+        //   type: 'post',
+        //   data: {
+        //     token: sessionStorage.getItem('mToken'),
+        //     codeType: 2,
+        //     mobile: that.userPhone,
+        //     newPass: that.md5(pass).toLowerCase(),
+        //     verifyCode: verifyCode
+        //   },
+        //   success: function (result) {
+        //     if (result.status === 200) {
+        //       // 删除cookie
+        //       sessionStorage.removeItem('total')
+        //       // 显示重新发送 把发送按钮设置为可点击
+        //       that.show = true
+        //       that.isSuccess = false
+        //       that.show_tip('修改操作成功')
+        //     } else if (result.status === 3) {
+        //       that.show_tip('验证码不正确')
+        //     } else {
+        //       that.show_tip('修改失败')
+        //     }
+        //   }
+        // })
       }
     },
     mounted () {

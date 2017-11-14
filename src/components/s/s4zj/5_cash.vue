@@ -47,6 +47,47 @@
     </div>
   </div>
 </template>
+<<script>
+export default {
+	name:'',
+    data(){
+      return{
+			}
+		},
+		methods: {
+			// 请求提现剩余次数 及可提现金额
+			cashMoney(){
+				
+			},
+			//提现申请
+			withdrawals(){
+				let that = this;
+				that.$.ajax({
+          type: 'post',
+          url: that.base + 'm2c.users/user/dealer/updatePassWord',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+						verifyCode:that.verifyCode,
+						mobile:mobile,
+						newPass:newPass,
+						codeType: 5
+          },
+          success: function (result) {
+            if (result.status === 200){
+              that.content = result.content
+              console.log(that.content)
+            }
+          }
+        })
+			},
+		},
+    mounted(){
+      let that = this;
+      that.cashMoney()
+    }
+}
+</script>
+
 <style lang="scss" scoped>
 .cash{
 		margin: auto;
@@ -57,7 +98,7 @@
     min-height: 800px;
     .cash_tip{
     	width: 100%;
-    	height: 212px;
+    	height: auto;
     	background: #EDF0F7;
     	padding: 20px;
     	b{
