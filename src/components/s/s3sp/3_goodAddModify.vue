@@ -738,71 +738,58 @@
           if(file.url==that.goodsMainImages[i]){
             that.goodsMainImages.splice(i,1)
           }
-          if(file.response.content!=undefined){
+          if(file.response!=undefined){
             if(file.response.content.url==that.goodsMainImages[i]){
               that.goodsMainImages.splice(i,1)
             }
           }
         }
-        console.warn("goodsMainImages="+that.goodsMainImages)
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url
         this.dialogVisible = 1>0
       },
-      success(response, file, fileList) {
+      success (response, file, fileList) {
         let that = this
         that.dialogImageUrl = file.url
-        that.dialogVisible = 1>0
-        if(file.response.content.url==''||file.response.content.url==undefined){
-          that.show_tip("上传失败,请重新上传")
-        }else{
+        that.dialogVisible = 1 > 0
+        if (file.response.content.url == '' || file.response.content.url == undefined) {
+          that.show_tip('上传失败,请重新上传')
+        } else {
           that.goodsMainImages.push(file.response.content.url)
-          console.log("goodsMainImages="+that.goodsMainImages)
-          var con = document.getElementById('dragImg').getElementsByTagName("ul");
-          var lis = document.getElementById('dragImg').getElementsByTagName('li');
+          var con = document.getElementById('dragImg').getElementsByTagName('ul')
+          var lis = document.getElementById('dragImg').getElementsByTagName('li')
           for (var i = 0; i < lis.length; i++) {
-            lis[i].draggable = true; //每个li都设置可拖拽属性
-            lis[i].flag = false;
-            lis[i].ondragstart = function(){
-              this.flag = true; //鼠标拖拽li时设置flag为true
+            lis[i].draggable = true // 每个li都设置可拖拽属性
+            lis[i].flag = false
+            lis[i].ondragstart = function () {
+              this.flag = true // 鼠标拖拽li时设置flag为true
             }
-            lis[i].ondragend = function(){
-              this.flag = false;
-              //alert(that.goodsMainImages)
+            lis[i].ondragend = function () {
+              this.flag = false
             }
           };
-          console.log(con)
-          con.ondrop = function(e) {
-            alert(0)
+          con.ondrop = function (e) {
             for (var i = 0; i < lis.length; i++) {
-              if(lis[i].flag){ //如果flag为真，则添加一个li至box里
-                con.appendChild(lis[i]);
+              if (lis[i].flag) { // 如果flag为真，则添加一个li至box里
+                con.appendChild(lis[i])
               }
             };
           }
-          // con.ondragenter = function(e) {
-          //   alert(1)
-          //   e.preventDefault();
-
-          // }
-          con.ondragover = function(e) {
+          con.ondragover = function (e) {
             alert(2)
-            e.preventDefault();
-
+            e.preventDefault()
           }
-          // con.ondragleave = function(e) {
-          //   alert(3)
-          //   e.preventDefault();
-          // }
-
         }
-        console.warn("goodsMainImages="+that.goodsMainImages)
       },
-      beforeAvatarUpload(file) {
-        const isMA = file.size < 409600;
+      beforeAvatarUpload (file) {
+        if (!file.type.includes('image/')) {
+          this.$message.error('上传图片格式不正确!')
+          return false
+        }
+        const isMA = file.size < 409600
         if (!isMA) {
-          this.$message.error('上传图片大小不能超过 400Kb!');
+          this.$message.error('上传图片大小不能超过 400Kb!')
         }
         return isMA;
       },
