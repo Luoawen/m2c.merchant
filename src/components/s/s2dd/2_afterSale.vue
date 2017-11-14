@@ -49,7 +49,7 @@
           label="商品信息"
           width="200">
           <template slot-scope="scope"><img v-bind:src="JSON.parse(scope.row.goodsInfo.goodsImage == ''? '[]': scope.row.goodsInfo.goodsImage)[0]" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsInfo.goodsName}}</span></template>
-        </el-table-column>       //scope.row.goodsInfo.
+        </el-table-column>     
         <el-table-column
           prop="afterSellOrderId"
           label="单号"
