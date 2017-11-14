@@ -29,7 +29,7 @@
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
           <button type="submit" class="btn btn-info btn-lg save" @click="modify_pass()">保存</button>
-          <!--<button type="submit" class="btn btn-default btn-lg">取消</button>-->
+          <button type="submit" class="btn btn-default btn-lg" @click="goBack">取消</button>
         </div>
       </div>
     </form>
@@ -52,6 +52,9 @@
     watch: {
     },
     methods: {
+      goBack(){
+        this.$router.go(-1);
+      },
       timekeeping () {
         let that = this
         // 把按钮设置为不可以点击

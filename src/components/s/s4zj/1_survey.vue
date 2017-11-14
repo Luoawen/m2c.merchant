@@ -121,7 +121,8 @@
         ruleShowBox: false, // 结算规则
         backgroundBg: false, // 弹层背景
         cashPassShow: false, // 交易密码
-        dealerTradePassword:JSON.parse(sessionStorage.getItem('mUser')).dealerTradePassword,
+        platePositisCache:'',
+        payPwdSetFlag:''// 是否有交易密码标识
       }
     },
     methods:{
@@ -135,7 +136,7 @@
       },
       pullMoney () {
         let that = this
-        if(that.dealerTradePassword!=null){
+        if(that.payPwdSetFlag === 1){
           that.$router.push({name:'cash'})
         }else{
           that.backgroundBg = true
@@ -197,6 +198,23 @@
             }
           }
         })
+      },
+      getpayPwdSetFlag(){
+        let that = this
+        that.$.ajax({
+          type: 'get',
+          url: this.base + 'm2c.trading/web/account/dealer/payPwdSetFlag',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            correlationId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            correlationType:2
+          },
+          success: function (result) {
+            if (result.status === 200){
+              that.payPwdSetFlag = result.content.payPwdSetFlag
+            }
+          }
+        })
       }
     },
     mounted(){
@@ -204,6 +222,7 @@
       that.amount();
       that.amountList();
       that.plateDiposit();
+      that.getpayPwdSetFlag()
     }
   }
 </script>
