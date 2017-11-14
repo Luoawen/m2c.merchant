@@ -114,7 +114,7 @@
               <span>{{comment.starLevel}}</span>星
             </td>
             <td class="a3">
-              <div class="tdtit">{{comment.goodsName}}</div>
+              <a class="ellipsis2" :title="comment.goodsName">{{comment.goodsName}}</a>
               <div class="tdcolor mt10">规格：{{comment.skuName}}</div>
             </td>
             <td class="a4">
@@ -510,10 +510,20 @@
         .tdcolor{
           color: #999999;
         }
-        .tdtit{
-          width: 180px;
-          height: 40px;
-        }
+        a.ellipsis2{
+    width:180px;
+    height: 20px;margin-bottom:20px;
+    line-height:20px;
+    color:#5a5e66;
+    margin-left:10px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    position: relative;
+    float:left;
+  }
+  a.ellipsis2:hover{ text-decoration:none;}
         .tdhf{
           /*width: 1120px;*/
           min-height: 100px;

@@ -868,6 +868,7 @@ white-space: nowrap;}
     -webkit-line-clamp: 2;
     overflow: hidden;
     position: relative;
+    float: left;
     // div{
     //   width:200px;
     //   padding:20px;
