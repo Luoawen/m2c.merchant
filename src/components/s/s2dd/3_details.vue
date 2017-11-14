@@ -12,7 +12,7 @@
             <div class="col-sm-4 detail_cen">
               <div>
                 <span class="tit01">售后状态:</span>
-                <span class="ml20">{{orderDetail.status==0?'申请退货':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'同意(退换货)':orderDetail.status==5?'客户寄出':orderDetail.status==6?'商家收到':orderDetail.status==7?'商家寄出':orderDetail.status==8?'客户收到':orderDetail.status==9?'同意退款':orderDetail.status==10?'确认退款':orderDetail.status==11?'交易关闭':'-'}}</span>
+                <span class="ml20">{{orderDetail.status==0?'申请退货':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'交易关闭':'-'}}</span>
               </div>
               <div>
                 <span class="tit01">售后单号:</span>
@@ -85,7 +85,7 @@
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
 
                 <div class="oprs" v-show="orderDetail.status==0 || orderDetail.status==1||orderDetail.status==2">
-                  <el-button size="mini" round @click="handleAgree()">同意售后</el-button>
+                  <el-button size="mini" round @click="handleAgree()">同意申请</el-button>
                 </div>
 
 
@@ -93,9 +93,9 @@
                 <div class="oprs" v-show="orderDetail.status==4 && orderDetail.orderType==2"><!-- 商户同意退款 -->
                   <el-button size="mini" round @click="agreedRefund()">同意退款</el-button>
                 </div>
-                <div class="oprs" v-show="orderDetail.status==9 && orderDetail.orderType==2"><!-- 商户确认退款 -->
+                <!--<div class="oprs" v-show="orderDetail.status==9 && orderDetail.orderType==2">
                   <el-button size="mini" round @click="confirmRefund()">确认退款</el-button>
-                </div>
+                </div>-->
 
 
                 <!-- 用户期望退货--> <!-- 1.商户同意售后 2.用户返回货物 3.商家确认收货 4.商户同意退款 5.商户确认退款 -->
@@ -121,7 +121,7 @@
                 </div>
 
                 <div class="oprs" v-show="orderDetail.status==0 || orderDetail.status==1||orderDetail.status==2">
-                  <el-button size="mini" round @click="handleRejected()">拒绝售后</el-button>
+                  <el-button size="mini" round @click="handleRejected()">拒绝申请</el-button>
                 </div>
               </td>
             </tr>
@@ -554,7 +554,8 @@
         let that = this
         that.$.ajax({
           type: 'PUT',
-          url: this.base + 'm2c.scm/order/dealer/agree-apply-sale',
+          url: this.base + 'm2c.scm/order/aftersale/dealer/agree-rt-money',
+          //url: 'http://localhost:8080/m2c.scm/order/aftersale/dealer/agree-rt-money',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,

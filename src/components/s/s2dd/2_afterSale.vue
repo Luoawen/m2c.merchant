@@ -48,7 +48,7 @@
         <el-table-column
           label="商品信息"
           width="200">
-          <template slot-scope="scope"><img v-bind:src="scope.row.goodsInfo.goodsImage" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsInfo.goodsName}}</span></template>
+          <template slot-scope="scope"><img v-bind:src="JSON.parse(scope.row.goodsInfo.goodsImage == ''? '[]': scope.row.goodsInfo.goodsImage)[0]" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsInfo.goodsName}}</span></template>
         </el-table-column>
         <el-table-column
           prop="afterSellOrderId"
@@ -143,10 +143,10 @@
           label: '申请退款'
         }, {
           value: '3',
-          label: '拒绝'
+          label: '拒绝申请'
         }, {
           value: '4',
-          label: '同意(退换货)'
+          label: '同意申请'
         }, {
           value: '5',
           label: '客户寄出'
@@ -164,7 +164,7 @@
           label: '同意退款'
         }, {
           value: '10',
-          label: '确认退款'
+          label: '已退款'
         }, {
           value: '11',
           label: '交易关闭'
@@ -188,7 +188,8 @@
     methods: {
       // 获取全部订单信息
       orderStore () {
-        let that = this
+        let that = this;
+        console.log("that.pageRows==" + that.pageRows + ";"+ that.currentPage);
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselllist',
@@ -205,6 +206,7 @@
             endTime:that.search_params.endTime
           },
           success: function (result) {
+            console.log(result);
             if (result.status === 200){
               // 获取商品列表
 
@@ -216,13 +218,13 @@
       }
       ,handleSizeChange(val) {
         let that = this
-        that.goodsStorePageRows=val
-        that.goodsStore();
+        that.pageRows=val
+        that.orderStore();
       }
       ,handleCurrentChange(val) {
         let that = this
-        that.goodsStoreCurrentPage=val
-        that.goodsStore();
+        that.currentPage=val
+        that.orderStore();
       }
       ,handleCommand (index,row,action) {
         let that = this
