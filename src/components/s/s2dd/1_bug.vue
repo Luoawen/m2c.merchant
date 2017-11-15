@@ -209,12 +209,11 @@
                 <!-- 有几种情况的不同表现方 -->
                 <div style="">
                   <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :'--'}}</div>
-                  <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.afStatus, goodsItem.skuId)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
-                  <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.skuId)" v-show="goodsItem.afStatus==0">拒绝</button></div>
+                  <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
+                  <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" v-show="goodsItem.afStatus==0">拒绝</button></div>
                 </div>
                 <div v-show="goodsItem.afStatus==3">
-                  <span>已拒绝</span>
-                  <i class="ico_explain"></i>
+                  <img src="../../../assets/images/ico_explain.png" :title="goodsItem.rejectReason" width="16px"></img>
                 </div>
               </div>
             </div>
@@ -274,10 +273,10 @@
         <span class="fr" @click="Refuseshow=false">X</span>
       </div>
       <div class="refuse_body">
-        <textarea placeholder="请填写"></textarea>
+        <textarea placeholder="请填写" id="refuse_txt"></textarea>
       </div>
       <div class="refuse_footer">
-        <button type="button" class="btn save"  @click="towAgreeshow">确认</button>
+        <button type="button" class="btn save"  @click="handleReject">拒绝</button>
         <button type="button" class="btn cancel" @click="Refuseshow=false">取消</button>
       </div>
     </div>
@@ -288,8 +287,9 @@
         <span class="fr" @click="TowAgreeshow=false">X</span>
       </div>
       <div class="TowAgreeshow_body">
-        <div class="tit01">是否确认退货？</div>
-        <div class="tit02">款项将原路退回给顾客</div>
+        <input type="number" placeholder="填入要退的运费" id="rt_freight"></input>
+        <div class="tit01">是否确认{{afStatus==0?'退货':afStatus==1?'换货':afStatus==2?'退款':''}}？</div>
+        <div class="tit02">{{afStatus==0?'款项将原路退回给顾客':afStatus==2?'款项将原路退回给顾客':''}}</div>
       </div>
       <div class="agreetc_footer">
         <button type="button" class="btn save" >确认</button>
@@ -322,16 +322,16 @@
         // 搜索参数
         searchParams: { orderStatus: '', afterSellStatus: '', startTime: '', endTime: '', condition: '',orderClassify:'', payWay:'', hasMedia:'', invoice: '',commentStatus:''}
         ,afStatus : -2
-        ,strSkuId : ''
+        ,saleAfterNo : ''
       }
     },
     methods: {
     // 获取全部订单信息
-      agreeShow (_afStatus, strSkuId) {
+      agreeShow (afterNo, _st) {
       var that = this;
       that.Agreeshow = true;
-      that.afStatus=_afStatus;
-      that.strSkuId = strSkuId;
+      that.afStatus=_st;
+      that.saleAfterNo = afterNo;
     },
     getDealerOrders () {
       let that = this
@@ -378,9 +378,10 @@
         '&commentStatus='+that.searchParams.commentStatus;
       window.location.href=url
     },
-    refuseShow () {
+    refuseShow (afterNo) {
       var that = this
       that.Refuseshow = true
+      that.saleAfterNo = afterNo;
     },
     towAgreeshow () {
       var that = this
@@ -444,11 +445,14 @@
           //url: 'http://localhost:8080/m2c.scm/dealerorder/dealerorderlist',
           data: {
             dealerId: that.dealerId
-            ,orderStatus: that.afStatus
-            ,afterSellStatus: that.strSkuId
+            ,saleAfterNo: that.saleAfterNo,
+            userId: JSON.parse(sessionStorage.getItem('mUser')).userId
           },
           success: function (res) {
-            var resultData = res.content;
+            //var resultData = res.content;
+            if (res.status == 200) {
+              that.getDealerOrders();
+            }
             that.Agreeshow = false;
           }
         });
@@ -478,6 +482,31 @@
           if(that.$("input[name='ck" + i + "']").prop("checked") != val)
             that.$("input[name='ck" + i + "']").click();
         }
+      }
+      ,handleReject() {
+        let that = this;
+        var reasonVal = that.$("#refuse_txt").val();
+        that.$.ajax({
+          type: 'PUT',
+          url: that.base + 'm2c.scm/order/dealer/reject-apply-sale',
+          //url: 'http://localhost:8080/m2c.scm/order/dealer/reject-apply-sale',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            isEncry: false,
+            saleAfterNo: that.saleAfterNo,
+            rejectReason: reasonVal,                     // 拒绝原因，中文
+            rejectReasonCode: 99,    // 拒绝原因编码
+            userId: JSON.parse(sessionStorage.getItem('mUser')).userId,
+            dealerId: that.dealerId
+          },
+          success: function (result) {
+            if (result.status === 200){
+              // 获取订单操作列表
+              that.getDealerOrders();
+            }
+            that.Refuseshow = false;
+          }
+        })
       }
   },
   mounted () {
