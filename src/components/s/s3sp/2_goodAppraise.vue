@@ -105,7 +105,8 @@
         <tbody v-for="comment in datacomment">
           <tr>
             <td class="a1">
-              <div>{{comment.commentContent}}</div>
+              <!--<div>{{comment.commentContent}}</div>-->
+              <a class="ellipsis3" :title="comment.commentContent">{{comment.commentContent}}</a><br/><br/>
               <div class="mt10" v-for="img in comment.commentImages">
                 <img class="conimg mr10 fl" :src="img" />
               </div>
@@ -512,18 +513,32 @@
         }
         a.ellipsis2{
     width:180px;
-    height: 20px;margin-bottom:20px;
+    height: 40px;/*margin-bottom:20px;*/
     line-height:20px;
     color:#5a5e66;
     margin-left:10px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 2;
     overflow: hidden;
     position: relative;
     float:left;
   }
   a.ellipsis2:hover{ text-decoration:none;}
+ a.ellipsis3{
+          width:180px;
+          height: 60px;/*margin-bottom:20px;*/
+          line-height:20px;
+          color:#5a5e66;
+          margin-left:10px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
+          overflow: hidden;
+          position: relative;
+          float:left;
+        }
+ a.ellipsis3:hover{ text-decoration:none;}
         .tdhf{
           /*width: 1120px;*/
           min-height: 100px;
