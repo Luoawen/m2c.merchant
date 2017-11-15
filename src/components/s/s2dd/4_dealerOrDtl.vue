@@ -13,6 +13,7 @@
       </a>
       <button type="button" class="fah" v-show="!bModify && orderStatus == 1" @click="Deliver=true">发货</button>
         <button type="button" class="fah" v-show="bModify||fModify" @click="saveDealerOrder()">保存</button>
+        <button type="button" class="fah" v-show="bModify||fModify" @click="bModify = false,fModify = false">取消</button>
       </span>
 
     </div>
@@ -59,7 +60,7 @@
           <span class="tit01">收货信息</span>
           <span class="ml20">
           	<span>{{recvAddr}}</span>
-          	<i class="ico_compile" v-show="orderStatus === 0 ? !bModify : bModify" @click="modifyFreight(true)"></i>
+          	<i class="ico_compile" v-show="orderStatus === 0||1 ? !bModify : bModify" @click="modifyFreight(true)"></i>
           </span>
         </div>
         	<!--点击ico_compile后出现编辑地址-->
