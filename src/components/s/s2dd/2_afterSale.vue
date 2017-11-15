@@ -59,7 +59,7 @@
           label="售后期望"
           width="200"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{scope.row.orderType==0?'换货':scope.row.orderType==1?'退货':scope.row.orderType==2?'仅退款':'-'}}</span></template>
+          <template slot-scope="scope"><span>{{scope.row.orderType==0?'换货':scope.row.orderType==1?'退货退款':scope.row.orderType==2?'仅退款':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="售后总额/元"
