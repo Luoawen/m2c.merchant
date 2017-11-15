@@ -128,12 +128,12 @@
                   <option value="0">无</option>
                 </select>
               </div>
-              <div class="clear mt10 mb20">
+              <!--<div class="clear mt10 mb20">
                 <span class="bt fl ">订单类型</span>
                 <select class="form-control fl " v-model="searchParams.orderClassify">
                   <option value="" selected>全部</option>
                 </select>
-              </div>
+              </div>-->
               <div class="clear mt10 mb20">
                 <span class="bt fl ">支付方式</span>
                 <select class="form-control fl " v-model="searchParams.payWay">
@@ -145,6 +145,7 @@
             </div>
           </div>
           <div class="footer clear">
+
             <button class="footerbtn sort" @click="search()">搜索</button>
             <button class="footerbtn ml20 czt" @click="clearAll()">重置</button>
           </div>
@@ -349,7 +350,8 @@
           ,condition: that.searchParams.condition
           ,payWay: that.searchParams.payWay
           ,invoice: that.searchParams.invoice
-          ,commentStatus: that.searchParams.commentStatus
+          ,commentStatus: that.searchParams.commentStatus,
+          hasMedia:that.searchParams.hasMedia
           ,pageNum: that.pageIndex
           ,rows: that.pageSize
         },
