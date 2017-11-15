@@ -513,7 +513,7 @@
         }
         a.ellipsis2{
     width:180px;
-    height: 40px;/*margin-bottom:20px;*/
+    height: 40px;
     line-height:20px;
     color:#5a5e66;
     margin-left:10px;
@@ -526,8 +526,8 @@
   }
   a.ellipsis2:hover{ text-decoration:none;}
  a.ellipsis3{
-          width:180px;
-          height: 60px;/*margin-bottom:20px;*/
+          width:90%;
+          height: 60px;
           line-height:20px;
           color:#5a5e66;
           margin-left:10px;
