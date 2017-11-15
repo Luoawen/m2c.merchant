@@ -57,7 +57,7 @@
 					<span>交易密码</span>
 					</div>
 					<el-input type="password" v-model="payPassword" class="col-sm-4" style="padding-left:0px;" placeholder="6位数密码" @blur="checkEmpty" :maxlength='6' ></el-input>
-					<router-link class="mt8 fl" :to="{name:'cashPass'}">忘记密码</router-link>
+					<router-link class="mt8 fl" :to="{name:'cashPass',query:{from:'cash'}}">忘记密码</router-link>
 					<i class="red" v-show="isEmpty">交易密码不能为空</i>
 				</div>
 			</div>
@@ -186,7 +186,7 @@ export default {
             }
           }
 				})
-				
+
 			},
 			withdrawals(){
 				let that = this;
@@ -253,7 +253,7 @@ export default {
     		margin-top: 8px;
     		display: inline-block;
 				text-align: right;
-				
+
 			}
 			i.red{
 				color:red;

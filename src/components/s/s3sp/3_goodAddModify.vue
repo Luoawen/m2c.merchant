@@ -832,8 +832,8 @@
           return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
         }
       },
-      handleSelect(item) {
-        console.log("item="+item);
+      handleSelect (item) {
+        console.log('item=' + item)
       },
       // 获取规格值
       getValue () {
@@ -856,8 +856,16 @@
         })
       }
     },
-    mounted(){
+    mounted () {
       let that = this
+      window.onscroll = function () {
+        if (window.scrollY > 864) {
+          console.info(window.scrollY)
+          $('.el-autocomplete-suggestion').hide()
+        } else {
+          $('.el-autocomplete-suggestion').show()
+        }
+      }
       that.goodsClassify()
       // 获取商品保障
       that.$.ajax({

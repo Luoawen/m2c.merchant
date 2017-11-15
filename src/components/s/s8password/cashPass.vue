@@ -2,9 +2,9 @@
   <div class="sz">
     <form class="form-horizontal">
       <div class="form-group">
-        <label class="col-sm-2 control-label">*验证码：</label>
+        <label class="col-sm-2 control-label" >*验证码：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="verifyCode" placeholder="4位数验证码" maxlength="4">
+          <input type="text" v-model="text" class="form-control" id="verifyCode" placeholder="4位数验证码" maxlength="4">
         </div>
         <div class="col-sm-3">
           <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="!show">
@@ -15,21 +15,21 @@
         <label v-show="isSuccess" class="col-sm-3 control-label">已向手机号{{userPhone}}发送验证码</label>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label">*交易密码：</label>
+        <label class="col-sm-2 control-label" >*交易密码：</label>
         <div class="col-sm-3">
-          <input type="password" class="form-control" id="newPass" maxlength="6" placeholder="6位数字密码">
+          <input type="password" v-model="text" class="form-control" id="newPass" maxlength="6" placeholder="6位数字密码">
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">*再次确认：</label>
         <div class="col-sm-3">
-          <input type="password" class="form-control" id="confirmNewPass" maxlength="6" placeholder="6位数字密码">
+          <input type="password" v-model="text" class="form-control" id="confirmNewPass" maxlength="6" placeholder="6位数字密码">
         </div>
       </div>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
           <button type="submit" class="btn btn-info btn-lg save" @click="modify_pass()">保存</button>
-          <button type="submit" class="btn btn-default btn-lg" @click="goBack">取消</button>
+          <button type="submit" class="btn btn-default btn-lg" v-if="from=='cash'" @click="goBack">取消</button>
         </div>
       </div>
     </form>
@@ -44,7 +44,9 @@
         show: true,
         count: sessionStorage.getItem('total') == null || sessionStorage.getItem('total') == '' ? 60 : sessionStorage.getItem('total'),
         total: '',
-        isSuccess: false
+        isSuccess: false,
+        from:'',
+        masage:''
       }
     },
     created () {
@@ -154,9 +156,13 @@
               // 显示重新发送 把发送按钮设置为可点击
               that.show = true
               that.isSuccess = false
-              that.show_tip('修改操作成功')
               JSON.parse(sessionStorage.getItem('mUser')).dealerTradePassword = that.md5(pass).toLowerCase()
-              that.$router.push({name:'cash'})
+              that.show_tip('修改操作成功')
+              that.text = ''
+              if(that.$route.query.from == 'cash'){
+                that.$router.push({name:'cash'})
+              }
+
             } else if (result.status === 3) {
               that.show_tip('验证码不正确')
             } else {
@@ -191,8 +197,13 @@
         // })
       }
     },
+    clear(){
+      let that = this
+      that.text = ''
+    },
     mounted () {
       let that = this
+      that.from = that.$route.query.from
       if (sessionStorage.getItem('total') !== undefined && sessionStorage.getItem('total') !== 'NaN' && sessionStorage.getItem('total') !== 'null' && sessionStorage.getItem('total') !== null && sessionStorage.getItem('total') !== '') { // cookie存在倒计时
         that.show = false
         that.isSuccess = true
