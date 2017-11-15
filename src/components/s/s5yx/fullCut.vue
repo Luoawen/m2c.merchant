@@ -11,9 +11,9 @@
           </div>
           <div class="set">
             <span class="wid70">有效期：</span>
-            <input type="date"  class="form-control expiry_date" v-model="params.expiration_time_start" :min="todayDate" :max="params.expiration_time_end" @blur="formValidator(3)"/>
+            <input type="date" id='fullCutTimeStart' class="form-control expiry_date" v-model="params.expiration_time_start" :min="todayDate" :max="params.expiration_time_end" @blur="formValidator(3)"/>
             <span class="">&nbsp;&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <input type="date"  class="form-control expiry_date" v-model="params.expiration_time_end" :min="params.expiration_time_start" @blur="formValidator(4)"/>
+            <input type="date" id='fullCutTimeEnd' class="form-control expiry_date" v-model="params.expiration_time_end" :min="params.expiration_time_start" @blur="formValidator(4)"/>
             <div class="set_bz" style="color: red;" v-show="tip_show.time">有效期不能为空</div>
           </div>
           <div class="set">
@@ -866,6 +866,8 @@
         if (flag == 0 || flag == 3) {
           if (that.params.expiration_time_start == '') {
             that.tip_show.time = true
+            that.$("#fullCutName").focus()
+            that.$("#fullCutTimeStart").focus().select()
             return false
           } else{
             that.tip_show.time = false
@@ -874,6 +876,8 @@
         if (flag == 0 || flag == 4) {
           if (that.params.expiration_time_end == '') {
             that.tip_show.time = true
+            that.$("#fullCutName").focus()
+            that.$("#fullCutTimeEnd").focus().select()
             return false
           } else{
             that.tip_show.time = false
@@ -1049,7 +1053,7 @@
             for (var i = 0; i < result.content.length; i++) {
               //遍历获取到的数据 result.content(result.content外包含页码) 绑定属性
               result.content[i].isRemoved = 0
-              result.content[i].isChoosed = 0 
+              result.content[i].isChoosed = 0
               result.content[i].isExchange = 0
               result.content[i].chooseSkuList = []
        //遍历选择商品列表 同 result.content 的goodsId 匹配  匹配到就将isChoosed 设置为1 并将  chooseGoodsList里的chooseSkuList 赋值给  result.content 的chooseSkuList(选择规格列表)
@@ -1094,7 +1098,7 @@
            that.goodsResult.content[index].isCheck =false
         }
        console.log('我是isCheck',that.goodsResult.content[index].isCheck)
-       
+
           //  知道获取的checkbox是哪个和数量
         for (var i = 0; i < goods.goodsSkuList.length; i++) {
           for (var g = 0; g < goods.chooseSkuList.length; g++) {
@@ -1583,7 +1587,7 @@
             that.removeGoodsList.push(that.goodsResult.content[i])
           }
         }
-       console.log('移除商品列表',that.removeGoodsList) 
+       console.log('移除商品列表',that.removeGoodsList)
       },
         addProductsItems (goods) {
         let that = this

@@ -267,7 +267,7 @@
           <el-upload
             :action="uploadUrl" name="img"
             list-type="picture-card" :on-success="success" :data="upLoadData" :file-list="fileList"
-            :on-preview="handlePictureCardPreview" show-file-list :limit=5 :before-upload="beforeAvatarUpload"
+            show-file-list :limit=5 :before-upload="beforeAvatarUpload"
             :on-remove="handleRemove" >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -744,10 +744,6 @@
             }
           }
         }
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url
-        this.dialogVisible = 1>0
       },
       success (response, file, fileList) {
         let that = this
