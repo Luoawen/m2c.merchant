@@ -307,7 +307,7 @@
         <div class="specification_footer">
           <button type="button" class="btn save"  data-dismiss="modal"  @click="cancleGoodsSkuChoose(goodsInfo,$event)" >取消</button>
           <button type="button" class="btn cancel" @click="goodsSkuChoose(goodsInfo,$event)">确认</button>
-        </div>  
+        </div>
       </div>
     </div>
     <!--作用范围商品规格选择弹窗e-->
@@ -1010,7 +1010,7 @@
         that.$('#choose_goods').modal({'show':true ,'backdrop':false})
         // console.dir('---choose_goods------',that.$('#choose_goods'))
            // 1.把保存的數據遍历一遍  將狀態放到弹框中
-          // console.log('我是that.params.goods_ids',that.params.goods_ids.length)  
+          // console.log('我是that.params.goods_ids',that.params.goods_ids.length)
           if(that.params.goods_ids.length >0 ){
            for(var h =0 ; h < that.goodsResult.content.length;h++){
               for(var k =0 ;k < that.goodsResult.content.length;k++ ){
@@ -1049,7 +1049,7 @@
             for (var i = 0; i < result.content.length; i++) {
               //遍历获取到的数据 result.content(result.content外包含页码) 绑定属性
               result.content[i].isRemoved = 0
-              result.content[i].isChoosed = 0 
+              result.content[i].isChoosed = 0
               result.content[i].isExchange = 0
               result.content[i].chooseSkuList = []
               result.content[i].isChooseSpecification ='编辑规格数量'
@@ -1098,7 +1098,7 @@
                    that.goodsResult.content[index].goodsSkuList[j].goodsSkuNum = ''
                    console.log('清空商品规格', that.goodsResult.content[index].goodsSkuList[j])
           }
-         
+
           that.goodsResult.content[index].isCheck =false
           that.goodsResult.content[index].isChooseSpecification ='编辑规格数量'
           // 旧逻辑
@@ -1174,12 +1174,12 @@
                    that.show_tip("参与满减库存应不大于现有库存")
                      // goodsInfo.isChooseSpecification ='编辑规格数量'
                      goodsInfo.goodsSkuList[i].isCheck = false;
-                     //return;  
+                     //return;
           }
           // if(goodsInfo.goodsSkuList[i].goodsSkuNum < 0){
           //          that.show_tip("参与满减库存应不小于0")
           //          goodsInfo.isChooseSpecification ='编辑规格数量'
-          //          return;  
+          //          return;
           // }
           if (goodsInfo.goodsSkuList[i].isCheck == true && goodsInfo.goodsSkuList[i].goodsSkuNum > 0) {
            // 定义一个空对象    将 选择规格列表传给服务器数据收集起来
@@ -1244,7 +1244,7 @@
             choose_goods.goodsName = that.goodsResult.content[i].goodsName
             choose_goods.chooseSkuList = that.goodsResult.content[i].chooseSkuList
             choose_goods.skuFlag = that.goodsResult.content[i].skuFlag;
-            that.chooseGoodsList.push(choose_goods)            
+            that.chooseGoodsList.push(choose_goods)
             that.goodsResult.content[i].isChooseSpecification ='已选规格数量'
             //that.goodsResult.content[i].isCheck =true
             that.goodsResult.content[i].isRemoved =true
@@ -1256,7 +1256,7 @@
         //     that.chooseGoodsList.splice(i, 1);
         //   }
         // }
-        console.log('选择商品列表',choose_goods)  
+        console.log('选择商品列表',choose_goods)
         console.log("点击之后的选择商品列表",that.removeGoodsList)
         that.goods_sku_show = false
         let el=$event.target
@@ -1275,7 +1275,7 @@
             // 控制是否选中样式
             that.goodsResult.content[i].isRemoved= false
           }
-         
+
         }
          goodsInfo.isChooseSpecification = '编辑规格数量'
           // 通过js来清空 控制样式
@@ -1291,7 +1291,7 @@
           if (that.goodsResult.content[i].goodsId == goods.goodsId) {
             that.goodsResult.content[i].isChoosed = 0
             that.goodsResult.content[i].chooseSkuList = []
-            that.goodsResult.content[i].goodsSkuNum = 0           
+            that.goodsResult.content[i].goodsSkuNum = 0
           }
         }
         for (var j = 0; j < that.params.goods_ids.length; j++) {
@@ -1682,10 +1682,10 @@
              break;
             }
           }
-         
+
           that.goodsResult.content[index].isRemoved =false
           that.goodsResult.content[index].isChooseSpecification ='编辑规格数量'
-        
+
         // if(that.goodsResult.content[index].isRemoved == undefined || that.goodsResult.content[index].isRemoved == false){
         //    that.goodsResult.content[index].isRemoved = true
         //     that.removeGoodsList.push(that.goodsResult.content[index])
@@ -1714,8 +1714,8 @@
         //     that.removeGoodsList.push(that.goodsResult.content[i])
         //   }
         // }
-       
-       console.log('移除商品列表',that.removeGoodsList) 
+
+       console.log('移除商品列表',that.removeGoodsList)
       },
         addProductsItems (goods) {
         var that = this
@@ -1745,11 +1745,11 @@
         for (var i = 0; i < that.shopResult.content.length; i++) {
           that.shopResult.content[i].isRemoved = 0
         }
-        
+
         that.removeGoodsList = []
         that.chooseGoodsList.splice(0);
         that.removeShopList = []
-        // 
+        //
         that.$('#full_range_dialog').modal('hide')
         that.modalShadow = false
       },
@@ -1825,7 +1825,7 @@
           }
         }
       },
-      
+
       cancelExchange(){
         var that = this
         for (var i = 0; i < that.goodsResult.content.length; i++) {
@@ -2032,7 +2032,7 @@
 }
 .pickSpecificationsStyle{
     width: 80px;
-    height: 30px; 
+    height: 30px;
     font-size: 12px;
     line-height: 30px;
     text-align: center;
