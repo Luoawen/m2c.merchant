@@ -36,7 +36,7 @@
 				<div path='/s/survey' class="content_s">资金概况</div>
 				<div path='/s/detail' class="content_s">收支明细</div>
 				<div path='/s/record' class="content_s">提现记录</div>
-				<div path='/s/countQuery' class="content_s">提现记录</div>
+				<div path='/s/countQuery' class="content_s">结算查询</div>
 			</div>
       <div class="public_nav" @click="slide" ><i class="nav_marketing"></i>营销</div>
       <div class="content_container">
@@ -49,7 +49,7 @@
 				<div path='/s/administer' class="content_s">品牌管理</div>
 				<div path='/s/formwork' class="content_s">运费模板</div>
 				<div path='/s/address' class="content_s">售后地址</div>
-				<div path='/s/transact' class="content_s">交易密码</div>
+				<div path='/s/cashPass' class="content_s">交易密码</div>
 			</div>
       <div class="public_nav" path='/s/updatePass'><i class="nav_setting"></i>修改密码</div>
     </div>
@@ -607,6 +607,7 @@ body {
       top: 20px;
       left: -100px;
       word-break:break-all;
+      z-index:3;
     }
   }
 }

@@ -1,4 +1,4 @@
-s<template>
+<template>
   <div class="Account">
     <div class="message"><b>账户信息</b></div>
     <div class="a_message"><span class="mr20">注册手机号</span><span id="userPhone">{{dealer_user_info.userPhone}}</span></div>

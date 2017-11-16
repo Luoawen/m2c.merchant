@@ -15,7 +15,7 @@
 						<i class="password_i public_i"></i>
 						<input type="password" class="mima_dd" placeholder="密码" v-model="login_params.password" @keydown.enter="login">
 						<input type="text" class="mima_wz" placeholder="密码" v-model="login_params.password" @keydown.enter="login" style="display:none;">
-						<a @click="get_password" class="eyes_box " data-show="1" href="javascript:void(0);"><i class="icon iconfont" >&#xe624;</i></a> 
+						<a @click="get_password" class="eyes_box " data-show="1" href="javascript:void(0);"><i class="icon iconfont" >&#xe624;</i></a>
 					</div>
 					<div class="login_s">
 						<button type="submit" @click="login">登&nbsp&nbsp录</button>
@@ -42,7 +42,7 @@
 			<input placeholder="手机验证码" class="hone_code public_input_code" v-model="verifyCode" maxlength="6">
 			<button @click="get_code" v-bind:class="{ phone_right:isActive }" >{{ timerCodeMsg }}</button>
 			<!-- <input type="password" placeholder="新密码" class="public_input_password" v-model="newPass"> -->
-			<input type="password" placeholder="请输入8-16位新密码" class="public_input_password" v-model="confirmPass">
+			<input type="password" placeholder="请输入6-16位新密码" class="public_input_password" v-model="confirmPass">
 			<button class="complete_button" @click="pass_forget_passwrod" v-bind:class="{ phone_right:isActive_pass }" >完成</button>
 		</div>
 	</div>
@@ -68,9 +68,9 @@ export default {
   methods: {
     login () {
       let that = this
-      if (that.login_params.password.length < 8) that.show_tip('请输入8到16位有效密码')
-      if (that.login_params.password.length > 16) that.show_tip('请输入8到16位有效密码')
-      if (that.login_params.password.length >= 8 && that.login_params.password.length <= 16) {
+      if (that.login_params.password.length < 6) that.show_tip('请输入6到16位有效密码')
+      if (that.login_params.password.length > 16) that.show_tip('请输入6到16位有效密码')
+      if (that.login_params.password.length >= 6 && that.login_params.password.length <= 16) {
         that.$.ajax({
           method: 'post',
           url: that.base + 'm2c.users/user/dlogin',
@@ -121,9 +121,9 @@ export default {
     },
     pass_forget_passwrod () {
       let that = this
-      if (that.confirmPass.length < 8) that.show_tip('请输入8到16位有效密码')
-      if (that.confirmPass.length > 16) that.show_tip('请输入8到16位有效密码')
-      if (that.confirmPass.length >= 8 && that.confirmPass.length <= 16) {
+      if (that.confirmPass.length < 6) that.show_tip('请输入6到16位有效密码')
+      if (that.confirmPass.length > 16) that.show_tip('请输入6到16位有效密码')
+      if (that.confirmPass.length >= 6 && that.confirmPass.length <= 16) {
         that.$.ajax({
           method: 'post',
           url: that.base + 'm2c.users/user/findPassword',

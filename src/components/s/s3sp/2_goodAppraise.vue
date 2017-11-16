@@ -105,7 +105,8 @@
         <tbody v-for="comment in datacomment">
           <tr>
             <td class="a1">
-              <div>{{comment.commentContent}}</div>
+              <!--<div>{{comment.commentContent}}</div>-->
+              <a class="ellipsis3" :title="comment.commentContent">{{comment.commentContent}}</a><br/><br/>
               <div class="mt10" v-for="img in comment.commentImages">
                 <img class="conimg mr10 fl" :src="img" />
               </div>
@@ -114,8 +115,8 @@
               <span>{{comment.starLevel}}</span>星
             </td>
             <td class="a3">
-              <div class="tdtit">{{comment.goodsName}}</div>
-              <div class="tdcolor mt10">规格：{{comment.skuName}}</div>
+              <a class="ellipsis2" :title="comment.goodsName">{{comment.goodsName}}</a><br/><br/>
+              <div class="tdcolor mt10">&nbsp;&nbsp;&nbsp;规格：{{comment.skuName}}</div>
             </td>
             <td class="a4">
               {{comment.orderId}}
@@ -510,10 +511,34 @@
         .tdcolor{
           color: #999999;
         }
-        .tdtit{
-          width: 180px;
-          height: 40px;
+        a.ellipsis2{
+    width:180px;
+    height: 40px;
+    line-height:20px;
+    color:#5a5e66;
+    margin-left:10px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    position: relative;
+    float:left;
+  }
+  a.ellipsis2:hover{ text-decoration:none;}
+ a.ellipsis3{
+          width:90%;
+          height: 60px;
+          line-height:20px;
+          color:#5a5e66;
+          margin-left:10px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
+          overflow: hidden;
+          position: relative;
+          float:left;
         }
+ a.ellipsis3:hover{ text-decoration:none;}
         .tdhf{
           /*width: 1120px;*/
           min-height: 100px;
@@ -651,7 +676,7 @@
       .inp{
         width: 500px;
         height: 39px;
-        color: #ccc;
+        color: #444;
       }
       i{
         width: 50px;

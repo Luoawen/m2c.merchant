@@ -263,18 +263,19 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="3"><i style="color:red;">* </i>商品主图</el-col>
-        <el-col :span="21" ref="dragImg" id="dragImg">
+        <el-col :span="21" id="dragImg">
           <el-upload
             :action="uploadUrl" name="img"
-            list-type="picture-card" :on-success="success" :data="upLoadData" :file-list="fileList"
-            :on-preview="handlePictureCardPreview" show-file-list :limit=5 :before-upload="beforeAvatarUpload"
+            list-type="picture" :on-success="success" :data="upLoadData" :file-list="fileList"
+            show-file-list :limit=5 :before-upload="beforeAvatarUpload"
             :on-remove="handleRemove" >
             <i class="el-icon-plus"></i>
           </el-upload>
-          <el-dialog v-model="dialogVisible" size="tiny">
-            <img width="100%" :src="dialogImageUrl" alt="">
-          </el-dialog>
           <i v-if="imgShowList" style="color:red; font-style:normal;">商品主图不能为空</i>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :offset=2 :span=21 >
           <p class="marginTop20">最多上传5张主图，可以通过拖曳图片调整顺序</p>
         </el-col>
       </el-row>
@@ -424,11 +425,13 @@
       'goodsMainImages.length':{
         handler: function (val, oldVal) {
           let that = this
+          let div = that.$("#dragImg").find("div").find("div")
           if (val == 5) {
             that.$nextTick(function(){
-              var div = that.$("#dragImg").find("div").find("div")
               div.hide()
             })
+          }else{
+            div.show()
           }
         },
         deep: true
@@ -526,6 +529,14 @@
               that.imgShowList = true
               return
             }
+            let liList = document.getElementById('dragImg').getElementsByTagName('li')
+            let liLength = liList.length
+            // for(var i=0;i<liLength;i++){
+            //   that.goodsMainImages.push(that.$(liList[i]).find("img").src)
+            //   console.log(that.$(liList[i]).find("img"))
+            //   console.log(that.goodsMainImages)
+            //   return
+            // }
             for(var k=0;k<that.goodsSKUs.length;k++){
               if(that.goodsSKUs[k].availableNum===''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].weight===''||that.goodsSKUs[k].weight==undefined||that.goodsSKUs[k].photographPrice===''||that.goodsSKUs[k].photographPrice==undefined){
                 that.sukShow = true
@@ -738,71 +749,32 @@
           if(file.url==that.goodsMainImages[i]){
             that.goodsMainImages.splice(i,1)
           }
-          if(file.response.content!=undefined){
+          if(file.response!=undefined){
             if(file.response.content.url==that.goodsMainImages[i]){
               that.goodsMainImages.splice(i,1)
             }
           }
         }
-        console.warn("goodsMainImages="+that.goodsMainImages)
       },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url
-        this.dialogVisible = 1>0
-      },
-      success(response, file, fileList) {
+      success (response, file, fileList) {
         let that = this
         that.dialogImageUrl = file.url
-        that.dialogVisible = 1>0
-        if(file.response.content.url==''||file.response.content.url==undefined){
-          that.show_tip("上传失败,请重新上传")
-        }else{
+        that.dialogVisible = 1 > 0
+        if (file.response.content.url == '' || file.response.content.url == undefined) {
+          that.show_tip(file.response.errorMessage)
+        } else {
           that.goodsMainImages.push(file.response.content.url)
-          console.log("goodsMainImages="+that.goodsMainImages)
-          var con = document.getElementById('dragImg').getElementsByTagName("ul");
-          var lis = document.getElementById('dragImg').getElementsByTagName('li');
-          for (var i = 0; i < lis.length; i++) {
-            lis[i].draggable = true; //每个li都设置可拖拽属性
-            lis[i].flag = false;
-            lis[i].ondragstart = function(){
-              this.flag = true; //鼠标拖拽li时设置flag为true
-            }
-            lis[i].ondragend = function(){
-              this.flag = false;
-              //alert(that.goodsMainImages)
-            }
-          };
-          console.log(con)
-          con.ondrop = function(e) {
-            alert(0)
-            for (var i = 0; i < lis.length; i++) {
-              if(lis[i].flag){ //如果flag为真，则添加一个li至box里
-                con.appendChild(lis[i]);
-              }
-            };
-          }
-          // con.ondragenter = function(e) {
-          //   alert(1)
-          //   e.preventDefault();
-
-          // }
-          con.ondragover = function(e) {
-            alert(2)
-            e.preventDefault();
-
-          }
-          // con.ondragleave = function(e) {
-          //   alert(3)
-          //   e.preventDefault();
-          // }
-
+          that.picture()
         }
-        console.warn("goodsMainImages="+that.goodsMainImages)
       },
-      beforeAvatarUpload(file) {
-        const isMA = file.size < 409600;
+      beforeAvatarUpload (file) {
+        if (!file.type.includes('image/')) {
+          this.$message.error('上传图片格式不正确!')
+          return false
+        }
+        const isMA = file.size < 409600
         if (!isMA) {
-          this.$message.error('上传图片大小不能超过 400Kb!');
+          this.$message.error('上传图片大小不能超过 400Kb!')
         }
         return isMA;
       },
@@ -849,8 +821,8 @@
           return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
         }
       },
-      handleSelect(item) {
-        console.log("item="+item);
+      handleSelect (item) {
+        console.log('item=' + item)
       },
       // 获取规格值
       getValue () {
@@ -871,10 +843,54 @@
             }
           }
         })
+      },
+      picture(){
+        let that = this
+        that.$nextTick(() =>{
+          console.log(document.getElementById('dragImg').getElementsByTagName('li').length)
+          console.log(that.$('#dragImg').find('li').length)
+          if(document.getElementById('dragImg').getElementsByTagName('li').length>0){
+            var moveItem = document.getElementById('dragImg').getElementsByTagName('li');
+            for (let i = 0; i < moveItem.length; i++) {
+              moveItem[i].setAttribute('id', 'label' + i);
+              moveItem[i].ondragstart = function (ev) {
+                ev.dataTransfer.setData("Img", this.id);
+              };
+            }
+            let con = document.getElementById('dragImg').getElementsByTagName('ul')[0]
+            con.setAttribute("id","ulcon")
+            document.getElementById('ulcon').ondragover = function (ev) {
+              ev.preventDefault();
+            }
+            document.getElementById('ulcon').ondrop = function (ev) {
+              ev.preventDefault();
+              var id = ev.dataTransfer.getData('Img');
+              var elem = document.getElementById(id);
+              var toElem = ev.toElement.id;
+              let flag = id.substr(id.length-1,1)
+              let index = that.goodsMainImages[flag]
+              that.goodsMainImages.splice(flag,1)
+              that.goodsMainImages.push(index)
+              this.appendChild(elem);
+              console.log(that.goodsMainImages)
+            }
+          }
+        })
       }
     },
-    mounted(){
+    mounted () {
       let that = this
+      that.$nextTick(function(){
+        that.$('.el-upload').appendTo("#dragImg")
+      })
+      window.onscroll = function () {
+        if (window.scrollY > 864) {
+          console.info(window.scrollY)
+          $('.el-autocomplete-suggestion').hide()
+        } else {
+          $('.el-autocomplete-suggestion').show()
+        }
+      }
       that.goodsClassify()
       // 获取商品保障
       that.$.ajax({
@@ -991,6 +1007,7 @@
               that.fileList.push(eval('(' + '{url:"'+ result.content.goodsMainImages[i] + '"}' + ')'))
               that.goodsMainImages.push(result.content.goodsMainImages[i])
             }
+            that.picture()
             console.log("that.fileList="+that.fileList)
             if(result.content.skuFlag==1){
               that.$('#skuFlag0').hide()
@@ -1001,6 +1018,7 @@
           }
         })
       }
+      
     }
   }
 </script>
@@ -1131,4 +1149,10 @@
 <style>
 .el-upload--picture-card{overflow: hidden;}
  table .el-input__inner{width:100px;}
+ #dragImg ul{width:auto;float:left;height:100px;display:block;margin-bottom:20px;}
+ .el-upload-list--picture .el-upload-list__item{float:left;width:100px;height:100px;padding:0;margin-right:20px;margin-top:0;}
+ .el-upload-list--picture .el-upload-list__item-thumbnail{width:100px;height:100px;float:left;position:static;margin-left:0;}
+ .el-upload{width:100px;height:100px;display:inline-block;float:left;overflow:hidden;margin-right:20px;}
+ .el-upload .el-icon-plus{width:98px;height:98px;background:#fff url(../../../assets/images/ico_add_ disabled.png) no-repeat center center;border:1px dotted #B7C9E1;}
+ .el-icon-plus:before{content:'';}
 </style>

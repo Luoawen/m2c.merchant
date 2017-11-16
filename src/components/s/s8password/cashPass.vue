@@ -1,13 +1,10 @@
 <template>
   <div class="sz">
     <form class="form-horizontal">
-      <div class="form-group" v-show="isSuccess">
-        <label class="col-sm-3 control-label">已向手机号{{userPhone}}发送验证码</label>
-      </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label">*验证码：</label>
+        <label class="col-sm-2 control-label" >*验证码：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="verifyCode" placeholder="4位数字" maxlength="4">
+          <input type="text" v-model="text" class="form-control" id="verifyCode" placeholder="4位数验证码" maxlength="4">
         </div>
         <div class="col-sm-3">
           <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="!show">
@@ -15,23 +12,24 @@
             <span v-show="!show" class="count">{{count}} s</span>
           </button>
         </div>
+        <label v-show="isSuccess" class="col-sm-3 control-label">已向手机号{{userPhone}}发送验证码</label>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label">*新密码：</label>
+        <label class="col-sm-2 control-label" >*交易密码：</label>
         <div class="col-sm-3">
-          <input type="password" class="form-control" id="newPass" maxlength="16" placeholder="6-16位数字密码">
+          <input type="password" v-model="text" class="form-control" id="newPass" maxlength="6" placeholder="6位数字密码">
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">*再次确认：</label>
         <div class="col-sm-3">
-          <input type="password" class="form-control" id="confirmNewPass" maxlength="16" placeholder="6-16位数字密码">
+          <input type="password" v-model="text" class="form-control" id="confirmNewPass" maxlength="6" placeholder="6位数字密码">
         </div>
       </div>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
           <button type="submit" class="btn btn-info btn-lg save" @click="modify_pass()">保存</button>
-          <!--<button type="submit" class="btn btn-default btn-lg">取消</button>-->
+          <button type="submit" class="btn btn-default btn-lg" v-if="from=='cash'" @click="goBack">取消</button>
         </div>
       </div>
     </form>
@@ -41,33 +39,14 @@
   export default {
     data () {
       return {
-        name: '',
-        // 搜索参数
-        search_params: {accNo: '', mediaName: '', province: '', proName: '', city: '', cityName: '', regionCode: '', areaName: '', parCate: '', cate: '', cooperWay: '', staff: '', addr: '', regisDateStart: '', regisDateEnd: '', detail: '', person: '', tel: ''},
-        // 所有的省份(供搜索使用)
-        province_all_search: [],
-        // 可选的城市(供搜索使用)
-        city_all_search: [],
-        // 所有的区(供搜索使用)
-        area_all_search: [],
-        // 所有的省份(供新增搜索删除(上)使用)
-        province_all_add_modify_1: [],
-        // 所有的城市(供新增搜索删除(上)使用)
-        city_all_add_modify_1: [],
-        // 所有的省份(供新增搜索删除(下)使用)
-        province_all_add_modify_2: [],
-        // 所有的城市(供新增搜索删除(下)使用)
-        city_all_add_modify_2: [],
-        // 所有的区域(供新增搜索删除(下)使用)
-        area_all_add_modify_2: [],
-        // 售后id
-        addressId: '',
         dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
         userPhone: JSON.parse(sessionStorage.getItem('mUser')).mobile,
         show: true,
         count: sessionStorage.getItem('total') == null || sessionStorage.getItem('total') == '' ? 60 : sessionStorage.getItem('total'),
         total: '',
-        isSuccess: false
+        isSuccess: false,
+        from:'',
+        masage:''
       }
     },
     created () {
@@ -75,6 +54,9 @@
     watch: {
     },
     methods: {
+      goBack(){
+        this.$router.go(-1);
+      },
       timekeeping () {
         let that = this
         // 把按钮设置为不可以点击
@@ -156,15 +138,16 @@
           that.show_tip('两次密码不一致')
           return false
         }
-        that.$.ajax({
-          url: that.base + 'm2c.users/user/findPassword',
+				that.$.ajax({
           type: 'post',
+          url: that.base + 'm2c.trading/web/account/dealer/payPassword',
           data: {
             token: sessionStorage.getItem('mToken'),
-            codeType: 2,
-            mobile: that.userPhone,
+						mobile: that.userPhone,
             newPass: that.md5(pass).toLowerCase(),
-            verifyCode: verifyCode
+            verifyCode: verifyCode,
+            correlationType: 2,
+            correlationId: that.dealerId
           },
           success: function (result) {
             if (result.status === 200) {
@@ -173,7 +156,13 @@
               // 显示重新发送 把发送按钮设置为可点击
               that.show = true
               that.isSuccess = false
+              JSON.parse(sessionStorage.getItem('mUser')).dealerTradePassword = that.md5(pass).toLowerCase()
               that.show_tip('修改操作成功')
+              that.text = ''
+              if(that.$route.query.from == 'cash'){
+                that.$router.push({name:'cash'})
+              }
+
             } else if (result.status === 3) {
               that.show_tip('验证码不正确')
             } else {
@@ -181,10 +170,40 @@
             }
           }
         })
+        // that.$.ajax({
+        //   url: that.base + 'm2c.users/user/findPassword',
+        //   type: 'post',
+        //   data: {
+        //     token: sessionStorage.getItem('mToken'),
+        //     codeType: 2,
+        //     mobile: that.userPhone,
+        //     newPass: that.md5(pass).toLowerCase(),
+        //     verifyCode: verifyCode
+        //   },
+        //   success: function (result) {
+        //     if (result.status === 200) {
+        //       // 删除cookie
+        //       sessionStorage.removeItem('total')
+        //       // 显示重新发送 把发送按钮设置为可点击
+        //       that.show = true
+        //       that.isSuccess = false
+        //       that.show_tip('修改操作成功')
+        //     } else if (result.status === 3) {
+        //       that.show_tip('验证码不正确')
+        //     } else {
+        //       that.show_tip('修改失败')
+        //     }
+        //   }
+        // })
       }
+    },
+    clear(){
+      let that = this
+      that.text = ''
     },
     mounted () {
       let that = this
+      that.from = that.$route.query.from
       if (sessionStorage.getItem('total') !== undefined && sessionStorage.getItem('total') !== 'NaN' && sessionStorage.getItem('total') !== 'null' && sessionStorage.getItem('total') !== null && sessionStorage.getItem('total') !== '') { // cookie存在倒计时
         that.show = false
         that.isSuccess = true
@@ -197,3 +216,6 @@
     }
   }
 </script>
+<style scoped>
+
+</style>

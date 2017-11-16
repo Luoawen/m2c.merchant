@@ -12,7 +12,7 @@
             <div class="col-sm-4 detail_cen">
               <div>
                 <span class="tit01">售后状态:</span>
-                <span class="ml20">{{orderDetail.status==0?'申请退货':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'同意(退换货)':orderDetail.status==5?'客户寄出':orderDetail.status==6?'商家收到':orderDetail.status==7?'商家寄出':orderDetail.status==8?'客户收到':orderDetail.status==9?'同意退款':orderDetail.status==10?'确认退款':orderDetail.status==11?'交易关闭':'-'}}</span>
+                <span class="ml20">{{orderDetail.status==0?'申请退货':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'交易关闭':'-'}}</span>
               </div>
               <div>
                 <span class="tit01">售后单号:</span>
@@ -28,7 +28,7 @@
               </div>
               <div>
                 <span class="tit01">订单总额:</span>
-                <span class="ml20">{{orderDetail.orderTotalMoney/100}}元（含运费<span>{{orderDetail.backFreight/100}}</span>元）</span>
+                <span class="ml20">{{orderDetail.orderTotalMoney/100}}元（含运费<span>{{orderDetail.orderFreight/100}}</span>元）</span>
               </div>
             </div>
             <div class="col-sm-4 detail_cen">
@@ -65,7 +65,7 @@
             <tbody>
             <tr>
               <td class="a1 clear">
-                <div class="a1tab fl mr20"><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage)[0]"/></div>
+                <div class="a1tab fl mr20"><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage == ''? '[]': orderDetail.goodsInfo.goodsImage)[0]"/></div>
                 <div class="a1tit fl">
                   <div class="wobse top">
                     {{orderDetail.goodsInfo.goodsName}}
@@ -85,7 +85,7 @@
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
 
                 <div class="oprs" v-show="orderDetail.status==0 || orderDetail.status==1||orderDetail.status==2">
-                  <el-button size="mini" round @click="handleAgree()">同意售后</el-button>
+                  <el-button size="mini" round @click="handleAgree()">同意申请</el-button>
                 </div>
 
 
@@ -93,9 +93,9 @@
                 <div class="oprs" v-show="orderDetail.status==4 && orderDetail.orderType==2"><!-- 商户同意退款 -->
                   <el-button size="mini" round @click="agreedRefund()">同意退款</el-button>
                 </div>
-                <div class="oprs" v-show="orderDetail.status==9 && orderDetail.orderType==2"><!-- 商户确认退款 -->
+                <!--<div class="oprs" v-show="orderDetail.status==9 && orderDetail.orderType==2">
                   <el-button size="mini" round @click="confirmRefund()">确认退款</el-button>
-                </div>
+                </div>-->
 
 
                 <!-- 用户期望退货--> <!-- 1.商户同意售后 2.用户返回货物 3.商家确认收货 4.商户同意退款 5.商户确认退款 -->
@@ -121,7 +121,7 @@
                 </div>
 
                 <div class="oprs" v-show="orderDetail.status==0 || orderDetail.status==1||orderDetail.status==2">
-                  <el-button size="mini" round @click="handleRejected()">拒绝售后</el-button>
+                  <el-button size="mini" round @click="handleRejected()">拒绝申请</el-button>
                 </div>
               </td>
             </tr>
@@ -176,7 +176,7 @@
                  label="操作类容">
                </el-table-column>
                <el-table-column
-                 prop="optUser"
+                 prop="optUserStr"
                  label="操作人">
                </el-table-column>
              </el-table>
@@ -222,7 +222,7 @@
       <tbody>
       <tr>
         <td class="a1 clear">
-          <div class="a1tab fl mr20"><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage)[0]" style="width: 60px ;height: 60px"/></div>
+          <div class="a1tab fl mr20"><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage == ''? '[]': orderDetail.goodsInfo.goodsImage)[0]" style="width: 60px ;height: 60px"/></div>
           <div class="a1tit fl">
             <div class="wobse top">
               {{orderDetail.goodsInfo.goodsName}}
@@ -319,6 +319,7 @@
           status:0,
           orderFreight:0,
           backFreight:0
+          ,dealerId:''
         },
         operatingRecords:[],
         logistics:{
@@ -343,6 +344,7 @@
         },
         formLabelWidth: '120px',
         shipments:[],
+        _map: {},
       }
     },
     methods: {
@@ -366,16 +368,19 @@
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselldetail',
+          //url: 'http://localhost:8080/m2c.scm/dealerorderafter/dealerorderafterselldetail',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
             afterSellOrderId:sessionStorage.getItem('afterSale:afterSellOrderId')
+            ,userId: JSON.parse(sessionStorage.getItem('mUser')).userId
           },
           success: function (result) {
             if (result.status === 200){
               // 获取商品详情
               let _content = result.content
+              console.log(_content);
               that.orderDetail.afterSelldealerOrderId = _content.afterSellDealerOrderId
               that.orderDetail.backMoney = _content.backMoney
               that.orderDetail.createdDate = that.date_format(new Date(_content.createdDate), 'yyyy-MM-dd hh:mm:ss')
@@ -388,6 +393,7 @@
               that.orderDetail.reason=_content.reason
               that.orderDetail.status=_content.status
               that.orderDetail.rejectReason=_content.rejectReason
+              that.orderDetail.dealerId = _content.dealerId;
             }
           }
         })
@@ -405,10 +411,26 @@
             pageNum: that.currentPage,    // 请求第几页*/
           },
           success: function (result) {
+            //console.log('fanjc===' + result)
             if (result.status === 200){
               // 获取订单操作列表
-              that.operatingRecords = result.content
-              that.totalCount = result.totalCount
+              that.operatingRecords = result.content;
+              var uIds = '';
+              //that._map = {};
+              var ct = 0;
+              for (var i=0; i< that.operatingRecords.length; i++) {
+                var usId = that.operatingRecords[i].optUser;
+                  that.operatingRecords[i].optUserStr = '--';
+                  if (uIds.indexOf(usId) == -1) {
+                    if (ct>0)
+                      uIds +=',';
+                    ct ++;
+                    uIds += usId;
+                  }
+              }
+              that.totalCount = result.totalCount;
+              console.log('fanjc======' + uIds)
+              that.getUserByIds(uIds);
             }
           }
         })
@@ -431,7 +453,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            afterSellOrderId: that.orderDetail.afterSelldealerOrderId,
+            afterSellOrderId: that.orderDetail.afterSelldealerOrderId
           },
           success: function (result) {
             if (result.status === 200){
@@ -459,12 +481,13 @@
             that.$.ajax({
               type: 'PUT',
               url: this.base + 'm2c.scm/order/dealer/agree-apply-sale',
+              //url: 'http://localhost:8080/m2c.scm/order/dealer/agree-apply-sale',
               data: {
                 token: sessionStorage.getItem('mToken'),
                 isEncry: false,
-                saleAfterNo:that.orderDetail.afterSellDealerOrderId,
+                saleAfterNo:that.orderDetail.afterSelldealerOrderId,
                 userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
-                skuId:that.orderDetail.goodsInfo.skuId
+                dealerId:that.orderDetail.dealerId
               },
               success: function (result) {
                 if (result.status === 200){
@@ -482,8 +505,8 @@
       }//商户同意售后
       ,handleRejected(){
         let that = this
-        let title= that.orderDetail.orderType==0?'是否拒绝换货申请?':that.orderDetail.orderType==1?'是否拒绝退货申请?':that.orderDetail.orderType==2?'是否拒绝退款申请?':'-'
-        let titleAisle= that.orderDetail.orderType==0?'拒绝申请换货':that.orderDetail.orderType==1?'拒绝申请退货':that.orderDetail.orderType==2?'拒绝申请退款':'-'
+        let title= that.orderDetail.orderType==0?'是否拒绝换货申请?':that.orderDetail.orderType==1?'是否拒绝退货申请?':that.orderDetail.orderType==2?'是否拒绝退款申请?':'-';
+        let titleAisle = that.orderDetail.orderType==0?'拒绝申请换货':that.orderDetail.orderType==1?'拒绝申请退货':that.orderDetail.orderType==2?'拒绝申请退款':'-';
         that.$confirm(title, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -496,15 +519,16 @@
            }).then(({ value }) => {
              that.$.ajax({
                type: 'PUT',
-               url: this.base + 'm2c.scm/order/afersale/refuse',
+               url: this.base + 'm2c.scm/order/dealer/reject-apply-sale',
+               //url: 'http://localhost:8080/m2c.scm/order/dealer/reject-apply-sale',
                data: {
                  token: sessionStorage.getItem('mToken'),
                  isEncry: false,
-                 saleAfterNo:that.orderDetail.afterSellDealerOrderId,
+                 saleAfterNo:that.orderDetail.afterSelldealerOrderId,
                  rejectReason: value,                     // 拒绝原因，中文
-                 rejectReasonCode: 0,    // 拒绝原因编码
+                 rejectReasonCode: 99,    // 拒绝原因编码
                  userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
-                 skuId:that.orderDetail.goodsInfo.skuId
+                 dealerId:that.orderDetail.dealerId
                },
                success: function (result) {
                  if (result.status === 200){
@@ -531,11 +555,12 @@
         let that = this
         that.$.ajax({
           type: 'PUT',
-          url: this.base + 'm2c.scm/order/dealer/agree-apply-sale',
+          url: this.base + 'm2c.scm/order/aftersale/dealer/agree-rt-money',
+          //url: 'http://localhost:8080/m2c.scm/order/aftersale/dealer/agree-rt-money',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            saleAfterNo:that.orderDetail.afterSellDealerOrderId,
+            saleAfterNo:that.orderDetail.afterSelldealerOrderId,
             userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
             skuId:that.orderDetail.goodsInfo.skuId
           },
@@ -555,7 +580,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            saleAfterNo:that.orderDetail.afterSellDealerOrderId,
+            saleAfterNo:that.orderDetail.afterSelldealerOrderId,
             userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
             skuId:that.orderDetail.goodsInfo.skuId
           },
@@ -575,7 +600,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            saleAfterNo:that.orderDetail.afterSellDealerOrderId,
+            saleAfterNo:that.orderDetail.afterSelldealerOrderId,
             userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
             skuId:that.orderDetail.goodsInfo.skuId
           },
@@ -618,7 +643,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            saleAfterNo:that.orderDetail.afterSellDealerOrderId,
+            saleAfterNo:that.orderDetail.afterSelldealerOrderId,
             userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
             skuId:that.orderDetail.goodsInfo.skuId,
             expressNo:that.shipmentForm.expressNo,
@@ -636,6 +661,36 @@
           }
         })
         //dialogVisible = false
+      }
+      ,getUserByIds(ids) {
+        console.log('fanjc======getUserByIds')
+        let that = this;
+        that.$.ajax({
+          type: 'get',
+          url: this.base + 'm2c.users/user/getUserInfoByIds',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            userIds: ids
+          },
+          success: function (result) {
+            //console.log('fanjc======')
+            console.log(result);
+            if (result.status === 200){
+              that._map = {};
+              var sz = result.content.length;
+              for(var i=0; i<sz; i++) {
+                var obj = result.content[i];
+                that._map[obj.userId] = obj.mobile + '[' + obj.userName + ']';
+              }
+              for (var i=0; i< that.operatingRecords.length> 0; i++) {
+                if (typeof(that._map[that.operatingRecords[i].optUser]) != 'undefined')
+                  that.operatingRecords[i].optUserStr = that._map[that.operatingRecords[i].optUser];
+                else
+                  that.operatingRecords[i].optUserStr = that.operatingRecords[i].optUser;
+              }
+            }
+          }
+        });
       }
     },
     mounted () {

@@ -54,7 +54,14 @@
               <el-table-column
                 label="商品信息"
                 width="300">
-                <template slot-scope="scope"><img v-bind:src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;"/><span class="ellipsis">{{scope.row.goodsName}}</span></template>
+                <template slot-scope="scope"><img v-bind:src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;display:inline-block;float:left;"/>
+                <a class="ellipsis2" :title="scope.row.goodsName">
+                    {{scope.row.goodsName}}
+                    <!-- <div class="goodsName">
+                      {{scope.row.goodsName}}
+                    </div> -->
+                  </a>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="goodsClassify"
@@ -164,8 +171,15 @@
               </el-table-column>
               <el-table-column
                 label="商品信息"
-                width="200">
-                <template slot-scope="scope"><img :src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsName}}</span></template>
+                width="300">
+                <template slot-scope="scope"><img :src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;display:inline-block;float:left;"/>
+                  <a class="ellipsis2" :title="scope.row.goodsName">
+                    {{scope.row.goodsName}}
+                    <!-- <div class="goodsName">
+                      {{scope.row.goodsName}}
+                    </div> -->
+                  </a>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="goodsClassify"
@@ -558,7 +572,7 @@
             rows: that.goodsStorePageRows,                     // 每页多少条数据
             pageNum: that.goodsStoreCurrentPage,    // 请求第几页*/
             goodsClassifyId:that.selectedOptions2[that.selectedOptions2.length-1],
-            goodsStatus:that.search_goodsCheck_params.goodsStatus,
+            approveStatus:that.search_goodsCheck_params.approveStatus,
             condition:that.search_goodsCheck_params.condition,
             startTime:that.search_goodsCheck_params.startTime,
             endTime:that.search_goodsCheck_params.endTime
@@ -844,4 +858,28 @@
   span.ellipsis{width:190px;margin-left:10px;overflow: hidden;display:inline-block;
 text-overflow:ellipsis;
 white-space: nowrap;}
+
+  a.ellipsis2{
+    width:180px;
+    color:#5a5e66;
+    margin-left:10px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    position: relative;
+    float: left;
+    // div{
+    //   width:200px;
+    //   padding:20px;
+    //   display: none;
+    //   border:1px soild #ccc;
+    //   box-shadow: 0px 3px 3px #ddd;
+    //   background:#fff;
+    //   z-index:2;
+    //   position: absolute;
+    //   top:40px;left:0px;
+    // }
+  }
+  a.ellipsis2:hover{ text-decoration:none;}
 </style>
