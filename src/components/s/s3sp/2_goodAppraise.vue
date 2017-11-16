@@ -5,7 +5,7 @@
         <span class="caret"></span>
       </div>
       <ul class="dropdown-menu" aria-labelledby="dLabel1">
-        <li @click="replyStatus(0)">全部</li>
+        <li @click="replyStatus('')">全部</li>
         <li v-for="(cell,index) in replyStatuses" @click="replyStatus(cell.replyStatus)">
           {{cell.replyStatus==2?"已回复":cell.replyStatus==1?"未回复":"全部"}}
         </li>
@@ -256,6 +256,7 @@
           that.replyStatusName = '回复状态'
         } else if (n === 0) {
           that.replyStatusName = '全部'
+          n = ''
         } else if (n === 1) {
           that.replyStatusName = '未回复'
         } else {
