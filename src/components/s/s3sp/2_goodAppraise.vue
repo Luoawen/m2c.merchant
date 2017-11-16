@@ -5,7 +5,7 @@
         <span class="caret"></span>
       </div>
       <ul class="dropdown-menu" aria-labelledby="dLabel1">
-        <li @click="replyStatus(0)">全部</li>
+        <li @click="replyStatus('')">全部</li>
         <li v-for="(cell,index) in replyStatuses" @click="replyStatus(cell.replyStatus)">
           {{cell.replyStatus==2?"已回复":cell.replyStatus==1?"未回复":"全部"}}
         </li>
