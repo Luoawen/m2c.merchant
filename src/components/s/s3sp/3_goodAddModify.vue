@@ -761,7 +761,7 @@
         that.dialogImageUrl = file.url
         that.dialogVisible = 1 > 0
         if (file.response.content.url == '' || file.response.content.url == undefined) {
-          that.show_tip('上传失败,请重新上传')
+          that.show_tip(file.response.errorMessage)
         } else {
           that.goodsMainImages.push(file.response.content.url)
           that.picture()
