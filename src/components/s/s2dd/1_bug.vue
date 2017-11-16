@@ -27,7 +27,7 @@
             <option value="7">商家寄出</option>
             <option value="8">客户收到</option>
             <option value="9">同意退款</option>
-            <option value="10">确认退款</option>
+            <option value="10">已退款</option>
             <option value="11">交易关闭</option>
           </select>
         </div>
@@ -90,7 +90,7 @@
                   <option value="7">商家寄出</option>
                   <option value="8">客户收到</option>
                   <option value="9">同意退款</option>
-                  <option value="10">确认退款</option>
+                  <option value="10">已退款</option>
                   <option value="11">交易关闭</option>
                 </select>
               </div>
@@ -211,7 +211,7 @@
                 <div style="">
                   <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :'--'}}</div>
                   <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
-                  <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" v-show="goodsItem.afStatus==0">拒绝</button></div>
+                  <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" v-show="goodsItem.afStatus>=0 && goodsItem.afStatus<=2">拒绝</button></div>
                 </div>
                 <div v-show="goodsItem.afStatus==3">
                   <img src="../../../assets/images/ico_explain.png" :title="goodsItem.rejectReason" width="16px"></img>
