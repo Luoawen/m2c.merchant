@@ -11,9 +11,9 @@
           </div>
           <div class="set">
             <span class="wid70">有效期：</span>
-            <input type="date"  class="form-control expiry_date" v-model="params.expiration_time_start" :min="todayDate" :max="params.expiration_time_end" @blur="formValidator(3)"/>
+            <input type="date" id='todayDate' class="form-control expiry_date" v-model="params.expiration_time_start" :min="todayDate" :max="params.expiration_time_end" @blur="formValidator(3)"/>
             <span class="">&nbsp;&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <input type="date"  class="form-control expiry_date" v-model="params.expiration_time_end" :min="params.expiration_time_start" @blur="formValidator(4)"/>
+            <input type="date"   class="form-control expiry_date" v-model="params.expiration_time_end" :min="params.expiration_time_start" @blur="formValidator(4)"/>
             <div class="set_bz" style="color: red;" v-show="tip_show.time">有效期不能为空</div>
           </div>
           <div class="set">
@@ -234,16 +234,17 @@
           <!--问题点 -->
           <div class="goods_body">
             <div class="merchant fl" v-for="(goods, index) in goodsResult.content" :key="index" >
-              <div @click="openGoodsSku(goods, index,$event)">
+              <div @click.prevent="openGoodsSku(goods, index,$event)">
                 <div>
                   <h6>{{goods.goodsName}}</h6>
                   <img class="fl" :src="goods.goodsImageUrl" />
                   <div>
                     <div class="goodsInfoText" >{{goods.dealerName}}</div>
                     <div><b>{{goods.goodsPrice/100}}元</b></div>
+                    <div class="pickSpecificationsStyle" :vaule='goods.isChooseSpecification'     @click.stop="ChooseSpecification(goods,index)">{{goods.isChooseSpecification}}</div>
                   </div>
                 </div>
-                <div class="fc" v-show="goods.isCheck"><div class="pickSpecificationsStyle"  v-show="goods.skuSingleFlag == 1"    :vaule = 'isChooseSpecification'   @click.stop="ChooseSpecification(goods)">{{isChooseSpecification}}</div></div>
+                <div class="fc" v-show="goods.isCheck"></div>
                 <div class="fcimg" v-show="goods.isCheck"></div>
               </div>
             </div>
@@ -304,9 +305,9 @@
           </div>
         </div>
         <div class="specification_footer">
-          <button type="button" class="btn save"  data-dismiss="modal"  @click="cancleGoodsSkuChoose(goodsInfo,$event)"   >取消</button>
+          <button type="button" class="btn save"  data-dismiss="modal"  @click="cancleGoodsSkuChoose(goodsInfo,$event)" >取消</button>
           <button type="button" class="btn cancel" @click="goodsSkuChoose(goodsInfo,$event)">确认</button>
-        </div>
+        </div>  
       </div>
     </div>
     <!--作用范围商品规格选择弹窗e-->
@@ -497,12 +498,13 @@
             <div class="good_choose">
               <div class="merchant fl" style="position: relative;" v-for="(goods, index) in goodsResult.content" @click="addRemoveGoods(goods,index,$event)">
                 <h6>{{goods.goodsName}}</h6>
-                <img  class="fl" :src="goods.goodsImageUrl"/>
+                <img  class="fl " :src="goods.goodsImageUrl"/>
                 <div>
                   <div class='goodsInfoText'>{{goods.dealerName}}</div>
                   <div>{{goods.goodsPrice/100}}元</div>
+                  <div class="pickSpecificationsStyle"   :vaule='goods.isChooseSpecification'     @click.stop="ChooseSpecification(goods,index)">{{goods.isChooseSpecification}}</div>
                 </div>
-                <div class="fc" v-show="goods.isRemoved"><div class="pickSpecificationsStyle"  v-show="goods.skuSingleFlag == 1"    :vaule = 'isChooseSpecification'   @click.stop="ChooseSpecification(goods)">{{isChooseSpecification}}</div>
+                <div class="fc" v-show="goods.isRemoved">
                 </div>
                 <div class="fcimg" v-show="goods.isRemoved"></div>
               </div>
@@ -523,8 +525,7 @@
               <div class="shop_choosebox fl" style="position: relative;" v-for="(shop, index) in shopResult.content" @click="addRemoveShop(shop)">
                 <div class="tit">{{shop.dealerName}}</div>
                 <div class="img"><img :src="shop.shopIcon"/></div>
-                <div class="fc" v-show="shop.isRemoved">
-                </div>
+                <div class="fc" v-show="shop.isRemoved"></div>
                 <div class="fcimg" v-show="shop.isRemoved"></div>
               </div>
             </div>
@@ -572,6 +573,7 @@
                 <div>
                   <div class='goodsInfoText'>{{goods.dealerName}}</div>
                   <div>{{goods.goodsPrice/100}}</div>
+                  <div class="pickSpecificationsStyle"   :vaule='goods.isChooseSpecification'   @click.stop="ChooseSpecification(goods,index)">{{goods.isChooseSpecification}}</div>
                 </div>
                 <div class="fc" v-show="goods.isExchange">
                 </div>
@@ -679,7 +681,6 @@
     name: '',
     data () {
       return {
-        isChooseSpecification :'请选规格',
         modalShadow:false,
         showlevel1: true,
         showlevel2: false,
@@ -749,7 +750,7 @@
       }
     },
     created: function () {
-      let that = this
+      var that = this
       that.params.full_cut_id = that.guid()
       var date = new Date()
       that.todayDate = that.formatDate(date, 'yyyy-MM-dd')
@@ -758,7 +759,7 @@
     },
     methods: {
       formatDate (date, fmt) {
-        let that = this
+        var that = this
         if (/(y+)/.test(fmt)) {
           fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
         }
@@ -864,6 +865,7 @@
         if (flag == 0 || flag == 3) {
           if (that.params.expiration_time_start == '') {
             that.tip_show.time = true
+            that.$("#todayDate").focus().select();
             return false
           } else{
             that.tip_show.time = false
@@ -1006,9 +1008,9 @@
         var that = this
         that.modalShadow =true
         that.$('#choose_goods').modal({'show':true ,'backdrop':false})
-        console.dir('---choose_goods------',that.$('#choose_goods'))
+        // console.dir('---choose_goods------',that.$('#choose_goods'))
            // 1.把保存的數據遍历一遍  將狀態放到弹框中
-          console.log('我是that.params.goods_ids',that.params.goods_ids.length)
+          // console.log('我是that.params.goods_ids',that.params.goods_ids.length)  
           if(that.params.goods_ids.length >0 ){
            for(var h =0 ; h < that.goodsResult.content.length;h++){
               for(var k =0 ;k < that.goodsResult.content.length;k++ ){
@@ -1050,6 +1052,7 @@
               result.content[i].isChoosed = 0 
               result.content[i].isExchange = 0
               result.content[i].chooseSkuList = []
+              result.content[i].isChooseSpecification ='编辑规格数量'
        //遍历选择商品列表 同 result.content 的goodsId 匹配  匹配到就将isChoosed 设置为1 并将  chooseGoodsList里的chooseSkuList 赋值给  result.content 的chooseSkuList(选择规格列表)
               for (var j = 0; j < that.chooseGoodsList.length; j++) {
                 if (result.content[i].goodsId == that.chooseGoodsList[j].goodsId) {
@@ -1061,6 +1064,9 @@
               for (var j = 0; j < that.removeGoodsList.length; j++) {
                 if (result.content[i].goodsId == that.removeGoodsList[j].goodsId) {
                   result.content[i].isRemoved = 1
+                  result.content[i].chooseSkuList = that.removeGoodsList[j].chooseSkuList
+                  console.log('that.removeGoodsList', that.removeGoodsList)
+
                 }
               }
               //遍历exchangeGoodsList  同上
@@ -1075,24 +1081,40 @@
         })
         that.modalShadow = true
       },
+      // 点击选中 ===》已经选中状态才能显示选中
       openGoodsSku (goods,index,$event) {
         var that = this
-        let el = $event.target
-        if(that.goodsResult.content[index].isCheck == undefined || that.goodsResult.content[index].isCheck == false){
-           that.goodsResult.content[index].isCheck = true
-            that.chooseGoodsList.push(that.goodsResult.content[index])
-            console.log(" that.chooseGoodsList")
-        }else{
-          for(var i = 0; i<that.chooseGoodsList.length;i++){
+        // console.log('that.goodsResult.content=============>',that.goodsResult.content[index])
+            // 遍历选择商品列表同商品结果比对  如果一致就删除
+            for(var i = 0; i<that.chooseGoodsList.length;i++){
             if(that.goodsResult.content[index].goodsId == that.chooseGoodsList[i].goodsId){
               that.deleteGoods(i,goods)
              break;
             }
           }
-           that.goodsResult.content[index].isCheck =false
-        }
-       console.log('我是isCheck',that.goodsResult.content[index].isCheck)
-       
+          // 清空商品规格列表 里面checkbox样式 和填写数量
+          for(var j = 0;j<that.goodsResult.content[index].goodsSkuList.length;++j){
+                   that.goodsResult.content[index].goodsSkuList[j].disabled =false
+                   that.goodsResult.content[index].goodsSkuList[j].goodsSkuNum = ''
+                   console.log('清空商品规格', that.goodsResult.content[index].goodsSkuList[j])
+          }
+         
+          that.goodsResult.content[index].isCheck =false
+          that.goodsResult.content[index].isChooseSpecification ='编辑规格数量'
+          // 旧逻辑
+        // if(that.goodsResult.content[index].isCheck == undefined || that.goodsResult.content[index].isCheck == false){
+        //    that.goodsResult.content[index].isCheck = true
+        //     that.chooseGoodsList.push(that.goodsResult.content[index])
+        //     console.log(" that.chooseGoodsList")
+        // }else{
+        //   for(var i = 0; i<that.chooseGoodsList.length;i++){
+        //     if(that.goodsResult.content[index].goodsId == that.chooseGoodsList[i].goodsId){
+        //       that.deleteGoods(i,goods)
+        //      break;
+        //     }
+        //   }
+        //    that.goodsResult.content[index].isCheck =false
+        // }
           //  知道获取的checkbox是哪个和数量
         for (var i = 0; i < goods.goodsSkuList.length; i++) {
           for (var g = 0; g < goods.chooseSkuList.length; g++) {
@@ -1105,32 +1127,62 @@
         that.goodsInfo = goods
       },
       // 打开规格选择弹框
-      ChooseSpecification (goods) {
+      ChooseSpecification (goods,index) {
         var that = this
         // 模态框弹出
         that.$('#specificationChoose').modal({'show':true ,'backdrop':false})
+        // 库存不能小于等于0   checkbox &input  设置 disable属性
        for (var i = 0; i < goods.goodsSkuList.length; i++){
             if(goods.goodsSkuList[i].goodsSkuInventory<=0){
-                // 库存不能小于等于0   checkbox &input  设置 disable属性
                 goods.goodsSkuList[i].disabled = true;
             }
        }
+          // 点击到 只有取消商品的功能
+        if(that.goodsResult.content[index].isChooseSpecification == '已选规格数量'){
+             for(var i = 0; i<that.chooseGoodsList.length;i++){
+            if(that.goodsResult.content[index].goodsId == that.chooseGoodsList[i].goodsId){
+              that.deleteGoods(i,goods)
+             break;
+            }
+          }
+          that.goodsResult.content[index].isCheck =false
+        }
+        // 旧逻辑
+        // console.log('that.goodsResult.content=============>',that.goodsResult.content[index])
+        // if(that.goodsResult.content[index].isChooseSpecification ='已选规格数量'){
+        //   that.chooseGoodsList.push(that.goodsResult.content[index])
+        // }else{
+        //      for(var i = 0; i<that.chooseGoodsList.length;i++){
+        //     if(that.goodsResult.content[index].goodsId == that.chooseGoodsList[i].goodsId){
+        //       that.deleteGoods(i,goods)
+        //      break;
+        //     }
+        //   }
+        //   that.goodsResult.content[index].isCheck =false
+        // }
        that.goodsInfo = goods
       },
+
          //  点击格选择弹框确认后将数据保存起来
        goodsSkuChoose (goodsInfo,$event) {
-        let that = this
+        var that = this
         // 定义空数组  遍历弹框里的规格列表（条件为checkbox被选中且现有库存数量大于0）
+        console.log(goodsInfo.goodsSkuList)
         var choose_sku_list = []
         for (var i = 0; i < goodsInfo.goodsSkuList.length; i++){
           if(goodsInfo.goodsSkuList[i].goodsSkuNum>goodsInfo.goodsSkuList[i].goodsSkuInventory){
                    that.show_tip("参与满减库存应不大于现有库存")
+                     // goodsInfo.isChooseSpecification ='编辑规格数量'
+                     goodsInfo.goodsSkuList[i].isCheck = false;
+                     //return;  
           }
-          if(goodsInfo.goodsSkuList[i].goodsSkuNum < 0){
-                   that.show_tip("参与满减库存应不小于0")
-          }
+          // if(goodsInfo.goodsSkuList[i].goodsSkuNum < 0){
+          //          that.show_tip("参与满减库存应不小于0")
+          //          goodsInfo.isChooseSpecification ='编辑规格数量'
+          //          return;  
+          // }
           if (goodsInfo.goodsSkuList[i].isCheck == true && goodsInfo.goodsSkuList[i].goodsSkuNum > 0) {
-           // 定义一个空对象     将要数据收集起来
+           // 定义一个空对象    将 选择规格列表传给服务器数据收集起来
             var choose_sku = {}
             //goodsSkuId :规格id
             choose_sku.goodsSkuId = goodsInfo.goodsSkuList[i].goodsSkuId
@@ -1139,8 +1191,26 @@
             // goodsSkuNum :商家输入的满减数量
             choose_sku.goodsSkuNum = goodsInfo.goodsSkuList[i].goodsSkuNum
             choose_sku_list.push(choose_sku)
+             console.log('--------goodsInfo内容--------',goodsInfo)
           }
         }
+         // 清空removeGoodsList
+        that.removeGoodsList = []
+            // 将遍历到匹配到的goodsInfo goodsResult.content[i].isRemoved设为1
+        for (var i = 0; i < that.goodsResult.content.length; i++) {
+          if (that.goodsResult.content[i].goodsId == goodsInfo.goodsId) {
+            that.goodsResult.content[i].isRemoved = 1
+          }
+
+          if (that.goodsResult.content[i].isRemoved == 1) {
+            that.removeGoodsList.push(that.goodsResult.content[i])
+          }
+        }
+        // for (var i = 0; i < that.goodsResult.content.length; i++) {
+        //   if (that.goodsResult.content[i].isRemoved == 1) {
+        //     that.removeGoodsList.push(that.goodsResult.content[i])
+        //   }
+        // }
         var _goodsId = '';
         // 遍历是否被选中
         for (var i = 0; i < that.goodsResult.content.length; i++) {
@@ -1149,22 +1219,24 @@
               that.goodsResult.content[i].isChoosed = 1
               that.goodsResult.content[i].skuFlag = 1;
               _goodsId = goodsInfo.goodsId;
+              that.goodsResult.content[i].isCheck = true;
+              that.goodsResult.content[i].isRemoved =true
+              goodsInfo.isChooseSpecification ='已选规格数量'
             }
             else {
               that.goodsResult.content[i].isChoosed = 0
               that.goodsResult.content[i].skuFlag = 0;
-              that.isChooseSpecification ='请选规格'
+              that.goodsResult.content[i].isCheck = false;
+              that.goodsResult.content[i].isRemoved =false
+              that.goodsResult.content[i].isChooseSpecification ='编辑规格数量'
             }
-            that.goodsResult.content[i].goodsSkuList = goodsInfo.goodsSkuList
+            console.log('==that.goodsResult.content[i]================>', that.goodsResult.content[i])
+             console.log('===goodsInfo===============>', goodsInfo)
             that.goodsResult.content[i].chooseSkuList = choose_sku_list
           }
         }
-        // need delete something
-        for(var i = that.chooseGoodsList.length - 1; i > -1 ; i--) {
-          if (that.chooseGoodsList[i].goodsId == _goodsId) {
-            that.chooseGoodsList.splice(i, 1);
-          }
-        }
+
+        that.chooseGoodsList.splice(0);
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           if (that.goodsResult.content[i].isChoosed == 1) {
             var choose_goods = {}
@@ -1172,37 +1244,54 @@
             choose_goods.goodsName = that.goodsResult.content[i].goodsName
             choose_goods.chooseSkuList = that.goodsResult.content[i].chooseSkuList
             choose_goods.skuFlag = that.goodsResult.content[i].skuFlag;
-            that.chooseGoodsList.push(choose_goods)
-                that.isChooseSpecification ='已选规格'
+            that.chooseGoodsList.push(choose_goods)            
+            that.goodsResult.content[i].isChooseSpecification ='已选规格数量'
+            //that.goodsResult.content[i].isCheck =true
+            that.goodsResult.content[i].isRemoved =true
           }
         }
-        console.log('选择商品列表',choose_goods)
+            // need delete something
+        // for(var i = that.chooseGoodsList.length - 1; i > -1 ; i--) {
+        //   if (that.chooseGoodsList[i].goodsId == _goodsId) {
+        //     that.chooseGoodsList.splice(i, 1);
+        //   }
+        // }
+        console.log('选择商品列表',choose_goods)  
+        console.log("点击之后的选择商品列表",that.removeGoodsList)
         that.goods_sku_show = false
         let el=$event.target
-    
         that.$(el).parents('#specificationChoose').modal("hide")
       },
       cancleGoodsSkuChoose (goodsInfo,$event) {
-            let that = this
-          let el=$event.target
-            //将选中的清空  从数组中清空  然后改变样式
-          goodsInfo.chooseSkuList =[]
-          that.$(el).parents('.specification_footer').siblings('.specification_cen').find('[type=checkbox]').prop('checked',false)
-          that.$(el).parents('.specification_footer').siblings('.specification_cen').find('.goodsSkuNum').val('')
-          that.isChooseSpecification = '请选规格'
+         //从数组中清空（被选中状态 和数量）改变样式
+        let that = this
+        let el=$event.target
+        for (var i = 0; i < that.goodsResult.content.length; i++) {
+          if (that.goodsResult.content[i].goodsId == goodsInfo.goodsId) {
+            for(var j= 0;j< goodsInfo.goodsSkuList.length;j++){
+                goodsInfo.goodsSkuList[j].goodsSkuNum= ''
+                goodsInfo.goodsSkuList[j].isCheck= false
+            }
+            // 控制是否选中样式
+            that.goodsResult.content[i].isRemoved= false
+          }
+         
+        }
+         goodsInfo.isChooseSpecification = '编辑规格数量'
+          // 通过js来清空 控制样式
+          // that.$(el).parents('.specification_footer').siblings('.specification_cen').find('[type=checkbox]').prop('checked',false)
+          // that.$(el).parents('.specification_footer').siblings('.specification_cen').find('.goodsSkuNum').val('')
+        console.log('删除后的goodsInfo.goodsSkuList',goodsInfo.goodsSkuList)
       },
       deleteGoods (index, goods) {
-        // alert("hhfalf")
          var that = this
+        console.log('deleteGoods that.goodsResult.content[index]====>', that.goodsResult.content[index])
         that.chooseGoodsList.splice(index, 1)
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           if (that.goodsResult.content[i].goodsId == goods.goodsId) {
             that.goodsResult.content[i].isChoosed = 0
             that.goodsResult.content[i].chooseSkuList = []
-            for (var g = 0; g < that.goodsResult.content.length; g++) {
-              // that.goodsResult.content[g].isCheck = false
-              that.goodsResult.content[g].goodsSkuNum = 0
-            }
+            that.goodsResult.content[i].goodsSkuNum = 0           
           }
         }
         for (var j = 0; j < that.params.goods_ids.length; j++) {
@@ -1238,7 +1327,7 @@
       },
       //取消选中商品
       cancleMakeGoodsIds ($event)  {
-          let that = this
+          var that = this
           // 清空选择商品数组
           that.chooseGoodsList =[]
             // 遍历弹框的 改变状态
@@ -1282,7 +1371,7 @@
       },
       //打开商品筛选品类选择弹窗
       openGoodsClassifyChoose () {
-        let that = this
+        var that = this
         that.goods_classify_show = true
         that.classifySelect('-1')
       },
@@ -1309,30 +1398,30 @@
       },
       // 展开商品分类
       expandClassify () {
-        let that = this
-        let target = event.target
-        let classifyId = target.getAttribute('classifyId')
+        var that = this
+        var target = event.target
+        var classifyId = target.getAttribute('classifyId')
         that.$(`[forClassifyId="${classifyId}"]`).slideToggle(200)
       },
       // 作用范围选择商品分类
       setClassify (classifyId) {
-        let that = this
+        var that = this
         console.log("that.rangeClassifyList:"+JSON.stringify(that.rangeClassifyList))
       },
       // 商品筛选选择商品分类
       setGoodsClassify (classifyId) {
-        let that = this
+        var that = this
         that.goodsClassifyList = []
         that.goodsClassifyList.push(classifyId)
       },
       //重置商品筛选商品分类
       resetGoodsClassify () {
-        let that = this
+        var that = this
         that.goodsClassifyList = []
       },
       // 重置商品分类
       resetClassify () {
-        let that = this
+        var that = this
         that.rangeClassifyList = []
         that.params.goods_classifys = []
       },
@@ -1345,7 +1434,7 @@
         that.goods_classify_show = false
       },
       makeClassifyIds () {
-        let that = this
+        var that = this
         that.params.goods_classifys = []
         for(var i = 0; i < that.rangeClassifyList.length; i++) {
           for (var a = 0; a < that.classifyList.length; a++) {
@@ -1409,7 +1498,7 @@
         that.$.ajax({
           type: 'get',
           url: that.base + 'm2c.scm/shop/sys/shop',
-//          url: that.localbase + 'm2c.scm/shop/sys/shop',
+          //    url: that.localbase + 'm2c.scm/shop/sys/shop',
           data: {
              dealerName: that.shop_query_item.dealerName,
              dealerClassify: that.shop_query_item.dealerClassify,
@@ -1572,41 +1661,64 @@
           }
         })
       },
-      //将数据存储到排除商品列表
+      //将数据存储到排除商品列表  =====>将选中的移除排除商品列表
       addRemoveGoods (goods,index,$event) {
         let that = this
-        if(that.goodsResult.content[index].isRemoved == undefined || that.goodsResult.content[index].isRemoved == false){
-           that.goodsResult.content[index].isRemoved = true
-            that.removeGoodsList.push(that.goodsResult.content[index])
-            console.log(" that.chooseGoodsList")
-        }else{
-          for(var i = 0; i<that.removeGoodsList.length;i++){
+         for(var i = 0; i<that.removeGoodsList.length;i++){
             if(that.goodsResult.content[index].goodsId == goods.goodsId){
-              that. deleteRemoveGoods(i,goods)
+
+              // that.goodsResult.content[index].goodsSkuList[j].disabled =false
+              // that.goodsResult.content[index].goodsSkuList[j].isCheck =false
+              // that.goodsResult.content[index].goodsSkuList[j].goodsSkuNum = ''
+              console.log(that.goodsResult.content[index].goodsSkuList);
+              for(var i = 0; i<that.goodsResult.content[index].goodsSkuList.length;i++) {
+                that.goodsResult.content[index].goodsSkuList[i].disabled = false
+                that.goodsResult.content[index].goodsSkuList[i].isCheck = false
+                that.goodsResult.content[index].goodsSkuList[i].goodsSkuNum = ''
+              }
+
+              that.deleteRemoveGoods(i,goods)
               console.log('removeGoodsList',that.removeGoodsList)
              break;
             }
           }
-           that.goodsResult.content[index].isRemoved =false
-        }
+         
+          that.goodsResult.content[index].isRemoved =false
+          that.goodsResult.content[index].isChooseSpecification ='编辑规格数量'
+        
+        // if(that.goodsResult.content[index].isRemoved == undefined || that.goodsResult.content[index].isRemoved == false){
+        //    that.goodsResult.content[index].isRemoved = true
+        //     that.removeGoodsList.push(that.goodsResult.content[index])
+        //     console.log(" that.chooseGoodsList")
+        // }else{
+        //   for(var i = 0; i<that.removeGoodsList.length;i++){
+        //     if(that.goodsResult.content[index].goodsId == goods.goodsId){
+        //       that. deleteRemoveGoods(i,goods)
+        //       console.log('removeGoodsList',that.removeGoodsList)
+        //      break;
+        //     }
+        //   }
+        //    that.goodsResult.content[index].isRemoved =false
+        // }
 
-////
-      //   for (var i = 0; i < that.goodsResult.content.length; i++) {
-      //     if (that.goodsResult.content[i].goodsId == goods.goodsId) {
-      //       that.goodsResult.content[i].isRemoved = 1
-      //     }
-      //   }
 
-      //   that.removeGoodsList = []
-      //   for (var i = 0; i < that.goodsResult.content.length; i++) {
-      //     if (that.goodsResult.content[i].isRemoved == 1) {
-      //       that.removeGoodsList.push(that.goodsResult.content[i])
-      //     }
-      //   }
-      //  console.log('移除商品列表',that.removeGoodsList) 
+        // for (var i = 0; i < that.goodsResult.content.length; i++) {
+        //   if (that.goodsResult.content[i].goodsId == goods.goodsId) {
+        //     that.goodsResult.content[i].isRemoved = 1
+        //   }
+        // }
+
+        // that.removeGoodsList = []
+        // for (var i = 0; i < that.goodsResult.content.length; i++) {
+        //   if (that.goodsResult.content[i].isRemoved == 1) {
+        //     that.removeGoodsList.push(that.goodsResult.content[i])
+        //   }
+        // }
+       
+       console.log('移除商品列表',that.removeGoodsList) 
       },
         addProductsItems (goods) {
-        let that = this
+        var that = this
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           if (that.goodsResult.content[i].goodsId == goods.goodsId) {
             that.goodsResult.content[i].isRemoved = 1
@@ -1620,21 +1732,30 @@
         }
       },
       cancelRemove(){
-        let that = this
+        var that = this
         for (var i = 0; i < that.goodsResult.content.length; i++) {
+         console.log('that.chooseGoodsList---',that.chooseGoodsList  )
           that.goodsResult.content[i].isRemoved = 0
+          // added by fanjc
+          that.goodsResult.content[i].isCheck = false;
+          that.goodsResult.content[i].goodsSkuNum = '';
+          that.goodsResult.content[i].isChooseSpecification ='编辑规格数量'
+          // end added
         }
         for (var i = 0; i < that.shopResult.content.length; i++) {
           that.shopResult.content[i].isRemoved = 0
         }
+        
         that.removeGoodsList = []
+        that.chooseGoodsList.splice(0);
         that.removeShopList = []
+        // 
         that.$('#full_range_dialog').modal('hide')
         that.modalShadow = false
       },
       // 拼接排除商品的ID
       makeRemoveIds () {
-        let that = this
+        var that = this
         that.params.remove_goods_ids = []
         that.params.remove_dealer_ids = []
         var remove_dealer = []
@@ -1647,11 +1768,12 @@
           remove_dealer.shopName = that.removeShopList[i].shopName
           that.params.remove_dealer_ids.push(remove_dealer)
         }
+        //模态框控制
         that.$('#full_range_dialog').modal('hide')
         that.modalShadow = false
       },
       deleteRemoveGoods(index, goods){
-        let that = this
+        var that = this
         that.removeGoodsList.splice(index,1)
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           if (that.goodsResult.content[i].goodsId == goods.goodsId) {
@@ -1660,7 +1782,7 @@
         }
       },
       deleteRemoveShop(index, shop){
-        let that = this
+        var that = this
         that.removeShopList.splice(index,1)
         for (var i = 0; i < that.shopResult.content.length; i++) {
           if (that.shopResult.content[i].dealerId == shop.dealerId) {
@@ -1678,8 +1800,9 @@
         that.goods_query_item.pageNum = 1
         that.goodsChoose()
       },
+      //添加换购商品
       addExchangeGoods (exchange) {
-        let that = this
+        var that = this
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           if (that.goodsResult.content[i].goodsId == exchange.goodsId) {
             that.goodsResult.content[i].isExchange = 1
@@ -1692,8 +1815,9 @@
           }
         }
       },
+      // 删除换购商品
       deleteExchangeGoods (index, exchange) {
-        let that = this
+        var that = this
         that.exchangeGoodsList.splice(index, 1)
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           if (that.goodsResult.content[i].goodsId == exchange.goodsId) {
@@ -1701,8 +1825,9 @@
           }
         }
       },
+      
       cancelExchange(){
-        let that = this
+        var that = this
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           that.goodsResult.content[i].isExchange = 0
         }
@@ -1711,7 +1836,7 @@
         that.modalShadow=false
       },
       makeExchangeIds(){
-        let that = this
+        var that = this
         var exchangeGoodsIds = []
         for (var i = 0; i < that.exchangeGoodsList.length; i++) {
           exchangeGoodsIds.push(that.exchangeGoodsList[i].goodsId)
@@ -1722,7 +1847,7 @@
       },
       addDiscount (level, flag) {
         // flag--1:滿元減元,2:满件减元，3：满元打折，4：满件打折
-        let that = this
+        var that = this
         for (var i = 0; i < that.fullCutList.length; i++) {
           that.fullCutList[i].threshold = parseInt(that.fullCutList[i].threshold) < 0 ? 0 - that.fullCutList[i].threshold : that.fullCutList[i].threshold
           that.fullCutList[i].money = parseInt(that.fullCutList[i].money) < 0 ? 0 - that.fullCutList[i].money : that.fullCutList[i].money
@@ -1783,14 +1908,14 @@
         }
       },
       deleteDiscount (index) {
-        let that = this
+        var that = this
         if(index > 0){
           that.fullCutList.splice(index, 1)
         }
       },
       //   层级level
       selectlevel (situation, threshold) {
-        let that = this
+        var that = this
         that.exchangeGoodsList = []
         that.fullCutList = [{threshold: '', discount: '', money: '', level: '', buyingPrice: '', goodsIds: ''}]
         //满多少减多少
@@ -1839,7 +1964,7 @@
         }
       },
       rangeSelect (rangeType) {
-        let that = this
+        var that = this
         that.params.dealer_ids = []
         that.chooseShopList = []
 
@@ -1906,19 +2031,21 @@
     font-size: 12px;
 }
 .pickSpecificationsStyle{
-    width: 60px;
-    height: 30px;
+    width: 80px;
+    height: 30px; 
+    font-size: 12px;
     line-height: 30px;
     text-align: center;
     color:green;
     border:1px  #BBD2F1  solid;
-    background:#ccc;
+    box-shadow: 1px 1px 1px #ccc;
+    background:withe;
     border-radius:5px;
     position: absolute;
-    right: 5px;
-    top:70%;
+    right: 1px;
+    top:73%;
+    z-index: 100;
     }
-
   .wid50{width: 50%}
   .clear{clear: both;overflow: hidden;}
   .fl{float: left;}
@@ -2489,7 +2616,7 @@
             img {
               width: 70px;
               height: 70px;
-              margin-left: 10px;
+              margin-left: 5px;
               margin-right: 5px;
             }
           }
@@ -2992,6 +3119,7 @@
             border: 1px solid #ccc;
             margin: 0 10px 10px 0;
             position: relative;
+            font-size:12px;
             h6 {
               padding-left: 10px;
               line-height: 30px;
@@ -3008,7 +3136,7 @@
             img {
               width: 70px;
               height: 70px;
-              margin-left: 10px;
+              margin-left: 5px;
               margin-right: 5px;
             }
           }
