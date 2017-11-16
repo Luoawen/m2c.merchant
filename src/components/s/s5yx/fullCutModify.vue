@@ -226,8 +226,9 @@
                 <h6>{{goods.goodsName}}</h6>
                 <img class="fl" :src="goods.goodsImageUrl"/>
                 <div>
-                  <div>{{goods.dealerName}}</div>
-                  <div>{{goods.goodsPrice/100}}</div>
+                  <div class="goodsInfoText">{{goods.dealerName}}</div>
+                  <div>{{goods.goodsPrice/100}}元</div>
+                   <div class="pickSpecificationsStyle" :vaule='goods.isChooseSpecification'     @click.stop="ChooseSpecification(goods,index)">{{goods.isChooseSpecification}}</div>
                 </div>  
                 <div class="fc" v-show="goods.isRemoved">
                 </div>
@@ -343,8 +344,9 @@
                   <img class="fl" :src="goods.goodsImageUrl"/>
                   <div>
                     <!-- <div>供应商</div> -->
-                    <div ><b >{{goods.dealerName}}</b></div>
+                    <div class="goodsInfoText" >{{goods.dealerName}}</div>
                     <div>价格<b>{{goods.goodsPrice/100}}元</b></div>
+                     <div class="pickSpecificationsStyle" :vaule='goods.isChooseSpecification'     @click.stop="ChooseSpecification(goods,index)">{{goods.isChooseSpecification}}</div>
                   </div>
                 </div>
                 <div class="fc" v-show="goods.isChoosed == 1">
@@ -1364,6 +1366,31 @@ overflow: hidden;
 .frame_layer{
   display:none;
 }
+
+.goodsInfoText{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+    font-size: 12px;
+}
+.pickSpecificationsStyle{
+    width: 80px;
+    height: 30px; 
+    font-size: 12px;
+    line-height: 30px;
+    text-align: center;
+    color:green;
+    border:1px  #BBD2F1  solid;
+    box-shadow: 1px 1px 1px #ccc;
+    background:withe;
+    border-radius:5px;
+    position: absolute;
+    right: 1px;
+    top:73%;
+    z-index: 100;
+    }
   .content{
     //   background: red;
     margin-left:20px;

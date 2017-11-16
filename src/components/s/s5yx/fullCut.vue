@@ -1747,7 +1747,7 @@
         }
         
         that.removeGoodsList = []
-        that.chooseGoodsList.splice(0);
+        that.chooseGoodsList = [];
         that.removeShopList = []
         // 
         that.$('#full_range_dialog').modal('hide')
