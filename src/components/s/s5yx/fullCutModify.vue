@@ -816,7 +816,7 @@
       openGoodsSku (goods,index,$event) {
         var that = this
         that.goods_sku_show = true
-      that.goodsResult.content[index].isCheck = true
+        that.goodsResult.content[index].isCheck = true
         that.chooseGoodsList.push(that.goodsResult.content[index])
         for (var i = 0; i < goods.goodsSkuList.length; i++) {
           if (goods.isChoosed == 0) {
@@ -1018,7 +1018,7 @@
           data: {
             goodsClassifyId: that.goods_query_item.goodsClassifyId,
             condition: that.goods_query_item.condition,
-            dealerId: that.goods_query_item.dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
             pageNum: that.goods_query_item.pageNum,
             rows: that.goods_query_item.rows
           },

@@ -20,7 +20,7 @@
                      <p><span>状态：</span><span v-text="item.status == 1 ? '未生效' : item.status == 2 ? '已生效' : item.status == 3 ? '已失效' : ''"></span></p>
                   </div>
                   <div>
-                     <span><span>使用情况：</span><span v-text="item.isUse"></span></span>&nbsp;&nbsp;&nbsp;&nbsp; <!--<a href="###">查看使用记录</a> -->
+                     <span><span>使用情况：</span><span v-text="item.isUse"></span></span>&nbsp;&nbsp;&nbsp;&nbsp;<span>（已使用 <span v-text="item.useNum == null ? 0 : item.useNum" style="color: #0078E4;"></span> 次）</span>
                   </div>
             </div>
         </div>

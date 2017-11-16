@@ -750,6 +750,7 @@
         // 保存 修改收货地址 运费
         let that = this;
         let select = document.querySelector('#province_select')
+        if(that.bModify == true){
         if (select !== null) {
           let options = select.options
           let index = select.selectedIndex
@@ -782,6 +783,7 @@
           } else {
             that.area = options[index].text
           }
+        }
         }
 
         var freightStr='';
