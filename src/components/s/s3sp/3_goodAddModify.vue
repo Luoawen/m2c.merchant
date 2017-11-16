@@ -884,11 +884,14 @@
         that.$('.el-upload').appendTo("#dragImg")
       })
       window.onscroll = function () {
-        if (window.scrollY > 864) {
-          console.info(window.scrollY)
-          $('.el-autocomplete-suggestion').hide()
-        } else {
-          $('.el-autocomplete-suggestion').show()
+        console.info(that.standardId)
+        if (that.standardId != '') {
+          if (window.scrollY > 864) {
+            console.info(window.scrollY)
+            $('.el-autocomplete-suggestion').hide()
+          } else {
+            $('.el-autocomplete-suggestion').show()
+          }
         }
       }
       that.goodsClassify()

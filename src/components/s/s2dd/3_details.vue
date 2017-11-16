@@ -38,7 +38,7 @@
               </div>
               <div>
                 <span class="tit01">售后金额:</span>
-                <span class="ml20 redcolor">{{orderDetail.backMoney/100}}元（含运费{{orderDetail.backFreight/100}}元）</span>
+                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':orderDetail.backMoney/100}}元（含运费{{orderDetail.orderType==0?'0':orderDetail.backFreight/100}}元）</span>
               </div>
               <div>
                 <span class="tit01">申请时间:</span>
@@ -413,7 +413,8 @@
           success: function (result) {
             //console.log('fanjc===' + result)
             if (result.status === 200){
-              // 获取订单操作列表
+              if (typeof(result.content) == 'string')
+                return;
               that.operatingRecords = result.content;
               var uIds = '';
               //that._map = {};
