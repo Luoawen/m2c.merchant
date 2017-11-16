@@ -1156,7 +1156,7 @@
  .el-upload-list--picture .el-upload-list__item{float:left;width:100px;height:100px;padding:0;margin-right:20px;margin-top:0;}
  .el-upload-list--picture .el-upload-list__item-thumbnail{width:100px;height:100px;float:left;position:static;margin-left:0;}
  .el-upload{width:100px;height:100px;display:inline-block;float:left;overflow:hidden;margin-right:20px;}
- .el-upload .el-icon-plus{width:98px;height:98px;background:#fff url(../../../assets/images/ico_add_ disabled.png) no-repeat center center;border:1px dotted #B7C9E1;}
+  /* .el-upload .el-icon-plus{width:98px;height:98px;background:#fff url(../../../assets/images/ico_add_ disabled.png) no-repeat center center;border:1px dotted #B7C9E1;}*/
 
  .el-icon-plus:before{content:'';}
 </style>
