@@ -256,6 +256,7 @@
           that.replyStatusName = '回复状态'
         } else if (n === 0) {
           that.replyStatusName = '全部'
+          n = ''
         } else if (n === 1) {
           that.replyStatusName = '未回复'
         } else {
