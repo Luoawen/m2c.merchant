@@ -130,7 +130,8 @@
       },
       resetSearchParams(){
         let that = this
-        that.search_params = {full_cut_no: '', full_cut_name: '', status: 0, start_time: '', end_time: '', full_cut_type: 0, creator_type: 0, use_type: 0}
+        //给的参数 含有creator 商家的id （只请求到该商家id的数据 ）
+        that.search_params = {full_cut_no: '', full_cut_name: '', status: 0, start_time: '', end_time: '', full_cut_type: 0, creator_type: '2', use_type: 0,creator:JSON.parse(sessionStorage.getItem('mUser')).dealerId}
         that.getFullCutList()
       },
       // 获取满减列表
@@ -169,9 +170,14 @@
               events: 'handle',
               align: 'center',
               valign: 'middle',
-              formatter: function () {
-                return `<a class="color_default" modify="true" path="/s/fullCutDetail" handle="true">详情</a>
-                &nbsp;&nbsp;<a class="color_red" forbid="true" path="/s/fullCutModify" handle="true">修改</a>`
+              formatter: function (x,y) {
+                   if (y.status < 3) {
+                  return "<a class='color_default' modify='true' style='cursor:pointer;' path='/s/fullCutDetail' handle='true'>详情</a>&nbsp;&nbsp;" +
+                    "<a style='color:red;cursor:pointer;' forbid='true' handle='true'>终止</a>&nbsp;&nbsp;" +
+                    "<a style='color:blue;cursor:pointer;' path='/s/fullCutModify' handle='true'>修改</a>"
+                } else {
+                  return "<a class='color_default'  modify='true' style='cursor:pointer;' path='/s/fullCutDetail' handle='true'>详情</a>&nbsp;&nbsp;"
+                }
               }
             },
             {
@@ -237,7 +243,27 @@
       window.handle = {
         'click [handle]': function (event, value, row, index) {
           sessionStorage.setItem('full_cut_id', row.fullCutId)
-          that.handle_td_click('search', row, event)
+          // that.handle_td_click('search', row, event)
+               let target = event.target
+          sessionStorage.setItem('full_cut_id', row.fullCutId)
+          if (target.getAttribute('forbid')) { // 操作--终止
+            if (confirm('确定要终止该满减?')) {
+              that.$.ajax({
+                type: 'post',
+                url: that.base +'m2c.market/fullcut/stop/' + row.fullCutId,
+                data: {},
+                success: function (result) {
+                  if (result.status == 200) {
+                    console.log('status:', result.status)
+                     that.show_tip("满减终止成功!")
+                    that.getFullCutList()
+                  } else {
+                    that.show_tip("满减终止失败!")
+                  }
+                }
+              })
+            }
+          }
         }
       }
     }
