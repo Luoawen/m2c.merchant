@@ -58,11 +58,12 @@
 					</div>
 					<el-input type="password" v-model="payPassword" class="col-sm-4" style="padding-left:0px;" placeholder="6位数密码" @blur="checkEmpty" :maxlength='6' ></el-input>
 					<router-link class="mt8 fl" :to="{name:'cashPass',query:{from:'cash'}}">忘记密码</router-link>
+					<i class="red" v-show="numberShow">剩余{{6-errorCount}}次机会</i>
 					<i class="red" v-show="isEmpty">交易密码不能为空</i>
 				</div>
 			</div>
 			<div class="mt40 pl150">
-				<button class="btnp xyb mr20" @click="save">提交</button>
+				<button class="btnp xyb mr20" @click="save" :disabled="errorCount>5">提交</button>
 				<button class="btnp qx" @click="passWord = !passWord">取消</button>
 			</div>
 		</template>
@@ -82,7 +83,9 @@ export default {
 				isEmpty:false,
 				passWord:true,
 				payPassword:'',
-				withdrawalId:'' // 提现单id
+				numberShow:false, // 剩余次数
+				withdrawalId:'', // 提现单id
+				errorCount:0 // 密码错误次数
 			}
 		},
 		methods: {
@@ -192,7 +195,7 @@ export default {
 				let that = this;
 				that.$.ajax({
           type: 'post',
-          url: that.base + 'm2c.trading/web/withdrawal/apply',
+          url: that.base + 'm2c.trading/web/withdrawal/dealer/apply',
           data: {
 						token: sessionStorage.getItem('mToken'),
 						createdUserId:JSON.parse(sessionStorage.getItem('mUser')).userId,
@@ -209,6 +212,21 @@ export default {
               console.log(result)
             }else{
 							that.show_tip(result.errorMessage)
+							that.numberShow = true
+							that.$.ajax({
+								type: 'get',
+								url: this.base + 'm2c.trading/web/withdrawal/dealer/payPasswordErrorCount',
+								data: {
+									token: sessionStorage.getItem('mToken'),
+									correlationId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+									correlationType:2
+								},
+								success: function (result) {
+									if (result.status === 200){
+										that.errorCount = result.content.errorCount
+									}
+								}
+							})
 						}
           }
 				})
