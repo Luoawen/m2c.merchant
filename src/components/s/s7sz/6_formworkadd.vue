@@ -858,46 +858,85 @@
         that.index = index
         that.$nextTick(()=>{
           //console.log(that.datas)
-          for(var i=0;i<that.datas.length;i++){
-            for(var j=0;j<that.datas[i].subs.length;j++){
-              for(var k=0;k<that.datas[i].subs[j].subs.length;k++){ // 循环到市
-                for(var p = 0; p < that.disabledList.length; p++) { 
-                  if(that.addRows[index].cityList.length>0){ // 如果是编辑进入 对应选中省市可被操作
-                    that.nowCityList = that.addRows[index].cityList // 防止用户不点确认点关闭使之前选中的市不能重新push进禁用数组
-                    for(var b=0;b<that.addRows[index].cityList.length;b++){
-                      if(that.addRows[index].cityList[b]==that.disabledList[p]){ 
-                        that.disabledList.splice(p,1) // 从禁用数组中拿掉
-                        if(that.disabledList[p]==that.datas[i].subs[j].subs[k].code){
-                          console.log(that.disabledList) // 对新的数组添加禁用
-                          that.$('.city'+that.disabledList[p]).attr("disabled",true) // 市禁用
-                          that.$('.pro'+that.datas[i].subs[j].code).attr("disabled",true) // 对应省禁用
-                          that.$('.area'+that.datas[i].code).attr("disabled",true) // 对应大区禁用
-                        }
+          if(that.addRows[index].cityList.length>0){ // 如果是编辑进入 对应选中省市可被操作
+            for(var a=0;a<that.addRows[index].cityList.length;a++){
+              that.nowCityList.push(that.addRows[index].cityList[a])// 防止用户不点确认点关闭使之前选中的市不能重新push进禁用数组
+            }
+          }
+          //console.log("+暂存数组",that.nowCityList)
+            if(that.addRows[index].cityList.length>0){ // 如果是编辑进入 对应选中省市可被操作
+              for(var p = 0; p < that.disabledList.length; p++) { 
+                for(var b=0;b<that.addRows[index].cityList.length;b++){
+                  if(that.addRows[index].cityList[b]==that.disabledList[p]){ 
+                    that.disabledList.splice(p,1) // 从禁用数组中拿掉
+                  }
+                }
+              }
+              for(var i=0;i<that.datas.length;i++){
+                for(var j=0;j<that.datas[i].subs.length;j++){
+                  for(var k=0;k<that.datas[i].subs[j].subs.length;k++){ // 循环到市
+                    for(var p = 0; p < that.disabledList.length; p++) { 
+                      if(that.disabledList[p]==that.datas[i].subs[j].subs[k].code){ // 对新的数组添加禁用
+                        that.$('.city'+that.disabledList[p]).attr("disabled",true)// 市禁用
+                        that.$('.pro'+that.datas[i].subs[j].code).attr("disabled",true)// 对应省禁用
+                        that.$('.area'+that.datas[i].code).attr("disabled",true) // 对应大区禁用
                       }
-                    }
-                  }else{
-                    if(that.disabledList[p]==that.datas[i].subs[j].subs[k].code){ // 未选择地区内进入 不需要其他操作 直接禁用其他已有市
-                      that.$('.city'+that.disabledList[p]).attr("disabled",true)
-                      that.$('.pro'+that.datas[i].subs[j].code).attr("disabled",true)
-                      that.$('.area'+that.datas[i].code).attr("disabled",true)
                     }
                   }
                 }
               }
+              for(var i=0;i<that.datas.length;i++){
+                for(var j=0;j<that.datas[i].subs.length;j++){
+                  for(var k=0;k<that.datas[i].subs[j].subs.length;k++){ // 循环到市
+                    for(var b=0;b<that.addRows[index].cityList.length;b++){
+                      if(that.addRows[index].cityList[b]==that.datas[i].subs[j].subs[k].code){ // 解除禁用
+                        that.$('.city'+that.addRows[index].cityList[b]).attr("disabled",false)
+                        that.$('.pro'+that.datas[i].subs[j].code).attr("disabled",false)
+                        that.$('.area'+that.datas[i].code).attr("disabled",false)
+                      }
+                    }
+                  }
+                }
+              }
+              console.log("去除当前省市的disableList",that.disabledList)
+              //console.log("去除当前省市的disableList",that.disabledList)
+            }else{
+              for(var i=0;i<that.datas.length;i++){
+                for(var j=0;j<that.datas[i].subs.length;j++){
+                  for(var k=0;k<that.datas[i].subs[j].subs.length;k++){ // 循环到市
+                    for(var p = 0; p < that.disabledList.length; p++) { 
+                      if(that.disabledList[p]==that.datas[i].subs[j].subs[k].code){ // 未选择地区内进入 不需要其他操作 直接禁用其他已有市
+                        that.$('.city'+that.disabledList[p]).attr("disabled",true)
+                        that.$('.pro'+that.datas[i].subs[j].code).attr("disabled",true)
+                        that.$('.area'+that.datas[i].code).attr("disabled",true)
+                      }
+                    }
+                  }
+                }
+              }
+              console.log("首次disableList",that.disabledList)
             }
-          }
+          
+          // for(var i=0;i<that.datas.length;i++){
+          //   for(var j=0;j<that.datas[i].subs.length;j++){
+          //     for(var k=0;k<that.datas[i].subs[j].subs.length;k++){ // 循环到市
+                
+          //     }
+          //   }
+          // }
           console.log(that.disabledList)
         })
       },
 // 隐藏地区选择盒子
       cityBoxHide(){
         let that = this
+        //console.log("-暂存数据",that.nowCityList)
         if(that.nowCityList.length>0){
           for(var i=0;i<that.nowCityList.length;i++){
             that.disabledList.push(that.nowCityList[i]) // 将上次选中的市重新push进禁用数组
           }
         }
-        console.log(that.disabledList)
+        //console.log(that.disabledList)
         that.nowCityList = []
         that.$('.table').find('.cityBox').hide()
       },
