@@ -805,6 +805,43 @@
         that.goods_classify_show = true
         that.classifySelect('-1')
       },
+        // 打开规格选择弹框
+      ChooseSpecification (goods,index) {
+        var that = this
+        // 模态框弹出
+        that.$('#specificationChoose').modal({'show':true ,'backdrop':false})
+        // 库存不能小于等于0   checkbox &input  设置 disable属性
+       for (var i = 0; i < goods.goodsSkuList.length; i++){
+            if(goods.goodsSkuList[i].goodsSkuInventory<=0){
+                goods.goodsSkuList[i].disabled = true;
+            }
+       }
+          // 点击到 只有取消商品的功能
+        if(that.goodsResult.content[index].isChooseSpecification == '已选规格数量'){
+             for(var i = 0; i<that.chooseGoodsList.length;i++){
+            if(that.goodsResult.content[index].goodsId == that.chooseGoodsList[i].goodsId){
+              that.deleteGoods(i,goods)
+            //  break;
+            }
+          }
+          that.goodsResult.content[index].isCheck =false
+        }
+        // 旧逻辑
+        // console.log('that.goodsResult.content=============>',that.goodsResult.content[index])
+        // if(that.goodsResult.content[index].isChooseSpecification ='已选规格数量'){
+        //   that.chooseGoodsList.push(that.goodsResult.content[index])
+        // }else{
+        //      for(var i = 0; i<that.chooseGoodsList.length;i++){
+        //     if(that.goodsResult.content[index].goodsId == that.chooseGoodsList[i].goodsId){
+        //       that.deleteGoods(i,goods)
+        //      break;
+        //     }
+        //   }
+        //   that.goodsResult.content[index].isCheck =false
+        // }
+       that.goodsInfo = goods
+      },
+
       // 打开作用范围商品的商家筛选弹窗
       openGoodsShopChoose () {
         var that = this
@@ -1027,6 +1064,7 @@
           success: function (result) {
             that.removeGoodsList.splice(0, that.removeGoodsList.length);
             for (var i = 0; i < result.content.length; i++) {
+                result.content[i].isChooseSpecification ='编辑规格数量'
             //result.content[i].isRemoved = 0
           // 通过for循环  将removeRangeList匹配到id的数组都设置为 isRemoved = 1(修改样式)
               for(var k = 0;k < that.item.removeRangeList.length;++k){
