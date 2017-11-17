@@ -248,7 +248,6 @@ html {
 // @media screen and (min-width:1440px) and (max-width:1680px){html{font-size:16px}}
 // @media screen and (min-width:1681px) and (max-width:1920px){html{font-size:18px}}
 
-@media print {.title{display: none;}.left_nav{display: none;}.right_nav{display: none;}.s23dyfhd{margin-left: -180px;margin-right: -50px;margin-top: -160px;}.print_order{height: 1300px;}button{display: none;}}
 body {
   background: #F4F5FA; // height: 100%;
 }
@@ -621,5 +620,7 @@ body {
       z-index:3;
     }
   }
+  @media print {.title{display: none;}.left_nav{display: none;}.right_nav{display: none;}.s{padding-left: 0px;}.printSendOrder{height:1000px;margin: 0px;font-size: 8px;position: absolute;top: -300px;}a{display: none;}}
+
 }
 </style>
