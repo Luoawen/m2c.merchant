@@ -784,6 +784,12 @@
           that.show_tip(file.response.errorMessage)
         } else {
           that.goodsMainImages.push(file.response.content.url)
+          that.$nextTick(()=>{
+            let l = that.$("#dragImg").find("img").length-1
+            that.$("#dragImg").find("img")[l].src = file.response.content.url
+            console.log(that.$("#dragImg").find("img")[l].src)
+          })
+
           that.picture()
         }
       },
@@ -867,8 +873,6 @@
       picture(){
         let that = this
         that.$nextTick(() =>{
-          console.log(document.getElementById('dragImg').getElementsByTagName('li').length)
-          console.log(that.$('#dragImg').find('li').length)
           if(document.getElementById('dragImg').getElementsByTagName('li').length>0){
             var moveItem = document.getElementById('dragImg').getElementsByTagName('li');
             for (let i = 0; i < moveItem.length; i++) {
@@ -883,16 +887,55 @@
               ev.preventDefault();
             }
             document.getElementById('ulcon').ondrop = function (ev) {
-              ev.preventDefault();
-              var id = ev.dataTransfer.getData('Img');
-              var elem = document.getElementById(id);
-              var toElem = ev.toElement.id;
-              let flag = id.substr(id.length-1,1)
-              let index = that.goodsMainImages[flag]
-              that.goodsMainImages.splice(flag,1)
-              that.goodsMainImages.push(index)
+              ev.preventDefault()
+              var id = ev.dataTransfer.getData('Img')
+              var startLocation = id.substring(5, id.length)
+              console.log('startLocation:' + startLocation)
+              var elem = document.getElementById(id)
+              var toElem = ev.toElement
+              var endLocation // 替换位置
+              for (var i = 0; i < that.goodsMainImages.length; i++) {
+                if (toElem.src == that.goodsMainImages[i]) {
+                  endLocation = i
+                  break
+                }
+              }
+              console.log('endLocation:' + endLocation)
+              // let flag = id.substr(id.length - 1, 1)
+              // let index = that.goodsMainImages[flag]
+              // that.goodsMainImages.splice(flag,1)
+              // that.goodsMainImages.push(index)
               this.appendChild(elem);
               console.log(that.goodsMainImages)
+              var tempImage
+              for (var i = 0; i < that.goodsMainImages.length; i++) {
+                if (i == startLocation) {
+                  tempImage = that.goodsMainImages[i]
+                  break
+                }
+              }
+              for (var j = 0; j < that.goodsMainImages.length; j++) {
+                if (j == startLocation) {
+                  that.goodsMainImages[j] = that.goodsMainImages[endLocation]
+                }
+                if (j == endLocation) {
+                  that.goodsMainImages[j] = tempImage
+                }
+              }
+              console.log(that.goodsMainImages)
+              // 重新赋值id
+              var moveItem = document.getElementById('dragImg').getElementsByTagName('li');
+              for (let i = 0; i < moveItem.length; i++) {
+                moveItem[i].setAttribute('id', 'label' + i);
+                moveItem[i].ondragstart = function (ev) {
+                  ev.dataTransfer.setData("Img", this.id);
+                };
+              }
+              let con = document.getElementById('dragImg').getElementsByTagName('ul')[0]
+              con.setAttribute("id","ulcon")
+              document.getElementById('ulcon').ondragover = function (ev) {
+                ev.preventDefault();
+              }
             }
           }
         })
