@@ -60,7 +60,7 @@
           <span class="tit01">收货信息</span>
           <span class="ml20">
           	<span>{{recvAddr}}</span>
-          	<i class="ico_compile" v-show="orderStatus === 0||1 ? !bModify : bModify" @click="modifyFreight(true)"></i>
+          	<i class="ico_compile" v-show="orderStatus === 0||orderStatus === 1 ? !bModify : bModify" @click="modifyFreight(true)"></i>
           </span>
         </div>
         	<!--点击ico_compile后出现编辑地址-->
@@ -699,7 +699,7 @@
       },
       modifyFreight (isModify) {
         let that = this;
-        if(that.orderStatus < 1)
+        if(that.orderStatus <= 1)
           that.bModify = isModify;
       },
       modifyFreight1 (isModify) {
