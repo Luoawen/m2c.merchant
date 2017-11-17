@@ -61,21 +61,21 @@
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
+                            <input type="checkbox" v-model="addRow.areaIdArr" :class="'area'+item.code" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
                             {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                            <input type="checkbox" v-model="addRow.IdArr" :class="'pro'+pro.code" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
                             <span> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
+                                <input type="checkbox" v-model="addRow.cityList" :class="'city'+city.code" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <el-button @click="sureCheckCity($event)">确认</el-button>
+                      <el-button @click="sureCheckCity(index,$event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -167,21 +167,21 @@
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
+                            <input type="checkbox" v-model="addRow.areaIdArr" :class="'area'+item.code" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
                             {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                            <input type="checkbox" v-model="addRow.IdArr" :class="'pro'+pro.code" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
                             <span> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
+                                <input type="checkbox" v-model="addRow.cityList" :class="'city'+city.code" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <el-button @click="sureCheckCity($event)">确认</el-button>
+                      <el-button @click="sureCheckCity(index,$event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -288,21 +288,21 @@
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
+                            <input type="checkbox" v-model="addRow.areaIdArr" :class="'area'+item.code" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
                             {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                            <input type="checkbox" v-model="addRow.IdArr" :class="'pro'+pro.code" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
                             <span> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
+                                <input type="checkbox" v-model="addRow.cityList" :class="'city'+city.code" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <el-button @click="sureCheckCity($event)">确认</el-button>
+                      <el-button @click="sureCheckCity(index,$event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -365,21 +365,21 @@
                       <div class="test-div">
                         <div class="bigArea" v-for="(item,index) in datas">
                           <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
+                            <input type="checkbox" v-model="addRow.areaIdArr" :class="'area'+item.code" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
                             {{item.name}}
                           </div>
                           <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox" v-model="addRow.IdArr" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                            <input type="checkbox" v-model="addRow.IdArr" :class="'pro'+pro.code" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
                             <span> {{pro.name}} </span>
                             <div class="cityWrap">
                               <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox" v-model="addRow.cityList" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
+                                <input type="checkbox" v-model="addRow.cityList" :class="'city'+city.code" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <el-button @click="sureCheckCity($event)">确认</el-button>
+                      <el-button @click="sureCheckCity(index,$event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -449,6 +449,9 @@
     data() {
       return {
         type: 'normal',
+        ceshi:'abc',
+        disabledList:[], // 多选框disable数组
+        nowCityList:[],// 临时存放当前编辑的cityList 以防止用户点击关闭而非确认
         formwork: {
           chargeType: 0,
           postageModelRules: [{
@@ -548,7 +551,7 @@
         }, 0)
       },
       // 处理address数组为字符串
-      sureCheckCity($event){
+      sureCheckCity(index,$event){
         let that = this
         let el = $event.target
         let proName = []
@@ -570,6 +573,17 @@
         }
         that.addRows[that.index].address=proName.toString()
         console.log(that.addRows[that.index].address)
+        // 使本次选中的cityCode push到禁用数组
+        for(var i = 0;i<that.addRows[that.index].cityList.length;i++){
+          that.disabledList.push(that.addRows[that.index].cityList[i])
+        }
+        that.$nextTick(()=>{
+          console.log(that.disabledList)
+          for(var p = 0; p < that.disabledList.length; p++) {
+            that.$('#city'+index+that.disabledList[p]).attr("disabled",true)
+          }
+        })
+        //console.log(that.disabledList)
       },
 // 选中大区时同时选中所有省市
       chooseArea(n, $event) {
@@ -808,8 +822,16 @@
         that.delectBg = true;
       },
 // 删除行
-      delectRule(index)
-      {
+      delectRule(index) {
+        let that = this
+        for(var a=0;a<that.disabledList.length;a++){
+          for(var b=0;b<that.addRows[index].cityList.length;b++){
+            if(that.addRows[index].cityList[b]==that.disabledList[a]){
+              that.disabledList.splice(a,1)
+            }
+          }
+        }
+        console.log(that.disabledList)
         this.addRows.splice(index, 1)
       },
 // 删除行
@@ -824,10 +846,49 @@
         var el = event.target
         that.$(el).parents('.table').find('.cityBox').eq(index).toggle()
         that.index = index
+        that.$nextTick(()=>{
+          //console.log(that.datas)
+          for(var i=0;i<that.datas.length;i++){
+            for(var j=0;j<that.datas[i].subs.length;j++){
+              for(var k=0;k<that.datas[i].subs[j].subs.length;k++){ // 循环到市
+                for(var p = 0; p < that.disabledList.length; p++) { 
+                  if(that.addRows[index].cityList.length>0){ // 如果是编辑进入 对应选中省市可被操作
+                    that.nowCityList = that.addRows[index].cityList // 防止用户不点确认点关闭使之前选中的市不能重新push进禁用数组
+                    for(var b=0;b<that.addRows[index].cityList.length;b++){
+                      if(that.addRows[index].cityList[b]==that.disabledList[p]){ 
+                        that.disabledList.splice(p,1) // 从禁用数组中拿掉
+                        if(that.disabledList[p]==that.datas[i].subs[j].subs[k].code){
+                          console.log(that.disabledList) // 对新的数组添加禁用
+                          that.$('.city'+that.disabledList[p]).attr("disabled",true) // 市禁用
+                          that.$('.pro'+that.datas[i].subs[j].code).attr("disabled",true) // 对应省禁用
+                          that.$('.area'+that.datas[i].code).attr("disabled",true) // 对应大区禁用
+                        }
+                      }
+                    }
+                  }else{
+                    if(that.disabledList[p]==that.datas[i].subs[j].subs[k].code){ // 未选择地区内进入 不需要其他操作 直接禁用其他已有市
+                      that.$('.city'+that.disabledList[p]).attr("disabled",true)
+                      that.$('.pro'+that.datas[i].subs[j].code).attr("disabled",true)
+                      that.$('.area'+that.datas[i].code).attr("disabled",true)
+                    }
+                  }
+                }
+              }
+            }
+          }
+          console.log(that.disabledList)
+        })
       },
 // 隐藏地区选择盒子
       cityBoxHide(){
-        this.$('.table').find('.cityBox').hide()
+        let that = this
+        if(that.nowCityList.length>0){
+          for(var i=0;i<that.nowCityList.length;i++){
+            that.disabledList.push(that.nowCityList[i]) // 将上次选中的市重新push进禁用数组
+          }
+        }
+        console.log(that.disabledList)
+        that.$('.table').find('.cityBox').hide()
       },
 // 显示市级盒子
       cityShow (index, $event) {
@@ -948,19 +1009,29 @@
             }
           }
         })
+      },
+      // 获取省市区
+      getcityTree () {
+        let that = this
+        that.$.ajax({
+          type: 'get',
+          url: that.localbase + 'm2c.operate/address/getinner.web',
+          success: function (result) {
+            that.datas = result.content.subs
+          }
+        })
       }
     },
     mounted(){
       let that = this
       that.$(window).click(function(){
-        that.$('.addMess').find('.cityBox').hide()
-      })
-      that.$.ajax({
-        type: 'get',
-        url: that.localbase + 'm2c.operate/address/getinner.web',
-        success: function (result) {
-          that.datas = result.content.subs
+        if(that.nowCityList.length>0){
+          for(var i=0;i<that.nowCityList.length;i++){
+            that.disabledList.push(that.nowCityList[i])
+          }
         }
+        console.log(that.disabledList)
+        that.$('.addMess').find('.cityBox').hide()
       })
       if (that.$route.query.addModify === 'true') {
         that.addModify = 'add'
@@ -972,6 +1043,7 @@
           },
           success: function (result) {
             that.modelId = result.content
+            that.getcityTree()
           }
         })
       } else {
@@ -990,7 +1062,20 @@
                 that.formwork.postageModelRules[i].continuedPostage = that.formwork.postageModelRules[i].continuedPostage / 100
               }
             }
-            console.log(that.formwork)
+            for(var j=0;j<result.content.postageModelRules.length;j++){
+              if(result.content.postageModelRules[j].cityCode!=null){
+                for(var k=0;k<result.content.postageModelRules[j].cityCode.split(',').length;k++){
+                  that.disabledList.push(result.content.postageModelRules[j].cityCode.split(',')[k])
+                }
+              }
+            }
+            that.$.ajax({
+              type: 'get',
+              url: that.localbase + 'm2c.operate/address/getinner.web',
+              success: function (result) {
+                that.datas = result.content.subs
+              }
+            })
           }
         })
       }
