@@ -33,6 +33,11 @@ $(function () {
         }
         $('#cuts').html(htm.join(''))
       }
+
+      // 已選sku
+      console.log(getQueryString('skuName'))
+      $('#skuName').text(getQueryString('skuName'))
+
       htm = []
       // 商品保障
       for (var i = 0; i < data.content.goodsGuarantee.length; i++) {
@@ -92,7 +97,7 @@ $(function () {
 function getQueryString (name) {
   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
   var r = window.location.search.substr(1).match(reg)
-  if (r != null) return unescape(r[2])
+  if (r != null) return decodeURI(r[2])
   return null
 }
 
@@ -123,4 +128,8 @@ function getName (name) {
     }
     return str.join('')
   }
+}
+
+function toDownUrl () {
+  window.location.href = 'http://www.m2c2017.com/appdown.html'
 }
