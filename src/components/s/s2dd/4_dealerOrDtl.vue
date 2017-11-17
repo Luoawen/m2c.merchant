@@ -415,7 +415,8 @@
         ,pageRows:5
         ,currentPage: 1
         ,totalCount:0
-        ,operatingRecords:[]
+        ,operatingRecords:[],
+        orderNo:''
       }
     },
     watch: {
@@ -482,7 +483,7 @@
       gotoprint(dealerOrId) {
         let that = this
         //var path='printSendOrder';
-        that.$router.push({name : 'printSendOrder',query: {dealerOrderId: that.dealerOrderId}})
+        that.$router.push({name : 'printSendOrder',query: {dealerOrderId: that.dealerOrderId,orderNo:that.orderNo}})
       },
       // 获取全部订单信息
       customerdetail () {
@@ -540,7 +541,6 @@
           pagination: true,
           data: {
             token: sessionStorage.getItem('mToken'),
-            orderNo: that.$route.query.orderId,
             dealerOrderId: that.dealerOrderId
           },
           success: function (result) {
@@ -892,6 +892,7 @@
     ,mounted () {
       let that = this;
       that.dealerOrderId = that.$route.query.dealerOrderId;
+      that.orderNo = that.$route.query.orderId
       that.getDealerOrderInfo();
       that.$.ajax({
         url: that.base + 'm2c.support/regn/provs',

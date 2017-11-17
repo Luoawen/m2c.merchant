@@ -42,7 +42,7 @@
   				</div>
   				<div class="tit">
   						<span class="tit_span">优惠金额：</span>
-  						<span>{{freeMoney}}</span>
+  						<span>{{freeMoney/100}}</span>
   				</div>
   			</el-col>
 			</el-row>
@@ -94,7 +94,7 @@
           <td></td>
           <td></td>
           <td>优惠金额/元</td>
-          <td>{{freeMoney/100}}</td>
+          <td>{{freeMoney}}</td>
         </tr>
         <tr>
           <td></td>
@@ -184,7 +184,7 @@
         ,expressPhone: ''
         ,expressPerson: '',
         freeMoney:'',
-        dealerName:'',
+        dealerName:JSON.parse(sessionStorage.getItem('mUser')).dealerName,
         totalFreight:0,
         custmerTel:''
       }
@@ -234,7 +234,7 @@
     setReturnData: function (data) {
       let that = this;
       that.totalFreight = data.totalFreight
-      that.dealerName = data.dealerName
+     // that.dealerName = data.dealerName
       that.orderId = data.orderId;
       that.goodsMoney = data.orderPrice;
       that.orderFreight = data.orderFreight;
