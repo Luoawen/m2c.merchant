@@ -75,7 +75,7 @@
                           </div>
                         </div>
                       </div>
-                      <el-button @click="sureCheckCity(index,$event)">确认</el-button>
+                      <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -181,7 +181,7 @@
                           </div>
                         </div>
                       </div>
-                      <el-button @click="sureCheckCity(index,$event)">确认</el-button>
+                      <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -302,7 +302,7 @@
                           </div>
                         </div>
                       </div>
-                      <el-button @click="sureCheckCity(index,$event)">确认</el-button>
+                      <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -379,7 +379,7 @@
                           </div>
                         </div>
                       </div>
-                      <el-button @click="sureCheckCity(index,$event)">确认</el-button>
+                      <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
                     </div>
                   </td>
                   <td>
@@ -554,36 +554,46 @@
       sureCheckCity(index,$event){
         let that = this
         let el = $event.target
-        let proName = []
-        for(var i=0;i<that.addRows[that.index].addressName.length;i++){
-          if(that.addRows[that.index].addressName[i].cityName.length==0){
-            proName.push(that.addRows[that.index].addressName[i].proName)
-          }else{
-            var res = [];
-            var json = {};
-            for(var j=0;j<that.addRows[that.index].addressName[i].cityName.length;j++){
-              if(!json[that.addRows[that.index].addressName[i].cityName[j]]){
-              res.push(that.addRows[that.index].addressName[i].cityName[j]);
-              json[that.addRows[that.index].addressName[i].cityName[j]] = 1;
-              }
+        let cityLength = []
+        for(var i=0;i<that.datas.length;i++){
+          for(var j=0;j<that.datas[i].subs.length;j++){
+            for(var k=0;k<that.datas[i].subs[j].subs.length;k++){ // 循环到市
+              cityLength.push(that.datas[i].subs[j].subs[k].code)
+              //return cityLength
             }
-            console.log(res)
-            proName.push(that.addRows[that.index].addressName[i].proName+"("+res.toString()+")")
           }
         }
-        that.addRows[that.index].address=proName.toString()
-        console.log(that.addRows[that.index].address)
-        // 使本次选中的cityCode push到禁用数组
-        for(var i = 0;i<that.addRows[that.index].cityList.length;i++){
-          that.disabledList.push(that.addRows[that.index].cityList[i])
-        }
-        that.$nextTick(()=>{
-          console.log(that.disabledList)
-          for(var p = 0; p < that.disabledList.length; p++) {
-            that.$('#city'+index+that.disabledList[p]).attr("disabled",true)
+        console.log(cityLength.length)
+        console.log(that.addRows[that.index].cityList.length)
+        if(cityLength.length==that.addRows[that.index].cityList.length){
+          that.show_tip("请不要选中全国区域")
+        } else{
+          let proName = []
+          for(var i=0;i<that.addRows[that.index].addressName.length;i++){
+            if(that.addRows[that.index].addressName[i].cityName.length==0){
+              proName.push(that.addRows[that.index].addressName[i].proName)
+            }else{
+              var res = [];
+              var json = {};
+              for(var j=0;j<that.addRows[that.index].addressName[i].cityName.length;j++){
+                if(!json[that.addRows[that.index].addressName[i].cityName[j]]){
+                res.push(that.addRows[that.index].addressName[i].cityName[j]);
+                json[that.addRows[that.index].addressName[i].cityName[j]] = 1;
+                }
+              }
+              console.log(res)
+              proName.push(that.addRows[that.index].addressName[i].proName+"("+res.toString()+")")
+            }
           }
-        })
-        //console.log(that.disabledList)
+          that.addRows[that.index].address=proName.toString()
+          console.log(that.addRows[that.index].address)
+          // 使本次选中的cityCode push到禁用数组
+          for(var i = 0;i<that.addRows[that.index].cityList.length;i++){
+            that.disabledList.push(that.addRows[that.index].cityList[i])
+          }
+          that.$(el).parents('.table').find('.cityBox').eq(index).toggle()
+        }
+        
       },
 // 选中大区时同时选中所有省市
       chooseArea(n, $event) {
@@ -888,6 +898,7 @@
           }
         }
         console.log(that.disabledList)
+        that.nowCityList = []
         that.$('.table').find('.cityBox').hide()
       },
 // 显示市级盒子
@@ -1024,15 +1035,6 @@
     },
     mounted(){
       let that = this
-      that.$(window).click(function(){
-        if(that.nowCityList.length>0){
-          for(var i=0;i<that.nowCityList.length;i++){
-            that.disabledList.push(that.nowCityList[i])
-          }
-        }
-        console.log(that.disabledList)
-        that.$('.addMess').find('.cityBox').hide()
-      })
       if (that.$route.query.addModify === 'true') {
         that.addModify = 'add'
         that.$.ajax({
