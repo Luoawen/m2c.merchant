@@ -9,23 +9,23 @@
   				<div class="grid-content">
   					<div class="tit">
   						<span class="tit_span">收货人：</span>
-  						<span>谁谁谁</span>
+  						<span>{{revPerson}}</span>
   					</div>
   					<div class="tit">
   						<span class="tit_span">订单号：</span>
-  						<span>123456</span>
+  						<span>{{orderId}}</span>
   					</div>
   					<div class="tit">
   						<span class="tit_span">订单总额：</span>
-  						<span>123456</span>
+  						<span>{{goodsMoney/100}}</span>
   					</div>
   					<div class="tit">
-  						<span class="tit_span">收货地址：</span>
-  						<span>世外桃源</span>
+  						<span class="tit_span1">收货地址：</span>
+  						<span style="width:500px">{{recvAddr}}</span>
   					</div>
   					<div class="tit">
   						<span class="tit_span">留言：</span>
-  						<span>666</span>
+  						<span>{{noted}}</span>
   					</div>
   				</div>
   			</el-col>
@@ -33,16 +33,16 @@
   				<div class="grid-content">
   				<div class="tit">
   						<span class="tit_span">收货人号码：</span>
-  						<span>1355350246456</span>
+  						<span>{{phone}}</span>
   					</div>
   				</div>
   				<div class="tit">
   						<span class="tit_span">下单时间：</span>
-  						<span>20121212</span>
+  						<span>{{createdDate}}</span>
   				</div>
   				<div class="tit">
   						<span class="tit_span">优惠金额：</span>
-  						<span>500</span>
+  						<span>{{freeMoney}}</span>
   				</div>
   			</el-col>
 			</el-row>
@@ -59,16 +59,52 @@
   					<td class="a6">商品金额/元</td>
   				</tr>
   			</thead>
-  			<tbody>
+  			<tbody v-for="(goods,index) in goodses">
   				<tr>
-  					<td></td>
-  					<td></td>
-  					<td></td>
-  					<td></td>
-  					<td></td>
-  					<td></td>
+  					<td>{{++index}}</td>
+  					<td>{{goods.goodsName}}</td>
+  					<td>{{goods.skuName}}</td>
+  					<td>{{goods.price/100}}</td>
+  					<td>{{goods.sellNum}}</td>
+  					<td>{{(goods.price * goods.sellNum)/100}}</td>
   				</tr>
   			</tbody>
+        <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>商品金额/元</td>
+          <td>
+            {{goodsTotalMoney/100}}
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>运费/元</td>
+          <td>{{totalFreight/100}}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>优惠金额/元</td>
+          <td>{{freeMoney/100}}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>订单总额/元</td>
+          <td>{{goodsMoney/100}}</td>
+        </tr>
+        </tbody>
   		</table>
   		<div class="mt30">
   			<el-row>
@@ -76,18 +112,18 @@
   				<div class="grid-content">
   					<div class="tit">
   						<span class="tit_span">商家：</span>
-  						<span>商家名称</span>
+  						<span>{{dealerName}}</span>
   					</div>
   					<div class="tit">
   						<span class="tit_span">商家客服：</span>
-  						<span>客服号码</span>
+  						<span>{{custmerTel}}</span>
   					</div>
   				</div>
   			</el-col>
   			<el-col :span="8">
   				<div class="grid-content">
   					<div class="tit">
-  						<span class="tit_span">美图溪客服</span> 						
+  						<span class="tit_span">美图溪客服</span>
   					</div>
   					<div class="tit">
   						<span class="tit_span">400-400-400（工作日9：00~18：00）</span>
@@ -100,6 +136,171 @@
   </div>
 </template>
 <script>
+
+  export default{
+    name:'',
+    data(){
+      return{
+        goodsTotalMoney:0,
+        goodsMoney: 0,
+        orderFreight: 0,
+        is_Success: false,
+        showactive: true,
+        showactive02: false,
+        showactive03: false,
+        showAfter: false,
+        Deliver: false,
+        strOrderStatus: '',
+        orderStatus: 0,
+        dealerOrderId: '',
+        createdDate: '',
+        payWay: '',
+        orderId:'',
+        payNo: '',
+        payTime: '',
+        recvAddr: '',
+        invoiceInfo: '',
+        noted: '',
+        goodses: [],
+        totalData: {},
+        bModify: false,
+        fModify: false,
+        province: '',
+        provinceCode: '',
+        city: '',
+        cityCode: '',
+        area: '',
+        areaCode: '',
+        streetAddr: '',
+        revPerson: '',
+        phone: '',
+        strSaleAfterNo: ''
+        ,shipments: []
+        ,expressNote: ''
+        ,expressNo: ''
+        ,expressName: ''
+        ,expressCode: ''
+        ,expressWay: '0'
+        ,expressPhone: ''
+        ,expressPerson: '',
+        freeMoney:'',
+        dealerName:'',
+        totalFreight:0,
+        custmerTel:''
+      }
+    },
+    methods: {
+      getDealerOrderInfo() {
+        let that = this;
+        that.$.ajax({
+          url: that.base + 'm2c.scm/order/dealer/orderdetail',
+          //url: 'http://localhost:8080/m2c.scm/order/dealer/orderdetail',
+          type: 'get',
+          cache: false,
+          pagination: true,
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            dealerOrderId: that.dealerOrderId
+          },
+          success: function (result) {
+
+            if (result.status === 200) {
+              that.setReturnData(result.content);
+            }
+          }
+        })
+      },
+
+      getCustmerTel(){
+        let that = this;
+        that.$.ajax({
+          url: that.base + 'm2c.scm/shop/sys/dealerShopDetail',
+          //url: 'http://localhost:8080/m2c.scm/order/dealer/orderdetail',
+          type: 'get',
+          cache: false,
+          pagination: true,
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
+          },
+          success: function (result) {
+            if (result.status === 200) {
+              that.custmerTel = result.content
+            }
+          }
+        })
+      },
+
+    setReturnData: function (data) {
+      let that = this;
+      that.totalFreight = data.totalFreight
+      that.dealerName = data.dealerName
+      that.orderId = data.orderId;
+      that.goodsMoney = data.orderPrice;
+      that.orderFreight = data.orderFreight;
+      that.orderStatus = data.orderStatus;
+      that.strOrderStatus = data.orderStatus === 0? '待付款': data.orderStatus === 1? '待发货': data.orderStatus === 2? '待收货': data.orderStatus === 3? '已完成': data.orderStatus === 4? '交易完成': data.orderStatus === 5? '交易关闭': '--';
+      //that.dealerOrderId = dealerOrderId;
+      var d = new Date(data.createdDate);
+      that.createdDate = that.date_format(d, 'yyyy-MM-dd hh:mm:ss');
+      that.payWay = data.payWay;
+      that.payNo = data.payNo;
+      that.provinceCode = data.privinceCode;
+      console.warn("data.privinceCode="+that.provinceCode)
+      that.cityCode = data.cityCode;
+      that.areaCode = data.areaCode;
+
+      if (data.payDate != null) {
+        d = new Date(data.payDate)
+        that.payTime  = that.date_format(d, 'yyyy-MM-dd hh:mm:ss');
+      }
+      that.city = data.city;
+      that.province = data.province;
+      console.log(data.provinceCode)
+      that.area = data.areaCounty;
+      that.phone = data.revPhone;
+      that.freeMoney = (data.plateformDiscount + data.dealerDiscount)/100;
+      that.revPerson = data.revPerson;
+      that.streetAddr = data.streetAddr;
+      that.recvAddr = data.province + data.city + data.areaCounty + data.streetAddr;
+
+
+
+      if (data.invoiceType != -1) {
+        if (data.invoiceType==1)
+          that.invoiceInfo = "发票台头：" + data.invoiceHeader + " 发票名称：" +  data.invoiceName + " 纳税人标识：" + data.invoiceCode;
+        else if (data.invoiceType==0)
+          that.invoiceInfo = "发票台头：" + data.invoiceHeader + " 发票名称：" +  data.invoiceName;
+      }
+      that.noted = data.noted;
+
+      that.setGoodsTable(data.goodsInfoBeans, data);
+    },
+    setGoodsTable: function (goodses, totalData) {
+      let that = this;
+      that.goodses = goodses;
+      for(var i = 0; i < that.goodses.length;i++){
+        that.goodsTotalMoney += goodses[i].sellNum * goodses[i].price;
+      }
+      that.totalData = totalData;
+      that.expressNum = 0;
+      that.goodses.forEach(function(val, index) {
+        val.freight = val.freight/100;
+        if(typeof(val.mediaResId)=='undefined' || val.mediaResId==null ||  val.mediaResId=='')
+          val.mediaResId = '-';
+
+        that.expressNum +=val.sellNum;
+      });
+    }
+    },
+
+    mounted(){
+      let that = this;
+      that.dealerOrderId = that.$route.query.dealerOrderId;
+      that.getDealerOrderInfo()
+      that.getCustmerTel()
+    }
+  }
 </script>
 <style lang="scss" scoped>
 .printSendOrder{
