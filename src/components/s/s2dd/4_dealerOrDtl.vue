@@ -9,7 +9,7 @@
       <span class="fr" v-show="showactive">
       <a v-show="!bModify">
       	<i class="ico_print"></i>
-      	<span class="dy">打印</span>
+      	<span class="dy" @click="gotoprint()">打印</span>
       </a>
       <button type="button" class="fah" v-show="!bModify && orderStatus == 1" @click="Deliver=true">发货</button>
         <button type="button" class="fah" v-show="bModify||fModify" @click="saveDealerOrder()">保存</button>
@@ -479,6 +479,11 @@
       }
     },
     methods: {
+      gotoprint(dealerOrId) {
+        let that = this
+        //var path='printSendOrder';
+        that.$router.push({name : 'printSendOrder',query: {dealerOrderId: dealerOrId}})
+      },
       // 获取全部订单信息
       customerdetail () {
         var that = this
