@@ -2,6 +2,10 @@
   <div class="printSendOrder">
   	<div class="bt">
   		拍获商城发货单
+      <a @click="print_order" class="print_order_style">
+        <i class="ico_print"></i>
+        <span class="dy" >打印</span>
+      </a>
   	</div>
   	<div class="printSend_top">
   		<el-row>
@@ -190,6 +194,9 @@
       }
     },
     methods: {
+      print_order () {
+        window.print()
+      },
       getDealerOrderInfo() {
         let that = this;
         that.$.ajax({
@@ -203,14 +210,12 @@
             dealerOrderId: that.dealerOrderId
           },
           success: function (result) {
-
             if (result.status === 200) {
               that.setReturnData(result.content);
             }
           }
         })
       },
-
       getCustmerTel(){
         let that = this;
         that.$.ajax({
@@ -230,7 +235,6 @@
           }
         })
       },
-
     setReturnData: function (data) {
       let that = this;
       that.totalFreight = data.totalFreight
@@ -288,9 +292,9 @@
         val.freight = val.freight/100;
         if(typeof(val.mediaResId)=='undefined' || val.mediaResId==null ||  val.mediaResId=='')
           val.mediaResId = '-';
-
         that.expressNum +=val.sellNum;
       });
+
     }
     },
     mounted(){
@@ -317,6 +321,7 @@
 		text-align: center;
 		line-height: 150px;
 		font-size: 24px;
+    position: relative;
 	}
 	.printSend_top{
 		width: 100%;
@@ -457,5 +462,22 @@
     height: 17px;
     background:url(../../../assets/images/ico_radio_select.png) no-repeat center;
   }
-
+.dy{
+  padding-left: 0px;
+  line-height: 38px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.ico_print{
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-right: 5px;
+  background: url(../../../assets/images/ico_print.png);
+}
+.print_order_style {
+  position: absolute;
+  top:0px;
+  right: 0px;
+}
 </style>

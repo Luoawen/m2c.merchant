@@ -8,7 +8,7 @@
         </div>
         <div class="col-sm-3">
           <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="!show">
-            <span v-show="show">获取验证码</span>
+            <span v-show="show" id="sendVer">获取验证码</span>
             <span v-show="!show" class="count">{{count}} s</span>
           </button>
         </div>
@@ -86,6 +86,7 @@
             sessionStorage.removeItem('total')
             // 显示重新发送 把发送按钮设置为可点击
             that.show = true
+            that.$("#sendVer").text("重新发送")
             that.isSuccess = false
           } else { // 剩余倒计时不为零
             // 重新写入总倒计时
