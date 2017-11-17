@@ -336,7 +336,7 @@
             </el-table-column>
             <el-table-column
               prop="optContent"
-              label="操作类容">
+              label="操作内容">
             </el-table-column>
             <el-table-column
               prop="optUserStr"
