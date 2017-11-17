@@ -293,10 +293,10 @@
       });
     }
     },
-
     mounted(){
       let that = this;
       that.dealerOrderId = that.$route.query.dealerOrderId;
+      console.log("----------------------------DealerOrderId:"+that.$route.query.dealerOrderId)
       that.getDealerOrderInfo()
       that.getCustmerTel()
     }

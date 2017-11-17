@@ -482,7 +482,7 @@
       gotoprint(dealerOrId) {
         let that = this
         //var path='printSendOrder';
-        that.$router.push({name : 'printSendOrder',query: {dealerOrderId: dealerOrId}})
+        that.$router.push({name : 'printSendOrder',query: {dealerOrderId: that.dealerOrderId}})
       },
       // 获取全部订单信息
       customerdetail () {
