@@ -32,7 +32,7 @@
         </el-table-column>
         <el-table-column
           label="结算号"
-          width="200">
+          width="300">
           <template slot-scope="scope"><span >{{scope.row.settleId}}</span></template>
         </el-table-column>
         <el-table-column
