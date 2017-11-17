@@ -75,7 +75,7 @@
           label="结算状态"
           width="150"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{scope.row.SettleStatus==1?'未结算':'已结算'}}</span></template>
+          <template slot-scope="scope"><span>{{scope.row.settleStatus==1?'未结算':scope.row.settleStatus == 2 ?'已结算':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="更新时间"
