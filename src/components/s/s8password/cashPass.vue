@@ -4,7 +4,7 @@
       <div class="form-group">
         <label class="col-sm-2 control-label" >*验证码：</label>
         <div class="col-sm-3">
-          <input type="text" v-model="text" class="form-control" id="verifyCode" placeholder="4位数验证码" maxlength="4">
+          <input type="text" class="form-control" id="verifyCode" placeholder="4位数验证码" maxlength="4">
         </div>
         <div class="col-sm-3">
           <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="!show">
@@ -17,13 +17,13 @@
       <div class="form-group">
         <label class="col-sm-2 control-label" >*交易密码：</label>
         <div class="col-sm-3">
-          <input type="password" v-model="text" class="form-control" id="newPass" maxlength="6" placeholder="6位数字密码">
+          <input type="password" class="form-control" id="newPass" maxlength="6" placeholder="6位数字密码">
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">*再次确认：</label>
         <div class="col-sm-3">
-          <input type="password" v-model="text" class="form-control" id="confirmNewPass" maxlength="6" placeholder="6位数字密码">
+          <input type="password" class="form-control" id="confirmNewPass" maxlength="6" placeholder="6位数字密码">
         </div>
       </div>
       <div class="form-group">
