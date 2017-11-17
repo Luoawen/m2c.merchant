@@ -1,27 +1,166 @@
 <template>
-  <div>这里是打印发货单页面（预览）</div>
+  <div class="printSendOrder">
+  	<div class="bt">
+  		一拍即获商城发货单
+  	</div>
+  	<div class="printSend_top">
+  		<el-row>
+  			<el-col :span="8">
+  				<div class="grid-content">
+  					<div class="tit">
+  						<span class="tit_span">收货人：</span>
+  						<span>谁谁谁</span>
+  					</div>
+  					<div class="tit">
+  						<span class="tit_span">订单号：</span>
+  						<span>123456</span>
+  					</div>
+  					<div class="tit">
+  						<span class="tit_span">订单总额：</span>
+  						<span>123456</span>
+  					</div>
+  					<div class="tit">
+  						<span class="tit_span">收货地址：</span>
+  						<span>世外桃源</span>
+  					</div>
+  					<div class="tit">
+  						<span class="tit_span">留言：</span>
+  						<span>666</span>
+  					</div>
+  				</div>
+  			</el-col>
+  			<el-col :span="8">
+  				<div class="grid-content">
+  				<div class="tit">
+  						<span class="tit_span">收货人号码：</span>
+  						<span>1355350246456</span>
+  					</div>
+  				</div>
+  				<div class="tit">
+  						<span class="tit_span">下单时间：</span>
+  						<span>20121212</span>
+  				</div>
+  				<div class="tit">
+  						<span class="tit_span">优惠金额：</span>
+  						<span>500</span>
+  				</div>
+  			</el-col>
+			</el-row>
+  	</div>
+  	<div class="printSend_cen">
+  		<table class="printSend_tab">
+  			<thead>
+  				<tr>
+  					<td class="a1">序号</td>
+  					<td class="a2">商品名称</td>
+  					<td class="a3">规格</td>
+  					<td class="a4">单价/元</td>
+  					<td class="a5">数量</td>
+  					<td class="a6">商品金额/元</td>
+  				</tr>
+  			</thead>
+  			<tbody>
+  				<tr>
+  					<td></td>
+  					<td></td>
+  					<td></td>
+  					<td></td>
+  					<td></td>
+  					<td></td>
+  				</tr>
+  			</tbody>
+  		</table>
+  		<div class="mt30">
+  			<el-row>
+  			<el-col :span="8">
+  				<div class="grid-content">
+  					<div class="tit">
+  						<span class="tit_span">商家：</span>
+  						<span>商家名称</span>
+  					</div>
+  					<div class="tit">
+  						<span class="tit_span">商家客服：</span>
+  						<span>客服号码</span>
+  					</div>
+  				</div>
+  			</el-col>
+  			<el-col :span="8">
+  				<div class="grid-content">
+  					<div class="tit">
+  						<span class="tit_span">美图溪客服</span> 						
+  					</div>
+  					<div class="tit">
+  						<span class="tit_span">400-400-400（工作日9：00~18：00）</span>
+  					</div>
+  				</div>
+  			</el-col>
+  			</el-row>
+  		</div>
+  	</div>
+  </div>
 </template>
 <script>
 </script>
 <style lang="scss" scoped>
-.mt20{
-  margin-top: 20px;
+.printSendOrder{
+	width: 95%;
+	margin: auto;
+	margin-left: 30px;
+	margin-top: 150px;
+	background: #fff;
+	padding-bottom: 80px;
+	.bt{
+		width: 100%;
+		height: 150px;
+		border-bottom: 1px solid #E5E5E5;
+		text-align: center;
+		line-height: 150px;
+		font-size: 24px;
+	}
+	.printSend_top{
+		width: 100%;
+		min-height: 150px;
+		border-bottom: 1px solid #E5E5E5;
+		padding: 30px 50px;
+		.tit{
+			line-height: 35px;
+			.tit_span{
+				display: inline-block;
+				height: 35px;
+				/*width: 100px;*/
+			}
+		}
+	}
+	.printSend_cen{
+		width: 100%;
+		min-height: 150px;
+		padding: 30px 50px;
+		.printSend_tab{
+			width:100%;
+			thead{
+				background: #DFE9F6;
+			}
+			tr{
+				td{
+					height: 40px;
+					line-height: 40px;
+					border: 1px solid #ccc;
+					text-align: center;
+				}
+			}
+		}
+		.tit{
+			line-height: 35px;
+			.tit_span{
+				display: inline-block;
+				height: 35px;
+				/*width: 100px;*/
+			}
+		}
+	}
 }
-.redcolor{
-  color: red;
-}
-.ml20{
-  margin-left: 20px;
-}
-.mt20{
-  margin-top: 20px;
-}
-.fl{
-  float: left;
-}
-.fr{
-  float: right;
-}
+
+ /*公用样式*/
 .clear{
   clear: both;
   overflow: hidden;
@@ -29,266 +168,14 @@
 .pad0{
 	padding:0px;
 }
-.detail{
-    width:95%;
-    min-height: 84px;
-    margin-left: 48px;
-    margin-top: 130px;
-    background-color: #fff;
-    .deliver{
-    	background: #fff;
-    	height: 358px;
-      top: 0px;
-      left: 0px;
-      padding-top: 21px;
-      padding-left: 23px;
-      .ico_close02{
-        width: 24px;
-        height: 24px;
-        display: inline-block;
-        background: url(../../../assets/images/ico_close02.png);
-        top: 0px;
-        right: 0px;
-      }
-      .deliver_tit{
-        font-size: 18px;
-        color: #333333;
-      }
-      .deliver_type01{
-        padding-left: 20px;
-        .bz{
-          font-size: 12px;
-        }
-        .btn01{
-          border-radius: 2px;
-          line-height: 30px;
-          height: 30px;
-          padding-left: 30px;
-          padding-right: 30px;
-          border: none;
-        }
-        .deliversure{
-          background: #0086FF;
-          color: #fff;
-        }
-        .deliverdel{
-          background: #fff;
-          border: 1px solid #CCCCCC;
-          border-radius: 2px;
-          color: #444;
-        }
-        .tit01{
-          /*display: inline-block;*/
-          width: 120px;
-          display: inline-block;
-          line-height: 30px;
-          text-align: right;
-        }
-        .tit02{
-          span{
-            display: inline-block;
-            line-height: 30px;
-          }
-        }
-        .tit03{
-          font-size: 12px;
-          color: #999999;
-          margin-left: 80px;
-          }
-          .deliver_input{
-            width: 30%;
-            height: 40px;
-          }
-      }
-
-    }
-    .fah{
-    		background: #0086FF;
-				border-radius: 2px;
-				width: 80px;
-				height: 30px;
-				color: #fff;
-				text-align: center;
-				line-height: 30px;
-				border: none;
-				margin-top: 5px;
-    	}
-    .nav{
-    	.ico_print{
-    		width: 16px;
-    		height: 16px;
-    		display: inline-block;
-    		margin-right: 5px;
-    		background: url(../../../assets/images/ico_print.png);
-    	}
-    	.fah{
-    		background: #0086FF;
-				border-radius: 2px;
-				width: 80px;
-				height: 30px;
-				color: #fff;
-				text-align: center;
-				line-height: 30px;
-				border: none;
-				margin-top: 5px;
-    	}
-    	.dy{
-    		padding-left: 0px;
-    		line-height: 38px;
-    	}
-      .active{
-        border-bottom:1px solid #0086FF;
-      }
-      height: 38px;
-      line-height: 38px;
-      border-bottom:1px solid #e7e7e7 ;
-      span{
-        display: inline-block;
-        padding-left: 30px;
-        padding-right: 30px;
-        line-height: 35px;
-      }
-    }
-    .customerdetail_container{
-      .detail_table{
-        margin: auto;
-        border: 1px solid #e7e7e7;
-        width: 99%;
-        margin-top: 20px;
-        .fh{
-    		background: #fff;
-    	 }
-       .deliver_tb{
-         background: #fff;
-         .tit_tb{
-           display: inline-block;
-           width: 80px;
-           text-align: right;
-         }
-       }
-        td{
-          padding-left: 20px;
-        }
-        .a1_img{
-            img{
-              width: 50px;
-              height: 50px;
-              margin-top: 20px;
-              margin-bottom: 20px;
-            }
-          }
-        .a1{
-          width: 22%;
-          .a1tab{
-          	padding-left: 50px;
-          }
-        }
-        .a2{
-          width:11%;
-        }
-        .a3{
-          width:7%;
-        }
-        .a4{
-          width:7.5%;
-        }
-        .a5{
-          width:8%;
-        }
-        .a6{
-          width:10%;
-        }
-        .a7{
-          width:7.5%;
-        }
-        .a6_input{
-        	border: 1px solid #E6E8F2;
-        	width: 100px;
-        	height: 40px;
-        }
-        thead{
-          background: #DFE9F6;
-          line-height: 40px;
-          height: 40px;
-        }
-        tbody{
-        	border-bottom: 1px solid #E5E5E5;
-        	background: #F4F5FA;
-        }
-        .js_num{
-        	background: #fff;
-        	padding-top: 20px;
-        	padding-bottom: 20px;
-        	td{
-        		padding-top: 20px;
-        		padding-bottom: 20px;
-        		line-height: 30px;
-        		text-align: right;
-        	}
-        }
-      }
-      /*width: 1583px;*/
-      min-height: 670px;
-      .detail_tit{
-        height: 60px;
-        width: 99%;
-        line-height: 60px;
-        margin-left: 10px;
-        padding-left: 20px;
-        background: #FFF9EE;
-        font-size: 18px;
-        color: #F5A623;
-      }
-      .detail_tit02{
-        height: 60px;
-        width: 99%;
-        line-height: 60px;
-        margin-left: 10px;
-        padding-left: 20px;
-        background: #FBF5EF;
-        font-size: 18px;
-        color: #FD3242;
-      }
-      .detail_top{
-        .detail_cen{
-          .tit01{
-            display: inline-block;
-            width: 90px;
-            height: 40px;
-            line-height:40px;
-            text-align: right;
-          }
-          .bj_select{
-          	width: 120px;
-          	height: 40px;
-          	line-height: 40px;
-          option{
-          	height: 40px;
-          	line-height: 40px;
-          }
-          }
-          .bj02_select{
-          	width: 350px;
-          	height: 40px;
-          	line-height: 40px;
-          }
-        }
-      }
-    }
-    .ico_compile{
-     	width: 16px;
-      height: 16px;
-      background: url(../../../assets/images/ico_compile.png);
-      display: inline-block;
-      margin-left: 10px;
-    }
-}
- /*公用样式*/
   .mt5{
     margin-top: 5px;
   }
   .mt10{
     margin-top: 10px;
+  }
+  .mt30{
+  	margin-top: 30px;
   }
   .ml10{
     margin-left: 10px;
