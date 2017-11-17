@@ -38,7 +38,7 @@
               </div>
               <div>
                 <span class="tit01">售后金额:</span>
-                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':orderDetail.backMoney/100}}元（含运费{{orderDetail.orderType==0?'0':orderDetail.backFreight/100}}元）</span>
+                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':(orderDetail.backMoney + orderDetail.backFreight)/100}}元（含运费{{orderDetail.orderType==0?'0':orderDetail.backFreight/100}}元）</span>
               </div>
               <div>
                 <span class="tit01">申请时间:</span>
@@ -129,9 +129,6 @@
           </table>
         </div>
 
-
-
-
       </el-tab-pane>
       <el-tab-pane label="售后物流" name="second">
         <div class="logistics" >
@@ -139,7 +136,7 @@
           <div class="col-sm-4 detail_cen" style="line-height: 40px;">
             <div >
               <span class="tit01">售后状态:</span>
-              <span class="ml20">{{logistics.status==0?'申请退货':logistics.status==1?'申请换货':logistics.status==2?'申请退款':logistics.status==3?'拒绝':logistics.status==4?'同意(退换货)':logistics.status==5?'客户寄出':logistics.status==6?'商家收到':logistics.status==7?'商家寄出':logistics.status==8?'客户收到':logistics.status==9?'同意退款':logistics.status==10?'确认退款':logistics.status==11?'交易关闭':'-'}}</span>
+              <span class="ml20">{{logistics.status==0?'申请退货':logistics.status==1?'申请换货':logistics.status==2?'申请退款':logistics.status==3?'拒绝申请':logistics.status==4?'同意申请':logistics.status==5?'客户寄出':logistics.status==6?'商家收到':logistics.status==7?'商家寄出':logistics.status==8?'客户收到':logistics.status==9?'同意退款':logistics.status==10?'已退款':logistics.status==11?'交易关闭':'-'}}</span>
             </div>
             <div>
               <span class="tit01">售后单号:</span>
@@ -199,9 +196,7 @@
 
       </el-tab-pane>
     </el-tabs>
-
 <div>
-
 
   <el-dialog
     title="提示"
@@ -287,16 +282,40 @@
     <el-button type="primary" @click="handleShipment()">确 定</el-button>
     </span>
   </el-dialog>
-
-
-</div>
-
-
-
   </div>
 
+    <div class="clsMask" v-show="showMask===true"  style="">
+    </div>
+    <div class="pop_content"  v-show="showRt===true">
+      <div class="hptczp_header">
+        <span>同意申请</span>
+        <span class="fr" @click="showMask=false;showRt=false">X</span>
+      </div>
+      <div class="hptczp_body">
+        <div class="linh40">
+          <span class=" wid80">
+            <span style="color: red;">*</span>
+            运费退款
+          </span>
+          <span> <el-input-number v-model="pRtFreight" :controls="false" :min="0" :max="orderDetail.orderFreight/100" ></el-input-number></span>
+          <span>元</span>
+        </div>
+        <div class="linh40 pl10">
+          <span class="wid80">售后金额</span>
+          <span>{{orderDetail.backMoney/100}}元</span>
+        </div>
+        <div class="linh40 pl10">
+          <span class=" wid80">售后总额</span>
+          <span>{{orderDetail.backMoney/100 + pRtFreight}}元</span>
+        </div>
+      </div>
+      <div class="hptczp_footer">
+        <button type="button" class="btn save" @click="agreeRtMoneyApply" >确认</button>
+        <button type="button" class="btn cancel" @click="showMask=false;showRt=false" >取消</button>
+      </div>
+    </div>
 
-
+  </div>
 </template>
 <script>
   export default {
@@ -320,6 +339,7 @@
           orderFreight:0,
           backFreight:0
           ,dealerId:''
+          ,doStatus: -2
         },
         operatingRecords:[],
         logistics:{
@@ -327,7 +347,7 @@
           expressName:'',
           expressNo:'',
           goodsInfo:'',
-          status:0,
+          status:0
         },
         dialogVisible: false,
         // 搜索参数
@@ -344,7 +364,10 @@
         },
         formLabelWidth: '120px',
         shipments:[],
-        _map: {},
+        _map: {}
+        ,pRtFreight:0
+        ,showMask: false
+        ,showRt: false
       }
     },
     methods: {
@@ -394,6 +417,7 @@
               that.orderDetail.status=_content.status
               that.orderDetail.rejectReason=_content.rejectReason
               that.orderDetail.dealerId = _content.dealerId;
+              that.orderDetail.doStatus = _content.doStatus;
             }
           }
         })
@@ -471,8 +495,13 @@
       }
       ,handleAgree(){
         let that = this
+        if (that.orderDetail.orderType == 2 && that.orderDetail.doStatus == 1) {
+            that.showMask = true;
+            that.showRt = true;
+            return ;
+        }
         let title= that.orderDetail.orderType==0?'是否同意换货申请?':that.orderDetail.orderType==1?'是否同意退货申请?':that.orderDetail.orderType==2?'是否同意退款申请?':'-'
-        let titleAisle= that.orderDetail.orderType==0?'同意申请换货':that.orderDetail.orderType==1?'同意申请退货':that.orderDetail.orderType==2?'t申请退款':'-'
+        let titleAisle= that.orderDetail.orderType==0?'同意申请换货':that.orderDetail.orderType==1?'同意申请退货':that.orderDetail.orderType==2?'申请退款':'-'
           that.$confirm(title, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -504,6 +533,31 @@
           });
         });
       }//商户同意售后
+      , agreeRtMoneyApply () {
+       // 同意退款申请，未来发货时需要输入的金额
+        let that = this
+        that.$.ajax({
+          type: 'PUT',
+          url: this.base + 'm2c.scm/order/dealer/agree-apply-sale',
+          //url: 'http://localhost:8080/m2c.scm/order/dealer/agree-apply-sale',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            isEncry: false,
+            saleAfterNo:that.orderDetail.afterSelldealerOrderId,
+            userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
+            dealerId:that.orderDetail.dealerId,
+            rtFreight:that.pRtFreight
+          },
+          success: function (result) {
+            if (result.status === 200){
+              // 获取订单操作列表
+              that.loadOrderDetail()
+            }
+            that.showMask = false;
+            that.showRt = false;
+          }
+        });
+      }
       ,handleRejected(){
         let that = this
         let title= that.orderDetail.orderType==0?'是否拒绝换货申请?':that.orderDetail.orderType==1?'是否拒绝退货申请?':that.orderDetail.orderType==2?'是否拒绝退款申请?':'-';
@@ -962,5 +1016,90 @@ display:-webkit-box;
 
       }
     }
+}
+.clsMask{
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  background: #000;
+  z-index: 999;
+  opacity: 0.5;
+}
+.pop_content{
+  width: 400px;
+  height: 280px;
+  background: #fff;
+  z-index: 9999;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -200px;
+  margin-top: -140px;
+  background: #FFFFFF;
+  border-radius: 4px;
+  .hptczp_header{
+    width:100%;
+    height: 50px;
+    background: #DFE9F6;
+    padding-left: 20px;
+    padding-right: 20px;
+    span{
+      display: inline-block;
+      line-height: 50px;
+    }
+  }
+  .hptczp_body{
+    padding-left: 20px;
+    padding-right: 20px;
+    background: #FFFFFF;
+    margin-top: 10px;
+    textarea{
+      width: 100%;
+      height: 100%;
+      border: 1px solid #E5E5E5;
+      width: 360px;
+      height: 140px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  }
+  .hptczp_footer{
+    height: 80px;
+    padding-top: 10px;
+    padding-left: 50%;
+    .btn {
+      width: 80px;
+      height: 30px;
+      border: none;
+      border-radius: 2px;
+      color: #fff;
+    }
+    .save {
+      margin-left: -110px;
+      background: #0086FF;
+    }
+    .cancel {
+      margin-left: 40px;
+      background: #FFF;
+      border: 1px solid #CCCCCC;
+      color: #444;
+    }
+
+  }
+  .linh40{
+    line-height: 40px;
+  }
+  .wid80{
+    width: 80px;
+    display: inline-block;
+  }
+  .pl10{
+    padding-left: 10px;
+  }
 }
 </style>
