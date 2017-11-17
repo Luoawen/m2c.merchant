@@ -124,12 +124,12 @@
                     <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkNumber(good.weight,index,'weight',goodsSKUs)"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.photographPrice,index,'photographPrice',goodsSKUs)"></el-input>
+                    <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkPrice(good.photographPrice,index,'photographPrice',goodsSKUs)"></el-input>
                 </td>
                 <td>
-                  <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
+                  <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkPrice(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
                 </td>
-                <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.supplyPrice,index,'supplyPrice',goodsSKUs)"></el-input></td>
+                <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs)"></el-input></td>
                 <td v-if="countMode==2">{{serviceRate}}</td>
                 <td>
                   <el-input v-model="good.goodsCode" placeholder="请输入内容"></el-input>
@@ -140,6 +140,7 @@
         <i v-if="sukShow" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为空</i>
         <i v-if="sukShow1" style="color:red; font-style:normal;">商品重量/拍获价不能为负数</i>
         <i v-if="sukShow2" style="color:red; font-style:normal;">商品库存请输入正整数</i>
+        <i v-if="sukShow3" style="color:red; font-style:normal;">商品/拍获价/市场价/供货价不能超过999999.99元</i>
       </div>
 
       <div class="tabPane" v-if="data.skuFlag==1">
@@ -219,12 +220,12 @@
                   <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkNumber(good.weight,index,'weight',goodsSKUs)"></el-input>
               </td>
               <td>
-                  <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.photographPrice,index,'photographPrice',goodsSKUs)"></el-input>
+                  <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkPrice(good.photographPrice,index,'photographPrice',goodsSKUs)"></el-input>
               </td>
               <td>
-                <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
+                <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkPrice(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
               </td>
-              <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.supplyPrice,index,'supplyPrice',goodsSKUs)"></el-input></td>
+              <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs)"></el-input></td>
               <td v-if="countMode==2">{{serviceRate}}</td>
               <td>
                 <el-input v-model="good.goodsCode" placeholder="请输入内容"></el-input>
@@ -363,6 +364,7 @@
         sukShow:false, // 商品库不能为空
         sukShow1:false, // 商品库不能为负数 可为小数
         sukShow2:false, // 商品库不能为负数
+        sukShow3:false, // 商品/拍获价/市场价/供货价不能超过999999.99元
         imgShowList:false, // 商品主图不能为空
         countMode:'', // 商家结算方式 1：按供货价 2：按服务费率
         radio: '1',
@@ -458,7 +460,7 @@
       }
     },
     methods: {
-      //验证是否为数字
+      // 验证是否为数字
       checkNumber (val, index, arr, list) {
         setTimeout(() => {
           if (val && $.isNumeric(val) && val >= 0) {
@@ -467,6 +469,24 @@
           } else {
             val = ''
             this.sukShow1 = true
+          }
+          list[index][arr] = val
+        }, 0)
+      },
+      checkPrice (val, index, arr, list) {
+        setTimeout(() => {
+          if (val && $.isNumeric(val) && val >= 0) {
+            if (val > 999999.99) {
+              this.sukShow3 = true
+            } else {
+              this.sukShow3 = false
+            }
+            val = Number(val).toFixed(2)
+            this.sukShow1 = false
+          } else {
+            val = ''
+            this.sukShow1 = true
+            this.sukShow3 = false
           }
           list[index][arr] = val
         }, 0)
