@@ -6,7 +6,11 @@
       <div class="survey_c_tbox fl mr20">
         <div class="tit">
           <span>待结算金额（元）</span>
-          <i class="problem"></i>
+          <div class="icon">
+            <div class="tips">
+              <p>客户付款后，待系统结算的金额</p>
+            </div>
+          </div>
         </div>
         <div class="tit02 clear">
           <span style="font-size: 30px">{{content.settleAmount == undefined || '' ? '-' :(content.settleAmount/100).toFixed(2)}}</span>
@@ -15,7 +19,12 @@
       <div class="survey_c_tbox fl mr20">
         <div class="tit">
           <span>提现中金额（元）</span>
-          <i class="problem"></i>
+          <div class="icon">
+            <div class="tips">
+              <p>待处理的提现金额</p>
+            </div>
+          </div>
+          <router-link class="fr" :to="{name:'record'}">详情</router-link>
         </div>
         <div class="tit02 clear">
           <span style="font-size: 30px">{{content.tradableingAmount ==  null ? '-' : (content.tradableingAmount/100).toFixed(2)}}</span>
@@ -24,7 +33,6 @@
       <div class="survey_c_tbox fl mr20">
         <div class="tit">
           <span>平台质保金（元）</span>
-          <i class="problem"></i>
         </div>
         <div class="tit02 clear">
           <span style="font-size: 30px">{{platePositisCache == undefined || '' ? '-' : (platePositisCache/100).toFixed(2)}}</span>
@@ -33,7 +41,11 @@
       <div class="survey_c_tbox fl mr20">
         <div class="tit">
           <span>可用金额（元）</span>
-          <i class="problem"></i>
+          <div class="icon">
+            <div class="tips">
+              <p>已结算的金额，可用金额可提现</p>
+            </div>
+          </div>
         </div>
         <div class="tit02 clear">
           <span style="font-size: 30px">{{content.tradableAmount/100}}</span>
