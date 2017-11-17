@@ -1,7 +1,7 @@
 <template>
   <div class="printSendOrder">
   	<div class="bt">
-  		一拍即获商城发货单
+  		拍获商城发货单
   	</div>
   	<div class="printSend_top">
   		<el-row>
@@ -126,7 +126,7 @@
   						<span class="tit_span">美图溪客服</span>
   					</div>
   					<div class="tit">
-  						<span class="tit_span">400-400-400（工作日9：00~18：00）</span>
+  						<span class="tit_span">400-101-3888（工作日9：00~18：00）</span>
   					</div>
   				</div>
   			</el-col>
