@@ -32,7 +32,7 @@
         </el-table-column>
         <el-table-column
           label="结算号"
-          width="200">
+          width="300">
           <template slot-scope="scope"><span >{{scope.row.settleId}}</span></template>
         </el-table-column>
         <el-table-column
@@ -144,7 +144,7 @@
             pageRows: that.pageRows,                     // 每页多少条数据
             pageNo: that.currentPage,    // 请求第几页*/
             keyword:that.search_params.condition,
-            SettleStatus:that.search_params.SettleStatus,
+            settleStatus:that.search_params.SettleStatus,
             startDate:that.search_params.startTime,
             endDate:that.search_params.endTime
           },

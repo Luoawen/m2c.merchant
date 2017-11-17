@@ -124,12 +124,12 @@
                     <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkNumber(good.weight,index,'weight',goodsSKUs)"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.photographPrice,index,'photographPrice',goodsSKUs)"></el-input>
+                    <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkPrice(good.photographPrice,index,'photographPrice',goodsSKUs)"></el-input>
                 </td>
                 <td>
-                  <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
+                  <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkPrice(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
                 </td>
-                <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.supplyPrice,index,'supplyPrice',goodsSKUs)"></el-input></td>
+                <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs)"></el-input></td>
                 <td v-if="countMode==2">{{serviceRate}}</td>
                 <td>
                   <el-input v-model="good.goodsCode" placeholder="请输入内容"></el-input>
@@ -140,6 +140,7 @@
         <i v-if="sukShow" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为空</i>
         <i v-if="sukShow1" style="color:red; font-style:normal;">商品重量/拍获价不能为负数</i>
         <i v-if="sukShow2" style="color:red; font-style:normal;">商品库存请输入正整数</i>
+        <i v-if="sukShow3" style="color:red; font-style:normal;">商品/拍获价/市场价/供货价不能超过999999.99元</i>
       </div>
 
       <div class="tabPane" v-if="data.skuFlag==1">
@@ -219,12 +220,12 @@
                   <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkNumber(good.weight,index,'weight',goodsSKUs)"></el-input>
               </td>
               <td>
-                  <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.photographPrice,index,'photographPrice',goodsSKUs)"></el-input>
+                  <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkPrice(good.photographPrice,index,'photographPrice',goodsSKUs)"></el-input>
               </td>
               <td>
-                <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
+                <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkPrice(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
               </td>
-              <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkNumber(good.supplyPrice,index,'supplyPrice',goodsSKUs)"></el-input></td>
+              <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs)"></el-input></td>
               <td v-if="countMode==2">{{serviceRate}}</td>
               <td>
                 <el-input v-model="good.goodsCode" placeholder="请输入内容"></el-input>
@@ -363,6 +364,7 @@
         sukShow:false, // 商品库不能为空
         sukShow1:false, // 商品库不能为负数 可为小数
         sukShow2:false, // 商品库不能为负数
+        sukShow3:false, // 商品/拍获价/市场价/供货价不能超过999999.99元
         imgShowList:false, // 商品主图不能为空
         countMode:'', // 商家结算方式 1：按供货价 2：按服务费率
         radio: '1',
@@ -415,7 +417,8 @@
         dLabel3: false,
         goodsBrandName: '',
         setUp:{},
-        disabled:false //禁用规格选择
+        disabled:false, //禁用规格选择
+        tempGoodsMainImages:[],
       }
     },
     created() {},
@@ -425,7 +428,7 @@
       'goodsMainImages.length':{
         handler: function (val, oldVal) {
           let that = this
-          let div = that.$("#dragImg").find("div").find("div")
+          let div = that.$("#dragImg").find("div.el-upload")
           if (val == 5) {
             that.$nextTick(function(){
               div.hide()
@@ -458,7 +461,7 @@
       }
     },
     methods: {
-      //验证是否为数字
+      // 验证是否为数字
       checkNumber (val, index, arr, list) {
         setTimeout(() => {
           if (val && $.isNumeric(val) && val >= 0) {
@@ -467,6 +470,24 @@
           } else {
             val = ''
             this.sukShow1 = true
+          }
+          list[index][arr] = val
+        }, 0)
+      },
+      checkPrice (val, index, arr, list) {
+        setTimeout(() => {
+          if (val && $.isNumeric(val) && val >= 0) {
+            if (val > 999999.99) {
+              this.sukShow3 = true
+            } else {
+              this.sukShow3 = false
+            }
+            val = Number(val).toFixed(2)
+            this.sukShow1 = false
+          } else {
+            val = ''
+            this.sukShow1 = true
+            this.sukShow3 = false
           }
           list[index][arr] = val
         }, 0)
@@ -763,6 +784,11 @@
         if (file.response.content.url == '' || file.response.content.url == undefined) {
           that.show_tip(file.response.errorMessage)
         } else {
+          that.$nextTick(()=>{
+            let l = that.$("#dragImg").find("img").length-1
+            that.$("#dragImg").find("img")[l].src = file.response.content.url
+            console.log(that.$("#dragImg").find("img")[l].src)
+          })
           that.goodsMainImages.push(file.response.content.url)
           that.picture()
         }
@@ -847,8 +873,6 @@
       picture(){
         let that = this
         that.$nextTick(() =>{
-          console.log(document.getElementById('dragImg').getElementsByTagName('li').length)
-          console.log(that.$('#dragImg').find('li').length)
           if(document.getElementById('dragImg').getElementsByTagName('li').length>0){
             var moveItem = document.getElementById('dragImg').getElementsByTagName('li');
             for (let i = 0; i < moveItem.length; i++) {
@@ -863,16 +887,49 @@
               ev.preventDefault();
             }
             document.getElementById('ulcon').ondrop = function (ev) {
-              ev.preventDefault();
-              var id = ev.dataTransfer.getData('Img');
-              var elem = document.getElementById(id);
-              var toElem = ev.toElement.id;
-              let flag = id.substr(id.length-1,1)
-              let index = that.goodsMainImages[flag]
-              that.goodsMainImages.splice(flag,1)
-              that.goodsMainImages.push(index)
-              this.appendChild(elem);
-              console.log(that.goodsMainImages)
+              ev.preventDefault()
+              var id = ev.dataTransfer.getData('Img')
+              var startLocation = id.substring(5, id.length)
+              console.log('startLocation:' + startLocation)
+              var toElem = ev.toElement
+              var endLocation // 替换位置
+              for (var i = 0; i < that.goodsMainImages.length; i++) {
+                if (toElem.src == that.goodsMainImages[i]) {
+                  endLocation = i
+                  break
+                }
+              }
+              that.tempGoodsMainImages = []
+              for (var j = 0; j < that.goodsMainImages.length; j++) {
+                if (j == startLocation) {
+                  that.tempGoodsMainImages.push(that.goodsMainImages[endLocation])
+                } else if (j == endLocation) {
+                  that.tempGoodsMainImages.push(that.goodsMainImages[startLocation])
+                } else {
+                  that.tempGoodsMainImages.push(that.goodsMainImages[j])
+                }
+              }
+              that.goodsMainImages = []
+              for (var k = 0; k < that.tempGoodsMainImages.length; k++) {
+                that.goodsMainImages.push(that.tempGoodsMainImages[k])
+              }
+              that.fileList = []
+              for (var n = 0; n < that.goodsMainImages.length; n++) {
+                that.fileList.push( eval ('(' + '{url:"' + that.goodsMainImages[n] + '"}' + ')'))
+              }
+              // 重新赋值id
+              var moveItem = document.getElementById('dragImg').getElementsByTagName('li');
+              for (let i = 0; i < moveItem.length; i++) {
+                moveItem[i].setAttribute('id', 'label' + i);
+                moveItem[i].ondragstart = function (ev) {
+                  ev.dataTransfer.setData("Img", this.id);
+                };
+              }
+              let con = document.getElementById('dragImg').getElementsByTagName('ul')[0]
+              con.setAttribute("id","ulcon")
+              document.getElementById('ulcon').ondragover = function (ev) {
+                ev.preventDefault();
+              }
             }
           }
         })
@@ -1153,10 +1210,10 @@
 .el-upload--picture-card{overflow: hidden;}
  table .el-input__inner{width:100px;}
  #dragImg ul{width:auto;float:left;height:100px;display:block;margin-bottom:20px;}
- .el-upload-list--picture .el-upload-list__item{float:left;width:100px;height:100px;padding:0;margin-right:20px;margin-top:0;}
- .el-upload-list--picture .el-upload-list__item-thumbnail{width:100px;height:100px;float:left;position:static;margin-left:0;}
+ .el-upload-list--picture .el-upload-list__item{float:left;width:100px;height:100px;padding:0;margin-top:0;box-sizing:initial;border:none;border-right:20px solid #fff; border-radius:0;}
+ .el-upload-list--picture .el-upload-list__item-thumbnail{width:100px;height:100px;float:left;position:static;margin-left:0;border-radius:4px; border:1px solid #c0ccda}
  .el-upload{width:100px;height:100px;display:inline-block;float:left;overflow:hidden;margin-right:20px;}
-  /* .el-upload .el-icon-plus{width:98px;height:98px;background:#fff url(../../../assets/images/ico_add_ disabled.png) no-repeat center center;border:1px dotted #B7C9E1;}*/
+  .el-upload .el-icon-plus{width:98px;height:98px;background:#fff url(../../../assets/images/ico_add_ disabled.png) no-repeat center center;border:1px dotted #B7C9E1;}
 
  .el-icon-plus:before{content:'';}
 </style>

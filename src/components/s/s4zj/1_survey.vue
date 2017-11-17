@@ -36,7 +36,7 @@
           <i class="problem"></i>
         </div>
         <div class="tit02 clear">
-          <span style="font-size: 30px">{{content.tradableAmount/100}}</span>
+          <span style="font-size: 30px">{{content.tradableAmount/100 == NaN || undefined || '' ? '-' : (content.tradableAmount/100).toFixed(2)}}</span>
           <el-button @click="pullMoney()" size="mini" type="primary"> 提现 </el-button>
         </div>
       </div>
@@ -236,7 +236,7 @@
     background: rgba(0, 0, 0, 0.6);
     z-index: 999;
   }
-  
+
   .delectSizeWrap {
     position: fixed;
     width: 50%;
@@ -285,7 +285,7 @@
     width: 30%;
     left: 50%;
     margin-left: -15%;
-    
+
   }
   .survey_contaner{
     margin: auto;

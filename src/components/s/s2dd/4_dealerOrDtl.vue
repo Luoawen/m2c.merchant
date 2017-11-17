@@ -9,7 +9,7 @@
       <span class="fr" v-show="showactive">
       <a v-show="!bModify">
       	<i class="ico_print"></i>
-      	<span class="dy">打印</span>
+      	<span class="dy" @click="gotoprint()">打印</span>
       </a>
       <button type="button" class="fah" v-show="!bModify && orderStatus == 1" @click="Deliver=true">发货</button>
         <button type="button" class="fah" v-show="bModify||fModify" @click="saveDealerOrder()">保存</button>
@@ -60,7 +60,7 @@
           <span class="tit01">收货信息</span>
           <span class="ml20">
           	<span>{{recvAddr}}</span>
-          	<i class="ico_compile" v-show="orderStatus === 0||1 ? !bModify : bModify" @click="modifyFreight(true)"></i>
+          	<i class="ico_compile" v-show="orderStatus === 0||orderStatus === 1 ? !bModify : bModify" @click="modifyFreight(true)"></i>
           </span>
         </div>
         	<!--点击ico_compile后出现编辑地址-->
@@ -336,7 +336,7 @@
             </el-table-column>
             <el-table-column
               prop="optContent"
-              label="操作类容">
+              label="操作内容">
             </el-table-column>
             <el-table-column
               prop="optUserStr"
@@ -415,7 +415,8 @@
         ,pageRows:5
         ,currentPage: 1
         ,totalCount:0
-        ,operatingRecords:[]
+        ,operatingRecords:[],
+        orderNo:''
       }
     },
     watch: {
@@ -479,6 +480,11 @@
       }
     },
     methods: {
+      gotoprint(dealerOrId) {
+        let that = this
+        //var path='printSendOrder';
+        that.$router.push({name : 'printSendOrder',query: {dealerOrderId: that.dealerOrderId,orderNo:that.orderNo}})
+      },
       // 获取全部订单信息
       customerdetail () {
         var that = this
@@ -535,7 +541,6 @@
           pagination: true,
           data: {
             token: sessionStorage.getItem('mToken'),
-            orderNo: that.$route.query.orderId,
             dealerOrderId: that.dealerOrderId
           },
           success: function (result) {
@@ -694,7 +699,7 @@
       },
       modifyFreight (isModify) {
         let that = this;
-        if(that.orderStatus < 1)
+        if(that.orderStatus <= 1)
           that.bModify = isModify;
       },
       modifyFreight1 (isModify) {
@@ -887,6 +892,7 @@
     ,mounted () {
       let that = this;
       that.dealerOrderId = that.$route.query.dealerOrderId;
+      that.orderNo = that.$route.query.orderId
       that.getDealerOrderInfo();
       that.$.ajax({
         url: that.base + 'm2c.support/regn/provs',

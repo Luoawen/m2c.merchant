@@ -2,9 +2,9 @@
   <div class="sz">
     <form class="form-horizontal">
       <div class="form-group">
-        <label class="col-sm-2 control-label" >*验证码：</label>
+        <label class="col-sm-2 control-label" ><label style="color: red">*</label>验证码：</label>
         <div class="col-sm-3">
-          <input type="text" v-model="text" class="form-control" id="verifyCode" placeholder="4位数验证码" maxlength="4">
+          <input type="text" class="form-control" id="verifyCode" placeholder="4位数验证码" maxlength="4">
         </div>
         <div class="col-sm-3">
           <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="!show">
@@ -12,23 +12,29 @@
             <span v-show="!show" class="count">{{count}} s</span>
           </button>
         </div>
-        <label v-show="isSuccess" class="col-sm-3 control-label">已向手机号{{userPhone}}发送验证码</label>
+        <!-- <label v-show="isSuccess" class="col-sm-3 control-label">已向手机号{{userPhone}}发送验证码</label> -->
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label" >*交易密码：</label>
+        <label class="col-sm-2 control-label" ></label>
         <div class="col-sm-3">
-          <input type="password" v-model="text" class="form-control" id="newPass" maxlength="6" placeholder="6位数字密码">
+          <p v-show="isSuccess">已向手机号<label style="color: red">{{userPhone}}</label>发送验证码</p>
         </div>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label">*再次确认：</label>
+        <label class="col-sm-2 control-label" ><label style="color: red">*</label>交易密码：</label>
         <div class="col-sm-3">
-          <input type="password" v-model="text" class="form-control" id="confirmNewPass" maxlength="6" placeholder="6位数字密码">
+          <input type="password" class="form-control" id="newPass" maxlength="6" placeholder="6位数字密码">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><label style="color: red">*</label>再次确认：</label>
+        <div class="col-sm-3">
+          <input type="password" class="form-control" id="confirmNewPass" maxlength="6" placeholder="6位数字密码">
         </div>
       </div>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-info btn-lg save" @click="modify_pass()">保存</button>
+          <el-button  type="primary" @click="modify_pass()">保存</el-button>
           <button type="submit" class="btn btn-default btn-lg" v-if="from=='cash'" @click="goBack">取消</button>
         </div>
       </div>
@@ -217,5 +223,20 @@
   }
 </script>
 <style scoped>
+.sz{
+  width: 96%;
+  height: 880px;
+  background: #fff;
+  margin: 20px 2%;
+  margin-top: 140px;
+  padding-top: 40px;
 
+}
+</style>
+<style>
+  label{font-weight: normal;}
+  .btn-group-lg>.btn, .btn-lg{
+    padding:7px 16px;
+    font-size:14px;
+  }
 </style>
