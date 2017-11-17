@@ -38,7 +38,7 @@
               </div>
               <div>
                 <span class="tit01">售后金额:</span>
-                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':orderDetail.backMoney/100}}元（含运费{{orderDetail.orderType==0?'0':orderDetail.backFreight/100}}元）</span>
+                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':(orderDetail.backMoney + orderDetail.backFreight)/100}}元（含运费{{orderDetail.orderType==0?'0':orderDetail.backFreight/100}}元）</span>
               </div>
               <div>
                 <span class="tit01">申请时间:</span>
