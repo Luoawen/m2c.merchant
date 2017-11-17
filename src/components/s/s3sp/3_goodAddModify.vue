@@ -417,7 +417,8 @@
         dLabel3: false,
         goodsBrandName: '',
         setUp:{},
-        disabled:false //禁用规格选择
+        disabled:false, //禁用规格选择
+        tempGoodsMainImages:[],
       }
     },
     created() {},
@@ -783,13 +784,12 @@
         if (file.response.content.url == '' || file.response.content.url == undefined) {
           that.show_tip(file.response.errorMessage)
         } else {
-          that.goodsMainImages.push(file.response.content.url)
           that.$nextTick(()=>{
             let l = that.$("#dragImg").find("img").length-1
             that.$("#dragImg").find("img")[l].src = file.response.content.url
             console.log(that.$("#dragImg").find("img")[l].src)
           })
-
+          that.goodsMainImages.push(file.response.content.url)
           that.picture()
         }
       },
@@ -891,7 +891,6 @@
               var id = ev.dataTransfer.getData('Img')
               var startLocation = id.substring(5, id.length)
               console.log('startLocation:' + startLocation)
-              var elem = document.getElementById(id)
               var toElem = ev.toElement
               var endLocation // 替换位置
               for (var i = 0; i < that.goodsMainImages.length; i++) {
@@ -900,29 +899,24 @@
                   break
                 }
               }
-              console.log('endLocation:' + endLocation)
-              // let flag = id.substr(id.length - 1, 1)
-              // let index = that.goodsMainImages[flag]
-              // that.goodsMainImages.splice(flag,1)
-              // that.goodsMainImages.push(index)
-              this.appendChild(elem);
-              console.log(that.goodsMainImages)
-              var tempImage
-              for (var i = 0; i < that.goodsMainImages.length; i++) {
-                if (i == startLocation) {
-                  tempImage = that.goodsMainImages[i]
-                  break
-                }
-              }
+              that.tempGoodsMainImages = []
               for (var j = 0; j < that.goodsMainImages.length; j++) {
                 if (j == startLocation) {
-                  that.goodsMainImages[j] = that.goodsMainImages[endLocation]
-                }
-                if (j == endLocation) {
-                  that.goodsMainImages[j] = tempImage
+                  that.tempGoodsMainImages.push(that.goodsMainImages[endLocation])
+                } else if (j == endLocation) {
+                  that.tempGoodsMainImages.push(that.goodsMainImages[startLocation])
+                } else {
+                  that.tempGoodsMainImages.push(that.goodsMainImages[j])
                 }
               }
-              console.log(that.goodsMainImages)
+              that.goodsMainImages = []
+              for (var k = 0; k < that.tempGoodsMainImages.length; k++) {
+                that.goodsMainImages.push(that.tempGoodsMainImages[k])
+              }
+              that.fileList = []
+              for (var n = 0; n < that.goodsMainImages.length; n++) {
+                that.fileList.push( eval ('(' + '{url:"' + that.goodsMainImages[n] + '"}' + ')'))
+              }
               // 重新赋值id
               var moveItem = document.getElementById('dragImg').getElementsByTagName('li');
               for (let i = 0; i < moveItem.length; i++) {
