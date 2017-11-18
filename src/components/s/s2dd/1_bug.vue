@@ -8,7 +8,7 @@
             <option value="0">待付款</option>
             <option value="1">待发货</option>
             <option value="2">待收货</option>
-            <option value="3">确认收货</option>
+            <option value="3">已完成</option>
             <option value="4">交易完成</option>
             <option value="5">交易关闭</option>
             <option value="-1">已取消</option>
@@ -75,8 +75,10 @@
                   <option value="0">待付款</option>
                   <option value="1">待发货</option>
                   <option value="2">待收货</option>
-                  <option value="3">确认收货</option>
+                  <option value="3">已完成</option>
                   <option value="4">交易完成</option>
+                  <option value="5">交易关闭</option>
+                  <option value="-1">已取消</option>
                 </select>
               </div>
               <div class="clear mt10 mb20">
