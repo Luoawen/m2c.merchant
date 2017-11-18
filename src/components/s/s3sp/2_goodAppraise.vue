@@ -305,7 +305,7 @@
             starLevel: that.search_params.starLevel,
             startTime: that.search_params.startTime,
             endTime: that.search_params.endTime,
-            condition: that.search_params.condition,
+            condition: that.search_params.condition.replace(/\s+/g,""),
             imageStatus: that.search_params.imageStatus,
             rows: that.goodsCommentPageRows,                          // 每页多少条数据
             pageNum: that.goodsCommentCurrentPage     // 请求第几页

@@ -204,7 +204,7 @@
             pageNum: that.currentPage,    // 请求第几页*/
             orderType:that.search_params.expectation,
             status:that.search_params.afterSaleStatus,
-            condition:that.search_params.condition,
+            condition:that.search_params.condition.replace(/\s+/g,""),
             startTime:that.search_params.startTime,
             endTime:that.search_params.endTime,
             mediaInfo:that.search_params.hasMedia

@@ -344,7 +344,7 @@
           ,afterSellStatus: that.searchParams.afterSellStatus
           ,startTime: that.searchParams.startTime
           ,endTime: that.searchParams.endTime
-          ,condition: that.searchParams.condition
+          ,condition: that.searchParams.condition.replace(/\s+/g,"")
           ,payWay: that.searchParams.payWay
           ,invoice: that.searchParams.invoice
           ,commentStatus: that.searchParams.commentStatus,
