@@ -311,7 +311,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="block" style="margin: 20px;float: right">
+        <div class="block" style="margin:20px;float:left">
           <el-pagination
             @size-change="goodsDelStoreHandleSizeChange"
             @current-change="goodsDelStoreHandleCurrentChange"

@@ -108,6 +108,7 @@
       // 左侧导航跳转
       goto (event) {
         let that = this
+        //alert(0)
         console.log('元素', that.$(event.target).text())
         let path = event.target.getAttribute('path')
         if (!path) return
@@ -166,6 +167,9 @@
     },
     mounted () {
       let that = this
+      window.onpopstate = function() {
+        that.goto();
+       };
       if (sessionStorage.length === 0) {
         that.$goRoute({path: '/slogin'})
         return
@@ -230,6 +234,7 @@
     beforeCreate () {
       document.title = '一拍即获-供应商平台'
       document.querySelector('#favicon').href = '/static/favicon_s.ico'
+        
     }
   }
 </script>
