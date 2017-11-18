@@ -170,11 +170,11 @@
           <span class="fr" @click="showhptc=false">X</span>
         </div>
         <div class="hptczp_body">
-            <textarea placeholder="请填写100字符以内内容" v-model="reply_params.replyContent" maxlength="100"></textarea>
+            <textarea placeholder="请填写" maxlength="" v-model="reply_params.replyContent"></textarea>
         </div>
         <div class="hptczp_footer">
           <button type="button" class="btn save" @click="reply()" >确认</button>
-          <button type="button" class="btn cancel" @click="cancel()" >取消</button>
+          <button type="button" class="btn cancel" @click="showhptc=false" >取消</button>
         </div>
     </div>
   </div>
@@ -227,11 +227,6 @@
         let that = this
         that.goodsCommentCurrentPage = val
         that.get_comment_info()
-      },
-      cancel () {
-        let that = this
-        that.showhptc = false
-        that.reply_params.replyContent = ''
       },
       reply () {
         let that = this
@@ -318,6 +313,9 @@
           success: function (result) {
             if (result.status === 200) {
               console.log(result)
+              if(result.content.length ==0){
+                that.show_tip("没有匹配的记录")
+              }
               that.datacomment = result.content
               that.goodsCommentTotalCount = result.totalCount
             }
