@@ -232,7 +232,7 @@
                 <div>{{item.revPhone}}</div>
               </div>
               <div class="a8" style="width:10%">
-                <span>{{item.orderStatus==0?'待付款': item.orderStatus==1? '待发货' : item.orderStatus==2?'待收货' : item.orderStatus==3 ? '已完成' : item.orderStatus==4 ? '交易完成' : item.orderStatus==5?'交易关闭': '--'}}</span>
+                <span>{{item.orderStatus==0?'待付款': item.orderStatus==1? '待发货' : item.orderStatus==2?'待收货' : item.orderStatus==3 ? '已完成' : item.orderStatus==4 ? '交易完成' : item.orderStatus==5?'交易关闭':item.orderStatus==-1?'已取消': '--'}}</span>
               </div>
             </div>
           </td>
