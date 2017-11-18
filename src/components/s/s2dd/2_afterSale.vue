@@ -167,8 +167,11 @@
           label: '已退款'
         }, {
           value: '11',
+          label: '售后完成'
+        },{
+          value: '12',
           label: '交易关闭'
-        }],
+        },],
         afterSaleStatus:'',//售后状态
         mediaStatus:[{
           value: '',

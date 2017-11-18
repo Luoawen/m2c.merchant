@@ -10,6 +10,8 @@
             <option value="2">待收货</option>
             <option value="3">确认收货</option>
             <option value="4">交易完成</option>
+            <option value="5">交易关闭</option>
+            <option value="-1">已取消</option>
           </select>
         </div>
       </div>
@@ -28,7 +30,8 @@
             <option value="8">客户收到</option>
             <option value="9">同意退款</option>
             <option value="10">已退款</option>
-            <option value="11">交易关闭</option>
+            <option value="11">售后完成</option>
+            <option value="12">交易关闭</option>
           </select>
         </div>
       </div>
