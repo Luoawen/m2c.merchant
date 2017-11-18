@@ -143,7 +143,7 @@
             dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
             pageRows: that.pageRows,                     // 每页多少条数据
             pageNo: that.currentPage,    // 请求第几页*/
-            keyword:that.search_params.condition,
+            keyword:that.search_params.condition.replace(/\s+/g,""),
             settleStatus:that.search_params.SettleStatus,
             startDate:that.search_params.startTime,
             endDate:that.search_params.endTime
