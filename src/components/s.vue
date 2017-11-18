@@ -168,7 +168,7 @@
     mounted () {
       let that = this
       window.onpopstate = function() {
-        that.goto();
+        window.location.reload();
        };
       if (sessionStorage.length === 0) {
         that.$goRoute({path: '/slogin'})
