@@ -132,7 +132,8 @@
               <div class="blue">规格：{{goods.skuName == ''?'默认':goods.skuName}}</div>
             	</div>
         		</td>
-            <td class="a2">{{typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].name : ''}}<br>{{typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].cateName:''}}</td>
+            <td class="a2">{{goods.mediaResId!=''?(typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].name : ''):''}}
+              <br>{{goods.mediaResId!=''?(typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].cateName:''):''}}</td>
             <td class="a3">{{goods.sellNum}}</td>
             <td class="a4">{{goods.unitName}}</td>
             <td class="a5">{{goods.price/100}}</td>

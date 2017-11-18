@@ -75,7 +75,8 @@
                   </div>
                 </div>
               </td>
-              <td class="a2">-</td>
+              <td class="a2">{{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].name : ''):''}}
+                <br>{{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].cateName:''):''}}</td>
               <td class="a3">{{orderDetail.goodsInfo.price/100}}</td>
               <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
               <td class="a5">{{orderDetail.goodsInfo.totalPrice/100}}</td>
@@ -339,7 +340,8 @@
           orderFreight:0,
           backFreight:0
           ,dealerId:''
-          ,doStatus: -2
+          ,doStatus: -2,
+          mediaResInfos:{}
         },
         operatingRecords:[],
         logistics:{
@@ -367,7 +369,11 @@
         _map: {}
         ,pRtFreight:0
         ,showMask: false
-        ,showRt: false
+        ,showRt: false,
+        goodses: [],
+        expressNum:0,
+        totalData:'',
+
       }
     },
     methods: {
@@ -409,6 +415,7 @@
               that.orderDetail.createdDate = that.date_format(new Date(_content.createdDate), 'yyyy-MM-dd hh:mm:ss')
               that.orderDetail.orderId = _content.orderId
               that.orderDetail.goodsInfo=_content.goodsInfo
+              that.mediaId = that.orderDetail.goodsInfo.mediaResId
               that.orderDetail.orderTotalMoney=_content.orderTotalMoney
               that.orderDetail.orderFreight=_content.orderFreight
               that.orderDetail.backFreight=_content.backFreight
@@ -418,10 +425,35 @@
               that.orderDetail.rejectReason=_content.rejectReason
               that.orderDetail.dealerId = _content.dealerId;
               that.orderDetail.doStatus = _content.doStatus;
+              that.setReturnData(result.content)
             }
           }
         })
-       }
+       },
+      setReturnData:function(data){
+        let that = this
+        that.setGoodsTable(data.goodsInfoBeans, data)
+      },
+      setGoodsTable:function(goods,totalData){
+        let that = this
+        that.totalData = totalData;
+        that.expressNum = 0;
+        that.goodses = goods
+        var resIds = '';
+        that.goodses.forEach(function(val, index) {
+          val.freight = val.freight/100;
+          //val.mediaResId='18AD16F1F35C569E4C1785DF22FA47652789';
+          if(typeof(val.mediaResId)=='undefined' || val.mediaResId==null ||  val.mediaResId=='')
+            ;//val.mediaResId = '-'
+          else {
+            if (index > 0)
+              resIds += ',';
+            resIds += '"'+val.mediaResId+'"';
+          }
+          that.expressNum += val.sellNum;
+        });
+        that.getMediaResInfo(resIds);
+      }
       ,operatingRecord() {
         let that = this
         that.$.ajax({
@@ -743,6 +775,36 @@
                 else
                   that.operatingRecords[i].optUserStr = that.operatingRecords[i].optUser;
               }
+            }
+          }
+        });
+      }
+      ,getMediaResInfo(resIds) {
+        if (resIds == '') {
+          return;
+        }
+        let that = this;
+        that.$.ajax({
+          type: 'get',
+          url: that.base + 'm2c.media/mres/byIdList',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            mresIdList: '[' + resIds + ']'
+          },
+          success: function (result) {
+            console.log(result);
+            if (result.status == 200) {
+              result.content;
+              that.mediaResInfos = {};
+
+              for (var i=0; i<result.content.length; i++) {
+                var a = {};
+                a.name = result.content[i].mresName;
+                a.cateName = result.content[i].cateName;
+                that.mediaResInfos[result.content[i].mresId] = a;
+              }
+              console.log("mediaResInfos:");
+              //console.log(that.mediaResInfos);
             }
           }
         });
