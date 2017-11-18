@@ -70,7 +70,7 @@
           label="售后状态"
           width="200"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{scope.row.status==0?'申请退货':scope.row.status==1?'申请换货':scope.row.status==2?'申请退款':scope.row.status==3?'拒绝':scope.row.status==4?'已同意申请':scope.row.status==5?'客户已寄出':scope.row.status==6?'商家已收到':scope.row.status==7?'商家已寄出':scope.row.status==8?'客户收到':scope.row.status==9?'已同意退款':scope.row.status==10?'已退款':scope.row.status==11?'交易关闭':'-'}}</span></template>
+          <template slot-scope="scope"><span>{{scope.row.status==0?'申请退货':scope.row.status==1?'申请换货':scope.row.status==2?'申请退款':scope.row.status==3?'拒绝':scope.row.status==4?'已同意申请':scope.row.status==5?'客户已寄出':scope.row.status==6?'商家已收到':scope.row.status==7?'商家已寄出':scope.row.status==8?'客户收到':scope.row.status==9?'已同意退款':scope.row.status==10?'已退款':scope.row.status==11?'交易关闭':scope.row.status==-1?'取消':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="申请时间"

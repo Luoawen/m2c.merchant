@@ -12,7 +12,7 @@
             <div class="col-sm-4 detail_cen">
               <div>
                 <span class="tit01">售后状态:</span>
-                <span class="ml20">{{orderDetail.status==0?'申请退货':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'交易关闭':'-'}}</span>
+                <span style="color: red;font-size: 15px" class="ml20">{{orderDetail.status==0?'申请退货':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'交易关闭':orderDetail.status==-1?'取消':'-'}}</span>
               </div>
               <div>
                 <span class="tit01">售后单号:</span>
