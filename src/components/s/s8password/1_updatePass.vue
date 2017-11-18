@@ -117,6 +117,7 @@
         let that = this
         that.$.ajax({
           url: that.base + 'm2c.users/user/sendSms',
+          timeout : 5000, //超时时间设置，单位毫秒
           type: 'post',
           data: {
             token: sessionStorage.getItem('mToken'),
