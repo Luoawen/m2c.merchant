@@ -14,6 +14,7 @@
           <el-dropdown-menu slot="dropdown" >
             <el-dropdown-item><div @click="goto" path='/s/userInfo'>账户信息</div></el-dropdown-item>
             <el-dropdown-item><div @click="goto" path='/s/updatePass'>登录密码</div></el-dropdown-item>
+            <el-dropdown-item><div @click="goto" path='/s/cashPass'>交易密码</div></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <div class="right_title_quit" @click="sign_out_tips">退出</div>
@@ -49,9 +50,9 @@
 				<div path='/s/administer' class="content_s">品牌管理</div>
 				<div path='/s/formwork' class="content_s">运费模板</div>
 				<div path='/s/address' class="content_s">售后地址</div>
-				<div path='/s/cashPass' class="content_s">交易密码</div>
+				<!-- <div path='/s/cashPass' class="content_s">交易密码</div> -->
 			</div>
-      <div class="public_nav" path='/s/updatePass'><i class="nav_setting"></i>修改密码</div>
+      <!-- <div class="public_nav" path='/s/updatePass'><i class="nav_setting"></i>修改密码</div> -->
     </div>
     <div class="right_nav">
       <i></i>
@@ -247,11 +248,20 @@ html {
 // @media screen and (min-width:1440px) and (max-width:1680px){html{font-size:16px}}
 // @media screen and (min-width:1681px) and (max-width:1920px){html{font-size:18px}}
 
-@media print {.title{display: none;}.left_nav{display: none;}.right_nav{display: none;}.s23dyfhd{margin-left: -180px;margin-right: -50px;margin-top: -160px;}.print_order{height: 1300px;}button{display: none;}}
 body {
   background: #F4F5FA; // height: 100%;
 }
-
+  div.icon{
+    width:16px;height:16px; display:inline-block; position:relative;
+    background:url(../assets/images/ico_explain.png) no-repeat 0 0;
+    div.tips{display:none;width:100px;height:auto;background:#fff;
+      border:1px solid #E5E5E5;border-radius: 4px;
+      box-shadow: 0 1px 0 0 #E5E5E5;position: absolute;
+      top:18px;left:0px; text-indent: 0;padding:6px;font-weight:normal;
+      p{line-height:24px;font-size:12px; color:#666;}
+    }
+  }
+  div.icon:hover div.tips{display:block;}
 * {
   margin: 0;
   padding: 0;
@@ -610,5 +620,7 @@ body {
       z-index:3;
     }
   }
+  @media print {.title{display: none;}.left_nav{display: none;}.right_nav{display: none;}.s{padding-left: 0px;}.printSendOrder{height:1000px;margin: 0px;font-size: 8px;position: absolute;top: -300px;}a{display: none;}}
+
 }
 </style>

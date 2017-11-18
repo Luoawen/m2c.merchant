@@ -593,7 +593,6 @@
           }
           that.$(el).parents('.table').find('.cityBox').eq(index).toggle()
         }
-        
       },
 // 选中大区时同时选中所有省市
       chooseArea(n, $event) {

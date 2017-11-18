@@ -9,7 +9,7 @@
 					<span>商家登录</span>
 					<div class="username">
 						<i class="username_i public_i"></i>
-						<input type="text" placeholder="用户名" v-model="login_params.mobile" @keydown.enter="login">
+						<input type="text" maxlength="11" placeholder="用户名" v-model="login_params.mobile" @keydown.enter="login">
 					</div>
 					<div class="password">
 						<i class="password_i public_i"></i>
@@ -38,11 +38,11 @@
 		<div class="modal_password" v-show="forget_password">
 			<p>忘记密码</p>
 			<div class="modal_refund_close"  @click="close_tip"></div>
-			<input placeholder="手机号码" class="public_input_phone" v-model="mobile" @input="get_phone">
-			<input placeholder="手机验证码" class="hone_code public_input_code" v-model="verifyCode" maxlength="6">
+			<input placeholder="手机号码" class="public_input_phone"  v-model="mobile" maxlength="11" @input="get_phone">
+			<input placeholder="手机验证码" class="hone_code public_input_code" v-model="verifyCode" maxlength="4" minlength="4">
 			<button @click="get_code" v-bind:class="{ phone_right:isActive }" >{{ timerCodeMsg }}</button>
 			<!-- <input type="password" placeholder="新密码" class="public_input_password" v-model="newPass"> -->
-			<input type="password" placeholder="请输入6-16位新密码" class="public_input_password" v-model="confirmPass">
+			<input type="password" placeholder="请输入6-16位新密码" maxlength="16" minlength="6" class="public_input_password" v-model="confirmPass">
 			<button class="complete_button" @click="pass_forget_passwrod" v-bind:class="{ phone_right:isActive_pass }" >完成</button>
 		</div>
 	</div>
