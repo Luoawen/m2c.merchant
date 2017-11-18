@@ -170,7 +170,7 @@
           <span class="fr" @click="showhptc=false">X</span>
         </div>
         <div class="hptczp_body">
-            <textarea placeholder="请填写" v-model="reply_params.replyContent"></textarea>
+            <textarea placeholder="请填写" maxlength="" v-model="reply_params.replyContent"></textarea>
         </div>
         <div class="hptczp_footer">
           <button type="button" class="btn save" @click="reply()" >确认</button>
@@ -313,6 +313,9 @@
           success: function (result) {
             if (result.status === 200) {
               console.log(result)
+              if(result.content.length ==0){
+                that.show_tip("没有匹配的记录")
+              }
               that.datacomment = result.content
               that.goodsCommentTotalCount = result.totalCount
             }
