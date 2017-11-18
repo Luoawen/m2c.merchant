@@ -127,7 +127,7 @@
             token: sessionStorage.getItem('mToken'),
             rows: that.pageRows,                     // 每页多少条数据
             pageNum: that.currentPage,    // 请求第几页*/
-            withdrawalId:that.search_params.condition,
+            withdrawalId:that.search_params.condition.replace(/\s+/g,""),
             wdStatus:that.search_params.SettleStatus,
             beginTime:that.search_params.startTime,
             endTime:that.search_params.endTime,

@@ -519,7 +519,7 @@
             pageNum: that.goodsStoreCurrentPage,    // 请求第几页*/
             goodsClassifyId:that.selectedOptions1[that.selectedOptions1.length-1],
             goodsStatus:that.search_goods_params.goodsStatus,
-            condition:that.search_goods_params.condition,
+            condition:that.search_goods_params.condition.replace(/\s+/g,""),
             startTime:that.search_goods_params.startTime,
             endTime:that.search_goods_params.endTime
           },
@@ -573,7 +573,7 @@
             pageNum: that.goodsStoreCurrentPage,    // 请求第几页*/
             goodsClassifyId:that.selectedOptions2[that.selectedOptions2.length-1],
             approveStatus:that.search_goodsCheck_params.approveStatus,
-            condition:that.search_goodsCheck_params.condition,
+            condition:that.search_goodsCheck_params.condition.replace(/\s+/g,""),
             startTime:that.search_goodsCheck_params.startTime,
             endTime:that.search_goodsCheck_params.endTime
           },
