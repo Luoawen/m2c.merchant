@@ -138,6 +138,8 @@ export default {
             if (result.status === 200) {
               that.show_tip('密码修改成功')
               that.close_tip()
+							that.timerCodeMsg = '获取验证码'
+              that.isActive = true
             } else {
               that.show_tip(result.errorMessage)
             }
@@ -163,6 +165,7 @@ export default {
       if (this.isActive !== true) return
       that.$.ajax({
         method: 'post',
+				timeout : 5000, //超时时间设置，单位毫秒
         url: that.base + 'm2c.users/user/sendSms',
         data: {
           token: '123',
