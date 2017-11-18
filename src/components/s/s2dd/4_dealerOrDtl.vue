@@ -132,7 +132,7 @@
               <div class="blue">规格：{{goods.skuName == ''?'默认':goods.skuName}}</div>
             	</div>
         		</td>
-            <td class="a2">{{goods.mediaResId}}</td>
+            <td class="a2">{{typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].name : ''}}<br>{{typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].cateName:''}}</td>
             <td class="a3">{{goods.sellNum}}</td>
             <td class="a4">{{goods.unitName}}</td>
             <td class="a5">{{goods.price/100}}</td>
@@ -415,8 +415,9 @@
         ,pageRows:5
         ,currentPage: 1
         ,totalCount:0
-        ,operatingRecords:[],
-        orderNo:''
+        ,operatingRecords:[]
+        ,orderNo:''
+        ,mediaResInfos : {}
       }
     },
     watch: {
@@ -599,13 +600,20 @@
         that.goodses = goodses;
         that.totalData = totalData;
         that.expressNum = 0;
+        var resIds = '';
         that.goodses.forEach(function(val, index) {
           val.freight = val.freight/100;
+          //val.mediaResId='18AD16F1F35C569E4C1785DF22FA47652789';
           if(typeof(val.mediaResId)=='undefined' || val.mediaResId==null ||  val.mediaResId=='')
-            val.mediaResId = '-';
-
-          that.expressNum +=val.sellNum;
+            ;//val.mediaResId = '-'
+          else {
+            if (index > 0)
+              resIds += ',';
+            resIds += '"'+val.mediaResId+'"';
+          }
+          that.expressNum += val.sellNum;
         });
+        that.getMediaResInfo(resIds);
       },
       get_log_info () {
         let that = this
@@ -887,6 +895,36 @@
         let that = this
         that.currentPage=val
         that.get_log_info();
+      }
+      ,getMediaResInfo(resIds) {
+        if (resIds == '') {
+          return;
+        }
+        let that = this;
+        that.$.ajax({
+          type: 'get',
+          url: that.base + 'm2c.media/mres/byIdList',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            mresIdList: '[' + resIds + ']'
+          },
+          success: function (result) {
+            console.log(result);
+            if (result.status == 200) {
+              result.content;
+              that.mediaResInfos = {};
+
+              for (var i=0; i<result.content.length; i++) {
+                var a = {};
+                a.name = result.content[i].mresName;
+                a.cateName = result.content[i].cateName;
+                that.mediaResInfos[result.content[i].mresId] = a;
+              }
+              console.log("mediaResInfos:");
+              console.log(that.mediaResInfos);
+            }
+          }
+        });
       }
     }
     ,mounted () {
