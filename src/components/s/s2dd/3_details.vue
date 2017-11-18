@@ -430,7 +430,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            orderId:that.orderDetail.orderId,
+            orderId:that.orderDetail.afterSelldealerOrderId,
             rows: that.pageRows,                     // 每页多少条数据
             pageNum: that.currentPage,    // 请求第几页*/
           },
