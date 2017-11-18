@@ -8,8 +8,10 @@
             <option value="0">待付款</option>
             <option value="1">待发货</option>
             <option value="2">待收货</option>
-            <option value="3">确认收货</option>
+            <option value="3">已完成</option>
             <option value="4">交易完成</option>
+            <option value="5">交易关闭</option>
+            <option value="-1">已取消</option>
           </select>
         </div>
       </div>
@@ -28,7 +30,8 @@
             <option value="8">客户收到</option>
             <option value="9">同意退款</option>
             <option value="10">已退款</option>
-            <option value="11">交易关闭</option>
+            <option value="11">售后完成</option>
+            <option value="12">交易关闭</option>
           </select>
         </div>
       </div>
@@ -72,8 +75,10 @@
                   <option value="0">待付款</option>
                   <option value="1">待发货</option>
                   <option value="2">待收货</option>
-                  <option value="3">确认收货</option>
+                  <option value="3">已完成</option>
                   <option value="4">交易完成</option>
+                  <option value="5">交易关闭</option>
+                  <option value="-1">已取消</option>
                 </select>
               </div>
               <div class="clear mt10 mb20">
@@ -232,7 +237,7 @@
                 <div>{{item.revPhone}}</div>
               </div>
               <div class="a8" style="width:10%">
-                <span>{{item.orderStatus==0?'待付款': item.orderStatus==1? '待发货' : item.orderStatus==2?'待收货' : item.orderStatus==3 ? '已完成' : item.orderStatus==4 ? '交易完成' : item.orderStatus==5?'交易关闭': '--'}}</span>
+                <span>{{item.orderStatus==0?'待付款': item.orderStatus==1? '待发货' : item.orderStatus==2?'待收货' : item.orderStatus==3 ? '已完成' : item.orderStatus==4 ? '交易完成' : item.orderStatus==5?'交易关闭':item.orderStatus==-1?'已取消': '--'}}</span>
               </div>
             </div>
           </td>
@@ -357,6 +362,9 @@
         },
         success: function (res) {
           var resultData = res.content;
+          if(res.content.length == 0){
+            that.show_tip("没有匹配的记录")
+          }
           that.totalCount = res.totalCount;
           that.resultdata= resultData;
           console.log(res);

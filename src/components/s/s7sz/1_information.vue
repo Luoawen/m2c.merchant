@@ -38,12 +38,13 @@
       </div>
       <div class="shopLogo pull-right">
         <div class="form-group nopad">
-          <div class="col-sm-8">
-            <input type="file" id="m11yhgl_img_input" style="display:none" @change="upload_img()">
-            <div class="img_up">
-              <img width='100px' height='100px' v-show='imgshow' id="m11yhgl_img" v-model:src="storeinformation.imgUrl">
-            </div>
-            <span class="upload" onclick="document.querySelector('#m11yhgl_img_input').click()">
+      <div class="col-sm-8">
+                <input type="file" id="m11yhgl_img_input" style="display:none" @change="upload_img()">
+                <div class="img_up">
+                  <img width='100px' height='100px'  v-show='imgshow' id="m11yhgl_img" v-model:src="storeinformation.imgUrl"
+                       onerror="this.src='../../../../static/assets/images/icon_uoloading.png';this.onerror=null" >
+                </div>
+                <span class="upload" onclick="document.querySelector('#m11yhgl_img_input').click()">
                   <div style="color:#337ab7;cursor:pointer;display:inline;">
                     <button class="btn btn-default">选择</button>
                   </div>
@@ -234,6 +235,7 @@
           width: 100px;
           height: 100px;
           background-size: 100px 100px;
+          background:none;
         }
         span{
           div{

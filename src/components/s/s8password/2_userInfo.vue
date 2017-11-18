@@ -5,7 +5,7 @@
     <div class="message"><b>公司信息</b></div>
     <div class="a_message"><span class="mr20">商家名称</span><span id="userPhone">{{dealer_user_info.dealerName}}</span></div>
     <div class="a_message"><span class="mr20">商家类型</span><span id="userPhone">{{dealer_user_info.dealerFristClassifyName}}</span></div>
-    <div class="a_message"><span class="mr20">签约时间</span><span id="userPhone">{{dealer_user_info.endSignDate}}</span></div>
+    <div class="a_message"><span class="mr20">签约时间</span><span id="userPhone">{{dealer_user_info.startSignDate}}&nbsp;&nbsp;至&nbsp;&nbsp;{{dealer_user_info.endSignDate}}</span></div>
     <div class="a_message"><span class="mr20">合作方式</span>
       <span id="userPhone" v-if="dealer_user_info.cooperationMode==1">包销</span>
       <span id="userPhone" v-if="dealer_user_info.cooperationMode==2">代销</span>

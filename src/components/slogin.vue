@@ -40,7 +40,7 @@
 			<div class="modal_refund_close"  @click="close_tip"></div>
 			<input placeholder="手机号码" class="public_input_phone"  v-model="mobile" maxlength="11" @input="get_phone">
 			<input placeholder="手机验证码" class="hone_code public_input_code" v-model="verifyCode" maxlength="4" minlength="4">
-			<button @click="get_code" v-bind:class="{ phone_right:isActive }" >{{ timerCodeMsg }}</button>
+			<button @click="get_code" v-bind:class="{ phone_right:isActive }" :disabled="disabled">{{ timerCodeMsg }}</button>
 			<!-- <input type="password" placeholder="新密码" class="public_input_password" v-model="newPass"> -->
 			<input type="password" placeholder="请输入6-16位新密码" maxlength="16" minlength="6" class="public_input_password" v-model="confirmPass">
 			<button class="complete_button" @click="pass_forget_passwrod" v-bind:class="{ phone_right:isActive_pass }" >完成</button>
@@ -62,7 +62,8 @@ export default {
       isActive_pass: true,
       timerCodeMsg: '获取验证码',
       forget_password: false,
-      login_params: { mobile: '', password: '', appDeviceSn: 111, terminalType: 3 }
+			login_params: { mobile: '', password: '', appDeviceSn: 111, terminalType: 3 },
+			disabled: false
     }
   },
   methods: {
@@ -138,6 +139,9 @@ export default {
             if (result.status === 200) {
               that.show_tip('密码修改成功')
               that.close_tip()
+							that.timerCodeMsg = '获取验证码'
+							that.isActive = true
+							that.disabled = false
             } else {
               that.show_tip(result.errorMessage)
             }
@@ -159,10 +163,12 @@ export default {
       that.confirmPass = ''
     },
     get_code () {
-      let that = this
+			let that = this
+			that.disabled = true
       if (this.isActive !== true) return
       that.$.ajax({
         method: 'post',
+				timeout : 2000, //超时时间设置，单位毫秒
         url: that.base + 'm2c.users/user/sendSms',
         data: {
           token: '123',
@@ -187,8 +193,16 @@ export default {
               }, i * 1000)
             }
           } else {
+						that.disabled = false
           }
-        }
+				},
+				complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+	　　　　if(status=='timeout'){//超时,status还有success,error等值的情况
+	　　　　　 //ajaxTimeoutTest.abort();
+	　　　　　  that.show_tip("请求超时");
+							that.disabled = false
+	　　　　}
+		　　}
       })
     }
   },

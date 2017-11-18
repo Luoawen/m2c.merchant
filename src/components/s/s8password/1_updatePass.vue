@@ -12,8 +12,8 @@
           <input type="text" class="form-control" id="verifyCode" placeholder="4位数验证码" maxlength="4">
         </div>
         <div class="col-sm-3">
-          <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="!show">
-            <span v-show="show">获取验证码</span>
+          <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="disabled">
+            <span v-show="show" id="sendVer">获取验证码</span>
             <span v-show="!show" class="count">{{count}} s</span>
           </button>
         </div>
@@ -75,7 +75,8 @@
         show: true,
         count: sessionStorage.getItem('total') == null || sessionStorage.getItem('total') == '' ? 60 : sessionStorage.getItem('total'),
         total: '',
-        isSuccess: false
+        isSuccess: false,
+        disabled:false,
       }
     },
     created () {
@@ -106,6 +107,8 @@
             sessionStorage.removeItem('total')
             // 显示重新发送 把发送按钮设置为可点击
             that.show = true
+            that.$("#sendVer").text("重新发送")
+            that.disabled = false
             that.isSuccess = false
           } else { // 剩余倒计时不为零
             // 重新写入总倒计时
@@ -115,8 +118,10 @@
       },
       sendVerficode () {
         let that = this
+        that.disabled = true
         that.$.ajax({
           url: that.base + 'm2c.users/user/sendSms',
+          timeout : 2000, //超时时间设置，单位毫秒
           type: 'post',
           data: {
             token: sessionStorage.getItem('mToken'),
@@ -131,8 +136,16 @@
               that.show_tip('已发送短信注意查收')
             } else {
               that.show_tip(result.errorMessage)
+              that.disabled = false
             }
-          }
+          },
+          complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+    　　　　if(status=='timeout'){//超时,status还有success,error等值的情况
+    　　　　　 //ajaxTimeoutTest.abort();
+    　　　　　 that.show_tip("请求超时");
+              that.disabled = false
+    　　　　}
+      　　}
         })
       },
       modify_pass () {

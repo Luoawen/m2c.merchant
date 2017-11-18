@@ -7,7 +7,7 @@
           <input type="text" class="form-control" id="verifyCode" placeholder="4位数验证码" maxlength="4">
         </div>
         <div class="col-sm-3">
-          <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="!show">
+          <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="disabled">
             <span v-show="show" id="sendVer">获取验证码</span>
             <span v-show="!show" class="count">{{count}} s</span>
           </button>
@@ -48,11 +48,12 @@
         dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
         userPhone: JSON.parse(sessionStorage.getItem('mUser')).mobile,
         show: true,
-        count: sessionStorage.getItem('total') == null || sessionStorage.getItem('total') == '' ? 60 : sessionStorage.getItem('total'),
+        count: sessionStorage.getItem('totalT') == null || sessionStorage.getItem('totalT') == '' ? 60 : sessionStorage.getItem('totalT'),
         total: '',
         isSuccess: false,
         from:'',
-        masage:''
+        masage:'',
+        disabled: false
       }
     },
     created () {
@@ -66,11 +67,10 @@
       timekeeping () {
         let that = this
         // 把按钮设置为不可以点击
-        // 把按钮设置为不可以点击
         that.show = false
         var interval = setInterval(function () { // 每秒读取一次cookie
           // 从cookie 中读取剩余倒计时
-          that.total = sessionStorage.getItem('total')
+          that.total = sessionStorage.getItem('totalT')
           // 在发送按钮显示剩余倒计时
           if (that.total == 1) {
             that.count = 60
@@ -83,37 +83,48 @@
             // 清除定时器
             clearInterval(interval)
             // 删除cookie
-            sessionStorage.removeItem('total')
+            sessionStorage.removeItem('totalT')
             // 显示重新发送 把发送按钮设置为可点击
             that.show = true
             that.$("#sendVer").text("重新发送")
+            that.disabled = false
             that.isSuccess = false
           } else { // 剩余倒计时不为零
             // 重新写入总倒计时
-            sessionStorage.setItem('total', that.total)
+            sessionStorage.setItem('totalT', that.total)
           }
         }, 1000)
       },
       sendVerficode () {
         let that = this
+        that.disabled = true // 把按钮设置为不可以点击
         that.$.ajax({
           url: that.base + 'm2c.users/user/sendSms',
+          timeout : 2000, //超时时间设置，单位毫秒
           type: 'post',
           data: {
             token: sessionStorage.getItem('mToken'),
-            codeType: 2,
+            codeType: 5,
             mobile: JSON.parse(sessionStorage.getItem('mUser')).mobile
           },
           success: function (result) {
             if (result.status === 200) {
               that.isSuccess = true
-              sessionStorage.setItem('total', 60)
+              sessionStorage.setItem('totalT', 60)
               that.timekeeping()
               that.show_tip('已发送短信注意查收')
             } else {
               that.show_tip(result.errorMessage)
+              that.disabled = false
             }
-          }
+          },
+          complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+    　　　　if(status=='timeout'){//超时,status还有success,error等值的情况
+    　　　　　 //ajaxTimeoutTest.abort();
+    　　　　　 that.show_tip("请求超时");
+              that.disabled = false
+    　　　　}
+      　　}
         })
       },
       modify_pass () {
@@ -159,7 +170,7 @@
           success: function (result) {
             if (result.status === 200) {
               // 删除cookie
-              sessionStorage.removeItem('total')
+              sessionStorage.removeItem('totalT')
               // 显示重新发送 把发送按钮设置为可点击
               that.show = true
               that.isSuccess = false
@@ -211,10 +222,10 @@
     mounted () {
       let that = this
       that.from = that.$route.query.from
-      if (sessionStorage.getItem('total') !== undefined && sessionStorage.getItem('total') !== 'NaN' && sessionStorage.getItem('total') !== 'null' && sessionStorage.getItem('total') !== null && sessionStorage.getItem('total') !== '') { // cookie存在倒计时
+      if (sessionStorage.getItem('totalT') !== undefined && sessionStorage.getItem('totalT') !== 'NaN' && sessionStorage.getItem('totalT') !== 'null' && sessionStorage.getItem('totalT') !== null && sessionStorage.getItem('totalT') !== '') { // cookie存在倒计时
         that.show = false
         that.isSuccess = true
-        that.total = sessionStorage.getItem('total')
+        that.total = sessionStorage.getItem('totalT')
         that.timekeeping()
       } else { // cookie 没有倒计时
         that.show = true

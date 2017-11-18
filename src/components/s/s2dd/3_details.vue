@@ -12,7 +12,7 @@
             <div class="col-sm-4 detail_cen">
               <div>
                 <span class="tit01">售后状态:</span>
-                <span class="ml20">{{orderDetail.status==0?'申请退货':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'交易关闭':'-'}}</span>
+                <span style="color: red;font-size: 15px" class="ml20">{{orderDetail.status==0?'申请退货':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'交易关闭':orderDetail.status==-1?'取消':'-'}}</span>
               </div>
               <div>
                 <span class="tit01">售后单号:</span>
@@ -75,7 +75,8 @@
                   </div>
                 </div>
               </td>
-              <td class="a2">-</td>
+              <td class="a2">{{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].name : ''):''}}
+                <br>{{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].cateName:''):''}}</td>
               <td class="a3">{{orderDetail.goodsInfo.price/100}}</td>
               <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
               <td class="a5">{{orderDetail.goodsInfo.totalPrice/100}}</td>
@@ -339,7 +340,8 @@
           orderFreight:0,
           backFreight:0
           ,dealerId:''
-          ,doStatus: -2
+          ,doStatus: -2,
+          mediaResInfos:{}
         },
         operatingRecords:[],
         logistics:{
@@ -367,7 +369,11 @@
         _map: {}
         ,pRtFreight:0
         ,showMask: false
-        ,showRt: false
+        ,showRt: false,
+        goodses: [],
+        expressNum:0,
+        totalData:'',
+
       }
     },
     methods: {
@@ -409,6 +415,7 @@
               that.orderDetail.createdDate = that.date_format(new Date(_content.createdDate), 'yyyy-MM-dd hh:mm:ss')
               that.orderDetail.orderId = _content.orderId
               that.orderDetail.goodsInfo=_content.goodsInfo
+              that.mediaId = that.orderDetail.goodsInfo.mediaResId
               that.orderDetail.orderTotalMoney=_content.orderTotalMoney
               that.orderDetail.orderFreight=_content.orderFreight
               that.orderDetail.backFreight=_content.backFreight
@@ -418,10 +425,35 @@
               that.orderDetail.rejectReason=_content.rejectReason
               that.orderDetail.dealerId = _content.dealerId;
               that.orderDetail.doStatus = _content.doStatus;
+              that.setReturnData(result.content)
             }
           }
         })
-       }
+       },
+      setReturnData:function(data){
+        let that = this
+        that.setGoodsTable(data.goodsInfoBeans, data)
+      },
+      setGoodsTable:function(goods,totalData){
+        let that = this
+        that.totalData = totalData;
+        that.expressNum = 0;
+        that.goodses = goods
+        var resIds = '';
+        that.goodses.forEach(function(val, index) {
+          val.freight = val.freight/100;
+          //val.mediaResId='18AD16F1F35C569E4C1785DF22FA47652789';
+          if(typeof(val.mediaResId)=='undefined' || val.mediaResId==null ||  val.mediaResId=='')
+            ;//val.mediaResId = '-'
+          else {
+            if (index > 0)
+              resIds += ',';
+            resIds += '"'+val.mediaResId+'"';
+          }
+          that.expressNum += val.sellNum;
+        });
+        that.getMediaResInfo(resIds);
+      }
       ,operatingRecord() {
         let that = this
         that.$.ajax({
@@ -430,7 +462,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            orderId:that.orderDetail.orderId,
+            orderId:that.orderDetail.afterSelldealerOrderId,
             rows: that.pageRows,                     // 每页多少条数据
             pageNum: that.currentPage,    // 请求第几页*/
           },
@@ -743,6 +775,36 @@
                 else
                   that.operatingRecords[i].optUserStr = that.operatingRecords[i].optUser;
               }
+            }
+          }
+        });
+      }
+      ,getMediaResInfo(resIds) {
+        if (resIds == '') {
+          return;
+        }
+        let that = this;
+        that.$.ajax({
+          type: 'get',
+          url: that.base + 'm2c.media/mres/byIdList',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            mresIdList: '[' + resIds + ']'
+          },
+          success: function (result) {
+            console.log(result);
+            if (result.status == 200) {
+              result.content;
+              that.mediaResInfos = {};
+
+              for (var i=0; i<result.content.length; i++) {
+                var a = {};
+                a.name = result.content[i].mresName;
+                a.cateName = result.content[i].cateName;
+                that.mediaResInfos[result.content[i].mresId] = a;
+              }
+              console.log("mediaResInfos:");
+              //console.log(that.mediaResInfos);
             }
           }
         });
