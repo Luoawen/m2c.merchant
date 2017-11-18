@@ -360,6 +360,9 @@
         },
         success: function (res) {
           var resultData = res.content;
+          if(res.content.length == 0){
+            that.show_tip("没有匹配的记录")
+          }
           that.totalCount = res.totalCount;
           that.resultdata= resultData;
           console.log(res);
