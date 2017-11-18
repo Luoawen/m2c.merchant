@@ -1716,18 +1716,7 @@
         //   that.goodsResult.content[index].isChooseSpecification ='编辑规格数量'
         
         if(that.goodsResult.content[index].isRemoved === undefined || that.goodsResult.content[index].isRemoved === 0){
-          // add by Iris 
-           // 数据存入 应该连同 goodsSkulist   也一并存入 
-        for(var j = 0;j<that.goodsResult.content[index].goodsSkuList.length;++j){
-                    // checkbox 的选中状态  //  并没有显示结果   问题点
-                that.goodsResult.content[index].goodsSkuList[j].isCheck = true
-                    // 商品规格列表的满减数量=库存数量
-                that.goodsResult.content[index].goodsSkuList[j].goodsSkuNum = that.goodsResult.content[index].goodsSkuList[j].goodsSkuInventory
-              that.removeGoodsList[index].chooseSkuList =that.goodsResult.content[index].goodsSkuList[j]
-              }
-             that.removeGoodsList.push(that.goodsResult.content[index])
-            console.log("that.chooseGoodsList", that.chooseGoodsList)
-        // add by Iris 
+       
         //  that.removeGoodsList.push(that.goodsResult.content[index])
            that.goodsResult.content[index].isRemoved = 1
            that.goodsResult.content[index].isChooseSpecification ='已选规格数量'
