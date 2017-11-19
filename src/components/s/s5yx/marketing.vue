@@ -43,9 +43,9 @@
         </select>
       </div><br/>
       <div class="search_cell">
-        <button class="btn button btn-info" @click="goto"  path="/s/fullCut">新增满减</button>
-        <button class="btn button btn-warning" @click="resetSearchParams()">重置搜索条件</button>
-        <button class="btn button btn-primary" @click="getFullCutList()"  >搜索</button>
+        <button class="btn button btn-primary " @click="goto"  path="/s/fullCut">新增满减</button>
+        <button class="btn button btn-primary" @click="resetSearchParams()">重置搜索条件</button>
+        <button class="btn button btn-primary "  @click="getFullCutList()"  >搜索</button>
       </div>
     </div>
 
@@ -140,7 +140,7 @@
         this.$("[data-toggle='popover']").popover('hide')
         that.$('#table').bootstrapTable('destroy').bootstrapTable({
           cache: false,
-          url: that.base + 'm2c.market/fullcut/page',
+          url: that.base + 'm2c.market/web/fullcut/page',
 //          url: 'http://localhost:8080/m2c.market/fullcut/page',
           queryParams: function (params) {
             return Object.assign({}, {
@@ -250,7 +250,7 @@
             if (confirm('确定要终止该满减?')) {
               that.$.ajax({
                 type: 'post',
-                url: that.base +'m2c.market/fullcut/stop/' + row.fullCutId,
+                url: that.base +'m2c.market/web/fullcut/stop/' + row.fullCutId,
                 data: {},
                 success: function (result) {
                   if (result.status == 200) {
