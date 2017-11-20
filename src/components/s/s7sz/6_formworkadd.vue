@@ -223,14 +223,10 @@
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit"
-                    class="btn btn-info btn-lg save"
-                    @click="save()"> 保存
-            </button>
-            <button type="submit"
-                    class="btn btn-default btn-lg"
-                    @click="back()"> 取消
-            </button>
+            <el-button type="primary" @click="save()"> 保存
+            </el-button>
+            <el-button @click="back()"> 取消
+            </el-button>
           </div>
         </div>
       </template>
@@ -422,14 +418,10 @@
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit"
-                    class="btn btn-info btn-lg save"
-                    @click="save()"> 保存
-            </button>
-            <button type="submit"
-                    class="btn btn-default btn-lg"
-                    @click="back()"> 取消
-            </button>
+            <el-button type="primary" @click="save()"> 保存
+            </el-button>
+            <el-button @click="back()"> 取消
+            </el-button>
           </div>
         </div>
         <div class="delectSizeWrap" v-show="delectBg">
@@ -1052,7 +1044,9 @@
             that.postageModelRules = []
             if (result.status === 200) {
               that.show_tip('保存成功')
-              that.$goRoute({path: 'formwork'})
+              setTimeout(()=> {
+                that.$router.push({name: 'formwork'})
+              },1000);
             } else {
               that.show_tip(result.errorMessage)
             }
