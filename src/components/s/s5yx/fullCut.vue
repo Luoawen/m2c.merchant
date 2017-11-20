@@ -826,8 +826,8 @@
             sku_list: that.params.sku_list
           }
           that.$.ajax({
-            // url: that.base + 'm2c.market/web/fullcut/creation',
-                 url: 'http://10.0.40.28:8080/m2c.market/web/fullcut/creation',
+            url: that.base + 'm2c.market/web/fullcut/creation',
+                //  url: 'http://10.0.40.28:8080/m2c.market/web/fullcut/creation',
             contentType: 'application/json', // 必须有
             type: 'post',
             data: JSON.stringify(rebody),
@@ -1084,7 +1084,7 @@
         })
         that.modalShadow = true
       },
-        //商品规格全选
+        //商品规格全选/全不选
       openGoodsSku (goods,index,$event) {
         var that = this
         var  choose_sku_list = []
@@ -1175,7 +1175,6 @@
           // }
        that.goodsInfo = goods
       },
-
          //  点击 规格选择弹框确认 后将数据保存起来（部分选择商品SKU）
        goodsSkuChoose (goodsInfo,$event) {
         var that = this
@@ -1196,7 +1195,7 @@
           if (goodsInfo.goodsSkuList[i].isCheck == true && goodsInfo.goodsSkuList[i].goodsSkuNum > 0) {
            // 定义一个空对象    将 选择规格列表传给服务器数据收集起来
             var choose_sku = {}
-            //goodsSkuId :规格id
+            // goodsSkuId :规格id
             choose_sku.goodsSkuId = goodsInfo.goodsSkuList[i].goodsSkuId
             // goodsSkuName :规格名称
             choose_sku.goodsSkuName = goodsInfo.goodsSkuList[i].goodsSkuName
@@ -1390,7 +1389,6 @@
             goodsSku_item.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum
             goodsSku_item.goodsId = that.chooseGoodsList[i].goodsId;
             goodsSku_item.skuFlag = that.chooseGoodsList[i].skuFlag;
-
             that.params.sku_list.push(goodsSku_item)
           }
           goods_item.goodsId = that.chooseGoodsList[i].goodsId
