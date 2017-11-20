@@ -434,11 +434,11 @@
         let that = this
         that.setGoodsTable(data.goodsInfoBeans, data)
       },
-      setGoodsTable:function(goods,totalData){
+      setGoodsTable:function(goodses,totalData){
         let that = this
         that.totalData = totalData;
         that.expressNum = 0;
-        that.goodses = goods
+        that.goodses = goodses
         var resIds = '';
         that.goodses.forEach(function(val, index) {
           val.freight = val.freight/100;
