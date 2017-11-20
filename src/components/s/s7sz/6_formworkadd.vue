@@ -231,6 +231,8 @@
           style="resize:none;"
           v-model="formwork.modelDescription" maxlength="200"> </textarea></div>
         </div>
+        <div style="padding-left:290px;"><span style="color: #aab2bd">便于顾客看到每个商品的模板说明，以便知晓您的运费计费规则</span></div>
+        <br/>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
             <el-button type="primary" @click="save()"> 保存
