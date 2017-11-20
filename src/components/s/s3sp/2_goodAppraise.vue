@@ -170,7 +170,7 @@
           <span class="fr" @click="showhptc=false">X</span>
         </div>
         <div class="hptczp_body">
-            <textarea placeholder="请填写" maxlength="" v-model="reply_params.replyContent" maxlength="100"></textarea>
+            <textarea placeholder="请填写100字符以内内容" maxlength="" v-model="reply_params.replyContent" maxlength="100"></textarea>
         </div>
         <div class="hptczp_footer">
           <button type="button" class="btn save" @click="reply()" >确认</button>
