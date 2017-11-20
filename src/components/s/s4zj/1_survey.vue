@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="tit02 clear">
-          <span style="font-size: 30px">{{content.tradableAmount/100 == NaN || content.tradableAmount/100 == undefined || content.tradableAmount/100 == '' ? '-' : (content.tradableAmount/100).toFixed(2)}}</span>
+          <span style="font-size: 30px">{{isNaN(content.tradableAmount/100) || content.tradableAmount/100 == undefined || content.tradableAmount/100 == '' ? '-' : (content.tradableAmount/100).toFixed(2)}}</span>
           <el-button @click="pullMoney()" size="mini" type="primary"> 提现 </el-button>
         </div>
       </div>
