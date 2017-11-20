@@ -145,13 +145,13 @@
       }
       ,handleSizeChange(val) {
         let that = this
-        that.goodsStorePageRows=val
-        that.goodsStore();
+        that.pageRows=val
+        that.orderStore();
       }
       ,handleCurrentChange(val) {
         let that = this
-        that.goodsStoreCurrentPage=val
-        that.goodsStore();
+        that.currentPage=val
+        that.orderStore();
       }
       ,handleCommand (index,row,action) {
         let that = this
