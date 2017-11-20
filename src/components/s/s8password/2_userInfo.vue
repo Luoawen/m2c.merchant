@@ -14,7 +14,7 @@
     </div>
     <div class="a_message">
       <span class="mr20">详细地址</span>
-      <span id="userPhone">{{dealer_user_info.dealerArea}},{{dealer_user_info.dealerCity}},{{dealer_user_info.dealerDetailAddress}}</span></div>
+      <span id="userPhone">{{dealer_user_info.dealerProvince}},{{dealer_user_info.dealerCity}},{{dealer_user_info.dealerArea}},{{dealer_user_info.dealerDetailAddress}}</span></div>
     <div class="message"><b>业务员信息</b></div>
     <div class="a_message"><span class="mr20">平台对接人</span><span id="userPhone">{{dealer_user_info.sellerName}},{{dealer_user_info.sellerPhone}}</span></div>
   </div>

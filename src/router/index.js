@@ -67,47 +67,56 @@ export default new Router({
         {
           path: 'bug',
           name: 'bug',
-          component: bug
+          component: bug,
+          meta: { title: '订货单' }
         },
         {
           path: 'afterSale',
           name: 'afterSale',
-          component: afterSale
+          component: afterSale,
+          meta: { title: '售后单' }
         },
         {
           path: 'details',
           name: 'details',
-          component: details
+          component: details,
+          meta: { title: '售后单详情' }
         },
         {
           path: 'detail',
           name: 'detail',
-          component: detail
+          component: detail,
+          meta: { title: '收支明细' }
         },
         {
           path: 'goodList',
           name: 'goodList',
-          component: goodList
+          component: goodList,
+          meta: { title: '商品列表' }
         },
         {
           path: 'goodAppraise',
           name: 'goodAppraise',
-          component: goodAppraise
+          component: goodAppraise,
+          meta: { title: '商品评价' }
         },
         {
           path: 'goodAddModify',
           name: 'goodAddModify',
-          component: goodAddModify
+          component: goodAddModify,
+          meta: {title: '商品修改新增'}
         },
         {
           path: 'gooddetail',
           name: 'gooddetail',
-          component: gooddetail
+          component: gooddetail,
+          meta: {title: '商品详情'}
         },
         {
           path: 'survey',
           name: 'survey',
-          component: survey
+          component: survey,
+          meta: {title: '资金概况'}
         },
         {
           path: 'fullCutDetail',
@@ -117,12 +126,14 @@ export default new Router({
         {
           path: 'record',
           name: 'record',
-          component: record
+          component: record,
+          meta: {title: '提现记录'}
         },
         {
           path: 'countQuery',
           name: 'countQuery',
-          component: countQuery
+          component: countQuery,
+          meta: {title: '结算查询'}
         },
         {
           path: 'cash',
@@ -132,77 +143,91 @@ export default new Router({
         {
           path: 'marketing',
           name: 'marketing',
-          component: marketing
+          component: marketing,
+          meta:{title:'工具'}
         },
         {
           path: 'fullCut',
           name: 'fullCut',
-          component: fullCut
+          component: fullCut,
+          meta:{title:'满减'}
         },
         {
           path: 'fullCutModify',
           name: 'fullCutModify',
-          component: fullCutModify
+          component: fullCutModify,
+          meta:{title:'满减'}
         },
         {
           path: 'data',
           name: 'data',
-          component: data
+          component: data,
+          meta: {title:'数据'}
         },
         {
           path: 'information',
           name: 'information',
-          component: information
+          component: information,
+          meta: {title:'店铺信息'}
         },
         {
           path: 'administer',
           name: 'administer',
-          component: administer
+          component: administer,
+          meta: {title:'品牌管理'}
         },
         {
           path: 'formwork',
           name: 'formwork',
-          component: formwork
+          component: formwork,
+          meta: {title:'运费模板'}
         },
         {
           path: 'address',
           name: 'address',
-          component: address
+          component: address,
+          meta: {title:'售后地址'}
         },
         {
           path: 'transact',
           name: 'transact',
-          component: transact
+          component: transact //废除的交易密码
         },
         {
           path: 'updatePass',
           name: 'updatePass',
-          component: updatePass
+          component: updatePass,
+          meta: {title:'修改密码'}
         },
         {
           path: 'cashPass',
           name: 'cashPass',
-          component: cashPass
+          component: cashPass,
+          meta: {title:'交易密码'}
         },
         {
           path: 'userInfo',
           name: 'userInfo',
-          component: userInfo
+          component: userInfo,
+          meta: {title:'账户信息'}
         },
         {
           path: 'formworkadd',
           name: 'formworkadd',
-          component: formworkadd
+          component: formworkadd,
+          meta: {title:'运费模板'}
         },
         {
           path: 'printSendOrder',
           name: 'printSendOrder',
-          component: printSendOrder
+          component: printSendOrder,
+          meta: {title:'发货单详情'}
         },
         {
           path: 'dealerOrDtl',
           name: 'dealerOrDtl',
-          component: dealerOrDtl
+          component: dealerOrDtl,
+          meta: { title: '订货单详情' }
         }
       ]
     }

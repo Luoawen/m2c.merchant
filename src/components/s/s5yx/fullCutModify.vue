@@ -784,26 +784,34 @@
         // 打开规格选择弹框
       ChooseSpecification (goods,index) {
         var that = this
+        console.log("goods ",goods);
         // 模态框控制
         that.$('#specificationChoose').modal({'show':true ,'backdrop':false})
-          //  alert("哈哈")
         // 库存不能小于等于0   checkbox &input  设置 disable属性
        for (var i = 0; i < goods.goodsSkuList.length; i++){
             if(goods.goodsSkuList[i].goodsSkuInventory<=0){
                 goods.goodsSkuList[i].disabled = true;
             }
        }
-
         if(that.goodsResult.content[index].isChooseSpecification == '已选规格数量'){
              for(var i = 0; i<that.goodsResult.content[index].goodsSkuList.length;i++){
-                     // checkbox 的选中状态  //  只显示了存入了一组数据
                 that.goodsResult.content[index].goodsSkuList[i].isCheck = true
+                // console.log('that.chooseGoodsList.goodsId============>',that.chooseGoodsList)
+                for(var g=0;g<that.chooseGoodsList.length;g++){
+                    if(that.chooseGoodsList[g].goodsId == goods.goodsId){
+                      goods.goodsSkuList.goodsSkuNum = that.chooseGoodsList[g].skuNum
+                      console.log('---- goods.goodsSkuList.goodsSkuNum-', goods.goodsSkuList.goodsSkuNum)
+                       console.log('that.goodsResult.content[index].goodsSkuList[i].goodsSkuNum',that.goodsResult.content[index].goodsSkuList[i].goodsSkuNum)
+               }else{
                     // 商品规格列表的满减数量=库存数量
                 that.goodsResult.content[index].goodsSkuList[i].goodsSkuNum = that.goodsResult.content[index].goodsSkuList[i].goodsSkuInventory
+               }
+                }
           }
           that.goodsResult.content[index].isCheck =false
+          that.goodsResult.content[index].isChoosed = 0
         }
-          // 
+          // ----------
         // if(that.goodsResult.content[index].isChooseSpecification == '已选规格数量'){
         //      for(var i = 0; i<that.chooseGoodsList.length;i++){
         //     if(that.goodsResult.content[index].goodsId == that.chooseGoodsList[i].goodsId){
@@ -1055,29 +1063,34 @@
         var that = this
         that.params.goods_ids = []
         that.params.sku_list = []
-        // 问题点 2
-        // for (var i = 0; i < that.chooseGoodsList.length; i++) {
-        //   var goods_item = {}
-        //   var goods_item_sku_list = []
-        //   for(var g = 0; g < that.chooseGoodsList[i].chooseSkuList.length; g++){
-        //     var goods_item_sku = {}
-        //     var goodsSku_item = {}
-        //     goods_item_sku.skuId = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuId
-        //     goods_item_sku.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum
-        //     goods_item_sku_list.push(goods_item_sku)
+        for (var i = 0; i < that.chooseGoodsList.length; i++) {
+          var goods_item = {}
+          var goods_item_sku_list = []
+        // 检查判断     
+        console.log('存在that.chooseGoodsList[i].chooseSkuList'+i,that.chooseGoodsList[i].chooseSkuList)
+         // if(!that.chooseGoodsList[i].chooseSkuList.length) { alert('没数据');return }
+          for(var g = 0; g < that.chooseGoodsList[i].chooseSkuList.length; g++){
+            var goods_item_sku = {}
+            var goodsSku_item = {}
+            goods_item_sku.skuId = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuId
+            goods_item_sku.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum
+            goods_item_sku_list.push(goods_item_sku)
 
-        //     goodsSku_item.skuId = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuId
-        //     goodsSku_item.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum
-        //     goodsSku_item.goodsId = that.chooseGoodsList[i].goodsId;
-        //     goodsSku_item.skuFlag = that.chooseGoodsList[i].skuFlag;
-        //     that.params.sku_list.push(goodsSku_item)
-        //   }
-        //   goods_item.goodsId = that.chooseGoodsList[i].goodsId
-        //   goods_item.goodsName = that.chooseGoodsList[i].goodsName
-        //   goods_item.skuFlag = that.chooseGoodsList[i].skuFlag;
-        //   goods_item.skuList = goods_item_sku_list
-        //   that.params.goods_ids.push(goods_item)
-        // }
+            goodsSku_item.skuId = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuId
+            goodsSku_item.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum
+            goodsSku_item.goodsId = that.chooseGoodsList[i].goodsId;
+            goodsSku_item.skuFlag = that.chooseGoodsList[i].skuFlag;
+            that.params.sku_list.push(goodsSku_item)
+            if(that.chooseGoodsList[i].chooseSkuList == undefined){
+              break;
+            }
+          }
+          goods_item.goodsId = that.chooseGoodsList[i].goodsId
+          goods_item.goodsName = that.chooseGoodsList[i].goodsName
+          goods_item.skuFlag = that.chooseGoodsList[i].skuFlag;
+          goods_item.skuList = goods_item_sku_list
+          that.params.goods_ids.push(goods_item)
+        }
         console.log('chooseGoodsList:' + JSON.stringify(that.chooseGoodsList))
         that.$('#choose_goods').modal('hide')
         that.modalShadow =false
@@ -1164,10 +1177,11 @@
                   for (var j = 0; j < that.chooseGoodsList.length; j++) {
                     if (result.content[i].goodsId === that.chooseGoodsList[j].goodsId) {
                       result.content[i].isChoosed = 1
+                      result.content[i].isCheck =true
                       result.content[i].isChooseSpecification ='已选规格数量'
                       result.content[i].skuFlag = that.chooseGoodsList[j].skuFlag
                       result.content[i].chooseSkuList = that.chooseGoodsList[j].chooseSkuList
-                        console.log( " result.content[i].chooseSkuList---"+i,result.content[i].chooseSkuList);
+                      console.log( " 存储到的result.content[i].chooseSkuList---"+i,result.content[i].chooseSkuList);
                     }
                   }
             }
@@ -1266,21 +1280,20 @@
       },
       deleteGoods (index, goods) {
         var that = this
+        // console.log(that.chooseGoodsList,'打印  that.chooseGoodsList');
         that.chooseGoodsList.splice(index, 1)
-        alert('hahahh')
-        if(!that.goodsResult.content.length) { alert('没数据');return }
-        console.log(that.goodsResult.content,'that.goodsResult.content');
-        // console.dir(that.goodsResult.content,'that.goodsResult.content');
         for (var i = 0; i<that.goodsResult.content.length; i++) {
-                   console.log('that.goodsResult.content[i]',that.goodsResult.content[i]); 
+          //  console.log('that.goodsResult.content[i]',that.goodsResult.content[i]); 
           if (that.goodsResult.content[index].goodsId === goods.goodsId) {
             that.goodsResult.content[index].isChoosed = 0
             that.goodsResult.content[index].skuFlag = 0
             that.goodsResult.content[index].chooseSkuList = []
-             that.goodsResult.content[index].goodsSkuNum = 0  
+            that.goodsResult.content[index].goodsSkuNum = 0  
           }
         }
-         for (var j = 0; j < that.params.goods_ids.length; j++) {
+        //  已经拼接的数据
+        console.log('that.params.goods_ids',that.params.goods_ids);
+         for (var j = 0; j < that.params.goods_ids.length; j++){
           console.log('--參數222----',that.params.goods_ids[j].goodsId)
           if (that.params.goods_ids[j].goodsId == goods.goodsId) {
             that.params.goods_ids.splice(j, 1)
@@ -1341,7 +1354,7 @@
       let that = this
       that.$.ajax({
 //        url: 'http://localhost:8080/m2c.market/fullcut/detail/' + sessionStorage.getItem('full_cut_id'),
-        url: that.base + 'm2c.market/web/fullcut/detail/' + sessionStorage.getItem('full_cut_id'),
+        url: that.base + 'm2c.market/fullcut/detail/' + sessionStorage.getItem('full_cut_id'),
         data: {
         },
         success: function (result) {
@@ -1352,20 +1365,20 @@
           that.params.total_num = that.item.totalNum
           that.params.range_type = that.item.rangeType
           // console.log('costList:', JSON.stringify(that.item.costList))
-          if (that.item.costList != null && that.item.costList.length > 0) {
-            for (var i = 0; i < that.item.costList.length; i++) {
-              if (that.item.costList[i].dealerId === 'ALL') {
-                that.costJson.platform = that.item.costList[i].platformPercent
-                that.costJson.dealer = that.item.costList[i].dealerPercent
-              } else {
-                var cost = {}
-                cost.dealerId = that.item.costList[i].dealerId
-                cost.platform = that.item.costList[i].platformPercent
-                cost.dealer = that.item.costList[i].dealerPercent
-                that.dealerCostList.push(cost)
-              }
-            }
-          }
+          // if (that.item.costList != null && that.item.costList.length > 0) {
+          //   for (var i = 0; i < that.item.costList.length; i++) {
+          //     if (that.item.costList[i].dealerId === 'ALL') {
+          //       that.costJson.platform = that.item.costList[i].platformPercent
+          //       that.costJson.dealer = that.item.costList[i].dealerPercent
+          //     } else {
+          //       var cost = {}
+          //       cost.dealerId = that.item.costList[i].dealerId
+          //       cost.platform = that.item.costList[i].platformPercent
+          //       cost.dealer = that.item.costList[i].dealerPercent
+          //       that.dealerCostList.push(cost)
+          //     }
+          //   }
+          // }
           if (that.item.rangeType == 0) {
             for (var i = 0; i < that.item.removeRangeList.length; i++) {
               if (that.item.removeRangeList[i].type == 2) {

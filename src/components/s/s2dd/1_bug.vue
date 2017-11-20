@@ -35,10 +35,10 @@
         </div>
       </div> -->
       <el-input v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码"></el-input>
-      <el-button type="primary" size="medium"  @click="search()">搜索</el-button>
+      <el-button type="primary" size="medium" @click="search()">搜索</el-button>
       <!-- <div class="search">
         <input type="text" class="inp" v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码">
-        <i class="icon searchIcon" id="searchIco" @click="search()"></i>
+        <i class="icon searchIcon" id="searchIco"></i>
       </div> -->
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
       <!-- <el-button type="primary" icon="el-icon-download" @click.native="exportSearch()" class="pull-right operation">导出</el-button> -->
@@ -157,7 +157,13 @@
         </tr>
         </thead>
         <!-- 在tbody上v-for循环 -->
-        <tbody v-for="(item,index) in resultdata">
+        <tbody v-if="totalCount==0">
+        <tr style="height: 50px;text-align: center;">
+          <td>没有匹配的记录</td>
+
+        </tr>
+        </tbody>
+        <tbody v-for="(item,index) in resultdata" v-if="totalCount>0">
         <tr>
           <td colspan="8" class="bt clear">
             <span class="ml10">订货号：{{item.dealerOrderId}}</span>  <span style="color: #ccc">&nbsp;|</span></span> <span class="ml10" v-show="item.payNo != '' ? true : false">支付单号：{{item.payNo}}</span>
@@ -355,7 +361,7 @@
         success: function (res) {
           var resultData = res.content;
           if(res.content.length == 0){
-            that.show_tip("没有匹配的记录")
+           // that.show_tip("没有匹配的记录")
           }
           that.totalCount = res.totalCount;
           that.resultdata= resultData;

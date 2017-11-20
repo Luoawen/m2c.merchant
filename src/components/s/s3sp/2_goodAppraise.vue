@@ -102,6 +102,17 @@
             <td class="a7">操作</td>
           </tr>
         </thead>
+        <tbody v-if="goodsCommentTotalCount==0">
+        <tr style="height: 50px;text-align">
+          <td>没有匹配的记录</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        </tbody>
         <tbody v-for="comment in datacomment">
           <tr>
             <td class="a1">
@@ -170,7 +181,7 @@
           <span class="fr" @click="showhptc=false">X</span>
         </div>
         <div class="hptczp_body">
-            <textarea placeholder="请填写" maxlength="" v-model="reply_params.replyContent" maxlength="100"></textarea>
+            <textarea placeholder="请填写100字符以内内容" maxlength="" v-model="reply_params.replyContent" maxlength="100"></textarea>
         </div>
         <div class="hptczp_footer">
           <button type="button" class="btn save" @click="reply()" >确认</button>
@@ -319,7 +330,6 @@
             if (result.status === 200) {
               console.log(result)
               if(result.content.length ==0){
-                that.show_tip("没有匹配的记录")
               }
               that.datacomment = result.content
               that.goodsCommentTotalCount = result.totalCount

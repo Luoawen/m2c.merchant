@@ -9,13 +9,13 @@
       <div class="form-group">
         <label class="col-sm-2 control-label"><label style="color: red">*</label>验证码：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="verifyCode" placeholder="4位数验证码" maxlength="4">
+          <input type="text" class="form-control" id="verifyCode" v-model="Info.verifyCode" placeholder="4位数验证码" maxlength="4">
         </div>
         <div class="col-sm-3">
-          <button type="submit" class="btn btn-default btn-lg" @click="sendVerficode" :disabled="disabled">
+          <a class="btn btn-default btn-lg" @click="sendVerficode" :disabled="disabled">
             <span v-show="show" id="sendVer">获取验证码</span>
             <span v-show="!show" class="count">{{count}} s</span>
-          </button>
+          </a>
         </div>
       </div>
       <div class="form-group">
@@ -27,13 +27,13 @@
       <div class="form-group">
         <label class="col-sm-2 control-label"><label style="color: red">*</label>新密码：</label>
         <div class="col-sm-3">
-          <input type="password" class="form-control" id="newPass" maxlength="16" placeholder="6-16位数字密码">
+          <input type="password" class="form-control" id="newPass" v-model="Info.newPass" maxlength="16" placeholder="6-16位数字密码">
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-2 control-label"><label style="color: red">*</label>再次确认：</label>
         <div class="col-sm-3">
-          <input type="password" class="form-control" id="confirmNewPass" maxlength="16" placeholder="6-16位数字密码">
+          <input type="password" class="form-control" id="confirmNewPass" v-model="Info.confirmNewPass" maxlength="16" placeholder="6-16位数字密码">
         </div>
       </div>
       <div class="form-group">
@@ -77,6 +77,7 @@
         total: '',
         isSuccess: false,
         disabled:false,
+        Info:{}
       }
     },
     created () {
@@ -195,6 +196,7 @@
               that.show = true
               that.isSuccess = false
               that.show_tip('修改操作成功')
+              that.Info = {}
             } else if (result.status === 3) {
               that.show_tip('验证码不正确')
             } else {

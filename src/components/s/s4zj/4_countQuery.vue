@@ -16,7 +16,7 @@
         </el-date-picker>
       </div><!--时间-->
       <div class="search" style="width: 350px;float: left">
-        <el-input placeholder="输入结算号 / 订货号 / 商家名称" v-model="search_params.condition" class="input-with-select">
+        <el-input placeholder="输入结算号 / 订货号 " v-model="search_params.condition" class="input-with-select">
           <el-button slot="append" icon="el-icon-search" @click.native="orderStore()"></el-button>
         </el-input>
       </div>
@@ -160,13 +160,13 @@
       }
       ,handleSizeChange(val) {
         let that = this
-        that.goodsStorePageRows=val
-        that.goodsStore();
+        that.pageRows=val
+        that.orderStore();
       }
       ,handleCurrentChange(val) {
         let that = this
-        that.goodsStoreCurrentPage=val
-        that.goodsStore();
+        that.currentPage=val
+        that.orderStore();
       }
       ,handleCommand (index,row,action) {
         let that = this

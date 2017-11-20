@@ -23,10 +23,11 @@
         </el-date-picker>
       </div><!--时间-->
       <div class="search" style="width: 350px;float: left">
-        <el-input placeholder="输入业务号 / 商家信息 " v-model="search_params.condition" class="input-with-select">
+        <el-input placeholder="输入业务号  " v-model="search_params.condition" class="input-with-select">
           <el-button slot="append" icon="el-icon-search" @click.native="orderStore()"></el-button>
         </el-input>
       </div>
+      <div><button type="button" style="margin-right: 100px;margin-top: 6px" class="btn btn-default pull-right operation" @click="exportDetail()">导出</button></div>
     </div>
     <div class="order_tab_list" style="margin-top: 20px;">
       <el-table
@@ -128,19 +129,25 @@
           label: '全部'
         }, {
           value: '1',
-          label: '销售分成'
+          label: '销售入账'
         }, {
           value: '2',
           label: '活动分摊'
         },{
           value: '3',
-          label: '提现'
+          label: '服务费'
         },{
           value: '4',
-          label: '分成退款'
+          label: '提现'
         },{
           value: '5',
           label: '分摊退款'
+        },{
+          value: '6',
+          label: '服务费退款'
+        },{
+          value: '7',
+          label: '销售退款'
         }],
 
 //        mediaStatus:[{
@@ -170,7 +177,7 @@
             token: sessionStorage.getItem('mToken'),
             pageSize: that.pageRows,                     // 每页多少条数据
             pageNo: that.currentPage,    // 请求第几页*/
-            businessIdOrDealerName:that.search_params.condition.replace(/\s+/g,""),
+            businessId:that.search_params.condition.replace(/\s+/g,""),
             businessType:that.search_params.businessType,
             inoutType:that.search_params.inoutType,
             startDate:that.search_params.startTime,
@@ -185,6 +192,11 @@
             }
           }
         })
+      },
+      exportDetail () {
+        let that = this
+        let url = that.localbase + 'm2c.trading/web/accounting/dealer/inout/detail/export?businessIdOrDealerName='+that.search_params.condition+'&startDate='+that.search_params.startTime+"&endDate="+that.search_params.endTime+"&inoutType="+that.search_params.inoutType+"&businessType="+that.search_params.businessType+"&dealerId="+JSON.parse(sessionStorage.getItem('mUser')).dealerId
+        window.location.href = url
       }
       ,handleSizeChange(val) {
         let that = this
