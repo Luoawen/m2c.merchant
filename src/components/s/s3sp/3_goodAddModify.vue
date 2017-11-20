@@ -817,7 +817,9 @@
       },
       // 删除规格行
       delect (index) {
-        this.goodsSpecifications.splice(index, 1)
+        let that = this
+        that.goodsSpecifications.splice(index, 1)
+        that.mapValue()
       },
       addRow(){
         let newRow = {
