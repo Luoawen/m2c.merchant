@@ -35,7 +35,7 @@
           <span>平台质保金（元）</span>
         </div>
         <div class="tit02 clear">
-          <span style="font-size: 30px">{{platePositisCache == undefined || '' ? '-' : (platePositisCache/100).toFixed(2)}}</span>
+          <span style="font-size: 30px">{{platePositisCache == undefined || '' ? '-' : (platePositisCache).toFixed(2)}}</span>
         </div>
       </div>
       <div class="survey_c_tbox fl mr20">
