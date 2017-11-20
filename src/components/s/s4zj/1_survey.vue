@@ -79,10 +79,12 @@
 
     <div class="block" style="margin: 20px;float: right">
       <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
         :page-sizes="[5, 10, 20, 30]"
         :page-size="goodsCheckStorePageRows"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="currentPage">
+        :total="totalCount">
       </el-pagination>
     </div>
     <!-- 规则 -->
@@ -126,6 +128,7 @@
       return{
         goodsCheckStorePageRows:5,
         currentPage:1,
+        totalCount:0,
         content:'',
         dealerName:'',
         contents:'',
@@ -154,7 +157,17 @@
           that.backgroundBg = true
           that.cashPassShow = true
         }
-      },
+      }
+    ,handleSizeChange(val) {
+      let that = this
+      that.goodsCheckStorePageRows=val
+      that.amountList();
+    }
+    ,handleCurrentChange(val) {
+      let that = this
+      that.currentPage=val
+      that.amountList();
+    },
       cashPassHide () {
         let that = this
         that.backgroundBg = false
@@ -191,6 +204,7 @@
           success: function (result) {
             if (result.status === 200){
               that.contents = result.content
+              that.totalCount = result.totalCount
             }
           }
         })
