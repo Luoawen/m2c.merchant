@@ -828,8 +828,8 @@
             sku_list: that.params.sku_list
           }
           that.$.ajax({
-            url: that.base + 'm2c.market/web/fullcut/creation',
-      //            url: 'http://localhost:8080/m2c.market/fullcut/creation',
+            // url: that.base + 'm2c.market/web/fullcut/creation',
+                 url: 'http://10.0.40.28:8080/m2c.market/web/fullcut/creation',
             contentType: 'application/json', // 必须有
             type: 'post',
             data: JSON.stringify(rebody),
@@ -1089,8 +1089,12 @@
         })
         that.modalShadow = true
       },
+<<<<<<< HEAD
         
 
+=======
+        //商品规格全选
+>>>>>>> local_hey
       openGoodsSku (goods,index,$event) {
         var that = this
         var  choose_sku_list = []
@@ -1104,6 +1108,7 @@
         for(var j = 0;j<that.goodsResult.content[index].goodsSkuList.length;++j){
                     // checkbox 的选中状态
                 that.goodsResult.content[index].goodsSkuList[j].isCheck = true
+                that.goodsResult.content[index].skuFlag = 0
                     // 商品规格列表的满减数量=库存数量
                 that.goodsResult.content[index].goodsSkuList[j].goodsSkuNum = that.goodsResult.content[index].goodsSkuList[j].goodsSkuInventory
                 console.log('选中商品规格', that.goodsResult.content[index].goodsSkuList[j])
@@ -1184,7 +1189,7 @@
        that.goodsInfo = goods
       },
 
-         //  点击 规格选择弹框确认 后将数据保存起来
+         //  点击 规格选择弹框确认 后将数据保存起来（部分选择商品SKU）
        goodsSkuChoose (goodsInfo,$event) {
         var that = this
         var el =$event.target
@@ -1214,14 +1219,12 @@
             choose_sku_list.push(choose_sku)
           }
         }
-        // var _goodsId = '';
         // 遍历是否被选中
         for (var i = 0; i < that.goodsResult.content.length; i++) {
           if (that.goodsResult.content[i].goodsId == goodsInfo.goodsId) {
             if (choose_sku_list.length > 0) {
               that.goodsResult.content[i].isChoosed = 1
-              // that.goodsResult.content[i].skuFlag = 1;
-              // _goodsId = goodsInfo.goodsId;
+              that.goodsResult.content[i].skuFlag = 1;
               that.goodsResult.content[i].isCheck = true;
               that.goodsResult.content[i].isRemoved =1;
               that.goodsResult.content[i].isExchange=1;
@@ -1229,7 +1232,7 @@
             }
             else {
               that.goodsResult.content[i].isChoosed = 0
-              // that.goodsResult.content[i].skuFlag = 0;
+              that.goodsResult.content[i].skuFlag = 0;
               that.goodsResult.content[i].isCheck = false;
               that.goodsResult.content[i].isRemoved =0
                that.goodsResult.content[i].isExchange=0;
@@ -1271,10 +1274,13 @@
                 
         // console.log("that.range 打印",that.params.range_type)    
         // console.log("that.range 打印",that.params.full_cut_type)
+<<<<<<< HEAD
         console.log("that.range 打印",that.params.full_cut_type)
 >>>>>>> local_hey
+=======
+        // console.log("that.range 打印",that.params.full_cut_type)
+>>>>>>> local_hey
 
-       
             // 清空全店移除商品列表   removeGoodsList
           if(that.panelFlag===3){
            that.removeGoodsList = []
@@ -1346,9 +1352,6 @@
 
         }
          goodsInfo.isChooseSpecification = '编辑规格数量'
-          // 通过js来清空 控制样式
-          // that.$(el).parents('.specification_footer').siblings('.specification_cen').find('[type=checkbox]').prop('checked',false)
-          // that.$(el).parents('.specification_footer').siblings('.specification_cen').find('.goodsSkuNum').val('')
         console.log('删除后的goodsInfo.goodsSkuList',goodsInfo.goodsSkuList)
       },
       deleteGoods (index, goods) {
@@ -1436,6 +1439,7 @@
             goodsSku_item.skuId = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuId
             goodsSku_item.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum
             goodsSku_item.goodsId = that.chooseGoodsList[i].goodsId;
+            goodsSku_item.skuFlag = that.chooseGoodsList[i].skuFlag;
 
             that.params.sku_list.push(goodsSku_item)
           }
