@@ -124,15 +124,15 @@
         sessionStorage.setItem('statusFlag', '')
         sessionStorage.setItem('trailStatus', '')
         sessionStorage.setItem('replyStatus', '')
-        if (path === '/s/home') {
-          that.$('.right_nav_content').attr('path', path)
-          that.$('.right_nav_content').text('')
-          that.$('#public_nav_three_level').text('')
-          return
-        }
-        that.$('.right_nav_content').attr('path', path)
-        that.$('.right_nav_content').text(' > ' + that.$(event.target).text())
-        that.$('#public_nav_three_level').text('')
+        // if (path === '/s/home') {
+        //   that.$('.right_nav_content').attr('path', path)
+        //   that.$('.right_nav_content').text('')
+        //   that.$('#public_nav_three_level').text('')
+        //   return
+        // }
+        // that.$('.right_nav_content').attr('path', path)
+        // that.$('.right_nav_content').text(' > ' + that.$(event.target).text())
+        // that.$('#public_nav_three_level').text('')
       },
       // 右侧导航跳转
       goto_right_nav (event) {
@@ -235,6 +235,21 @@
       document.title = '一拍即获-供应商平台'
       document.querySelector('#favicon').href = '/static/favicon_s.ico'
         
+    },
+    watch: {
+      '$route' (to, from) {
+        // 对路由变化作出响应...
+        // console.log("变化",to.name)
+        // Array.from(document.querySelectorAll('[path]')).map(function (x) {
+        //   this.$(x).removeClass('avter')
+        // })
+        // this.$('[path="' + to.name + '"]').addClass('avter')
+        if(to.meta.title==''){
+          this.$('.right_nav_content').text('')
+        }else{
+          this.$('.right_nav_content').text(' > ' + to.meta.title)
+        }
+      }
     }
   }
 </script>
