@@ -826,7 +826,7 @@
             sku_list: that.params.sku_list
           }
           that.$.ajax({
-            url: that.base + 'm2c.market/web/fullcut/creation',
+            url: that.base + 'm2c.market/fullcut/creation',
                 //  url: 'http://10.0.40.28:8080/m2c.market/web/fullcut/creation',
             contentType: 'application/json', // 必须有
             type: 'post',

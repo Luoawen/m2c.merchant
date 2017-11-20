@@ -1066,7 +1066,7 @@
         for (var i = 0; i < that.chooseGoodsList.length; i++) {
           var goods_item = {}
           var goods_item_sku_list = []
-        // 检查判断
+        // 检查判断     
         console.log('存在that.chooseGoodsList[i].chooseSkuList'+i,that.chooseGoodsList[i].chooseSkuList)
          // if(!that.chooseGoodsList[i].chooseSkuList.length) { alert('没数据');return }
           for(var g = 0; g < that.chooseGoodsList[i].chooseSkuList.length; g++){
@@ -1081,6 +1081,9 @@
             goodsSku_item.goodsId = that.chooseGoodsList[i].goodsId;
             goodsSku_item.skuFlag = that.chooseGoodsList[i].skuFlag;
             that.params.sku_list.push(goodsSku_item)
+            if(that.chooseGoodsList[i].chooseSkuList == undefined){
+              break;
+            }
           }
           goods_item.goodsId = that.chooseGoodsList[i].goodsId
           goods_item.goodsName = that.chooseGoodsList[i].goodsName
@@ -1351,7 +1354,7 @@
       let that = this
       that.$.ajax({
 //        url: 'http://localhost:8080/m2c.market/fullcut/detail/' + sessionStorage.getItem('full_cut_id'),
-        url: that.base + 'm2c.market/web/fullcut/detail/' + sessionStorage.getItem('full_cut_id'),
+        url: that.base + 'm2c.market/fullcut/detail/' + sessionStorage.getItem('full_cut_id'),
         data: {
         },
         success: function (result) {
