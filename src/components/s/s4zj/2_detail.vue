@@ -23,7 +23,7 @@
         </el-date-picker>
       </div><!--时间-->
       <div class="search" style="width: 350px;float: left">
-        <el-input placeholder="输入业务号 / 商家信息 " v-model="search_params.condition" class="input-with-select">
+        <el-input placeholder="输入业务号  " v-model="search_params.condition" class="input-with-select">
           <el-button slot="append" icon="el-icon-search" @click.native="orderStore()"></el-button>
         </el-input>
       </div>
