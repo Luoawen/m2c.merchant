@@ -432,7 +432,7 @@
        },
       setReturnData:function(data){
         let that = this
-        that.setGoodsTable(data.goodsInfoBeans, data)
+        that.setGoodsTable(data.goodsInfo, data)
       },
       setGoodsTable:function(goods,totalData){
         let that = this
@@ -440,7 +440,7 @@
         that.expressNum = 0;
         that.goodses = goods
         var resIds = '';
-        that.goodses.forEach(function(val, index) {
+        /*that.goodses.forEach(function(val, index) {
           val.freight = val.freight/100;
           //val.mediaResId='18AD16F1F35C569E4C1785DF22FA47652789';
           if(typeof(val.mediaResId)=='undefined' || val.mediaResId==null ||  val.mediaResId=='')
@@ -451,7 +451,14 @@
             resIds += '"'+val.mediaResId+'"';
           }
           that.expressNum += val.sellNum;
-        });
+        });*/
+          that.goodses.freight = that.goodses/100;
+          if(typeof(that.goodses.mediaResId)=='undefined' || that.goodses.mediaResId==null ||  that.goodses.mediaResId=='')
+            ;//val.mediaResId = '-'
+          else {
+            resIds += '"' + that.goodses.mediaResId + '"';
+          }
+          that.expressNum += that.goodses.sellNum;
         that.getMediaResInfo(resIds);
       }
       ,operatingRecord() {
