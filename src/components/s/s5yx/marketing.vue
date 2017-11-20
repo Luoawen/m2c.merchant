@@ -140,11 +140,12 @@
         this.$("[data-toggle='popover']").popover('hide')
         that.$('#table').bootstrapTable('destroy').bootstrapTable({
           cache: false,
-          url: that.base + 'm2c.market/web/fullcut/page',
+          url: that.base + 'm2c.market/fullcut/page',
 //          url: 'http://localhost:8080/m2c.market/fullcut/page',
           queryParams: function (params) {
             return Object.assign({}, {
-              token: sessionStorage.getItem('mToken'),
+              // token: sessionStorage.getItem('mToken'),
+              token: sessionStorage.getItem('access_token'),
               isEncry: false,
               page_size: params.limit,                     // 每页多少条数据
               page_no: params.offset / params.limit + 1    // 请求第几页
