@@ -56,11 +56,16 @@
       <div class="goodInfo" v-if="goodInfoShow">
         <p><span>品牌名称：</span>{{goodInfo.brandName==''?'--':goodInfo.brandName}}</p>
         <p><span>英文名称：</span>{{goodInfo.brandNameEn==''?'--':goodInfo.brandNameEn}}</p>
-        <p><span>品牌区域：</span>{{goodInfo.firstAreaName==''?'':goodInfo.firstAreaName}}
+        <p><span>品牌区域：</span>
+          <span v-if="goodInfo.firstAreaName=='' && goodInfo.twoAreaName=='' && goodInfo.threeAreaName==''">--</span>
+          <span v-if="goodInfo.firstAreaName != '' || goodInfo.twoAreaName!='' || goodInfo.threeAreaName!=''">
+          {{goodInfo.firstAreaName==''?'':goodInfo.firstAreaName}}
           {{goodInfo.twoAreaName=='' ? '': ','+ goodInfo.twoAreaName}}
-          {{goodInfo.threeAreaName==''? '': ',' + goodInfo.threeAreaName}}</p>
+          {{goodInfo.threeAreaName==''? '': ',' + goodInfo.threeAreaName}}</span>
+        </p>
         <div><span>品牌LOGO：</span>
           <span v-if="goodInfo.brandLogo != ''"><img :src="goodInfo.brandLogo" /></span>
+          <span v-if="goodInfo.brandLogo == ''">--</span>
         </div>
         <div v-show="isBrandApprove">
           <p class="goodInfop" v-show="goodInfo.rejectReason!==''"><span>拒绝原因：</span>{{goodInfo.rejectReason}}</p>
