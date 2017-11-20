@@ -1,6 +1,5 @@
 <template>
   <div class="detail">
-
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="售后单详情" name="first">
         <div class="customerdetail_container">
