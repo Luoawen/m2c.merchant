@@ -115,8 +115,8 @@
       <em class="bread" v-if="changeGoodShow && handle_toggle=='add'">> 新增品牌</em>
       <em class="bread" v-if="changeGoodShow && handle_toggle!='add'">> 修改品牌</em>
       <div class="goodInfo changeGoodInfo" v-if="changeGoodShow">
-        <p>品牌名称：<input type="text" v-model="add_modify_params.brandName" /></p>
-        <p>英文名称：<input type="text" v-model="add_modify_params.brandNameEn" /></p>
+        <p><span style="color: red">*</span>品牌名称：<input type="text" v-model="add_modify_params.brandName"  maxlength="10" placeholder="1-10字符"/></p>
+        <p>英文名称：<input type="text" v-model="add_modify_params.brandNameEn"  maxlength="20" placeholder="1-20字符"/></p>
         <div>品牌区域：
           <select id="country_select" v-model="add_modify_params.firstAreaCode">
             <option value=""></option>
