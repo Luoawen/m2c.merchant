@@ -159,7 +159,8 @@
         <!-- 在tbody上v-for循环 -->
         <tbody v-if="totalCount==0">
         <tr style="height: 50px;text-align: center;">
-          没有匹配的记录
+          <td>没有匹配的记录</td>
+
         </tr>
         </tbody>
         <tbody v-for="(item,index) in resultdata" v-if="totalCount>0">
