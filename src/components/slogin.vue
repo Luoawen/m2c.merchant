@@ -23,9 +23,9 @@
 					<div class="lost">
 						<a @click="get_forget_passwrod">忘记登录密码？</a>
 					</div>
-					<div class="register">
+					<!-- <div class="register">
 						注册商家
-					</div>
+					</div> -->
 				</div>
 			<div class="footer">
 				<p><a>一拍即获</a> | <a>商家平台</a> | <a>媒体平台</a></p>
