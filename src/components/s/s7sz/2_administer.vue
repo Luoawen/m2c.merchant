@@ -56,11 +56,16 @@
       <div class="goodInfo" v-if="goodInfoShow">
         <p><span>品牌名称：</span>{{goodInfo.brandName==''?'--':goodInfo.brandName}}</p>
         <p><span>英文名称：</span>{{goodInfo.brandNameEn==''?'--':goodInfo.brandNameEn}}</p>
-        <p><span>品牌区域：</span>{{goodInfo.firstAreaName==''?'':goodInfo.firstAreaName}}
+        <p><span>品牌区域：</span>
+          <span v-if="goodInfo.firstAreaName=='' && goodInfo.twoAreaName=='' && goodInfo.threeAreaName==''">--</span>
+          <span v-if="goodInfo.firstAreaName != '' || goodInfo.twoAreaName!='' || goodInfo.threeAreaName!=''">
+          {{goodInfo.firstAreaName==''?'':goodInfo.firstAreaName}}
           {{goodInfo.twoAreaName=='' ? '': ','+ goodInfo.twoAreaName}}
-          {{goodInfo.threeAreaName==''? '': ',' + goodInfo.threeAreaName}}</p>
+          {{goodInfo.threeAreaName==''? '': ',' + goodInfo.threeAreaName}}</span>
+        </p>
         <div><span>品牌LOGO：</span>
           <span v-if="goodInfo.brandLogo != ''"><img :src="goodInfo.brandLogo" /></span>
+          <span v-if="goodInfo.brandLogo == ''">--</span>
         </div>
         <div v-show="isBrandApprove">
           <p class="goodInfop" v-show="goodInfo.rejectReason!==''"><span>拒绝原因：</span>{{goodInfo.rejectReason}}</p>
@@ -110,8 +115,8 @@
       <em class="bread" v-if="changeGoodShow && handle_toggle=='add'">> 新增品牌</em>
       <em class="bread" v-if="changeGoodShow && handle_toggle!='add'">> 修改品牌</em>
       <div class="goodInfo changeGoodInfo" v-if="changeGoodShow">
-        <p>品牌名称：<input type="text" v-model="add_modify_params.brandName" /></p>
-        <p>英文名称：<input type="text" v-model="add_modify_params.brandNameEn" /></p>
+        <p><span style="color: red">*</span>品牌名称：<input type="text" v-model="add_modify_params.brandName"  maxlength="10" placeholder="1-10字符"/></p>
+        <p>英文名称：<input type="text" v-model="add_modify_params.brandNameEn"  maxlength="20" placeholder="1-20字符"/></p>
         <div>品牌区域：
           <select id="country_select" v-model="add_modify_params.firstAreaCode">
             <option value=""></option>
