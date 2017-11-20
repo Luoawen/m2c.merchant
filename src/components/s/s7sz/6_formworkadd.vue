@@ -2,13 +2,13 @@
   <div class="addMess">
     <form class="form-horizontal" id="temMess">
       <div class="form-group">
-        <label class="col-sm-2 control-label"> 运费模板名称： </label>
+        <label class="col-sm-2 control-label"> * 运费模板名称： </label>
         <div class="col-sm-3">
           <input type="text" class="form-control" placeholder="1-20字符" v-model="formwork.modelName" maxlength="20">
         </div>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label"> 计费方式： </label>
+        <label class="col-sm-2 control-label"> * 计费方式： </label>
         <div class="col-sm-3">
           <form>
             <input name="tem" type="radio" value='0' v-model="formwork.chargeType" id="tem"/>
@@ -21,14 +21,24 @@
       <!--按重量-->
       <template v-if="formwork.chargeType==0">
         <div class="form-group">
-          <label class="col-sm-2 control-label"> * 运费计算规则： </label>
+          <label class="col-sm-2 control-label"> * 运费计算规则
+            <div class="icon">
+              <div class="tips" style="width:400px;z-index:2;">
+                <p>1、按重计费规则；即≤首重时，按首运费计算，超过首重的部分，按照续重、续费计算；比如商品5kg，首重1kg，首运费10元，续重2kg，续费5元（代表每增加0~1kg，运费增加2.5元）；则运费=10+4*（5/2）
+                </p>
+                <p>
+                  2、按件计费规则；即≤首件时，按首运费计算，超过首件的部分，按照续件、续费计算；比如商品总共20件，首件5个，首运费10元，续件5个，续费15元；则运费=10+15*（15/5）
+                </p>
+              </div>
+            </div>
+            ： </label>
           <div class="col-sm-8">
             <table class="table table-bordered">
               <thead>
               <tr class="active">
                 <th style="width:210px"> 可配送至</th>
                 <th> 首重 / kg</th>
-                <th> 运费 / 元</th>
+                <th> 首运费 / 元</th>
                 <th> 续重 / kg</th>
                 <th> 续费 / 元</th>
                 <th> 操作</th>
@@ -98,7 +108,7 @@
                           style="width:50px;height:30px;"
                           v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
                   </td>
-                  <td @click="delectRule(index)"> 删除</td>
+                  <td><a @click="delectRule(index)">删除</a></td>
                 </tr>
               </tbody>
               <tbody v-if="addModify==='modify'">
@@ -204,13 +214,13 @@
                           style="width:50px;height:30px;"
                           v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
                   </td>
-                  <td @click="delectRule(index)"> 删除</td>
+                  <td><a @click="delectRule(index)">删除</a></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <p style="padding-left:290px;color:blue;cursor:pointer;" @click="addRow()"> 为制定地区设置运费 </p>
+        <p style="padding-left:290px;color:blue" ><span @click="addRow()" style="cursor:pointer;">为指定地区设置运费</span> </p>
         <div class="form-group">
           <label class="col-sm-2 control-label"> 模板说明： </label>
           <div class="col-sm-6">
@@ -233,7 +243,17 @@
       <!--按件数-->
       <template v-if="formwork.chargeType==1">
         <div class="form-group">
-          <label class="col-sm-2 control-label"> * 运费计算规则： </label>
+          <label class="col-sm-2 control-label"> * 运费计算规则
+            <div class="icon">
+              <div class="tips" style="width:400px;z-index:2;">
+                <p>1、按重计费规则；即≤首重时，按首运费计算，超过首重的部分，按照续重、续费计算；比如商品5kg，首重1kg，首运费10元，续重2kg，续费5元（代表每增加0~1kg，运费增加2.5元）；则运费=10+4*（5/2）
+                </p>
+                <p>
+                  2、按件计费规则；即≤首件时，按首运费计算，超过首件的部分，按照续件、续费计算；比如商品总共20件，首件5个，首运费10元，续件5个，续费15元；则运费=10+15*（15/5）
+                </p>
+              </div>
+            </div>
+            ： </label>
           <div class="col-sm-8">
             <table class="table table-bordered">
               <thead>
@@ -241,7 +261,7 @@
                 <th scope="row" style="width:210px "> 可配送至
                 </th>
                 <th> 首件 / 个</th>
-                <th> 运费 / 元</th>
+                <th> 首运费 / 元</th>
                 <th> 续件 / 个</th>
                 <th> 续费 / 元</th>
                 <th> 操作</th>
@@ -321,7 +341,7 @@
                           style="width:50px;height:30px;"
                           v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
                   </td>
-                  <td @click="delectRule(index)"> 删除</td>
+                  <td><a @click="delectRule(index)">删除</a></td>
                 </tr>
               </tbody>
               <!-- add -->
@@ -398,14 +418,13 @@
                           style="width:50px;height:30px;"
                           v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
                   </td>
-                  <td @click="delectRule(index)"> 删除</td>
+                  <td ><span @click="delectRule(index)">删除</span></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <p style="padding-left:290px;color:blue;cursor:pointer;"
-           @click="addRow()"> 为制定地区设置运费 </p>
+        <p style="padding-left:290px;color:blue;"><span style="cursor:pointer;" @click="addRow()">为指定地区设置运费</span> </p>
         <div class="form-group">
           <label class="col-sm-2 control-label"> 模板说明： </label>
           <div class="col-sm-6">
@@ -856,9 +875,9 @@
           }
           //console.log("+暂存数组",that.nowCityList)
             if(that.addRows[index].cityList.length>0){ // 如果是编辑进入 对应选中省市可被操作
-              for(var p = 0; p < that.disabledList.length; p++) { 
+              for(var p = 0; p < that.disabledList.length; p++) {
                 for(var b=0;b<that.addRows[index].cityList.length;b++){
-                  if(that.addRows[index].cityList[b]==that.disabledList[p]){ 
+                  if(that.addRows[index].cityList[b]==that.disabledList[p]){
                     that.disabledList.splice(p,1) // 从禁用数组中拿掉
                   }
                 }
@@ -866,7 +885,7 @@
               for(var i=0;i<that.datas.length;i++){
                 for(var j=0;j<that.datas[i].subs.length;j++){
                   for(var k=0;k<that.datas[i].subs[j].subs.length;k++){ // 循环到市
-                    for(var p = 0; p < that.disabledList.length; p++) { 
+                    for(var p = 0; p < that.disabledList.length; p++) {
                       if(that.disabledList[p]==that.datas[i].subs[j].subs[k].code){ // 对新的数组添加禁用
                         that.$('.city'+that.disabledList[p]).attr("disabled",true)// 市禁用
                         that.$('.pro'+that.datas[i].subs[j].code).attr("disabled",true)// 对应省禁用
@@ -895,7 +914,7 @@
               for(var i=0;i<that.datas.length;i++){
                 for(var j=0;j<that.datas[i].subs.length;j++){
                   for(var k=0;k<that.datas[i].subs[j].subs.length;k++){ // 循环到市
-                    for(var p = 0; p < that.disabledList.length; p++) { 
+                    for(var p = 0; p < that.disabledList.length; p++) {
                       if(that.disabledList[p]==that.datas[i].subs[j].subs[k].code){ // 未选择地区内进入 不需要其他操作 直接禁用其他已有市
                         that.$('.city'+that.disabledList[p]).attr("disabled",true)
                         that.$('.pro'+that.datas[i].subs[j].code).attr("disabled",true)
@@ -907,11 +926,11 @@
               }
               console.log("首次disableList",that.disabledList)
             }
-          
+
           // for(var i=0;i<that.datas.length;i++){
           //   for(var j=0;j<that.datas[i].subs.length;j++){
           //     for(var k=0;k<that.datas[i].subs[j].subs.length;k++){ // 循环到市
-                
+
           //     }
           //   }
           // }
