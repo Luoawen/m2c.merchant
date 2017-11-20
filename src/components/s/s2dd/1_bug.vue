@@ -157,7 +157,12 @@
         </tr>
         </thead>
         <!-- 在tbody上v-for循环 -->
-        <tbody v-for="(item,index) in resultdata">
+        <tbody v-if="totalCount==0">
+        <tr style="height: 50px;text-align: center;">
+          没有匹配的记录
+        </tr>
+        </tbody>
+        <tbody v-for="(item,index) in resultdata" v-if="totalCount>0">
         <tr>
           <td colspan="8" class="bt clear">
             <span class="ml10">订货号：{{item.dealerOrderId}}</span>  <span style="color: #ccc">&nbsp;|</span></span> <span class="ml10" v-show="item.payNo != '' ? true : false">支付单号：{{item.payNo}}</span>
@@ -355,7 +360,7 @@
         success: function (res) {
           var resultData = res.content;
           if(res.content.length == 0){
-            that.show_tip("没有匹配的记录")
+           // that.show_tip("没有匹配的记录")
           }
           that.totalCount = res.totalCount;
           that.resultdata= resultData;

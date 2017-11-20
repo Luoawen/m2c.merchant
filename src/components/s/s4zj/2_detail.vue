@@ -177,7 +177,7 @@
             token: sessionStorage.getItem('mToken'),
             pageSize: that.pageRows,                     // 每页多少条数据
             pageNo: that.currentPage,    // 请求第几页*/
-            businessIdOrDealerName:that.search_params.condition.replace(/\s+/g,""),
+            businessId:that.search_params.condition.replace(/\s+/g,""),
             businessType:that.search_params.businessType,
             inoutType:that.search_params.inoutType,
             startDate:that.search_params.startTime,
