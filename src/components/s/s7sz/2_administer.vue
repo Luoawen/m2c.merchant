@@ -1,57 +1,149 @@
 <template>
-  <div class="bs-example bs-example-tabs sz" data-example-id="togglable-tabs">
-    <ul id="myTabs" class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active" @click="brandQuery()"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">品牌库</a></li>
-      <li role="presentation" @click="brandApproveQuery()"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" >品牌审核</a></li>
-      <button type="button" class="btn btn-info pull-right btn-lg" @click="addGood()">新增</button>
-    </ul>
-    <div id="myTabContent" class="tab-content">
-      <div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
-        <div class="search_cell">
-          <span class="zIndex2" @click.stop="is_Success=!is_Success">申请时间<i class="icon timeIcon"></i></span>
-          <div class="time" v-if="is_Success" @click.stop>
-            <el-date-picker v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
-            </el-date-picker>
-            <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" @change="get_comment_info()">
-            </el-date-picker>
-          </div>
+  <div class="content clear">
+    <el-tabs v-model="activeName" @tab-click="handleTabClick">
+      <el-tab-pane label="品牌库" name="first">
+        <div class="searchWrap">
+          <el-date-picker
+            v-model="time"
+            type="daterange"
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期" value-format="yyyy-MM-dd"
+            @change="timeCheck">
+          </el-date-picker>
+          <el-input v-model="search_params.condition" placeholder="输入品牌名称"></el-input>
+          <el-button type="primary" size="medium" @click="get_comment_info()">搜索</el-button>
+          <el-button type="primary" size="medium" class="fr" @click="addGood()">新增</el-button>
         </div>
-        <div class="search">
-          <input type="text" class="inp" placeholder="输入品牌名称" v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info()"></i>
+        <el-table
+          ref="multipleTable"
+          :data="bindsList"
+          tooltip-effect="dark"
+          style="width: 100%">
+          <el-table-column
+            label="操作"
+            width="120"
+            show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-col :span="12">
+                <el-dropdown trigger="click">
+                  <span class="el-dropdown-link">
+                    操作<i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','a')">详情</el-dropdown-item>
+                    <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_edit','a')">编辑
+                      </el-dropdown-item>
+                    <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_delete','a')">删除</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-col>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="brandName"
+            label="品牌名称"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="createTime"
+            label="申请时间"
+            show-overflow-tooltip>
+          </el-table-column>
+        </el-table>
+        <div class="block" style="margin:20px;float:left">
+          <el-pagination
+            @size-change="bindsSizeChange"
+            @current-change="bindsCurrentChange"
+            :current-page="bindsCurrentPage"
+            :page-sizes="[5, 10, 20, 30]"
+            :page-size="bindPageRows"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="bindsTotalCount">
+          </el-pagination>
         </div>
-
-        <div class="comment_info">
-          <table id="table" style="table-layout:fixed"></table>
+      </el-tab-pane>
+      <el-tab-pane label="品牌审核" name="second">
+        <div class="searchWrap">
+          <el-select v-model="search_approve.approveStatus" placeholder="品牌状态">
+            <el-option
+              v-for="brandStatu in brandStatus"
+              :key="brandStatu.value"
+              :label="brandStatu.label"
+              :value="brandStatu.value">
+            </el-option>
+          </el-select>
+          <el-date-picker
+            v-model="time"
+            type="daterange"
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期" value-format="yyyy-MM-dd"
+            @change="timeCheck">
+          </el-date-picker>
+          <el-input v-model="search_approve.condition" placeholder="输入品牌名称"></el-input>
+          <el-button type="primary" size="medium" @click="get_comment_info1()">搜索</el-button>
         </div>
-      </div>
-      <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
-        <div class="dropdown">
-          <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">{{brandStatusName}}
-            <span class="icon arrowsIcon"></span>
-          </div>
-          <ul class="dropdown-menu" aria-labelledby="dLabel1">
-            <li @click="get_comment_info1(0)">全部</li>
-            <li @click="get_comment_info1(1)">申请中</li>
-            <li @click="get_comment_info1(2)">审核不通过</li>
-          </ul>
+        <el-table
+          ref="multipleTable"
+          :data="bindsApproveList"
+          tooltip-effect="dark"
+          style="width: 100%">
+          <el-table-column
+            label="操作"
+            width="120"
+            show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-col :span="12">
+                <el-dropdown trigger="click">
+                  <span class="el-dropdown-link">
+                    操作<i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','b')">详情</el-dropdown-item>
+                    <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_edit','b')">编辑
+                      </el-dropdown-item>
+                    <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_delete','b')">删除</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-col>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="brandName"
+            label="品牌名称"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="createTime"
+            label="申请时间"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            label="品牌状态"
+            show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span >{{scope.row.approveStatus==1?'审批中':scope.row.approveStatus==2?'审批不通过':''}}</span>
+              <el-tooltip class="item" effect="dark" :content="scope.row.rejectReason" placement="bottom-start">
+                <div class="ico_msg" v-if="scope.row.approveStatus==2"></div>
+              </el-tooltip>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="block" style="margin:20px;float:left">
+          <el-pagination
+            @size-change="bindsApproveSizeChange"
+            @current-change="bindsApproveCurrentChange"
+            :current-page="bindsApproveCurrentPage"
+            :page-sizes="[5, 10, 20, 30]"
+            :page-size="bindApprovePageRows"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="bindsApproveTotalCount">
+          </el-pagination>
         </div>
-        <div class="search_cell">
-          <span class="zIndex2" @click.stop="is_Success2=!is_Success2">申请时间<i class="icon timeIcon"></i></span>
-          <div class="time" v-if="is_Success2" @click.stop>
-            <el-date-picker v-model="search_approve.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
-            </el-date-picker>
-            <el-date-picker v-model="search_approve.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" @change="get_comment_info1(search_approve.approveStatus)">
-            </el-date-picker>
-          </div>
-        </div>
-        <div class="search">
-          <input type="text" class="inp" placeholder="输入品牌名称"  v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info1(search_approve.approveStatus)"></i>
-        </div>
-        <div class="comment_info">
-          <table id="table1" style="table-layout:fixed"></table>
-        </div>
-      </div>
-      <!--详情-->
+      </el-tab-pane>
+    </el-tabs>
+    <!--详情-->
       <em class="bread" v-if="goodInfoShow">> 品牌详情</em>
       <div class="goodInfo" v-if="goodInfoShow">
         <p><span>品牌名称：</span>{{goodInfo.brandName==''?'--':goodInfo.brandName}}</p>
@@ -75,18 +167,6 @@
       <!--删除-->
       <div class="delectGoodBg" v-if="delectGoodBg"></div>
       <div class="delectGoodWrap" v-if="delectGoodBg">
-     <!-- <div class="delectGoodCon" v-if="delectGood">
-          <p>是否删除品牌</p>
-          <button class="blueBtn" @click="delete_confirm()">确定</button>
-          <button class="defultBtn" @click="delectGoodHide()">取消</button>
-          <a class="colseDelectBox" @click="delectGoodHide()"></a>
-        </div>
-        <div class="delectGoodCon" v-if="delectApprove">
-          <p>是否删除品牌审核</p>
-          <button class="blueBtn" @click="deleteApprove_confirm()">确定</button>
-          <button class="defultBtn" @click="delectApproveHide()">取消</button>
-          <a class="colseDelectBox" @click="delectApproveHide()"></a>
-        </div>-->
         <div class="delectGoodCon" v-if="delectGood" >
           <div class="agreetc_header">
             <span>提示</span>
@@ -148,8 +228,6 @@
         <button v-show="" @click="approve_confirm()">提交审核</button>
         <button @click="changeGoodShow=!changeGoodShow">返回</button>
       </div>
-    </div>
-
   </div>
 </template>
 
@@ -158,24 +236,32 @@
     name: '',
     data () {
       return {
-        is_Success: false,
-        is_Success2: false,
+        time:'',
+        activeName:'first',
         btnShow: true,
+        bindPageRows:10,
+        bindsCurrentPage: 1,
+        bindsTotalCount:0,
+        bindApprovePageRows:10,
+        bindsApproveCurrentPage: 1,
+        bindsApproveTotalCount:0,
+        goodsDelStoreData:[],
         goodInfoShow: false, // 详情盒子
         delectGoodBg: false, // 弹层背景
         delectGood: false, // 删除盒子
         delectApprove: false, // 删除品牌审核
         changeGoodShow: false,
+        bindsList:[],
+        bindsApproveList:[],
         // 搜索参数
         search_params: {condition: '', startTime: '', endTime: ''},
         search_approve: {condition: '', startTime: '', endTime: '', approveStatus: ''},
         goodInfo: [],
         delete_params: {brandId: ''},
-        deleteApprove_params: {approveId: ''},
+        deleteApproveId: '',
         change_params: {brandId: ''},
-        pinpais: [
-          {name: '品牌一', value: '1'},
-          {name: '品牌一', value: '2'}
+        brandStatus: [
+          {value:'',label:'品牌状态'},{value:'1',label:'申请中'},{value:'2',label:'审核不通过'}
         ],
         // 上传图片后返回的地址
         imgshow: false,
@@ -196,7 +282,6 @@
         city_show: false,
         modifyLocal: '',
         isBrandApprove: false,
-        brandStatusName: '品牌状态'
       }
     },
     watch: {
@@ -255,6 +340,115 @@
       }
     },
     methods: {
+      handleTabClick (tab, event) {//tab切换
+        let that = this
+        that.search_params = {condition: '', startTime: '', endTime: ''},
+        that.search_approve = {condition: '', startTime: '', endTime: '', approveStatus: ''}
+        that.time = ''
+        if (tab.paneName==='first'){
+          that.get_comment_info()//品牌库列表
+        }else if (tab.paneName==='second'){
+          that.get_comment_info1()//品牌审核列表
+        }
+      },
+      //时间赋值
+      timeCheck () {
+        let that = this
+        if(that.time != null){
+          if(that.activeName=='first'){
+            that.search_params.startTime = that.time[0]
+            that.search_params.endTime = that.time[1]
+          }else{
+            that.search_approve.startTime = that.time[0]
+            that.search_approve.endTime = that.time[1]
+          }
+        }else{
+          if(that.activeName=='first'){
+            that.search_params.startTime = ''
+            that.search_params.endTime = ''
+          }else{
+            that.search_approve.startTime = ''
+            that.search_approve.endTime = ''
+          }
+        }
+      },
+      bindsSizeChange(val) {
+        let that = this
+        that.bindPageRows=val
+        that.get_comment_info();
+      }
+      ,bindsCurrentChange(val) {
+        let that = this
+        that.bindsCurrentPage=val
+        that.get_comment_info();
+      },
+      bindsApproveSizeChange(val) {
+        let that = this
+        that.bindApprovePageRows=val
+        that.get_comment_info1();
+      }
+      ,bindsApproveCurrentChange(val) {
+        let that = this
+        that.bindsApproveCurrentPage=val
+        that.get_comment_info1();
+      },
+      handleCommand (index,row,action,to) {
+        let that = this
+        if (action === '_detail') {
+          if(to=='a'){
+            that.goodInfoShow = true
+            that.$.ajax({
+              url: that.localbase + 'm2c.scm/brand/' + row.brandId,
+              success: function (result) {
+                that.goodInfo = result.content
+              }
+            })
+          }else{
+            that.goodInfoShow = true
+            that.$.ajax({
+              url: that.localbase + 'm2c.scm/brand/approve/' + row.approveId,
+              success: function (result) {
+                that.goodInfo = result.content
+                console.warn(that.goodInfo)
+              }
+            })
+          }
+        } else if (action === '_edit') {
+          if(to=='a'){
+            that.changeGoodShow = true
+            // let row = this.$('#table').bootstrapTable('getSelections')[0]
+            that.$.ajax({
+              url: that.localbase + 'm2c.scm/brand/' + row.brandId,
+              success: function (result) {
+                that.add_modify_params = result.content
+                /* 初始化图片 */
+                document.querySelector('#m11yhgl_img').src = result.content.brandLogo ? result.content.brandLogo : ''
+              }
+            })
+            that.modify_td_click(that.add_modify_params)
+          } else {
+            that.changeGoodShow = true
+            // let row = this.$('#table').bootstrapTable('getSelections')[0]
+            that.$.ajax({
+              url: that.localbase + 'm2c.scm/brand/approve/' + row.approveId,
+              success: function (result) {
+                that.add_modify_params = result.content
+                /* 初始化图片 */
+                document.querySelector('#m11yhgl_img').src = result.content.brandLogo ? result.content.brandLogo : ''
+              }
+            })
+            that.modify_td_click(that.add_modify_params)
+          }
+        } else if (action === '_delete') {
+          if(to=='a'){
+            let brandId = row.brandId
+            that.delectGoodShow(brandId)
+          }else{
+            that.deleteApproveId = row.approveId
+            that.deleteApprove()
+          }
+        }
+      },
       brandQuery () {
         let that = this
         that.changeGoodShow = false
@@ -475,7 +669,7 @@
         // that.reset_add_modify_params_bind()
         that.$.ajax({
           type: 'delete',
-          url: that.localbase + 'm2c.scm/brand/approve/' + that.deleteApprove_params.approveId,
+          url: that.localbase + 'm2c.scm/brand/approve/' + that.deleteApproveId,
           data: {
             token: sessionStorage.getItem('mToken')
           },
@@ -531,250 +725,67 @@
         that.delectApprove = false
         that.delectGoodBg = false
       },
-      // 表格上的按钮点击
-      td_click (toggle, row, index) {
-        let that = this
-        // 品牌库上操作
-        if (toggle === 'btnshow') {
-          // console.warn(row)
-          // let index = that.$('a.btnImg').index()
-          that.$('.btnBox').eq(index).toggle()
-          // console.log($(that).index().toggle())
-        } else if (toggle === 'modify') { // 表格上点击详情
-          that.$('.btnBox').hide()
-          that.goodInfoShow = true
-          that.$.ajax({
-            url: that.localbase + 'm2c.scm/brand/' + row.brandId,
-            success: function (result) {
-              that.goodInfo = result.content
-            }
-          })
-        } else if (toggle === 'delete') { // 表格上点击删除
-          that.$('.btnBox').hide()
-          that.delete_params = row
-          that.delectGoodShow()
-        } else if (toggle === 'modify_status') { // 表格上点击修改
-          that.$('.btnBox').hide()
-          that.changeGoodShow = true
-          // let row = this.$('#table').bootstrapTable('getSelections')[0]
-          that.$.ajax({
-            url: that.localbase + 'm2c.scm/brand/' + row.brandId,
-            success: function (result) {
-              that.add_modify_params = result.content
-              /* 初始化图片 */
-              document.querySelector('#m11yhgl_img').src = result.content.brandLogo ? result.content.brandLogo : ''
-            }
-          })
-          that.modify_td_click(that.add_modify_params)
-        } else if (toggle === 'btnshow1') { // 品牌审核上的操作
-          // console.warn(row)
-          // let index = that.$('a.btnImg').index()
-          that.$('.btnBox1').eq(index).toggle()
-          // console.log($(that).index().toggle())
-        } else if (toggle === 'handleInfo') { // 表格上点击详情
-          that.$('.btnBox1').hide()
-          that.goodInfoShow = true
-          that.$.ajax({
-            url: that.localbase + 'm2c.scm/brand/approve/' + row.approveId,
-            success: function (result) {
-              that.goodInfo = result.content
-              console.warn(that.goodInfo)
-            }
-          })
-        } else if (toggle === 'deleteApprove') { // 表格上点击删除
-          that.$('.btnBox1').hide()
-          that.deleteApprove_params = row
-          console.warn(that.deleteApprove_params)
-          that.deleteApprove()
-        } else if (toggle === 'modifyApprove') { // 表格上点击修改
-          that.$('.btnBox1').hide()
-          that.changeGoodShow = true
-          // let row = this.$('#table').bootstrapTable('getSelections')[0]
-          that.$.ajax({
-            url: that.localbase + 'm2c.scm/brand/approve/' + row.approveId,
-            success: function (result) {
-              that.add_modify_params = result.content
-              /* 初始化图片 */
-              document.querySelector('#m11yhgl_img').src = result.content.brandLogo ? result.content.brandLogo : ''
-            }
-          })
-          that.modify_td_click(that.add_modify_params)
-        }
-      },
+      
       // 获取商品库列表
       get_comment_info () {
         let that = this
-        if (that.search_params.startTime > that.search_params.endTime) {
-          that.show_tip('开始时间不能大于结束时间')
-          return
-        }
-        that.is_Success = false
-        this.$("[data-toggle='popover']").popover('hide')
-        that.$('#table').bootstrapTable('destroy').bootstrapTable({
-          cache: false,
-          url: that.localbase + 'm2c.scm/brand',
-          queryParams: function (params) {
-            return Object.assign({}, {
-              token: sessionStorage.getItem('mToken'),
-              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // 商户ID
-              rows: params.limit,                          // 每页多少条数据
-              pageNum: params.offset / params.limit + 1    // 请求第几页
-            }, that.search_params)
+        that.$.ajax({
+          type: 'get',
+          url: that.base + 'm2c.scm/brand',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            rows: that.bindPageRows,                     // 每页多少条数据
+            pageNum: that.bindsCurrentPage,    // 请求第几页*/
+            condition:that.search_params.condition.replace(/\s+/g,""),
+            startTime:that.search_params.startTime,
+            endTime:that.search_params.endTime
           },
-          pagination: true,
-          pageNumber: 1,
-          pageSize: 10,
-          pageList: [5, 10, 20, 100, 200, 500],
-          striped: true,
-          queryParamsType: 'limit',
-          sidePagination: 'server',
-          contentType: 'application/x-www-form-urlencoded',
-          responseHandler: function (result) {
-            // console.log('结算单列表:', result)
-            return {
-              total: result.totalCount,    // 总页数
-              rows: result.content         // 数据
+          success: function (result) {
+            if (result.status === 200){
+              // 获取商品列表
+              that.bindsList = result.content
+              that.bindsTotalCount = result.totalCount
+              console.log(that.bindsList)
             }
-          },
-          columns: [{
-            field: 'brandName',
-            title: '品牌名称',
-            align: 'center',
-            valign: 'middle'
-          }, {
-            field: 'createTime',
-            title: '申请时间',
-            align: 'center',
-            valign: 'middle'
-          }, {
-            title: '操作',
-            align: 'center',
-            valign: 'middle',
-            events: 'handle',
-            formatter: function (x, y) {
-              return `
-              <div class="btnWrap">
-                <a class="btnImg" btnshow=true handle=true></a>
-                <div class="btnBox">
-                  <a class="color_default" modify=true handle=true>详情</a><a class="color_green" modify_status=true handle=true>编辑</a><a class="color_red" delete=true handle=true>删除</a>
-                </div>
-              </div>
-              `
-            }
-          }]
+          }
         })
       },
       // 获取审核列表
-      get_comment_info1 (n) {
+      get_comment_info1 () {
         let that = this
-        if (that.search_approve.startTime > that.search_approve.endTime) {
-          that.show_tip('开始时间不能大于结束时间')
-          return
-        }
-        that.is_Success2 = false
-        if (n === '' || n === undefined) {
-          that.brandStatusName = '品牌状态'
-        } else if (n === 0) {
-          that.brandStatusName = '全部'
-        } else if (n === 1) {
-          that.brandStatusName = '申请中'
-        } else {
-          that.brandStatusName = '审批不通过'
-        }
-        that.search_approve.approveStatus = n === 0 ? '' : n
-        this.$("[data-toggle='popover']").popover('hide')
-        that.$('#table1').bootstrapTable('destroy').bootstrapTable({
-          cache: false,
-          url: that.localbase + 'm2c.scm/brand/approve',
-          queryParams: function (params) {
-            return Object.assign({}, {
-              token: sessionStorage.getItem('mToken'),
-              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // 商户ID
-              rows: params.limit,                          // 每页多少条数据
-              pageNum: params.offset / params.limit + 1    // 请求第几页
-            }, that.search_approve)
+        that.$.ajax({
+          type: 'get',
+          url: that.base + 'm2c.scm/brand/approve',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            rows: that.bindApprovePageRows,                     // 每页多少条数据
+            pageNum: that.bindsApproveCurrentPage,    // 请求第几页*/
+            condition:that.search_approve.condition.replace(/\s+/g,""),
+            startTime:that.search_approve.startTime,
+            endTime:that.search_approve.endTime,
+            approveStatus:that.search_approve.approveStatus
           },
-          pagination: true,
-          pageNumber: 1,
-          pageSize: 10,
-          pageList: [5, 10, 20, 100, 200, 500],
-          striped: true,
-          queryParamsType: 'limit',
-          sidePagination: 'server',
-          contentType: 'application/x-www-form-urlencoded',
-          responseHandler: function (result) {
-            // console.log('结算单列表:', result)
-            return {
-              total: result.totalCount,    // 总页数
-              rows: result.content         // 数据
+          success: function (result) {
+            if (result.status === 200){
+              // 获取商品列表
+              that.bindsApproveList = result.content
+              that.bindsApproveTotalCount = result.totalCount
+              console.log(that.bindsApproveList)
             }
-          },
-          columns: [{
-            field: 'brandName',
-            title: '品牌名称',
-            align: 'center',
-            valign: 'middle'
-          }, {
-            field: 'createTime',
-            title: '申请时间',
-            align: 'center',
-            valign: 'middle'
-          }, {
-            title: '品牌状态',
-            align: 'center',
-            valign: 'middle',
-            formatter: function (x, y) {
-              return y.approveStatus === 1 ? '审批中' : `
-              <div class="color_default">审批不通过
-                <i class="ico_msg">
-                <div class="ico-tit">` + y.rejectReason + `</div>
-              </i>
-
-              </div>
-              `
-            }
-          }, {
-            title: '操作',
-            align: 'center',
-            valign: 'middle',
-            events: 'handle',
-            formatter: function (x, y) {
-              return `
-              <div class="btnWrap">
-                <a class="btnImg" btnshow1=true handle=true></a>
-                <div class="btnBox1">
-                  <a class="color_default" handleInfo=true handle=true>详情</a><a class="color_green" modifyApprove=true handle=true>编辑</a><a class="color_red" deleteApprove=true handle=true>删除</a>
-                </div>
-              </div>
-              `
-            }
-          }]
+          }
         })
-      },
-      timeBox () {
-        this.is_Success = true
       }
     },
     mounted () {
       let that = this
-      window.handle = {
-        'click [handle]': function (event, value, row, index) {
-          let target = event.target
-          let toggle = target.getAttribute('btnshow') ? 'btnshow' : target.getAttribute('modify') ? 'modify' : target.getAttribute('delete') ? 'delete' : target.getAttribute('modify_status') ? 'modify_status' : target.getAttribute('btnshow1') ? 'btnshow1' : target.getAttribute('handleInfo') ? 'handleInfo' : target.getAttribute('deleteApprove') ? 'deleteApprove' : target.getAttribute('modifyApprove') ? 'modifyApprove' : ''
-          that.td_click(toggle, row, index)
-        }
-      }
       that.get_comment_info()
       that.modifyLocal = 1
       that.province_show = false
       that.city_show = false
       that.isBrandApprove = false
       that.rejectShow = false
-      that.brandStatusName = '品牌状态'
-      that.$(document).click(function () { //点击页面收起所有盒子
-        that.is_Success = false
-        that.is_Success2 = false
-      })
     }
   }
 </script>
