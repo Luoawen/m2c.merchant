@@ -22,26 +22,12 @@
         type="daterange"
         range-separator="-"
         start-placeholder="下单开始日期"
-        end-placeholder="下单结束日期"
-        @blur="timeCheck">
+        end-placeholder="下单结束日期" value-format="yyyy-MM-dd"
+        @change="timeCheck">
       </el-date-picker>
-      <!-- <div class="search_cell">
-        <span class="zIndex2" @click="is_Success=!is_Success">下单时间<i class="icon timeIcon"></i></span>
-        <div class="time" v-if="is_Success">
-          <el-date-picker v-model="searchParams.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
-          </el-date-picker>
-          <el-date-picker v-model="searchParams.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" @change="search()">
-          </el-date-picker>
-        </div>
-      </div> -->
-      <el-input v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码"></el-input>
+      <el-input v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码" title="输入商品名称/订单号/支付单号/收货人号码"></el-input>
       <el-button type="primary" size="medium" @click="search()">搜索</el-button>
-      <!-- <div class="search">
-        <input type="text" class="inp" v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码">
-        <i class="icon searchIcon" id="searchIco"></i>
-      </div> -->
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
-      <!-- <el-button type="primary" icon="el-icon-download" @click.native="exportSearch()" class="pull-right operation">导出</el-button> -->
       <!-- 高级搜索 -->
       <div class="poi2 Advanced_s" v-show="Advancedshow===true">
         <div class="">
@@ -176,7 +162,7 @@
                       </span>
               &lt;!&ndash;<span class="ml10">订货号：</span><span>{{item.dealerOrderId}}</span>&ndash;&gt;
             </div>-->
-            <div class="fr detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</div>
+            <div class="detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</div>
           </td>
         </tr>
         <tr class="content clear" >
@@ -525,11 +511,6 @@
 </script>
 <style lang="scss" scoped>
   .content{
-    width: 100%;
-    min-height: 500px;
-    padding:15px;
-    background-color: #fff;
-    .searcWrap{width:100%;height:auto;position:relative;}
     .Advanced_s{
       width: 100%;
       min-height: 430px;
@@ -825,6 +806,8 @@
               font-size: 13px;
               color: #667991;
               cursor: pointer;
+              display:inline-block;
+              margin-left:10px;
             }
           }
         }

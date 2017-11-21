@@ -282,6 +282,35 @@ body {
     }
   }
   div.icon:hover div.tips{display:block;}
+  .content{
+    width: 100%;
+    min-height: 500px;
+    padding:15px;
+    background-color: #fff;
+    .searcWrap{width:100%;height:auto;position:relative;}
+  }
+  .clear{
+    clear: both;
+    overflow: hidden;
+  }
+  .ellipsis{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+  }
+  .ellipsis2{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  a.ellipsis2{
+    color:#5a5e66;
+  }
+  a.ellipsis2:hover{ text-decoration:none;}
+  .fl{float:left;}
+  .fr{float:right;}
+  .width190{width:190px;}
 * {
   margin: 0;
   padding: 0;

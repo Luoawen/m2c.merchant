@@ -1,32 +1,31 @@
 <template>
-  <div class="goods_block" style="background: #FFFFFF;padding-left: 20px;">
+  <div class="content clear">
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane label="商品库" name="first">
         <div role="tabpanel" class="tab-pane fade in active" aria-labelledby="home-tab">
-          <div class="goods_search" style="width: 100%; height: 40px;">
-            <div  style="float: left">
-              商品分类:<el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="selectedOptions1" change-on-select :props="goodsClassifyProps"></el-cascader>
-            </div><!--商品分类-->
-            <div style="float: left">
-              商品状态:
-              <el-select v-model="search_goods_params.goodsStatus" placeholder="请选择商品状态">
-                <el-option v-for="item in goodsStatus" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
-            </div><!--商品状态-->
-            <div class="ops_time" style="float:left;width: 540px;">时间选择:
-              <el-date-picker  v-model="search_goods_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
-              </el-date-picker>
-              -
-              <el-date-picker v-model="search_goods_params.endTime" type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
-              </el-date-picker>
-            </div><!--时间-->
-            <div class="search" style="width: 400px;float: left">
+          <div class="searcWrap">
+            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="selectedOptions1" change-on-select placeholder="请选择商品分类":props="goodsClassifyProps"></el-cascader>
+            <el-select v-model="search_goods_params.goodsStatus" placeholder="请选择商品状态">
+              <el-option v-for="item in goodsStatus" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+            <el-date-picker
+              v-model="time"
+              type="daterange"
+              range-separator="-"
+              start-placeholder="选择开始日期"
+              end-placeholder="选择结束日期" value-format="yyyy-MM-dd"
+              @change="timeCheck">
+            </el-date-picker>
+            <el-input v-model="search_goods_params.condition" placeholder="输入商品名称/编码/条形码/品牌" title="输入商品名称/编码/条形码/品牌"></el-input>
+            <el-button type="primary" size="medium" @click="goodsStoreSearch()">搜索</el-button>
+            <!-- <div class="search" style="width: 400px;float: left">
               <el-input placeholder="输入商品名称 / 编码 / 条形码 / 品牌" v-model="search_goods_params.condition" class="input-with-select">
                 <el-button slot="append" icon="el-icon-search" @click.native="goodsStoreSearch()"></el-button>
               </el-input>
-            </div>
-            <div class="advanced" style="width: 50px;float: left;margin-left: 30px">
+            </div> -->
+            <el-button type="primary" size="medium" @click="newGoods" class="fr">新增</el-button>
+            <el-button type="primary" size="medium" icon="el-icon-download" @click.native="exportSearch()" class="fr">导出</el-button>
              <!-- <el-dropdown  @command="handleCommand">
                 <el-button type="primary">
                   批量操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
@@ -38,8 +37,6 @@
                   <el-dropdown-item command="export">导出</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>-->
-              <el-button type="primary" icon="el-icon-download" @click.native="exportSearch()">导出</el-button>
-            </div>
           </div>
           <div class="good_info" style="margin-top: 20px;">
             <el-table
@@ -50,6 +47,27 @@
               <el-table-column
                 type="selection"
                 width="55">
+              </el-table-column>
+              <el-table-column
+                label="操作"
+                show-overflow-tooltip>
+                <template slot-scope="scope">
+                  <el-col :span="12">
+                    <el-dropdown trigger="click">
+                      <span class="el-dropdown-link">
+                        操作<i class="el-icon-arrow-down el-icon--right"></i>
+                      </span>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','a')">详情</el-dropdown-item>
+                        <el-dropdown-item v-if="scope.row.goodsStatus==1" @click.native="handleCommand(scope.$index, scope.row,'_soldup','a')">上架</el-dropdown-item>
+                        <el-dropdown-item v-if="scope.row.goodsStatus!=1" @click.native="handleCommand(scope.$index, scope.row,'_soldout','a')">下架</el-dropdown-item>
+                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_edit','a')">编辑
+                          </el-dropdown-item>
+                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_delete','a')">删除</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </el-col>
+                </template>
               </el-table-column>
               <el-table-column
                 label="商品信息"
@@ -65,13 +83,11 @@
               </el-table-column>
               <el-table-column
                 prop="goodsClassify"
-                label="分类"
-                width="200">
+                label="分类">
               </el-table-column>
               <el-table-column
                 prop="brandName"
                 label="品牌"
-                width="200"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -95,29 +111,9 @@
                 show-overflow-tooltip>
                 <template slot-scope="scope"><span >{{scope.row.goodsStatus==1?'仓库':scope.row.goodsStatus==2?'出售中':scope.row.goodsStatus==3?'已售罄':''}}</span></template>
               </el-table-column>
-              <el-table-column
-                label="操作"
-                show-overflow-tooltip>
-                <template slot-scope="scope">
-                  <el-col :span="12">
-                    <el-dropdown trigger="click">
-                      <span class="el-dropdown-link">
-                        操作<i class="el-icon-arrow-down el-icon--right"></i>
-                      </span>
-                      <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','a')">详情</el-dropdown-item>
-                        <el-dropdown-item v-if="scope.row.goodsStatus==1" @click.native="handleCommand(scope.$index, scope.row,'_soldup','a')">上架</el-dropdown-item>
-                        <el-dropdown-item v-if="scope.row.goodsStatus!=1" @click.native="handleCommand(scope.$index, scope.row,'_soldout','a')">下架</el-dropdown-item>
-                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_edit','a')">编辑
-                          </el-dropdown-item>
-                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_delete','a')">删除</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </el-dropdown>
-                  </el-col>
-                </template>
-              </el-table-column>
+              
             </el-table>
-            <div class="block" style="margin: 20px;float: right">
+            <div class="block fl" style="margin: 20px;">
                 <el-pagination
                   @size-change="goodsStoreHandleSizeChange"
                   @current-change="goodsStoreHandleCurrentChange"
@@ -132,7 +128,6 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="商品审核" name="second">
-
         <div role="tabpanel" class="tab-pane fade in active"  aria-labelledby="home-tab">
           <div class="goods_search" style="width: 100%; height: 40px;">
             <div  style="float: left">
@@ -227,7 +222,7 @@
                 </template>
               </el-table-column>
             </el-table>
-            <div class="block" style="margin: 20px;float: right">
+            <div class="block fl" style="margin: 20px;">
               <el-pagination
                 @size-change="goodsCheckStoreHandleSizeChange"
                 @current-change="goodsCheckStoreHandleCurrentChange"
@@ -323,7 +318,6 @@
           </el-pagination>
         </div>
       </el-tab-pane>
-      <el-button type="primary" @click="newGoods">新增</el-button>
     </el-tabs>
   </div>
 </template>
@@ -333,12 +327,13 @@
     name: '',
     data () {
       return {
+        time:'',
         goodsStorePageRows:5,
         goodsStoreCurrentPage: 1,
         goodsStoreTotalCount:0,
         goodsStatus:[{
           value: '',
-          label: '全部'
+          label: '商品状态'
         }, {
           value: '1',
           label: '仓库中'
@@ -383,6 +378,16 @@
       }
     },
     methods: {
+      //时间赋值
+      timeCheck () {
+        let that = this
+        if(that.time != ''){
+          that.search_goods_params.startTime = that.time[0]
+          that.search_goods_params.endTime = that.time[1]
+        }
+        console.log(that.search_goods_params.startTime)
+        console.log(that.search_goods_params.endTime)
+      },
       // 点击新增时校验店铺信息是否存在
       newGoods () {
         let that = this
@@ -410,7 +415,7 @@
         data: {parentClassifyId:-1},
         success: function (result) {
           that.goodsClassifys=result.content;
-          that.goodsClassifys.unshift({"parentClassifyId":'',"classifyId":'',"serviceRate":'',"classifyName":"全部" });
+          //that.goodsClassifys.unshift({"parentClassifyId":'',"classifyId":'',"serviceRate":'',"classifyName":"全部" });
         }
       })
     }
@@ -858,7 +863,6 @@
   span.ellipsis{width:190px;margin-left:10px;overflow: hidden;display:inline-block;
 text-overflow:ellipsis;
 white-space: nowrap;}
-
   a.ellipsis2{
     width:180px;
     color:#5a5e66;
@@ -869,17 +873,7 @@ white-space: nowrap;}
     overflow: hidden;
     position: relative;
     float: left;
-    // div{
-    //   width:200px;
-    //   padding:20px;
-    //   display: none;
-    //   border:1px soild #ccc;
-    //   box-shadow: 0px 3px 3px #ddd;
-    //   background:#fff;
-    //   z-index:2;
-    //   position: absolute;
-    //   top:40px;left:0px;
-    // }
   }
   a.ellipsis2:hover{ text-decoration:none;}
+
 </style>
