@@ -1609,7 +1609,7 @@ color:#fff;
 background-color:#409EFF
 }
 .el-table,.el-table__expanded-cell {
-background-color:#fff
+background-color:#DFE9F6
 }
 .el-select__tag .el-icon-close {
 font-size:14px
@@ -1686,10 +1686,10 @@ border-right-width:1px
 }
 .el-table thead {
 color:#878d99;
-font-weight:500
+font-weight:normal
 }
 .el-table thead.is-group th {
-background:#f5f7fa
+/* background:#DFE9F6 */
 }
 .el-table td,.el-table th {
 padding:12px 0;
@@ -1734,24 +1734,36 @@ padding-right:10px;
 overflow:hidden;
 text-overflow:ellipsis
 }
-.el-table tr {
-background-color:#fff
-}
 .el-table tr input[type=checkbox] {
 margin:0
 }
 .el-table td,.el-table th.is-leaf {
-border-bottom:1px solid #e6ebf5
+border-bottom:1px solid #e6ebf5;
+color:#666;
+font-weight: normal;
+padding-left:20px;
+overflow:hidden;
+}
+.el-table th.is-leaf{
+  color:#333;
+}
+.el-table tr:nth-child(2n+1){
+  background:#F4F5FA;
+}
+.el-table tr:nth-child(2n){
+  background:#EDF0F7
 }
 .el-table th.is-sortable {
-cursor:pointer
+cursor:pointer;
 }
 .el-table th {
 white-space:nowrap;
 overflow:hidden;
 -moz-user-select:none;
 user-select:none;
-text-align:left
+text-align:left;
+background:#DFE9F6;
+padding-left:20px;
 }
 .el-table th div {
 line-height:40px;
@@ -8362,7 +8374,7 @@ border-left-color:#fff
 display:inline-block;
 position:relative;
 font-size:14px;
-line-height:40px
+line-height:36px
 }
 .el-cascader .el-input,.el-cascader .el-input__inner {
 cursor:pointer
@@ -8397,7 +8409,7 @@ position:relative
 .el-cascader__label {
 position:absolute;
 left:0;
-top:0;
+top:8px;
 height:100%;
 padding:0 25px 0 15px;
 color:#5a5e66;
@@ -9086,7 +9098,8 @@ padding:12px 20px;
 border-radius:4px
 }
 .el-button+.el-button {
-margin-left:10px
+  margin:7px;
+  margin-left:10px
 }
 .el-button:focus,.el-button:hover {
 color:#409EFF;

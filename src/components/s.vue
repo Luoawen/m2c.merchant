@@ -83,7 +83,7 @@
         life: 'beforeCreate',
         sign_out_tip: { isShow: false },
         three_level: '',
-        dealerName: JSON.parse(sessionStorage.getItem('mUser')).username
+        dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName
       }
     },
     methods: {
@@ -167,9 +167,9 @@
     },
     mounted () {
       let that = this
-      window.onpopstate = function() {
-        window.location.reload();
-       };
+      // window.onpopstate = function() {
+      //   window.location.reload();
+      //  };
       if (sessionStorage.length === 0) {
         that.$goRoute({path: '/slogin'})
         return
@@ -197,44 +197,44 @@
       window.onbeforeunload = function () {
         sessionStorage.setItem('active_path', that.$('.right_nav_content').text())
       }
-      that.$('.right_nav_content').text(sessionStorage.getItem('active_path'))
-      setTimeout(function () {
-        that.life = 'done'
-        let query = window.location.href.split('/')
-        console.log('地址', query)
-        query = '/' + query[query.length - 2] + '/' + query[query.length - 1]
-        let target = `[path='${query}']`
-        console.log('target', target)
-        if (target === `[path='/s/s22czdd']`) {
-          target = `[path='/s/s21ddgl']`
-        } else if (target === `[path='/s/s32thhcz']`) {
-          target = `[path='/s/s31thhgl']`
-        } else if (target === `[path='/s/s23dyfhd']`) {
-          target = `[path='/s/s21ddgl']`
-        }
-        that.$(target).parent().slideDown(400)
-        // 设置左边导航栏的目标样式
-        Array.from(document.querySelectorAll('[path]')).map(function (x) {
-          that.$(x).removeClass('avter')
-        })
-        that.$(target).addClass('avter')
-      }, 0)
-      if (sessionStorage.getItem('Path') === '/s/s12yhpjgl') {
-        that.$('#public_nav_three_level').text('  > 评价管理')
-      } else if (sessionStorage.getItem('Path') === '/s/s22czdd') {
-        that.$('#public_nav_three_level').text('  > 订单操作')
-      } else if (sessionStorage.getItem('Path') === '/s/s32thhcz') {
-        that.$('#public_nav_three_level').text('  > 退换货操作')
-      } else if (sessionStorage.getItem('Path') === '/s/s42zdmx') {
-        that.$('#public_nav_three_level').text('  > 账单明细')
-      } else if (sessionStorage.getItem('Path') === '/s/s23dyfhd') {
-        that.$('#public_nav_three_level').text('  > 打印发货单')
-      }
+      // that.$('.right_nav_content').text(sessionStorage.getItem('active_path'))
+      // setTimeout(function () {
+      //   that.life = 'done'
+      //   let query = window.location.href.split('/')
+      //   console.log('地址', query)
+      //   query = '/' + query[query.length - 2] + '/' + query[query.length - 1]
+      //   let target = `[path='${query}']`
+      //   console.log('target', target)
+      //   if (target === `[path='/s/s22czdd']`) {
+      //     target = `[path='/s/s21ddgl']`
+      //   } else if (target === `[path='/s/s32thhcz']`) {
+      //     target = `[path='/s/s31thhgl']`
+      //   } else if (target === `[path='/s/s23dyfhd']`) {
+      //     target = `[path='/s/s21ddgl']`
+      //   }
+      //   that.$(target).parent().slideDown(400)
+      //   // 设置左边导航栏的目标样式
+      //   Array.from(document.querySelectorAll('[path]')).map(function (x) {
+      //     that.$(x).removeClass('avter')
+      //   })
+      //   that.$(target).addClass('avter')
+      // }, 0)
+      // if (sessionStorage.getItem('Path') === '/s/s12yhpjgl') {
+      //   that.$('#public_nav_three_level').text('  > 评价管理')
+      // } else if (sessionStorage.getItem('Path') === '/s/s22czdd') {
+      //   that.$('#public_nav_three_level').text('  > 订单操作')
+      // } else if (sessionStorage.getItem('Path') === '/s/s32thhcz') {
+      //   that.$('#public_nav_three_level').text('  > 退换货操作')
+      // } else if (sessionStorage.getItem('Path') === '/s/s42zdmx') {
+      //   that.$('#public_nav_three_level').text('  > 账单明细')
+      // } else if (sessionStorage.getItem('Path') === '/s/s23dyfhd') {
+      //   that.$('#public_nav_three_level').text('  > 打印发货单')
+      // }
     },
     beforeCreate () {
-      document.title = '一拍即获-供应商平台'
+      document.title = '一拍即获-商家平台'
       document.querySelector('#favicon').href = '/static/favicon_s.ico'
-        
+
     },
     watch: {
       '$route' (to, from) {
@@ -244,6 +244,9 @@
         //   this.$(x).removeClass('avter')
         // })
         // this.$('[path="' + to.name + '"]').addClass('avter')
+        this.$('.content_s').removeClass('avter')
+        this.$('[path="' + to.path + '"]').addClass('avter')
+        this.$('[path="' + to.path + '"]').parent(".content_container").css('display','block')
         if(to.meta.title==''){
           this.$('.right_nav_content').text('')
         }else{
@@ -282,6 +285,35 @@ body {
     }
   }
   div.icon:hover div.tips{display:block;}
+  .content{
+    width: 100%;
+    min-height: 500px;
+    padding:15px;
+    background-color: #fff;
+    .searcWrap{width:100%;height:auto;position:relative;}
+  }
+  .clear{
+    clear: both;
+    overflow: hidden;
+  }
+  .ellipsis{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+  }
+  .ellipsis2{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  a.ellipsis2{
+    color:#5a5e66;
+  }
+  a.ellipsis2:hover{ text-decoration:none;}
+  .fl{float:left;}
+  .fr{float:right;}
+  .width190{width:190px;}
 * {
   margin: 0;
   padding: 0;
