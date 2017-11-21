@@ -70,7 +70,7 @@
           <template slot-scope="scope"><span >{{date_format(new Date(scope.row.updatedTime), 'yyyy-MM-dd hh:mm:ss')  }}</span></template>
         </el-table-column>
       </el-table>
-      <div class="block" style="margin: 20px;float: right">
+      <div class="block" style="margin: 20px;float: left">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -89,7 +89,7 @@
     name: '',
     data () {
       return {
-        pageRows:5,
+        pageRows:10,
         currentPage: 1,
         totalCount:0,
         expectations:[{
