@@ -48,7 +48,7 @@
           label="业务类型"
           width="300"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{scope.row.businessType==1?'销售分成':scope.row.businessType==2?'活动分摊':scope.row.businessType==3?'提现':scope.row.businessType==4?'分成退款':scope.row.businessType==5?'分摊退款':'-'}}</span></template>
+          <template slot-scope="scope"><span>{{scope.row.businessType==1?'销售入账':scope.row.businessType==2?'活动分摊':scope.row.businessType==3?'服务费':scope.row.businessType==4?'提现':scope.row.businessType==5?'分摊退款':scope.row.businessType==6?'服务费退款':scope.row.businessType==7?'销售退款':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="收入/元"
