@@ -1,25 +1,20 @@
 <template>
-  <div role="tabpanel" class="tab-pane fade in active"  aria-labelledby="home-tab" style="margin-top: 20px;width: 100%;margin-top: 130px;margin-left: 20px;">
-    <div class="goods_search" style="width: 100%; height: 40px;">
-      <div  style="float: left">
-        结算状态:
-        <el-select v-model="search_params.SettleStatus" placeholder="请选择结算状态">
-          <el-option v-for="item in expectations" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-      </div><!-- 售后期望-->
-      <div class="ops_time" style="float:left;width: 540px;">申请时间:
-        <el-date-picker  v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
-        </el-date-picker>
-        -
-        <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
-        </el-date-picker>
-      </div><!--时间-->
-      <div class="search" style="width: 350px;float: left">
-        <el-input placeholder="输入结算号 / 订货号 " v-model="search_params.condition" class="input-with-select">
-          <el-button slot="append" icon="el-icon-search" @click.native="orderStore()"></el-button>
-        </el-input>
-      </div>
+  <div class="content clear">
+    <div class="searcWrap">
+      <el-select v-model="search_params.SettleStatus" placeholder="结算状态">
+        <el-option v-for="item in expectations" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+      <el-date-picker
+        v-model="time"
+        type="daterange"
+        range-separator="-"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期" value-format="yyyy-MM-dd"
+        @change="timeCheck">
+      </el-date-picker>
+      <el-input v-model="search_params.condition" placeholder="输入结算号/订货号" title="输入结算号/订货号"></el-input>
+      <el-button type="primary" size="medium" @click="orderStore()">搜索</el-button>
     </div>
     <div class="order_tab_list" style="margin-top: 20px;">
       <el-table
@@ -28,52 +23,43 @@
         tooltip-effect="dark"
         style="width: 100%">
         <el-table-column
-          width="20">
-        </el-table-column>
-        <el-table-column
           label="结算号"
-          width="300">
+          width="260">
           <template slot-scope="scope"><span >{{scope.row.settleId}}</span></template>
         </el-table-column>
         <el-table-column
           label="订货号"
-          width="350"
+          width="240"
           show-overflow-tooltip>
           <template slot-scope="scope"><span><!--{{scope.row.orderType==0?'换货':scope.row.orderType==1?'退货':scope.row.orderType==2?'仅退款':'-'}}-->{{scope.row.dealerOrderId}}</span></template>
         </el-table-column>
         <el-table-column
           label="订货金额/元"
-          width="150"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{(scope.row.goodsTotalAmount/100).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column
           label="售后金额/元"
-          width="150"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{(scope.row.afterSellAmount/100).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column
           label="服务费/元"
-          width="150"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{scope.row.serviceTotalCharge == undefined ? '-':(scope.row.serviceTotalCharge/100).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column
           label="活动分摊/元"
-          width="150"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{scope.row.activityTotalAmount == undefined ? '-':(scope.row.activityTotalAmount/100).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column
           label="结算总额/元"
-          width="150"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{scope.row.settleTotalAmount == undefined ? '-':(scope.row.settleTotalAmount/100).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column
           label="结算状态"
-          width="150"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{scope.row.settleStatus==1?'未结算':scope.row.settleStatus == 2 ?'已结算':'-'}}</span></template>
         </el-table-column>
@@ -84,7 +70,7 @@
           <template slot-scope="scope"><span >{{date_format(new Date(scope.row.updatedTime), 'yyyy-MM-dd hh:mm:ss')  }}</span></template>
         </el-table-column>
       </el-table>
-      <div class="block" style="margin: 20px;float: right">
+      <div class="block" style="margin: 20px;float: left">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -103,12 +89,12 @@
     name: '',
     data () {
       return {
-        pageRows:5,
+        pageRows:10,
         currentPage: 1,
         totalCount:0,
         expectations:[{
           value: '',
-          label: '全部'
+          label: '结算状态'
         }, {
           value: '1',
           label: '未结算'
@@ -127,11 +113,22 @@
 //          label: '无媒体信息'
 //        }],
         // 搜索参数
-        search_params: { dealerOrderId: '',condition: '', startTime: '', endTime: '',SettleStatus:'' }
-        ,orderStoreData:[]
+        search_params: { dealerOrderId: '', condition: '', startTime: '', endTime: '', SettleStatus: '' },
+        orderStoreData: [],
+        time: ''
       }
     },
     methods: {
+      timeCheck () {
+        let that = this
+        if (that.time != null) {
+          that.search_params.startTime = that.time[0]
+          that.search_params.endTime = that.time[1]
+        } else {
+          that.search_params.startTime = ''
+          that.search_params.endTime = ''
+        }
+      },
       // 获取全部订单信息
       orderStore () {
         let that = this

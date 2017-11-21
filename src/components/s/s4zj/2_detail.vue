@@ -36,17 +36,17 @@
         <el-table-column
           label="业务类型"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{scope.row.businessType==1?'销售分成':scope.row.businessType==2?'活动分摊':scope.row.businessType==3?'提现':scope.row.businessType==4?'分成退款':scope.row.businessType==5?'分摊退款':'-'}}</span></template>
+          <template slot-scope="scope"><span>{{scope.row.businessType==1?'销售入账':scope.row.businessType==2?'活动分摊':scope.row.businessType==3?'服务费':scope.row.businessType==4?'提现':scope.row.businessType==5?'分摊退款':scope.row.businessType==6?'服务费退款':scope.row.businessType==7?'销售退款':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="收入/元"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>+{{(scope.row.amount/100 > 0?(scope.row.amount)/100:0).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span>+{{scope.row.inoutType == 1 ?(scope.row.amount/100).toFixed(2):0}}</span></template>
         </el-table-column>
         <el-table-column
           label="支出/元"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{(scope.row.amount/100 < 0?(scope.row.amount)/100:0).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span v-if="scope.row.amount>=0">-{{scope.row.inoutType == 2 ?(scope.row.amount/100).toFixed(2):0}}</span> <span v-if="scope.row.amount <0">{{scope.row.inoutType == 2 ?(scope.row.amount/100).toFixed(2):0}}</span></template>
         </el-table-column>
         <!--<el-table-column
           label="商家信息"

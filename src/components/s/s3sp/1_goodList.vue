@@ -112,7 +112,7 @@
                 show-overflow-tooltip>
                 <template slot-scope="scope"><span >{{scope.row.goodsStatus==1?'仓库':scope.row.goodsStatus==2?'出售中':scope.row.goodsStatus==3?'已售罄':''}}</span></template>
               </el-table-column>
-              
+
             </el-table>
             <div class="block fl" style="margin: 20px;">
                 <el-pagination
@@ -211,7 +211,10 @@
               <el-table-column
                 label="状态"
                 show-overflow-tooltip>
-                <template slot-scope="scope"><span >{{scope.row.approveStatus==1?'审核中':scope.row.approveStatus==2?'审核不通过':''}}</span></template>
+                <template slot-scope="scope"><span >{{scope.row.approveStatus==1?'审核中':scope.row.approveStatus==2?'审核不通过':''}}
+                <el-tooltip class="item" effect="dark" :content="scope.row.rejectReason" placement="bottom-start">
+                    <i v-if="scope.row.approveStatus==2" class="ico_msg" ></i>
+                  </el-tooltip></span></template>
               </el-table-column>
             </el-table>
             <div class="block fl" style="margin: 20px;">
