@@ -461,7 +461,7 @@
             sku_list: JSON.stringify(that.chooseSkuList)
           }
           that.$.ajax({
-            url: that.base + 'm2c.market/web/fullcut/modify',
+            url: that.base + 'm2c.market/fullcut/modify',
 //            url: 'http://localhost:8080/m2c.market/fullcut/modify',
             contentType: 'application/json', // 必须有
             type: 'post',

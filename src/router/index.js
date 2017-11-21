@@ -121,7 +121,8 @@ export default new Router({
         {
           path: 'fullCutDetail',
           name: 'fullCutDetail',
-          component: fullCutDetail
+          component: fullCutDetail,
+          meta: {title: '满减详情'}
         },
         {
           path: 'record',
@@ -138,37 +139,38 @@ export default new Router({
         {
           path: 'cash',
           name: 'cash',
-          component: cash
+          component: cash,
+          meta: {title: '提现申请'}
         },
         {
           path: 'marketing',
           name: 'marketing',
           component: marketing,
-          meta:{title:'工具'}
+          meta: {title: '工具'}
         },
         {
           path: 'fullCut',
           name: 'fullCut',
           component: fullCut,
-          meta:{title:'满减'}
+          meta: {title: '满减新增'}
         },
         {
           path: 'fullCutModify',
           name: 'fullCutModify',
           component: fullCutModify,
-          meta:{title:'满减'}
+          meta: {title: '满减修改'}
         },
         {
           path: 'data',
           name: 'data',
           component: data,
-          meta: {title:'数据'}
+          meta: {title: '数据'}
         },
         {
           path: 'information',
           name: 'information',
           component: information,
-          meta: {title:'店铺信息'}
+          meta: {title: '店铺信息'}
         },
         {
           path: 'administer',
