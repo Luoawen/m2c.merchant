@@ -17,8 +17,8 @@
         v-model="time"
         type="daterange"
         range-separator="-"
-        start-placeholder="申请开始日期"
-        end-placeholder="申请结束日期" value-format="yyyy-MM-dd"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期" value-format="yyyy-MM-dd"
         @change="timeCheck">
       </el-date-picker>
       <el-input v-model="search_params.condition" placeholder="输入商品名称/订货号/售后号" title="输入商品名称/订货号/售后号"></el-input>
@@ -98,7 +98,7 @@
     name: '',
     data () {
       return {
-        pageRows:5,
+        pageRows:10,
         currentPage: 1,
         totalCount:0,
         expectations:[{
@@ -178,12 +178,13 @@
       //时间赋值
       timeCheck () {
         let that = this
-        if(that.time != ''){
+        if(that.time != null){
           that.search_params.startTime = that.time[0]
           that.search_params.endTime = that.time[1]
+        }else{
+          that.search_params.startTime = ''
+          that.search_params.endTime = ''
         }
-        console.log(that.search_params.startTime)
-        console.log(that.search_params.endTime)
       },
       // 获取全部订单信息
       orderStore () {

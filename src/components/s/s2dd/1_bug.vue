@@ -21,8 +21,8 @@
         v-model="time"
         type="daterange"
         range-separator="-"
-        start-placeholder="下单开始日期"
-        end-placeholder="下单结束日期" value-format="yyyy-MM-dd"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期" value-format="yyyy-MM-dd"
         @change="timeCheck">
       </el-date-picker>
       <el-input v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码" title="输入商品名称/订单号/支付单号/收货人号码"></el-input>
@@ -292,7 +292,7 @@
         TowAgreeshow: false,
         resultdata: [],
         selDealerOrder:[],
-        pageSize: 5,
+        pageSize: 10,
         pageIndex: 1,
         totalCount: 0,
         dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,//'JXS42ACB6D352E9417FBBCF03908219AAF1',
@@ -309,12 +309,13 @@
       //时间赋值
       timeCheck () {
         let that = this
-        if(that.time != ''){
+        if(that.time != null){
           that.searchParams.startTime = that.time[0]
           that.searchParams.endTime = that.time[1]
+        }else{
+          that.searchParams.startTime = ''
+          that.searchParams.endTime = ''
         }
-        console.log(that.searchParams.startTime)
-        console.log(that.searchParams.endTime)
       },
     // 获取全部订单信息
       agreeShow (afterNo, _st) {
