@@ -745,6 +745,7 @@
             expressWay: that.expressWay,
             expressCode: that.expressCode,
             dealerOrderId: that.dealerOrderId
+            ,userId: JSON.parse(sessionStorage.getItem('mUser')).userId
           },
           success: function (result) {
             console.log(result);
@@ -827,6 +828,7 @@
             street: that.streetAddr,
             dealerOrderId: that.dealerOrderId,
             freights: freightStr
+            ,userId: JSON.parse(sessionStorage.getItem('mUser')).userId
           },
           success: function (result) {
             //console.log(result)
