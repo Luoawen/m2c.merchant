@@ -69,7 +69,7 @@
         </el-col>
         <el-col :span="11">
           <el-form-item label="商品条形码">
-            <el-input v-model="data.goodsBarCode" placeholder="请输入内容"></el-input>
+            <el-input v-model="data.goodsBarCode" placeholder="请输入内容" maxlength = 30></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -129,7 +129,7 @@
                 <td>
                   <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkMarketPrice(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
                 </td>
-                <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkSupplyPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs)"></el-input></td>
+                <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkSupplyPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs,good.photographPrice)"></el-input></td>
                 <td v-if="countMode==2">{{serviceRate}}</td>
                 <td>
                   <el-input v-model="good.goodsCode" placeholder="请输入内容" maxlength = 30 @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)"></el-input>
@@ -149,7 +149,7 @@
         <i v-if="sukShow1" style="color:red; font-style:normal;">商品重量不能为空且为大于0的数字<br/></i>
         <i v-if="sukShow2" style="color:red; font-style:normal;">商品拍获价不能为空且为大于0的数字，不能超过999999.99元<br/></i>
         <i v-if="sukShow3" style="color:red; font-style:normal;">商品市场价为大于0的数字，不能超过999999.99元<br/></i>
-        <i v-if="sukShow4" style="color:red; font-style:normal;">商品供货价不能为空且大于0的数字，不能超过999999.99元<br/></i>
+        <i v-if="sukShow4" style="color:red; font-style:normal;">商品供货价不能为空且为大于0的数字，不能大于拍获价，不能超过999999.99元<br/></i>
         <i v-if="sukShow5" style="color:red; font-style:normal;">商品编码为1-30字符的字母或数字且不能重复</i>
       </div>
 
@@ -235,7 +235,7 @@
               <td>
                 <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkMarketPrice(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
               </td>
-              <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkSupplyPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs)"></el-input></td>
+              <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkSupplyPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs,good.photographPrice)"></el-input></td>
               <td v-if="countMode==2">{{serviceRate}}</td>
               <td>
                 <el-input v-model="good.goodsCode" placeholder="请输入内容" maxlength = 30 @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)"></el-input>
@@ -272,7 +272,7 @@
         <i v-if="sukShow1" style="color:red; font-style:normal;">商品重量不能为空且为大于0的数字<br/></i>
         <i v-if="sukShow2" style="color:red; font-style:normal;">商品拍获价不能为空且为大于0的数字，不能超过999999.99元<br/></i>
         <i v-if="sukShow3" style="color:red; font-style:normal;">商品市场价为大于0的数字，不能超过999999.99元<br/></i>
-        <i v-if="sukShow4" style="color:red; font-style:normal;">商品供货价不能为空且大于0的数字，不能超过999999.99元<br/></i>
+        <i v-if="sukShow4" style="color:red; font-style:normal;">商品供货价不能为空且为大于0的数字，不能大于拍获价，不能超过999999.99元<br/></i>
         <i v-if="sukShow5" style="color:red; font-style:normal;">商品编码为1-30字符的字母或数字且不能重复</i>
       </div>
       <el-row>
@@ -548,10 +548,10 @@
           list[index][arr] = val
         }, 0)
       },
-      checkSupplyPrice (val, index, arr, list) {
+      checkSupplyPrice (val, index, arr, list, val1) {
         setTimeout(() => {
           if (val && $.isNumeric(val) && val > 0) {
-            if (val > 999999.99) {
+            if (val > 999999.99 || val > val1) {
               this.sukShow4 = true
             } else {
               val = Number(val).toFixed(2)
@@ -563,6 +563,68 @@
           }
           list[index][arr] = val
         }, 0)
+      },
+      checkGoodsCodeSubmit (val) {  // 校验商品编码
+        var re = /^[0-9a-zA-Z]{1,30}$/
+        if (val != '' && !re.test(val)) {
+          this.sukShow5 = true
+        } else {
+          this.sukShow5 = false
+        }
+      },
+      checkInventorySubmit (val) {  // 校验库存
+        var re = /^[0-9]\d*$/
+        if (!re.test(val)) {
+          this.sukShow = true
+        } else {
+          this.sukShow = false
+        }
+      },
+      checkWeightSubmit (val) { // 校验重量
+        if (val && $.isNumeric(val) && val > 0) {
+          val = Number(val).toFixed(2)
+          this.sukShow1 = false
+        } else {
+          val = ''
+          this.sukShow1 = true
+        }
+      },
+      checkPhotographPriceSubmit (val) {
+        if (val && $.isNumeric(val) && val > 0) {
+          if (val > 999999.99) {
+            this.sukShow2 = true
+          } else {
+            this.sukShow2 = false
+          }
+        } else {
+          this.sukShow2 = true
+        }
+      },
+      checkMarketPriceSubmit (val) {
+        if (val && $.isNumeric(val) && val >= 0) {
+          if (val > 999999.99 || val == 0) {
+            this.sukShow3 = true
+          } else {
+            this.sukShow3 = false
+          }
+        } else {
+          if (val == '') {
+            this.sukShow3 = false
+          } else {
+            this.sukShow3 = true
+          }
+        }
+      },
+      checkSupplyPriceSubmit (val) {
+        if (val && $.isNumeric(val) && val > 0) {
+          if (val > 999999.99) {
+            this.sukShow4 = true
+          } else {
+            this.sukShow4 = false
+          }
+        } else {
+          this.sukShow4 = true
+        }
       },
       stantardIdChange(item,index){
         let that=this
@@ -618,21 +680,33 @@
             //   console.log(that.goodsMainImages)
             //   return
             // }
-            for(var k=0;k<that.goodsSKUs.length;k++){
-              if(that.goodsSKUs[k].availableNum===''||that.goodsSKUs[k].availableNum==undefined||that.goodsSKUs[k].weight===''||that.goodsSKUs[k].weight==undefined||that.goodsSKUs[k].photographPrice===''||that.goodsSKUs[k].photographPrice==undefined){
-                that.sukShow = true
-                return
-              }else{
-                that.sukShow = false
-                that.goodsSKUs[k].marketPrice=parseFloat(that.goodsSKUs[k].marketPrice*100)
-                that.goodsSKUs[k].photographPrice=parseFloat(that.goodsSKUs[k].photographPrice*100)
-                that.goodsSKUs[k].showStatus=that.goodsSKUs[k].show
-                if(that.countMode==1){
-                  that.goodsSKUs[k].supplyPrice=parseFloat(that.goodsSKUs[k].supplyPrice*100)
+            for (var k = 0; k < that.goodsSKUs.length; k++) {
+              if (that.goodsSKUs[k].availableNum == undefined) {
+                that.checkInventorySubmit(that.goodsSKUs[k].availableNum)
+                if (that.sukShow == true) {
+                  return
                 }
               }
+              if (that.goodsSKUs[k].weight == undefined) {
+                that.checkWeightSubmit(that.goodsSKUs[k].weight)
+                if (that.sukShow1 == true) {
+                  return
+                }
+              }
+              if (that.goodsSKUs[k].photographPrice == undefined) {
+                that.checkPhotographPriceSubmit(that.goodsSKUs[k].photographPrice)
+                if (that.sukShow2 == true) {
+                  return
+                }
+              }
+              that.goodsSKUs[k].marketPrice = parseFloat(that.goodsSKUs[k].marketPrice * 100)
+              that.goodsSKUs[k].photographPrice= parseFloat(that.goodsSKUs[k].photographPrice * 100)
+              that.goodsSKUs[k].showStatus = that.goodsSKUs[k].show
+              if (that.countMode == 1) {
+                that.goodsSKUs[k].supplyPrice = parseFloat(that.goodsSKUs[k].supplyPrice * 100)
+              }
             }
-            let a={
+            let a = {
               token: sessionStorage.getItem('mToken'),
               goodsId: that.goodsId,
               dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
