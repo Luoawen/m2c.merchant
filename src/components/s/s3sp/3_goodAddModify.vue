@@ -1333,6 +1333,7 @@
     background-color: #f9fafc;
   }
   .tabPane table{width:100%; line-height:60px; text-align: center;margin-top:20px;margin-bottom:20px;}
+  .tabPane table .el-input{width:auto;}
   .tabPane table th{
     background:#DFE9F6;text-align: center;
   }
@@ -1361,7 +1362,7 @@
 </style>
 <style>
 .el-upload--picture-card{overflow: hidden;}
- table .el-input__inner{width:100px;}
+ table .el-input__inner{width:118px;}
  #dragImg ul{width:auto;float:left;height:100px;display:block;margin-bottom:20px;}
  .el-upload-list--picture .el-upload-list__item{float:left;width:100px;height:100px;padding:0;margin-top:0;box-sizing:initial;border:none;border-right:20px solid #fff; border-radius:0;}
  .el-upload-list--picture .el-upload-list__item-thumbnail{width:100px;height:100px;float:left;position:static;margin-left:0;border-radius:4px; border:1px solid #c0ccda}
