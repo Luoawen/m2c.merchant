@@ -68,8 +68,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="11">
-          <el-form-item label="商品条形码">
-            <el-input v-model="data.goodsBarCode" placeholder="请输入内容" maxlength = 30></el-input>
+          <el-form-item label="商品条形码"  prop="goodsBarCode">
+            <el-input v-model="data.goodsBarCode" placeholder="请输入内容"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -341,6 +341,16 @@
             }
           }, 1000);
         };
+      var checkGoodsBarCode = (rule, value, callback) => {
+        var reg = /^[0-9a-zA-Z]{1,30}$/
+        setTimeout(() => {
+          if (value != '' && !reg.test(value)) {
+            callback(new Error('只能为1到30位的数字或字母'))
+          } else {
+            callback();
+          }
+        }, 1000);
+      };
       return {
         ruleForm: {
           goodsName: '',
@@ -349,7 +359,8 @@
           goodsBrandId: '',
           goodsUnitId: '',
           goodsMinQuantity: '',
-          goodsPostageId: ''
+          goodsPostageId: '',
+          goodsBarCode: ''
         },
         rules: {
           goodsClassifyId: [
@@ -374,7 +385,9 @@
           goodsPostageId: [
             { required: true, message: '请选择运费模板', trigger: 'change' }
           ],
-
+          goodsBarCode: [
+            {required: false, validator: checkGoodsBarCode, trigger: 'blur' }
+          ]
         },
         standardIdShow: false, // 规格不能为空
         sukShow: false, // 商品库存不能为空且为正整数
@@ -1321,6 +1334,7 @@
     background-color: #f9fafc;
   }
   .tabPane table{width:100%; line-height:60px; text-align: center;margin-top:20px;margin-bottom:20px;}
+  .tabPane table .el-input{width:auto;}
   .tabPane table th{
     background:#DFE9F6;text-align: center;
   }
@@ -1349,7 +1363,7 @@
 </style>
 <style>
 .el-upload--picture-card{overflow: hidden;}
- table .el-input__inner{width:100px;}
+ table .el-input__inner{width:118px;}
  #dragImg ul{width:auto;float:left;height:100px;display:block;margin-bottom:20px;}
  .el-upload-list--picture .el-upload-list__item{float:left;width:100px;height:100px;padding:0;margin-top:0;box-sizing:initial;border:none;border-right:20px solid #fff; border-radius:0;}
  .el-upload-list--picture .el-upload-list__item-thumbnail{width:100px;height:100px;float:left;position:static;margin-left:0;border-radius:4px; border:1px solid #c0ccda}
