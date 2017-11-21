@@ -83,7 +83,7 @@
         life: 'beforeCreate',
         sign_out_tip: { isShow: false },
         three_level: '',
-        dealerName: JSON.parse(sessionStorage.getItem('mUser')).username
+        dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName
       }
     },
     methods: {
@@ -234,7 +234,7 @@
     beforeCreate () {
       document.title = '一拍即获-供应商平台'
       document.querySelector('#favicon').href = '/static/favicon_s.ico'
-        
+
     },
     watch: {
       '$route' (to, from) {
