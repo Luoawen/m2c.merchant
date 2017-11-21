@@ -4,7 +4,7 @@
       <el-tab-pane label="商品库" name="first">
         <div role="tabpanel" class="tab-pane fade in active" aria-labelledby="home-tab">
           <div class="searcWrap">
-            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="selectedOptions1" change-on-select placeholder="商品分类":props="goodsClassifyProps"></el-cascader>
+            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="selectedOptions1" change-on-select placeholder="请选择商品分类":props="goodsClassifyProps"></el-cascader>
             <el-select v-model="search_goods_params.goodsStatus" placeholder="请选择商品状态">
               <el-option v-for="item in goodsStatus" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
@@ -50,7 +50,6 @@
               </el-table-column>
               <el-table-column
                 label="操作"
-                width="120"
                 show-overflow-tooltip>
                 <template slot-scope="scope">
                   <el-col :span="12">
@@ -130,22 +129,30 @@
       </el-tab-pane>
       <el-tab-pane label="商品审核" name="second">
         <div role="tabpanel" class="tab-pane fade in active"  aria-labelledby="home-tab">
-          <div class="searchWrap">
-            <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="selectedOptions2" change-on-select placeholder="商品分类":props="goodsClassifyProps"></el-cascader><!--商品分类-->
-            <el-select v-model="search_goodsCheck_params.approveStatus" placeholder="请选择商品状态">
-              <el-option v-for="item in approveStatus" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select><!--商品状态-->
-            <el-date-picker
-              v-model="time"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="选择开始日期"
-              end-placeholder="选择结束日期" value-format="yyyy-MM-dd"
-              @change="timeCheck">
-            </el-date-picker><!--时间-->
-            <el-input v-model="search_goodsCheck_params.condition" placeholder="输入商品名称/编码/条形码/品牌" title="输入商品名称/编码/条形码/品牌"></el-input>
-            <el-button type="primary" size="medium" @click="goodsCheckStoreSearch()">搜索</el-button>
+          <div class="goods_search" style="width: 100%; height: 40px;">
+            <div  style="float: left">
+              商品分类:<el-cascader  :options="goodsClassifys" v-model="selectedOptions2"  change-on-select :props="goodsClassifyProps"></el-cascader>
+            </div><!--商品分类-->
+            <div style="float: left">
+              商品状态:
+             <el-select v-model="search_goodsCheck_params.approveStatus" placeholder="请选择商品状态">
+                <el-option v-for="item in approveStatus" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+             </el-select>
+            </div><!--商品状态-->
+            <div class="ops_time" style="float:left;width: 540px;">时间选择:
+             <el-date-picker  v-model="search_goodsCheck_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+              </el-date-picker>
+              -
+              <el-date-picker v-model="search_goodsCheck_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </div><!--时间-->
+            <div class="search" style="width: 400px;float: left">
+             <el-input placeholder="输入商品名称 / 编码 / 条形码 / 品牌" v-model="search_goodsCheck_params.condition" class="input-with-select">
+                <el-button slot="append" icon="el-icon-search" @click.native="goodsCheckStoreSearch()"></el-button>
+              </el-input>
+            </div>
+            <div class="advanced" style="width: 50px;float: left;margin-left: 30px"><!--<el-button round>批量操作</el-button>--></div>
           </div>
           <div class="good_info" style="margin-top: 20px;">
             <el-table
@@ -153,28 +160,9 @@
               :data="goodsCheckStoreData"
               tooltip-effect="dark"
               style="width: 100%">
-              <!-- <el-table-column
+              <el-table-column
                 type="selection"
                 width="55">
-              </el-table-column> -->
-              <el-table-column
-                label="操作"
-                width="120"
-                show-overflow-tooltip>
-                <template slot-scope="scope">
-                  <el-col :span="12">
-                    <el-dropdown trigger="click">
-                      <span class="el-dropdown-link">
-                        操作<i class="el-icon-arrow-down el-icon--right"></i>
-                      </span>
-                      <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','b')">详情</el-dropdown-item>
-                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_edit','b')">编辑</el-dropdown-item>
-                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_delete','b')">删除</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </el-dropdown>
-                  </el-col>
-                </template>
               </el-table-column>
               <el-table-column
                 label="商品信息"
@@ -190,11 +178,13 @@
               </el-table-column>
               <el-table-column
                 prop="goodsClassify"
-                label="分类">
+                label="分类"
+                width="200">
               </el-table-column>
               <el-table-column
                 prop="brandName"
                 label="品牌"
+                width="200"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -213,6 +203,24 @@
                 show-overflow-tooltip>
                 <template slot-scope="scope"><span >{{scope.row.approveStatus==1?'审核中':scope.row.approveStatus==2?'审核不通过':''}}</span></template>
               </el-table-column>
+              <el-table-column
+                label="操作"
+                show-overflow-tooltip>
+                <template slot-scope="scope">
+                  <el-col :span="12">
+                    <el-dropdown trigger="click">
+                      <span class="el-dropdown-link">
+                        操作<i class="el-icon-arrow-down el-icon--right"></i>
+                      </span>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','b')">详情</el-dropdown-item>
+                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_edit','b')">编辑</el-dropdown-item>
+                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_delete','b')">删除</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </el-col>
+                </template>
+              </el-table-column>
             </el-table>
             <div class="block fl" style="margin: 20px;">
               <el-pagination
@@ -230,15 +238,15 @@
 
       </el-tab-pane>
       <el-tab-pane label="已删商品" name="delete">
-        <div class="searchWrap">
-          <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="selectedOptions2" change-on-select placeholder="商品分类":props="goodsClassifyProps"></el-cascader><!--商品分类-->
-          <el-input v-model="search_goodsCheck_params.condition" placeholder="输入商品名称/编码/条形码/品牌" title="输入商品名称/编码/条形码/品牌"></el-input>
-          <el-button type="primary" size="medium" @click="goodsDeleteStore()">搜索</el-button>
-          <!-- <div class="search" style="width: 400px;float: left">
+        <div class="goods_search" style="width: 100%; height: 40px;">
+          <div  style="float: left">
+            商品分类:<el-cascader  :options="goodsClassifys" v-model="selectedOptions2"  change-on-select :props="goodsClassifyProps"></el-cascader>
+          </div><!--商品分类-->
+          <div class="search" style="width: 400px;float: left">
             <el-input placeholder="输入商品名称 / 编码 / 条形码 / 品牌" v-model="search_goodsCheck_params.condition" class="input-with-select">
               <el-button slot="append" icon="el-icon-search" @click.native="goodsDeleteStore()"></el-button>
             </el-input>
-          </div> -->
+          </div>
         </div>
         <el-table
           ref="multipleTable"
@@ -246,41 +254,23 @@
           tooltip-effect="dark"
           style="width: 100%">
           <el-table-column
-            label="操作"
-            width="120"
-            show-overflow-tooltip>
-            <template slot-scope="scope">
-              <el-col :span="12">
-                <el-dropdown trigger="click">
-                      <span class="el-dropdown-link">
-                        操作<i class="el-icon-arrow-down el-icon--right"></i>
-                      </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','a')">详情</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </el-col>
-            </template>
+            type="selection"
+            width="55">
           </el-table-column>
           <el-table-column
             label="商品信息"
-            width="300">
-            <template slot-scope="scope"><img :src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;display:inline-block;float:left;"/>
-              <a class="ellipsis2" :title="scope.row.goodsName">
-                {{scope.row.goodsName}}
-                <!-- <div class="goodsName">
-                  {{scope.row.goodsName}}
-                </div> -->
-              </a>
-            </template>
+            width="200">
+            <template slot-scope="scope"><img v-bind:src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsName}}</span></template>
           </el-table-column>
           <el-table-column
             prop="goodsClassify"
-            label="分类">
+            label="分类"
+            width="200">
           </el-table-column>
           <el-table-column
             prop="brandName"
             label="品牌"
+            width="200"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
@@ -298,6 +288,22 @@
             prop="sellNum"
             label="销量"
             show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-col :span="12">
+                <el-dropdown trigger="click">
+                      <span class="el-dropdown-link">
+                        操作<i class="el-icon-arrow-down el-icon--right"></i>
+                      </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','a')">详情</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </el-col>
+            </template>
           </el-table-column>
         </el-table>
         <div class="block" style="margin:20px;float:left">
@@ -356,7 +362,7 @@
         goodsCheckStoreData:[],
         approveStatus:[{
           value: '',
-          label: '审核状态'
+          label: '全部'
         }, {
           value: '1',
           label: '审核中'
@@ -376,16 +382,11 @@
       timeCheck () {
         let that = this
         if(that.time != ''){
-          if(that.activeName == 'first'){
-            that.search_goods_params.startTime = that.time[0]
-            that.search_goods_params.endTime = that.time[1]
-          } else if(that.activeName == 'second'){
-            that.search_goodsCheck_params.startTime = that.time[0]
-            that.search_goodsCheck_params.endTime = that.time[1]
-          }else {
-            return false
-          }
+          that.search_goods_params.startTime = that.time[0]
+          that.search_goods_params.endTime = that.time[1]
         }
+        console.log(that.search_goods_params.startTime)
+        console.log(that.search_goods_params.endTime)
       },
       // 点击新增时校验店铺信息是否存在
       newGoods () {
