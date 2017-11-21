@@ -96,7 +96,7 @@
             label: '不通过'
           }, {
             value: '4',
-            label: '已转装'
+            label: '已转账'
           }, {
             value: '5',
             label: '作废'
