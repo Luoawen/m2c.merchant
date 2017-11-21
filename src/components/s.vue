@@ -163,6 +163,21 @@
         document.querySelector('#modal_tipLabel').innerHTML = title
         document.querySelector('#modal_tip_content').innerHTML = content
         that.$('#modal_tip').modal('show')
+      },
+      change(){
+        console.log(this.$route.path)
+        console.log(this.$route.meta.title)
+        let path = this.$route.path
+        this.$nextTick(()=>{
+          this.$('.content_s').removeClass('avter')
+          this.$('[path="' + this.$route.path + '"]').addClass('avter')
+          this.$('[path="' + this.$route.path + '"]').parent(".content_container").css('display','block')
+          if(this.$route.meta.title==''){
+            this.$('.right_nav_content').text('')
+          }else{
+            this.$('.right_nav_content').text(' > ' + this.$route.meta.title)
+          }
+        })
       }
     },
     mounted () {
@@ -231,28 +246,18 @@
       //   that.$('#public_nav_three_level').text('  > 打印发货单')
       // }
     },
+    created() {
+     // 组件创建完后获取数据，
+     // 此时 data 已经被 observed 了
+     this.change();
+    },
     beforeCreate () {
       document.title = '一拍即获-商家平台'
       document.querySelector('#favicon').href = '/static/favicon_s.ico'
         
     },
     watch: {
-      '$route' (to, from) {
-        // 对路由变化作出响应...
-        // console.log("变化",to.name)
-        // Array.from(document.querySelectorAll('[path]')).map(function (x) {
-        //   this.$(x).removeClass('avter')
-        // })
-        // this.$('[path="' + to.name + '"]').addClass('avter')
-        this.$('.content_s').removeClass('avter')
-        this.$('[path="' + to.path + '"]').addClass('avter')
-        this.$('[path="' + to.path + '"]').parent(".content_container").css('display','block')
-        if(to.meta.title==''){
-          this.$('.right_nav_content').text('')
-        }else{
-          this.$('.right_nav_content').text(' > ' + to.meta.title)
-        }
-      }
+      '$route':"change"
     }
   }
 </script>
@@ -290,6 +295,7 @@ body {
     min-height: 500px;
     padding:15px;
     background-color: #fff;
+    position: relative;
     .searcWrap{width:100%;height:auto;position:relative;}
   }
   .clear{
