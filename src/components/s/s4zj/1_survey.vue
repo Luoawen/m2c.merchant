@@ -62,7 +62,7 @@
         <tr>
           <td><strong>提现单号</strong></td>
           <td><strong>申请金额/元</strong></td>
-          <td><strong>体现状态</strong></td>
+          <td><strong>提现状态</strong></td>
           <td><strong>申请时间</strong></td>
         </tr>
         </thead>
