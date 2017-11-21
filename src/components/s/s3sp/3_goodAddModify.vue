@@ -75,7 +75,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="11">
-          <el-form-item label="关键词">
+          <el-form-item label="关键词"  prop="goodsKeyWord">
             <el-input v-model="data.goodsKeyWord" placeholder="请输入内容"></el-input>
           </el-form-item>
         </el-col>
@@ -86,7 +86,6 @@
             <el-checkbox v-for="(guarantee,index) in goodsGuaranteeList" :key="guarantee.guaranteeId" :label="guarantee.guaranteeId">{{guarantee.guaranteeDesc}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-        </el-col>
       </el-row>
     </el-form>
       <el-row>
