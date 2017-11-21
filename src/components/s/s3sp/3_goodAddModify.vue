@@ -75,7 +75,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="11">
-          <el-form-item label="关键词">
+          <el-form-item label="关键词"  prop="goodsKeyWord">
             <el-input v-model="data.goodsKeyWord" placeholder="请输入内容"></el-input>
           </el-form-item>
         </el-col>
@@ -86,7 +86,6 @@
             <el-checkbox v-for="(guarantee,index) in goodsGuaranteeList" :key="guarantee.guaranteeId" :label="guarantee.guaranteeId">{{guarantee.guaranteeDesc}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-        </el-col>
       </el-row>
     </el-form>
       <el-row>
@@ -349,7 +348,24 @@
           } else {
             callback();
           }
-        }, 1000);
+        }, 0);
+      };
+      var checkGoodsKeyWord = (rule, value, callback) => {
+        var reg = /^.{1,20}$/
+        setTimeout(() => {
+          if (value != '') {
+            var values = value.split(',')
+            for (var i = 0; i < values.length; i++) {
+              if (!reg.test(values[i])) {
+                callback(new Error('每个关键词1-20字符，每个关键词用逗号隔开'))
+              } else {
+                callback();
+              }
+            }
+          } else {
+            callback();
+          }
+        }, 0);
       };
       return {
         ruleForm: {
@@ -360,7 +376,8 @@
           goodsUnitId: '',
           goodsMinQuantity: '',
           goodsPostageId: '',
-          goodsBarCode: ''
+          goodsBarCode: '',
+          goodsKeyWord: ''
         },
         rules: {
           goodsClassifyId: [
@@ -380,13 +397,16 @@
             { required: true, message: '请选择计量单位', trigger: 'change' }
           ],
           goodsMinQuantity: [
-            {required: true, validator: checkGoodsMinQuantity, trigger: 'blur' }
+            { required: true, validator: checkGoodsMinQuantity, trigger: 'blur' }
           ],
           goodsPostageId: [
             { required: true, message: '请选择运费模板', trigger: 'change' }
           ],
           goodsBarCode: [
-            {required: false, validator: checkGoodsBarCode, trigger: 'blur' }
+            { required: false, validator: checkGoodsBarCode, trigger: 'blur' }
+          ],
+          goodsKeyWord: [
+            { required: false, validator: checkGoodsKeyWord, trigger: 'blur' }
           ]
         },
         standardIdShow: false, // 规格不能为空
@@ -1334,6 +1354,7 @@
     background-color: #f9fafc;
   }
   .tabPane table{width:100%; line-height:60px; text-align: center;margin-top:20px;margin-bottom:20px;}
+  .tabPane table .el-input{width:auto;}
   .tabPane table th{
     background:#DFE9F6;text-align: center;
   }
@@ -1362,7 +1383,7 @@
 </style>
 <style>
 .el-upload--picture-card{overflow: hidden;}
- table .el-input__inner{width:100px;}
+ table .el-input__inner{width:118px;}
  #dragImg ul{width:auto;float:left;height:100px;display:block;margin-bottom:20px;}
  .el-upload-list--picture .el-upload-list__item{float:left;width:100px;height:100px;padding:0;margin-top:0;box-sizing:initial;border:none;border-right:20px solid #fff; border-radius:0;}
  .el-upload-list--picture .el-upload-list__item-thumbnail{width:100px;height:100px;float:left;position:static;margin-left:0;border-radius:4px; border:1px solid #c0ccda}
