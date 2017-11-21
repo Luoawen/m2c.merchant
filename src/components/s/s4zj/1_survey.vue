@@ -1,5 +1,5 @@
 <template>
-  <div class="survey_contaner col-sm-11">
+  <div class="survey_contaner content clear">
     <div style="height: 10px"></div>
     <div style="font-size: 20px">&nbsp;&nbsp;<strong>我的资产</strong><a class="ruleShow" @click="ruleShow">结算规则说明</a></div>
     <div class="survey_c_top clear">
@@ -35,7 +35,7 @@
           <span>平台质保金（元）</span>
         </div>
         <div class="tit02 clear">
-          <span style="font-size: 30px">{{platePositisCache == undefined || '' ? '-' : (platePositisCache).toFixed(2)}}</span>
+          <span style="font-size: 30px">{{platePositisCache == undefined || '' ? '-' : platePositisCache}}</span>
         </div>
       </div>
       <div class="survey_c_tbox fl mr20">
@@ -57,26 +57,25 @@
     <div style="height: 20px"></div>
     <div style="height: 30px"><span style="font-size: 20px;">&nbsp;&nbsp;<strong>提现记录</strong></span></div>
     <div class="survey_c_cen clear">
-      <table  class="col-sm-12 surveytab">
+      <table class="col-sm-12 notetable">
         <thead>
-        <tr>
-          <td><strong>提现单号</strong></td>
-          <td><strong>申请金额/元</strong></td>
-          <td><strong>提现状态</strong></td>
-          <td><strong>申请时间</strong></td>
-        </tr>
+          <tr>
+            <td width="25%">提现单号</td>
+            <td width="20%">申请金额/元</td>
+            <td width="20%">提现状态</td>
+            <td width="25%">申请时间</td>
+          </tr>
         </thead>
-        <tbody v-for="item in contents">
-        <tr>
-          <td>{{item.withdrawalId}}</td>
-          <td>{{(item.amount/100).toFixed(2)}}</td>
-          <td>{{item.wdStatus == 0?'处理中':item.wdStatus == 1?'待审批':item.wdStatus == 2?'待转账':item.wdStatus == 3?'不通过':item.wdStatus == 4?'已转账':item.wdStatus == 5?'作废':'-'}}</td>
-          <td>{{date_format(new Date(item.createdTime), 'yyyy-MM-dd hh:mm:ss')  }}</td>
-        </tr>
+        <tbody>
+          <tr v-for="item in contents" class="content clear">
+            <td>{{item.withdrawalId}}</td>
+            <td>{{(item.amount/100).toFixed(2)}}</td>
+            <td>{{item.wdStatus == 0?'处理中':item.wdStatus == 1?'待审批':item.wdStatus == 2?'待转账':item.wdStatus == 3?'不通过':item.wdStatus == 4?'已转账':item.wdStatus == 5?'作废':'-'}}</td>
+            <td>{{date_format(new Date(item.createdTime), 'yyyy-MM-dd hh:mm:ss')  }}</td>
+          </tr>
         </tbody>
       </table>
     </div>
-
     <div class="block" style="margin: 20px;float: right">
       <el-pagination
         @size-change="handleSizeChange"
@@ -220,7 +219,7 @@
           },
           success: function (result) {
             if (result.status === 200){
-              that.platePositisCache = result.content
+              that.platePositisCache = result.content.toFixed(2)
             }
           }
         })
@@ -314,12 +313,7 @@
 
   }
   .survey_contaner{
-    margin: auto;
-    background: #FFFFFF;
-    margin-left: 30px;
-    margin-top: 20px;
-    padding: 0!important;
-    a.ruleShow{float:right;margin-right:20px;color:#667991;font-size:14px;}
+    a.ruleShow{margin-left:20px;color:#667991;font-size:14px;}
     .survey_c_top{
       min-height: 120px;
       width: 100%;
@@ -330,6 +324,7 @@
         height: 100px;
         background: #EDF0F7;
         padding: 20px;
+        margin:10px;
         .tit{
           font-size: 12px;
           color: #333333;
@@ -393,31 +388,34 @@
       padding-left: 10px;
       padding-right: 10px;
       padding-bottom: 20px;
-      .surveytab{
-        border:1px solid #D2D4E2;
+      .notetable{
+        min-height: 40px;
+        border: 1px solid #e5e5e5;
         thead{
           background: #DFE9F6;
-          font-size: 14px;
-          color: #333333;
           tr{
-            height:40px;
+            height: 40px;
+            line-height: 40px;
             td{
-              line-height: 40px;
-              padding-left: 40px;
-              text-align: left;
+              padding-left:40px;
             }
           }
         }
         tbody{
-          background: #EDF0F7;
-          font-size: 14px;
-          color: #333333;
           tr{
-            height:40px;
+            height: 40px;
+          }
+          tr:nth-child(2n){
+            background:#f4f5fa;
+          }
+          tr:nth-child(2n+1){
+            background:#edf0f7;
+          }
+          .content{
+            padding-top: 20px;
+            padding-bottom: 20px;
             td{
-              line-height: 40px;
-              padding-left: 40px;
-              text-align: left;
+              padding-left:40px;
             }
           }
         }

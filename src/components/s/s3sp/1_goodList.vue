@@ -13,8 +13,8 @@
               v-model="time"
               type="daterange"
               range-separator="-"
-              start-placeholder="选择开始日期"
-              end-placeholder="选择结束日期" value-format="yyyy-MM-dd"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期" value-format="yyyy-MM-dd"
               @change="timeCheck">
             </el-date-picker>
             <el-input v-model="search_goods_params.condition" placeholder="输入商品名称/编码/条形码/品牌" title="输入商品名称/编码/条形码/品牌"></el-input>
@@ -140,8 +140,8 @@
               v-model="time"
               type="daterange"
               range-separator="-"
-              start-placeholder="选择开始日期"
-              end-placeholder="选择结束日期" value-format="yyyy-MM-dd"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期" value-format="yyyy-MM-dd"
               @change="timeCheck">
             </el-date-picker><!--时间-->
             <el-input v-model="search_goodsCheck_params.condition" placeholder="输入商品名称/编码/条形码/品牌" title="输入商品名称/编码/条形码/品牌"></el-input>
@@ -322,7 +322,7 @@
     data () {
       return {
         time:'',
-        goodsStorePageRows:5,
+        goodsStorePageRows:10,
         goodsStoreCurrentPage: 1,
         goodsStoreTotalCount:0,
         goodsStatus:[{
@@ -350,7 +350,7 @@
         selectedOptions2: [''],
         selectedOptions3: [''],
         goodsStoreData:[],
-        goodsCheckStorePageRows:5,
+        goodsCheckStorePageRows:10,
         goodsCheckStoreCurrentPage: 1,
         goodsCheckStoreTotalCount:0,
         goodsCheckStoreData:[],
@@ -365,7 +365,7 @@
           label: '审核不通过'
         }],
         search_goodsCheck_params: { goodsClassifyId: '', approveStatus: '', condition: '', startTime: '', endTime: '' },
-        goodsDelStorePageRows:5,
+        goodsDelStorePageRows:10,
         goodsDelStoreCurrentPage: 1,
         goodsDelStoreTotalCount:0,
         goodsDelStoreData:[]
@@ -375,13 +375,23 @@
       //时间赋值
       timeCheck () {
         let that = this
-        if(that.time != ''){
+        if(that.time != null){
           if(that.activeName == 'first'){
             that.search_goods_params.startTime = that.time[0]
             that.search_goods_params.endTime = that.time[1]
           } else if(that.activeName == 'second'){
             that.search_goodsCheck_params.startTime = that.time[0]
             that.search_goodsCheck_params.endTime = that.time[1]
+          }else {
+            return false
+          }
+        }else{
+          if(that.activeName == 'first'){
+            that.search_goods_params.startTime = ''
+            that.search_goods_params.endTime = ''
+          } else if(that.activeName == 'second'){
+            that.search_goodsCheck_params.startTime = ''
+            that.search_goodsCheck_params.endTime = ''
           }else {
             return false
           }
@@ -477,13 +487,13 @@
       ,handleTabClick (tab, event) {//tab切换
         let that = this
 
-        that.goodsStorePageRows=5
+        that.goodsStorePageRows=10
         that.goodsStoreCurrentPage= 1
         that.goodsStoreTotalCount=0
-        that.goodsCheckStorePageRows=5,
+        that.goodsCheckStorePageRows=10,
         that.goodsCheckStoreCurrentPage= 1,
         that.goodsCheckStoreTotalCount=0,
-        that.goodsDelStorePageRows=5,
+        that.goodsDelStorePageRows=10,
         that.goodsDelStoreCurrentPage=1,
         that.goodsDelStoreTotalCount=0,
 
