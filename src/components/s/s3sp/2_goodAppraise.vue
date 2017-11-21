@@ -89,13 +89,13 @@
       <table class="comment_table col-sm-12" id="table" style="table-layout:fixed">
         <thead>
           <tr>
-            <td class="a7">操作</td>
-            <td class="a1">评论内容</td>
-            <td class="a2">评价星级</td>
-            <td class="a3">商品信息</td>
-            <td class="a4">订单号</td>
-            <td class="a5">顾客信息</td>
-            <td class="a6">评价时间</td>
+            <td width="120px">操作</td>
+            <td>评论内容</td>
+            <td>评价星级</td>
+            <td>商品信息</td>
+            <td>订单号</td>
+            <td>顾客信息</td>
+            <td>评价时间</td>
           </tr>
         </thead>
         <tbody v-if="goodsCommentTotalCount==0">
@@ -111,39 +111,41 @@
         </tbody>
         <tbody v-for="comment in datacomment">
           <tr>
-            <td class="a7">
+            <td>
               <div  v-if='!comment.replyCommentContent ' @click="showtchp(comment.commentId)">
                 <i class="icon_hp"></i>
                 <span>回评</span>
               </div>
             </td>
-            <td class="a1">
+            <td>
               <!--<div>{{comment.commentContent}}</div>-->
               <a class="ellipsis3" :title="comment.commentContent">{{comment.commentContent}}</a><br/><br/>
               <div class="mt10" v-for="img in comment.commentImages">
                 <img class="conimg mr10 fl" :src="img" />
               </div>
             </td>
-            <td class="a2">
+            <td>
               <span>{{comment.starLevel}}</span>星
             </td>
-            <td class="a3">
+            <td>
               <a class="ellipsis2" :title="comment.goodsName">{{comment.goodsName}}</a><br/><br/>
               <div class="tdcolor mt10">&nbsp;&nbsp;&nbsp;规格：{{comment.skuName}}</div>
             </td>
-            <td class="a4">
+            <td>
               {{comment.orderId}}
             </td>
-            <td class="a5">
+            <td>
               <div>{{comment.buyerName}}</div>
               <div>{{comment.buyerPhoneNumber}}</div>
             </td>
-            <td class="a6">
+            <td>
               <div>{{comment.commentTime}}</div>
             </td>
           </tr>
           <tr v-if='comment.replyCommentContent '>
-            <td colspan="7">
+            <td>
+            </td>
+            <td colspan="6">
               <div class="tdhf">
                 <div class="nr">
                   回复内容:

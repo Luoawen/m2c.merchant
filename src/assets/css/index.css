@@ -1744,6 +1744,9 @@ font-weight: normal;
 padding-left:20px;
 overflow:hidden;
 }
+.el-table th.is-leaf{
+  color:#333;
+}
 .el-table tr:nth-child(2n+1){
   background:#F4F5FA;
 }

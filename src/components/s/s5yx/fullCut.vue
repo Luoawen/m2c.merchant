@@ -1349,23 +1349,22 @@
       },
       //取消选中商品
       cancleMakeGoodsIds ($event)  {
-
    //从数组中清空（被选中状态 和数量）改变样式
         let that = this
         let el=$event.target
             // 遍历弹框的 改变状态
-          for(var i = 0; i<that.goodsResult.content.length;i++) {
-              for (var j = 0; j < that.goodsResult.content[i].goodsSkuList.length; ++j) {
-                that.goodsResult.content[i].goodsSkuList[j].isCheck = false
-                that.goodsResult.content[i].goodsSkuList[j].goodsSkuNum = ''
-                that.goodsResult.content[i].isCheck =false
-                that.goodsResult.content[i].isChoosed =false 
-                that.goodsResult.content[i].isChooseSpecification ='编辑规格数量'
-                console.log('清空商品规格', that.goodsResult.content[i].goodsSkuList[j])
-              }
-            }
+          // for(var i = 0; i<that.goodsResult.content.length;i++) {
+          //     for (var j = 0; j < that.goodsResult.content[i].goodsSkuList.length; ++j) {
+          //       that.goodsResult.content[i].goodsSkuList[j].isCheck = false
+          //       that.goodsResult.content[i].goodsSkuList[j].goodsSkuNum = ''
+          //       that.goodsResult.content[i].isCheck =false
+          //       that.goodsResult.content[i].isChoosed =false 
+          //       that.goodsResult.content[i].isChooseSpecification ='编辑规格数量'
+          //       console.log('清空商品规格', that.goodsResult.content[i].goodsSkuList[j])
+          //     }
+          //   }
         // 清空选择商品数组
-          that.chooseGoodsList =[]
+          // that.chooseGoodsList =[]
         //控制模态框
         that.$('#choose_goods').modal('hide')
         that.modalShadow =false
@@ -1379,6 +1378,7 @@
           var goods_item = {}
           var goods_item_sku_list = []
           for(var g = 0; g < that.chooseGoodsList[i].chooseSkuList.length; g++){
+             console.log('------that.chooseGoodsList[i].chooseSkuList.length',that.chooseGoodsList[i].chooseSkuList)
             var goods_item_sku = {}
             var goodsSku_item = {}
             goods_item_sku.skuId = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuId
@@ -1785,22 +1785,22 @@
       },
       cancelRemove(){
         var that = this
-        for (var i = 0; i < that.goodsResult.content.length; i++) {
-         console.log('that.chooseGoodsList---',that.chooseGoodsList  )
-          that.goodsResult.content[i].isRemoved = 0
-          // added by fanjc
-          that.goodsResult.content[i].isCheck = false;
-          that.goodsResult.content[i].goodsSkuNum = '';
-          that.goodsResult.content[i].isChooseSpecification ='编辑规格数量'
-          // end added
-        }
-        for (var i = 0; i < that.shopResult.content.length; i++) {
-          that.shopResult.content[i].isRemoved = 0
-        }
+        // for (var i = 0; i < that.goodsResult.content.length; i++) {
+        //  console.log('that.chooseGoodsList---',that.chooseGoodsList  )
+        //   that.goodsResult.content[i].isRemoved = 0
+        //   // added by fanjc
+        //   that.goodsResult.content[i].isCheck = false;
+        //   that.goodsResult.content[i].goodsSkuNum = '';
+        //   that.goodsResult.content[i].isChooseSpecification ='编辑规格数量'
+        //   // end added
+        // }
+        // for (var i = 0; i < that.shopResult.content.length; i++) {
+        //   that.shopResult.content[i].isRemoved = 0
+        // }
         
-        that.removeGoodsList = []
-        that.chooseGoodsList = [];
-        that.removeShopList = []
+        // that.removeGoodsList = []
+        // that.chooseGoodsList = [];
+        // that.removeShopList = []
         // 
         that.$('#full_range_dialog').modal('hide')
         that.modalShadow = false

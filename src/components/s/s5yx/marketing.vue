@@ -2,17 +2,14 @@
   <div class="marketing">
     <div class="search " >
       <div class="search_cell ">
-        <span>编号</span>
         <input class="form-control search_input  " v-model="search_params.full_cut_no" placeholder="满减编号" @blur="formValidator(1)">
       </div>
       <div class="search_cell">
-        <span>满减名称</span>
         <input class="form-control search_input" v-model="search_params.full_cut_name" placeholder="满减名称" maxlength="11">
       </div>
       <div class="search_cell">
-        <span>状态</span>
         <select data-v-0c409cb2="" class="form-control search_input"  v-model="search_params.status">
-            <option data-v-0c409cb2="" value="0" >全部</option>
+            <option data-v-0c409cb2="" value="0" >状态</option>
             <option data-v-0c409cb2="" value="1">未生效</option>
             <option data-v-0c409cb2="" value="2">已生效</option>
             <option data-v-0c409cb2="" value="3">已失效</option>
@@ -26,26 +23,24 @@
       </div><span @click="sevenDay()">最近7天</span>
       </br>
       <div class="search_cell">
-          <span>形式</span>
         <select data-v-0c409cb2="" class="form-control search_input" v-model="search_params.full_cut_type">
-            <option data-v-0c409cb2="" value="0">全部</option>
+            <option data-v-0c409cb2="" value="0">形式</option>
             <option data-v-0c409cb2="" value="1">减钱</option>
             <option data-v-0c409cb2="" value="2">打折</option>
             <option data-v-0c409cb2="" value="3">换购</option>
         </select>
       </div>
       <div class="search_cell">
-        <span>使用情况</span>
         <select data-v-0c409cb2="" class="form-control search_input" v-model="search_params.use_type">
-          <option data-v-0c409cb2="" value="0">全部</option>
+          <option data-v-0c409cb2="" value="0">使用情况</option>
           <option data-v-0c409cb2="" value="1">正常</option>
           <option data-v-0c409cb2="" value="2">无可用</option>
         </select>
       </div><br/>
       <div class="search_cell">
-        <button class="btn button btn-primary " @click="goto"  path="/s/fullCut">新增满减</button>
-        <button class="btn button btn-primary" @click="resetSearchParams()">重置搜索条件</button>
-        <button class="btn button btn-primary "  @click="getFullCutList()"  >搜索</button>
+        <button class="btn button "  @click="goto"  path="/s/fullCut">新增满减</button>
+        <button class="btn button " @click="resetSearchParams()">重置搜索条件</button>
+        <button class="btn button "  @click="getFullCutList()"  >搜索</button>
       </div>
     </div>
 
@@ -175,7 +170,7 @@
                    if (y.status < 3) {
                   return "<a class='color_default' modify='true' style='cursor:pointer;' path='/s/fullCutDetail' handle='true'>详情</a>&nbsp;&nbsp;" +
                     "<a style='color:red;cursor:pointer;' forbid='true' handle='true'>终止</a>&nbsp;&nbsp;" +
-                    "<a style='color:blue;cursor:pointer;' path='/s/fullCutModify' handle='true'>修改</a>"
+                    "<a class='color_default' style='cursor:pointer;' path='/s/fullCutModify' handle='true'>修改</a>"
                 } else {
                   return "<a class='color_default'  modify='true' style='cursor:pointer;' path='/s/fullCutDetail' handle='true'>详情</a>&nbsp;&nbsp;"
                 }
@@ -289,6 +284,8 @@
     color: white;
     margin:10px  20px 0 0;
     padding: 0 5px;
+    border-radius: 6px;
+    background-color: rgb(1,134,255)
   }
 }
 
@@ -308,14 +305,15 @@
     search_input_date_r:右侧日期选择框
     */
     margin-left:30px;min-width:500px;
+    padding: 15px 36px;
     span:first-child{margin-right:10px}
     .search_cell{display:inline-block;margin-top:10px;margin-right:30px;}
-    .search_input{display:inline-block;vertical-align:middle;border-radius:0;width:130px;}
+    .search_input{display:inline-block;vertical-align:middle;border-radius:5px;width:200px;height:36px}
     .search_input_date_l{width:160px;margin-right:5px}
     .search_input_date_r{width:160px;margin-left:5px}
     .search_button{border-radius:0;padding-left:20px;padding-right:20px;background-color:#60AEF6;width:130px;height:34px;color:white}
     .area_select{width:90px;display:inline-block;vertical-align:middle;border-radius:0;margin-right:5px;}
-    .search_input,.search_button,.area_select{height:26px;line-height:26px;padding-top:0;padding-bottom:0;}
+    .search_input,.search_button,.area_select{height:36px;line-height:36px;padding-top:0;padding-bottom:0;}
   }
   
 </style>

@@ -313,7 +313,7 @@
           <div class="search">
             <div class="search_tit">选择商品：</div>
             <div class="clear">
-              <input class="input form-control fl" type="text" placeholder="请输入商品标题或者编号进行搜索" />
+              <input class="input form-control fl" v-model="goods_query_item.condition" type="text" placeholder="请输入商品标题或者编号进行搜索" />
               <button class="sort fl" @click="goodsSelect()">搜索</button>
               <div class="right">
               </div>
@@ -390,7 +390,7 @@
     </div>
     <!--点击商品商家筛选按钮弹窗e-->
     <!--作用范围商品规格选择弹窗s-->
-    <div :class='["frame_layer",goods_sku_show?"frame_layer_show":""]' v-if="item.rangeType===2" style="z-index:199999;background：red"class="modal fade frame_layer01" 
+    <div :class='["frame_layer",goods_sku_show?"frame_layer_show":""]' style="z-index:199999;background：red"class="modal fade frame_layer01" 
      id='specificationChoose' role="dialog" aria-labelledby="myModalLabel" aira-hidden= "true" >
       <div class="specification_container modal-dialog">
         <div class="specification_cen clear">
@@ -550,7 +550,6 @@
           full_cut_name: '',
           total_num: '',
           range_type: '',
-          goods_classifys: []
         },
         tip_show: {
           name: false,
@@ -861,10 +860,10 @@
                 that.goodsResult.content[index].chooseSkuList = choose_sku_list
               }
           that.chooseGoodsList.push(that.goodsResult.content[index].goodsSkuList)
-          console.log("打印---that.chooseGoodsList", that.chooseGoodsList)
+          // console.log("打印---that.chooseGoodsList", that.chooseGoodsList)
           // 样式  
            that.goodsResult.content[index].isChoosed = 1
-           console.log('that.goodsResult.content[index].isChoosed',that.goodsResult.content[index].isChoosed)
+          //  console.log('that.goodsResult.content[index].isChoosed',that.goodsResult.content[index].isChoosed)
            that.goodsResult.content[index].isChooseSpecification ='已选规格数量'
         }else{
              // 再次点击取消  
@@ -948,6 +947,7 @@
             chooseGoods.skuFlag = that.goodsResult.content[i].skuFlag
             chooseGoods.chooseSkuList = that.goodsResult.content[i].chooseSkuList
             that.chooseGoodsList.push(chooseGoods)
+ console.log("-往上已经确认chooseSkuList --- that.goodsResult.content[index].chooseSkuList-", chooseSkuList)
             that.goodsResult.content[i].isChooseSpecification ='已选规格数量'
           }
         }
@@ -1069,32 +1069,33 @@
         // 检查判断     
         console.log('存在that.chooseGoodsList[i].chooseSkuList'+i,that.chooseGoodsList[i].chooseSkuList)
          // if(!that.chooseGoodsList[i].chooseSkuList.length) { alert('没数据');return }
+             if(that.chooseGoodsList[i].chooseSkuList == undefined){
+              break;
+               }
           for(var g = 0; g < that.chooseGoodsList[i].chooseSkuList.length; g++){
+            console.log('------that.chooseGoodsList[i].chooseSkuList.length',that.chooseGoodsList[i].chooseSkuList)
             var goods_item_sku = {}
             var goodsSku_item = {}
             goods_item_sku.skuId = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuId
             goods_item_sku.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum
             goods_item_sku_list.push(goods_item_sku)
-
+              // 收集  goods_item_sku_list   case*[{"goodsId":"SPFL2D1B6BFC81DD40C9BDDD3075C64DB9AB",‘skuId’:’20171017163439297105’,’skuNum’:20}]  数据
             goodsSku_item.skuId = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuId
             goodsSku_item.skuNum = that.chooseGoodsList[i].chooseSkuList[g].goodsSkuNum
             goodsSku_item.goodsId = that.chooseGoodsList[i].goodsId;
             goodsSku_item.skuFlag = that.chooseGoodsList[i].skuFlag;
             that.params.sku_list.push(goodsSku_item)
-            if(that.chooseGoodsList[i].chooseSkuList == undefined){
-              break;
-            }
           }
           goods_item.goodsId = that.chooseGoodsList[i].goodsId
           goods_item.goodsName = that.chooseGoodsList[i].goodsName
           goods_item.skuFlag = that.chooseGoodsList[i].skuFlag;
           goods_item.skuList = goods_item_sku_list
           that.params.goods_ids.push(goods_item)
+          console.log('----that.params.goods_ids',that.params.goods_ids)
         }
         console.log('chooseGoodsList:' + JSON.stringify(that.chooseGoodsList))
         that.$('#choose_goods').modal('hide')
         that.modalShadow =false
-        
       },
       cancleMakeGoodsIds() {
         //从数组中清空（被选中状态 和数量）改变样式
@@ -1182,6 +1183,13 @@
                       result.content[i].skuFlag = that.chooseGoodsList[j].skuFlag
                       result.content[i].chooseSkuList = that.chooseGoodsList[j].chooseSkuList
                       console.log( " 存储到的result.content[i].chooseSkuList---"+i,result.content[i].chooseSkuList);
+                     // 获取到的数据变成   遍历的 goodsInfo.goodsSkuList
+                     for(var v =0;v <that.chooseGoodsList[j].chooseSkuList.length;v++){
+                       result.content[i].goodsSkuList.goodsSkuNum = that.chooseGoodsList[j].chooseSkuList[v].skuNum
+                      //  打印都有数据
+                       console.log(result.content[i].goodsSkuList.goodsSkuNum,'result.content[i].goodsSkuList.goodsSkuNum')
+                       console.log(that.chooseGoodsList[j].chooseSkuList[v].skuNum,'that.chooseGoodsList[j].chooseSkuList[v].skuNum')
+                     }
                     }
                   }
             }
