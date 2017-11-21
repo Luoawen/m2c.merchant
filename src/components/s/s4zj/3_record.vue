@@ -1,25 +1,25 @@
 <template>
-  <div role="tabpanel" class="tab-pane fade in active"  aria-labelledby="home-tab" style="margin-top: 20px;width: 100%;margin-top: 130px;margin-left: 20px;">
-    <div class="goods_search" style="width: 100%; height: 40px;">
-      <div  style="float: left">
-        提现状态:
-        <el-select v-model="search_params.SettleStatus" placeholder="请选择结算状态">
-          <el-option v-for="item in expectations" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-      </div><!-- 售后期望-->
-      <div class="ops_time" style="float:left;width: 540px;">申请时间:
-        <el-date-picker  v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
-        </el-date-picker>
-        -
-        <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
-        </el-date-picker>
-      </div><!--时间-->
-      <div class="search" style="width: 350px;float: left">
+  <div class="content clear">
+    <div class="searcWrap">
+      <el-select v-model="search_params.SettleStatus" placeholder="请选择结算状态">
+        <el-option v-for="item in expectations" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select><!-- 结算状态-->
+      <el-date-picker
+        v-model="time"
+        type="daterange"
+        range-separator="-"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期" value-format="yyyy-MM-dd"
+        @change="timeCheck">
+      </el-date-picker><!--时间-->
+      <el-input v-model="search_params.condition" placeholder="输入提现单号"></el-input>
+      <el-button type="primary" size="medium" @click="orderStore()">搜索</el-button>
+      <!-- <div class="search" style="width: 350px;float: left">
         <el-input placeholder="输入提现单号" v-model="search_params.condition" class="input-with-select">
           <el-button slot="append" icon="el-icon-search" @click.native="orderStore()"></el-button>
         </el-input>
-      </div>
+      </div> -->
     </div>
     <div class="order_tab_list" style="margin-top: 20px;">
       <el-table
@@ -28,34 +28,28 @@
         tooltip-effect="dark"
         style="width: 100%">
         <el-table-column
-          width="30">
-        </el-table-column>
-        <el-table-column
           label="提现单号"
-          width="400">
+          width="300">
           <template slot-scope="scope"><span >{{scope.row.withdrawalId}}</span></template>
         </el-table-column>
         <el-table-column
           label="申请金额/元"
-          width="400"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{(scope.row.amount/100).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column
           label="提现状态"
-          width="400"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{scope.row.wdStatus == 0?'处理中':scope.row.wdStatus == 1?'待审批':scope.row.wdStatus == 2?'待转账':scope.row.wdStatus == 3?'不通过':scope.row.wdStatus == 4?'已转账':scope.row.wdStatus == 5?'作废':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="申请时间"
-          width="400"
+          width="300"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{date_format(new Date(scope.row.createdTime), 'yyyy-MM-dd hh:mm:ss')}}</span></template>
         </el-table-column>
-
       </el-table>
-      <div class="block" style="margin: 20px;float: right">
+      <div class="block fl" style="margin:20px;">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -74,12 +68,13 @@
     name: '',
     data () {
       return {
-        pageRows:5,
+        time:'',
+        pageRows:10,
         currentPage: 1,
         totalCount:0,
         expectations:[{
           value: '',
-          label: '全部'
+          label: '提现状态'
         }, {
           value: '0',
           label: '处理中'
@@ -96,7 +91,7 @@
             label: '不通过'
           }, {
             value: '4',
-            label: '已转装'
+            label: '已转帐'
           }, {
             value: '5',
             label: '作废'
@@ -117,6 +112,17 @@
       }
     },
     methods: {
+      //时间赋值
+      timeCheck () {
+        let that = this
+        if(that.time != null){
+          that.search_params.startTime = that.time[0]
+          that.search_params.endTime = that.time[1]
+        }else{
+          that.search_params.startTime = ''
+          that.search_params.endTime = ''
+        }
+      },
       // 获取全部订单信息
       orderStore () {
         let that = this

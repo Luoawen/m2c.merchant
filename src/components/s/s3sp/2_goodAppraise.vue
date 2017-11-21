@@ -1,40 +1,36 @@
 <template>
-  <div class="sp">
-    <div class="dropdown">
-      <div id="dLabel1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="sort">{{replyStatusName}}
-        <span class="caret"></span>
-      </div>
-      <ul class="dropdown-menu" aria-labelledby="dLabel1">
-        <li @click="replyStatus('')">全部</li>
-        <li v-for="(cell,index) in replyStatuses" @click="replyStatus(cell.replyStatus)">
-          {{cell.replyStatus==2?"已回复":cell.replyStatus==1?"未回复":"全部"}}
-        </li>
-      </ul>
+  <div class="content clear">
+    <div class="searcWrap">
+      <el-select v-model="search_params.replyStatus" placeholder="回复状态">
+        <el-option
+          v-for="reply in replyStatuses"
+          :key="reply.value"
+          :label="reply.label"
+          :value="reply.value">
+        </el-option>
+      </el-select>
+
+      <el-select v-model="search_params.starLevel" placeholder="星级评价">
+        <el-option
+          v-for="level in leveles"
+          :key="level.value"
+          :label="level.label"
+          :value="level.value">
+        </el-option>
+      </el-select>
+      <el-date-picker
+        v-model="time"
+        type="daterange"
+        range-separator="-"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期" value-format="yyyy-MM-dd"
+        @change="timeCheck">
+      </el-date-picker>
+      <el-input v-model="search_params.condition" placeholder="输入商品名称/订单号/顾客姓名/顾客手机号" title="输入商品名称/订单号/顾客姓名/顾客手机号"></el-input>
+      <el-button type="primary" size="medium" @click="get_comment_info()">搜索</el-button>
+      <span class="ml10 gjsort" @click="advancedSearch">高级搜索</span>
     </div>
-    <div class="dropdown">
-      <div id="dLabel2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="state">{{levelName}}
-        <span class="caret"></span>
-      </div>
-      <ul class="dropdown-menu" aria-labelledby="dLabel1">
-        <li @click="level(0)">全部</li>
-        <li v-for="(cell,index) in leveles" @click="level(cell.level)">
-          {{cell.level==5?"5星":cell.level==4?"4星":cell.level==3?"3星":cell.level==2?"2星":cell.level==1?"1星":"全部"}}
-        </li>
-      </ul>
-    </div>
-    <div class="search_cell">
-      <span class="zIndex2" @click="is_Success=!is_Success">评论时间<i class="icon timeIcon"></i></span>
-      <div class="time" v-if="is_Success">
-        <el-date-picker v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
-        </el-date-picker>
-        <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" @change="get_comment_info()">
-        </el-date-picker>
-      </div>
-    </div>
-    <div class="search">
-      <input type="text" class="inp" placeholder="输入商品名称 / 订单号 / 顾客姓名/ 顾客手机号" v-model="search_params.condition"><i class="icon searchIcon" @click="get_comment_info()"></i>
-    </div>
-    <span class="ml10 gjsort" @click="advancedSearch">高级搜索</span>
+
     <div class="poi2 Advanced_s" v-show="advancedShow">
       <div class="">
         <div class="titbt">高级搜索</div>
@@ -89,17 +85,17 @@
         </div>
       </div>
     </div>
-    <div class="comment_info  clear" style="background:#fff;">
+    <div class="comment_info  clear" style="margin-top:20px;">
       <table class="comment_table col-sm-12" id="table" style="table-layout:fixed">
         <thead>
           <tr>
-            <td class="a1">评论内容</td>
-            <td class="a2">评价星级</td>
-            <td class="a3">商品信息</td>
-            <td class="a4">订单号</td>
-            <td class="a5">顾客信息</td>
-            <td class="a6">评价时间</td>
-            <td class="a7">操作</td>
+            <td width="120px">操作</td>
+            <td>评论内容</td>
+            <td>评价星级</td>
+            <td>商品信息</td>
+            <td>订单号</td>
+            <td>顾客信息</td>
+            <td>评价时间</td>
           </tr>
         </thead>
         <tbody v-if="goodsCommentTotalCount==0">
@@ -115,39 +111,41 @@
         </tbody>
         <tbody v-for="comment in datacomment">
           <tr>
-            <td class="a1">
+            <td>
+              <div  v-if='!comment.replyCommentContent ' @click="showtchp(comment.commentId)">
+                <i class="icon_hp"></i>
+                <span>回评</span>
+              </div>
+            </td>
+            <td>
               <!--<div>{{comment.commentContent}}</div>-->
               <a class="ellipsis3" :title="comment.commentContent">{{comment.commentContent}}</a><br/><br/>
               <div class="mt10" v-for="img in comment.commentImages">
                 <img class="conimg mr10 fl" :src="img" />
               </div>
             </td>
-            <td class="a2">
+            <td>
               <span>{{comment.starLevel}}</span>星
             </td>
-            <td class="a3">
+            <td>
               <a class="ellipsis2" :title="comment.goodsName">{{comment.goodsName}}</a><br/><br/>
               <div class="tdcolor mt10">&nbsp;&nbsp;&nbsp;规格：{{comment.skuName}}</div>
             </td>
-            <td class="a4">
+            <td>
               {{comment.orderId}}
             </td>
-            <td class="a5">
+            <td>
               <div>{{comment.buyerName}}</div>
               <div>{{comment.buyerPhoneNumber}}</div>
             </td>
-            <td class="a6">
+            <td>
               <div>{{comment.commentTime}}</div>
-            </td>
-            <td class="a7" v-if='!comment.replyCommentContent '>
-              <div @click="showtchp(comment.commentId)">
-              <i class="icon_hp"></i>
-              <span>回评</span>
-              </div>
             </td>
           </tr>
           <tr v-if='comment.replyCommentContent '>
-            <td colspan="7">
+            <td>
+            </td>
+            <td colspan="6">
               <div class="tdhf">
                 <div class="nr">
                   回复内容:
@@ -159,7 +157,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="block" style="margin: 20px;float: right">
+      <div class="block" style="margin: 20px;float: left">
         <el-pagination
           @size-change="goodsCommentHandleSizeChange"
           @current-change="goodsCommentHandleCurrentChange"
@@ -201,20 +199,32 @@
         // 搜索参数
         search_params: {condition: '', replyStatus: '', starLevel: '', startTime: '', endTime: '', imageStatus: ''},
         reply_params: {commentId: '', replyContent: ''},
-        replyStatuses: [{replyStatus: 1}, {replyStatus: 2}], // 回复状态
-        leveles: [{level: 1}, {level: 2}, {level: 3}, {level: 4}, {level: 5}], // 评价星级
+        replyStatuses: [{value: '', label: '回复状态'}, {value: '1', label: '未回复'}, {value: '2', label: '已回复'}], // 回复状态
+        leveles: [{value: '', label: '评价星级'}, {value: '1', label: '1星'}, {value: '2', label: '2星'}, {value: '3', label: '3星'}, {value: '4', label: '4星'}, {value: '5', label: '5星'}], // 评价星级
         datacomment: '',
         showhptc: false,
         commentId: '',
         goodsCommentCurrentPage: 1,
-        goodsCommentPageRows: 5,
+        goodsCommentPageRows: 10,
         goodsCommentTotalCount: 0,
         replyStatusName: '回复状态',
         levelName: '评价星级',
-        advancedShow: false
+        advancedShow: false,
+        time: ''
       }
     },
     methods: {
+      // 时间赋值
+      timeCheck () {
+        let that = this
+        if (that.time != null) {
+          that.search_params.startTime = that.time[0]
+          that.search_params.endTime = that.time[1]
+        } else {
+          that.search_params.startTime = ''
+          that.search_params.endTime = ''
+        }
+      },
       clearAll () {
         let that = this
         that.advancedShow = false
@@ -264,43 +274,6 @@
             }
           }
         })
-      },
-      // 回复状态
-      replyStatus (n) {
-        let that = this
-        if (n === '' || n === undefined) {
-          that.replyStatusName = '回复状态'
-        } else if (n === 0) {
-          that.replyStatusName = '全部'
-          n = ''
-        } else if (n === 1) {
-          that.replyStatusName = '未回复'
-        } else {
-          that.replyStatusName = '已回复'
-        }
-        that.search_params.replyStatus = n
-        that.get_comment_info()
-      },
-      // 评价星级
-      level (n) {
-        let that = this
-        if (n === '' || n === undefined) {
-          that.levelName = '评价星级'
-        } else if (n === 0) {
-          that.levelName = '全部'
-        } else if (n === 1) {
-          that.levelName = '1星'
-        } else if (n === 2) {
-          that.levelName = '2星'
-        } else if (n === 3) {
-          that.levelName = '3星'
-        } else if (n === 4) {
-          that.levelName = '4星'
-        } else if (n === 5) {
-          that.levelName = '5星'
-        }
-        that.search_params.starLevel = n
-        that.get_comment_info()
       },
       // 获取结算单列表
       get_comment_info () {
@@ -407,7 +380,7 @@
   left: 50%;
   top: 50%;
   margin-left: -200px;
-  margin-top: 140px;
+  margin-top: -140px;
   background: #FFFFFF;
   border-radius: 4px;
   .hptczp_header{

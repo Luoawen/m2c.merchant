@@ -1,39 +1,28 @@
 <template>
-  <div role="tabpanel" class="tab-pane fade in active"  aria-labelledby="home-tab" style="margin-top: 20px;width: 100%;margin-top: 130px;margin-left: 20px;">
-    <div class="goods_search" style="width: 100%; height: 40px;">
-      <div  style="float: left">
-        售后期望:
-        <el-select v-model="search_params.expectation" placeholder="请选择售后期望">
-          <el-option v-for="item in expectations" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-      </div><!-- 售后期望-->
-      <div style="float: left">
-        售后状态:
-        <el-select v-model="search_params.afterSaleStatus" placeholder="请选择售后状态">
-          <el-option v-for="item in afterSales" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-      </div><!--售后状态-->
-      <div style="float: left">
-        媒体信息:
-        <el-select v-model="search_params.hasMedia" placeholder="请选择媒体信息">
-          <el-option v-for="item in mediaStatus" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
-      </div><!--售后状态-->
-      <div class="ops_time" style="float:left;width: 540px;">申请时间:
-        <el-date-picker  v-model="search_params.startTime"   type="date"  placeholder="选择日期"   format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
-        </el-date-picker>
-        -
-        <el-date-picker v-model="search_params.endTime" type="date"  placeholder="选择日期"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd">
-        </el-date-picker>
-      </div><!--时间-->
-      <div class="search" style="width: 350px;float: left">
-        <el-input placeholder="输入商品名称 / 订货号 / 售后号" v-model="search_params.condition" class="input-with-select">
-          <el-button slot="append" icon="el-icon-search" @click.native="orderStore()"></el-button>
-        </el-input>
-      </div>
+  <div class="content clear">
+    <div class="searcWrap">
+      <el-select v-model="search_params.expectation" placeholder="请选择售后期望">
+        <el-option v-for="item in expectations" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+      <el-select v-model="search_params.afterSaleStatus" placeholder="请选择售后状态">
+        <el-option v-for="item in afterSales" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+      <el-select v-model="search_params.hasMedia" placeholder="请选择媒体信息">
+        <el-option v-for="item in mediaStatus" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+      <el-date-picker
+        v-model="time"
+        type="daterange"
+        range-separator="-"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期" value-format="yyyy-MM-dd"
+        @change="timeCheck">
+      </el-date-picker>
+      <el-input v-model="search_params.condition" placeholder="输入商品名称/订货号/售后号" title="输入商品名称/订货号/售后号"></el-input>
+      <el-button type="primary" size="medium" @click="orderStore()">搜索</el-button>
     </div>
     <div class="order_tab_list" style="margin-top: 20px;">
       <el-table
@@ -42,22 +31,34 @@
         tooltip-effect="dark"
         style="width: 100%">
         <el-table-column
-          type="selection"
-          width="55">
+          label="操作"
+          width="120"
+          show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-dropdown trigger="click">
+              <span class="el-dropdown-link">
+                操作<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail')">详情</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </template>
         </el-table-column>
         <el-table-column
           label="商品信息"
-          width="200">
-          <template slot-scope="scope"><img v-bind:src="JSON.parse(scope.row.goodsInfo.goodsImage == ''? '[]': scope.row.goodsInfo.goodsImage)[0]" style="width: 60px;height: 60px;"/><span >{{scope.row.goodsInfo.goodsName}}</span></template>
+          width="300">
+          <template slot-scope="scope"><img v-bind:src="JSON.parse(scope.row.goodsInfo.goodsImage == ''? '[]': scope.row.goodsInfo.goodsImage)[0]" style="width: 60px;height:60px;margin-right:10px;" class="fl"/>
+          <a class="ellipsis2 width190" style="margin-left:70px;" :title="scope.row.goodsInfo.goodsName">{{scope.row.goodsInfo.goodsName}}</a>
+          </template>
         </el-table-column>
         <el-table-column
           prop="afterSellOrderId"
           label="单号"
-          width="200">
+          width="300">
         </el-table-column>
         <el-table-column
           label="售后期望"
-          width="200"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{scope.row.orderType==0?'换货':scope.row.orderType==1?'退货退款':scope.row.orderType==2?'仅退款':'-'}}</span></template>
         </el-table-column>
@@ -68,33 +69,17 @@
         </el-table-column>
         <el-table-column
           label="售后状态"
-          width="200"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{scope.row.status==0?'申请退货':scope.row.status==1?'申请换货':scope.row.status==2?'申请退款':scope.row.status==3?'拒绝':scope.row.status==4?'已同意申请':scope.row.status==5?'客户已寄出':scope.row.status==6?'商家已收到':scope.row.status==7?'商家已寄出':scope.row.status==8?'客户收到':scope.row.status==9?'已同意退款':scope.row.status==10?'已退款':scope.row.status==11?'售后关闭':scope.row.status==-1?'取消':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="申请时间"
+          width="200"
           show-overflow-tooltip>
           <template slot-scope="scope"><span >{{date_format(new Date(scope.row.createDate), 'yyyy-MM-dd hh:mm:ss')  }}</span></template>
         </el-table-column>
-        <el-table-column
-          label="操作"
-          show-overflow-tooltip>
-          <template slot-scope="scope">
-            <el-col :span="12">
-              <el-dropdown trigger="click">
-                      <span class="el-dropdown-link">
-                        操作<i class="el-icon-arrow-down el-icon--right"></i>
-                      </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail')">详情</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </el-col>
-          </template>
-        </el-table-column>
       </el-table>
-      <div class="block" style="margin: 20px;float: right">
+      <div class="block" style="margin: 20px;float: left">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -113,12 +98,12 @@
     name: '',
     data () {
       return {
-        pageRows:5,
+        pageRows:10,
         currentPage: 1,
         totalCount:0,
         expectations:[{
           value: '',
-          label: '全部'
+          label: '售后期望'
         }, {
           value: '2',
           label: '仅退款'
@@ -131,7 +116,7 @@
         }],
         afterSales:[{
           value: '',
-          label: '全部'
+          label: '售后状态'
         }, {
           value: '0',
           label: '申请退货'
@@ -175,7 +160,7 @@
         afterSaleStatus:'',//售后状态
         mediaStatus:[{
           value: '',
-          label: '全部'
+          label: '媒体信息'
         }, {
           value: '1',
           label: '有媒体信息'
@@ -185,10 +170,22 @@
         }],
         // 搜索参数
         search_params: { expectation: '', afterSaleStatus: '', condition: '', startTime: '', endTime: '',hasMedia:'' }
-        ,orderStoreData:[]
+        ,orderStoreData:[],
+        time:''
       }
     },
     methods: {
+      //时间赋值
+      timeCheck () {
+        let that = this
+        if(that.time != null){
+          that.search_params.startTime = that.time[0]
+          that.search_params.endTime = that.time[1]
+        }else{
+          that.search_params.startTime = ''
+          that.search_params.endTime = ''
+        }
+      },
       // 获取全部订单信息
       orderStore () {
         let that = this;
