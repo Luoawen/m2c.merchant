@@ -1,30 +1,39 @@
 <template>
-  <div class="marketing">
-    <div class="search " >
+  <div class="content clear">
+    <div class="searchWarp search" >
       <div class="search_cell ">
         <input class="form-control search_input  " v-model="search_params.full_cut_no" placeholder="满减编号" @blur="formValidator(1)">
       </div>
       <div class="search_cell">
         <input class="form-control search_input" v-model="search_params.full_cut_name" placeholder="满减名称" maxlength="11">
       </div>
+        <el-date-picker
+        v-model="time"
+        type="daterange"
+        range-separator="-"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期" value-format="yyyy-MM-dd"
+        @change="timeCheck">
+      </el-date-picker>
       <div class="search_cell">
         <select data-v-0c409cb2="" class="form-control search_input"  v-model="search_params.status">
-            <option data-v-0c409cb2="" value="0" >状态</option>
+            <option data-v-0c409cb2="" value="0" >全部状态</option>
             <option data-v-0c409cb2="" value="1">未生效</option>
             <option data-v-0c409cb2="" value="2">已生效</option>
             <option data-v-0c409cb2="" value="3">已失效</option>
         </select>
       </div>
-      <div class="search_cell">
-        <span>生成时间</span>
+      <!-- <div class="search_cell"> -->
+        <!-- <span>生成时间</span>
         <input type="date" class="form-control search_input search_input_date_l" v-model="search_params.start_time" :max="search_params.end_time">
         ~
-        <input type="date" class="form-control search_input search_input_date_r" v-model="search_params.end_time" :min="search_params.start_time">
-      </div><span @click="sevenDay()">最近7天</span>
-      </br>
+        <input type="date" class="form-control search_input search_input_date_r" v-model="search_params.end_time" :min="search_params.start_time"> -->
+      <!-- </div> -->
+      <!-- <span @click="sevenDay()">最近7天</span> -->
+      <!-- </br> -->
       <div class="search_cell">
         <select data-v-0c409cb2="" class="form-control search_input" v-model="search_params.full_cut_type">
-            <option data-v-0c409cb2="" value="0">形式</option>
+            <option data-v-0c409cb2="" value="0">全部形式</option>
             <option data-v-0c409cb2="" value="1">减钱</option>
             <option data-v-0c409cb2="" value="2">打折</option>
             <option data-v-0c409cb2="" value="3">换购</option>
@@ -54,6 +63,7 @@
     name: '',
     data () {
       return {
+        time:'',
         // 搜索参数
         // search_params: {orderNo: '', settleBillId: '', dealerKey: '', mediaKey: '', salerKey: '', startTime: '', endTime: ''}
         search_params: {
@@ -70,6 +80,17 @@
       }
     },
     methods: {
+         //时间赋值
+      timeCheck () {
+        let that = this
+        if(that.time != null){
+          that.search_params.startTime = that.time[0]
+          that.search_params.endTime = that.time[1]
+        }else{
+          that.search_params.startTime = ''
+          that.search_params.endTime = ''
+        }
+      },
       formatDate (date, fmt) {
         let that = this
         if (/(y+)/.test(fmt)) {
@@ -267,28 +288,6 @@
 </script>
 
 <style lang="scss" scoped>
-.search{
-  min-height: 180px;
-  margin: 10px 30px 0 30px;
-  padding:30px 26px ;
-  background-color: #fff;
-  .search_cell{
-    margin-top:0;
-    margin-bottom: 14px;
-    // color:red;
-  }
-  .button{
-    border-radius: 0;
-    min-width: 130px;
-    height: 34px;
-    color: white;
-    margin:10px  20px 0 0;
-    padding: 0 5px;
-    border-radius: 6px;
-    background-color: rgb(1,134,255)
-  }
-}
-
 .modal-open{
   #handle{display:flex}
   #handle.in{z-index:2000}
@@ -302,10 +301,10 @@
     /*
     search_input:正常的input框/select框
     search_input_date_l:左侧日期选择框
-    search_input_date_r:右侧日期选择框
+    search_input_date_r:右侧日期选择框margin-left:30px;padding: 15px 36px;
     */
-    margin-left:30px;min-width:500px;
-    padding: 15px 36px;
+    min-width:500px;
+    .button{background-color: rgb(4, 136, 255);color:#fff;margin-left:10px}
     span:first-child{margin-right:10px}
     .search_cell{display:inline-block;margin-top:10px;margin-right:30px;}
     .search_input{display:inline-block;vertical-align:middle;border-radius:5px;width:200px;height:36px}
