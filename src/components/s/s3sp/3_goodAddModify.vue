@@ -68,8 +68,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="11">
-          <el-form-item label="商品条形码">
-            <el-input v-model="data.goodsBarCode" placeholder="请输入内容" maxlength = 30></el-input>
+          <el-form-item label="商品条形码"  prop="goodsBarCode">
+            <el-input v-model="data.goodsBarCode" placeholder="请输入内容"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -341,6 +341,16 @@
             }
           }, 1000);
         };
+      var checkGoodsBarCode = (rule, value, callback) => {
+        var reg = /^[0-9a-zA-Z]{1,30}$/
+        setTimeout(() => {
+          if (value != '' && !reg.test(value)) {
+            callback(new Error('只能为1到30位的数字或字母'))
+          } else {
+            callback();
+          }
+        }, 1000);
+      };
       return {
         ruleForm: {
           goodsName: '',
@@ -349,7 +359,8 @@
           goodsBrandId: '',
           goodsUnitId: '',
           goodsMinQuantity: '',
-          goodsPostageId: ''
+          goodsPostageId: '',
+          goodsBarCode: ''
         },
         rules: {
           goodsClassifyId: [
@@ -374,7 +385,9 @@
           goodsPostageId: [
             { required: true, message: '请选择运费模板', trigger: 'change' }
           ],
-
+          goodsBarCode: [
+            {required: false, validator: checkGoodsBarCode, trigger: 'blur' }
+          ]
         },
         standardIdShow: false, // 规格不能为空
         sukShow: false, // 商品库存不能为空且为正整数
