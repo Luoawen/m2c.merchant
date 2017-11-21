@@ -348,7 +348,22 @@
           } else {
             callback();
           }
-        }, 1000);
+        }, 0);
+      };
+      var checkGoodsKeyWord = (rule, value, callback) => {
+        var reg = /^.{1,20}$/
+        setTimeout(() => {
+          if (value != '') {
+            var values = value.split(',')
+            for (var i = 0; i < values.length; i++) {
+              if (!reg.test(values[i])) {
+                callback(new Error('每个关键词1-20字符，每个关键词用逗号隔开'))
+              } else {
+                callback();
+              }
+            }
+          }
+        }, 0);
       };
       return {
         ruleForm: {
@@ -359,7 +374,8 @@
           goodsUnitId: '',
           goodsMinQuantity: '',
           goodsPostageId: '',
-          goodsBarCode: ''
+          goodsBarCode: '',
+          goodsKeyWord: ''
         },
         rules: {
           goodsClassifyId: [
@@ -379,13 +395,16 @@
             { required: true, message: '请选择计量单位', trigger: 'change' }
           ],
           goodsMinQuantity: [
-            {required: true, validator: checkGoodsMinQuantity, trigger: 'blur' }
+            { required: true, validator: checkGoodsMinQuantity, trigger: 'blur' }
           ],
           goodsPostageId: [
             { required: true, message: '请选择运费模板', trigger: 'change' }
           ],
           goodsBarCode: [
-            {required: false, validator: checkGoodsBarCode, trigger: 'blur' }
+            { required: false, validator: checkGoodsBarCode, trigger: 'blur' }
+          ],
+          goodsKeyWord: [
+            { required: false, validator: checkGoodsKeyWord, trigger: 'blur' }
           ]
         },
         standardIdShow: false, // 规格不能为空
