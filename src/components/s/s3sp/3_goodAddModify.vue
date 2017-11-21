@@ -362,6 +362,8 @@
                 callback();
               }
             }
+          } else {
+            callback();
           }
         }, 0);
       };
