@@ -193,7 +193,7 @@
       <table class="mt20 detail_table">
         <thead>
         	<tr class="fh">
-      		<td colspan="2">{{orderStatus === 1 ? '待发货数：' + expressNum : orderStatus === 2 ? '待发货数：' + expressNum:'--'}}</td>
+      		<td colspan="2">{{orderStatus === 1 ? '待发货数：' + expressNum : orderStatus == 2 ? '待收货数：' + expressNum: orderStatus > 2 ? '已收货数：' + expressNum:'--'}}</td>
       		<td>
       			<button class="fah fr mr10" @click="deliver" v-show="orderStatus==0">发货</button>
       		</td>
@@ -906,7 +906,7 @@
         let that = this;
         that.$.ajax({
           type: 'get',
-          url: that.base + 'm2c.media/mres/byIdList',
+          url: that.base + 'm2c.media/mres/byIdList/mu',
           data: {
             token: sessionStorage.getItem('mToken'),
             mresIdList: '[' + resIds + ']'
