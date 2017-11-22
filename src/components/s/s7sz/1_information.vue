@@ -1,5 +1,5 @@
-<template xmlns:v-model="http://www.w3.org/1999/xhtml">
-  <div class="message">
+<template>
+  <div class="message content clear">
     <h4>店铺信息</h4>
     <div class="shop">
       <div class="shopMess">
@@ -30,7 +30,7 @@
           </div>
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-            <el-button type="submit"  @click="modifyDealerMess()">保存</el-button>
+            <el-button type="primary" size="medium" @click="modifyDealerMess()">保存</el-button>
             <!--<button type="submit" class="btn btn-default btn-lg">取消</button>-->
             </div>
           </div>
@@ -212,9 +212,6 @@
 
 <style lang="scss" scoped>
   .message{
-    width: 1583px;
-    margin-top: 146px;
-    margin-left: 30px;
     .shop{
       margin-top: 30px;
       .shopMess{
