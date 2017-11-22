@@ -172,7 +172,7 @@
           this.$('.content_s').removeClass('avter')
           this.$('[path="' + this.$route.path + '"]').addClass('avter')
           this.$('[path="' + this.$route.path + '"]').parent(".content_container").css('display','block')
-          if(this.$route.meta.title==''){
+          if(this.$route.meta.title==''||this.$route.meta.title==undefined){
             this.$('.right_nav_content').text('')
           }else{
             this.$('.right_nav_content').text(' > ' + this.$route.meta.title)
@@ -505,25 +505,25 @@ body {
         cursor: pointer;
       }
       .nav_home {
-        background: url(../assets/images/ico_home.png) no-repeat;
+        background: url(../assets/images/nav_home.png) no-repeat;
       }
       .nav_order {
-        background: url(../assets/images/ico_deal.png) no-repeat;
+        background: url(../assets/images/nav_order.png) no-repeat;
       }
       .nav_change {
-        background: url(../assets/images/ico_commodity.png) no-repeat;
+        background: url(../assets/images/nav_commodity.png) no-repeat;
       }
       .nav_asset_m {
-        background: url(../assets/images/ico_sidebar06.png) no-repeat;
+        background: url(../assets/images/nav_finance.png) no-repeat;
       }
       .nav_marketing {
         background: url(../assets/images/nav_marketing.png) no-repeat;
       }
       .nav_data {
-        background: url(../assets/images/ico_sidebar05.png) no-repeat;
+        background: url(../assets/images/nav_sell.png) no-repeat;
       }
       .nav_setting {
-        background: url(../assets/images/ico_header_set.png) no-repeat;
+        background: url(../assets/images/nav_set.png) no-repeat;
       }
     }
     .right_nav {
@@ -565,7 +565,7 @@ body {
         float: left;
       }
       i {
-        background: url(../assets/images/ico_home.png) no-repeat;
+        background: url(../assets/images/nav_home.png) no-repeat;
         display: block;
         position: absolute;
         top: 20px;

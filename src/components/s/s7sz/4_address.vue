@@ -460,6 +460,7 @@
 
 <style lang="scss" scoped>
   .sz {
+    .form-horizontal{padding-top:20px;padding-left:0;}
     .control-label{font-weight:normal;}
     .form-group {
       margin-bottom: 30px;

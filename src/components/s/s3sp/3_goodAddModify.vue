@@ -354,14 +354,18 @@
         var reg = /^.{1,20}$/
         setTimeout(() => {
           if (value != '') {
-            var values = value.split(',')
+            var values
+            if (this.handle_toggle == 'add') {
+              values = value.split(',')
+            } else {
+              values = value
+            }
             for (var i = 0; i < values.length; i++) {
               if (!reg.test(values[i])) {
                 callback(new Error('每个关键词1-20字符，每个关键词用逗号隔开'))
-              } else {
-                callback();
               }
             }
+            callback();
           } else {
             callback();
           }
