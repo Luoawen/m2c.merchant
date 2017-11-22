@@ -441,8 +441,8 @@
           }
         } else if (action === '_delete') {
           if(to=='a'){
-            let brandId = row.brandId
-            that.delectGoodShow(brandId)
+            that.delete_params.brandId = row.brandId
+            that.delectGoodShow()
           }else{
             that.deleteApproveId = row.approveId
             that.deleteApprove()
@@ -674,11 +674,11 @@
             token: sessionStorage.getItem('mToken')
           },
           success: function (result) {
-            if(result.status == 200){
-            that.show_tip("删除成功")
-            that.delectApproveHide()
-            that.get_comment_info1()
-            }else{
+            if (result.status == 200 || result.status == 200) {
+              that.show_tip('删除成功')
+              that.delectApproveHide()
+              that.get_comment_info1()
+            } else {
               that.show_tip(result.errorMessage)
             }
           }
@@ -725,7 +725,7 @@
         that.delectApprove = false
         that.delectGoodBg = false
       },
-      
+
       // 获取商品库列表
       get_comment_info () {
         let that = this
