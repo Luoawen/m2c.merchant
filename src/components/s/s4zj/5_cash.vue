@@ -39,7 +39,7 @@
 					<span>备注</span>
 					</div>
 					<div>
-						<textarea placeholder="请填写" class="el-input__inner text col-sm-6 mr5" v-model="applyComment">
+						<textarea placeholder="请填写" class="el-input__inner text col-sm-6 mr5" v-model="applyComment" maxlength="200">
 						</textarea>
 					</div>
 				</div>
