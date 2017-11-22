@@ -193,7 +193,7 @@
       <table class="mt20 detail_table">
         <thead>
         	<tr class="fh">
-      		<td colspan="2">{{orderStatus === 1 ? '待发货数：' + expressNum : orderStatus === 2 ? '待发货数：' + expressNum:'--'}}</td>
+      		<td colspan="2">{{orderStatus === 1 ? '待发货数：' + expressNum : orderStatus === 2 ? '待收货数：' + expressNum:'--'}}</td>
       		<td>
       			<button class="fah fr mr10" @click="deliver" v-show="orderStatus==0">发货</button>
       		</td>
@@ -223,8 +223,8 @@
             <div class="mt10 mb10">
               <span class="mr20 tit_tb">配送方式</span>
               <span class="ml20">
-                <span>{{orderStatus==2? (expressWay==0?'物流发货':expressWay==1?'自有物流':'-') :'-'}}
-                  <span class="mr20 tit_tbb">{{orderStatus==2? (expressWay==0?'物流公司':expressWay==1?'配送员':''):''}}</span>
+                <span>{{orderStatus>=2? (expressWay==0?'物流发货':expressWay==1?'自有物流':'-') :'-'}}
+                  <span class="mr20 tit_tbb">{{orderStatus>=2? (expressWay==0?'物流公司':expressWay==1?'配送员':''):''}}</span>
                   <span class="ml20">{{expressWay==0?expressName:expressWay==1?expressPerson+'， '+expressPhone:''}}</span>
                 </span>
               </span>
@@ -232,13 +232,13 @@
             <div class="mt10 mb10" v-show="expressWay==0">
               <span class="mr20 tit_tb">物流单号</span>
               <span class="ml20">
-              <span>{{orderStatus==2? expressNo:'-'}}</span>
+              <span>{{orderStatus>=2? expressNo:'-'}}</span>
               </span>
             </div>
             <div class="mt10 mb10">
               <span class="mr20 tit_tb">备注</span>
               <span class="ml20">
-              <span>{{orderStatus==2? expressNote:'-'}}</span>
+              <span>{{orderStatus>=2? expressNote:'-'}}</span>
               </span>
             </div>
             </td>
