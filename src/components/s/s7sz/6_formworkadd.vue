@@ -227,9 +227,9 @@
           <textarea class="form-control"
           cols="80"
           rows="7"
-          placeholder="1-200字符"
+          placeholder="1-100字符"
           style="resize:none;"
-          v-model="formwork.modelDescription" maxlength="200"> </textarea></div>
+          v-model="formwork.modelDescription" maxlength="100"> </textarea></div>
         </div>
         <div style="padding-left:290px;"><span style="color: #aab2bd">便于顾客看到每个商品的模板说明，以便知晓您的运费计费规则</span></div>
         <br/>
