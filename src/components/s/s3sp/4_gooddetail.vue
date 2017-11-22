@@ -82,7 +82,7 @@
 								<tr>
 									<td>规格</td>
 									<td>库存</td>
-									<td>重量/kg（个）</td>
+									<td>重量/kg{{data.goodsUnitName==''?'':'（'+data.goodsUnitName+'）'}}</td>
 									<td>拍获价/元</td>
 									<td>市场价/元</td>
 									<td>{{countMode==1?'供货价':'服务费率/%'}}</td>
@@ -125,9 +125,13 @@
 								<tr>
 									<td>规格值</td>
 									<td>对外展示</td>
-									<td>*库存</td>
-									<td>*重量/kg（个）</td>
-									<td>*拍获价/元</td>
+									<td>库存</td>
+									<td>重量/kg{{data.goodsUnitName==''?'':'（'+data.goodsUnitName+'）'}}<div class="icon">
+                    <div class="tips" style="width:400px;z-index:2;">
+                      <p>表示每个计量单位对应的重量，比如0.05kg(个)表示每个重量为0.05kg</p>
+                    </div>
+                  </div></td>
+									<td>拍获价/元</td>
 									<td>市场价/元</td>
 									<td>{{countMode==1?'供货价':'服务费率/%'}}</td>
 									<td>商品编码</td>
