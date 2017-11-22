@@ -257,7 +257,13 @@
     },
     methods: {
 			goBack(){
-        this.$router.go(-1)
+        if(this.$route.query.from=='a'){
+					this.$router.push({name:'goodList',query:{activeName:'first'}})
+				}else if(this.$route.query.from=='b'){
+					this.$router.push({name:'goodList',query:{activeName:'second'}})
+				}else{
+					this.$router.push({name:'goodList',query:{activeName:'delete'}})
+				}
       },
 			Togactive01 () {
 				var that = this
