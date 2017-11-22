@@ -7,12 +7,12 @@
       <el-row :gutter="20">
         <el-col :span="11">
           <el-form-item label="商品名称" prop="goodsName">
-            <el-input v-model="data.goodsName" placeholder="1-50字符"></el-input>
+            <el-input v-model="data.goodsName"   placeholder="1-50字符" :maxlength="50" ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="11">
           <el-form-item label="商品副标题" prop="goodsSubTitle">
-            <el-input v-model="data.goodsSubTitle" placeholder="1-100字符"></el-input>
+            <el-input v-model="data.goodsSubTitle" placeholder="1-100字符" :maxlength="100"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -135,7 +135,7 @@
                 <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkSupplyPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs,good.photographPrice)"></el-input></td>
                 <td v-if="countMode==2">{{serviceRate}}</td>
                 <td>
-                  <el-input v-model="good.goodsCode" placeholder="请输入内容" maxlength = 30 @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)"></el-input>
+                  <el-input v-model="good.goodsCode" placeholder="请输入内容" :maxlength = "30" @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)"></el-input>
                 </td>
               </tr>
             </tbody>
@@ -245,7 +245,7 @@
               <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkSupplyPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs,good.photographPrice)"></el-input></td>
               <td v-if="countMode==2">{{serviceRate}}</td>
               <td>
-                <el-input v-model="good.goodsCode" placeholder="请输入内容" maxlength = 30 @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)"></el-input>
+                <el-input v-model="good.goodsCode" placeholder="请输入内容" :maxlength = "30" @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)"></el-input>
               </td>
             </tr>
             <tr v-if="goodsSKUs.length!=0">
@@ -745,18 +745,6 @@
         let that = this
         that.$refs[formName].validate((valid) => {
           if (valid) {
-            if(that.goodsMainImages.length<=0){
-              that.imgShowList = true
-              return
-            }
-            let liList = document.getElementById('dragImg').getElementsByTagName('li')
-            let liLength = liList.length
-            // for(var i=0;i<liLength;i++){
-            //   that.goodsMainImages.push(that.$(liList[i]).find("img").src)
-            //   console.log(that.$(liList[i]).find("img"))
-            //   console.log(that.goodsMainImages)
-            //   return
-            // }
             for (var k = 0; k < that.goodsSKUs.length; k++) {
               if (that.goodsSKUs[k].availableNum == undefined) {
                 that.checkInventorySubmit(that.goodsSKUs[k].availableNum)
@@ -782,6 +770,10 @@
               if (that.countMode == 1) {
                 that.goodsSKUs[k].supplyPrice = parseFloat(that.goodsSKUs[k].supplyPrice * 100)
               }
+            }
+            if (that.goodsMainImages.length <= 0) {
+              that.imgShowList = true
+              return
             }
             let a = {
               token: sessionStorage.getItem('mToken'),
