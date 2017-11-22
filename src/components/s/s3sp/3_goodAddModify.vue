@@ -38,7 +38,7 @@
       <el-row :gutter="20">
         <el-col :span="11">
           <el-form-item label="计量单位" prop="goodsUnitId">
-            <el-select v-model="data.goodsUnitId" placeholder="请选择">
+            <el-select v-model="data.goodsUnitId" placeholder="请选择" @change="unitChange">
               <el-option
                 v-for="item in units"
                 :key="item.unitId"
@@ -106,7 +106,11 @@
             <tr>
               <th>规格</th>
               <th><span style="color: red">*</span>库存</th>
-              <th><span style="color: red">*</span>重量/kg（个）</th>
+              <th><span style="color: red">*</span>重量/kg{{unitName==''?'':'（'+unitName+'）'}}<div class="icon">
+                <div class="tips" style="width:400px;z-index:2;">
+                  <p>表示每个计量单位对应的重量，比如0.05kg(个)表示每个重量为0.05kg</p>
+                </div>
+              </div></th>
               <th><span style="color: red">*</span>拍获价/元</th>
               <th>市场价/元</th>
               <th>{{countMode==1?'供货价':'服务费率/%'}}</th>
@@ -205,7 +209,11 @@
               <th>规格值</th>
               <th>对外展示</th>
               <th><span style="color: red">*</span>库存</th>
-              <th><span style="color: red">*</span>重量/kg（个）</th>
+              <th><span style="color: red">*</span>重量/kg{{unitName==''?'':'（'+unitName+'）'}}<div class="icon">
+                <div class="tips" style="width:400px;z-index:2;">
+                  <p>表示每个计量单位对应的重量，比如0.05kg(个)表示每个重量为0.05kg</p>
+                </div>
+              </div></th>
               <th><span style="color: red">*</span>拍获价/元</th>
               <th>市场价/元</th>
               <th>{{countMode==1?'供货价':'服务费率/%'}}</th>
@@ -471,13 +479,28 @@
         dLabel2: false,
         dLabel3: false,
         goodsBrandName: '',
-        setUp:{},
-        disabled:false, //禁用规格选择
-        tempGoodsMainImages:[],
+        setUp: {},
+        disabled: false, // 禁用规格选择
+        tempGoodsMainImages: [],
+        unitName: ''
       }
     },
     created() {},
     watch: {
+      // 监听计量单位
+      'data.goodsUnitId': {
+        handler: function (val, oldVal) {
+          let that = this
+          if (val != oldVal) {
+            that.$nextTick(function () {
+              that.unitChange(val)
+            })
+          } else {
+            return false
+          }
+        },
+        deep: true
+      },
       // 监听商品分类以获取费率
       // 监听goodsMainImages的长度
       'goodsMainImages.length':{
@@ -516,6 +539,17 @@
       }
     },
     methods: {
+      unitChange (item) {
+        let that = this
+        if (that.units && that.units != '' && that.units != null && that.units.length > 0) {
+          for (var i = 0; i < that.units.length; i++) {
+            if (item == that.units[i].unitId) {
+              that.unitName = that.units[i].unitName
+              break
+            }
+          }
+        }
+      },
       checkGoodsCode (val, index, arr, list) {  // 校验商品编码
         setTimeout(() => {
           var re = /^[0-9a-zA-Z]{1,30}$/
