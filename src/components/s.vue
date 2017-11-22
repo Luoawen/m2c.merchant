@@ -172,7 +172,7 @@
           this.$('.content_s').removeClass('avter')
           this.$('[path="' + this.$route.path + '"]').addClass('avter')
           this.$('[path="' + this.$route.path + '"]').parent(".content_container").css('display','block')
-          if(this.$route.meta.title==''){
+          if(this.$route.meta.title==''||this.$route.meta.title==undefined){
             this.$('.right_nav_content').text('')
           }else{
             this.$('.right_nav_content').text(' > ' + this.$route.meta.title)
