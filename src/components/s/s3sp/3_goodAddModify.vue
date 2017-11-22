@@ -295,7 +295,7 @@
           <p class="marginTop20">最多上传5张主图，可以通过拖曳图片调整顺序</p>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
+      <el-row :gutter="20" style="z-index:1;"></el-row>
         <el-col :span="3">图文详情</el-col>
         <el-col :span="21" style="height:400px;">
           <div id="editor-container">

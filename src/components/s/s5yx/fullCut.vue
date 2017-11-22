@@ -502,7 +502,7 @@
                 <div>
                   <div class='goodsInfoText'>{{goods.dealerName}}</div>
                   <div>{{goods.goodsPrice/100}}元</div>
-                  <div class="pickSpecificationsStyle"   :vaule='goods.isChooseSpecification'     @click.stop="ChooseSpecification(goods,index)">{{goods.isChooseSpecification}}</div>
+                  <!-- <div class="pickSpecificationsStyle"   :vaule='goods.isChooseSpecification'     @click.stop="ChooseSpecification(goods,index)">{{goods.isChooseSpecification}}</div> -->
                 </div>
                 <div class="fc" v-show='goods.isRemoved===1'>
                 </div>

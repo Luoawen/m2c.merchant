@@ -120,7 +120,7 @@
                     </div>
             </div>
          </div>
-         <div class="info-content" v-if="item.costList != null && item.costList.length > 0">
+         <!-- <div class="info-content" v-if="item.costList != null && item.costList.length > 0">
            <div>
             <h4>成本设置</h4>
             <p   v-for="cost in item.costList">
@@ -129,7 +129,7 @@
               <span>商家承担:&nbsp;<span v-text="cost.dealerPercent + '%'"></span></span>
             </p>
            </div>
-        </div>
+        </div> -->
         <div class="info-content">
             <h4>备注</h4>
             <p>{{item.remark == '' ? '暂无' : item.remark}}</p>
