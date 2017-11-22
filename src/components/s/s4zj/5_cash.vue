@@ -26,10 +26,10 @@
 					<span>提现金额</span>
 					</div>
 					<el-input v-model="tradableA" class="col-sm-4" style="padding-left:0px;" :placeholder="'最多可提现'+tradableAmount" :disabled="isdisable" @blur="checkTradab"></el-input>
-					<span class="fl mt8 mr20">元</span>
-					<a class="mt8 fl" @click="tradabAll">全部提现</a>
-					<i class="red" v-show="isEmpty">提现金额不能为空</i>
-					<i class="red" v-show="checkShow">提现金额不能大于可提现金额</i>
+          <span class="fl mt8 mr20">元</span>
+          <a class="mt8 fl" @click="tradabAll">全部提现</a>
+          <i class="red" v-show="isEmpty">提现金额不能为空</i>
+          <i class="red" v-show="checkShow">提现金额不能大于可提现金额</i>
 				</div>
 				<div class="tit">
 					本月还可提现 {{availableCount}} 次
@@ -39,7 +39,7 @@
 					<span>备注</span>
 					</div>
 					<div>
-						<textarea placeholder="请填写" class="el-input__inner text col-sm-6 mr5" v-model="applyComment">
+						<textarea placeholder="请填写" class="el-input__inner text col-sm-6 mr5" v-model="applyComment" maxlength="200">
 						</textarea>
 					</div>
 				</div>
@@ -58,7 +58,7 @@
 					</div>
 					<el-input type="password" v-model="payPassword" class="col-sm-4" style="padding-left:0px;" placeholder="6位数密码" @blur="checkEmpty" :maxlength='6' ></el-input>
 					<router-link class="mt8 fl" :to="{name:'cashPass',query:{from:'cash'}}">忘记密码</router-link>
-					<i class="red" v-show="numberShow">剩余{{6-errorCount}}次机会</i>
+					<i class="red" v-show="numberShow">剩余{{6-errorCount}}次输错提现密码机会</i>
 					<i class="red" v-show="isEmpty">交易密码不能为空</i>
 				</div>
 			</div>
@@ -215,7 +215,7 @@ export default {
 							that.numberShow = true
 							that.$.ajax({
 								type: 'get',
-								url: this.base + 'm2c.trading/web/withdrawal/dealer/payPasswordErrorCount',
+								url: that.base + 'm2c.trading/web/withdrawal/dealer/payPasswordErrorCount',
 								data: {
 									token: sessionStorage.getItem('mToken'),
 									correlationId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,

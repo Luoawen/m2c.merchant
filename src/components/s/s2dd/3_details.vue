@@ -339,8 +339,7 @@
           orderFreight:0,
           backFreight:0
           ,dealerId:''
-          ,doStatus: -2,
-          mediaResInfos:{}
+          ,doStatus: -2
         },
         operatingRecords:[],
         logistics:{
@@ -372,7 +371,7 @@
         goodses: [],
         expressNum:0,
         totalData:'',
-
+        mediaResInfos:{}
       }
     },
     methods: {
