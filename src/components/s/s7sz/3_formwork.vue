@@ -1,11 +1,11 @@
 <template>
-  <div class="sz">
-    <router-link :to="{ name:'formworkadd', query: {addModify: 'true'} }" class="btn btn-info pull-right add btn-lg">新增</router-link>
+  <div class="sz content clear">
+    <el-button type="primary" size="medium" @click="goAdd">新增</el-button>
     <template v-for="(formwork,index) in formworks">
       <table class="table table-bordered">
         <thead>
           <tr class="active">
-            <th>模板名称</th>
+            <th width="500px">模板名称</th>
             <th>{{formwork.modelName}}</th>
             <th class="some">
               <p v-if="formwork.goodsUserNum==0">已有{{formwork.goodsUserNum}}个商品使用 </p>
@@ -66,6 +66,9 @@ export default {
     this.getTemplate()
   },
   methods: {
+    goAdd(){
+      this.$router.push({ name:'formworkadd', query: {addModify: 'true'}})
+    },
     showdelete (modelId) {
       var that = this;
       that.formworkId = modelId;
@@ -122,31 +125,29 @@ export default {
 
 <style lang="scss" scoped>
 .sz{
-    width: 1620px;
-    height: 800px;
-    margin-left: 48px;
-    margin-top: 130px;
-    background-color: #fff;
     .add{
       margin: 31px 44px 5px 0;
     }
     .table{
-      width: 1538px;
-      margin-left: 38px;
-      thead{
-        tr{
-          th{
-            border: 0px solid transparent;
-          }
-          th.act{
-            color: blue !important;
-            cursor: pointer;
-          }
-          th.some{
-            cursor: pointer;
-          }
+      width:100%;
+      margin-top: 20px;
+      tr{ 
+        th{
+          font-weight:normal;
+          border: 0px solid transparent;
+          border-bottom:1px solid #e6ebf5
         }
+        th.act{
+          color: blue !important;
+          cursor: pointer;
+        }
+        th.some{
+          cursor: pointer;
+        }
+        td{font-weight:normal;}
       }
+      thead tr.active th{background:#DFE9F6}
+      tbody tr.active th{background:#f4f5fa}
     }
 }
 

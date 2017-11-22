@@ -1,5 +1,5 @@
 <template>
-  <div class="sz">
+  <div class="sz content clear">
     <form class="form-horizontal" action="" method="post" v-on:submit.prevent>
       <div class="form-group search_cell">
         <label class="col-sm-2 control-label"><span style="color: red">*</span>售后地址：</label>
@@ -45,9 +45,8 @@
       </div>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-info btn-lg save"
-                  @click="isAdd == true?add_address():modify_address()">保存
-          </button>
+          <el-button type="primary" size="medium" @click="isAdd == true?add_address():modify_address()">保存
+          </el-button>
          <!-- <button type="submit" class="btn btn-default btn-lg" @click="cancel()">取消</button>-->
         </div>
       </div>
@@ -461,12 +460,8 @@
 
 <style lang="scss" scoped>
   .sz {
-    width: 1620px;
-    height: 800px;
-    margin-left: 48px;
-    margin-top: 130px;
-    padding-top: 50px;
-    background-color: #fff;
+    .form-horizontal{padding-top:20px;padding-left:0;}
+    .control-label{font-weight:normal;}
     .form-group {
       margin-bottom: 30px;
       button {

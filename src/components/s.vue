@@ -172,7 +172,7 @@
           this.$('.content_s').removeClass('avter')
           this.$('[path="' + this.$route.path + '"]').addClass('avter')
           this.$('[path="' + this.$route.path + '"]').parent(".content_container").css('display','block')
-          if(this.$route.meta.title==''){
+          if(this.$route.meta.title==''||this.$route.meta.title==undefined){
             this.$('.right_nav_content').text('')
           }else{
             this.$('.right_nav_content').text(' > ' + this.$route.meta.title)
@@ -189,62 +189,9 @@
         that.$goRoute({path: '/slogin'})
         return
       }
-      //  获取供应商信息
-      // that.$.ajax({
-      //   url: that.base + 'm2c.goods/dealer/app/detail',
-      //   data: {
-      //     token: sessionStorage.getItem('mToken'),
-      //     dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-      //     userId: JSON.parse(sessionStorage.getItem('mUser')).userId
-      //   },
-      //   success: function (data) {
-      //     console.log(data)
-      //     that.dealerName = data.content.dealerName
-      //     that.userName = data.content.userName
-      //     that.dealerMobile = data.content.dealerMobile
-      //     that.dealerProvince = data.content.dealerProvince
-      //     that.dealerCity = data.content.dealerCity
-      //     that.detailAddress = data.content.detailAddress
-      //     that.dealerArea = data.content.dealerArea
-      //     if (data.content.createdDate !== null) that.createdDate = that.date_format(new Date(data.content.createdDate), 'yyyy-MM-dd hh:mm:ss')
-      //   }
-      // })
       window.onbeforeunload = function () {
         sessionStorage.setItem('active_path', that.$('.right_nav_content').text())
       }
-      // that.$('.right_nav_content').text(sessionStorage.getItem('active_path'))
-      // setTimeout(function () {
-      //   that.life = 'done'
-      //   let query = window.location.href.split('/')
-      //   console.log('地址', query)
-      //   query = '/' + query[query.length - 2] + '/' + query[query.length - 1]
-      //   let target = `[path='${query}']`
-      //   console.log('target', target)
-      //   if (target === `[path='/s/s22czdd']`) {
-      //     target = `[path='/s/s21ddgl']`
-      //   } else if (target === `[path='/s/s32thhcz']`) {
-      //     target = `[path='/s/s31thhgl']`
-      //   } else if (target === `[path='/s/s23dyfhd']`) {
-      //     target = `[path='/s/s21ddgl']`
-      //   }
-      //   that.$(target).parent().slideDown(400)
-      //   // 设置左边导航栏的目标样式
-      //   Array.from(document.querySelectorAll('[path]')).map(function (x) {
-      //     that.$(x).removeClass('avter')
-      //   })
-      //   that.$(target).addClass('avter')
-      // }, 0)
-      // if (sessionStorage.getItem('Path') === '/s/s12yhpjgl') {
-      //   that.$('#public_nav_three_level').text('  > 评价管理')
-      // } else if (sessionStorage.getItem('Path') === '/s/s22czdd') {
-      //   that.$('#public_nav_three_level').text('  > 订单操作')
-      // } else if (sessionStorage.getItem('Path') === '/s/s32thhcz') {
-      //   that.$('#public_nav_three_level').text('  > 退换货操作')
-      // } else if (sessionStorage.getItem('Path') === '/s/s42zdmx') {
-      //   that.$('#public_nav_three_level').text('  > 账单明细')
-      // } else if (sessionStorage.getItem('Path') === '/s/s23dyfhd') {
-      //   that.$('#public_nav_three_level').text('  > 打印发货单')
-      // }
     },
     created() {
      // 组件创建完后获取数据，
@@ -558,25 +505,25 @@ body {
         cursor: pointer;
       }
       .nav_home {
-        background: url(../assets/images/ico_home.png) no-repeat;
+        background: url(../assets/images/nav_home.png) no-repeat;
       }
       .nav_order {
-        background: url(../assets/images/ico_deal.png) no-repeat;
+        background: url(../assets/images/nav_order.png) no-repeat;
       }
       .nav_change {
-        background: url(../assets/images/ico_commodity.png) no-repeat;
+        background: url(../assets/images/nav_commodity.png) no-repeat;
       }
       .nav_asset_m {
-        background: url(../assets/images/ico_sidebar06.png) no-repeat;
+        background: url(../assets/images/nav_finance.png) no-repeat;
       }
       .nav_marketing {
         background: url(../assets/images/nav_marketing.png) no-repeat;
       }
       .nav_data {
-        background: url(../assets/images/ico_sidebar05.png) no-repeat;
+        background: url(../assets/images/nav_sell.png) no-repeat;
       }
       .nav_setting {
-        background: url(../assets/images/ico_header_set.png) no-repeat;
+        background: url(../assets/images/nav_set.png) no-repeat;
       }
     }
     .right_nav {
@@ -618,7 +565,7 @@ body {
         float: left;
       }
       i {
-        background: url(../assets/images/ico_home.png) no-repeat;
+        background: url(../assets/images/nav_home.png) no-repeat;
         display: block;
         position: absolute;
         top: 20px;
