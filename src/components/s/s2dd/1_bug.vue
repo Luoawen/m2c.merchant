@@ -186,7 +186,7 @@
                 <!-- 有几种情况的不同表现方 -->
                 <div style="">
                   <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :'--'}}</div>
-                  <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
+                  <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.backMoney, item.orderFreight)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
                   <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" v-show="goodsItem.afStatus>=0 && goodsItem.afStatus<=2">拒绝</button></div>
                 </div>
                 <div v-show="goodsItem.afStatus==3">
@@ -232,15 +232,15 @@
 
     </div>
     <!-- &lt;!&ndash; 是否同意弹框 &ndash;&gt; -->
-    <div class="agreetc_content" v-show="Agreeshow===true" >
+    <div class="agreetc_content" v-show="agreeApplyShow===true" >
       <div class="agreetc_header">
         <span>提示</span>
-        <span class="fr" @click="Agreeshow=false">X</span>
+        <span class="fr" @click="agreeApplyShow=false;Agreeshow=false;">X</span>
       </div>
       <div class="agreetc_body">确认同意{{afStatus==0?'退货':afStatus==1?'换货':afStatus==2?'退款' : '--'}}申请？</div>
       <div class="agreetc_footer">
         <button type="button" class="btn save" @click="agreeApply()">确认</button>
-        <button type="button" class="btn cancel" @click="Agreeshow=false">取消</button>
+        <button type="button" class="btn cancel" @click="agreeApplyShow=false;Agreeshow=false;">取消</button>
       </div>
     </div>
     <!-- &lt;!&ndash; 拒绝原因 &ndash;&gt; -->
@@ -273,6 +273,35 @@
         <button type="button" class="btn cancel" @click="TowAgreeshow=false">取消</button>
       </div>
     </div>
+
+    <div class="pop_content"  v-show="showRt===true">
+      <div class="hptczp_header">
+        <span>同意申请</span>
+        <span class="fr" @click="Agreeshow=false;showRt=false">X</span>
+      </div>
+      <div class="hptczp_body">
+        <div class="linh40">
+          <span class=" wid80">
+            <span style="color: red;">*</span>
+            运费退款
+          </span>
+          <span> <el-input-number v-model="pRtFreight" :controls="false" :min="0" :max="orderFreight" ></el-input-number></span>
+          <span>元</span>
+        </div>
+        <div class="linh40 pl10">
+          <span class="wid80">售后金额</span>
+          <span>{{backMoney/100}}元</span>
+        </div>
+        <div class="linh40 pl10">
+          <span class=" wid80">售后总额</span>
+          <span>{{backMoney/100 + pRtFreight}}元</span>
+        </div>
+      </div>
+      <div class="hptczp_footer">
+        <button type="button" class="btn save" @click="agreeRtMoneyApply" >确认</button>
+        <button type="button" class="btn cancel" @click="Agreeshow=false;showRt=false" >取消</button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -303,6 +332,11 @@
         orderStatus:[{value:'',label:'订单状态'},{value:'0',label:'待付款'},{value:'1',label:'待发货'},{value:'2',label:'待收货'},{value:'3',label:'已完成'},{value:'4',label:'交易完成'},{value:'5',label:'交易关闭'},{value:'-1',label:'已取消'}],
         afterSellStatus:[{value:'',label:'售后状态'},{value:'0',label:'申请退货'},{value:'1',label:'申请换货'},{value:'2',label:'申请退款'},{value:'3',label:'商家拒绝申请'},{value:'4',label:'商家同意申请'},{value:'5',label:'客户寄出'},{value:'6',label:'商家收到'},{value:'7',label:'商家寄出'},{value:'8',label:'客户收到'},{value:'9',label:'同意退款'},{value:'10',label:'已退款'},{value:'11',label:'售后完成'},{value:'12',label:'交易关闭'}],
         time:''
+        ,pRtFreight:0
+        ,showRt: false
+        ,agreeApplyShow: false
+        ,backMoney:0
+        ,orderFreight:0
       }
     },
     methods: {
@@ -318,11 +352,19 @@
         }
       },
     // 获取全部订单信息
-      agreeShow (afterNo, _st) {
+      agreeShow (afterNo, _st, _orderStatus, afType, backMoney, ordFreight) {
       var that = this;
-      that.Agreeshow = true;
       that.afStatus=_st;
       that.saleAfterNo = afterNo;
+      that.Agreeshow = true;
+      that.backMoney = backMoney;
+      that.orderFreight = ordFreight / 100;
+      console.log(afType + ":===orderStatus ==" + _orderStatus);
+      if (afType == 2 && _orderStatus == 1) {
+        that.showRt = true;
+        return ;
+      }
+      that.agreeApplyShow = true;
     },
     getDealerOrders () {
       let that = this
@@ -448,6 +490,7 @@
             if (res.status == 200) {
               that.getDealerOrders();
             }
+            that.agreeApplyShow = false;
             that.Agreeshow = false;
           }
         });
@@ -502,6 +545,31 @@
             that.Refuseshow = false;
           }
         })
+      }
+      ,agreeRtMoneyApply () {
+        // 同意退款申请，未来发货时需要输入的金额
+        let that = this
+        that.$.ajax({
+          type: 'PUT',
+          url: this.base + 'm2c.scm/order/dealer/agree-apply-sale',
+          //url: 'http://localhost:8080/m2c.scm/order/dealer/agree-apply-sale',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            isEncry: false,
+            saleAfterNo:that.saleAfterNo,
+            userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
+            dealerId:that.dealerId,
+            rtFreight:that.pRtFreight
+          },
+          success: function (result) {
+            if (result.status === 200){
+              // 获取订单操作列表
+              that.getDealerOrders();
+            }
+            that.Agreeshow = false;
+            that.showRt = false;
+          }
+        });
       }
   },
   mounted () {
@@ -1009,4 +1077,79 @@
   .icon{width:40px;height:40px;z-index:11;display:inline-block;}
   .timeIcon{background:url(../../../assets/images/ico_calendar@2x.png) no-repeat center bottom;background-size:19px 20px;}
   .searchIcon{background:url(../../../assets/images/ico_search.png) no-repeat center center;background-size:20px 20px;}
+
+  .pop_content{
+    width: 400px;
+    height: 280px;
+    background: #fff;
+    z-index: 9999;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -140px;
+    background: #FFFFFF;
+    border-radius: 4px;
+    .hptczp_header{
+      width:100%;
+      height: 50px;
+      background: #DFE9F6;
+      padding-left: 20px;
+      padding-right: 20px;
+      span{
+        display: inline-block;
+        line-height: 50px;
+      }
+    }
+    .hptczp_body{
+      padding-left: 20px;
+      padding-right: 20px;
+      background: #FFFFFF;
+      margin-top: 10px;
+      textarea{
+        width: 100%;
+        height: 100%;
+        border: 1px solid #E5E5E5;
+        width: 360px;
+        height: 140px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+    }
+    .hptczp_footer{
+      height: 80px;
+      padding-top: 10px;
+      padding-left: 50%;
+      .btn {
+        width: 80px;
+        height: 30px;
+        border: none;
+        border-radius: 2px;
+        color: #fff;
+      }
+      .save {
+        margin-left: -110px;
+        background: #0086FF;
+      }
+      .cancel {
+        margin-left: 40px;
+        background: #FFF;
+        border: 1px solid #CCCCCC;
+        color: #444;
+      }
+
+    }
+    .linh40{
+      line-height: 40px;
+    }
+    .wid80{
+      width: 80px;
+      display: inline-block;
+    }
+    .pl10{
+      padding-left: 10px;
+    }
+  }
 </style>
