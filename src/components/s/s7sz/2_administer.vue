@@ -674,7 +674,7 @@
             token: sessionStorage.getItem('mToken')
           },
           success: function (result) {
-            if (result.status == 200 || result.status == 200) {
+            if (result.status == 200) {
               that.show_tip('删除成功')
               that.delectApproveHide()
               that.get_comment_info1()
