@@ -219,8 +219,8 @@
             </div>
           </div>
           <div class="goods_body">
-            <div class="merchant fl" v-for="(goods, index) in goodsResult.content">
-              <!--<div @click="openGoodsSku(goods,index)">-->
+            <div class="merchant fl" v-for="(goods, index) in goodsResult.content"  @click="addChooseGoods(goods,index)" >
+              <!-- <div @click="openGoodsSku(goods,index)"> -->
               <div>
                 <div>
                   <h6>{{goods.goodsName}}</h6>
@@ -668,7 +668,27 @@
         that.$('#choose_goods').modal('hide')
         that.modalShadow = false
       },
-      // 作用范围 选择商品  (获取到数据遍历状态 包含规格)
+      deleteGoods (index, goods) {
+        var that = this
+        that.chooseGoodsList.splice(index, 1)
+        for (var i = 0; i<that.goodsResult.content.length; i++) {
+          if (that.goodsResult.content[index].goodsId === goods.goodsId) {
+            that.goodsResult.content[index].isChoosed = 0
+            that.goodsResult.content[index].skuFlag = 0
+            that.goodsResult.content[index].chooseSkuList = []
+            for (var g = 0; g < that.goodsResult.content[i].goodsSkuList.length; g++) {
+              that.goodsResult.content[i].goodsSkuList[g].isCheck = false
+              that.goodsResult.content[i].goodsSkuList[g].goodsSkuNum = 0
+            }
+          }
+        }
+        for (var j = 0; j < that.chooseSkuList.length; j++){
+          if (that.chooseSkuList[j].goodsId === goods.goodsId) {
+            that.chooseSkuList.splice(j, 1)
+          }
+        }
+      },
+      // 作用范围   (获取到面板上的数据 并初始化)
       goodsSelect () {
         var that = this
         that.$.ajax({
@@ -692,7 +712,7 @@
               // 循环 移除范畴列表(没有选择规格的功能)
               for (var k = 0; k < that.removeGoodsList.length; k++) {
                 if (result.content[i].goodsId === that.removeGoodsList[k].goodsId) {
-                  result.content[i].isRemoved = 1
+                    result.content[i].isRemoved = 1
                 }
               }
               // 循环 选择(适用)范畴列表  
@@ -711,11 +731,13 @@
       },
       addRemoveGoods (goods) {
         let that = this
+        //点击选中 取消
         if (goods.isRemoved == 0) {
           goods.isRemoved = 1
         } else if (goods.isRemoved == 1) {
           goods.isRemoved = 0
         }
+        // 
         var flag = true
         for (var i = 0; i < that.removeGoodsList.length; i++) {
           if (that.removeGoodsList[i].goodsId === goods.goodsId) {
@@ -733,6 +755,37 @@
         }
         console.log('removeGoodsList:', JSON.stringify(that.removeGoodsList))
       },
+      addChooseGoods(goods) {
+        let that = this
+        //点击选中 取消
+        if (goods.isChoosed == 0) {
+          goods.isChoosed = 1
+          goods.isChooseSpecification='已选规格数量'
+          goods.skuFlag = 0
+        } else if (goods.isChoosed == 1) {
+          goods.isChoosed = 0
+           goods.isChooseSpecification='编辑规格数量'
+           goods.skuFlag = 1
+        }
+        // 
+        var flag = true
+        for (var i = 0; i < that.chooseGoodsList.length; i++) {
+          if (that.chooseGoodsList[i].goodsId === goods.goodsId) {
+            if (goods.isChoosed == 0) {
+              that.chooseGoodsList.splice(i, 1)
+            }
+            flag = false
+          }
+        }
+        if (flag == true && goods.isChoosed == 1) {
+          var chooseGoods = {}
+          chooseGoods.goodsId = goods.goodsId
+          chooseGoods.goodsName = goods.goodsName
+          that.chooseGoodsList.push(chooseGoods)
+        }
+        console.log('removeGoodsList:', JSON.stringify(that.chooseGoodsList))
+      },
+      // 取消功能  清除掉全部已经选中的移除商品
       cancelRemove () {
         let that = this
         for (var i = 0; i < that.goodsResult.content.length; i++) {
@@ -748,45 +801,18 @@
         that.$('#full_range_dialog').modal('hide');
         console.log('removeGoodsList:', JSON.stringify(that.removeGoodsList))
       },
-      deleteGoods (index, goods) {
-        var that = this
-        that.chooseGoodsList.splice(index, 1)
-        for (var i = 0; i<that.goodsResult.content.length; i++) {
-          if (that.goodsResult.content[index].goodsId === goods.goodsId) {
-            that.goodsResult.content[index].isChoosed = 0
-            that.goodsResult.content[index].skuFlag = 0
-            that.goodsResult.content[index].chooseSkuList = []
-            for (var g = 0; g < that.goodsResult.content[i].goodsSkuList.length; g++) {
-              that.goodsResult.content[i].goodsSkuList[g].isCheck = false
-              that.goodsResult.content[i].goodsSkuList[g].goodsSkuNum = 0
+      deleteRemoveGoods (index, goods) {
+        let that = this
+        // console.log('---that.item.removeRangeList-',that.item.removeRangeList);
+        that.removeGoodsList.splice(index, 1)
+        //  遍历刚获得的结果  把isRemoved 变为0  (但是最开始的时候已经初始化过了  不明 )
+        if (that.goodsResult != '') {
+          for (var i = 0; i < that.goodsResult.content.length; i++) {
+            if (that.goodsResult.content[i].goodsId === goods.goodsId) {
+              that.goodsResult.content[i].isRemoved = 0
             }
           }
         }
-        for (var j = 0; j < that.chooseSkuList.length; j++){
-          if (that.chooseSkuList[j].goodsId === goods.goodsId) {
-            that.chooseSkuList.splice(j, 1)
-          }
-        }
-      },
-      deleteRemoveGoods (index, goods) {
-        let that = this
-        //原本存在的数组
-        console.log('---that.item.removeRangeList-',that.item.removeRangeList);
-        that.item.removeRangeList.splice(index, 1)
-       console.log('---that.item.removeRangeList-',that.item.removeRangeList);
-        // 不明
-        // if (that.goodsResult != '') {
-        //   for (var i = 0; i < that.goodsResult.content.length; i++) {
-        //     if (that.goodsResult.content[i].goodsId === goods.goodsId) {
-        //       that.goodsResult.content[i].isRemoved = 0
-        //     }
-        //   }
-        // }
-
-
-
-
-
       }
     },
     mounted () {
