@@ -469,7 +469,9 @@ body {
       background: #505562;
       color: #B0B8BD;
       // text-align: center;
-      padding-top: 4.28rem;
+      padding-top: 0.28rem;
+      padding-bottom:1rem;
+      height:96%;
       margin-top: 4.29rem;
       margin-bottom: 0px;
       min-width: 100px;

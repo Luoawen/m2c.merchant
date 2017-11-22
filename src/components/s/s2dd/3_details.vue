@@ -792,7 +792,7 @@
         let that = this;
         that.$.ajax({
           type: 'get',
-          url: that.base + 'm2c.media/mres/byIdList',
+          url: that.base + 'm2c.media/mres/byIdList/mu',
           data: {
             token: sessionStorage.getItem('mToken'),
             mresIdList: '[' + resIds + ']'
