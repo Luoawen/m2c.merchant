@@ -677,8 +677,7 @@
           data: {
             goodsClassifyId: that.goods_query_item.goodsClassifyId,
             condition: that.goods_query_item.condition,
-           dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
             pageNum: that.goods_query_item.pageNum,
             rows: that.goods_query_item.rows
           },
@@ -690,13 +689,13 @@
               result.content[i].skuFlag = 0
               result.content[i].chooseSkuList = []
               result.content[i].isChooseSpecification = '编辑规格数量'
-              // 循环 移除范畴列表
+              // 循环 移除范畴列表(没有选择规格的功能)
               for (var k = 0; k < that.removeGoodsList.length; k++) {
                 if (result.content[i].goodsId === that.removeGoodsList[k].goodsId) {
                   result.content[i].isRemoved = 1
                 }
               }
-              // 循环 选择(适用)范畴列表    问题点1  不能回显刚获得的数据
+              // 循环 选择(适用)范畴列表  
               for (var j = 0; j < that.chooseGoodsList.length; j++) {
                 if (result.content[i].goodsId === that.chooseGoodsList[j].goodsId) {
                   result.content[i].isChoosed = 1
@@ -771,14 +770,23 @@
       },
       deleteRemoveGoods (index, goods) {
         let that = this
+        //原本存在的数组
+        console.log('---that.item.removeRangeList-',that.item.removeRangeList);
         that.item.removeRangeList.splice(index, 1)
-        if (that.goodsResult != '') {
-          for (var i = 0; i < that.goodsResult.content.length; i++) {
-            if (that.goodsResult.content[i].goodsId === goods.goodsId) {
-              that.goodsResult.content[i].isRemoved = 0
-            }
-          }
-        }
+       console.log('---that.item.removeRangeList-',that.item.removeRangeList);
+        // 不明
+        // if (that.goodsResult != '') {
+        //   for (var i = 0; i < that.goodsResult.content.length; i++) {
+        //     if (that.goodsResult.content[i].goodsId === goods.goodsId) {
+        //       that.goodsResult.content[i].isRemoved = 0
+        //     }
+        //   }
+        // }
+
+
+
+
+
       }
     },
     mounted () {
