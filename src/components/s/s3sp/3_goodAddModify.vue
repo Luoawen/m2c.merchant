@@ -295,9 +295,9 @@
           <p class="marginTop20">最多上传5张主图，可以通过拖曳图片调整顺序</p>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
+      <el-row :gutter="20" style="z-index:1;"></el-row>
         <el-col :span="3">图文详情</el-col>
-        <el-col :span="21" style="height:400px;">
+        <el-col :span="21" style="height:400px;z-index:1;">
           <div id="editor-container">
             <UE :defaultMsg=defaultMsg :config=config ref="ue"></UE>
           </div>
@@ -354,14 +354,18 @@
         var reg = /^.{1,20}$/
         setTimeout(() => {
           if (value != '') {
-            var values = value.split(',')
+            var values
+            if (this.handle_toggle == 'add') {
+              values = value.split(',')
+            } else {
+              values = value
+            }
             for (var i = 0; i < values.length; i++) {
               if (!reg.test(values[i])) {
                 callback(new Error('每个关键词1-20字符，每个关键词用逗号隔开'))
-              } else {
-                callback();
               }
             }
+            callback();
           } else {
             callback();
           }
@@ -694,7 +698,13 @@
       },
       // 取消
       goBack(){
-        this.$router.push({name:'goodList'})
+        if(this.$route.query.from=='a'){
+					this.$router.push({name:'goodList',query:{activeName:'first'}})
+				}else if(this.$route.query.from=='b'){
+					this.$router.push({name:'goodList',query:{activeName:'second'}})
+				}else{
+          this.$router.push({name:'goodList',query:{activeName:'first'}})
+        }
       },
       // 提交保存或修改
       save (formName) {
@@ -1325,7 +1335,7 @@
     }
   .marginTop20{margin-top:20px;}
   .el-upload--picture-card{overflow: hidden;}
-  .infoBox{width:96%; margin:20px 2%;background:#fff;padding:20px 3%;float:left;}
+  .infoBox{width:96%; margin:20px 2%;background:#fff;padding:20px 3%;float:left;position:relative;z-index:1;}
   .infoBox h4{color:#333;line-height:30px;margin-left:-5%;}
   .el-row {
     margin-bottom: 20px;width:80%;margin-left:4%;

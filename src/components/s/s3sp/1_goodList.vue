@@ -259,7 +259,7 @@
                         操作<i class="el-icon-arrow-down el-icon--right"></i>
                       </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','a')">详情</el-dropdown-item>
+                    <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','c')">详情</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </el-col>
@@ -348,7 +348,7 @@
           label:'classifyName',
         },
         search_goods_params: { goodsClassifyId: '', goodsStatus: '', condition: '', startTime: '', endTime: '' },
-        activeName: 'first',
+        activeName: this.$route.query.activeName==undefined?'first':this.$route.query.activeName,
         selectedOptions1: [''],
         selectedOptions2: [''],
         selectedOptions3: [''],
@@ -626,10 +626,12 @@
         if (action === '_detail') {
           let goodsId = row.goodsId
           if(to=='a'){
-            that.$router.push({name:'gooddetail',query:{goodsId:row.goodsId}});
-          }else{
+            that.$router.push({name:'gooddetail',query:{goodsId:row.goodsId,from:to}});
+          }else if(to=='b'){
             let approveStatus = row.approveStatus
-            that.$router.push({name:'gooddetail',query:{goodsId:goodsId,approveStatus:approveStatus}});
+            that.$router.push({name:'gooddetail',query:{goodsId:goodsId,approveStatus:approveStatus,from:to}});
+          }else{
+            that.$router.push({name:'gooddetail',query:{goodsId:row.goodsId,from:to}});
           }
         } else if (action === '_soldout') {
           that.soldGoods(row,to)
@@ -638,11 +640,11 @@
         }
         else if (action === '_edit') {
           let goodsId = row.goodsId
-          if(row.approveStatus==''||row.approveStatus==undefined){
-            that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId}});
-          }else{
+          if(to=='a'){
+            that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId,from:to}});
+          }else if(to=='b'){
             let approveStatus = row.approveStatus
-            that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId,approveStatus:approveStatus}});
+            that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId,approveStatus:approveStatus,from:to}});
           }
         } else if (action === '_delete') {
           that.deleteGoods(row,to);
@@ -685,8 +687,13 @@
     mounted () {
       let that = this
       that.goodsClassify()
-      that.goodsStore()
-
+      if (that.$route.query.activeName == 'second') {
+        that.goodsCheckStore()
+      } else if (that.$route.query.activeName == 'delete'){
+        that.goodsDeleteStore()
+      } else{
+        that.goodsStore()
+      }
     }
   }
 </script>
