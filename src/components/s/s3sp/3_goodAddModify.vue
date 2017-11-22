@@ -297,7 +297,7 @@
       </el-row>
       <el-row :gutter="20" style="z-index:1;"></el-row>
         <el-col :span="3">图文详情</el-col>
-        <el-col :span="21" style="height:400px;">
+        <el-col :span="21" style="height:400px;z-index:1;">
           <div id="editor-container">
             <UE :defaultMsg=defaultMsg :config=config ref="ue"></UE>
           </div>
@@ -698,7 +698,13 @@
       },
       // 取消
       goBack(){
-        this.$router.push({name:'goodList'})
+        if(this.$route.query.from=='a'){
+					this.$router.push({name:'goodList',query:{activeName:'first'}})
+				}else if(this.$route.query.from=='b'){
+					this.$router.push({name:'goodList',query:{activeName:'second'}})
+				}else{
+          this.$router.push({name:'goodList',query:{activeName:'first'}})
+        }
       },
       // 提交保存或修改
       save (formName) {
@@ -1329,7 +1335,7 @@
     }
   .marginTop20{margin-top:20px;}
   .el-upload--picture-card{overflow: hidden;}
-  .infoBox{width:96%; margin:20px 2%;background:#fff;padding:20px 3%;float:left;}
+  .infoBox{width:96%; margin:20px 2%;background:#fff;padding:20px 3%;float:left;position:relative;z-index:1;}
   .infoBox h4{color:#333;line-height:30px;margin-left:-5%;}
   .el-row {
     margin-bottom: 20px;width:80%;margin-left:4%;
