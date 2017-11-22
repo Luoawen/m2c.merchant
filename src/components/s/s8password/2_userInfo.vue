@@ -1,7 +1,7 @@
 <template>
   <div class="Account">
     <div class="message"><b>账户信息</b></div>
-    <div class="a_message"><span class="mr20">管理员</span><span id="userPhone">{{dealer_user_info.userName}}</span></div>
+    <div class="a_message"><span class="mr20">管理员</span><span id="userPhone">{{dealer_user_info.userName}}&nbsp;&nbsp;&nbsp;{{dealer_user_info.userPhone}}</span></div>
     <div class="message"><b>公司信息</b></div>
     <div class="a_message"><span class="mr20">商家名称</span><span id="userPhone">{{dealer_user_info.dealerName}}</span></div>
     <div class="a_message"><span class="mr20">商家类型</span><span id="userPhone">{{dealer_user_info.dealerFristClassifyName}}</span></div>
