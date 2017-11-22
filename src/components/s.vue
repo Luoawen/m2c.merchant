@@ -565,7 +565,7 @@ body {
         float: left;
       }
       i {
-        background: url(../assets/images/ico_home.png) no-repeat;
+        background: url(../assets/images/nav_home.png) no-repeat;
         display: block;
         position: absolute;
         top: 20px;
