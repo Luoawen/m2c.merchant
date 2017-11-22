@@ -223,10 +223,13 @@
             <div class="mt10 mb10">
               <span class="mr20 tit_tb">配送方式</span>
               <span class="ml20">
-              <span>{{orderStatus==2? expressName:'-'}}</span>
+                <span>{{orderStatus==2? (expressWay==0?'物流发货':expressWay==1?'自有物流':'-') :'-'}}
+                  <span class="mr20 tit_tbb">{{orderStatus==2? (expressWay==0?'物流公司':expressWay==1?'配送员':''):''}}</span>
+                  <span class="ml20">{{expressWay==0?expressName:expressWay==1?expressPerson+'， '+expressPhone:''}}</span>
+                </span>
               </span>
             </div>
-            <div class="mt10 mb10">
+            <div class="mt10 mb10" v-show="expressWay==0">
               <span class="mr20 tit_tb">物流单号</span>
               <span class="ml20">
               <span>{{orderStatus==2? expressNo:'-'}}</span>
@@ -497,8 +500,9 @@
       customerfreight () {
         var that = this
         that.$.ajax({
-          url: that.base + 'm2c.scm/order/dealer/sendOrderDetail',
+          //url: that.base + 'm2c.scm/order/dealer/sendOrderDetail',
           //url: 'http://localhost:8080/m2c.scm/dealer/sendOrderDetail',
+          url: that.base + 'm2c.scm/order/dealer/expressDetail',
           type: 'get',
           cache: false,
           pagination: true,
@@ -507,9 +511,13 @@
           },
           success: function (result) {
             if (result.status === 200) {
-              that.expressNote=result.content.orderDtls[0].expressNote
-              that.expressNo=result.content.orderDtls[0].expressNo
-              that.expressName=result.content.orderDtls[0].expressName
+              that.expressNote  =result.content[0].expressNote
+              that.expressNo    =result.content[0].expressNo
+              that.expressName  =result.content[0].expressName
+              that.expressWay   =result.content[0].expressWay
+              that.expressPerson=result.content[0].expressPerson
+              that.expressPhone =result.content[0].expressPhone
+              that.expressCode  =result.content[0].expressCode
             }
           }
         })
@@ -1109,6 +1117,14 @@
            display: inline-block;
            width: 80px;
            text-align: right;
+           color: #666666;
+         }
+         .tit_tbb{
+           display: inline-block;
+           margin-left: 150px;
+           width: 80px;
+           text-align: right;
+           color: #666666;
          }
        }
         td{
