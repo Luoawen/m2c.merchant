@@ -25,7 +25,7 @@
 					<span style="color: red;">*</span>
 					<span>提现金额</span>
 					</div>
-					<el-input v-model="tradableA" class="col-sm-4" style="padding-left:0px;" :placeholder="'最多可提现'+tradableAmount" :disabled="isdisable" @blur="checkTradab"></el-input>
+					<el-input v-model="tradableA" class="col-sm-4" style="padding-left:0px;" :placeholder="'最多可提现'+tradabledAmount" :disabled="isdisable" @blur="checkTradab"></el-input>
           <span class="fl mt8 mr20">元</span>
           <a class="mt8 fl" @click="tradabAll">全部提现</a>
           <i class="red" v-show="isEmpty">提现金额不能为空</i>
@@ -39,7 +39,7 @@
 					<span>备注</span>
 					</div>
 					<div>
-						<textarea placeholder="请填写" class="el-input__inner text col-sm-6 mr5" v-model="applyComment">
+						<textarea placeholder="请填写" class="el-input__inner text col-sm-6 mr5" v-model="applyComment" maxlength="200">
 						</textarea>
 					</div>
 				</div>
@@ -58,13 +58,13 @@
 					</div>
 					<el-input type="password" v-model="payPassword" class="col-sm-4" style="padding-left:0px;" placeholder="6位数密码" @blur="checkEmpty" :maxlength='6' ></el-input>
 					<router-link class="mt8 fl" :to="{name:'cashPass',query:{from:'cash'}}">忘记密码</router-link>
-					<i class="red" v-show="numberShow">剩余{{6-errorCount}}次机会</i>
+					<i class="red" v-show="numberShow">剩余{{6-errorCount}}次输错提现密码机会</i>
 					<i class="red" v-show="isEmpty">交易密码不能为空</i>
 				</div>
 			</div>
 			<div class="mt40 pl150">
-				<button class="btnp xyb mr20" @click="save" :disabled="errorCount>5">提交</button>
-				<button class="btnp qx" @click="passWord = !passWord">取消</button>
+				<button class="btnp xyb mr20" @click="save()" :disabled="errorCount>5">提交</button>
+				<button class="btnp qx" @click="goBack()">取消</button>
 			</div>
 		</template>
   </div>
@@ -74,7 +74,7 @@ export default {
 	name:'',
     data(){
       return{
-				tradableAmount:'', // 获取到的可提现金额
+				tradabledAmount:'', // 获取到的可提现金额
 				isdisable:false, // input框是否禁用
 				tradableA:'', // 暂存提现金额
 				availableCount:0, // 可提现次数
@@ -115,17 +115,24 @@ export default {
 					that.isEmpty = true
 				} else {
 					that.isEmpty = false
-					if(that.tradableA > that.tradableAmount){
+					if(that.tradableA > that.tradabledAmount){
 						that.checkShow = true
 					}else{
 						that.passWord = false
 					}
 				}
 			},
+
+      //点击取消
+      goBack(){
+			  let that = this;
+			  that.passWord = false
+        that.$router.push({name : 'survey',query: {}})
+      },
 			// 全部提现
 			tradabAll(){
 				let that = this
-				that.tradableA = that.tradableAmount
+				that.tradableA = that.tradabledAmount
 				that.isEmpty = false
 			},
 			// 校验是否超过可提现金额
@@ -135,7 +142,7 @@ export default {
 					that.isEmpty = true
 				} else {
 					that.isEmpty = false
-					if(that.tradableA > that.tradableAmount){
+					if(that.tradableA > that.tradabledAmount){
 						that.checkShow = true
 					}
 				}
@@ -152,8 +159,8 @@ export default {
           },
           success: function (result) {
             if (result.status === 200){
-							that.tradableAmount = result.content.tradableAmount/100
-							if(that.tradableAmount==0){
+							that.tradabledAmount = result.content.tradabledAmount/100
+							if(that.tradabledAmount==0){
 								that.isdisable = true
 							}
             }
@@ -209,6 +216,7 @@ export default {
           },
           success: function (result) {
             if (result.status === 200){
+              that.$router.push({name : 'survey',query: {}})
               console.log(result)
             }else{
 							that.show_tip(result.errorMessage)
