@@ -637,8 +637,8 @@
             }
           }
           that.$.ajax({
-            type: that.handle_toggle === 'add' ? 'post' : (that.modifyLocal === 1 ? 'post' : 'put'),
-            url: that.handle_toggle === 'add' ? (that.localbase + 'm2c.scm/brand/approve') : (that.modifyLocal === 1 ? (that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.brandId) : that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.approveId),
+            type: that.handle_toggle === 'add' ? 'post' : 'put',
+            url: that.handle_toggle === 'add' ? (that.localbase + 'm2c.scm/brand/approve') : that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.approveId,
             // data: Object.assign({}, that.add_modify_params, that.touxiang_change ? {icon: that.add_modify_params_imgurl} : {}, {
             data: Object.assign({
               token: sessionStorage.getItem('mToken'),
