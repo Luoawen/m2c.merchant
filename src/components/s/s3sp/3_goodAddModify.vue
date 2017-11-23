@@ -113,7 +113,7 @@
               </div></th>
               <th><span style="color: red">*</span>拍获价/元</th>
               <th>市场价/元</th>
-              <th>{{countMode==1?'供货价':'服务费率/%'}}</th>
+              <th><span style="color: red" v-show="countMode==1">*</span>{{countMode==1?'供货价':'服务费率/%'}}</th>
               <th>商品编码</th>
             </tr>
           </thead>
@@ -216,7 +216,7 @@
               </div></th>
               <th><span style="color: red">*</span>拍获价/元</th>
               <th>市场价/元</th>
-              <th>{{countMode==1?'供货价':'服务费率/%'}}</th>
+              <th><span style="color: red" v-show="countMode==1">*</span>{{countMode==1?'供货价':'服务费率/%'}}</th>
               <th>商品编码</th>
             </tr>
           </thead>
