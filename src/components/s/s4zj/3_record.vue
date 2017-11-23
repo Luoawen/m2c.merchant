@@ -43,7 +43,7 @@
           <template slot-scope="scope"><span>{{scope.row.wdStatus == 0?'处理中':scope.row.wdStatus == 1?'待审批':scope.row.wdStatus == 2?'待转账':scope.row.wdStatus == 3?'不通过':scope.row.wdStatus == 4?'已转账':scope.row.wdStatus == 5?'作废':'-'}}</span></template>
         </el-table-column>
         <el-table-column
-          label="申请时间"
+          label="更新时间"
           width="300"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{date_format(new Date(scope.row.createdTime), 'yyyy-MM-dd hh:mm:ss')}}</span></template>
