@@ -1,10 +1,10 @@
 <template>
   <div class="goods_detail" >
     <div class="col-sm-12 detail_container">
-      <div class="nav">
+<!--      <div class="nav">
       <span class="nav_tit" :class="{active:showactive01}" @click="Togactive01"><a>商品详情</a></span>
-      <!-- <span class="nav_tit" :class="{active:showactive02}" @click="Togactive02"><a>媒体资源</a></span> -->
-      </div>
+      &lt;!&ndash; <span class="nav_tit" :class="{active:showactive02}" @click="Togactive02"><a>媒体资源</a></span> &ndash;&gt;
+      </div>-->
       <!--商品详情-->
       <div v-show="showactive01" class="g_detail">
       	<div>
