@@ -29,7 +29,7 @@
         style="width: 100%">
         <el-table-column
           label="提现单号"
-          width="300">
+          width="350">
           <template slot-scope="scope"><span >{{scope.row.withdrawalId}}</span></template>
         </el-table-column>
         <el-table-column
