@@ -3,7 +3,7 @@
     <div class="title">
       <div class="left_title">
         <i class="logo"></i>
-        <span>一拍即获 |</span>
+        <span>拍获 |</span>
         <span class="logo_sty">商家平台</span>
       </div>
       <div class="right_title">
@@ -199,7 +199,7 @@
      this.change();
     },
     beforeCreate () {
-      document.title = '一拍即获-商家平台'
+      document.title = '拍获-商家平台'
       document.querySelector('#favicon').href = '/static/favicon_s.ico'
 
     },
