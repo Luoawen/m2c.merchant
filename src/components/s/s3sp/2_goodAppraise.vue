@@ -33,7 +33,7 @@
 
     <div class="poi2 Advanced_s" v-show="advancedShow">
       <div class="">
-        <div class="titbt">高级搜索</div>
+        <div class="titbt">高级搜索<i @click="advancedShow=!advancedShow" class="close"></i></div>
         <div class="clear">
           <div class="col-sm-6 left">
             <div class="clear mt10 mb20">
@@ -227,7 +227,6 @@
       },
       clearAll () {
         let that = this
-        that.advancedShow = false
         that.search_params.condition = ''
         that.search_params.replyStatus = ''
         that.search_params.starLevel = ''
@@ -278,6 +277,7 @@
       // 获取结算单列表
       get_comment_info () {
         let that = this
+        that.advancedShow = false
         if (that.search_params.startTime > that.search_params.endTime) {
           that.show_tip('开始时间不能大于结束时间')
           return
@@ -743,13 +743,16 @@
 .timeIcon{background:url(../../../assets/images/ico_calendar@2x.png) no-repeat center bottom;background-size:19px 20px;}
 .searchIcon{background:url(../../../assets/images/ico_search.png) no-repeat center center;background-size:20px 20px;}
 .Advanced_s{
-  width: 90%;
+  width: 100%;
   min-height: 430px;
   background: #fff;
   z-index: 99;
   top: 0px;
-  left: 200px;
+  left: 10px;
   padding:20px;
+  i.close{
+    opacity:1;display:inline-block;width:24px;height:24px;float:right; mergin-right:20px;background:url(../../../assets/images/ico_close.png) no-repeat center center;
+  }
   .left,.right{
     .bt{
       display: inline-block;

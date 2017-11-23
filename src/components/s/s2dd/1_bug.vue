@@ -177,7 +177,7 @@
                 </div>
               </div>
               <div class="a2 fl mt20" id="a2" style="width: 14%;">
-                {{goodsItem.discountPrice/100}}
+                {{(goodsItem.discountPrice/100).toFixed(2)}}
               </div>
               <div class="a3 fl mt20" id="a3" style="width: 18%;text-align: center;padding-right: 40px;">
                 {{goodsItem.sellNum}}
@@ -198,7 +198,7 @@
 
             <div class="cont col-sm-4" style="width:40%;">
               <div class="a5" style="width:25%;">
-                {{(item.goodsMoney + item.orderFreight - item.dealerDiscount - item.plateDiscount)/100}}
+                {{((item.goodsMoney + item.orderFreight - item.dealerDiscount - item.plateDiscount)/100).toFixed(2)}}
               </div>
               <div class="a6 mt10" style="width:28%;">
                 {{date_format(new Date(item.createdDate), 'yyyy-MM-dd hh:mm:ss')}}
@@ -290,11 +290,11 @@
         </div>
         <div class="linh40 pl10">
           <span class="wid80">售后金额</span>
-          <span>{{backMoney/100}}元</span>
+          <span>{{(backMoney/100).toFixed(2)}}元</span>
         </div>
         <div class="linh40 pl10">
           <span class=" wid80">售后总额</span>
-          <span>{{backMoney/100 + pRtFreight}}元</span>
+          <span>{{(backMoney/100 + pRtFreight).toFixed(2)}}元</span>
         </div>
       </div>
       <div class="hptczp_footer">

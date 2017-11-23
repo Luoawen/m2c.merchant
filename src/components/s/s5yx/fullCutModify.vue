@@ -783,7 +783,7 @@
           chooseGoods.goodsName = goods.goodsName
           that.chooseGoodsList.push(chooseGoods)
         }
-        console.log('removeGoodsList:', JSON.stringify(that.chooseGoodsList))
+        console.log('chooseGoodsList:', JSON.stringify(that.chooseGoodsList))
       },
       // 取消功能  清除掉全部已经选中的移除商品
       cancelRemove () {
