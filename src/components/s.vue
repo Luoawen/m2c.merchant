@@ -170,7 +170,6 @@
       change(){
         console.log(this.$route.path)
         console.log(this.$route.meta.title)
-        
         let path = this.$route.path
         this.$nextTick(()=>{
           this.$('.content_s').removeClass('avter')
@@ -245,9 +244,10 @@ body {
   .content{
     width: 100%;
     min-height: 500px;
-    padding:15px;
+    padding:25px;
     background-color: #fff;
     position: relative;
+    box-sizing: border-box;
     .searcWrap{width:100%;height:auto;position:relative;}
   }
   .clear{

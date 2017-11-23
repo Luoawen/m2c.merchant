@@ -747,10 +747,6 @@
     .good_info {
       background: #fff;
       margin-top: 10px;
-      padding-top: 10px;
-      padding-left: 10px;
-      padding-right: 10px;
-      padding-bottom: 10px;
       .notetable{
         min-height: 40px;
         border: 1px solid #e5e5e5;

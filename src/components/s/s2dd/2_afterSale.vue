@@ -348,7 +348,6 @@
     .good_info {
       background: #fff;
       margin-top: 10px;
-      padding: 10px;
       position: relative;
       .bootstrap-table {
         margin: 0;
