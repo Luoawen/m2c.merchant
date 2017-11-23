@@ -867,6 +867,8 @@
         if (flag == 0 || flag == 3) {
           if (that.params.expiration_time_start == '') {
             that.tip_show.time = true
+            that.$("#fullCutName").focus();
+            that.$("#todayDate").focus().select();
             return false
           } else{
             that.tip_show.time = false
@@ -875,8 +877,8 @@
         if (flag == 0 || flag == 4) {
           if (that.params.expiration_time_end == '') {
             that.tip_show.time = true
-             that.$("#fullCutName").select();
-             that.$("#exactlyToday").focus();
+            that.$("#fullCutName").focus();
+             that.$("#exactlyToday").focus().select();
             return false
           } else{
             that.tip_show.time = false
