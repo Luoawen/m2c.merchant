@@ -27,7 +27,7 @@
               </div>
               <div>
                 <span class="tit01">订单总额:</span>
-                <span class="ml20">{{orderDetail.orderTotalMoney/100}}元（含运费<span>{{orderDetail.orderFreight/100}}</span>元）</span>
+                <span class="ml20">{{(orderDetail.orderTotalMoney/100).toFixed(2)}}元（含运费<span>{{(orderDetail.orderFreight/100).toFixed(2)}}</span>元）</span>
               </div>
             </div>
             <div class="col-sm-4 detail_cen">
@@ -37,7 +37,7 @@
               </div>
               <div>
                 <span class="tit01">售后金额:</span>
-                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':(orderDetail.backMoney + orderDetail.backFreight)/100}}元（含运费{{orderDetail.orderType==0?'0':orderDetail.backFreight/100}}元）</span>
+                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((orderDetail.backMoney + orderDetail.backFreight)/100).toFixed(2)}}元（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight/100).toFixed(2)}}元）</span>
               </div>
               <div>
                 <span class="tit01">申请时间:</span>
@@ -76,10 +76,10 @@
               </td>
               <td class="a2">{{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].name : ''):''}}
                 <br>{{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].cateName:''):''}}</td>
-              <td class="a3">{{orderDetail.goodsInfo.price/100}}</td>
+              <td class="a3">{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</td>
               <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
-              <td class="a5">{{orderDetail.goodsInfo.totalPrice/100}}</td>
-              <td class="a5">{{orderDetail.backMoney/100}}</td>
+              <td class="a5">{{(orderDetail.goodsInfo.totalPrice/100).toFixed(2)}}</td>
+              <td class="a5">{{(orderDetail.backMoney/100).toFixed(2)}}</td>
               <td class="a6">
                 <!--状态，0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
@@ -227,10 +227,10 @@
             </div>
           </div>
         </td>
-        <td class="a3">{{orderDetail.goodsInfo.price}}</td>
+        <td class="a3">{{(orderDetail.goodsInfo.price).toFixed(2)}}</td>
         <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
-        <td class="a5">{{orderDetail.goodsInfo.totalPrice}}</td>
-        <td class="a5">{{orderDetail.backMoney}}</td>
+        <td class="a5">{{(orderDetail.goodsInfo.totalPrice).toFixed(2)}}</td>
+        <td class="a5">{{(orderDetail.backMoney).toFixed(2)}}</td>
       </tr>
       </tbody>
     </table>
@@ -302,11 +302,11 @@
         </div>
         <div class="linh40 pl10">
           <span class="wid80">售后金额</span>
-          <span>{{orderDetail.backMoney/100}}元</span>
+          <span>{{(orderDetail.backMoney/100).toFixed(2)}}元</span>
         </div>
         <div class="linh40 pl10">
           <span class=" wid80">售后总额</span>
-          <span>{{orderDetail.backMoney/100 + pRtFreight}}元</span>
+          <span>{{(orderDetail.backMoney/100 + pRtFreight).toFixed(2)}}元</span>
         </div>
       </div>
       <div class="hptczp_footer">
