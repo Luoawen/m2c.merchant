@@ -209,12 +209,13 @@
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-                label="状态"
-                show-overflow-tooltip>
-                <template slot-scope="scope"><span >{{scope.row.approveStatus==1?'审核中':scope.row.approveStatus==2?'审核不通过':''}}
-                <el-tooltip class="item" effect="dark" :content="scope.row.rejectReason" placement="bottom-start">
-                    <i v-if="scope.row.approveStatus==2" class="ico_msg" ></i>
-                  </el-tooltip></span></template>
+                label="状态">
+                <template slot-scope="scope">
+                  <span>{{scope.row.approveStatus==1?'审核中':scope.row.approveStatus==2?'审核不通过':''}}</span>
+                  <div class="ico_msg" v-if="scope.row.approveStatus==2">
+                    <div>{{scope.row.rejectReason}}</div>
+                  </div>
+                </template>
               </el-table-column>
             </el-table>
             <div class="block fl" style="margin: 20px;">
@@ -698,7 +699,19 @@
   }
 </script>
 <style lang="scss" scoped>
-
+  .ico_msg{
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: url(../../../assets/images/ico_msg.png);
+    position:relative;
+    div{display:none;width:150px;background:#fff;position: fixed;margin-top:20px;z-index:2;height:auto;
+      padding:10px; margin-left:-120px;border:1px solid #ccc; border-radius:3px;box-shadow:0px 3px 3px #ccc;
+    }
+  }
+  .ico_msg:hover div{
+      display: inline-block;
+    }
   .sz{
     width: 1620px;
     height: 880px;
