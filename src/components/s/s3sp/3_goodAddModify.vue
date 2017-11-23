@@ -717,8 +717,10 @@
         let that = this
         that.goodsSKUs=[{show:true,skuName: '', showStatus: true, marketPrice:'', goodsCode: '', supplyPrice: ''}]
       },
+      // 清空多规格内的值
       clearGoodsSKUs(){
         let that = this
+        that.goodsSpecifications=[{itemName:'',itemValue:[],state1:''}]
         that.goodsSKUs=[]
       },
       // 批量设置
