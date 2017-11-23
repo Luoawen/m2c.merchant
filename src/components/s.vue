@@ -199,7 +199,7 @@
      this.change();
     },
     beforeCreate () {
-      document.title = '一拍即获-商家平台'
+      document.title = '拍获-商家平台'
       document.querySelector('#favicon').href = '/static/favicon_s.ico'
 
     },
