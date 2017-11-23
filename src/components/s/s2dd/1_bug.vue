@@ -31,7 +31,7 @@
       <!-- 高级搜索 -->
       <div class="poi2 Advanced_s" v-show="Advancedshow===true">
         <div class="">
-          <div class="titbt">高级搜索</div>
+          <div class="titbt">高级搜索<i @click="Advancedshow=!Advancedshow" class="close"></i></div>
           <div class="clear">
             <div class="col-sm-6 left">
               <div class="clear mt10 mb20">
@@ -588,6 +588,9 @@
       top: 0px;
       left: 0px;
       padding:20px;
+      i.close{
+        opacity:1;display:inline-block;width:24px;height:24px;float:right; mergin-right:20px;background:url(../../../assets/images/ico_close.png) no-repeat center center;
+      }
       .left,.right{
         .bt{
           display: inline-block;
