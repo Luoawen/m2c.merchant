@@ -25,7 +25,7 @@
 					<span style="color: red;">*</span>
 					<span>提现金额</span>
 					</div>
-					<el-input v-model="tradableA" class="col-sm-4" style="padding-left:0px;" :placeholder="'最多可提现'+tradabledAmount" :disabled="isdisable" @blur="checkTradab"></el-input>
+					<el-input v-model="tradableA" class="col-sm-4" style="padding-left:0px;" :placeholder="'最多可提现'+tradableAmount" :disabled="isdisable" @blur="checkTradab"></el-input>
           <span class="fl mt8 mr20">元</span>
           <a class="mt8 fl" @click="tradabAll">全部提现</a>
           <i class="red" v-show="isEmpty">提现金额不能为空</i>
@@ -74,7 +74,7 @@ export default {
 	name:'',
     data(){
       return{
-				tradabledAmount:'', // 获取到的可提现金额
+				tradableAmount:'', // 获取到的可提现金额
 				isdisable:false, // input框是否禁用
 				tradableA:'', // 暂存提现金额
 				availableCount:0, // 可提现次数
@@ -115,7 +115,7 @@ export default {
 					that.isEmpty = true
 				} else {
 					that.isEmpty = false
-					if(that.tradableA > that.tradabledAmount){
+					if(that.tradableA > that.tradableAmount){
 						that.checkShow = true
 					}else{
 						that.passWord = false
@@ -132,7 +132,7 @@ export default {
 			// 全部提现
 			tradabAll(){
 				let that = this
-				that.tradableA = that.tradabledAmount
+				that.tradableA = that.tradableAmount
 				that.isEmpty = false
 			},
 			// 校验是否超过可提现金额
@@ -142,7 +142,7 @@ export default {
 					that.isEmpty = true
 				} else {
 					that.isEmpty = false
-					if(that.tradableA > that.tradabledAmount){
+					if(that.tradableA > that.tradableAmount){
 						that.checkShow = true
 					}
 				}
@@ -159,8 +159,8 @@ export default {
           },
           success: function (result) {
             if (result.status === 200){
-							that.tradabledAmount = result.content.tradabledAmount/100
-							if(that.tradabledAmount==0){
+							that.tradableAmount = result.content.tradableAmount/100
+							if(that.tradableAmount==0){
 								that.isdisable = true
 							}
             }
