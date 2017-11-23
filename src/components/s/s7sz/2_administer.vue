@@ -426,6 +426,7 @@
                 that.add_modify_params = result.content
                 /* 初始化图片 */
                 document.querySelector('#m11yhgl_img').src = result.content.brandLogo ? result.content.brandLogo : ''
+                that.imgshow = true
               }
             })
           } else {
@@ -437,6 +438,7 @@
                 that.add_modify_params = result.content
                 /* 初始化图片 */
                 document.querySelector('#m11yhgl_img').src = result.content.brandLogo ? result.content.brandLogo : ''
+                that.imgshow = true
               }
             })
           }
