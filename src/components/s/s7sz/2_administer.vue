@@ -425,7 +425,6 @@
                 document.querySelector('#m11yhgl_img').src = result.content.brandLogo ? result.content.brandLogo : ''
               }
             })
-            that.modify_td_click(that.add_modify_params)
           } else {
             that.changeGoodShow = true
             // let row = this.$('#table').bootstrapTable('getSelections')[0]
@@ -437,7 +436,6 @@
                 document.querySelector('#m11yhgl_img').src = result.content.brandLogo ? result.content.brandLogo : ''
               }
             })
-            that.modify_td_click(that.add_modify_params)
           }
         } else if (action === '_delete') {
           if(to=='a'){
@@ -448,24 +446,6 @@
             that.deleteApprove()
           }
         }
-      },
-      brandQuery () {
-        let that = this
-        that.changeGoodShow = false
-        that.goodInfoShow = false
-        that.modifyLocal = 1
-        that.get_comment_info()
-        that.isBrandApprove = false
-        that.search_params = []
-      },
-      brandApproveQuery () {
-        let that = this
-        that.changeGoodShow = false
-        that.goodInfoShow = false
-        that.modifyLocal = 2
-        that.get_comment_info1()
-        that.isBrandApprove = true
-        that.search_params = []
       },
       area () {
         let that = this
@@ -571,25 +551,6 @@
           })
         }
       },
-  // 表格上点击修改
-      modify_td_click (row) {
-        let that = this
-        new Promise(function (resolve, reject) {
-          resolve()
-        }).then(function () {
-          let arr = {}
-          for (let [key, value] of Object.entries(row)) {
-            arr[key] = value
-          }
-          that.add_modify_params = arr
-          that.handle_toggle = 'modify_status'
-          that.imgshow = true
-          that.touxiang_change = false
-          // that.get_comment_info()
-          // that.get_comment_info1()
-          that.area()
-        })
-      },
       // 修改保存
       change_confirm () {
         let that = this
@@ -637,8 +598,8 @@
             }
           }
           that.$.ajax({
-            type: that.handle_toggle === 'add' ? 'post' : 'put',
-            url: that.handle_toggle === 'add' ? (that.localbase + 'm2c.scm/brand/approve') : that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.approveId,
+            type: that.handle_toggle === 'add' ? 'post' : that.activeName == 'first' ? 'post' : 'put',
+            url: that.handle_toggle === 'add' ? (that.localbase + 'm2c.scm/brand/approve') : that.activeName == 'first' ? that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.brandId : that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.approveId,
             // data: Object.assign({}, that.add_modify_params, that.touxiang_change ? {icon: that.add_modify_params_imgurl} : {}, {
             data: Object.assign({
               token: sessionStorage.getItem('mToken'),
