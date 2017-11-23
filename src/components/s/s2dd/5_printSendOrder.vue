@@ -21,7 +21,7 @@
   					</div>
   					<div class="tit">
   						<span class="tit_span">订单总额：</span>
-  						<span>{{goodsMoney/100}}</span>
+  						<span>{{(goodsMoney/100).toFixed(2)}}</span>
   					</div>
   					<div class="tit">
   						<span class="tit_span1">收货地址：</span>
@@ -46,7 +46,7 @@
   				</div>
   				<div class="tit">
   						<span class="tit_span">优惠金额：</span>
-  						<span>{{freeMoney/100}}</span>
+  						<span>{{(freeMoney/100).toFixed(2)}}</span>
   				</div>
   			</el-col>
 			</el-row>
@@ -70,7 +70,7 @@
   					<td>{{goods.skuName}}</td>
   					<td>{{goods.price/100}}</td>
   					<td>{{goods.sellNum}}</td>
-  					<td>{{(goods.price * goods.sellNum)/100}}</td>
+  					<td>{{((goods.price * goods.sellNum)/100).toFixed(2)}}</td>
   				</tr>
   			</tbody>
         <tbody>
@@ -81,7 +81,7 @@
           <td></td>
           <td>商品金额/元</td>
           <td>
-            {{goodsTotalMoney/100}}
+            {{(goodsTotalMoney/100).toFixed(2)}}
           </td>
         </tr>
         <tr>
@@ -90,7 +90,7 @@
           <td></td>
           <td></td>
           <td>运费/元</td>
-          <td>{{totalFreight/100}}</td>
+          <td>{{(totalFreight/100).toFixed(2)}}</td>
         </tr>
         <tr>
           <td></td>
@@ -98,7 +98,7 @@
           <td></td>
           <td></td>
           <td>优惠金额/元</td>
-          <td>{{freeMoney}}</td>
+          <td>{{freeMoney.toFixed(2)}}</td>
         </tr>
         <tr>
           <td></td>
@@ -106,7 +106,7 @@
           <td></td>
           <td></td>
           <td>订单总额/元</td>
-          <td>{{goodsMoney/100}}</td>
+          <td>{{(goodsMoney/100).toFixed(2)}}</td>
         </tr>
         </tbody>
   		</table>

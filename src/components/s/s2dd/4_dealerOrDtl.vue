@@ -42,15 +42,15 @@
           <div class="clear">
           	<div class="col-sm-4 pad0">
             <span class="tit01">支付方式</span>
-            <span class="ml20">{{payWay === 1 ? '支付宝': payWay === 2 ? '微信': '-'}}</span>
+            <span class="ml20">{{payWay === 1 ? '支付宝': payWay === 2 ? '微信': '--'}}</span>
            	</div>
            	<div class="col-sm-4 pad0">
             <span class="tit01">支付时间</span>
-            <span class="ml20">{{payTime}}</span>
+            <span class="ml20">{{payTime==''?'--':payTime}}</span>
             </div>
             <div class="col-sm-4 pad0">
             <span class="tit01">支付单号</span>
-            <span class="ml20">{{payNo}}</span>
+            <span class="ml20">{{payNo==''?'--':payNo}}</span>
             </div>
           </div>
 
@@ -101,12 +101,12 @@
         </div>
         <div>
           <span class="tit01">发票信息</span>
-          <span class="ml20">{{invoiceInfo}}</span>
+          <span class="ml20">{{invoiceInfo==''?'--':invoiceInfo}}</span>
         </div>
 
         <div>
           <span class="tit01">买家留言</span>
-          <span class="ml20 ">{{noted}}</span>
+          <span class="ml20 ">{{noted==''?'--':noted}}</span>
         </div>
         </div>
       </div>
@@ -136,10 +136,10 @@
               <br>{{goods.mediaResId!=''?(typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].cateName:''):''}}</td>
             <td class="a3">{{goods.sellNum}}</td>
             <td class="a4">{{goods.unitName}}</td>
-            <td class="a5">{{goods.price/100}}</td>
-            <td class="a5">{{goods.totalPrice/100}}</td>
+            <td class="a5">{{(goods.price/100).toFixed(2)}}</td>
+            <td class="a5">{{(goods.totalPrice/100).toFixed(2)}}</td>
             <td class="a6">
-            	<span :id="'spanFreight' + index" v-show="!fModify">{{goods.freight}}</span>
+            	<span :id="'spanFreight' + index" v-show="!fModify">{{(goods.freight).toFixed(2)}}</span>
             	<i class="ico_compile" @click="modifyFreight1(true)" v-show="orderStatus === 0 ? !fModify : fModify"></i>
             	<!--点击ico_compile后会出现input-->
             	<input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.freight" type="number"/>
@@ -157,11 +157,11 @@
 							<div>订单总额</div>
         		</td>
         		<td class="pr40">
-        			<div>{{totalData.totalOrderPrice/100}}</div>
-							<div>{{totalData.totalFreight/100}}</div>
-							<div>{{totalData.plateformDiscount/100}}</div>
+        			<div>{{(totalData.totalOrderPrice/100).toFixed(2)}}</div>
+							<div>{{(totalData.totalFreight/100).toFixed(2)}}</div>
+							<div>{{(totalData.plateformDiscount/100).toFixed(2)}}</div>
 							<!--<div>{{totalData.dealerDiscount/100}}</div>-->
-							<div class="redcolor" style="font-size: 18px;">{{totalData.orderPrice/100}}</div>
+							<div class="redcolor" style="font-size: 18px;">{{(totalData.orderPrice/100).toFixed(2)}}</div>
         		</td>
         	</tr>
         </tbody>
@@ -195,7 +195,7 @@
         	<tr class="fh">
       		<td colspan="2">{{orderStatus === 1 ? '待发货数：' + expressNum : orderStatus == 2 ? '待收货数：' + expressNum: orderStatus > 2 ? '已收货数：' + expressNum:'--'}}</td>
       		<td>
-      			<button class="fah fr mr10" @click="deliver" v-show="orderStatus==0">发货</button>
+      			<button class="fah fr mr10" @click="deliver" v-show="orderStatus==1">发货</button>
       		</td>
       	</tr>
         <tr>
