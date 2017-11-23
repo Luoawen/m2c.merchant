@@ -29,7 +29,7 @@
         style="width: 100%">
         <el-table-column
           label="提现单号"
-          width="300">
+          width="350">
           <template slot-scope="scope"><span >{{scope.row.withdrawalId}}</span></template>
         </el-table-column>
         <el-table-column
@@ -43,10 +43,10 @@
           <template slot-scope="scope"><span>{{scope.row.wdStatus == 0?'处理中':scope.row.wdStatus == 1?'待审批':scope.row.wdStatus == 2?'待转账':scope.row.wdStatus == 3?'不通过':scope.row.wdStatus == 4?'已转账':scope.row.wdStatus == 5?'作废':'-'}}</span></template>
         </el-table-column>
         <el-table-column
-          label="申请时间"
+          label="更新时间"
           width="300"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{date_format(new Date(scope.row.createdTime), 'yyyy-MM-dd hh:mm:ss')}}</span></template>
+          <template slot-scope="scope"><span>{{scope.row.updatedTime == ''?'-':(date_format(new Date(scope.row.updatedTime), 'yyyy-MM-dd hh:mm:ss'))}}</span></template>
         </el-table-column>
       </el-table>
       <div class="block fl" style="margin:20px;">
