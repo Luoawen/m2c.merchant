@@ -307,7 +307,7 @@
         <div class="specification_footer">
           <button type="button" class="btn save"  data-dismiss="modal"  @click="cancleGoodsSkuChoose(goodsInfo,$event)" >取消</button>
           <button type="button" class="btn cancel" @click="goodsSkuChoose(goodsInfo,$event)">确认</button>
-        </div>  
+        </div>
       </div>
     </div>
     <!--作用范围商品规格选择弹窗e-->
@@ -676,7 +676,7 @@
   </div>
 </template>
 
-<script>  
+<script>
   export default {
     name: '',
     data () {
@@ -1013,7 +1013,7 @@
         that.$('#choose_goods').modal({'show':true ,'backdrop':false})
         // console.dir('---choose_goods------',that.$('#choose_goods'))
            // 1.把保存的數據遍历一遍  將狀態放到弹框中
-          // console.log('我是that.params.goods_ids',that.params.goods_ids.length)  
+          // console.log('我是that.params.goods_ids',that.params.goods_ids.length)
           if(that.params.goods_ids.length >0 ){
            for(var h =0 ; h < that.goodsResult.content.length;h++){
               for(var k =0 ;k < that.goodsResult.content.length;k++ ){
@@ -1053,7 +1053,7 @@
             for (var i = 0; i < result.content.length; i++) {
               //遍历获取到的数据 result.content(result.content外包含页码) 绑定属性
               result.content[i].isRemoved = 0
-              result.content[i].isChoosed = 0 
+              result.content[i].isChoosed = 0
               result.content[i].isExchange = 0
               result.content[i].chooseSkuList = []
               result.content[i].isChooseSpecification ='编辑规格数量'
@@ -1090,10 +1090,10 @@
         var that = this
         var  choose_sku_list = []
         console.log('that.goodsResult.content=============>',that.goodsResult.content[index])
-          //  点击选中  
+          //  点击选中
           // 全选将选项放入chooseGoodsList
         if(that.goodsResult.content[index].isCheck == undefined || that.goodsResult.content[index].isCheck == false){
-      // 数据存入 应该连同 goodsSkulist   也一并存入 
+      // 数据存入 应该连同 goodsSkulist   也一并存入
         for(var j = 0;j<that.goodsResult.content[index].goodsSkuList.length;++j){
                     // checkbox 的选中状态
                 that.goodsResult.content[index].goodsSkuList[j].isCheck = true
@@ -1118,7 +1118,7 @@
            that.goodsResult.content[index].isCheck = true
             that.goodsResult.content[index].isChooseSpecification ='已选规格数量'
         }else{
-          // 再次点击取消  
+          // 再次点击取消
           // 遍历选择商品列表同商品结果比对  如果一致就删除该商品
           for(var i = 0; i<that.chooseGoodsList.length;i++){
             if(that.goodsResult.content[index].goodsId == that.chooseGoodsList[i].goodsId){
@@ -1191,7 +1191,7 @@
           // if(goodsInfo.goodsSkuList[i].goodsSkuNum < 0){
           //          that.show_tip("参与满减库存应不小于0")
           //          goodsInfo.isChooseSpecification ='编辑规格数量'
-          //          return;  
+          //          return;
           // }
           if (goodsInfo.goodsSkuList[i].isCheck == true && goodsInfo.goodsSkuList[i].goodsSkuNum > 0) {
            // 定义一个空对象    将 选择规格列表传给服务器数据收集起来
@@ -1229,8 +1229,8 @@
             that.goodsResult.content[i].chooseSkuList = choose_sku_list
           }
         }
-                
-        // console.log("that.range 打印",that.params.range_type)    
+
+        // console.log("that.range 打印",that.params.range_type)
         // console.log("that.range 打印",that.params.full_cut_type)
         // console.log("that.range 打印",that.params.full_cut_type)
 
@@ -1275,12 +1275,12 @@
         //           choose_goods.skuFlag = that.goodsResult.content[j].skuFlag;
         //           that.exchangeGoodsList.push(choose_goods)
         //           that.goodsResult.content[j].isChooseSpecification ='已选规格数量'
-        //           // that.goodsResult.content[j].isCheck = true  
+        //           // that.goodsResult.content[j].isCheck = true
         //           that.goodsResult.content[j].isExchange =1
         //         }
         //       }
         //   }
-        console.log('点击之后的选择商品列表',that.chooseGoodsList)  
+        console.log('点击之后的选择商品列表',that.chooseGoodsList)
         // console.log("点击之后的换购商品列表",that.exchangeGoodsList)
        console.log("点击之后的移除商品列表",that.removeGoodsList)
         that.goods_sku_show = false
@@ -1301,7 +1301,7 @@
             that.goodsResult.content[i].isRemoved= 0
              that.goodsResult.content[i].isExchange= 0
           }
-         
+
         }
          goodsInfo.isChooseSpecification = '编辑规格数量'
         console.log('删除后的goodsInfo.goodsSkuList',goodsInfo.goodsSkuList)
@@ -1314,7 +1314,7 @@
           if (that.goodsResult.content[i].goodsId == goods.goodsId) {
             that.goodsResult.content[i].isChoosed = 0
             that.goodsResult.content[i].chooseSkuList = []
-            that.goodsResult.content[i].goodsSkuNum = 0           
+            that.goodsResult.content[i].goodsSkuNum = 0
           }
         }
         for (var j = 0; j < that.params.goods_ids.length; j++) {
@@ -1359,7 +1359,7 @@
           //       that.goodsResult.content[i].goodsSkuList[j].isCheck = false
           //       that.goodsResult.content[i].goodsSkuList[j].goodsSkuNum = ''
           //       that.goodsResult.content[i].isCheck =false
-          //       that.goodsResult.content[i].isChoosed =false 
+          //       that.goodsResult.content[i].isChoosed =false
           //       that.goodsResult.content[i].isChooseSpecification ='编辑规格数量'
           //       console.log('清空商品规格', that.goodsResult.content[i].goodsSkuList[j])
           //     }
@@ -1695,7 +1695,7 @@
           }
         })
       },
-      //将数据存储到排除商品列表 
+      //将数据存储到排除商品列表
       addRemoveGoods (goods,index,$event) {
         let that = this
         //  for(var i = 0; i<that.removeGoodsList.length;i++){
@@ -1716,10 +1716,10 @@
         //      break;
         //     }
         //   }
-         
+
         //   that.goodsResult.content[index].isRemoved =false
         //   that.goodsResult.content[index].isChooseSpecification ='编辑规格数量'
-        
+
         if(that.goodsResult.content[index].isRemoved === undefined || that.goodsResult.content[index].isRemoved === 0){
             that.goodsResult.content[index].isRemoved = 1
             that.goodsResult.content[index].isChooseSpecification ='已选规格数量'
@@ -1768,7 +1768,7 @@
             that.removeGoodsList.push(that.goodsResult.content[i])
           }
         }
-       console.log('移除商品列表',that.removeGoodsList) 
+       console.log('移除商品列表',that.removeGoodsList)
       },
         addProductsItems (goods) {
         var that = this
@@ -1798,11 +1798,11 @@
         // for (var i = 0; i < that.shopResult.content.length; i++) {
         //   that.shopResult.content[i].isRemoved = 0
         // }
-        
+
         // that.removeGoodsList = []
         // that.chooseGoodsList = [];
         // that.removeShopList = []
-        // 
+        //
         that.$('#full_range_dialog').modal('hide')
         that.modalShadow = false
       },
@@ -1859,10 +1859,10 @@
       addExchangeGoods (goods,index) {
         var that = this
         var  choose_sku_list = []
-          //  点击选中  
+          //  点击选中
           // 全选将选项放入exchangeGoodsList
         if(that.goodsResult.content[index].isExchange == undefined || that.goodsResult.content[index].isExchange == 0){
-      // 数据存入 应该连同 goodsSkulist   也一并存入 
+      // 数据存入 应该连同 goodsSkulist   也一并存入
         for(var j = 0;j<that.goodsResult.content[index].goodsSkuList.length;++j){
                     // checkbox 的选中状态
                 that.goodsResult.content[index].goodsSkuList[j].isCheck = true
@@ -1886,7 +1886,7 @@
              that.goodsResult.content[index].isExchange = 1
             that.goodsResult.content[index].isChooseSpecification ='已选规格数量'
         }else{
-          // 再次点击取消  
+          // 再次点击取消
           // 遍历选择商品列表同商品结果比对  如果一致就删除该商品
           for(var i = 0; i<that.exchangeGoodsList.length;i++){
             if(that.goodsResult.content[index].goodsId == that.exchangeGoodsList[i].goodsId){
@@ -1919,7 +1919,7 @@
           }
         }
       },
-      
+
       cancelExchange(){
         var that = this
         for (var i = 0; i < that.goodsResult.content.length; i++) {
@@ -2126,7 +2126,7 @@
 }
 .pickSpecificationsStyle{
     width: 80px;
-    height: 30px; 
+    height: 30px;
     font-size: 12px;
     line-height: 30px;
     text-align: center;
