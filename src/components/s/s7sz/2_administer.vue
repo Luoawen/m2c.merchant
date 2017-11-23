@@ -120,13 +120,12 @@
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            label="品牌状态"
-            show-overflow-tooltip>
+            label="品牌状态">
             <template slot-scope="scope">
-              <span >{{scope.row.approveStatus==1?'审批中':scope.row.approveStatus==2?'审批不通过':''}}</span>
-              <el-tooltip class="item" effect="dark" :content="scope.row.rejectReason" placement="bottom-start">
-                <div class="ico_msg" v-if="scope.row.approveStatus==2"></div>
-              </el-tooltip>
+              <span>{{scope.row.approveStatus==1?'审批中':scope.row.approveStatus==2?'审批不通过':''}}</span>
+              <div class="ico_msg" v-if="scope.row.approveStatus==2">
+                <div>{{scope.row.rejectReason}}</div>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -954,12 +953,19 @@
     }
   }
 }
-.ico_msg{
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  background: url(../../../assets/images/ico_msg.png);
-}
+  .ico_msg{
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: url(../../../assets/images/ico_msg.png);
+    position:relative;
+    div{display:none;width:150px;background:#fff;position: fixed;margin-top:20px;z-index:2;height:auto;
+      padding:10px; margin-left:-120px;border:1px solid #ccc; border-radius:3px;box-shadow:0px 3px 3px #ccc;
+    }
+  }
+  .ico_msg:hover div{
+    display: inline-block;
+  }
 /*详情*/
 #myTabContent{position:relative;}
 em.bread{position:fixed; top:80px;left:367px;font-style:normal;color:#333;z-index:9999;}
