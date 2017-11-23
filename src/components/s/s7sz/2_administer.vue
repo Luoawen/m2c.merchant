@@ -414,7 +414,10 @@
             })
           }
         } else if (action === '_edit') {
-          if(to=='a'){
+          that.area()
+          that.touxiang_change = false
+          that.handle_toggle = 'modify'
+          if (to == 'a') {
             that.changeGoodShow = true
             // let row = this.$('#table').bootstrapTable('getSelections')[0]
             that.$.ajax({
