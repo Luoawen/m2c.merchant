@@ -2,7 +2,7 @@
 	<div class="slogin">
 			<div class="header">
 				<div class="logo"></div>
-				<span>一拍即获 </span>
+				<span>拍获 </span>
 				<span class="logo_right"> | 商家平台</span>
 			</div>
 				<div class="login_form_s" id="login_form_slogin">
@@ -28,8 +28,8 @@
 					</div> -->
 				</div>
 			<div class="footer">
-				<p><a>一拍即获</a> | <a>商家平台</a> | <a>媒体平台</a></p>
-				<p class="finfo">Copyright © 2017 深圳市美图溪信息技术有限公司 &nbsp;|&nbsp; 粤ICP 备17077016号</a>
+				<p><a href="http://www.m2c2017.com" target="_blank">拍获</a> | <a href="http://b.m2c2017.com" target="_blank">商家平台</a> | <a  href="http://m.m2c2017.com" target="_blank">媒体平台</a></p>
+				<p class="finfo">Copyright © 2017 深圳市美图溪信息技术有限公司 &nbsp;|&nbsp; 粤ICP 备17077016号
 				</p>
 			</div>
 		<!-- 忘记密码提示框样式 -->
