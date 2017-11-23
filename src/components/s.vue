@@ -37,6 +37,9 @@
 				<div path='/s/survey' class="content_s">资金概况</div>
 				<div path='/s/detail' class="content_s">收支明细</div>
 				<div path='/s/record' class="content_s">提现记录</div>
+			</div>
+      <div class="public_nav" @click="slide"><i class="nav_count"></i>结算</div>
+      <div class="content_container">
 				<div path='/s/countQuery' class="content_s">结算查询</div>
 			</div>
       <div class="public_nav" @click="slide" ><i class="nav_marketing"></i>营销</div>
@@ -167,14 +170,17 @@
       change(){
         console.log(this.$route.path)
         console.log(this.$route.meta.title)
+        
         let path = this.$route.path
         this.$nextTick(()=>{
           this.$('.content_s').removeClass('avter')
           this.$('[path="' + this.$route.path + '"]').addClass('avter')
           this.$('[path="' + this.$route.path + '"]').parent(".content_container").css('display','block')
           if(this.$route.meta.title==''||this.$route.meta.title==undefined){
+            document.title = '拍获-商家平台'
             this.$('.right_nav_content').text('')
           }else{
+            document.title = this.$route.meta.title+'-拍获-商家平台'
             this.$('.right_nav_content').text(' > ' + this.$route.meta.title)
           }
         })
@@ -199,9 +205,8 @@
      this.change();
     },
     beforeCreate () {
-      document.title = '拍获-商家平台'
+      //document.title = '拍获-商家平台'
       document.querySelector('#favicon').href = '/static/favicon_s.ico'
-
     },
     watch: {
       '$route':"change"
@@ -463,17 +468,17 @@ body {
       position: fixed;
       top: 0px;
       left: 0px;
-      z-index: 999; // top: 4.29rem;
+      z-index: 99; // top: 4.29rem;
       width: 200px; // height: 99999999px;
       line-height: 50px;
       background: #505562;
       color: #B0B8BD;
       // text-align: center;
-      padding-top: 3rem;
+      padding-top: 7rem;
       padding-bottom:1rem;
       height:100%;
       box-sizing:border-box;
-      margin-top: 4.29rem;
+      margin-top: 0rem;
       margin-bottom: 0px;
       min-width: 100px;
       .avter {
@@ -518,6 +523,9 @@ body {
       }
       .nav_asset_m {
         background: url(../assets/images/nav_finance.png) no-repeat;
+      }
+      .nav_count {
+        background: url(../assets/images/nav_clearing.png) no-repeat;
       }
       .nav_marketing {
         background: url(../assets/images/nav_marketing.png) no-repeat;
@@ -568,7 +576,7 @@ body {
         float: left;
       }
       i {
-        background: url(../assets/images/nav_home.png) no-repeat;
+        background: url(../assets/images/ico_home.png) no-repeat;
         display: block;
         position: absolute;
         top: 20px;
