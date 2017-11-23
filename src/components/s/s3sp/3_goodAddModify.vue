@@ -157,7 +157,7 @@
       </div>
 
       <div class="tabPane" v-if="data.skuFlag==1">
-        <table>
+        <table id="hideItemValue">
           <thead>
             <tr>
               <th></th>
@@ -705,6 +705,9 @@
             that.goodsSpecifications[index].itemName=that.stantards[i].stantardName
           }
         }
+        that.goodsSpecifications[index].itemValue = []
+        that.mapValue()
+        //that.goodsSpecifications = []
         that.restaurants = []
         that.getValue()
         that.standardIdShow = false
@@ -1151,13 +1154,17 @@
         that.$('.el-upload').appendTo("#dragImg")
       })
       window.onscroll = function () {
-        console.info(that.standardId)
         if (that.standardId != '') {
           if (window.scrollY > 864) {
-            console.info(window.scrollY)
             $('.el-autocomplete-suggestion').hide()
           } else {
-            $('.el-autocomplete-suggestion').show()
+            for(var i=0;i<that.goodsSpecifications.length;i++){
+              if(that.goodsSpecifications[i].itemValue != [] ){
+                $('#hideItemValue').find('.el-autocomplete-suggestion').eq(i).hide()
+              }else{
+                $('.el-autocomplete-suggestion').show()
+              }
+            }
           }
         }
       }
