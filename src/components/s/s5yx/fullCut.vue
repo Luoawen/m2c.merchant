@@ -13,7 +13,7 @@
             <span class="wid70">有效期：</span>
             <input type="date" id='todayDate' class="form-control expiry_date" v-model="params.expiration_time_start" :min="todayDate" :max="params.expiration_time_end" @blur="formValidator(3)"/>
             <span class="">&nbsp;&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <input type="date"   class="form-control expiry_date" v-model="params.expiration_time_end" :min="params.expiration_time_start" @blur="formValidator(4)"/>
+            <input type="date" id='exactlyToday'  class="form-control expiry_date" v-model="params.expiration_time_end" :min="params.expiration_time_start" @blur="formValidator(4)"/>
             <div class="set_bz" style="color: red;" v-show="tip_show.time">有效期不能为空</div>
           </div>
           <div class="set">
@@ -867,7 +867,6 @@
         if (flag == 0 || flag == 3) {
           if (that.params.expiration_time_start == '') {
             that.tip_show.time = true
-            that.$("#todayDate").focus().select();
             return false
           } else{
             that.tip_show.time = false
@@ -876,6 +875,8 @@
         if (flag == 0 || flag == 4) {
           if (that.params.expiration_time_end == '') {
             that.tip_show.time = true
+             that.$("#fullCutName").select();
+             that.$("#exactlyToday").focus();
             return false
           } else{
             that.tip_show.time = false
