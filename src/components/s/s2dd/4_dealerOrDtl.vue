@@ -89,13 +89,13 @@
           		</select>
           	</span>
           	<span class="fl mr20">
-          		<input class="bj02_select form-control" v-model="streetAddr"/>
+          		<input class="bj02_select form-control" maxlength="20" v-model="streetAddr"/>
           	</span>
               <span class="fl mr20">
-          		<input class="bj_select form-control" v-model="revPerson"/>
+          		<input class="bj_select form-control" maxlength="10" v-model="revPerson"/>
           	</span>
               <span class="fl mr20">
-          		<input class="bj_select form-control" v-model="phone"/>
+          		<input class="bj_select form-control" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" v-model="phone"/>
           	</span>
           	</span>
         </div>
@@ -807,6 +807,19 @@
             that.area = options[index].text
           }
         }
+        }
+
+        if(that.streetAddr==''){
+          that.show_tip("请输入详细地址")
+          return
+        }
+        if(that.revPerson == ''){
+          that.show_tip("请输入收货人姓名")
+          return
+        }
+        if(that.phone == ''){
+          that.show_tip("请输入收货人手机号")
+          return
         }
 
         var freightStr='';
