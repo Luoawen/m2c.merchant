@@ -214,7 +214,7 @@
             	</div>
         		</td>
         		<td>{{goods.sellNum}}</td>
-        		<td>{{orderStatus==0? goods.sellNum : 0}}</td>
+        		<td>{{(orderStatus==1 || orderStatus==0)? goods.sellNum : 0}}</td>
         	</tr>
         </tbody>
         <tbody class="deliver_tb">
@@ -596,9 +596,9 @@
           that.recvAddr = data.province + data.city + data.areaCounty + data.streetAddr + " " + data.revPerson + " " + data.revPhone;
           if (data.invoiceType != -1) {
             if (data.invoiceType==1)
-              that.invoiceInfo = "发票台头：" + data.invoiceHeader + " 发票名称：" +  data.invoiceName + " 纳税人标识：" + data.invoiceCode;
+              that.invoiceInfo = "发票抬头：" + data.invoiceHeader + " 纳税人标识：" + data.invoiceCode + "发票内容：明细"; //data.invoiceName +
             else if (data.invoiceType==0)
-              that.invoiceInfo = "发票台头：" + data.invoiceHeader + " 发票名称：" +  data.invoiceName;
+              that.invoiceInfo = "发票抬头：" + data.invoiceHeader + "发票内容：明细"; //data.invoiceName;
           }
           that.noted = data.noted;
 
