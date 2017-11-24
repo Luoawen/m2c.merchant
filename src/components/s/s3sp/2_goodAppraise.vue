@@ -176,13 +176,13 @@
     <div class="hptczp_content"  v-show="showhptc===true">
         <div class="hptczp_header">
           <span>回评内容</span>
-          <span class="fr" @click="showhptc=false">X</span>
+          <span class="fr" @click="cancel()">X</span>
         </div>
         <div class="hptczp_body">
             <textarea placeholder="请填写100字符以内内容" maxlength="" v-model="reply_params.replyContent" maxlength="100"></textarea>
         </div>
         <div class="hptczp_footer">
-          <button type="button" class="btn save" @click="reply()" >确认</button>
+          <button type="button" class="btn save" @click="reply()" :disabled="reply_params.replyContent==''">确认</button>
           <button type="button" class="btn cancel" @click="cancel()" >取消</button>
         </div>
     </div>

@@ -609,6 +609,11 @@
             cancelButtonText: '取消',
             inputType:'textarea',
            }).then(({ value }) => {
+
+             if (value.length > 200) {
+               that.show_tip("原因输入太长，不能大于200字!");
+               return;
+             }
              that.$.ajax({
                type: 'PUT',
                url: this.base + 'm2c.scm/order/dealer/reject-apply-sale',
