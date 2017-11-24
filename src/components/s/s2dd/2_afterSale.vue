@@ -154,12 +154,9 @@
           value: '11',
           label: '售后完成'
         },{
-          value: '12',
-          label: '售后关闭'
-        },{
           value: '-1',
-          label: '已关闭'
-        },],
+          label: '已取消'
+        }],
         afterSaleStatus:'',//售后状态
         mediaStatus:[{
           value: '',
