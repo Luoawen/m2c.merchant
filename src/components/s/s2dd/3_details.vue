@@ -33,7 +33,7 @@
             <div class="col-sm-4 detail_cen">
               <div>
                 <span class="tit01">售后期望:</span>
-                <span class="ml20">{{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}</span>
+                <span class="ml20">{{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货退款':orderDetail.orderType==2?'仅退款':'-'}}</span>
               </div>
               <div>
                 <span class="tit01">售后金额:</span>
