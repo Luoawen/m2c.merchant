@@ -145,7 +145,7 @@
         <!-- 在tbody上v-for循环 -->
         <tbody v-if="totalCount==0">
         <tr style="height: 50px;text-align: center;">
-          <td>没有匹配的记录</td>
+          <td  colspan="8">没有匹配的记录</td>
 
         </tr>
         </tbody>

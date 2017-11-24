@@ -100,13 +100,7 @@
         </thead>
         <tbody v-if="goodsCommentTotalCount==0">
         <tr style="height: 50px;text-align">
-          <td>没有匹配的记录</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td colspan="7">没有匹配的记录</td>
         </tr>
         </tbody>
         <tbody v-for="comment in datacomment">

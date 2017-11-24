@@ -551,13 +551,14 @@
         }
       },
       checkGoodsCode (val, index, arr, list) {  // 校验商品编码
+        let that = this
         setTimeout(() => {
           var re = /^[0-9a-zA-Z]{1,30}$/
           if (val != '' && !re.test(val)) {
             list[index][arr] = ''
-            this.sukShow5 = true
+            that.sukShow5 = true
           } else {
-            this.sukShow5 = false
+            that.sukShow5 = false
             if(val != ''){
               this.$.ajax({
                 type: 'get',
@@ -569,7 +570,7 @@
                 },
                 success: function (result) {
                   if(result.content!=''){
-                    alert("商品编码已存在！")
+                    that.show_tip("商品编码已存在！")
                   }else{
                     return
                   }
