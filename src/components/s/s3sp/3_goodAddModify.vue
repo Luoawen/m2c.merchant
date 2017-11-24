@@ -706,6 +706,10 @@
           }
         }
         that.goodsSpecifications[index].itemValue = []
+        console.log(that.goodsSpecifications)
+        // if(index != 2){
+          
+        // }
         that.mapValue()
         //that.goodsSpecifications = []
         that.restaurants = []
@@ -845,6 +849,7 @@
       mapValue () {
         let that = this
         let goodSkuList = that.goodsSKUs
+        let goback = false
         that.goodsSKUs=[]
           if(that.goodsSpecifications.length==1 || that.goodsSpecifications[1].itemValue.length==0){
             for(var j=0;j<that.goodsSpecifications[0].itemValue.length;j++){
@@ -866,11 +871,15 @@
                 }
               }
             } else if(that.goodsSpecifications.length==3){
+              //console.log(that.goodsSKUs)
               var p = [[],[],[]]
               for(var k=0;k<that.goodsSpecifications.length;k++){
                 for(var y=0;y<that.goodsSpecifications[k].itemValue.length;y++){
                   p[k].push(that.goodsSpecifications[k].itemValue[y].spec_name)
                 }
+              }
+              if(p[2].length==0){
+                p.splice(2,1)
               }
             } // 此定义不利于拓展，暂时没想到更好的方法
             var arr = js(p[0],p[1])
@@ -895,7 +904,6 @@
                 }
               }
               return arr
-              console.log(arr)
             }
             for(var a=0;a<goodSkuList.length;a++){
               for(var b=0;b<that.goodsSKUs.length;b++){
@@ -942,7 +950,6 @@
           let state2 = {spec_name:state1}
           if(JSON.stringify(array).indexOf(JSON.stringify(state2))===-1){
             that.goodsSpecifications[index].itemValue.push(state2)
-            console.log(that.goodsSpecifications[index])
             that.mapValue()
             that.goodsSpecifications[index].state1=''
           }else{
