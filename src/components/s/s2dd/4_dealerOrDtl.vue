@@ -89,13 +89,13 @@
           		</select>
           	</span>
           	<span class="fl mr20">
-          		<input class="bj02_select form-control" v-model="streetAddr"/>
+          		<input class="bj02_select form-control" maxlength="20" v-model="streetAddr"/>
           	</span>
               <span class="fl mr20">
-          		<input class="bj_select form-control" v-model="revPerson"/>
+          		<input class="bj_select form-control" maxlength="10" v-model="revPerson"/>
           	</span>
               <span class="fl mr20">
-          		<input class="bj_select form-control" v-model="phone"/>
+          		<input class="bj_select form-control" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" v-model="phone"/>
           	</span>
           	</span>
         </div>
@@ -252,23 +252,22 @@
     <div class="poi1">
       <i class="poi2 ico_close02" @click="Deliver=false"></i>
       <div class="deliver_tit">发货信息</div>
-      <div class="deliver_type01 mt20 mb10 clear">
+      <div class="deliver_type01 mt20 clear">
         <span class="mr20 tit01 fl">
         <span class="redcolor">*</span>
         <span>配送方式</span>
         </span>
-
         <template>
           <el-radio v-model="expressWay" label="0" @click="expressCheck(0)" >物流发货</el-radio>
           <el-radio v-model="expressWay" label="1" @click="expressCheck(1)">自有物流</el-radio>
         </template>
         <div class="tit03 clear">若有自己的配送车队，可选自有物流</div>
       </div>
-      <div class="deliver_type01 mt20 mb10 clear">
+      <div class="deliver_type01 clear">
         <div class=""  v-show="expressWay != 1">
-        <span class="mr20 tit01 fl">
+        <span class="mr20 tit01 mt10 fl">
         <span class="redcolor">*</span>
-        <span>物流公司</span>
+        <span style="line-height:40px">物流公司</span>
         </span>
         <span>
           <select class="form-control deliver_input fl" placeholder="请选择" v-model="expressCode" id="ship_select">
@@ -276,47 +275,47 @@
           </select>
         </span>
         </div>
-        <div class="">
-        <span class="mr20 tit01 fl">
-        <span class="redcolor">*</span>
-        <span>备注</span>
-        </span>
-        <span>
-          <input class="form-control deliver_input" placeholder="选填" v-model="expressNote"/>
-        </span>
-        </div>
         <div class="" v-show="expressWay == 1">
         <span class="mr20 tit01 fl">
-        <span class="redcolor">*</span>
-        <span>配送人</span>
+          <span class="redcolor">*</span>
+          <span>配送员姓名</span>
         </span>
           <span>
-          <input class="form-control deliver_input" v-model="expressPerson"/>
+          <input class="form-control deliver_input" placeholder="请填写" maxlength="10" v-model="expressPerson"/>
         </span>
         </div>
       </div>
-      <div class="deliver_type01 mt20 mb10 clear">
+      <div class="deliver_type01 mb10 clear" style="margin-top:-10px;">
         <div class="">
         <span class="mr20 tit01 fl">
-        <span class="redcolor">*</span>
-        <span>物流单号</span>
+           <span class="redcolor" v-show="expressWay != 1">*</span>
+           <span v-show="expressWay == 1">运单号</span>
+           <span  v-show="expressWay != 1">物流单号</span>
         </span>
         <span>
-          <input class="form-control deliver_input" placeholder="请填写" v-model="expressNo"/>
+          <input v-show="expressWay == 1" class="form-control deliver_input" placeholder="选填" maxlength="30" v-model="expressNo"/>
+          <input v-show="expressWay != 1" class="form-control deliver_input" placeholder="请填写" maxlength="30" v-model="expressNo"/>
         </span>
         </div>
 
           <div class="" v-show="expressWay == 1">
         <span class="mr20 tit01 fl">
         <span class="redcolor">*</span>
-        <span>配送人电话</span>
+        <span>配送员手机号</span>
         </span>
             <span>
-          <input class="form-control deliver_input" v-model="expressPhone"/>
+          <input class="form-control deliver_input" placeholder="请填写" maxlength="11" v-model="expressPhone"/>
         </span>
           </div>
+        <div class="">
+        <span class="mr20 tit01 fl">
+        <span>备注</span>
+        </span>
+          <span>
+          <input class="form-control deliver_input" placeholder="选填" maxlength="100" v-model="expressNote"/>
+        </span>
+        </div>
       </div>
-
       <div class="deliver_type01 mt20 mb10 clear">
         <button class="deliversure btn01 mr20 ml20" @click="deliverDealerOrder()">确定发货</button>
         <button class="btn01 deliverdel" @click="Deliver=false">取消</button>
@@ -727,6 +726,36 @@
       deliverDealerOrder(){
         // 发货请求
         let that=this;
+        if (that.expressWay == 0) {
+          if (that.expressCode == '') {
+            that.show_tip('请选择物流公司')
+            return
+          }
+          if (that.expressNo == '') {
+            that.show_tip('请填写物流单号')
+            return
+          }
+          var pattern = /^[0-9a-zA-Z]{1,30}$/
+          if (!pattern.test(that.expressNo)){
+            that.show_tip('物流单号只可以输入字母或数字')
+            return
+          }
+        }
+        if (that.expressWay == 1) {
+          if (that.expressPerson == '') {
+            that.show_tip('请填写配送员姓名')
+            return
+          }
+          if (that.expressPhone == '') {
+            that.show_tip('请填写配送员手机号')
+            return
+          }
+          var pattern = /^(13|14|15|17|18)[0-9]{9}$/
+          if (!pattern.test(that.expressPhone)){
+            that.show_tip('请填写正确的配送员手机号')
+            return
+          }
+        }
         let select = document.querySelector('#ship_select')
         if (select !== null) {
           let options = select.options
@@ -807,6 +836,19 @@
             that.area = options[index].text
           }
         }
+        }
+
+        if(that.streetAddr==''){
+          that.show_tip("请输入详细地址")
+          return
+        }
+        if(that.revPerson == ''){
+          that.show_tip("请输入收货人姓名")
+          return
+        }
+        if(that.phone == ''){
+          that.show_tip("请输入收货人手机号")
+          return
         }
 
         var freightStr='';
@@ -990,11 +1032,12 @@
     background-color: #fff;
     .deliver{
     	background: #fff;
-    	height: 358px;
+    	height: auto;
       top: 0px;
       left: 0px;
-      padding-top: 21px;
-      padding-left: 23px;
+      padding:30px;
+      padding-top:20px;
+      box-shadow: 0px 6px 6px #ccc;
       .ico_close02{
         width: 24px;
         height: 24px;
@@ -1037,6 +1080,9 @@
           line-height: 30px;
           text-align: right;
         }
+        .el-radio{
+          line-height:30px;
+        }
         .tit02{
           span{
             display: inline-block;
@@ -1046,14 +1092,14 @@
         .tit03{
           font-size: 12px;
           color: #999999;
-          margin-left: 80px;
+          margin-left: 142px;
           }
           .deliver_input{
             width: 30%;
             height: 40px;
+            margin:15px 0;
           }
       }
-
     }
     .fah{
     		background: #0086FF;
