@@ -372,6 +372,7 @@
         expressNum:0,
         totalData:'',
         mediaResInfos:{}
+        ,isGetUserRuning : false
       }
     },
     methods: {
