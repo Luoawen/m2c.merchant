@@ -824,7 +824,6 @@
             that.city = options[index].text
           }
         }
-
         select = document.querySelector('#area_select')
         if (select !== null) {
           let options = select.options
@@ -837,7 +836,10 @@
           }
         }
         }
-
+        if(that.$(".a6_input").val()<0){
+          that.show_tip("输入金额不能位负数")
+          return
+        }
         if(that.streetAddr==''){
           that.show_tip("请输入详细地址")
           return
