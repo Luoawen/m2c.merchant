@@ -733,6 +733,28 @@
         that.shipmentForm.expressName=choosenItem.expressName
       }
       ,handleShipment(){
+
+        //shipmentForm.expressWay==0
+        if(that.shipmentForm.expressWay==0){
+            if(that.shipmentForm.expressCode == '' || that.shipmentForm.expressCode == undefined){
+              that.show_tip("请选择物流公司")
+            }
+            if(that.shipmentForm.expressNo == '' || that.shipmentForm.expressNo == undefined){
+              that.show_tip("请输入物流单号")
+            }
+        }
+        if(that.shipmentForm.expressWay==1){
+          if(that.shipmentForm.expressPerson == '' || that.shipmentForm.expressPerson == undefined){
+            that.show_tip("请输入配送员姓名")
+          }
+          if(that.shipmentForm.phone == '' || that.shipmentForm.phone == undefined){
+            that.show_tip("请输入配送员电话")
+          }
+          if(shipmentForm.expressNo == '' || shipmentForm.expressNo == undefined){
+            that.show_tip("请输入运单号")
+          }
+        }
+
         let that = this
         that.$.ajax({
           type: 'PUT',
