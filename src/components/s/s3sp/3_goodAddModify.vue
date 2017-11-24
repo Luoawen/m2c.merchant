@@ -558,6 +558,24 @@
             this.sukShow5 = true
           } else {
             this.sukShow5 = false
+            if(val != ''){
+              this.$.ajax({
+                type: 'get',
+                url: this.localbase + 'm2c.scm/goods/code',
+                data:{
+                  token: sessionStorage.getItem('mToken'),
+                  dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+                  goodsCode:val
+                },
+                success: function (result) {
+                  if(result.content!=''){
+                    alert("商品编码已存在！")
+                  }else{
+                    return
+                  }
+                }
+              })
+            }
           }
         }, 0)
       },
@@ -708,7 +726,7 @@
         that.goodsSpecifications[index].itemValue = []
         console.log(that.goodsSpecifications)
         // if(index != 2){
-          
+
         // }
         that.mapValue()
         //that.goodsSpecifications = []
@@ -776,17 +794,19 @@
                   return
                 }
               }
+            }
+            if (that.goodsMainImages.length <= 0) {
+              that.show_tip("您还有信息未完善！")
+              that.imgShowList = true
+              return
+            }
+            for (var k = 0; k < that.goodsSKUs.length; k++) {
               that.goodsSKUs[k].marketPrice = parseFloat(that.goodsSKUs[k].marketPrice * 100)
               that.goodsSKUs[k].photographPrice= parseFloat(that.goodsSKUs[k].photographPrice * 100)
               that.goodsSKUs[k].showStatus = that.goodsSKUs[k].show
               if (that.countMode == 1) {
                 that.goodsSKUs[k].supplyPrice = parseFloat(that.goodsSKUs[k].supplyPrice * 100)
               }
-            }
-            if (that.goodsMainImages.length <= 0) {
-              that.show_tip("您还有信息未完善！")
-              that.imgShowList = true
-              return
             }
             let a = {
               token: sessionStorage.getItem('mToken'),
