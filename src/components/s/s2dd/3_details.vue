@@ -763,6 +763,9 @@
       ,getUserByIds(ids) {
         console.log('fanjc======getUserByIds')
         let that = this;
+        if (that.isGetUserRuning)
+          return;
+        that.isGetUserRuning = true;
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.users/user/getUserInfoByIds',
@@ -787,6 +790,7 @@
                   that.operatingRecords[i].optUserStr = that.operatingRecords[i].optUser;
               }
             }
+            that.isGetUserRuning = false;
           }
         });
       }
