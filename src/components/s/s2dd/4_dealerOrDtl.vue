@@ -276,47 +276,47 @@
           </select>
         </span>
         </div>
-        <div class="">
-        <span class="mr20 tit01 fl">
-        <span class="redcolor">*</span>
-        <span>备注</span>
-        </span>
-        <span>
-          <input class="form-control deliver_input" placeholder="选填" v-model="expressNote"/>
-        </span>
-        </div>
         <div class="" v-show="expressWay == 1">
         <span class="mr20 tit01 fl">
         <span class="redcolor">*</span>
-        <span>配送人</span>
+        <span>配送员姓名</span>
         </span>
           <span>
-          <input class="form-control deliver_input" v-model="expressPerson"/>
+          <input class="form-control deliver_input" placeholder="请填写" maxlength="10" v-model="expressPerson"/>
         </span>
         </div>
       </div>
       <div class="deliver_type01 mt20 mb10 clear">
         <div class="">
         <span class="mr20 tit01 fl">
-        <span class="redcolor">*</span>
-        <span>物流单号</span>
+           <span class="redcolor" v-show="expressWay != 1">*</span>
+           <span v-show="expressWay == 1">运单号</span>
+           <span  v-show="expressWay != 1">物流单号</span>
         </span>
         <span>
-          <input class="form-control deliver_input" placeholder="请填写" v-model="expressNo"/>
+          <input v-show="expressWay == 1" class="form-control deliver_input" placeholder="选填" maxlength="30" v-model="expressNo"/>
+          <input v-show="expressWay != 1" class="form-control deliver_input" placeholder="请填写" maxlength="30" v-model="expressNo"/>
         </span>
         </div>
 
           <div class="" v-show="expressWay == 1">
         <span class="mr20 tit01 fl">
         <span class="redcolor">*</span>
-        <span>配送人电话</span>
+        <span>配送员手机号</span>
         </span>
             <span>
-          <input class="form-control deliver_input" v-model="expressPhone"/>
+          <input class="form-control deliver_input" placeholder="请填写" maxlength="11" v-model="expressPhone"/>
         </span>
           </div>
+        <div class="">
+        <span class="mr20 tit01 fl">
+        <span>备注</span>
+        </span>
+          <span>
+          <input class="form-control deliver_input" placeholder="选填" maxlength="100" v-model="expressNote"/>
+        </span>
+        </div>
       </div>
-
       <div class="deliver_type01 mt20 mb10 clear">
         <button class="deliversure btn01 mr20 ml20" @click="deliverDealerOrder()">确定发货</button>
         <button class="btn01 deliverdel" @click="Deliver=false">取消</button>
@@ -727,6 +727,36 @@
       deliverDealerOrder(){
         // 发货请求
         let that=this;
+        if (that.expressWay == 0) {
+          if (that.expressCode == '') {
+            that.show_tip('请选择物流公司')
+            return
+          }
+          if (that.expressNo == '') {
+            that.show_tip('请填写物流单号')
+            return
+          }
+          var pattern = /^[0-9a-zA-Z]{1,30}$/
+          if (!pattern.test(that.expressNo)){
+            that.show_tip('物流单号只可以输入字母或数字')
+            return
+          }
+        }
+        if (that.expressWay == 1) {
+          if (that.expressPerson == '') {
+            that.show_tip('请填写配送员姓名')
+            return
+          }
+          if (that.expressPhone == '') {
+            that.show_tip('请填写配送员手机号')
+            return
+          }
+          var pattern = /^(13|14|15|17|18)[0-9]{9}$/
+          if (!pattern.test(that.expressPhone)){
+            that.show_tip('请填写正确的配送员手机号')
+            return
+          }
+        }
         let select = document.querySelector('#ship_select')
         if (select !== null) {
           let options = select.options
