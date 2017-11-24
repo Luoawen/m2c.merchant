@@ -113,7 +113,7 @@
               </div></th>
               <th><span style="color: red">*</span>拍获价/元</th>
               <th>市场价/元</th>
-              <th>{{countMode==1?'供货价':'服务费率/%'}}</th>
+              <th><span style="color: red" v-show="countMode==1">*</span>{{countMode==1?'供货价':'服务费率/%'}}</th>
               <th>商品编码</th>
             </tr>
           </thead>
@@ -157,7 +157,7 @@
       </div>
 
       <div class="tabPane" v-if="data.skuFlag==1">
-        <table>
+        <table id="hideItemValue">
           <thead>
             <tr>
               <th></th>
@@ -216,7 +216,7 @@
               </div></th>
               <th><span style="color: red">*</span>拍获价/元</th>
               <th>市场价/元</th>
-              <th>{{countMode==1?'供货价':'服务费率/%'}}</th>
+              <th><span style="color: red" v-show="countMode==1">*</span>{{countMode==1?'供货价':'服务费率/%'}}</th>
               <th>商品编码</th>
             </tr>
           </thead>
@@ -705,6 +705,9 @@
             that.goodsSpecifications[index].itemName=that.stantards[i].stantardName
           }
         }
+        that.goodsSpecifications[index].itemValue = []
+        that.mapValue()
+        //that.goodsSpecifications = []
         that.restaurants = []
         that.getValue()
         that.standardIdShow = false
@@ -714,8 +717,10 @@
         let that = this
         that.goodsSKUs=[{show:true,skuName: '', showStatus: true, marketPrice:'', goodsCode: '', supplyPrice: ''}]
       },
+      // 清空多规格内的值
       clearGoodsSKUs(){
         let that = this
+        that.goodsSpecifications=[{itemName:'',itemValue:[],state1:''}]
         that.goodsSKUs=[]
       },
       // 批量设置
@@ -1151,13 +1156,17 @@
         that.$('.el-upload').appendTo("#dragImg")
       })
       window.onscroll = function () {
-        console.info(that.standardId)
         if (that.standardId != '') {
           if (window.scrollY > 864) {
-            console.info(window.scrollY)
             $('.el-autocomplete-suggestion').hide()
           } else {
-            $('.el-autocomplete-suggestion').show()
+            for(var i=0;i<that.goodsSpecifications.length;i++){
+              if(that.goodsSpecifications[i].itemValue != [] ){
+                $('#hideItemValue').find('.el-autocomplete-suggestion').eq(i).hide()
+              }else{
+                $('.el-autocomplete-suggestion').show()
+              }
+            }
           }
         }
       }
