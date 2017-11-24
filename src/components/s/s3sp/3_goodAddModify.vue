@@ -726,7 +726,7 @@
         that.goodsSpecifications[index].itemValue = []
         console.log(that.goodsSpecifications)
         // if(index != 2){
-          
+
         // }
         that.mapValue()
         //that.goodsSpecifications = []
@@ -776,35 +776,37 @@
               if (that.goodsSKUs[k].availableNum == undefined) {
                 that.checkInventorySubmit(that.goodsSKUs[k].availableNum)
                 if (that.sukShow == true) {
-                  // that.show_tip("您还有信息未完善！")
+                  that.show_tip("您还有信息未完善！")
                   return
                 }
               }
               if (that.goodsSKUs[k].weight == undefined) {
                 that.checkWeightSubmit(that.goodsSKUs[k].weight)
                 if (that.sukShow1 == true) {
-                  // that.show_tip("您还有信息未完善！")
+                  that.show_tip("您还有信息未完善！")
                   return
                 }
               }
               if (that.goodsSKUs[k].photographPrice == undefined) {
                 that.checkPhotographPriceSubmit(that.goodsSKUs[k].photographPrice)
                 if (that.sukShow2 == true) {
-                  // that.show_tip("您还有信息未完善！")
+                  that.show_tip("您还有信息未完善！")
                   return
                 }
               }
+            }
+            if (that.goodsMainImages.length <= 0) {
+              that.show_tip("您还有信息未完善！")
+              that.imgShowList = true
+              return
+            }
+            for (var k = 0; k < that.goodsSKUs.length; k++) {
               that.goodsSKUs[k].marketPrice = parseFloat(that.goodsSKUs[k].marketPrice * 100)
               that.goodsSKUs[k].photographPrice= parseFloat(that.goodsSKUs[k].photographPrice * 100)
               that.goodsSKUs[k].showStatus = that.goodsSKUs[k].show
               if (that.countMode == 1) {
                 that.goodsSKUs[k].supplyPrice = parseFloat(that.goodsSKUs[k].supplyPrice * 100)
               }
-            }
-            if (that.goodsMainImages.length <= 0) {
-              // that.show_tip("您还有信息未完善！")
-              that.imgShowList = true
-              return
             }
             let a = {
               token: sessionStorage.getItem('mToken'),
