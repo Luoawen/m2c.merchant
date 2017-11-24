@@ -524,6 +524,10 @@
       ,handleReject() {
         let that = this;
         var reasonVal = that.$("#refuse_txt").val();
+        if (reasonVal.length > 200) {
+          that.show_tip("原因输入太长，不能大于200字!");
+          return;
+        }
         that.$.ajax({
           type: 'PUT',
           url: that.base + 'm2c.scm/order/dealer/reject-apply-sale',
@@ -905,7 +909,7 @@
     height: 280px;
     background: #fff;
     z-index: 9999;
-    position: absolute;
+    position: fixed;
     left: 50%;
     top: 50%;
     margin-left: -200px;
