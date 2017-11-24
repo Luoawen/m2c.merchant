@@ -46,16 +46,14 @@
       <div class="content_container">
 				<div path='/s/marketing' class="content_s">工具</div>
 			</div>
-      <div class="public_nav" path='/s/data'><i class="nav_data"></i>数据</div>
+      <!-- <div class="public_nav" path='/s/data'><i class="nav_data"></i>数据</div> -->
       <div class="public_nav" @click="slide"><i class="nav_setting"></i>设置</div>
       <div class="content_container">
 				<div path='/s/information' class="content_s">店铺信息</div>
 				<div path='/s/administer' class="content_s">品牌管理</div>
 				<div path='/s/formwork' class="content_s">运费模板</div>
 				<div path='/s/address' class="content_s">售后地址</div>
-				<!-- <div path='/s/cashPass' class="content_s">交易密码</div> -->
 			</div>
-      <!-- <div class="public_nav" path='/s/updatePass'><i class="nav_setting"></i>修改密码</div> -->
     </div>
     <div class="right_nav">
       <i></i>
@@ -92,7 +90,7 @@
     methods: {
       slide (event) {
         let target1 = event.currentTarget.nextSibling.nextSibling
-        console.log(target1)
+        //console.log(target1)
         this.$(target1).slideToggle(200)
       },
       // 退出提示框
@@ -111,7 +109,6 @@
       // 左侧导航跳转
       goto (event) {
         let that = this
-        //alert(0)
         console.log('元素', that.$(event.target).text())
         let path = event.target.getAttribute('path')
         if (!path) return
@@ -121,12 +118,12 @@
           that.$(x).removeClass('avter')
         })
         that.$('[path="' + path + '"]').addClass('avter')
-        sessionStorage.setItem('Path', '')
-        sessionStorage.setItem('startTime', '')
-        sessionStorage.setItem('endTime', '')
-        sessionStorage.setItem('statusFlag', '')
-        sessionStorage.setItem('trailStatus', '')
-        sessionStorage.setItem('replyStatus', '')
+        // sessionStorage.setItem('Path', '')
+        // sessionStorage.setItem('startTime', '')
+        // sessionStorage.setItem('endTime', '')
+        // sessionStorage.setItem('statusFlag', '')
+        // sessionStorage.setItem('trailStatus', '')
+        // sessionStorage.setItem('replyStatus', '')
         // if (path === '/s/home') {
         //   that.$('.right_nav_content').attr('path', path)
         //   that.$('.right_nav_content').text('')
@@ -495,9 +492,9 @@ body {
         font-size: 13px;
         cursor: pointer;
       }
-      .content_s:hover {
-        color: #B7CAE2;
-      }
+      // .content_s:hover {
+      //   color: #B7CAE2;
+      // }
       i {
         position: absolute;
         top: 50%;
@@ -606,35 +603,35 @@ body {
       font-size: 14px;
       color: #333333;
     }
-    .ico_msg{
-      width: 16px;
-      height: 16px;
-      display: inline-block;
-      background: url(../assets/images/ico_msg.png);
-      cursor: pointer;
-      position: relative;
-      font-style: normal;
-    }
-    .ico_msg:hover .ico-tit{
-      display: block;
-    }
-    .ico-tit{
-      display: none;
-      color: #333;
-      font-size: 12px;
-      position:absolute;
-      border: 1px solid #F5BD23;
-      box-shadow: 0 0 4px 0 rgba(0,0,0,0.10);
-      border-radius: 2px;
-      width: 228px;
-      min-height: 82px;
-      background: #fff;
-      padding: 10px;
-      top: 20px;
-      left: -100px;
-      word-break:break-all;
-      z-index:3;
-    }
+    // .ico_msg{
+    //   width: 16px;
+    //   height: 16px;
+    //   display: inline-block;
+    //   background: url(../assets/images/ico_msg.png);
+    //   cursor: pointer;
+    //   position: relative;
+    //   font-style: normal;
+    // }
+    // .ico_msg:hover .ico-tit{
+    //   display: block;
+    // }
+    // .ico-tit{
+    //   display: none;
+    //   color: #333;
+    //   font-size: 12px;
+    //   position:absolute;
+    //   border: 1px solid #F5BD23;
+    //   box-shadow: 0 0 4px 0 rgba(0,0,0,0.10);
+    //   border-radius: 2px;
+    //   width: 228px;
+    //   min-height: 82px;
+    //   background: #fff;
+    //   padding: 10px;
+    //   top: 20px;
+    //   left: -100px;
+    //   word-break:break-all;
+    //   z-index:3;
+    // }
   }
   @media print {.title{display: none;}.left_nav{display: none;}.right_nav{display: none;}.s{padding-left: 0px;}.printSendOrder{height:1000px;margin: 0px;font-size: 8px;position: absolute;top: -300px;}a{display: none;}}
 
