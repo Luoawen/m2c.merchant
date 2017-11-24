@@ -510,11 +510,11 @@
             that.goodsInfo.goodsSkuList[i].disabled = true
           }
           if (that.goodsInfo.isChoosed == 0) {
-            that.goodsInfo.isChooseSpecification = '编辑规格数量'
+            that.goodsInfo.isChooseSpecification = '编辑  '
             that.goodsInfo.goodsSkuList[i].isCheck = false
             that.goodsInfo.goodsSkuList[i].goodsSkuNum = 0
           } else {
-            that.goodsInfo.isChooseSpecification = '已选规格数量'
+            that.goodsInfo.isChooseSpecification = '已选  '
             if (that.goodsInfo.skuFlag == 0) {
               that.goodsInfo.goodsSkuList[i].isCheck = true
               that.goodsInfo.goodsSkuList[i].goodsSkuNum = that.goodsInfo.goodsSkuList[i].goodsSkuInventory
@@ -539,7 +539,7 @@
           if (goodsInfo.isChoosed == 1) { // 已选中的商品被取消
             goodsInfo.isChoosed = 0
             goodsInfo.skuFlag = 0
-            goodsInfo.isChooseSpecification = '编辑规格数量'
+            goodsInfo.isChooseSpecification = '编辑  '
             goodsInfo.chooseSkuList = []
             for (var g = 0; g < goodsInfo.goodsSkuList.length; g++) {
               goodsInfo.isCheck = false
@@ -553,7 +553,7 @@
           } else if (goodsInfo.isChoosed == 0) { // 未选中的商品被选中
             goodsInfo.isChoosed = 1
             goodsInfo.skuFlag = 0
-            goodsInfo.isChooseSpecification = '已选规格数量'
+            goodsInfo.isChooseSpecification = '已选  '
             goodsInfo.chooseSkuList = []
           }
         }
@@ -577,11 +577,11 @@
           if (chooseSkuList.length > 0) {
             goodsInfo.isChoosed = 1
             goodsInfo.skuFlag = 1
-            goodsInfo.isChooseSpecification = '已选规格数量'
+            goodsInfo.isChooseSpecification = '已选  '
           } else {
             goodsInfo.isChoosed = 0
             goodsInfo.skuFlag = 0
-            goodsInfo.isChooseSpecification = '编辑规格数量'
+            goodsInfo.isChooseSpecification = '编辑  '
           }
           goodsInfo.chooseSkuList = chooseSkuList
         }
@@ -632,7 +632,7 @@
         // 从数组中清空（被选中状态 和数量）改变样式
         goodsInfo.isChoosed = 0
         goodsInfo.skuFlag = 0
-        goodsInfo.isChooseSpecification = '编辑规格数量'
+        goodsInfo.isChooseSpecification = '编辑  '
         for (var j = 0; j < goodsInfo.goodsSkuList.length; j++) {
           goodsInfo.goodsSkuList[j].isCheck = false
           goodsInfo.goodsSkuList[j].goodsSkuNum = ''
@@ -658,7 +658,7 @@
           that.goodsResult.content[i].isChoosed = 0
           that.goodsResult.content[i].skuFlag = 0
           that.goodsResult.content[i].chooseSkuList = []
-          that.goodsResult.content[i].isChooseSpecification = '编辑规格数量'
+          that.goodsResult.content[i].isChooseSpecification = '编辑  '
           for (var j = 0; j < that.goodsResult.content[i].goodsSkuList.length; ++j) {
             that.goodsResult.content[i].goodsSkuList[j].isCheck = false
             that.goodsResult.content[i].goodsSkuList[j].goodsSkuNum = ''
@@ -708,7 +708,7 @@
               result.content[i].isRemoved = 0
               result.content[i].skuFlag = 0
               result.content[i].chooseSkuList = []
-              result.content[i].isChooseSpecification = '编辑规格数量'
+              result.content[i].isChooseSpecification = '编辑  '
               // 循环 移除范畴列表(没有选择规格的功能)
               for (var k = 0; k < that.removeGoodsList.length; k++) {
                 if (result.content[i].goodsId === that.removeGoodsList[k].goodsId) {
@@ -720,7 +720,7 @@
                 if (result.content[i].goodsId === that.chooseGoodsList[j].goodsId) {
                   result.content[i].isChoosed = 1
                   result.content[i].skuFlag = that.chooseGoodsList[j].skuFlag
-                  result.content[i].isChooseSpecification = '已选规格数量'
+                  result.content[i].isChooseSpecification = '已选  '
                   result.content[i].chooseSkuList = that.chooseGoodsList[j].chooseSkuList
                 }
               }
@@ -760,11 +760,11 @@
         //点击选中 取消
         if (goods.isChoosed == 0) {
           goods.isChoosed = 1
-          goods.isChooseSpecification='已选规格数量'
+          goods.isChooseSpecification='已选  '
           goods.skuFlag = 0
         } else if (goods.isChoosed == 1) {
           goods.isChoosed = 0
-           goods.isChooseSpecification='编辑规格数量'
+           goods.isChooseSpecification='编辑  '
            goods.skuFlag = 1
         }
         // 
@@ -886,18 +886,18 @@ overflow: hidden;
     font-size: 12px;
 }
 .pickSpecificationsStyle{
-    width: 80px;
+    width: 60px;
     height: 30px;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 30px;
     text-align: center;
     color:green;
     border:1px  #BBD2F1  solid;
     box-shadow: 1px 1px 1px #ccc;
-    background:withe;
+    background-color:#fff;
     border-radius:5px;
     position: absolute;
-    right: 1px;
+    right: 3px;
     top:73%;
     z-index: 100;
     }

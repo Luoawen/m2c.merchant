@@ -1056,7 +1056,7 @@
               result.content[i].isChoosed = 0 
               result.content[i].isExchange = 0
               result.content[i].chooseSkuList = []
-              result.content[i].isChooseSpecification ='编辑规格数量'
+              result.content[i].isChooseSpecification ='编辑 '
        //遍历选择商品列表 同 result.content 的goodsId 匹配  匹配到就将isChoosed 设置为1 并将  chooseGoodsList里的chooseSkuList 赋值给  result.content 的chooseSkuList(选择规格列表)
               for (var j = 0; j < that.chooseGoodsList.length; j++) {
                 if (result.content[i].goodsId == that.chooseGoodsList[j].goodsId) {
@@ -1116,7 +1116,7 @@
             console.log("that.chooseGoodsList", that.chooseGoodsList)
             // 样式变动
            that.goodsResult.content[index].isCheck = true
-            that.goodsResult.content[index].isChooseSpecification ='已选规格数量'
+            that.goodsResult.content[index].isChooseSpecification ='已选 '
         }else{
           // 再次点击取消  
           // 遍历选择商品列表同商品结果比对  如果一致就删除该商品
@@ -1136,7 +1136,7 @@
           }
            // isCheck控制的是 fc 和fcimg样式
           that.goodsResult.content[index].isCheck =false
-          that.goodsResult.content[index].isChooseSpecification ='编辑规格数量'
+          that.goodsResult.content[index].isChooseSpecification ='编辑 '
         }
         that.goodsInfo = goods
       },
@@ -1152,7 +1152,7 @@
             }
        }
           // 点击到 只有取消商品的功能
-        if(that.goodsResult.content[index].isChooseSpecification == '已选规格数量'){
+        if(that.goodsResult.content[index].isChooseSpecification == '已选 '){
              for(var i = 0; i<that.chooseGoodsList.length;i++){
             if(that.goodsResult.content[index].goodsId == that.chooseGoodsList[i].goodsId){
               that.deleteGoods(i,goods)
@@ -1163,7 +1163,7 @@
         }
           // 旧逻辑
           // console.log('that.goodsResult.content=============>',that.goodsResult.content[index])
-          // if(that.goodsResult.content[index].isChooseSpecification ='已选规格数量'){
+          // if(that.goodsResult.content[index].isChooseSpecification ='已选 '){
           //   that.chooseGoodsList.push(that.goodsResult.content[index])
           // }else{
           //      for(var i = 0; i<that.chooseGoodsList.length;i++){
@@ -1190,7 +1190,7 @@
           }
           // if(goodsInfo.goodsSkuList[i].goodsSkuNum < 0){
           //          that.show_tip("参与满减库存应不小于0")
-          //          goodsInfo.isChooseSpecification ='编辑规格数量'
+          //          goodsInfo.isChooseSpecification ='编辑 '
           //          return;  
           // }
           if (goodsInfo.goodsSkuList[i].isCheck == true && goodsInfo.goodsSkuList[i].goodsSkuNum > 0) {
@@ -1214,7 +1214,7 @@
               that.goodsResult.content[i].isCheck = true;
               that.goodsResult.content[i].isRemoved =1;
               that.goodsResult.content[i].isExchange=1;
-              goodsInfo.isChooseSpecification ='已选规格数量'
+              goodsInfo.isChooseSpecification ='已选 '
             }
             else {
               that.goodsResult.content[i].isChoosed = 0
@@ -1222,7 +1222,7 @@
               that.goodsResult.content[i].isCheck = false;
               that.goodsResult.content[i].isRemoved =0
                that.goodsResult.content[i].isExchange=0;
-              that.goodsResult.content[i].isChooseSpecification ='编辑规格数量'
+              that.goodsResult.content[i].isChooseSpecification ='编辑 '
             }
             console.log('==that.goodsResult.content[i]================>', that.goodsResult.content[i])
              console.log('===goodsInfo===============>', goodsInfo)
@@ -1257,7 +1257,7 @@
               choose_goods.chooseSkuList = that.goodsResult.content[j].chooseSkuList
               choose_goods.skuFlag = that.goodsResult.content[j].skuFlag;
               that.chooseGoodsList.push(choose_goods)
-              that.goodsResult.content[j].isChooseSpecification ='已选规格数量'
+              that.goodsResult.content[j].isChooseSpecification ='已选 '
               that.goodsResult.content[j].isCheck =true
               that.goodsResult.content[j].isChoosed =1
             }
@@ -1274,7 +1274,7 @@
         //           choose_goods.chooseSkuList = that.goodsResult.content[j].chooseSkuList
         //           choose_goods.skuFlag = that.goodsResult.content[j].skuFlag;
         //           that.exchangeGoodsList.push(choose_goods)
-        //           that.goodsResult.content[j].isChooseSpecification ='已选规格数量'
+        //           that.goodsResult.content[j].isChooseSpecification ='已选 '
         //           // that.goodsResult.content[j].isCheck = true  
         //           that.goodsResult.content[j].isExchange =1
         //         }
@@ -1303,7 +1303,7 @@
           }
          
         }
-         goodsInfo.isChooseSpecification = '编辑规格数量'
+         goodsInfo.isChooseSpecification = '编辑 '
         console.log('删除后的goodsInfo.goodsSkuList',goodsInfo.goodsSkuList)
       },
       deleteGoods (index, goods) {
@@ -1360,7 +1360,7 @@
           //       that.goodsResult.content[i].goodsSkuList[j].goodsSkuNum = ''
           //       that.goodsResult.content[i].isCheck =false
           //       that.goodsResult.content[i].isChoosed =false 
-          //       that.goodsResult.content[i].isChooseSpecification ='编辑规格数量'
+          //       that.goodsResult.content[i].isChooseSpecification ='编辑 '
           //       console.log('清空商品规格', that.goodsResult.content[i].goodsSkuList[j])
           //     }
           //   }
@@ -1718,11 +1718,11 @@
         //   }
          
         //   that.goodsResult.content[index].isRemoved =false
-        //   that.goodsResult.content[index].isChooseSpecification ='编辑规格数量'
+        //   that.goodsResult.content[index].isChooseSpecification ='编辑 '
         
         if(that.goodsResult.content[index].isRemoved === undefined || that.goodsResult.content[index].isRemoved === 0){
             that.goodsResult.content[index].isRemoved = 1
-            that.goodsResult.content[index].isChooseSpecification ='已选规格数量'
+            that.goodsResult.content[index].isChooseSpecification ='已选 '
             // 数据存入 goodsSkulist  存入
         for(var j = 0;j<that.goodsResult.content[index].goodsSkuList.length;j++){
                     // checkbox 的选中状态  //  只显示了存入了一组数据
@@ -1758,7 +1758,7 @@
             }
           }
            that.goodsResult.content[index].isRemoved = 0
-           that.goodsResult.content[index].isChooseSpecification ='编辑规格数量'
+           that.goodsResult.content[index].isChooseSpecification ='编辑 '
         }
     //  选中产品被移除
         that.removeGoodsList = []
@@ -1792,7 +1792,7 @@
         //   // added by fanjc
         //   that.goodsResult.content[i].isCheck = false;
         //   that.goodsResult.content[i].goodsSkuNum = '';
-        //   that.goodsResult.content[i].isChooseSpecification ='编辑规格数量'
+        //   that.goodsResult.content[i].isChooseSpecification ='编辑 '
         //   // end added
         // }
         // for (var i = 0; i < that.shopResult.content.length; i++) {
@@ -1884,7 +1884,7 @@
             console.log("that.chooseGoodsList", that.chooseGoodsList)
             // 样式变动
              that.goodsResult.content[index].isExchange = 1
-            that.goodsResult.content[index].isChooseSpecification ='已选规格数量'
+            that.goodsResult.content[index].isChooseSpecification ='已选 '
         }else{
           // 再次点击取消  
           // 遍历选择商品列表同商品结果比对  如果一致就删除该商品
@@ -1904,7 +1904,7 @@
           }
            // 改变样式
           that.goodsResult.content[index].isExchange =0
-          that.goodsResult.content[index].isChooseSpecification ='编辑规格数量'
+          that.goodsResult.content[index].isChooseSpecification ='编辑 '
         }
         that.goodsInfo = goods
 
@@ -2125,18 +2125,18 @@
     font-size: 12px;
 }
 .pickSpecificationsStyle{
-    width: 80px;
-    height: 30px; 
-    font-size: 12px;
+    width: 60px;
+    height: 30px;
+    font-size: 14px;
     line-height: 30px;
     text-align: center;
     color:green;
     border:1px  #BBD2F1  solid;
     box-shadow: 1px 1px 1px #ccc;
-    background:withe;
+    background-color:#fff;
     border-radius:5px;
     position: absolute;
-    right: 1px;
+    right: 3px;
     top:73%;
     z-index: 100;
     }
