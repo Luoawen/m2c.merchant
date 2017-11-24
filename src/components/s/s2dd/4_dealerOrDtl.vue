@@ -214,7 +214,7 @@
             	</div>
         		</td>
         		<td>{{goods.sellNum}}</td>
-        		<td>{{(orderStatus==1 || orderStatus==0)? goods.sellNum : 0}}</td>
+        		<td>{{(orderStatus==1 || orderStatus==0)? (goods.sellNum - goods.afNum) : 0}}</td>
         	</tr>
         </tbody>
         <tbody class="deliver_tb">
@@ -620,7 +620,7 @@
               resIds += ',';
             resIds += '"'+val.mediaResId+'"';
           }
-          that.expressNum += val.sellNum;
+          that.expressNum += val.sellNum - val.afNum;
         });
         that.getMediaResInfo(resIds);
       },
