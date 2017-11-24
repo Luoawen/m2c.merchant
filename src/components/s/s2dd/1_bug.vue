@@ -330,7 +330,7 @@
         afStatus : -2,
         saleAfterNo : '',
         orderStatus:[{value:'',label:'订单状态'},{value:'0',label:'待付款'},{value:'1',label:'待发货'},{value:'2',label:'待收货'},{value:'3',label:'已完成'},{value:'4',label:'交易完成'},{value:'5',label:'交易关闭'},{value:'-1',label:'已取消'}],
-        afterSellStatus:[{value:'',label:'售后状态'},{value:'0',label:'申请退货'},{value:'1',label:'申请换货'},{value:'2',label:'申请退款'},{value:'3',label:'商家拒绝申请'},{value:'4',label:'商家同意申请'},{value:'5',label:'客户寄出'},{value:'6',label:'商家收到'},{value:'7',label:'商家寄出'},{value:'8',label:'客户收到'},{value:'9',label:'同意退款'},{value:'10',label:'已退款'},{value:'11',label:'售后完成'},{value:'12',label:'售后已关闭'}],
+        afterSellStatus:[{value:'',label:'售后状态'},{value:'0',label:'申请退货'},{value:'1',label:'申请换货'},{value:'2',label:'申请退款'},{value:'3',label:'商家拒绝申请'},{value:'4',label:'商家同意申请'},{value:'5',label:'客户寄出'},{value:'6',label:'商家收到'},{value:'7',label:'商家寄出'},{value:'8',label:'客户收到'},{value:'9',label:'同意退款'},{value:'10',label:'已退款'},{value:'11',label:'售后完成'},{value:'12',label:'售后关闭'},{value:'-1',label:'已取消'}],
         time:''
         ,pRtFreight:0
         ,showRt: false

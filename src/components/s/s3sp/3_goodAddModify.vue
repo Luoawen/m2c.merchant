@@ -758,18 +758,21 @@
               if (that.goodsSKUs[k].availableNum == undefined) {
                 that.checkInventorySubmit(that.goodsSKUs[k].availableNum)
                 if (that.sukShow == true) {
+                  that.show_tip("您还有信息未完善！")
                   return
                 }
               }
               if (that.goodsSKUs[k].weight == undefined) {
                 that.checkWeightSubmit(that.goodsSKUs[k].weight)
                 if (that.sukShow1 == true) {
+                  that.show_tip("您还有信息未完善！")
                   return
                 }
               }
               if (that.goodsSKUs[k].photographPrice == undefined) {
                 that.checkPhotographPriceSubmit(that.goodsSKUs[k].photographPrice)
                 if (that.sukShow2 == true) {
+                  that.show_tip("您还有信息未完善！")
                   return
                 }
               }
@@ -781,6 +784,7 @@
               }
             }
             if (that.goodsMainImages.length <= 0) {
+              that.show_tip("您还有信息未完善！")
               that.imgShowList = true
               return
             }
@@ -813,7 +817,7 @@
               }
             })
           } else {
-            console.log('error submit!!');
+            that.show_tip("您还有信息未完善！")
             return false;
           }
         })
