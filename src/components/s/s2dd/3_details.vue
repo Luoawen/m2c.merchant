@@ -85,13 +85,13 @@
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
 
                 <div class="oprs" v-show="orderDetail.status==0 || orderDetail.status==1||orderDetail.status==2">
-                  <el-button size="mini" round @click="handleAgree()">同意申请</el-button>
+                  <el-button size="mini" @click="handleAgree()">同意申请</el-button>
                 </div>
 
 
                 <!-- 用户期望退款--> <!-- 1.商户同意售后 2.商户同意退款 3.商户确认退款 -->
                 <div class="oprs" v-show="orderDetail.status==4 && orderDetail.orderType==2"><!-- 商户同意退款 -->
-                  <el-button size="mini" round @click="agreedRefund()">同意退款</el-button>
+                  <el-button size="mini" @click="agreedRefund()">同意退款</el-button>
                 </div>
                 <!--<div class="oprs" v-show="orderDetail.status==9 && orderDetail.orderType==2">
                   <el-button size="mini" round @click="confirmRefund()">确认退款</el-button>
@@ -100,28 +100,28 @@
 
                 <!-- 用户期望退货--> <!-- 1.商户同意售后 2.用户返回货物 3.商家确认收货 4.商户同意退款 5.商户确认退款 -->
                 <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==0">
-                  <el-button size="mini" round @click="confirmReceipt()">确认收货</el-button>
+                  <el-button size="mini" @click="confirmReceipt()">确认收货</el-button>
                 </div>
 
                 <div class="btm" v-show="orderDetail.status==6 && orderDetail.orderType==1">
-                  <el-button size="mini" round @click="agreedRefund()">同意退款</el-button>
+                  <el-button size="mini" @click="agreedRefund()">同意退款</el-button>
                 </div>
 
                 <div class="btm" v-show="orderDetail.status==9 && orderDetail.orderType==0">
-                  <el-button size="mini" round @click="confirmRefund()">确认退款</el-button>
+                  <el-button size="mini" @click="confirmRefund()">确认退款</el-button>
                 </div>
 
                 <!-- 用户期望换货--> <!-- 1.商户同意售后 2.用户返回货物 3.商家确认收货 4.商户填写物流信息 5.商户确认发货 -->
                 <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==1">
-                  <el-button size="mini" round @click="confirmReceipt()">确认收货</el-button>
+                  <el-button size="mini" @click="confirmReceipt()">确认收货</el-button>
                 </div>
 
                 <div class="oprs" v-show="orderDetail.status==6 && orderDetail.orderType==0">
-                  <el-button size="mini" round @click="shipment()">发货</el-button>
+                  <el-button size="mini" @click="shipment()">发货</el-button>
                 </div>
 
                 <div class="oprs" v-show="orderDetail.status==0 || orderDetail.status==1||orderDetail.status==2">
-                  <el-button size="mini" round @click="handleRejected()">拒绝申请</el-button>
+                  <el-button size="mini" @click="handleRejected()">拒绝申请</el-button>
                 </div>
               </td>
             </tr>
@@ -253,10 +253,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="物流单号:" :label-width="formLabelWidth">
-          <el-input v-model="shipmentForm.expressNo" auto-complete="off" width="200"></el-input>
+          <el-input v-model="shipmentForm.expressNo" auto-complete="off" width="200" maxlength="30"></el-input>
         </el-form-item>
         <el-form-item label="备注:" :label-width="formLabelWidth">
-          <el-input v-model="shipmentForm.noted" auto-complete="off" width="200"></el-input>
+          <el-input v-model="shipmentForm.noted" auto-complete="off" width="200" maxlength="200"></el-input>
         </el-form-item>
       </el-form>
       <el-form :model="shipmentForm" v-show="shipmentForm.expressWay==1">
@@ -270,7 +270,7 @@
           <el-input v-model="shipmentForm.expressNo" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注:" :label-width="formLabelWidth">
-          <el-input v-model="shipmentForm.noted" auto-complete="off" ></el-input>
+          <el-input v-model="shipmentForm.noted" auto-complete="off" maxlength="200"></el-input>
         </el-form-item>
       </el-form>
     </div>

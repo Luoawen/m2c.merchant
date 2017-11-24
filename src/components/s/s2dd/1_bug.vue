@@ -66,7 +66,7 @@
                   <option value="8">客户收到</option>
                   <option value="9">同意退款</option>
                   <option value="10">已退款</option>
-                  <option value="11">交易关闭</option>
+                  <option value="11">售后完成</option>
                 </select>
               </div>
               <div class="clear mt10 mb20">
