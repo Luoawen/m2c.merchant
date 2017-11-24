@@ -558,6 +558,24 @@
             this.sukShow5 = true
           } else {
             this.sukShow5 = false
+            if(val != ''){
+              this.$.ajax({
+                type: 'get',
+                url: this.localbase + 'm2c.scm/goods/code',
+                data:{
+                  token: sessionStorage.getItem('mToken'),
+                  dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+                  goodsCode:val
+                },
+                success: function (result) {
+                  if(result.content!=''){
+                    alert("商品编码已存在！")
+                  }else{
+                    return
+                  }
+                }
+              })
+            }
           }
         }, 0)
       },
@@ -758,21 +776,21 @@
               if (that.goodsSKUs[k].availableNum == undefined) {
                 that.checkInventorySubmit(that.goodsSKUs[k].availableNum)
                 if (that.sukShow == true) {
-                  that.show_tip("您还有信息未完善！")
+                  // that.show_tip("您还有信息未完善！")
                   return
                 }
               }
               if (that.goodsSKUs[k].weight == undefined) {
                 that.checkWeightSubmit(that.goodsSKUs[k].weight)
                 if (that.sukShow1 == true) {
-                  that.show_tip("您还有信息未完善！")
+                  // that.show_tip("您还有信息未完善！")
                   return
                 }
               }
               if (that.goodsSKUs[k].photographPrice == undefined) {
                 that.checkPhotographPriceSubmit(that.goodsSKUs[k].photographPrice)
                 if (that.sukShow2 == true) {
-                  that.show_tip("您还有信息未完善！")
+                  // that.show_tip("您还有信息未完善！")
                   return
                 }
               }
@@ -784,7 +802,7 @@
               }
             }
             if (that.goodsMainImages.length <= 0) {
-              that.show_tip("您还有信息未完善！")
+              // that.show_tip("您还有信息未完善！")
               that.imgShowList = true
               return
             }
