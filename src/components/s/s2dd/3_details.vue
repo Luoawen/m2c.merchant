@@ -11,7 +11,7 @@
             <div class="col-sm-4 detail_cen">
               <div>
                 <span class="tit01">售后状态:</span>
-                <span style="color: red;font-size: 15px" class="ml20">{{orderDetail.status==0?'申请退货':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'交易关闭':orderDetail.status==-1?'取消':'-'}}</span>
+                <span style="color: red;font-size: 15px" class="ml20">{{orderDetail.status==0?'申请退货':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'售后完成':orderDetail.status==11?'售后关闭':orderDetail.status==-1?'已取消':'-'}}</span>
               </div>
               <div>
                 <span class="tit01">售后单号:</span>
@@ -136,7 +136,7 @@
           <div class="col-sm-4 detail_cen" style="line-height: 40px;">
             <div >
               <span class="tit01">售后状态:</span>
-              <span class="ml20">{{logistics.status==0?'申请退货':logistics.status==1?'申请换货':logistics.status==2?'申请退款':logistics.status==3?'拒绝申请':logistics.status==4?'同意申请':logistics.status==5?'客户寄出':logistics.status==6?'商家收到':logistics.status==7?'商家寄出':logistics.status==8?'客户收到':logistics.status==9?'同意退款':logistics.status==10?'已退款':logistics.status==11?'交易关闭':'-'}}</span>
+              <span class="ml20">{{logistics.status==0?'申请退货':logistics.status==1?'申请换货':logistics.status==2?'申请退款':logistics.status==3?'拒绝申请':logistics.status==4?'同意申请':logistics.status==5?'客户寄出':logistics.status==6?'商家收到':logistics.status==7?'商家寄出':logistics.status==8?'客户收到':logistics.status==9?'同意退款':logistics.status==10?'已退款':logistics.status==11?'售后完成':logistics.status==12?'售后关闭':logistics.status==-1?'已取消':'-'}}</span>
             </div>
             <div>
               <span class="tit01">售后单号:</span>
