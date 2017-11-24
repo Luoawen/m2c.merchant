@@ -252,23 +252,22 @@
     <div class="poi1">
       <i class="poi2 ico_close02" @click="Deliver=false"></i>
       <div class="deliver_tit">发货信息</div>
-      <div class="deliver_type01 mt20 mb10 clear">
+      <div class="deliver_type01 mt20 clear">
         <span class="mr20 tit01 fl">
         <span class="redcolor">*</span>
         <span>配送方式</span>
         </span>
-
         <template>
           <el-radio v-model="expressWay" label="0" @click="expressCheck(0)" >物流发货</el-radio>
           <el-radio v-model="expressWay" label="1" @click="expressCheck(1)">自有物流</el-radio>
         </template>
         <div class="tit03 clear">若有自己的配送车队，可选自有物流</div>
       </div>
-      <div class="deliver_type01 mt20 mb10 clear">
+      <div class="deliver_type01 clear">
         <div class=""  v-show="expressWay != 1">
-        <span class="mr20 tit01 fl">
+        <span class="mr20 tit01 mt10 fl">
         <span class="redcolor">*</span>
-        <span>物流公司</span>
+        <span style="line-height:40px">物流公司</span>
         </span>
         <span>
           <select class="form-control deliver_input fl" placeholder="请选择" v-model="expressCode" id="ship_select">
@@ -278,15 +277,15 @@
         </div>
         <div class="" v-show="expressWay == 1">
         <span class="mr20 tit01 fl">
-        <span class="redcolor">*</span>
-        <span>配送员姓名</span>
+          <span class="redcolor">*</span>
+          <span>配送员姓名</span>
         </span>
           <span>
           <input class="form-control deliver_input" placeholder="请填写" maxlength="10" v-model="expressPerson"/>
         </span>
         </div>
       </div>
-      <div class="deliver_type01 mt20 mb10 clear">
+      <div class="deliver_type01 mb10 clear" style="margin-top:-10px;">
         <div class="">
         <span class="mr20 tit01 fl">
            <span class="redcolor" v-show="expressWay != 1">*</span>
@@ -1020,11 +1019,12 @@
     background-color: #fff;
     .deliver{
     	background: #fff;
-    	height: 358px;
+    	height: auto;
       top: 0px;
       left: 0px;
-      padding-top: 21px;
-      padding-left: 23px;
+      padding:30px;
+      padding-top:20px;
+      box-shadow: 0px 6px 6px #ccc;
       .ico_close02{
         width: 24px;
         height: 24px;
@@ -1067,6 +1067,9 @@
           line-height: 30px;
           text-align: right;
         }
+        .el-radio{
+          line-height:30px;
+        }
         .tit02{
           span{
             display: inline-block;
@@ -1076,14 +1079,14 @@
         .tit03{
           font-size: 12px;
           color: #999999;
-          margin-left: 80px;
+          margin-left: 142px;
           }
           .deliver_input{
             width: 30%;
             height: 40px;
+            margin:15px 0;
           }
       }
-
     }
     .fah{
     		background: #0086FF;
