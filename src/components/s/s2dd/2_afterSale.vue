@@ -156,6 +156,9 @@
         },{
           value: '12',
           label: '售后关闭'
+        },{
+          value: '-1',
+          label: '已关闭'
         },],
         afterSaleStatus:'',//售后状态
         mediaStatus:[{

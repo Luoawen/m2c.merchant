@@ -102,7 +102,7 @@
         that.disabled = true // 把按钮设置为不可以点击
         that.$.ajax({
           url: that.base + 'm2c.users/user/sendSms',
-          timeout : 2000, //超时时间设置，单位毫秒
+          timeout : 5000, //超时时间设置，单位毫秒
           type: 'post',
           data: {
             token: sessionStorage.getItem('mToken'),
