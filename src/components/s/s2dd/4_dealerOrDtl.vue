@@ -136,7 +136,7 @@
               <br>{{goods.mediaResId!=''?(typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].cateName:''):''}}</td>
             <td class="a3">{{goods.sellNum}}</td>
             <td class="a4">{{goods.unitName}}</td>
-            <td class="a5">{{(goods.price/100).toFixed(2)}}</td>
+            <td class="a5">{{goods.isChange==0?(goods.price/100).toFixed(2):(goods.changePrice/100).toFixed(2)}}</td>
             <td class="a5">{{(goods.totalPrice/100).toFixed(2)}}</td>
             <td class="a6">
             	<span :id="'spanFreight' + index" v-show="!fModify">{{(goods.freight).toFixed(2)}}</span>
