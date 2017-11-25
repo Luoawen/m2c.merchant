@@ -11,9 +11,11 @@
         <label class="col-sm-2 control-label"> * 计费方式： </label>
         <div class="col-sm-3">
           <form>
-            <input name="tem" type="radio" value='0' v-model="formwork.chargeType" id="tem"/>
+            <input name="tem" type="radio" value='0' v-model="formwork.chargeType" id="tem" v-if="addModify==='add'" />
+            <input name="tem" type="radio" value='0' v-model="formwork.chargeType" id="tem" v-if="addModify==='modify'" :disabled="modifyFlag==1"/>
             <label for="tem">按重量</label>
-            <input name="tem" type="radio" value='1' v-model="formwork.chargeType" id="tem1"/>
+            <input name="tem" type="radio" value='1' v-model="formwork.chargeType" id="tem1" v-if="addModify==='add'" />
+            <input name="tem" type="radio" value='1' v-model="formwork.chargeType" id="tem1" v-if="addModify==='modify'"  :disabled="modifyFlag!=1"/>
             <label for="tem1">按件数</label>
           </form>
         </div>
@@ -23,7 +25,7 @@
         <div class="form-group">
           <label class="col-sm-2 control-label"> * 运费计算规则
             <div class="icon">
-              <div class="tips" style="width:400px;z-index:2;">
+              <div class="tips" style="width:400px;z-index:2; text-align: left;">
                 <p>1、按重计费规则；即≤首重时，按首运费计算，超过首重的部分，按照续重、续费计算；比如商品5kg，首重1kg，首运费10元，续重2kg，续费5元（代表每增加0~1kg，运费增加2.5元）；则运费=10+4*（5/2）
                 </p>
                 <p>
@@ -247,7 +249,7 @@
         <div class="form-group">
           <label class="col-sm-2 control-label"> * 运费计算规则
             <div class="icon">
-              <div class="tips" style="width:400px;z-index:2;">
+              <div class="tips" style="width:400px;z-index:2; text-align: left;">
                 <p>1、按重计费规则；即≤首重时，按首运费计算，超过首重的部分，按照续重、续费计算；比如商品5kg，首重1kg，首运费10元，续重2kg，续费5元（代表每增加0~1kg，运费增加2.5元）；则运费=10+4*（5/2）
                 </p>
                 <p>
@@ -433,9 +435,9 @@
           <textarea class="form-control"
           cols="80"
           rows="7"
-          placeholder="1-200字符"
+          placeholder="1-100字符"
           style="resize:none;"
-          v-model="formwork.modelDescription"> </textarea></div>
+          v-model="formwork.modelDescription" maxlength="100"> </textarea></div>
         </div>
         <div style="padding-left:290px;"><span style="color: #aab2bd">便于顾客看到每个商品的模板说明，以便知晓您的运费计费规则</span></div>
         <br/>
@@ -507,7 +509,8 @@
           continuedWeight: '',
           continuedPostage: '',
           index: ''
-        }
+        },
+        modifyFlag: ''
       }
     },
     created() {},
@@ -518,6 +521,8 @@
           if (val != oldVal) {
             that.add_postageModelRule = {}
             that.add_postageModelRule_w = {}
+            that.addRows = []
+            that.disabledList = []
           }
         },
         deep: true
@@ -977,76 +982,74 @@
           } else {
             that.postageModelRules.push(that.add_postageModelRule_w)
           }
-          //console.log(that.postageModelRules)
-          for (var i = 0; i < that.postageModelRules.length; i++) {
-            if (that.formwork.chargeType === 1) {
-              if (that.postageModelRules[i].firstPiece === '' || that.postageModelRules[i].firstPostage === '' || that.postageModelRules[i].continuedPiece === '' || that.postageModelRules[i].continuedPostage === '') {
+        } else {
+          for (var i=0; i<that.formwork.postageModelRules.length; i++){
+            that.postageModelRules.push(that.formwork.postageModelRules[i])
+          }
+        }
+        if (that.postageModelRules == '') {
+          that.show_tip('运费计算规则不能为空')
+          return
+        }
+        for (var i = 0; i < that.postageModelRules.length; i++) {
+          if (that.formwork.chargeType == 1) {
+            if (that.postageModelRules[i].firstPiece === undefined || that.postageModelRules[i].firstPostage === undefined || that.postageModelRules[i].continuedPiece === undefined ||  that.postageModelRules[i].continuedPostage === undefined ||
+              that.postageModelRules[i].firstPiece === '' || that.postageModelRules[i].firstPostage === '' || that.postageModelRules[i].continuedPiece === '' || that.postageModelRules[i].continuedPostage === '' ||
+              that.postageModelRules[i].firstPiece === null || that.postageModelRules[i].firstPostage === null || that.postageModelRules[i].continuedPiece === null || that.postageModelRules[i].continuedPostage === null) {
+              that.postageModelRules = []
+              that.show_tip('运费计算规则不能为空')
+              return
+            }
+          } else {
+            if (that.postageModelRules[i].firstWeight === undefined || that.postageModelRules[i].firstPostage === undefined || that.postageModelRules[i].continuedWeight === undefined ||  that.postageModelRules[i].continuedPostage === undefined ||
+              that.postageModelRules[i].firstWeight === '' || that.postageModelRules[i].firstPostage === '' || that.postageModelRules[i].continuedWeight === '' || that.postageModelRules[i].continuedPostage === ''||
+              that.postageModelRules[i].firstWeight === null || that.postageModelRules[i].firstPostage === null || that.postageModelRules[i].continuedWeight === null || that.postageModelRules[i].continuedPostage === null) {
+              that.postageModelRules = []
+              that.show_tip('运费计算规则不能为空')
+              return
+            }
+          }
+        }
+        if (that.addRows.length > 0) {
+          for (var i = 0; i < that.addRows.length; i++) {
+            if (that.addRows[i].address === undefined || that.addRows[i].address === '' || that.addRows[i].address.length === 0) {
+              that.postageModelRules = []
+              that.show_tip('请添加地区')
+              return
+            }
+            if (that.formwork.chargeType == 1) {
+              if (that.addRows[i].firstPiece === undefined || that.addRows[i].firstPostage === undefined || that.addRows[i].continuedPiece === undefined ||  that.addRows[i].continuedPostage === undefined ||
+                that.addRows[i].firstPiece === '' || that.addRows[i].firstPostage === '' || that.addRows[i].continuedPiece === '' || that.addRows[i].continuedPostage === ''||
+                that.addRows[i].firstPiece === null || that.addRows[i].firstPostage === null || that.addRows[i].continuedPiece === null || that.addRows[i].continuedPostage === null) {
                 that.postageModelRules = []
                 that.show_tip('运费计算规则不能为空')
                 return
               }
             } else {
-              if (that.postageModelRules[i].firstWeight === '' || that.postageModelRules[i].firstPostage === '' || that.postageModelRules[i].continuedWeight === '' || that.postageModelRules[i].continuedPostage === '') {
+              if (that.addRows[i].firstWeight === undefined || that.addRows[i].firstPostage === undefined || that.addRows[i].continuedWeight === undefined ||  that.addRows[i].continuedPostage === undefined ||
+                that.addRows[i].firstWeight === '' || that.addRows[i].firstPostage === '' || that.addRows[i].continuedWeight === '' || that.addRows[i].continuedPostage === '' ||
+                that.addRows[i].firstWeight === null || that.addRows[i].firstPostage === null || that.addRows[i].continuedWeight === null || that.addRows[i].continuedPostage === null) {
                 that.postageModelRules = []
                 that.show_tip('运费计算规则不能为空')
                 return
               }
             }
           }
-          if (that.addRows.length > 0) {
-            for (var i = 0; i < that.addRows.length; i++) {
-              if (that.addRows[i].address === undefined || that.addRows[i].address === '' || that.addRows[i].address.length === 0) {
-                that.postageModelRules = []
-                that.show_tip('请添加地区')
-                return
-              }
-              if (that.formwork.chargeType == 1) {
-                if (that.addRows[i].firstPiece === '' || that.addRows[i].firstPostage === '' || that.addRows[i].continuedPiece === '' || that.addRows[i].continuedPostage === '') {
-                  that.postageModelRules = []
-                  that.show_tip('运费计算规则不能为空')
-                  return
-                }
-              } else {
-                if (that.addRows[i].firstWeight === '' || that.addRows[i].firstPostage === '' || that.addRows[i].continuedWeight === '' || that.addRows[i].continuedPostage === '') {
-                  that.postageModelRules = []
-                  that.show_tip('运费计算规则不能为空')
-                  return
-                }
-              }
-              that.postageModelRule = {
-                address: that.addRows[i].address,
-                cityCode: that.addRows[i].cityList.join(),
-                continuedPiece: that.addRows[i].continuedPiece,
-                continuedPostage: that.addRows[i].continuedPostage,
-                continuedWeight: that.addRows[i].continuedWeight,
-                firstPiece: that.addRows[i].firstPiece,
-                firstPostage: that.addRows[i].firstPostage,
-                firstWeight: that.addRows[i].firstWeight,
-                defaultFlag: 1
-              }
-              that.postageModelRules.push(that.postageModelRule)
-            }
-          }
-        } else {
-          for (var i=0; i<that.formwork.postageModelRules.length; i++){
-            that.postageModelRules.push(that.formwork.postageModelRules[i])
-          }
-          for (var i = 0; i < that.addRows.length; i++) {
-            that.postageModelRule = {
-              address: that.addRows[i].address,
-              cityCode: that.addRows[i].cityList.join(),
-              continuedPiece: that.addRows[i].continuedPiece,
-              continuedPostage: that.addRows[i].continuedPostage,
-              continuedWeight: that.addRows[i].continuedWeight,
-              firstPiece: that.addRows[i].firstPiece,
-              firstPostage: that.addRows[i].firstPostage,
-              firstWeight: that.addRows[i].firstWeight,
-              defaultFlag: that.addRows[that.index].address === '' ? 0 : 1
-            }
-            that.postageModelRules.push(that.postageModelRule)
-          }
         }
-
+        for (var i = 0; i < that.addRows.length; i++) {
+          that.postageModelRule = {
+            address: that.addRows[i].address,
+            cityCode: that.addRows[i].cityList.join(),
+            continuedPiece: that.addRows[i].continuedPiece,
+            continuedPostage: that.addRows[i].continuedPostage,
+            continuedWeight: that.addRows[i].continuedWeight,
+            firstPiece: that.addRows[i].firstPiece,
+            firstPostage: that.addRows[i].firstPostage,
+            firstWeight: that.addRows[i].firstWeight,
+            defaultFlag: (that.addRows[that.index] != undefined && that.addRows[that.index].address === '') ? 0 : 1
+          }
+          that.postageModelRules.push(that.postageModelRule)
+        }
         for (var i = 0; i < that.postageModelRules.length; i++) {
           that.postageModelRules[i].continuedPostage = parseFloat(that.postageModelRules[i].continuedPostage * 100).toFixed(2)
           that.postageModelRules[i].firstPostage = parseFloat(that.postageModelRules[i].firstPostage * 100).toFixed(2)
@@ -1066,10 +1069,8 @@
           success: function (result) {
             that.postageModelRules = []
             if (result.status === 200) {
-              that.show_tip('保存成功')
-              setTimeout(()=> {
-                that.$router.push({name: 'formwork'})
-              },1000);
+              // that.show_tip('保存成功')
+              that.$router.push({name: 'formwork'})
             } else {
               that.show_tip(result.errorMessage)
             }
@@ -1113,6 +1114,7 @@
           },
           success: function (result) {
             that.formwork = result.content
+            that.modifyFlag = result.content.chargeType
             if (that.formwork.postageModelRules.length > 0) {
               for (var i = 0; i < that.formwork.postageModelRules.length; i++) {
                 that.formwork.postageModelRules[i].firstPostage = that.formwork.postageModelRules[i].firstPostage / 100
