@@ -9,7 +9,6 @@
           :value="reply.value">
         </el-option>
       </el-select>
-
       <el-select v-model="search_params.starLevel" placeholder="星级评价">
         <el-option
           v-for="level in leveles"
@@ -90,7 +89,7 @@
         <thead>
           <tr>
             <td width="120px">操作</td>
-            <td>评论内容</td>
+            <td width="320px;">评论内容</td>
             <td>评价星级</td>
             <td>商品信息</td>
             <td>订单号</td>
@@ -129,7 +128,7 @@
             </td>
             <td>
               <a class="ellipsis2" :title="comment.goodsName">{{comment.goodsName}}</a><br/><br/>
-              <div class="tdcolor mt10">&nbsp;&nbsp;&nbsp;规格：{{comment.skuName}}</div>
+              <div class="tdcolor mt10">规格：{{comment.skuName}}</div>
             </td>
             <td>
               {{comment.orderId}}
@@ -508,7 +507,7 @@
     height: 40px;
     line-height:20px;
     color:#5a5e66;
-    margin-left:10px;
+    // margin-left:10px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -517,12 +516,12 @@
     float:left;
   }
   a.ellipsis2:hover{ text-decoration:none;}
- a.ellipsis3{
+  a.ellipsis3{
           width:90%;
           height: 60px;
           line-height:20px;
           color:#5a5e66;
-          margin-left:10px;
+          // margin-left:10px;
           display: -webkit-box;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 3;
