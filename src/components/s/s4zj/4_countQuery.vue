@@ -17,19 +17,50 @@
       <el-button type="primary" size="medium" @click="orderStore()">搜索</el-button>
     </div>
     <div class="order_tab_list" style="margin-top: 20px;">
+      <table class="tableHead" style="z-index:2">
+        <tr>
+          <th width="300">结算号</th>
+          <th width="200">订货号</th>
+          <th>订货金额/元</th>
+          <th>售后金额/元</th>
+          <th>服务费/元
+            <div class="icon">
+              <div class="tips">
+                <p>使用平台的服务费</p>
+              </div>
+            </div>
+          </th>
+          <th>活动分摊/元
+            <div class="icon">
+              <div class="tips">
+                <p>平台优惠活动，商家承担的活动成本</p>
+              </div>
+            </div>
+          </th>
+          <th>结算总额/元
+            <div class="icon">
+              <div class="tips">
+                <p>商家最终结算的金额</p>
+              </div>
+            </div>
+          </th>
+          <th>结算状态</th>
+          <th width="200">更新时间</th>
+        </tr>
+      </table>
       <el-table
-        ref="multipleTable"
+        ref="multipleTable" id="multipleTable" :show-header=false
         :data="orderStoreData"
         tooltip-effect="dark"
-        style="width: 100%">
+        style="z-index:1;">
         <el-table-column
-          label="结算号"
-          width="300">
+         width="300"
+          label="结算号">
           <template slot-scope="scope"><span >{{scope.row.settleId}}</span></template>
         </el-table-column>
         <el-table-column
           label="订货号"
-          width="240"
+           width="200"
           show-overflow-tooltip>
           <template slot-scope="scope"><span><!--{{scope.row.orderType==0?'换货':scope.row.orderType==1?'退货':scope.row.orderType==2?'仅退款':'-'}}-->{{scope.row.dealerOrderId}}</span></template>
         </el-table-column>
@@ -65,7 +96,7 @@
         </el-table-column>
         <el-table-column
           label="更新时间"
-          width="200"
+           width="200"
           show-overflow-tooltip>
           <template slot-scope="scope"><span >{{date_format(new Date(scope.row.updatedTime), 'yyyy-MM-dd hh:mm:ss')  }}</span></template>
         </el-table-column>
@@ -114,7 +145,7 @@
 //        }],
         // 搜索参数
         search_params: { dealerOrderId: '', condition: '', startTime: '', endTime: '', SettleStatus: '' },
-        orderStoreData: [],
+        orderStoreData: [{settleId:'123456789',dealerOrderId:'123456789',goodsTotalAmount:'3456',afterSellAmount:'45',serviceTotalCharge:'345678',activityTotalAmount:'234567',settleTotalAmount:'6543',settleStatus:1,updatedTime:'345678'}],
         time: ''
       }
     },
@@ -148,9 +179,15 @@
           success: function (result) {
             if (result.status === 200){
               // 获取商品列表
-
               that.orderStoreData = result.content
               that.totalCount = result.totalCount
+              that.$nextTick(()=>{
+                let th=that.$(".tableHead").find("th")
+                for(var i=0;i<th.length;i++){
+                  console.log(th.eq(i).width()+"px")
+                  that.$('#multipleTable').find(".cell").eq(i).css('width',th.eq(i).width()+"px")
+                }
+              })
             }
           }
         })
@@ -179,11 +216,31 @@
 
 </script>
 <style lang="scss" scoped>
+  table{ table-layout:fixed;}
+    .tableHead{width:100%;border:none;margin:none;padding:0px;z-index:2;position: relative;
+      tr th{height:40px;background:#F4F5FA;box-shadow: 0 1px 0 0 #E5E5E5;line-height:40px;font-size: 14px;
+      color: #333;text-align: left;padding-left:20px;}
+      tr:hover td{background: #DFE9F6;}
+      tr th{background: #DFE9F6;font-weight:normal;
+        div.icon{width:16px;height:16px; display:inline-block; position:relative;background:url(../../../assets/images/ico_explain.png) no-repeat 0 0;
+          div.tips{display:none;width:100px;height:auto;background:#fff;border:1px solid #E5E5E5;border-radius: 4px;box-shadow: 0 1px 0 0 #E5E5E5;position: absolute;top:18px;left:0px; text-indent: 0;padding:6px;font-weight:normal;
+            p{line-height:24px;font-size:12px; color:#666;}
+          }
+        }
+        div.icon:hover div.tips{display:block;}
+      }
+      tr td.sums{
+        text-align: right;
+        padding-right:60px;
+        height:50px;
+      }
+    }
   .sp{
     width: 1583px;
     margin-left: 48px;
     margin-top: 130px;
     background-color: #fff;
+    
     .dropdown{
       display: inline-block;
       font-size: 16px;
