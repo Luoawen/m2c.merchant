@@ -249,13 +249,14 @@
               </div>
             </div>
             <div class="page">
-              <button>上一页</button>
+              <button @click="pageGoods(goodsResult.pageNumber - 1, goodsResult.pageCount)">上一页</button>
               <span>{{goodsResult.pageNumber}}</span>/
               <span>{{goodsResult.pageCount}}</span>
-              <button>下一页</button>
+              <button @click="pageGoods(goodsResult.pageNumber + 1, goodsResult.pageCount)">下一页</button>
               <span>到</span>
               <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="goods_query_item.pageNum"/>
               <span>页</span>
+               <button @click="pageGoods(goods_query_item.pageNum, goodsResult.pageCount)">GO</button>
             </div>
           </div>
           <div class="footer">
@@ -443,7 +444,7 @@
               </div>
             </div>
             <div class="page">
-              <button>上一页</button>
+              <button >上一页</button>
               <span>{{shopResult.pageNumber}}</span>/
               <span>{{shopResult.pageCount}}</span>
               <button>下一页</button>
@@ -510,13 +511,14 @@
               </div>
             </div>
             <div class="page">
-              <button>上一页</button>
-              <span>{{goodsResult.pageNumber}}</span>/
-              <span>{{goodsResult.pageCount}}</span>
-              <button>下一页</button>
-              <span>到</span>
-              <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="goods_query_item.pageNum"/>
-              <span>页</span>
+                  <button @click="pageGoods(goodsResult.pageNumber - 1, goodsResult.pageCount)">上一页</button>
+                  <span>{{goodsResult.pageNumber}}</span>/
+                  <span>{{goodsResult.pageCount}}</span>
+                  <button @click="pageGoods(goodsResult.pageNumber + 1, goodsResult.pageCount)">下一页</button>
+                  <span>到</span>
+                  <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="goods_query_item.pageNum"/>
+                  <span>页</span>
+                  <button @click="pageGoods(goods_query_item.pageNum, goodsResult.pageCount)">GO</button>
             </div>
           </div>
           <!--商家-->
@@ -530,13 +532,14 @@
               </div>
             </div>
             <div class="page">
-              <button>上一页</button>
-              <span>{{shopResult.pageNumber}}</span>/
-              <span>{{shopResult.pageCount}}</span>
-              <button>下一页</button>
+             <button @click="pageGoods(goodsResult.pageNumber - 1, goodsResult.pageCount)">上一页</button>
+              <span>{{goodsResult.pageNumber}}</span>/
+              <span>{{goodsResult.pageCount}}</span>
+              <button @click="pageGoods(goodsResult.pageNumber + 1, goodsResult.pageCount)">下一页</button>
               <span>到</span>
-              <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="shop_query_item.pageNum"/>
+              <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="" v-model="goods_query_item.pageNum"/>
               <span>页</span>
+               <button @click="pageGoods(goods_query_item.pageNum, goodsResult.pageCount)">GO</button>
             </div>
           </div>
           <div class="footer">
@@ -1005,7 +1008,18 @@
           that.$(el).parents('#choose_goods').modal("hide")
           that.modalShadow =false
       },
-
+      // 页码  
+       pageGoods (pageNum, pageCount) {
+        var that = this
+        if (pageNum <= 1) {
+          pageNum = 1
+        }
+        if (pageNum >= pageCount) {
+          pageNum = pageCount
+        }
+        that.goods_query_item.pageNum = pageNum
+        that.goodsChoose()
+      },
       // 打开 作用范围 选择商品弹窗
       openGoodsChoose () {
         var that = this
