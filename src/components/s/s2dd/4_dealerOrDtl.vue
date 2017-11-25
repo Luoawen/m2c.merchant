@@ -422,6 +422,7 @@
         ,orderNo:''
         ,mediaResInfos : {}
         ,isGetUserRuning: false
+        ,_map :{}
       }
     },
     watch: {
@@ -627,59 +628,6 @@
       get_log_info () {
         let that = this
         that.is_Success = false
-        /*that.$('#logTable').bootstrapTable('destroy').bootstrapTable({
-          method: 'get',
-          url: that.base + 'm2c.scm/order/logs/' + that.dealerOrderId,
-          queryParams: function (params) {
-            return Object.assign({}, {
-              token: sessionStorage.getItem('mToken'),
-              isEncry: false,
-              orderId: that.$route.query.orderId,
-              rows: params.limit,                     // 每页多少条数据
-              pageNumber: params.offset / params.limit + 1    // 请求第几页
-            })
-          },
-          pagination: true,
-          pageNumber: 1,
-          pageSize: 10,
-          pageList: [5, 10, 20, 100],
-          striped: true,
-          showExport: true,
-          exportDataType: 'selected',
-          queryParamsType: 'limit',
-          sidePagination: 'server',
-          contentType: 'application/x-www-form-urlencoded',
-          responseHandler: function (result) {
-            console.log(result)
-            return {
-              total: result.totalCount,    // 总页数
-              rows: result.content         // 数据
-            }
-          },
-          columns: [{
-            title: '操作时间',
-            events: 'handle',
-            width: '150',
-            formatter: function (x, y) {
-              let d = new Date(y.optTime)
-              return that.date_format(d, 'yyyy-MM-dd hh:mm:ss')
-            },
-            align: 'center',
-            valign: 'middle'
-          }, {
-            field: 'optContent',
-            title: '操作内容',
-            align: 'center',
-            valign: 'middle',
-            width: '250'
-          }, {
-            field: 'optUser',
-            title: '操作人',
-            align: 'center',
-            valign: 'middle',
-            width: '120'
-          }]
-        })*/
         that.$.ajax({
           type: 'get',
           url: that.base + 'm2c.scm/order/logs/' + that.dealerOrderId,
@@ -927,7 +875,7 @@
           },
           success: function (result) {
             //console.log('fanjc======')
-            console.log(result);
+            //console.log(result);
             if (result.status === 200){
               that._map = {};
               var sz = result.content.length;
@@ -936,12 +884,14 @@
                 that._map[obj.userId] = obj.mobile + '[' + obj.userName + ']';
               }
               for (var i=0; i< that.operatingRecords.length> 0; i++) {
-                if (typeof(that._map[that.operatingRecords[i].optUser]) != 'undefined')
+                if (typeof(that._map[that.operatingRecords[i].optUser]) != 'undefined') {
                   that.operatingRecords[i].optUserStr = that._map[that.operatingRecords[i].optUser];
-                else
+              } else {
                   that.operatingRecords[i].optUserStr = that.operatingRecords[i].optUser;
+                }
               }
             }
+            console.log(that.operatingRecords);
             that.isGetUserRuning = false;
           }
         });
