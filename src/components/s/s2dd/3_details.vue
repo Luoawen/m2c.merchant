@@ -144,11 +144,11 @@
             </div>
             <div>
               <span class="tit01">物流公司:</span>
-              <span class="ml20">{{logistics.expressName}}</span>
+              <span class="ml20">{{logistics.status < 5 ? '--' :logistics.status >= 7? logistics.expressName : logistics.backExpressName}}</span>
             </div>
             <div>
               <span class="tit01">物流单号:</span>
-              <span class="ml20">{{logistics.expressNo}}</span>
+              <span class="ml20">{{logistics.status < 5 ? '--' :logistics.status >= 7? logistics.expressNo : logistics.backExpressNo}}</span>
             </div>
 
           </div>
@@ -348,6 +348,9 @@
           expressNo:'',
           goodsInfo:'',
           status:0
+          ,backExpressName:''
+          ,backExpressNo:''
+          ,orderType : -1
         },
         dialogVisible: false,
         // 搜索参数
@@ -525,6 +528,9 @@
               that.logistics.afterSellOrderId=_content.afterSellOrderId;
               that.logistics.expressName=_content.expressName;
               that.logistics.expressNo=_content.expressNo;
+              that.logistics.backExpressName=_content.backExpressName;
+              that.logistics.backExpressNo=_content.backExpressNo;
+              that.logistics.orderType=_content.orderType;
               that.logistics.goodsInfo=_content.goodsInfo;
               that.logistics.status=_content.status;
             }
