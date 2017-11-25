@@ -105,13 +105,12 @@
         <tbody v-for="comment in datacomment">
           <tr>
             <td>
-              <div  v-if='!comment.replyCommentContent ' @click="showtchp(comment.commentId)">
+              <div v-if='!comment.replyCommentContent ' @click="showtchp(comment.commentId)">
                 <i class="icon_hp"></i>
                 <span>回评</span>
               </div>
             </td>
             <td>
-              <!--<div>{{comment.commentContent}}</div>-->
               <a class="ellipsis3" :title="comment.commentContent">{{comment.commentContent}}</a><br/><br/>
               <div class="mt10" v-for="img in comment.commentImages">
                 <img class="conimg mr10 fl" :src="img" />
@@ -162,6 +161,20 @@
         </el-pagination>
       </div>
     </div>
+    <!-- 图片弹层 -->
+    <!-- <div class="hptczp" v-show="">
+      <div class="imgWrap">
+        <ul>
+          <li class="mt10" v-for="(img,index) in comment.commentImages" v-if="indexImg">
+            <img :src="img" />
+          </li>
+        </ul>
+        <div class="ctrl">
+          <a @click="prev" class="fl"><</a>
+          <a @click="next" class="fr">></a>
+        </div>
+      </div>
+    </div> -->
       <!-- 回评弹出框 hptc-->
     <div class="hptczp" v-show="showhptc===true"  style="">
 
@@ -480,6 +493,9 @@
           padding-right: 20px;
           background: #fff;
           min-height: 80px;
+          overflow: hidden;
+          text-overflow:ellipsis;
+          // white-space: nowrap;
         }
         .td_img{
           width: 50px;
