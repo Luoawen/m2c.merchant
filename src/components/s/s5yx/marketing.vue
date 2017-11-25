@@ -1,21 +1,7 @@
 <template>
   <div class="content clear">
     <div class="searchWarp search" >
-      <div class="search_cell ">
-        <input class="form-control search_input  " v-model="search_params.full_cut_no" placeholder="满减编号" @blur="formValidator(1)">
-      </div>
-      <div class="search_cell">
-        <input class="form-control search_input" v-model="search_params.full_cut_name" placeholder="满减名称" maxlength="11">
-      </div>
-        <el-date-picker
-        v-model="time"
-        type="daterange"
-        range-separator="-"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期" value-format="yyyy-MM-dd"
-        @change="timeCheck">
-      </el-date-picker>
-      <div class="search_cell">
+           <div class="search_cell">
         <select data-v-0c409cb2="" class="form-control search_input"  v-model="search_params.status">
             <option data-v-0c409cb2="" value="0" >全部状态</option>
             <option data-v-0c409cb2="" value="1">未生效</option>
@@ -45,38 +31,57 @@
           <option data-v-0c409cb2="" value="1">正常</option>
           <option data-v-0c409cb2="" value="2">无可用</option>
         </select>
-      </div><br/>
+      </div>
+        <el-date-picker
+        v-model="time"
+        type="daterange"
+        range-separator="-"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期" value-format="yyyy-MM-dd"
+        @change="timeCheck">
+      </el-date-picker>
+       <div class="search_cell ">
+        <input class="form-control search_input  " v-model="search_params.full_cut_no" placeholder="满减编号" @blur="formValidator(1)">
+      </div>
       <div class="search_cell">
-        <button class="btn button "  @click="goto"  path="/s/fullCut">新增满减</button>
-        <button class="btn button " @click="resetSearchParams()">重置搜索条件</button>
-        <button class="btn button "  @click="getFullCutList()"  >搜索</button>
+        <input class="form-control search_input" v-model="search_params.full_cut_name" placeholder="满减名称" maxlength="11">
+      </div>
+   <br/>
+      <div class="search_cell">
+       
+        <el-button type="primary" size="medium"  @click="goto($event,'/s/fullCut')"  path="/s/fullCut" >新增满减</el-button>  
+        <!-- <router-link  type="primary"   :to="{ path: '/s/fullCut' }">新增满减</router-link> -->
+        <el-button type="primary" size="medium" @click="resetSearchParams()">重置搜索条件</el-button>
+         <el-button type="primary" size="medium" @click="getFullCutList()">搜索</el-button>
       </div>
     </div>
-
-    <!-- <table id="table" @click="goto"></table> -->
          <div class="good_info" style="margin-top: 20px;">
             <el-table
               ref="multipleTable"
               :data="goodsStoreData"
               tooltip-effect="dark"
               style="width: 100%;">
-              <el-table-column  label="操作">
+              <el-table-column    label="操作" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <el-col :span="24"  >
-                      <span   v-if='scope.row.status < 3'>
+                      <!-- <span   v-if='scope.row.status < 3'>
                           <el-button   type="text"  class='color_default'  style='cursor:pointer;'  @click.native="handleCommand(scope.$index, scope.row,'_detail','a')" path='/s/fullCutDetail'>详情</el-button>&nbsp;&nbsp;
                           <el-button   type="text" style='color:red;cursor:pointer;'  @click.native="handleCommand(scope.$index, scope.row,'_forbid','a')" >终止</el-button>&nbsp;&nbsp; 
                           <el-button   type="text" class='color_default' style='cursor:pointer;'   @click.native="handleCommand(scope.$index, scope.row,'_modify','a')" path='/s/fullCutModify'>修改</el-button>
                       </span>
                       <span v-else>
                         <el-button   type="text" class='color_default'   style='cursor:pointer;'  @click.native="handleCommand(scope.$index, scope.row,'_detail','a')" path='/s/fullCutDetail' >详情</el-button>&nbsp;&nbsp;
+                      </span> -->
+                      <el-dropdown trigger="click">
+                      <span class="el-dropdown-link">
+                        操作<i class="el-icon-arrow-down el-icon--right"></i>
                       </span>
-                      <!-- <el-dropdown-menu slot="dropdown"> -->
-                        <!-- <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','a')">详情</el-dropdown-item>
-                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_edit','a')">编辑
-                          </el-dropdown-item>
-                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_delete','a')">删除</el-dropdown-item> -->
-                      <!-- </el-dropdown-menu> -->
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail','a')">详情</el-dropdown-item>
+                        <el-dropdown-item  v-if="scope.row.status<3" @click.native="handleCommand(scope.$index, scope.row,'_modify','a')">修改</el-dropdown-item>
+                        <el-dropdown-item  style="color:red" v-if="scope.row.status<3" @click.native="handleCommand(scope.$index, scope.row,'_forbid','a')">终止</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
                   </el-col>
                 </template>
               </el-table-column>
@@ -114,12 +119,6 @@
                 label="生成时间"
                 show-overflow-tooltip>
               </el-table-column>
-              <!-- <el-table-column
-                label="状态"
-                show-overflow-tooltip>
-                <template slot-scope="scope"><span >{{scope.row.goodsStatus==1?'仓库':scope.row.goodsStatus==2?'出售中':scope.row.goodsStatus==3?'已售罄':''}}</span></template>
-              </el-table-column> -->
-              
             </el-table>
             <div class="block fl" style="margin: 20px;">
                 <el-pagination
@@ -255,9 +254,10 @@
       //   date2.setDate(date1.getDate() - 7)
       //   that.search_params.start_time = that.formatDate(date2, 'yyyy-MM-dd')
       // },
-      goto (event) {
+      goto ($event,path) {
         let that = this
-        let path = event.target.getAttribute('path')
+        console.log(event.target,"event.target")
+        // let path = event.target.getAttribute('path')
         if (!path) return
         if (that.active_path === path) {
           that.$router.go(0)
@@ -281,6 +281,8 @@
         let that = this
         //给的参数 含有creator 商家的id （只请求到该商家id的数据 ）
         that.search_params = {full_cut_no: '', full_cut_name: '', status: 0, start_time: '', end_time: '', full_cut_type: 0, creator_type: '2', use_type: 0,creator:JSON.parse(sessionStorage.getItem('mUser')).dealerId}
+        //  操作日期控件 恢复状态
+        that.time=""
         that.getFullCutList()
       },
       // 获取满减列表
