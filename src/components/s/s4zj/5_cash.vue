@@ -28,7 +28,7 @@
 					<el-input v-model="tradableA" class="col-sm-4" style="padding-left:0px;" :placeholder="'最多可提现'+tradableAmount" :disabled="isdisable" @blur="checkTradab"></el-input>
           <span class="fl mt8 mr20">元</span>
           <a class="mt8 fl" @click="tradabAll">全部提现</a>
-          <i class="red" v-show="isEmpty">提现金额不能为空</i>
+          <i class="red" v-show="isEmpty">提现金额必须大于0</i>
           <i class="red" v-show="checkShow">提现金额不能大于可提现金额</i>
 				</div>
 				<div class="tit">
@@ -145,6 +145,9 @@ export default {
 					if(that.tradableA > that.tradableAmount){
 						that.checkShow = true
 					}
+					if(that.tradableA <= 0){
+            that.isEmpty = true
+          }
 				}
 			},
 			// 请求提现剩余次数 及可提现金额 申请单Id
