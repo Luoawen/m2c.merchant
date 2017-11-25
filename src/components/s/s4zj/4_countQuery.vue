@@ -24,7 +24,7 @@
         style="width: 100%">
         <el-table-column
           label="结算号"
-          width="260">
+          width="300">
           <template slot-scope="scope"><span >{{scope.row.settleId}}</span></template>
         </el-table-column>
         <el-table-column
@@ -61,7 +61,7 @@
         <el-table-column
           label="结算状态"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{scope.row.settleStatus==1?'未结算':scope.row.settleStatus == 2 ?'已结算':'-'}}</span></template>
+          <template slot-scope="scope"><span>{{scope.row.settleStatus==1?'待结算':scope.row.settleStatus == 2 ?'已结算':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="更新时间"
@@ -97,7 +97,7 @@
           label: '结算状态'
         }, {
           value: '1',
-          label: '未结算'
+          label: '待结算'
         }, {
           value: '2',
           label: '已结算'
