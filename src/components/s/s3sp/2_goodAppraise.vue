@@ -410,7 +410,7 @@
     width:600px;
     height: 600px;
     background: #ffffff;
-    
+    border-radius:10px;
     position: fixed;
     top:50%;left:50%;
     margin-top:-300px;
