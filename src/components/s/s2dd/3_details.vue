@@ -11,7 +11,7 @@
             <div class="col-sm-4 detail_cen">
               <div>
                 <span class="tit01">售后状态:</span>
-                <span style="color: red;font-size: 15px" class="ml20">{{orderDetail.status==0?'申请退货':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'售后完成':orderDetail.status==11?'售后关闭':orderDetail.status==-1?'已取消':'-'}}</span>
+                <span style="color: red;font-size: 15px" class="ml20">{{orderDetail.status==0?'申请退货退款':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'售后完成':orderDetail.status==11?'售后关闭':orderDetail.status==-1?'已取消':'-'}}</span>
               </div>
               <div>
                 <span class="tit01">售后单号:</span>
@@ -107,9 +107,9 @@
                   <el-button size="mini" @click="agreedRefund()">同意退款</el-button>
                 </div>
 
-                <div class="btm" v-show="orderDetail.status==9 && orderDetail.orderType==0">
+                <!--<div class="btm" v-show="orderDetail.status==9 && orderDetail.orderType==0">
                   <el-button size="mini" @click="confirmRefund()">确认退款</el-button>
-                </div>
+                </div>-->
 
                 <!-- 用户期望换货--> <!-- 1.商户同意售后 2.用户返回货物 3.商家确认收货 4.商户填写物流信息 5.商户确认发货 -->
                 <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==1">
@@ -650,25 +650,32 @@
         });
       }//商户拒绝售后
       ,agreedRefund(){
-        let that = this
-        that.$.ajax({
-          type: 'PUT',
-          url: this.base + 'm2c.scm/order/aftersale/dealer/agree-rt-money',
-          //url: 'http://localhost:8080/m2c.scm/order/aftersale/dealer/agree-rt-money',
-          data: {
-            token: sessionStorage.getItem('mToken'),
-            isEncry: false,
-            saleAfterNo:that.orderDetail.afterSelldealerOrderId,
-            userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
-            skuId:that.orderDetail.goodsInfo.skuId
-          },
-          success: function (result) {
-            if (result.status === 200){
-              // 获取订单操作列表
-              that.loadOrderDetail()
+        let that = this;
+        that.$confirm('确定同意退款？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let that = this
+          that.$.ajax({
+            type: 'PUT',
+            url: this.base + 'm2c.scm/order/aftersale/dealer/agree-rt-money',
+            //url: 'http://localhost:8080/m2c.scm/order/aftersale/dealer/agree-rt-money',
+            data: {
+              token: sessionStorage.getItem('mToken'),
+              isEncry: false,
+              saleAfterNo: that.orderDetail.afterSelldealerOrderId,
+              userId: JSON.parse(sessionStorage.getItem('mUser')).userId,
+              skuId: that.orderDetail.goodsInfo.skuId
+            },
+            success: function (result) {
+              if (result.status === 200) {
+                // 获取订单操作列表
+                that.loadOrderDetail()
+              }
             }
-          }
-        })
+          })
+        }).catch(() => {});
       }//商户同意退款
       ,confirmRefund(){
         let that = this
@@ -1014,6 +1021,16 @@ display:-webkit-box;
         margin-left: 0px;
         padding-left: 20px;
         background: #FBF5EF;
+        font-size: 18px;
+        color: #FD3242;
+      }
+      .detail_tit03{
+        height: 60px;
+        width: 99%;
+        line-height: 60px;
+        margin-left: 0px;
+        padding-left: 20px;
+        background: #FF00;
         font-size: 18px;
         color: #FD3242;
       }
