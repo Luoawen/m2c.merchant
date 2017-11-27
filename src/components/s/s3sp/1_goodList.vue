@@ -687,7 +687,6 @@
   },
     mounted () {
       let that = this
-      that.goodsClassify()
       if (that.$route.query.activeName == 'second') {
         that.goodsCheckStore()
       } else if (that.$route.query.activeName == 'delete'){
@@ -695,6 +694,7 @@
       } else{
         that.goodsStore()
       }
+      that.goodsClassify()
     }
   }
 </script>
