@@ -130,8 +130,8 @@
                     </ul>
                   </div>
                   <div class="ctrl">
-                    <a @click="prev" class="prev" v-if="imgIndex > 0"><</a>
-                    <a @click="next" class="next" v-if="imgIndex < comment.commentImages.length-1">></a>
+                    <a @click="prev" class="prev" v-if="imgIndex > 0"></a>
+                    <a @click="next" class="next" v-if="imgIndex < comment.commentImages.length-1"></a>
                   </div>
                   <a class="close" @click="imgWrap=!imgWrap"></a>
                 </template>
@@ -407,50 +407,49 @@
   opacity: 0.5;
 }
   .imgWrap{
-    width:600px;
-    height: 600px;
-    background: #ffffff;
-    border-radius:10px;
+    width:660px;
+    height:660px;
+    // background: #ffffff;
+    // border-radius:10px;
     position: fixed;
     top:50%;left:50%;
-    margin-top:-300px;
-    margin-left:-220px;
+    margin-top:-330px;
+    margin-left:-330px;
     z-index: 999;
     a.close{
-      display:inline-block;width:36px;height:36px;
-       position: absolute;top:-60px;right:-120px; background:url(../../../assets/images/ico_close@3x.png) no-repeat 0 0;
+      display:inline-block;width:30px;height:30px;
+      position: absolute;top:-60px;right:-200px; background:url(../../../assets/images/ico_close_close.png) no-repeat 0 0;
     }
     div.imgUl{
-      width:600px;
-      height:600px;
+      width:660px;
+      height:660px;
       position: absolute;
       top:0px;left:0px;
-      overflow: hidden;
+      vertical-align: middle;
+      display: table;
       ul{
-        width:600px;
-        height:600px;
-        border-radius:5px;
-        overflow: hidden;
+        width:660px;
+        height:660px;
         li{
-          position: absolute;top:0;left:0;
-          width:600px;height:600px;
-          img{width:100%;height:100%;border-radius:5px;}
+          line-height:660px;
+          width:660px;
+          height:660px;
+          img{width:660px;height:auto;}
         }
       }
     }
     div.ctrl{
       position: absolute;
       top:260px;
-      left:-100px;
-      width:800px;
+      left:-130px;
+      width:920px;
       a{
-        width:40px;height:40px;display:inline-block;position:absolute;font-size:60px;color:#fff; font-family: '宋体';
+        width:50px;height:50px;display:inline-block;position:absolute;
       }
-      :hover{
-        text-decoration: none;
-      }
-      a.prev{top:0;left:0px;}
-      a.next{top:0;right:0px;}
+      a.prev{top:0;left:0px;background:url(../../../assets/images/ico_leftarrows_pressed.png) no-repeat 0 0;opacity:0.4}
+      a.next{top:0;right:0px;background:url(../../../assets/images/ico_leftarrows_pressed.png) no-repeat 0 0;opacity:0.4}
+      a.prev:hover{transition: all 0.2s ease;opacity:1}
+      a.next:hover{transition: all 0.2s ease;opacity:1}
     }
   }
 
