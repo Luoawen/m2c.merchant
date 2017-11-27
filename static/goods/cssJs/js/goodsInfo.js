@@ -112,6 +112,8 @@ function getApiUrl () {
     apiUrl = 'http://api.m2c2017local.com:80/'
   } else if (href.includes('localhost')) { // 本地环境
     apiUrl = 'http://api.m2c2017local.com:80/'
+  } else if (href.includes('final')) { // final环境
+    apiUrl = 'http://api.m2c2017final.com:80/'
   } else { // 演示环境
     apiUrl = 'http://api.m2c2017.com:80/'
   }
