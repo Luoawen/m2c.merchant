@@ -8826,6 +8826,9 @@ width:200px;
 margin:7px 0;
 margin-right:10px;
 }
+.soloSearchBox .el-input,.soloSearchBox .el-cascader,.soloSearchBox .el-select{
+  width:100%;
+}
 .el-input::-webkit-scrollbar {
 z-index:11;
 width:6px

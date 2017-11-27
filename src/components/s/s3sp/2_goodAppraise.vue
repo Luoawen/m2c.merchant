@@ -115,7 +115,7 @@
               <div class="mt10" v-for="(img,index2) in comment.commentImages">
                 <div class="conimg" @click="imgWrapShow(index,index2)">
                   <img class="conimg mr10 fl" :src="img" />
-                  <div><i></i></div>
+                  <div><i class="el-icon-zoom-in"></i></div>
                 </div>
               </div>
               <!-- 图片弹层 -->
@@ -585,7 +585,7 @@
           width: 50px;
           height: 50px;
           position: relative;
-          display: inline-block;float: left;margin-right:10px;
+          display: inline-block;float:left;margin-right:10px;
           div{
             position: absolute;
             width:50px;height:50px;
@@ -593,7 +593,7 @@
             left: 0;
             background:rgba(255,255,255,0.5);
             display: none;
-            i{width:16px;height:16px;background:url(../../../assets/images/ico_search.png) no-repeat 0 0;position:absolute;top:17px;left:17px;}
+            i{width:16px;height:16px;position:absolute;top:15px;left:19px;}
           }
         }
         .conimg:hover div{
