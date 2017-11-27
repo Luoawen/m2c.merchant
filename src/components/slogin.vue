@@ -207,8 +207,8 @@ export default {
     }
   },
   beforeCreate () {
-    document.title = '一拍即获-供应商-登录'
-    document.querySelector('#favicon').href = '/static/favicon_s.ico'
+    document.title = '拍获-供应商-登录'
+		document.querySelector('#favicon').href = '/static/favicon_s.ico'
   },
   mounted () {
     if ((this.newPass !== '') & (this.confirmPass !== '')) {
