@@ -184,8 +184,8 @@
               <div class="a4 fl mt10" style="width:14%;text-align:center;">
                 <!-- 有几种情况的不同表现方 -->
                 <div style="">
-                  <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :'--'}}</div>
-                  <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.backMoney, item.orderFreight)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
+                  <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :goodsItem.afStatus==6? '商家收到':goodsItem.afStatus==7? '商家寄出':goodsItem.afStatus==8? '客户收到':goodsItem.afStatus==9? '确认退款':'--'}}</div>
+                  <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.backMoney, item.orderFreight, item.dealerOrderId, goodsItem.skuId)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
                   <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" v-show="goodsItem.afStatus>=0 && goodsItem.afStatus<=2">拒绝</button></div>
                 </div>
                 <div v-show="goodsItem.afStatus==3">
@@ -351,7 +351,7 @@
         }
       },
     // 获取全部订单信息
-      agreeShow (afterNo, _st, _orderStatus, afType, backMoney, ordFreight) {
+      agreeShow (afterNo, _st, _orderStatus, afType, backMoney, ordFreight, dOrderId, skuID) {
       var that = this;
       that.afStatus=_st;
       that.saleAfterNo = afterNo;
@@ -360,10 +360,30 @@
       that.orderFreight = ordFreight / 100;
       console.log(afType + ":===orderStatus ==" + _orderStatus);
       if (afType == 2 && _orderStatus == 1) {
+        that.getHasReturnFreight(dOrderId, skuID);
         that.showRt = true;
         return ;
       }
       that.agreeApplyShow = true;
+    },
+    getHasReturnFreight(dOrderId, skuId){
+      let that = this
+      that.$.ajax({
+        type: 'PUT',
+        url: this.base + 'm2c.scm/dealerorderafter/cost/freight',
+        data: {
+          token: sessionStorage.getItem('mToken'),
+          isEncry: false,
+          dealerOrderId: dOrderId,
+          userId: JSON.parse(sessionStorage.getItem('mUser')).userId,
+          skuId: skuId
+        },
+        success: function (result) {
+          if (result.status === 200){
+            that.hasRtFreight = result.content.costFt;
+          }
+        }
+      })
     },
     getDealerOrders () {
       let that = this

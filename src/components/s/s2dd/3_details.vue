@@ -79,7 +79,7 @@
               <td class="a3">{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</td>
               <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
               <td class="a5">{{(orderDetail.goodsInfo.totalPrice/100).toFixed(2)}}</td>
-              <td class="a5">{{(orderDetail.backMoney/100).toFixed(2)}}</td>
+              <td class="a5">{{((orderDetail.backMoney + orderDetail.backFreight)/100).toFixed(2)}}</td>
               <td class="a6">
                 <!--状态，0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
@@ -297,7 +297,7 @@
             <span style="color: red;">*</span>
             运费退款
           </span>
-          <span> <el-input-number v-model="pRtFreight" :controls="false" :min="0" :max="orderDetail.orderFreight/100" ></el-input-number></span>
+          <span> <el-input-number v-model="pRtFreight" :controls="false" :min="0" :max="(orderDetail.orderFreight - hasRtFreight)/100" ></el-input-number></span>
           <span>元</span>
         </div>
         <div class="linh40 pl10">
@@ -330,7 +330,7 @@
           afterSelldealerOrderId:'',
           backMoney: 0,
           createdDate: '',
-          dealerdealerOrderId: '',
+          dealerOrderId: '',
           goodsInfo:{},
           orderTotalMoney:0,
           orderType:0,
@@ -376,6 +376,7 @@
         totalData:'',
         mediaResInfos:{}
         ,isGetUserRuning : false
+        , hasRtFreight : 0
       }
     },
     methods: {
@@ -540,6 +541,7 @@
       ,handleAgree(){
         let that = this
         if (that.orderDetail.orderType == 2 && that.orderDetail.doStatus == 1) {
+            that.getHasReturnFreight();
             that.showMask = true;
             that.showRt = true;
             return ;
@@ -579,7 +581,11 @@
       }//商户同意售后
       , agreeRtMoneyApply () {
        // 同意退款申请，未来发货时需要输入的金额
-        let that = this
+        let that = this;
+        if (that.pRtFreight == '' || that.pRtFreight < 0) {
+          that.showTip('退款运费不能为小于0的数字及空！');
+          return;
+        }
         that.$.ajax({
           type: 'PUT',
           url: this.base + 'm2c.scm/order/dealer/agree-apply-sale',
@@ -682,23 +688,22 @@
             }
           })
         }).catch(() => {});
-      }//商户同意退款
-      ,confirmRefund(){
+      }//获取售后运费
+      ,getHasReturnFreight(){
         let that = this
         that.$.ajax({
           type: 'PUT',
-          url: this.base + 'm2c.scm/order/aftersale/dealer/confirm-rt-money',
+          url: this.base + 'm2c.scm/dealerorderafter/cost/freight',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            saleAfterNo:that.orderDetail.afterSelldealerOrderId,
-            userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
-            skuId:that.orderDetail.goodsInfo.skuId
+            dealerOrderId: that.orderDetail.orderId,
+            userId: JSON.parse(sessionStorage.getItem('mUser')).userId,
+            skuId: that.orderDetail.goodsInfo.skuId
           },
           success: function (result) {
             if (result.status === 200){
-              // 获取订单操作列表
-              that.loadOrderDetail()
+              that.hasRtFreight = result.content.costFt;
             }
           }
         })
@@ -1034,7 +1039,7 @@ display:-webkit-box;
         line-height: 60px;
         margin-left: 0px;
         padding-left: 20px;
-        background: #FF00;
+        background: #FBF5EF;
         font-size: 18px;
         color: #FD3242;
       }
