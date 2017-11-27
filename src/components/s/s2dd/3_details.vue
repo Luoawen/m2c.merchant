@@ -79,7 +79,7 @@
               <td class="a3">{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</td>
               <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
               <td class="a5">{{(orderDetail.goodsInfo.totalPrice/100).toFixed(2)}}</td>
-              <td class="a5">{{(orderDetail.backMoney/100).toFixed(2)}}</td>
+              <td class="a5">{{((orderDetail.backMoney + orderDetail.backFreight)/100).toFixed(2)}}</td>
               <td class="a6">
                 <!--状态，0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
@@ -1036,7 +1036,7 @@ display:-webkit-box;
         line-height: 60px;
         margin-left: 0px;
         padding-left: 20px;
-        background: #FF00;
+        background: #FBF5EF;
         font-size: 18px;
         color: #FD3242;
       }
