@@ -46,7 +46,7 @@
   				</div>
   				<div class="tit">
   						<span class="tit_span">优惠金额：</span>
-  						<span>{{(freeMoney/100).toFixed(2)}}</span>
+  						<span>{{(freeMoney).toFixed(2)}}</span>
   				</div>
   			</el-col>
 			</el-row>
