@@ -369,7 +369,7 @@
     getHasReturnFreight(dOrderId, skuId){
       let that = this
       that.$.ajax({
-        type: 'PUT',
+        type: 'GET',
         url: this.base + 'm2c.scm/dealerorderafter/cost/freight',
         data: {
           token: sessionStorage.getItem('mToken'),
