@@ -120,9 +120,8 @@
             </div>
           </div>
           <div class="footer clear">
-
-            <button class="footerbtn sort" @click="search()">搜索</button>
-            <button class="footerbtn ml20 czt" @click="clearAll()">重置</button>
+            <el-button type="primary" size="medium" @click="search()">搜索</el-button>
+            <el-button size="medium" @click="clearAll()">重置</el-button>
           </div>
         </div>
       </div>
