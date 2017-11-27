@@ -447,7 +447,7 @@
         width:50px;height:50px;display:inline-block;position:absolute;
       }
       a.prev{top:0;left:0px;background:url(../../../assets/images/ico_leftarrows_pressed.png) no-repeat 0 0;opacity:0.4}
-      a.next{top:0;right:0px;background:url(../../../assets/images/ico_leftarrows_pressed.png) no-repeat 0 0;opacity:0.4}
+      a.next{top:0;right:0px;background:url(../../../assets/images/ico_rightarrows_pressed.png) no-repeat 0 0;opacity:0.4}
       a.prev:hover{transition: all 0.2s ease;opacity:1}
       a.next:hover{transition: all 0.2s ease;opacity:1}
     }
