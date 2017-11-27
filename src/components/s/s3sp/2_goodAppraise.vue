@@ -79,8 +79,8 @@
           </div>
         </div>
         <div class="footer clear">
-          <button class="footerbtn sort" @click="get_comment_info()">搜索</button>
-          <button class="footerbtn ml20 czt" @click="clearAll()">重置</button>
+          <el-button type="primary" size="medium" @click="get_comment_info()">搜索</el-button>
+          <el-button size="medium" @click="clearAll()">重置</el-button>
         </div>
       </div>
     </div>
@@ -102,7 +102,7 @@
           <td colspan="7">没有匹配的记录</td>
         </tr>
         </tbody>
-        <tbody v-for="comment in datacomment">
+        <tbody v-for="(comment,index) in datacomment">
           <tr>
             <td>
               <div v-if='!comment.replyCommentContent ' @click="showtchp(comment.commentId)">
@@ -112,8 +112,29 @@
             </td>
             <td>
               <a class="ellipsis3" :title="comment.commentContent">{{comment.commentContent}}</a><br/><br/>
-              <div class="mt10" v-for="img in comment.commentImages">
-                <img class="conimg mr10 fl" :src="img" />
+              <div class="mt10" v-for="(img,index2) in comment.commentImages">
+                <div class="conimg" @click="imgWrapShow(index,index2)">
+                  <img class="conimg mr10 fl" :src="img" />
+                  <div><i></i></div>
+                </div>
+              </div>
+              <!-- 图片弹层 -->
+              <div class="hptczp" v-show="imgWrap"></div>
+              <div class="imgWrap" v-show="imgWrap">
+                <template v-for="comment in datacomment">
+                  <div class="imgUl">
+                    <ul>
+                      <li>
+                        <img :src="comment.commentImages[imgIndex]" />
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="ctrl">
+                    <a @click="prev" class="prev" v-if="imgIndex > 0"></a>
+                    <a @click="next" class="next" v-if="imgIndex < comment.commentImages.length-1"></a>
+                  </div>
+                  <a class="close" @click="imgWrap=!imgWrap"></a>
+                </template>
               </div>
             </td>
             <td>
@@ -161,20 +182,7 @@
         </el-pagination>
       </div>
     </div>
-    <!-- 图片弹层 -->
-    <!-- <div class="hptczp" v-show="">
-      <div class="imgWrap">
-        <ul>
-          <li class="mt10" v-for="(img,index) in comment.commentImages" v-if="indexImg">
-            <img :src="img" />
-          </li>
-        </ul>
-        <div class="ctrl">
-          <a @click="prev" class="fl"><</a>
-          <a @click="next" class="fr">></a>
-        </div>
-      </div>
-    </div> -->
+
       <!-- 回评弹出框 hptc-->
     <div class="hptczp" v-show="showhptc===true"  style="">
 
@@ -216,10 +224,32 @@
         replyStatusName: '回复状态',
         levelName: '评价星级',
         advancedShow: false,
-        time: ''
+        time: '',
+        imgWrap:false, //图片盒子显示隐藏
+        rowIndex:0,
+        imgIndex:0
       }
     },
     methods: {
+      // 图片放大
+      imgWrapShow(index,index2){
+        let that = this
+        that.imgWrap = true
+        that.rowIndex = index
+        that.imgIndex = index2
+      },
+      prev(){
+        let that = this
+        if(that.imgIndex > 0){
+          that.imgIndex--
+        }
+      },
+      next(){
+        let that = this
+        if(that.imgIndex < that.datacomment[that.rowIndex].commentImages.length-1){
+          that.imgIndex++
+        }
+      },
       // 时间赋值
       timeCheck () {
         let that = this
@@ -375,8 +405,54 @@
   background: #000;
   z-index: 999;
   opacity: 0.5;
-
 }
+  .imgWrap{
+    width:660px;
+    height:660px;
+    // background: #ffffff;
+    // border-radius:10px;
+    position: fixed;
+    top:50%;left:50%;
+    margin-top:-330px;
+    margin-left:-330px;
+    z-index: 999;
+    a.close{
+      display:inline-block;width:30px;height:30px;
+      position: absolute;top:-60px;right:-200px; background:url(../../../assets/images/ico_close_close.png) no-repeat 0 0;
+    }
+    div.imgUl{
+      width:660px;
+      height:660px;
+      position: absolute;
+      top:0px;left:0px;
+      vertical-align: middle;
+      display: table;
+      ul{
+        width:660px;
+        height:660px;
+        li{
+          line-height:660px;
+          width:660px;
+          height:660px;
+          img{width:660px;height:auto;}
+        }
+      }
+    }
+    div.ctrl{
+      position: absolute;
+      top:260px;
+      left:-130px;
+      width:920px;
+      a{
+        width:50px;height:50px;display:inline-block;position:absolute;
+      }
+      a.prev{top:0;left:0px;background:url(../../../assets/images/ico_leftarrows_pressed.png) no-repeat 0 0;opacity:0.4}
+      a.next{top:0;right:0px;background:url(../../../assets/images/ico_rightarrows_pressed.png) no-repeat 0 0;opacity:0.4}
+      a.prev:hover{transition: all 0.2s ease;opacity:1}
+      a.next:hover{transition: all 0.2s ease;opacity:1}
+    }
+  }
+
 .hptczp_content{
   width: 400px;
   height: 280px;
@@ -508,6 +584,20 @@
         .conimg{
           width: 50px;
           height: 50px;
+          position: relative;
+          display: inline-block;float: left;margin-right:10px;
+          div{
+            position: absolute;
+            width:50px;height:50px;
+            top: 0;
+            left: 0;
+            background:rgba(255,255,255,0.5);
+            display: none;
+            i{width:16px;height:16px;background:url(../../../assets/images/ico_search.png) no-repeat 0 0;position:absolute;top:17px;left:17px;}
+          }
+        }
+        .conimg:hover div{
+          display: block;
         }
         .tdcolor{
           color: #999999;
