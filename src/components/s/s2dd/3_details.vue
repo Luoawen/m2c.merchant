@@ -583,7 +583,7 @@
        // 同意退款申请，未来发货时需要输入的金额
         let that = this;
         if (that.pRtFreight == '' || that.pRtFreight < 0) {
-          that.show_tips('退款运费不能为小于0的数字及空！');
+          that.show_tip('退款运费不能为小于0的数字及空！');
           return;
         }
         that.$.ajax({
