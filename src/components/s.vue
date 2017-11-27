@@ -500,8 +500,8 @@ body {
         top: 50%;
         margin-top: -12px;
         left: 21px;
-        width: 24px;
-        height: 24px;
+        width: 22px;
+        height: 22px;
       }
       .public_nav {
         position: relative;
