@@ -297,7 +297,7 @@
             <span style="color: red;">*</span>
             运费退款
           </span>
-          <span> <el-input-number v-model="pRtFreight" :controls="false" :min="0" :max="(orderDetail.orderFreight - hasRtFreight)/100" ></el-input-number></span>
+          <span> <el-input-number v-model="pRtFreight" :controls="false" :min="-1" :max="(orderDetail.orderFreight - hasRtFreight)/100" ></el-input-number></span>
           <span>元</span>
         </div>
         <div class="linh40 pl10">
