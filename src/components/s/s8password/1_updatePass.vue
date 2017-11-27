@@ -119,6 +119,9 @@
       },
       sendVerficode () {
         let that = this
+        if(that.disabled == true){
+          return
+        }
         that.disabled = true
         that.$.ajax({
           url: that.base + 'm2c.users/user/sendSms',
@@ -212,6 +215,7 @@
         that.show = false
         that.isSuccess = true
         that.total = sessionStorage.getItem('total')
+        that.disabled = true
         that.timekeeping()
       } else { // cookie 没有倒计时
         that.show = true

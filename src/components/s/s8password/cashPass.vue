@@ -99,6 +99,9 @@
       sendVerficode () {
         //alert(0)
         let that = this
+        if(that.disabled == true){
+          return
+        }
         that.disabled = true // 把按钮设置为不可以点击
         that.$.ajax({
           url: that.base + 'm2c.users/user/sendSms',
@@ -228,6 +231,7 @@
         that.show = false
         that.isSuccess = true
         that.total = sessionStorage.getItem('totalT')
+        that.disabled = true
         that.timekeeping()
       } else { // cookie 没有倒计时
         that.show = true

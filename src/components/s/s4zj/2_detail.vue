@@ -29,8 +29,8 @@
         style="width: 100%">
         <el-table-column
           label="业务号"
-          width="300">
-          <template slot-scope="scope"><span v-if="scope.row.businessType != 4 && scope.row.businessType != 5">{{scope.row.businessId}}</span><span v-if="scope.row.businessType == 4">售后单号：&nbsp{{scope.row.businessId}}</span><span v-if="scope.row.businessType == 5">售后单号：&nbsp{{scope.row.businessId}}</span><br/>
+          width="400">
+          <template slot-scope="scope"><span v-if="scope.row.businessType != 5 && scope.row.businessType != 6 && scope.row.businessType != 7 ">{{scope.row.businessId}}</span><span v-if="scope.row.businessType == 5 || scope.row.businessType == 6 || scope.row.businessType == 7">售后单号：&nbsp{{scope.row.businessId}}</span><br/>
             <span v-if="scope.row.businessType == 4 || scope.row.businessType == 5"  style="font-size:3px;color: lightsteelblue ">{{scope.row.correlationBusinessId}}</span></template>
         </el-table-column>
         <el-table-column

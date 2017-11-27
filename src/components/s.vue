@@ -187,10 +187,6 @@
       // window.onpopstate = function() {
       //   window.location.reload();
       //  };
-      if (sessionStorage.length === 0) {
-        that.$goRoute({path: '/slogin'})
-        return
-      }
       window.onbeforeunload = function () {
         sessionStorage.setItem('active_path', that.$('.right_nav_content').text())
       }
@@ -203,6 +199,10 @@
     beforeCreate () {
       //document.title = '拍获-商家平台'
       document.querySelector('#favicon').href = '/static/favicon_s.ico'
+      if (!sessionStorage.getItem('mToken')) {
+        this.$goRoute({path: '/slogin'})
+        return
+      }
     },
     watch: {
       '$route':"change"
@@ -500,8 +500,8 @@ body {
         top: 50%;
         margin-top: -12px;
         left: 21px;
-        width: 24px;
-        height: 24px;
+        width: 22px;
+        height: 22px;
       }
       .public_nav {
         position: relative;

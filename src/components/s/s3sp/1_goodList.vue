@@ -110,7 +110,7 @@
               <el-table-column
                 label="状态"
                 show-overflow-tooltip>
-                <template slot-scope="scope"><span >{{scope.row.goodsStatus==1?'仓库':scope.row.goodsStatus==2?'出售中':scope.row.goodsStatus==3?'已售罄':''}}</span></template>
+                <template slot-scope="scope"><span >{{scope.row.goodsStatus==1?'仓库中':scope.row.goodsStatus==2?'出售中':scope.row.goodsStatus==3?'已售罄':''}}</span></template>
               </el-table-column>
 
             </el-table>

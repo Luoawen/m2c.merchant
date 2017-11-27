@@ -227,10 +227,10 @@
             </div>
           </div>
         </td>
-        <td class="a3">{{(orderDetail.goodsInfo.price).toFixed(2)}}</td>
+        <td class="a3">{{(orderDetail.goodsInfo.price).toFixed(2)/100}}</td>
         <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
-        <td class="a5">{{(orderDetail.goodsInfo.totalPrice).toFixed(2)}}</td>
-        <td class="a5">{{(orderDetail.backMoney).toFixed(2)}}</td>
+        <td class="a5">{{(orderDetail.goodsInfo.totalPrice).toFixed(2)/100}}</td>
+        <td class="a5">{{(orderDetail.backMoney).toFixed(2)/100}}</td>
       </tr>
       </tbody>
     </table>
@@ -747,7 +747,7 @@
         that.shipmentForm.expressName=choosenItem.expressName
       }
       ,handleShipment(){
-
+        let that = this
         //shipmentForm.expressWay==0
         if(that.shipmentForm.expressWay==0){
             if(that.shipmentForm.expressCode == '' || that.shipmentForm.expressCode == undefined){
@@ -764,12 +764,10 @@
           if(that.shipmentForm.phone == '' || that.shipmentForm.phone == undefined){
             that.show_tip("请输入配送员电话")
           }
-          if(shipmentForm.expressNo == '' || shipmentForm.expressNo == undefined){
+          if(that.shipmentForm.expressNo == '' || that.shipmentForm.expressNo == undefined){
             that.show_tip("请输入运单号")
           }
         }
-
-        let that = this
         that.$.ajax({
           type: 'PUT',
           url: this.base + 'm2c.scm/order/aftersale/dealer/ship',

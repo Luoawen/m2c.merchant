@@ -35,14 +35,20 @@
           width="120"
           show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-dropdown trigger="click">
+            <!--<el-dropdown trigger="click">
               <span class="el-dropdown-link">
-                操作<i class="el-icon-arrow-down el-icon--right"></i>
+                操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail')">详情</el-dropdown-item>
               </el-dropdown-menu>
-            </el-dropdown>
+            </el-dropdown>-->
+            <el-button
+              @click.native.prevent="handleCommand(scope.$index, scope.row,'_detail')"
+              type="text"
+              size="small">
+              详情
+            </el-button>
           </template>
         </el-table-column>
         <el-table-column
