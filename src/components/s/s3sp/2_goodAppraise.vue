@@ -125,7 +125,7 @@
                   <div class="imgUl">
                     <ul>
                       <li>
-                        <img :src="comment.commentImages[imgIndex]" />
+                        <img :src="datacomment[rowIndex].commentImages[imgIndex]" />
                       </li>
                     </ul>
                   </div>
@@ -404,7 +404,7 @@
   top: 0px;
   background: #000;
   z-index: 999;
-  opacity: 0.5;
+  opacity: 0.3;
 }
   .imgWrap{
     width:660px;
