@@ -524,7 +524,7 @@
   height: 280px;
   background: #fff;
   z-index: 9999;
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
   margin-left: -200px;

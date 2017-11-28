@@ -1,5 +1,5 @@
 <template>
-  <div class="content clear">
+  <div class="content clear" style="min-height:600px;">
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane label="品牌库" name="first">
         <div class="searchWrap">
@@ -148,20 +148,23 @@
         <p><span>品牌名称：</span>{{goodInfo.brandName==''?'--':goodInfo.brandName}}</p>
         <p><span>英文名称：</span>{{goodInfo.brandNameEn==''?'--':goodInfo.brandNameEn}}</p>
         <p><span>品牌区域：</span>
-          <span v-if="goodInfo.firstAreaName=='' && goodInfo.twoAreaName=='' && goodInfo.threeAreaName==''">--</span>
-          <span v-if="goodInfo.firstAreaName != '' || goodInfo.twoAreaName!='' || goodInfo.threeAreaName!=''">
-          {{goodInfo.firstAreaName==''?'':goodInfo.firstAreaName}}
-          {{goodInfo.twoAreaName=='' ? '': ','+ goodInfo.twoAreaName}}
-          {{goodInfo.threeAreaName==''? '': ',' + goodInfo.threeAreaName}}</span>
+          <template v-if="goodInfo.firstAreaName=='' && goodInfo.twoAreaName=='' && goodInfo.threeAreaName==''">--</template>
+          <template v-if="goodInfo.firstAreaName != '' || goodInfo.twoAreaName!='' || goodInfo.threeAreaName!=''">
+            {{goodInfo.firstAreaName==''?'':goodInfo.firstAreaName}}
+            {{goodInfo.twoAreaName=='' ? '': ','+ goodInfo.twoAreaName}}
+            {{goodInfo.threeAreaName==''? '': ',' + goodInfo.threeAreaName}}</template>
         </p>
-        <div><span>品牌LOGO：</span>
-          <span v-if="goodInfo.brandLogo != ''"><img :src="goodInfo.brandLogo" /></span>
-          <span v-if="goodInfo.brandLogo == ''">--</span>
+        <div>
+          <span>品牌LOGO：</span>
+          <template v-if="goodInfo.brandLogo != ''"><img :src="goodInfo.brandLogo" /></template>
+          <template v-if="goodInfo.brandLogo == ''">--</template>
         </div>
-        <div v-show="isBrandApprove">
-          <p class="goodInfop" v-show="goodInfo.rejectReason!==''"><span>拒绝原因：</span>{{goodInfo.rejectReason}}</p>
-        </div>
-        <button @click="goodInfoShow=!goodInfoShow">返回</button>
+        <span v-show="activeName=='second'">
+            <p v-show="goodInfo.rejectReason!==''"><span>拒绝原因：</span>{{goodInfo.rejectReason}}</p>
+            <el-button v-show="goodInfo.approveStatus!==2" type="primary" size="medium" @click="agreeGoodShow(goodInfo.approveId)">同意</el-button>
+            <el-button v-show="goodInfo.approveStatus!==2" type="danger" size="medium" @click="rejectGoodShow(goodInfo.approveId)">拒绝</el-button>
+              </span>
+        <el-button size="medium" @click="goodInfoShow=!goodInfoShow">返回</el-button>
       </div>
       <!--删除-->
       <div class="delectGoodBg" v-if="delectGoodBg"></div>
@@ -194,9 +197,16 @@
       <em class="bread" v-if="changeGoodShow && handle_toggle=='add'">> 新增品牌</em>
       <em class="bread" v-if="changeGoodShow && handle_toggle!='add'">> 修改品牌</em>
       <div class="goodInfo changeGoodInfo" v-if="changeGoodShow">
-        <p><span style="color: red">*</span>品牌名称：<input type="text" v-model="add_modify_params.brandName"  maxlength="10" placeholder="1-10字符"/></p>
-        <p>英文名称：<input type="text" v-model="add_modify_params.brandNameEn"  maxlength="20" placeholder="1-20字符"/></p>
-        <div>品牌区域：
+        <p>
+          <span><i class="red">*</i>品牌名称：</span>
+          <el-input v-model="add_modify_params.brandName" maxlength="10" placeholder="1-10字符"></el-input>
+        </p>
+        <p>
+          <span>英文名称：</span>
+          <el-input v-model="add_modify_params.brandNameEn"  maxlength="20" placeholder="1-20字符"></el-input>
+        </p>
+        <div>
+          <span>品牌区域：</span>
           <select id="country_select" v-model="add_modify_params.firstAreaCode">
             <option value=""></option>
             <option v-for="(cell,index) in country_all_search" :key="index" :value="cell.code">
@@ -216,20 +226,18 @@
             </option>
           </select>
         </div>
-        <div>品牌LOGO：
+        <div><span>品牌LOGO：</span>
           <input type="file" id="m11yhgl_img_input" style="display:none" @change="upload_img()">
-                <div class="img_up">
-                  <img width="60" height="60" v-show='imgshow' id="m11yhgl_img">
-                </div>
-                <span class="upload" onclick="document.querySelector('#m11yhgl_img_input').click()"><div style="color:#337ab7;cursor:pointer;display:inline;">点击上传(小于1M)</div></span>
+          <div class="img_up" onclick="document.querySelector('#m11yhgl_img_input').click()">
+            <img width="100" height="100" v-show='imgshow' id="m11yhgl_img">
+          </div>
+          <span class="upload">请上传1M以内的图片</span>
         </div>
-        <button @click="change_confirm()">保存</button>
-        <button v-show="" @click="approve_confirm()">提交审核</button>
-        <button @click="changeGoodShow=!changeGoodShow">返回</button>
+        <el-button type="primary" size="medium" @click="change_confirm()">保存</el-button>
+        <el-button size="medium" style="margin-left:20px;margin-top:29px;" @click="changeGoodShow=!changeGoodShow">返回</el-button>
       </div>
   </div>
 </template>
-
 <script>
   export default {
     name: '',
@@ -977,25 +985,27 @@
 /*详情*/
 #myTabContent{position:relative;}
 em.bread{position:fixed; top:80px;left:367px;font-style:normal;color:#333;z-index:9999;}
-.goodInfo{position:absolute;top:-50px;left:0;width:100%;height:840px;padding-top:40px;background:#fff;z-index:99;}
-.goodInfo p,.goodInfo div,.goodInfo button{margin-left:80px;margin-top:20px;}
-.goodInfo div img{width:60px;height:60px; display:inline-block;}
-.goodInfo button{width:150px;height:50px;border:1px solid #ccc; text-align: center;}
-.goodInfo .goodInfop
-{
-  width:300px;
-  word-break:break-all;
-}
-.goodInfo .goodInfop span{
-  margin-left: -80px; display:inline-block;width:80px;
-}
+.goodInfo{position:absolute;top:-50px;left:0;width:100%;height:840px;padding-top:80px;background:#fff;z-index:99;}
+  .goodInfo p,.goodInfo div{margin-left:160px;margin-top:20px;line-height:36px;}
+  .goodInfo button{margin-left:160px;margin-top:20px;}
+  .goodInfo div img{width:100px;height:100px; display:inline-block;}
+  .goodInfo .goodInfop
+  {
+    width:400px;
+    word-break:break-all;
+  }
+  .goodInfo p span,.goodInfo div span{
+    margin-left: -160px; display:inline-block;width:160px;padding-right:20px;text-align: right;
+  }
+  .goodInfo div span.upload{display: block;margin-left:0px;color:#999;}
+  .goodInfo p div,.goodInfo div div{margin-left:0;}
 /*删除*/
 .delectGoodCon {
   width: 400px;
   height: 280px;
   background: #fff;
   z-index: 9999;
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
   margin-left: -200px;
@@ -1064,13 +1074,13 @@ em.bread{position:fixed; top:80px;left:367px;font-style:normal;color:#333;z-inde
     color: #444;
   }
 }
-/*.delectGoodBg{position:absolute;top:0;left:0;width:100%;height:880px;background:rgba(0,0,0,0.6);z-index:99;}*/
+.delectGoodBg{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:999;}
 /*.delectGoodWrap{position:absolute;width:380px;height:280px;padding:10px;border-radius:10px;top:50%;left:50%;margin-left:-200px;background:#fff;z-index:99;}*/
 /*.delectGoodWrap p{line-height:50px;}*/
 .blueBtn,.defultBtn{background:rgb(96, 174, 246);width:80px;height:30px;border-radius:4px;text-align: center;color:#fff;}
 .defultBtn{background:#ccc;}
 /*修改/新增*/
-.changeGoodInfo input,.changeGoodInfo select{width:200px;line-height:40px;color:#666;}
+.changeGoodInfo input,.changeGoodInfo select{width:200px;line-height:34px;color:#666;}
 .zIndex2{z-index:21;}
 .sz .tab-content .tab-pane .search_cell .time{top:50px;left:14px;width:450px;}
 .icon{width:40px;height:40px;z-index:11;display:inline-block;}

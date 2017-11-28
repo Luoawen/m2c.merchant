@@ -228,6 +228,14 @@ body {
   background: #F4F5FA; // height: 100%;
 }
   label{font-weight: normal;}
+  select {
+      width:100%;height:34px;border:solid 1px #d8dce5;font-size:12px;line-height:34px;border-radius:3px;margin-top:7px;
+      padding-right: 14px;padding-left:10px;
+      appearance:none;
+      -moz-appearance:none;
+      -webkit-appearance:none;
+      background: url(../assets/images/ico_arrows.png) no-repeat scroll right center transparent;
+    }
   i.red{
     color: red;display:inline-block;padding-right:6px;font-size:12px;
 		font-style: normal;
