@@ -129,98 +129,6 @@
           </el-row>
         </div>
       </div>
-      <!-- <div class="poi2 Advanced_s" v-show="Advancedshow===true">
-        <div class="">
-          <div class="titbt">高级搜索<i @click="Advancedshow=!Advancedshow" class="close"></i></div>
-          <div class="clear">
-            <div class="col-sm-6 left">
-              <div class="clear mt10 mb20">
-                <span class="bt fl ">关键词</span>
-                <input class="form-control fl " placeholder="输入商品名称/订单号/支付单号/收货人号码" v-model="searchParams.condition"/>
-              </div>
-              <div class="clear mt10 mb20">
-                <span class="bt fl ">订单状态</span>
-                <select class="form-control fl " v-model="searchParams.orderStatus">
-                  <option value="" selected>全部</option>
-                  <option value="0">待付款</option>
-                  <option value="1">待发货</option>
-                  <option value="2">待收货</option>
-                  <option value="3">已完成</option>
-                  <option value="4">交易完成</option>
-                  <option value="5">交易关闭</option>
-                  <option value="-1">已取消</option>
-                </select>
-              </div>
-              <div class="clear mt10 mb20">
-                <span class="bt fl ">售后状态</span>
-                <select class="form-control fl " v-model="searchParams.afterSellStatus">
-                  <option value="" selected>全部</option>
-                  <option value="0">申请退货</option>
-                  <option value="1">申请换货</option>
-                  <option value="2">申请退款</option>
-                  <option value="3">商家已拒绝</option>
-                  <option value="4">已同意申请</option>
-                  <option value="5">客户已寄出</option>
-                  <option value="6">商家已收到</option>
-                  <option value="7">商家已寄出</option>
-                  <option value="8">客户已收到</option>
-                  <option value="9">已同意退款</option>
-                  <option value="10">商家已退款</option>
-                  <option value="11">售后已完成</option>
-                  <option value="11">售后已关闭</option>
-                  <option value="-1">售后已取消</option>
-                </select>
-              </div>
-              <div class="clear mt10 mb20">
-                <span class="bt fl ">广告位</span>
-                <select class="form-control fl " v-model="searchParams.hasMedia">
-                  <option value="" selected>全部</option>
-                  <option value="1" >有</option>
-                  <option value="0" >无</option>
-                </select>
-              </div>
-              <div class="clear mt10 mb20">
-                <span class="bt fl ">开发票</span>
-                <select class="form-control fl " v-model="searchParams.invoice">
-                  <option value="">全部</option>
-                  <option value="0" >个人</option>
-                  <option value="1" >公司</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-sm-6 right">
-              <div class="clear mt10 mb20">
-                <span class="bt fl ">下单时间</span>
-                <span class="clear">
-                  <span class="fl"><input class="form-control time" type="date" v-model="searchParams.startTime"/></span>
-                  <span class="fl mr10" style="display:inline-block;line-height:40px;">~</span>
-                  <span class="fl"><input class="form-control time" type="date" v-model="searchParams.endTime"/></span>
-                </span>
-              </div>
-              <div class="clear mt10 mb20">
-                <span class="bt fl ">评论状态</span>
-                <select class="form-control fl " v-model="searchParams.commentStatus">
-                  <option value="" selected>全部</option>
-                  <option value="1">有</option>
-                  <option value="0">无</option>
-                </select>
-              </div>
-              <div class="clear mt10 mb20">
-                <span class="bt fl ">支付方式</span>
-                <select class="form-control fl " v-model="searchParams.payWay">
-                  <option value="" selected>全部</option>
-                  <option value="1" >支付宝</option>
-                  <option value="2" >微信</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="footer clear">
-            <el-button type="primary" size="medium" @click="search()">搜索</el-button>
-            <el-button size="medium" @click="clearAll()">重置</el-button>
-          </div>
-        </div>
-      </div> -->
     </div>
     <div class="good_info ">
       <table id="table"  class="notetable col-sm-12">
@@ -280,10 +188,7 @@
               <div class="a4 fl mt10" style="width:14%;text-align:center;">
                 <!-- 有几种情况的不同表现方 -->
                 <div style="">
-                  <div class="">
-                    <!-- {{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :goodsItem.afStatus==6? '商家收到':goodsItem.afStatus==7? '商家寄出':goodsItem.afStatus==8? '客户收到':goodsItem.afStatus==9? '确认退款':'--'}} -->
-                    {{afStatus==0?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==1?'待商家同意':goodsItem.afStatus==4?'待顾客寄回商品':goodsItem.afStatus==5?'顾客已寄出':goodsItem.afStatus==6?'待商家发货':goodsItem.afStatus==7?'待顾客收货':goodsItem.afStatus>=8?'售后已完成':'--'):afStatus==1?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==0?'待商家同意':goodsItem.afStatus==4?'待顾客寄回商品':goodsItem.afStatus==5?'顾客已寄出':goodsItem.afStatus==6?'待商家确认退款':goodsItem.afStatus>=9?'售后已完成':'--'):afStatus==2?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==2?'待商家同意':goodsItem.afStatus==4?'待商家确认退款':goodsItem.afStatus>=9?'售后已完成':'--'):'--'}}
-                  </div>
+                  <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :goodsItem.afStatus==6? '商家收到':goodsItem.afStatus==7? '商家寄出':goodsItem.afStatus==8? '客户收到':goodsItem.afStatus==9? '确认退款':'--'}}</div>
                   <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.backMoney, item.orderFreight, item.dealerOrderId, goodsItem.skuId)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
                   <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" v-show="goodsItem.afStatus>=0 && goodsItem.afStatus<=2">拒绝</button></div>
                 </div>
