@@ -124,5 +124,5 @@ html,body{font-family:MicrosoftYaHei!important}
 /*.BMap_Marker,[unselectable="on"]{display:none}*/
 
 /* 设置图片的初始样式 */
-.img_up{width: 60px; height:60px; display: inline-block; background: url('../images/icon_uoloading.png')}
+.img_up{width: 100px; height:100px; display: inline-block; background: url('../images/img_add.png')}
 /*img[src=''],img:not([src]){background:url('../images/icon_uoloading.png') no-repeat center center/100% 100%;border:none}*/

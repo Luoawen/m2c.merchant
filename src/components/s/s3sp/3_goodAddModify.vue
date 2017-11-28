@@ -1319,6 +1319,7 @@
             }else{
               that.$('#skuFlag1').hide()
             }
+            //that.$refs.ue.getUEContent()
             that.$refs.ue.setUEContent(result.content.goodsDesc)
           }
         })
