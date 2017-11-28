@@ -227,6 +227,7 @@ html {
 body {
   background: #F4F5FA; // height: 100%;
 }
+  label{font-weight: normal;}
   i.red{
     color: red;display:inline-block;padding-right:6px;font-size:12px;
 		font-style: normal;

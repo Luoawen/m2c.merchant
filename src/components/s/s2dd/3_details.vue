@@ -91,7 +91,7 @@
 
                 <!-- 用户期望退款--> <!-- 1.商户同意售后 2.商户同意退款 3.商户确认退款 -->
                 <div class="oprs" v-show="orderDetail.status==4 && orderDetail.orderType==2"><!-- 商户同意退款 -->
-                  <el-button size="mini" @click="agreedRefund()">同意退款</el-button>
+                  <el-button size="mini" style="margin:-1px 0 0 -1px;" @click="agreedRefund()">同意退款</el-button>
                 </div>
                 <!--<div class="oprs" v-show="orderDetail.status==9 && orderDetail.orderType==2">
                   <el-button size="mini" round @click="confirmRefund()">确认退款</el-button>

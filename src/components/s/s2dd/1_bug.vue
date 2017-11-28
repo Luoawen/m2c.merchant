@@ -3,7 +3,7 @@
     <div class="searcWrap">
       <el-select v-model="searchParams.orderStatus" placeholder="订单状态">
         <el-option
-          v-for="orderStatu in orderStatus"
+          v-for="orderStatu in orderStatuses"
           :key="orderStatu.value"
           :label="orderStatu.label"
           :value="orderStatu.value">
@@ -11,7 +11,7 @@
       </el-select>
       <el-select v-model="searchParams.afterSellStatus" placeholder="售后状态">
         <el-option
-          v-for="afterSellStatu in afterSellStatus"
+          v-for="afterSellStatu in afterSellStatuses"
           :key="afterSellStatu.value"
           :label="afterSellStatu.label"
           :value="afterSellStatu.value">
@@ -29,7 +29,107 @@
       <el-button type="primary" size="medium" @click="search()">搜索</el-button>
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
       <!-- 高级搜索 -->
-      <div class="poi2 Advanced_s" v-show="Advancedshow===true">
+      <div class="soloSearchBox" v-if="Advancedshow">
+        <h4>高级搜索<a class="close" @click="Advancedshow=!Advancedshow"></a></h4>
+        <div class="searcWrap mess">
+          <el-row :gutter="20">
+            <el-col :span="3" class="alginRight">关键词：</el-col>
+            <el-col :span="9">
+              <el-input v-model="searchParams.condition" placeholder="输入商品名称/订货号/支付单号/收货人号码/商家名称/商家ID" title="输入商品名称/订货号/支付单号/收货人号码/商家名称/商家ID"></el-input>
+            </el-col>
+            <el-col :span="3" class="alginRight">下单时间</el-col>
+            <el-col :span="9">
+              <el-date-picker style="padding-bottom:1px;"
+                v-model="time"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期" value-format="yyyy-MM-dd"
+                @change="timeCheck">
+              </el-date-picker><!--时间-->
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="3" class="alginRight">订单状态：</el-col>
+            <el-col :span="9">
+              <el-select v-model="searchParams.orderStatus" placeholder="订单状态">
+                <el-option
+                  v-for="orderStatu in orderStatuses"
+                  :key="orderStatu.value"
+                  :label="orderStatu.label"
+                  :value="orderStatu.value">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="3" class="alginRight">评论状态：</el-col>
+            <el-col :span="9">
+              <el-select v-model="searchParams.commentStatus" placeholder="评论状态">
+                <el-option
+                  v-for="commentStatu in commentStatus"
+                  :key="commentStatu.value"
+                  :label="commentStatu.label"
+                  :value="commentStatu.value">
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="3" class="alginRight">售后状态：</el-col>
+            <el-col :span="9">
+              <el-select v-model="searchParams.afterSellStatus" placeholder="售后状态">
+                <el-option
+                  v-for="afterSellStatu in afterSellStatuses"
+                  :key="afterSellStatu.value"
+                  :label="afterSellStatu.label"
+                  :value="afterSellStatu.value">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="3" class="alginRight">支付方式：</el-col>
+            <el-col :span="9">
+              <el-select v-model="searchParams.payWay" placeholder="支付方式">
+                <el-option
+                  v-for="isPayDeposit in isPayDeposits"
+                  :key="isPayDeposit.value"
+                  :label="isPayDeposit.label"
+                  :value="isPayDeposit.value">
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="3" class="alginRight">开发票：</el-col>
+            <el-col :span="9">
+              <el-select v-model="searchParams.invoiceType" placeholder="开发票">
+                <el-option
+                  v-for="invoiceType in invoiceTypes"
+                  :key="invoiceType.value"
+                  :label="invoiceType.label"
+                  :value="invoiceType.value">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="3" class="alginRight">广告位：</el-col>
+            <el-col :span="9">
+              <el-select v-model="searchParams.mediaInfo" placeholder="广告位">
+                <el-option
+                  v-for="mediaInfo in mediaInfos"
+                  :key="mediaInfo.value"
+                  :label="mediaInfo.label"
+                  :value="mediaInfo.value">
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20" class="mt20">
+            <el-col :span="20" :offset="3">
+              <el-button type="primary" size="medium" @click="search()">搜索</el-button>
+              <el-button size="medium" @click="clearAll()">重置</el-button>
+            </el-col>
+          </el-row>
+        </div>
+      </div>
+      <!-- <div class="poi2 Advanced_s" v-show="Advancedshow===true">
         <div class="">
           <div class="titbt">高级搜索<i @click="Advancedshow=!Advancedshow" class="close"></i></div>
           <div class="clear">
@@ -103,12 +203,6 @@
                   <option value="0">无</option>
                 </select>
               </div>
-              <!--<div class="clear mt10 mb20">
-                <span class="bt fl ">订单类型</span>
-                <select class="form-control fl " v-model="searchParams.orderClassify">
-                  <option value="" selected>全部</option>
-                </select>
-              </div>-->
               <div class="clear mt10 mb20">
                 <span class="bt fl ">支付方式</span>
                 <select class="form-control fl " v-model="searchParams.payWay">
@@ -124,7 +218,7 @@
             <el-button size="medium" @click="clearAll()">重置</el-button>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="good_info ">
       <table id="table"  class="notetable col-sm-12">
@@ -328,8 +422,12 @@
         searchParams: { orderStatus: '', afterSellStatus: '', startTime: '', endTime: '', condition: '',orderClassify:'', payWay:'', hasMedia:'', invoice: '',commentStatus:''},
         afStatus : -2,
         saleAfterNo : '',
-        orderStatus:[{value:'',label:'订单状态'},{value:'0',label:'待付款'},{value:'1',label:'待发货'},{value:'2',label:'待收货'},{value:'3',label:'已完成'},{value:'4',label:'交易完成'},{value:'5',label:'交易关闭'},{value:'-1',label:'已取消'}],
-        afterSellStatus:[{value:'',label:'售后状态'},{value:'0',label:'申请退货'},{value:'1',label:'申请换货'},{value:'2',label:'申请退款'},{value:'3',label:'商家拒绝申请'},{value:'4',label:'商家同意申请'},{value:'5',label:'客户寄出'},{value:'6',label:'商家收到'},{value:'7',label:'商家寄出'},{value:'8',label:'客户收到'},{value:'9',label:'同意退款'},{value:'10',label:'已退款'},{value:'11',label:'售后完成'},{value:'12',label:'售后关闭'},{value:'-1',label:'已取消'}],
+        orderStatuses:[{value:'',label:'订单状态'},{value:'0',label:'待付款'},{value:'1',label:'待发货'},{value:'2',label:'待收货'},{value:'3',label:'已完成'},{value:'4',label:'交易完成'},{value:'5',label:'交易关闭'},{value:'-1',label:'已取消'}],
+        afterSellStatuses:[{value:'',label:'售后状态'},{value:'0',label:'申请退货'},{value:'1',label:'申请换货'},{value:'2',label:'申请退款'},{value:'3',label:'商家拒绝申请'},{value:'4',label:'商家同意申请'},{value:'5',label:'客户寄出'},{value:'6',label:'商家收到'},{value:'7',label:'商家寄出'},{value:'8',label:'客户收到'},{value:'9',label:'同意退款'},{value:'10',label:'已退款'},{value:'11',label:'售后完成'},{value:'12',label:'售后关闭'},{value:'-1',label:'已取消'}],
+        commentStatus:[{value:'',label:'评论状态'},{value:'0',label:'待评论'},{value:'1',label:'已评论'}],
+        isPayDeposits:[{value:'',label:'支付方式'},{value:'1',label:'支付宝'},{value:'2',label:'微信'}],// 支付方式
+        invoiceTypes:[{value:'',label:'开发票'},{value:'0',label:'个人'},{value:'1',label:'公司'}], // 发票
+        mediaInfos:[{value:'',label:'广告位'},{value:'0',label:'无'},{value:'1',label:'有'}], // 广告位
         time:''
         ,pRtFreight:0
         ,showRt: false
@@ -492,6 +590,7 @@
         that.searchParams.condition1= '';
         that.searchParams.startTime1= '';
         that.searchParams.endTime1= '';
+        that.time = ''
       }
       ,agreeApply() {
         let that = this;
@@ -603,61 +702,24 @@
 </script>
 <style lang="scss" scoped>
   .content{
-    .Advanced_s{
-      width: 100%;
-      min-height: 430px;
-      background: #fff;
-      z-index: 99;
-      top: 0px;
-      left: 0px;
-      padding:20px;
-      i.close{
+    .soloSearchBox{position:absolute;top:0;left:0;height:auto;padding:20px;width:100%;background:#fff;z-index:2;
+      h4 a.close{
         opacity:1;display:inline-block;width:24px;height:24px;float:right; mergin-right:20px;background:url(../../../assets/images/ico_close.png) no-repeat center center;
       }
-      .left,.right{
-        .bt{
-          display: inline-block;
-          width: 80px;
-          line-height: 40px;
-          text-align: right;
-          padding-right: 10px;
+      .searcWrap{width:100%;height:auto;position:relative;}
+      .mess{
+        margin-top: 30px;padding:0px 40px;padding-bottom:30px;background:#fff;
+        h4{
+          line-height:50px;
+          margin-bottom:10px;
+          font-size:16px;
+          color:#333;
         }
-        input,select{
-          width: 75%;
-          height: 40px;
-          line-height: 40px;
-        }
-        .time{
-          width: 165px;
-          margin-right: 10px;
-
-        }
+        .inline{display:inline-block;line-height:50px;}
+        .modify{margin-left:10px;line-height:50px;width:16px;height:16px;background:url(../../../assets/images/ico_compile.png) no-repeat center center;}
       }
-      .titbt{
-        font-size: 18px;
-        color: #333333;
-      }
-      .footer{
-        padding-left: 30px;
-        .footerbtn{
-          border: 1px solid #CCCCCC;
-          border-radius: 2px;
-          width: 80px;
-          height: 30px;
-          line-height: 30px;
-          font-size: 14px;
-          color: #333333;
-          text-align: center;
-        }
-        .sort{
-          background: #0086FF;
-          border-radius: 2px;
-          color: #FFFFFF;
-        }
-        .czt{
-          background: #fff;
-        }
-      }
+      .alginRight{text-align: right; line-height:50px;color:#666;}
+      .formControl{display:inline-block;width:100%;height:36px;padding:6px 12px; line-height:50px;font-size:14px;background:#fff;border:1px solid #ccc;border-radius:4px;}
     }
     .dropdown{
       display: inline-block;
