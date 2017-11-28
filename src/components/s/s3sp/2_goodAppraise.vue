@@ -29,8 +29,72 @@
       <el-button type="primary" size="medium" @click="get_comment_info()">搜索</el-button>
       <span class="ml10 gjsort" @click="advancedSearch">高级搜索</span>
     </div>
-
-    <div class="poi2 Advanced_s" v-show="advancedShow">
+    <div class="soloSearchBox" v-if="advancedShow">
+      <h4>高级搜索<a class="close" @click="advancedShow=!advancedShow"></a></h4>
+      <div class="searcWrap mess">
+        <el-row :gutter="20">
+          <el-col :span="3" class="alginRight">关键词：</el-col>
+          <el-col :span="9">
+            <el-input v-model="search_params.condition" placeholder="输入商品名称/订单号/顾客姓名/顾客手机号/商家名称/商家ID" title="输入商品名称/订单号/顾客姓名/顾客手机号/商家名称/商家ID"></el-input>
+          </el-col>
+          <el-col :span="3" class="alginRight">评价时间：</el-col>
+          <el-col :span="9">
+            <el-date-picker style="padding-bottom:1px;"
+              v-model="time"
+              type="daterange"
+              range-separator="-"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期" value-format="yyyy-MM-dd"
+              @change="timeCheck">
+            </el-date-picker><!--时间-->
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="3" class="alginRight">回复状态：</el-col>
+          <el-col :span="9">
+            <el-select v-model="search_params.replyStatus" placeholder="回复状态">
+              <el-option
+                v-for="replyStatu in replyStatuses"
+                :key="replyStatu.value"
+                :label="replyStatu.label"
+                :value="replyStatu.value">
+              </el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="3" class="alginRight">评价星级：</el-col>
+          <el-col :span="9">
+            <el-select v-model="search_params.starLevel" placeholder="评价星级">
+              <el-option
+                v-for="starLevel in leveles"
+                :key="starLevel.value"
+                :label="starLevel.label"
+                :value="starLevel.value">
+              </el-option>
+            </el-select>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="3" class="alginRight">图片情况：</el-col>
+          <el-col :span="9">
+            <el-select v-model="search_params.imageStatus" placeholder="图片情况">
+              <el-option
+                v-for="imageStatu in imageStatuses"
+                :key="imageStatu.value"
+                :label="imageStatu.label"
+                :value="imageStatu.value">
+              </el-option>
+            </el-select>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" class="mt20">
+          <el-col :span="20" :offset="3">
+            <el-button type="primary" size="medium" @click="get_comment_info()">搜索</el-button>
+            <el-button size="medium" @click="clearAll()">重置</el-button>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
+    <!-- <div class="poi2 Advanced_s" v-show="advancedShow">
       <div class="">
         <div class="titbt">高级搜索<i @click="advancedShow=!advancedShow" class="close"></i></div>
         <div class="clear">
@@ -83,7 +147,7 @@
           <el-button size="medium" @click="clearAll()">重置</el-button>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="comment_info  clear" style="margin-top:20px;">
       <table class="comment_table col-sm-12" id="table" style="table-layout:fixed">
         <thead>
@@ -215,6 +279,7 @@
         reply_params: {commentId: '', replyContent: ''},
         replyStatuses: [{value: '', label: '回复状态'}, {value: '1', label: '未回复'}, {value: '2', label: '已回复'}], // 回复状态
         leveles: [{value: '', label: '评价星级'}, {value: '1', label: '1星'}, {value: '2', label: '2星'}, {value: '3', label: '3星'}, {value: '4', label: '4星'}, {value: '5', label: '5星'}], // 评价星级
+        imageStatuses:[{value: '', label: '图片情况'}, {value: '1', label: '无图'}, {value: '2', label: '有图'}], // 图片情况
         datacomment: '',
         showhptc: false,
         commentId: '',
@@ -269,6 +334,7 @@
         that.search_params.endTime = ''
         that.search_params.startTime = ''
         that.search_params.imageStatus = ''
+        that.time = ''
       },
       advancedSearch () {
         let that = this
@@ -841,64 +907,24 @@
 .icon{width:40px;height:40px;z-index:11;display:inline-block;}
 .timeIcon{background:url(../../../assets/images/ico_calendar@2x.png) no-repeat center bottom;background-size:19px 20px;}
 .searchIcon{background:url(../../../assets/images/ico_search.png) no-repeat center center;background-size:20px 20px;}
-.Advanced_s{
-  width: 100%;
-  min-height: 430px;
-  background: #fff;
-  z-index: 99;
-  top: 0px;
-  left: 10px;
-  padding:20px;
-  i.close{
+.soloSearchBox{position:absolute;top:0;left:0;height:auto;padding:20px;width:100%;background:#fff;z-index:2;
+  h4 a.close{
     opacity:1;display:inline-block;width:24px;height:24px;float:right; mergin-right:20px;background:url(../../../assets/images/ico_close.png) no-repeat center center;
   }
-  .left,.right{
-    .bt{
-      display: inline-block;
-      width: 80px;
-      line-height: 40px;
-      text-align: right;
-      padding-right: 10px;
+  .searcWrap{width:100%;height:auto;position:relative;}
+  .mess{
+    margin-top: 30px;padding:0px 40px;padding-bottom:30px;background:#fff;
+    h4{
+      line-height:50px;
+      margin-bottom:10px;
+      font-size:16px;
+      color:#333;
     }
-    input,select{
-      width: 75%;
-      height: 40px;
-      line-height: 40px;
-    }
-    .time{
-      width: 165px;
-      margin-right: 10px;
-
-    }
+    .inline{display:inline-block;line-height:50px;}
+    .modify{margin-left:10px;line-height:50px;width:16px;height:16px;background:url(../../../assets/images/ico_compile.png) no-repeat center center;}
   }
-  .titbt{
-    font-size: 18px;
-    color: #333333;
-  }
-  .footer{
-    padding-left: 30px;
-    .footerbtn{
-      border: 1px solid #CCCCCC;
-      border-radius: 2px;
-      width: 80px;
-      height: 30px;
-      line-height: 30px;
-      font-size: 14px;
-      color: #333333;
-      text-align: center;
-    }
-    .sort{
-      background: #0086FF;
-      border-radius: 2px;
-      color: #FFFFFF;
-    }
-    .czt{
-      background: #fff;
-    }
-  }
-}
-.poi2{
-  position: absolute;
+  .alginRight{text-align: right; line-height:50px;color:#666;}
+  .formControl{display:inline-block;width:100%;height:36px;padding:6px 12px; line-height:50px;font-size:14px;background:#fff;border:1px solid #ccc;border-radius:4px;}
 }
 .mb20{
   margin-bottom: 20px;
