@@ -227,6 +227,14 @@ html {
 body {
   background: #F4F5FA; // height: 100%;
 }
+  i.red{
+    color: red;display:inline-block;padding-right:6px;font-size:12px;
+		font-style: normal;
+  }
+  i.redTip{
+    padding-left:10px;
+    padding-top:10px;
+  }
   div.icon{
     width:16px;height:16px; display:inline-block; position:relative;
     background:url(../assets/images/ico_explain.png) no-repeat 0 0;
