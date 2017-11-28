@@ -252,7 +252,6 @@
 }
 </style>
 <style>
-  label{font-weight: normal;}
   .btn-group-lg>.btn, .btn-lg{
     padding:7px 16px;
     font-size:14px;
