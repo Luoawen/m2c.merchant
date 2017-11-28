@@ -58,15 +58,17 @@
                   <option value="0">申请退货</option>
                   <option value="1">申请换货</option>
                   <option value="2">申请退款</option>
-                  <option value="3">商家拒绝申请</option>
-                  <option value="4">商家同意申请</option>
-                  <option value="5">客户寄出</option>
-                  <option value="6">商家收到</option>
-                  <option value="7">商家寄出</option>
-                  <option value="8">客户收到</option>
-                  <option value="9">同意退款</option>
-                  <option value="10">已退款</option>
-                  <option value="11">售后完成</option>
+                  <option value="3">商家已拒绝</option>
+                  <option value="4">已同意申请</option>
+                  <option value="5">客户已寄出</option>
+                  <option value="6">商家已收到</option>
+                  <option value="7">商家已寄出</option>
+                  <option value="8">客户已收到</option>
+                  <option value="9">已同意退款</option>
+                  <option value="10">商家已退款</option>
+                  <option value="11">售后已完成</option>
+                  <option value="11">售后已关闭</option>
+                  <option value="-1">售后已取消</option>
                 </select>
               </div>
               <div class="clear mt10 mb20">
@@ -184,7 +186,10 @@
               <div class="a4 fl mt10" style="width:14%;text-align:center;">
                 <!-- 有几种情况的不同表现方 -->
                 <div style="">
-                  <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :goodsItem.afStatus==6? '商家收到':goodsItem.afStatus==7? '商家寄出':goodsItem.afStatus==8? '客户收到':goodsItem.afStatus==9? '确认退款':'--'}}</div>
+                  <div class="">
+                    <!-- {{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :goodsItem.afStatus==6? '商家收到':goodsItem.afStatus==7? '商家寄出':goodsItem.afStatus==8? '客户收到':goodsItem.afStatus==9? '确认退款':'--'}} -->
+                    {{afStatus==0?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==1?'待商家同意':goodsItem.afStatus==4?'待顾客寄回商品':goodsItem.afStatus==5?'顾客已寄出':goodsItem.afStatus==6?'待商家发货':goodsItem.afStatus==7?'待顾客收货':goodsItem.afStatus>=8?'售后已完成':'--'):afStatus==1?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==0?'待商家同意':goodsItem.afStatus==4?'待顾客寄回商品':goodsItem.afStatus==5?'顾客已寄出':goodsItem.afStatus==6?'待商家确认退款':goodsItem.afStatus>=9?'售后已完成':'--'):afStatus==2?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==2?'待商家同意':goodsItem.afStatus==4?'待商家确认退款':goodsItem.afStatus>=9?'售后已完成':'--'):'--'}}
+                  </div>
                   <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.backMoney, item.orderFreight, item.dealerOrderId, goodsItem.skuId)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
                   <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" v-show="goodsItem.afStatus>=0 && goodsItem.afStatus<=2">拒绝</button></div>
                 </div>
@@ -329,7 +334,7 @@
         afStatus : -2,
         saleAfterNo : '',
         orderStatus:[{value:'',label:'订单状态'},{value:'0',label:'待付款'},{value:'1',label:'待发货'},{value:'2',label:'待收货'},{value:'3',label:'已完成'},{value:'4',label:'交易完成'},{value:'5',label:'交易关闭'},{value:'-1',label:'已取消'}],
-        afterSellStatus:[{value:'',label:'售后状态'},{value:'0',label:'申请退货'},{value:'1',label:'申请换货'},{value:'2',label:'申请退款'},{value:'3',label:'商家拒绝申请'},{value:'4',label:'商家同意申请'},{value:'5',label:'客户寄出'},{value:'6',label:'商家收到'},{value:'7',label:'商家寄出'},{value:'8',label:'客户收到'},{value:'9',label:'同意退款'},{value:'10',label:'已退款'},{value:'11',label:'售后完成'},{value:'12',label:'售后关闭'},{value:'-1',label:'已取消'}],
+        afterSellStatus:[{value:'',label:'售后状态'},{value:'0',label:'申请退货'},{value:'1',label:'申请换货'},{value:'2',label:'申请退款'},{value:'3',label:'商家已拒绝'},{value:'4',label:'已同意申请'},{value:'5',label:'客户已寄出'},{value:'6',label:'商家已收到'},{value:'7',label:'商家已寄出'},{value:'8',label:'客户已收到'},{value:'9',label:'已同意退款'},{value:'10',label:'商家已退款'},{value:'11',label:'售后已完成'},{value:'12',label:'售后已关闭'},{value:'-1',label:'售后已取消'}],
         time:''
         ,pRtFreight:0
         ,showRt: false
