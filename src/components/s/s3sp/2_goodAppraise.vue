@@ -206,7 +206,7 @@
             </td>
             <td>
               <a class="ellipsis2" :title="comment.goodsName">{{comment.goodsName}}</a><br/><br/>
-              <div class="tdcolor mt10">规格：{{comment.skuName}}</div>
+              <div class="tdcolor mt10">规格：{{comment.skuName == ''?'默认':comment.skuName}}</div>
             </td>
             <td>
               {{comment.orderId}}
