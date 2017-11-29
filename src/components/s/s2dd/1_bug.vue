@@ -188,7 +188,7 @@
               <div class="a4 fl mt10" style="width:14%;text-align:center;">
                 <!-- 有几种情况的不同表现方 -->
                 <div style="">
-                  <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :goodsItem.afStatus==6? '商家收到':goodsItem.afStatus==7? '商家寄出':goodsItem.afStatus==8? '客户收到':goodsItem.afStatus==9? '确认退款':'--'}}</div>
+                  <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户已寄出' :goodsItem.afStatus==6? '商家已收到':goodsItem.afStatus==7? '商家已寄出':goodsItem.afStatus==8? '客户已收到':goodsItem.afStatus==9? '已确认退款':goodsItem.afStatus>=10? '售后已完成':'--'}}</div>
                   <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.backMoney, item.orderFreight, item.dealerOrderId, goodsItem.skuId)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
                   <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" v-show="goodsItem.afStatus>=0 && goodsItem.afStatus<=2">拒绝</button></div>
                 </div>
