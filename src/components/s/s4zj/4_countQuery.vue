@@ -14,7 +14,7 @@
         @change="timeCheck">
       </el-date-picker>
       <el-input v-model="search_params.condition" placeholder="输入结算号/订货号" title="输入结算号/订货号"></el-input>
-      <el-button type="primary" size="medium" @click="orderStore()">搜索</el-button>
+      <el-button type="primary" size="medium" @click="orderStore()" class="btn-search">搜索</el-button>
     </div>
     <div class="order_tab_list" style="margin-top: 20px;">
       <table class="tableHead" style="z-index:2">
