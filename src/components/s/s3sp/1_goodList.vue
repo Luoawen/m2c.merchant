@@ -18,7 +18,7 @@
               @change="timeCheck">
             </el-date-picker>
             <el-input v-model="search_goods_params.condition" placeholder="输入商品名称/编码/条形码/品牌" title="输入商品名称/编码/条形码/品牌"></el-input>
-            <el-button type="primary" size="medium" @click="goodsStoreSearch()">搜索</el-button>
+            <el-button type="primary" size="medium" @click="goodsStoreSearch()" class="btn-search">搜索</el-button>
             <!-- <div class="search" style="width: 400px;float: left">
               <el-input placeholder="输入商品名称 / 编码 / 条形码 / 品牌" v-model="search_goods_params.condition" class="input-with-select">
                 <el-button slot="append" icon="el-icon-search" @click.native="goodsStoreSearch()"></el-button>
@@ -145,7 +145,7 @@
               @change="timeCheck">
             </el-date-picker><!--时间-->
             <el-input v-model="search_goodsCheck_params.condition" placeholder="输入商品名称/编码/条形码/品牌" title="输入商品名称/编码/条形码/品牌"></el-input>
-            <el-button type="primary" size="medium" @click="goodsCheckStoreSearch()">搜索</el-button>
+            <el-button type="primary" size="medium" @click="goodsCheckStoreSearch()" class="btn-search">搜索</el-button>
           </div>
           <div class="good_info" style="margin-top: 20px;">
             <el-table
@@ -235,9 +235,9 @@
       </el-tab-pane>
       <el-tab-pane label="已删商品" name="delete">
         <div class="searchWrap">
-          <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="selectedOptions2" change-on-select placeholder="商品分类":props="goodsClassifyProps"></el-cascader><!--商品分类-->
+          <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="selectedOptions3" change-on-select placeholder="商品分类":props="goodsClassifyProps"></el-cascader><!--商品分类-->
           <el-input v-model="search_goodsCheck_params.condition" placeholder="输入商品名称/编码/条形码/品牌" title="输入商品名称/编码/条形码/品牌"></el-input>
-          <el-button type="primary" size="medium" @click="goodsDeleteStore()">搜索</el-button>
+          <el-button type="primary" size="medium" @click="goodsDeleteStore()" class="btn-search" >搜索</el-button>
           <!-- <div class="search" style="width: 400px;float: left">
             <el-input placeholder="输入商品名称 / 编码 / 条形码 / 品牌" v-model="search_goodsCheck_params.condition" class="input-with-select">
               <el-button slot="append" icon="el-icon-search" @click.native="goodsDeleteStore()"></el-button>
@@ -551,6 +551,7 @@
         })
       },
       goodsStoreSearch () {
+        alert("商品仓")
         let that = this
         if (that.search_goods_params.startTime > that.search_goods_params.endTime) {
           that.show_tip('开始时间不能大于结束时间')
@@ -652,6 +653,7 @@
         }
       }
       ,goodsDeleteStore () {
+        alert("删除商品")
         let that = this
         that.$.ajax({
           type: 'get',

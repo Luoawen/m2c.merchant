@@ -26,7 +26,7 @@
         @change="timeCheck">
       </el-date-picker>
       <el-input v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码" title="输入商品名称/订单号/支付单号/收货人号码"></el-input>
-      <el-button type="primary" size="medium" @click="search()">搜索</el-button>
+      <el-button type="primary" size="medium" @click="search()"   class="btn-search">搜索</el-button>
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
       <!-- 高级搜索 -->
       <div class="soloSearchBox" v-if="Advancedshow">
@@ -123,7 +123,7 @@
           </el-row>
           <el-row :gutter="20" class="mt20">
             <el-col :span="20" :offset="3">
-              <el-button type="primary" size="medium" @click="search()">搜索</el-button>
+              <el-button type="primary" size="medium" @click="search()" class="btn-search">搜索</el-button>
               <el-button size="medium" @click="clearAll()">重置</el-button>
             </el-col>
           </el-row>

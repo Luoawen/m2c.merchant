@@ -14,7 +14,7 @@
         @change="timeCheck">
       </el-date-picker><!--时间-->
       <el-input v-model="search_params.condition" placeholder="输入提现单号"></el-input>
-      <el-button type="primary" size="medium" @click="orderStore()">搜索</el-button>
+      <el-button type="primary" size="medium" @click="orderStore()" class="btn-search">搜索</el-button>
       <!-- <div class="search" style="width: 350px;float: left">
         <el-input placeholder="输入提现单号" v-model="search_params.condition" class="input-with-select">
           <el-button slot="append" icon="el-icon-search" @click.native="orderStore()"></el-button>
