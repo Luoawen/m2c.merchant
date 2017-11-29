@@ -54,7 +54,8 @@
         from:'',
         masage:'',
         disabled: false,
-        Info:{}
+        Info:{},
+        flage:''
       }
     },
     created () {
@@ -87,7 +88,9 @@
             sessionStorage.removeItem('totalT')
             // 显示重新发送 把发送按钮设置为可点击
             that.show = true
-            that.$("#sendVer").text("重新发送")
+            if(that.flage!=='save'){
+              that.$("#sendVer").text("重新发送")
+            }
             that.disabled = false
             that.isSuccess = false
           } else { // 剩余倒计时不为零
@@ -181,6 +184,8 @@
               that.isSuccess = false
               JSON.parse(sessionStorage.getItem('mUser')).dealerTradePassword = that.md5(pass).toLowerCase()
               that.show_tip('修改操作成功')
+              that.$("#sendVer").text("获取验证码")
+              that.flage = 'save'
               that.text = ''
               that.Info = {}
               if(that.$route.query.from == 'cash'){

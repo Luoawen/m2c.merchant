@@ -18,7 +18,7 @@
           @change="timeCheck">
         </el-date-picker>
       <el-input v-model="search_params.condition" placeholder="输入业务号" title="输入业务号"></el-input>
-      <el-button type="primary" size="medium" @click="orderStore()">搜索</el-button>
+      <el-button type="primary" size="medium" @click="orderStore()" class="btn-search">搜索</el-button>
       <el-button type="primary" size="medium" icon="el-icon-download" @click.native="exportDetail()" class="fr">导出</el-button>
     </div>
     <div class="order_tab_list" style="margin-top: 20px;">
@@ -31,7 +31,7 @@
           label="业务号"
           width="400">
           <template slot-scope="scope"><span v-if="scope.row.businessType != 5 && scope.row.businessType != 6 && scope.row.businessType != 7 ">{{scope.row.businessId}}</span><span v-if="scope.row.businessType == 5 || scope.row.businessType == 6 || scope.row.businessType == 7">售后单号：&nbsp{{scope.row.businessId}}</span><br/>
-            <span v-if="scope.row.businessType == 5 || scope.row.businessType == 6 || scope.row.businessType == 7"  style="font-size:3px;color: lightsteelblue ">{{scope.row.correlationBusinessId}}</span></template>
+            <span v-if="scope.row.businessType == 5 || scope.row.businessType == 6 || scope.row.businessType == 7"  style="font-size:12px;color: lightsteelblue ">{{scope.row.correlationBusinessId}}</span></template>
         </el-table-column>
         <el-table-column
           label="业务类型"

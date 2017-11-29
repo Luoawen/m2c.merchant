@@ -75,7 +75,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="11">
-          <el-form-item label="关键词"  prop="goodsKeyWord">
+          <el-form-item label="关键词" prop="goodsKeyWord">
             <el-input v-model="data.goodsKeyWord" placeholder="请输入内容"></el-input>
           </el-form-item>
         </el-col>
@@ -1301,6 +1301,7 @@
             that.goodsSpecifications = result.content.goodsSpecifications
             that.goodsSKUs = result.content.goodsSKUs
             that.data.goodsMinQuantity = result.content.goodsMinQuantity.toString()
+            that.data.goodsKeyWord = result.content.goodsKeyWord.join()
             for(var p=0;p<result.content.goodsSKUs.length;p++){
               that.goodsSKUs[p].marketPrice=result.content.goodsSKUs[p].marketPrice/100
               that.goodsSKUs[p].photographPrice=result.content.goodsSKUs[p].photographPrice/100
