@@ -142,7 +142,7 @@
           <td class="a5">订单总额/元</td>
           <td class="a6">下单时间</td>
           <td class="a7">收货人</td>
-          <td class="a8">订货单状态</td>
+          <td>订货单状态</td>
         </tr>
         </thead>
         <!-- 在tbody上v-for循环 -->
