@@ -224,6 +224,7 @@ export default {
 		left: 50.3%;
 	}
 }
+::-ms-reveal{display: none;}
 .slogin {
 	width: 100%;
 	height: 100%;
