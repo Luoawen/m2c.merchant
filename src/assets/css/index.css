@@ -1,4 +1,5 @@
 @charset "UTF-8";
+input[type="number"]{-moz-appearance:textfield;-moz-box-shadow:none;}
 .el-pager li,.el-pagination .el-input__inner {
 text-align:center
 }
