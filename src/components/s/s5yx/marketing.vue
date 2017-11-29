@@ -52,7 +52,7 @@
         <el-button type="primary" size="medium"  @click="goto($event,'/s/fullCut')"  path="/s/fullCut" >新增满减</el-button>  
         <!-- <router-link  type="primary"   :to="{ path: '/s/fullCut' }">新增满减</router-link> -->
         <el-button type="primary" size="medium" @click="resetSearchParams()">重置搜索条件</el-button>
-         <el-button type="primary" size="medium" @click="getFullCutList()">搜索</el-button>
+         <el-button type="primary" size="medium" @click="getFullCutList()" class="btn-search">搜索</el-button>
       </div>
     </div>
          <div class="good_info" style="margin-top: 20px;">
@@ -64,14 +64,6 @@
               <el-table-column    label="操作" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <el-col :span="24"  >
-                      <!-- <span   v-if='scope.row.status < 3'>
-                          <el-button   type="text"  class='color_default'  style='cursor:pointer;'  @click.native="handleCommand(scope.$index, scope.row,'_detail','a')" path='/s/fullCutDetail'>详情</el-button>&nbsp;&nbsp;
-                          <el-button   type="text" style='color:red;cursor:pointer;'  @click.native="handleCommand(scope.$index, scope.row,'_forbid','a')" >终止</el-button>&nbsp;&nbsp; 
-                          <el-button   type="text" class='color_default' style='cursor:pointer;'   @click.native="handleCommand(scope.$index, scope.row,'_modify','a')" path='/s/fullCutModify'>修改</el-button>
-                      </span>
-                      <span v-else>
-                        <el-button   type="text" class='color_default'   style='cursor:pointer;'  @click.native="handleCommand(scope.$index, scope.row,'_detail','a')" path='/s/fullCutDetail' >详情</el-button>&nbsp;&nbsp;
-                      </span> -->
                       <el-dropdown trigger="click">
                       <span class="el-dropdown-link">
                         操作<i class="el-icon-arrow-down el-icon--right"></i>

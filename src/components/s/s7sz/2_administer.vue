@@ -12,7 +12,7 @@
             @change="timeCheck">
           </el-date-picker>
           <el-input v-model="search_params.condition" placeholder="输入品牌名称"></el-input>
-          <el-button type="primary" size="medium" @click="get_comment_info()">搜索</el-button>
+          <el-button type="primary" size="medium" @click="get_comment_info()" class="btn-search">搜索</el-button>
           <el-button type="primary" size="medium" class="fr" @click="addGood()">新增</el-button>
         </div>
         <el-table
@@ -82,7 +82,7 @@
             @change="timeCheck">
           </el-date-picker>
           <el-input v-model="search_approve.condition" placeholder="输入品牌名称"></el-input>
-          <el-button type="primary" size="medium" @click="get_comment_info1()">搜索</el-button>
+          <el-button type="primary" size="medium" @click="get_comment_info1()" class="btn-search">搜索</el-button>
         </div>
         <el-table
           ref="multipleTable"
