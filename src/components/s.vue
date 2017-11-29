@@ -227,6 +227,7 @@ html {
 body {
   background: #F4F5FA; // height: 100%;
 }
+  ::-ms-reveal{display: none;}
   label{font-weight: normal;}
   select {
       width:100%;height:34px;border:solid 1px #d8dce5;font-size:12px;line-height:34px;border-radius:3px;margin-top:7px;
