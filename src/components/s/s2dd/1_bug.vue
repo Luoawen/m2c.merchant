@@ -1,5 +1,5 @@
 <template>
-  <div class="content clear">
+  <div class="clear">
     <div class="searcWrap">
       <el-select v-model="searchParams.orderStatus" placeholder="订单状态">
         <el-option
@@ -168,7 +168,7 @@
             <div class="detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</div>
           </td>
         </tr>
-        <tr class="content clear" >
+        <tr class="clear" >
          <td colspan="8" class="clear">
             <div class="cont col-sm-8 " style="width:60%;" >
               <div class="fl border_r" style="width:100%;min-height:100px"  v-for="goodsItem in item.goodsList">
