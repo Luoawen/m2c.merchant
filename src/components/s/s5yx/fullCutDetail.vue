@@ -120,16 +120,6 @@
                     </div>
             </div>
          </div>
-         <!-- <div class="info-content" v-if="item.costList != null && item.costList.length > 0">
-           <div>
-            <h4>成本设置</h4>
-            <p   v-for="cost in item.costList">
-              <span>商家:&nbsp;<span v-text="cost.dealerId == 'ALL' ? '商家通用' : cost.dealerId"></span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span>平台承担:&nbsp;<span v-text="cost.platformPercent + '%'"></span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span>商家承担:&nbsp;<span v-text="cost.dealerPercent + '%'"></span></span>
-            </p>
-           </div>
-        </div> -->
         <div class="info-content">
             <h4>备注</h4>
             <p>{{item.remark == '' ? '暂无' : item.remark}}</p>
