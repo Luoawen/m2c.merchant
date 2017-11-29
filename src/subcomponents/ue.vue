@@ -21,9 +21,11 @@
     },
     mounted () {
       const _this = this
-      _this.editor = window.UE.getEditor('editor', _this.config) // 初始化UE
-      _this.editor.addListener('ready', function () {
-        _this.editor.setContent(_this.defaultMsg) // 确保UE加载完成后，放入内容。
+      _this.$nextTick(()=>{
+        _this.editor = window.UE.getEditor('editor', _this.config) // 初始化UE
+        _this.editor.addListener('ready', function () {
+          _this.editor.setContent(_this.defaultMsg) // 确保UE加载完成后，放入内容。
+        })
       })
     },
     methods: {
