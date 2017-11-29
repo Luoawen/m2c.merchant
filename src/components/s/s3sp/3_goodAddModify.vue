@@ -307,7 +307,7 @@
         <el-col :span="3">图文详情</el-col>
         <el-col :span="21" style="height:400px;z-index:1;">
           <div id="editor-container">
-            <UE :defaultMsg=defaultMsg :config=config ref="ue"></UE>
+            <UE :config=config ref="ue"></UE>
           </div>
         </el-col>
       </el-row>
@@ -451,8 +451,6 @@
           imgGroup:1
         },
         fileList:[],
-        // 富文本编辑
-        defaultMsg: '',
         config: {
           initialFrameWidth: 700,
           initialFrameHeight: 300
@@ -641,7 +639,7 @@
       checkSupplyPrice (val, index, arr, list, val1) {
         setTimeout(() => {
           if (val && $.isNumeric(val) && val > 0) {
-            if (val > 999999.99 || val > val1) {
+            if (val > 999999.99 || parseFloat(val) > parseFloat(val1)) {
               this.sukShow4 = true
             } else {
               val = Number(val).toFixed(2)
@@ -1320,7 +1318,7 @@
             }else{
               that.$('#skuFlag1').hide()
             }
-            that.defaultMsg=result.content.goodsDesc
+            that.$refs.ue.setUEContent(result.content.goodsDesc)
           }
         })
       }
