@@ -641,7 +641,7 @@
       checkSupplyPrice (val, index, arr, list, val1) {
         setTimeout(() => {
           if (val && $.isNumeric(val) && val > 0) {
-            if (val > 999999.99 || val > val1) {
+            if (val > 999999.99 || parseFloat(val) > parseFloat(val1)) {
               this.sukShow4 = true
             } else {
               val = Number(val).toFixed(2)
