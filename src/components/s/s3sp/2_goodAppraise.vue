@@ -162,8 +162,8 @@
           </tr>
         </thead>
         <tbody v-if="goodsCommentTotalCount==0">
-        <tr style="height: 50px;text-align">
-          <td colspan="7">没有匹配的记录</td>
+        <tr style="height: 50px;text-align:center">
+          <td colspan="7">暂无数据</td>
         </tr>
         </tbody>
         <tbody v-for="(comment,index) in datacomment">
