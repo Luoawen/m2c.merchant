@@ -31,7 +31,7 @@
           label="业务号"
           width="400">
           <template slot-scope="scope"><span v-if="scope.row.businessType != 5 && scope.row.businessType != 6 && scope.row.businessType != 7 ">{{scope.row.businessId}}</span><span v-if="scope.row.businessType == 5 || scope.row.businessType == 6 || scope.row.businessType == 7">售后单号：&nbsp{{scope.row.businessId}}</span><br/>
-            <span v-if="scope.row.businessType == 5 || scope.row.businessType == 6 || scope.row.businessType == 7"  style="font-size:3px;color: lightsteelblue ">{{scope.row.correlationBusinessId}}</span></template>
+            <span v-if="scope.row.businessType == 5 || scope.row.businessType == 6 || scope.row.businessType == 7"  style="font-size:12px;color: lightsteelblue ">{{scope.row.correlationBusinessId}}</span></template>
         </el-table-column>
         <el-table-column
           label="业务类型"
