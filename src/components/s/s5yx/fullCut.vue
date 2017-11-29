@@ -226,7 +226,7 @@
             <div class="search_tit">选择商品：</div>
             <div class="clear">
               <input class="input form-control fl" type="text" placeholder="请输入商品名称" v-model="goods_query_item.condition" />
-              <button class="sort fl" @click="goodsChoose">搜索</button>
+              <button class="sort fl  btn-search" @click="goodsChoose">搜索</button>
               <div class="right">
               </div>
             </div>
@@ -475,7 +475,7 @@
           <div class="shop_choose_sort clear" :style="tab_flag == 'goods' ? '' : 'display:none;'">
             <div class="fl">
               <input placeholder="请输入商品名称进行搜索" class="form-control sort_input fl" v-model="goods_query_item.condition"/>
-              <button class="sort" @click="goodsChoose()">搜索</button>
+              <button class="sort btn-search" @click="goodsChoose()">搜索</button>
             </div>
           </div>
           <!--商家条件-->
@@ -564,7 +564,7 @@
           <div class="shop_choose_sort clear">
             <div class="fl">
               <input placeholder="请输入商品名称进行搜索" class="form-control sort_input fl" v-model="goods_query_item.condition"/>
-              <button class="sort" @click="goodsChoose()">搜索</button>
+              <button class="sort btn-search" @click="goodsChoose()">搜索</button>
             </div>
           </div>
           <!--商品-->

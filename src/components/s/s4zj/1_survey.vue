@@ -67,7 +67,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in contents" class="content clear">
+          <tr v-for="item in contents" class="clear">
             <td>{{item.withdrawalId}}</td>
             <td>{{(item.amount/100).toFixed(2)}}</td>
             <td>{{item.wdStatus == 0?'处理中':item.wdStatus == 1?'待审批':item.wdStatus == 2?'待转账':item.wdStatus == 3?'不通过':item.wdStatus == 4?'已转账':item.wdStatus == 5?'作废':'-'}}</td>

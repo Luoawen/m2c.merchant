@@ -26,7 +26,7 @@
         @change="timeCheck">
       </el-date-picker>
       <el-input v-model="search_params.condition" placeholder="输入商品名称/订单号/顾客姓名/顾客手机号" title="输入商品名称/订单号/顾客姓名/顾客手机号"></el-input>
-      <el-button type="primary" size="medium" @click="get_comment_info()">搜索</el-button>
+      <el-button type="primary" size="medium" @click="get_comment_info()" class="btn-search">搜索</el-button>
       <span class="ml10 gjsort" @click="advancedSearch">高级搜索</span>
     </div>
     <div class="soloSearchBox" v-if="advancedShow">
@@ -162,8 +162,8 @@
           </tr>
         </thead>
         <tbody v-if="goodsCommentTotalCount==0">
-        <tr style="height: 50px;text-align">
-          <td colspan="7">没有匹配的记录</td>
+        <tr style="height: 50px;text-align:center">
+          <td colspan="7">暂无数据</td>
         </tr>
         </tbody>
         <tbody v-for="(comment,index) in datacomment">

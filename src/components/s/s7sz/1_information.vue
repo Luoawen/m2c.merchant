@@ -39,7 +39,7 @@
       <div class="shopLogo pull-right">
         <div class="form-group nopad">
           <div class="col-sm-8">
-            <input type="file" id="m11yhgl_img_input" style="display:none" @change="upload_img()">
+            <input type="file" id="m11yhgl_img_input" style="display:none" @change="upload_img($event)">
             <div class="img_up">
               <img width='100px' height='100px'  v-show='imgshow' id="m11yhgl_img" v-model:src="storeinformation.imgUrl"
                     onerror="this.src='../../../../static/assets/images/icon_uoloading.png';this.onerror=null" >
@@ -87,14 +87,13 @@
       return url
     },
     // 上传头像
-    upload_img () {
-      let target = event.target
+    upload_img ($event) {
+      let target = $event.target
       let objUrl = this.getObjectURL(target.files[0])
       let size = target.files[0].size
       if (size >= 1024000 * 1) this.show_tip('图片超过1M了哦')
       else {
         if (objUrl) {
-          // this.img_url = objUrl
           this.imgshow = true
           document.querySelector('#m11yhgl_img').src = objUrl
           console.log(document.querySelector('#m11yhgl_img').src)
