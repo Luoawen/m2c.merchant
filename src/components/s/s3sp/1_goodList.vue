@@ -551,7 +551,6 @@
         })
       },
       goodsStoreSearch () {
-        alert("商品仓")
         let that = this
         if (that.search_goods_params.startTime > that.search_goods_params.endTime) {
           that.show_tip('开始时间不能大于结束时间')
@@ -653,7 +652,6 @@
         }
       }
       ,goodsDeleteStore () {
-        alert("删除商品")
         let that = this
         that.$.ajax({
           type: 'get',
