@@ -123,6 +123,7 @@ Vue.use(Element)
 
     else { // 演示环境
       Vue.prototype.base = 'http://api.m2c2017.com:80/'
+      Vue.prototype.localbase = 'http://api.m2c2017.com:80/'
     }
   }
   // 设置jQuery方法
