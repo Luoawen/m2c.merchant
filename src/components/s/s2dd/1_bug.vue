@@ -26,7 +26,7 @@
         @change="timeCheck">
       </el-date-picker>
       <el-input v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码" title="输入商品名称/订单号/支付单号/收货人号码"></el-input>
-      <el-button type="primary" size="medium" @click="search()">搜索</el-button>
+      <el-button type="primary" size="medium" @click="search()"   class="btn-search">搜索</el-button>
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
       <!-- 高级搜索 -->
       <div class="soloSearchBox" v-if="Advancedshow">
@@ -123,7 +123,7 @@
           </el-row>
           <el-row :gutter="20" class="mt20">
             <el-col :span="20" :offset="3">
-              <el-button type="primary" size="medium" @click="search()">搜索</el-button>
+              <el-button type="primary" size="medium" @click="search()" class="btn-search">搜索</el-button>
               <el-button size="medium" @click="clearAll()">重置</el-button>
             </el-col>
           </el-row>
@@ -142,7 +142,7 @@
           <td class="a5">订单总额/元</td>
           <td class="a6">下单时间</td>
           <td class="a7">收货人</td>
-          <td class="a8">订货单状态</td>
+          <td>订货单状态</td>
         </tr>
         </thead>
         <!-- 在tbody上v-for循环 -->
@@ -188,7 +188,7 @@
               <div class="a4 fl mt10" style="width:14%;text-align:center;">
                 <!-- 有几种情况的不同表现方 -->
                 <div style="">
-                  <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户寄出' :goodsItem.afStatus==6? '商家收到':goodsItem.afStatus==7? '商家寄出':goodsItem.afStatus==8? '客户收到':goodsItem.afStatus==9? '确认退款':'--'}}</div>
+                  <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户已寄出' :goodsItem.afStatus==6? '商家已收到':goodsItem.afStatus==7? '商家已寄出':goodsItem.afStatus==8? '客户已收到':goodsItem.afStatus==9? '已确认退款':goodsItem.afStatus>=10? '售后已完成':'--'}}</div>
                   <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.backMoney, item.orderFreight, item.dealerOrderId, goodsItem.skuId)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
                   <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" v-show="goodsItem.afStatus>=0 && goodsItem.afStatus<=2">拒绝</button></div>
                 </div>

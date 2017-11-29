@@ -40,7 +40,7 @@
       <div class="form-group">
         <label class="col-sm-2 control-label">联系电话：</label>
         <div class="col-sm-3">
-          <input type="text" class="form-control" id="input3" placeholder="请填写" v-model="search_params.tel">
+          <input type="text" class="form-control" maxlength="11" id="input3" placeholder="请填写" v-model="search_params.tel">
         </div>
       </div>
       <div class="form-group">

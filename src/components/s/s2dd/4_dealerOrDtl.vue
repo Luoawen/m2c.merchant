@@ -1224,8 +1224,10 @@
           }
           .bj_select{
           	width: 120px;
-          	height: 40px;
-          	line-height: 40px;
+          	height: 34px;
+            line-height: 34px;
+            padding:0 10px;
+            margin-top:8px;
           option{
           	height: 40px;
           	line-height: 40px;
@@ -1233,8 +1235,9 @@
           }
           .bj02_select{
           	width: 350px;
-          	height: 40px;
-          	line-height: 40px;
+          	height: 34px;
+            line-height: 34px;
+            margin-top:8px;
           }
         }
       }

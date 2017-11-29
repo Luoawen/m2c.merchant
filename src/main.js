@@ -87,6 +87,15 @@ Vue.use(Element)
   // 模态框阴影点击后不关闭
   $.fn.modal.Constructor.DEFAULTS.backdrop = 'static'
 
+    {
+      document.body.addEventListener('keyup', function (e) {
+        if (e.keyCode === 13) {
+          let elements = [].slice.call(document.querySelectorAll('.btn-search'))
+          console.log(elements.length)
+          elements.forEach( item => { item.click() })
+        }})
+    }
+
   // 设置localStorage
   localStorage.setItem('biUser', 'dev')
   // 设置mBase
@@ -114,6 +123,7 @@ Vue.use(Element)
 
     else { // 演示环境
       Vue.prototype.base = 'http://api.m2c2017.com:80/'
+      Vue.prototype.localbase = 'http://api.m2c2017.com:80/'
     }
   }
   // 设置jQuery方法
