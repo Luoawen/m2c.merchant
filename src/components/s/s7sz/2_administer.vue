@@ -195,11 +195,11 @@
       <div class="goodInfo changeGoodInfo" v-if="changeGoodShow">
         <p>
           <span><i class="red">*</i>品牌名称：</span>
-          <el-input v-model="add_modify_params.brandName" maxlength="10" placeholder="1-10字符"></el-input>
+          <el-input v-model="add_modify_params.brandName" :maxlength="10" placeholder="1-10字符"></el-input>
         </p>
         <p>
           <span>英文名称：</span>
-          <el-input v-model="add_modify_params.brandNameEn"  maxlength="20" placeholder="1-20字符"></el-input>
+          <el-input v-model="add_modify_params.brandNameEn"  :maxlength="20" placeholder="1-20字符"></el-input>
         </p>
         <div>
           <span>品牌区域：</span>
