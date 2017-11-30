@@ -180,8 +180,8 @@
               </td>
               <td>
                 <el-tag
-                  :key="tag"
                   v-for="tag in item.itemValue"
+                  :key="tag.spec_name"
                   closable
                   :disable-transitions="false"
                   @close="handleClose(tag.spec_name,index)">
@@ -528,7 +528,7 @@
               },
               success: function (result) {
                 that.goodsBrandName=result.content.brandName
-                console.log(that.goodsBrandName)
+                //console.log(that.goodsBrandName)
               }
             })
           }
@@ -1121,11 +1121,14 @@
               ev.preventDefault()
             }
             document.getElementById('ulcon').ondrop = function (ev) {
+              //var ev = event || window.event
               ev.preventDefault()
               var id = ev.dataTransfer.getData('Img')
               var startLocation = id.substring(5, id.length)
               console.log('startLocation:' + startLocation)
               var toElem = ev.toElement
+              console.log(ev)
+              console.log(toElem)
               if (toElem != undefined && toElem.src != undefined) {
                 var endLocation // 替换位置
                 for (var i = 0; i < that.goodsMainImages.length; i++) {
@@ -1144,6 +1147,7 @@
                     that.tempGoodsMainImages.push(that.goodsMainImages[j])
                   }
                 }
+                console.log('tempGoodsMainImages',that.tempGoodsMainImages)
                 that.goodsMainImages = []
                 for (var k = 0; k < that.tempGoodsMainImages.length; k++) {
                   that.goodsMainImages.push(that.tempGoodsMainImages[k])
@@ -1152,7 +1156,6 @@
                 for (var n = 0; n < that.goodsMainImages.length; n++) {
                   that.fileList.push(eval('(' + '{url:"' + that.goodsMainImages[n] + '"}' + ')'))
                 }
-
                 $('.el-upload-list__item-thumbnail').click()
                 // $('.el-icon-upload-success .el-icon-check').text('::before')
                 // 重新赋值id
@@ -1312,7 +1315,7 @@
               that.goodsMainImages.push(result.content.goodsMainImages[i])
             }
             that.picture()
-            console.log("that.fileList="+that.fileList)
+            //console.log("that.fileList="+that.fileList)
             if(result.content.skuFlag==1){
               that.$('#skuFlag0').hide()
             }else{
