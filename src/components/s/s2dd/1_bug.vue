@@ -1,5 +1,5 @@
 <template>
-  <div class="clear">
+  <div class="content clear">
     <div class="searcWrap">
       <el-select v-model="searchParams.orderStatus" placeholder="订单状态">
         <el-option
@@ -168,7 +168,7 @@
             <div class="detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</div>
           </td>
         </tr>
-        <tr class="clear" >
+        <tr class="content clear" >
          <td colspan="8" class="clear">
             <div class="cont col-sm-8 " style="width:60%;" >
               <div class="fl border_r" style="width:100%;min-height:100px"  v-for="goodsItem in item.goodsList">
@@ -333,7 +333,7 @@
         afStatus : -2,
         saleAfterNo : '',
         orderStatuses:[{value:'',label:'订单状态'},{value:'0',label:'待付款'},{value:'1',label:'待发货'},{value:'2',label:'待收货'},{value:'3',label:'已完成'},{value:'4',label:'交易完成'},{value:'5',label:'交易关闭'},{value:'-1',label:'已取消'}],
-        afterSellStatuses:[{value:'',label:'售后状态'},{value:'0',label:'申请退货'},{value:'1',label:'申请换货'},{value:'2',label:'申请退款'},{value:'3',label:'商家拒绝申请'},{value:'4',label:'商家同意申请'},{value:'5',label:'客户寄出'},{value:'6',label:'商家收到'},{value:'7',label:'商家寄出'},{value:'8',label:'客户收到'},{value:'9',label:'同意退款'},{value:'10',label:'已退款'},{value:'11',label:'售后完成'},{value:'12',label:'售后关闭'},{value:'-1',label:'已取消'}],
+        afterSellStatuses:[{value:'',label:'售后状态'},{value:'0',label:'申请退货'},{value:'1',label:'申请换货'},{value:'2',label:'申请退款'},{value:'3',label:'商家已拒绝'},{value:'4',label:'已同意申请'},{value:'5',label:'客户已寄出'},{value:'6',label:'商家已收到'},{value:'7',label:'商家已寄出'},{value:'8',label:'客户已收到'},{value:'9',label:'已同意退款'},{value:'10',label:'商家已退款'},{value:'11',label:'售后已完成'},{value:'12',label:'售后已关闭'},{value:'-1',label:'售后已取消'}],
         commentStatus:[{value:'',label:'评论状态'},{value:'0',label:'待评论'},{value:'1',label:'已评论'}],
         isPayDeposits:[{value:'',label:'支付方式'},{value:'1',label:'支付宝'},{value:'2',label:'微信'}],// 支付方式
         invoiceTypes:[{value:'',label:'开发票'},{value:'0',label:'个人'},{value:'1',label:'公司'}], // 发票

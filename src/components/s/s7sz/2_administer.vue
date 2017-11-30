@@ -159,11 +159,7 @@
           <template v-if="goodInfo.brandLogo != ''"><img :src="goodInfo.brandLogo" /></template>
           <template v-if="goodInfo.brandLogo == ''">--</template>
         </div>
-        <span v-show="activeName=='second'">
-            <p v-show="goodInfo.rejectReason!==''"><span>拒绝原因：</span>{{goodInfo.rejectReason}}</p>
-            <el-button v-show="goodInfo.approveStatus!==2" type="primary" size="medium" @click="agreeGoodShow(goodInfo.approveId)">同意</el-button>
-            <el-button v-show="goodInfo.approveStatus!==2" type="danger" size="medium" @click="rejectGoodShow(goodInfo.approveId)">拒绝</el-button>
-              </span>
+        <p v-show="goodInfo.rejectReason!==''"><span>拒绝原因：</span>{{goodInfo.rejectReason}}</p>
         <el-button size="medium" @click="goodInfoShow=!goodInfoShow">返回</el-button>
       </div>
       <!--删除-->
