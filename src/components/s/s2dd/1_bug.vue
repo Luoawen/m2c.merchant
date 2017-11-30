@@ -131,91 +131,79 @@
       </div>
     </div>
     <div class="good_info ">
-      <table id="table"  class="notetable col-sm-12">
+      <table id="table" class="notetable">
         <thead>
-        <tr>
-          <td class="a1">
-            <span class="ml10">商品信息</span></td>
-          <td class="a2">单价/元</td>
-          <td class="a3">数量</td>
-          <td class="a4">售后状态</td>
-          <td class="a5">订单总额/元</td>
-          <td class="a6">下单时间</td>
-          <td class="a7">收货人</td>
-          <td>订货单状态</td>
-        </tr>
+          <tr class="clear">
+            <td class="a1">商品信息</td>
+            <td class="a2">单价/元</td>
+            <td class="a3">数量</td>
+            <td class="a4">售后状态</td>
+            <td class="a5">订单总额/元</td>
+            <td class="a6">下单时间</td>
+            <td class="a7">收货人</td>
+            <td class="a8">订货单状态</td>
+          </tr>
         </thead>
         <!-- 在tbody上v-for循环 -->
         <tbody v-if="totalCount==0">
-        <tr style="height: 50px;text-align: center;">
-          <td  colspan="8">没有匹配的记录</td>
-
-        </tr>
+          <tr style="height: 50px;text-align: center;">
+            <td  colspan="8">没有匹配的记录</td>
+          </tr>
         </tbody>
         <tbody v-for="(item,index) in resultdata" v-if="totalCount>0">
-        <tr>
-          <td colspan="8" class="bt clear">
-            <span class="ml10">订货号：{{item.dealerOrderId}}</span>  <span style="color: #ccc">&nbsp;|</span></span> <span class="ml10" v-show="item.payNo != '' ? true : false">支付单号：{{item.payNo}}</span>
-      <!--      <div class="fl">
-                      <span  class="mt10">
-                        &lt;!&ndash;<input  type="checkbox" :id="'aa'+index" class="input_check" :value="item.dealerOrderId">
-                        <label  :for="'aa'+index" class="fl mt10">
-                        </label>&ndash;&gt;
-                        <el-checkbox @change="checkClick(index)" :label="'订货号：' + item.dealerOrderId" :name="'ck'+index"></el-checkbox>
-                      </span>
-              &lt;!&ndash;<span class="ml10">订货号：</span><span>{{item.dealerOrderId}}</span>&ndash;&gt;
-            </div>-->
-            <div class="detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</div>
-          </td>
-        </tr>
-        <tr class="content clear" >
-         <td colspan="8" class="clear">
-            <div class="cont col-sm-8 " style="width:60%;" >
-              <div class="fl border_r" style="width:100%;min-height:100px"  v-for="goodsItem in item.goodsList">
-              <div class="a1 fl" id="a1" style="width:50%;">
-                <div class="a1_img mr10 fl"><img :src="JSON.parse(goodsItem.goodsImage == ''? '[]': goodsItem.goodsImage)[0]"/></div>
-                <div class="fl">
-                  <div class="wose wid">{{goodsItem.goodsName}}</div>
-                  <div class="blue" v-if="goodsItem.skuName != ''">规格：{{goodsItem.skuName}}</div>
+          <tr>
+            <td colspan="8" class="bt clear">
+              <span class="ml10">订货号：{{item.dealerOrderId}}</span>  <span style="color: #ccc">&nbsp;|</span></span> <span class="ml10" v-show="item.payNo != '' ? true : false">支付单号：{{item.payNo}}</span>
+              <div class="detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</div>
+            </td>
+          </tr>
+          <tr class="content clear" >
+            <td colspan="8" class="clear">
+              <div class="cont col-sm-8 " style="width:59%;">
+                <div class="fl border_r" style="width:100%;min-height:100px" v-for="goodsItem in item.goodsList">
+                <div class="a1 fl" id="a1" style="width:50%;">
+                  <div class="a1_img mr10 fl"><img :src="JSON.parse(goodsItem.goodsImage == ''? '[]': goodsItem.goodsImage)[0]"/></div>
+                  <div class="fl">
+                    <div class="wose wid">{{goodsItem.goodsName}}</div>
+                    <div class="blue" v-if="goodsItem.skuName != ''">规格：{{goodsItem.skuName}}</div>
+                  </div>
+                </div>
+                <div class="a2 fl mt20" id="a2" style="width: 14%;">
+                  {{(goodsItem.discountPrice/100).toFixed(2)}}
+                </div>
+                <div class="a3 fl mt20" id="a3" style="width: 18%;text-align: center;padding-right: 40px;">
+                  {{goodsItem.sellNum}}
+                </div>
+                <div class="a4 fl mt10" style="width:14%;text-align:center;">
+                  <!-- 有几种情况的不同表现方 -->
+                  <div style="">
+                    <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户已寄出' :goodsItem.afStatus==6? '商家已收到':goodsItem.afStatus==7? '商家已寄出':goodsItem.afStatus==8? '客户已收到':goodsItem.afStatus==9? '已确认退款':goodsItem.afStatus>=10? '售后已完成':'--'}}</div>
+                    <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.backMoney, item.orderFreight, item.dealerOrderId, goodsItem.skuId)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
+                    <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" v-show="goodsItem.afStatus>=0 && goodsItem.afStatus<=2">拒绝</button></div>
+                  </div>
+                  <div v-show="goodsItem.afStatus==3">
+                    <img src="../../../assets/images/ico_explain.png" :title="goodsItem.rejectReason" width="16px"></img>
+                  </div>
                 </div>
               </div>
-              <div class="a2 fl mt20" id="a2" style="width: 14%;">
-                {{(goodsItem.discountPrice/100).toFixed(2)}}
               </div>
-              <div class="a3 fl mt20" id="a3" style="width: 18%;text-align: center;padding-right: 40px;">
-                {{goodsItem.sellNum}}
-              </div>
-              <div class="a4 fl mt10" style="width:14%;text-align:center;">
-                <!-- 有几种情况的不同表现方 -->
-                <div style="">
-                  <div class="">{{goodsItem.afStatus==0? '申请退货' : goodsItem.afStatus==1? '申请换货' : goodsItem.afStatus==2? '申请退款' : goodsItem.afStatus==3? '拒绝' : goodsItem.afStatus==4? '同意申请': goodsItem.afStatus==5? '客户已寄出' :goodsItem.afStatus==6? '商家已收到':goodsItem.afStatus==7? '商家已寄出':goodsItem.afStatus==8? '客户已收到':goodsItem.afStatus==9? '已确认退款':goodsItem.afStatus>=10? '售后已完成':'--'}}</div>
-                  <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.backMoney, item.orderFreight, item.dealerOrderId, goodsItem.skuId)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
-                  <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" v-show="goodsItem.afStatus>=0 && goodsItem.afStatus<=2">拒绝</button></div>
+              <div class="cont col-sm-4" style="width:40%;">
+                <div class="a5" style="width:25%;">
+                  {{((item.goodsMoney + item.orderFreight - item.dealerDiscount - item.plateDiscount)/100).toFixed(2)}}
                 </div>
-                <div v-show="goodsItem.afStatus==3">
-                  <img src="../../../assets/images/ico_explain.png" :title="goodsItem.rejectReason" width="16px"></img>
+                <div class="a6 mt10" style="width:28%;">
+                  {{date_format(new Date(item.createdDate), 'yyyy-MM-dd hh:mm:ss')}}
+                </div>
+                <div class="a7 mt10" style="width:28%">
+                  <div>{{item.revPerson}}</div>
+                  <div>{{item.revPhone}}</div>
+                </div>
+                <div class="a8" style="width:10%">
+                  <span>{{item.orderStatus==0?'待付款': item.orderStatus==1? '待发货' : item.orderStatus==2?'待收货' : item.orderStatus==3 ? '已完成' : item.orderStatus==4 ? '交易完成' : item.orderStatus==5?'交易关闭':item.orderStatus==-1?'已取消': '--'}}</span>
                 </div>
               </div>
-            </div>
-            </div>
-
-            <div class="cont col-sm-4" style="width:40%;">
-              <div class="a5" style="width:25%;">
-                {{((item.goodsMoney + item.orderFreight - item.dealerDiscount - item.plateDiscount)/100).toFixed(2)}}
-              </div>
-              <div class="a6 mt10" style="width:28%;">
-                {{date_format(new Date(item.createdDate), 'yyyy-MM-dd hh:mm:ss')}}
-              </div>
-              <div class="a7 mt10" style="width:28%">
-                <div>{{item.revPerson}}</div>
-                <div>{{item.revPhone}}</div>
-              </div>
-              <div class="a8" style="width:10%">
-                <span>{{item.orderStatus==0?'待付款': item.orderStatus==1? '待发货' : item.orderStatus==2?'待收货' : item.orderStatus==3 ? '已完成' : item.orderStatus==4 ? '交易完成' : item.orderStatus==5?'交易关闭':item.orderStatus==-1?'已取消': '--'}}</span>
-              </div>
-            </div>
-          </td>
-        </tr>
+            </td>
+          </tr>
         </tbody>
       </table>
       <div class="block" style="margin: 20px;float:left;">
@@ -743,18 +731,22 @@
       background: #fff;
       margin-top: 10px;
       .notetable{
+        min-width:1000px;
+        width:100%;
         min-height: 40px;
         border: 1px solid #e5e5e5;
         .a1{
-          width:30%;
+          width:29%;
           display: inline-block;
+          box-sizing: border-box;
+          padding-left:10px;
         }
         .a2{
           width: 10%;
           display: inline-block;
         }
         .a3{
-          width: 10%;
+          width: 9%;
           display: inline-block;
         }
         .a4{
@@ -792,9 +784,15 @@
           display: inline-block;
         }
         .a8{
-          width:10% ;
+          width:8% ;
           display: inline-block;
         }
+        thead td.a1{padding-left:40px;}
+        thead td.a3{padding-left:47px;}
+        thead td.a4{padding-left:37px;}
+        thead td.a5{padding-left:40px;}
+        thead td.a7{padding-left:36px;}
+        thead td.a8{padding-left:40px;}
         .b1{
         	width: 40%;
         	 display: inline-block;
