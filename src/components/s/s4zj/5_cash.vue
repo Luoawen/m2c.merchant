@@ -219,7 +219,7 @@ export default {
           },
           success: function (result) {
             if (result.status === 200){
-              that.$router.push({name : 'survey',query: {}})
+              that.$router.push({name : 'survey'})
               console.log(result)
             }else{
 							that.show_tip(result.errorMessage)
@@ -284,7 +284,7 @@ export default {
 				text-align: right;
 
 			}
-			
+
     	.tit{
     		font-size: 12px;
 				color: #666666;
