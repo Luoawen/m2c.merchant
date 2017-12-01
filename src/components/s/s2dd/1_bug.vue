@@ -27,6 +27,7 @@
       </el-date-picker>
       <el-input v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码" title="输入商品名称/订单号/支付单号/收货人号码"></el-input>
       <el-button type="primary" size="medium" @click="search()"   class="btn-search">搜索</el-button>
+      <el-button type="primary" size="medium" icon="el-icon-download" @click.native="exportSearch()" class="fr">导出</el-button>
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
       <!-- 高级搜索 -->
       <div class="soloSearchBox" v-if="Advancedshow">
@@ -445,6 +446,25 @@
         '&commentStatus='+that.searchParams.commentStatus;
       window.location.href=url
     },
+    /*exportSearch (){
+      let that = this
+      if (that.searchParams.startTime > that.searchParams.endTime) {
+        that.show_tip('开始时间不能大于结束时间')
+        return
+      }
+      //searchParams: { orderStatus: '', afterSellStatus: '', startTime: '', endTime: '', condition: '',orderClassify:'', payWay:'', hasMedia:'', invoice: '',commentStatus:''},
+      let url=that.localbase + 'm2c.scm/order/export/dealerorderlist?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+
+        '&orderStatus='+that.searchParams.orderStatus+
+        '&afterSellStatus='+that.searchParams.afterSellStatus+
+        '&startTime='+that.searchParams.startTime+
+        '&endTime='+that.searchParams.endTime+
+        '&condition='+that.searchParams.condition+
+        '&payWay='+that.searchParams.goodsClassifyId+
+        '&commentStatus='+that.searchParams.commentStatus+
+        '&hasMedia='+that.searchParams.hasMedia+
+        '&orderClassify='+that.searchParams.orderClassify+'&invoice='+that.searchParams.invoice;
+      window.location.href=url
+    },*/
     refuseShow (afterNo) {
       var that = this
       that.Refuseshow = true
