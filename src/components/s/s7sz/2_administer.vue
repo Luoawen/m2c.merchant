@@ -159,7 +159,7 @@
           <template v-if="goodInfo.brandLogo != ''"><img :src="goodInfo.brandLogo" /></template>
           <template v-if="goodInfo.brandLogo == ''">--</template>
         </div>
-        <p v-show="goodInfo.rejectReason!==''"><span>拒绝原因：</span>{{goodInfo.rejectReason}}</p>
+        <p v-show="goodInfo.rejectReason!==undefined"><span>拒绝原因：</span>{{goodInfo.rejectReason}}</p>
         <el-button size="medium" @click="goodInfoShow=!goodInfoShow">返回</el-button>
       </div>
       <!--删除-->
