@@ -435,6 +435,9 @@
         that.show_tip('开始时间不能大于结束时间')
         return
       }
+      if ( that.totalCount == 0 ) {
+        return;
+      }
       let url=that.localbase + 'm2c.scm/order/export/dealerorderlist?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+
         '&orderStatus='+that.searchParams.orderStatus+
         '&afterSellStatus='+that.searchParams.afterSellStatus+
