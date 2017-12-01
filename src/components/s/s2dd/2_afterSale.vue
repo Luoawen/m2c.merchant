@@ -23,6 +23,7 @@
       </el-date-picker>
       <el-input v-model="search_params.condition" placeholder="输入商品名称/订货号/售后号" title="输入商品名称/订货号/售后号"></el-input>
       <el-button type="primary" size="medium" @click="orderStore()" class="btn-search">搜索</el-button>
+      <el-button type="primary" size="medium" icon="el-icon-download" @click.native="exportSearch()" class="fr">导出</el-button>
     </div>
     <div class="order_tab_list" style="margin-top: 20px;">
       <el-table
@@ -229,6 +230,16 @@
           sessionStorage.setItem('afterSale:afterSellOrderId', row.afterSellOrderId)
           that.$goRoute({path: path})
         }
+      },
+      exportSearch (){
+        let that = this
+        if (that.search_params.startTime > that.search_params.endTime) {
+          that.show_tip('开始时间不能大于结束时间')
+          return
+        }
+        // search_params: { expectation: '', afterSaleStatus: '', condition: '', startTime: '', endTime: '',hasMedia:'' }
+        let url=that.localbase + 'm2c.scm/order/export/saleafter?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+'&status='+that.search_params.afterSaleStatus+'&orderType='+that.search_params.expectation+'&condition='+that.search_params.condition+'&startTime='+that.search_params.startTime+'&mediaInfo='+that.search_params.hasMedia+'&endTime='+that.search_params.endTime;
+        window.location.href=url
       }
     },
     mounted () {
