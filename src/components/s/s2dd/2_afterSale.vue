@@ -79,7 +79,7 @@
           <template slot-scope="scope">
             <span>
             <!--{{scope.row.status==0?'申请退货':scope.row.status==1?'申请换货':scope.row.status==2?'申请退款':scope.row.status==3?'拒绝':scope.row.status==4?'已同意申请':scope.row.status==5?'客户已寄出':scope.row.status==6?'商家已收到':scope.row.status==7?'商家已寄出':scope.row.status==8?'客户收到':scope.row.status==9?'已同意退款':scope.row.status==10?'已退款':scope.row.status==11?'售后完成':scope.row.status==-1?'取消':'-'}}-->
-              {{scope.row.orderType==0?(scope.row.status==-1?'售后已取消':scope.row.status==3?'商家已拒绝':scope.row.status==1?'待商家同意':scope.row.status==4?'待顾客寄回商品':scope.row.status==5?'顾客已寄出':scope.row.status==6?'待商家发货':scope.row.status==7?'待顾客收货':scope.row.status>=8?'售后已完成':'--'):scope.row.orderType==1?(scope.row.status==-1?'售后已取消':scope.row.status==3?'商家已拒绝':scope.row.status==0?'待商家同意':scope.row.status==4?'待顾客寄回商品':scope.row.status==5?'顾客已寄出':scope.row.status==6?'待商家确认退款':scope.row.status>=9?'售后已完成':'--'):scope.row.orderType==2?(scope.row.status==-1?'售后已取消':scope.row.status==3?'商家已拒绝':scope.row.status==2?'待商家同意':scope.row.status==4?'待商家确认退款':scope.row.status>=9?'售后已完成':'--'):'--'}}
+              {{scope.row.orderType==0?(scope.row.status==-1?'售后已取消':scope.row.status==3?'商家已拒绝':scope.row.status==1?'待商家同意':scope.row.status==4?'待顾客寄回商品':(scope.row.status==5||scope.row.status==6)?'待商家发货':scope.row.status==7?'待顾客收货':scope.row.status>=8?'售后已完成':'--'):scope.row.orderType==1?(scope.row.status==-1?'售后已取消':scope.row.status==3?'商家已拒绝':scope.row.status==0?'待商家同意':scope.row.status==4?'待顾客寄回商品':(scope.row.status==5||scope.row.status==6)?'待商家确认退款':scope.row.status>=9?'售后已完成':'--'):scope.row.orderType==2?(scope.row.status==-1?'售后已取消':scope.row.status==3?'商家已拒绝':scope.row.status==2?'待商家同意':scope.row.status==4?'待商家确认退款':scope.row.status>=9?'售后已完成':'--'):'--'}}
             </span></template>
         </el-table-column>
         <el-table-column
@@ -128,47 +128,29 @@
           value: '',
           label: '售后状态'
         }, {
-          value: '0',
-          label: '申请退货'
+          value: '20',
+          label: '待商家同意'
         }, {
-          value: '1',
-          label: '申请换货'
+          value: '21',
+          label: '待顾客寄回商品'
         }, {
-          value: '2',
-          label: '申请退款'
+          value: '22',
+          label: '待商家确认退款'
         }, {
-          value: '3',
-          label: '商家已拒绝'
+          value: '23',
+          label: '待商家发货'
         }, {
-          value: '4',
-          label: '已同意申请'
+          value: '24',
+          label: '待顾客收货'
         }, {
-          value: '5',
-          label: '客户已寄出'
-        }, {
-          value: '6',
-          label: '商家已收到'
-        }, {
-          value: '7',
-          label: '商家已寄出'
-        }, {
-          value: '8',
-          label: '客户已收到'
-        }, {
-          value: '9',
-          label: '已同意退款'
-        }, {
-          value: '10',
-          label: '商家已退款'
-        }, {
-          value: '11',
+          value: '25',
           label: '售后已完成'
         }, {
-          value: '12',
-          label: '售后已关闭'
-        },{
-          value: '-1',
+          value: '26',
           label: '售后已取消'
+        },{
+          value: '27',
+          label: '商家已拒绝'
         }],
         afterSaleStatus:'',//售后状态
         mediaStatus:[{
