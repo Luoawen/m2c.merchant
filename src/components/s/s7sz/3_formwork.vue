@@ -5,13 +5,13 @@
       <table class="table table-bordered">
         <thead>
           <tr class="active">
-            <th width="500px">模板名称</th>
-            <th>{{formwork.modelName}}</th>
-            <th class="some">
-              <p v-if="formwork.goodsUserNum==0">已有{{formwork.goodsUserNum}}个商品使用 </p>
+            <th width="30%">模板名称</th>
+            <th width="17.5%">{{formwork.modelName}}</th>
+            <th width="17.5%" class="some">
+              <p style="margin:0;" v-if="formwork.goodsUserNum==0">已有{{formwork.goodsUserNum}}个商品使用 </p>
               <router-link v-if="formwork.goodsUserNum!=0" :to="{name:'goodList'}">已有{{formwork.goodsUserNum}}个商品使用 </router-link></th>
-            <th class="act"><router-link :to="{ name:'formworkadd', query: {addModify: false, modelId: formwork.modelId} }">编辑</router-link></th>
-            <th><a  @click="showdelete(formwork.modelId)"  v-if="formwork.goodsUserNum==0">删除</a></th>
+            <th width="17.5%" class="act"><router-link :to="{ name:'formworkadd', query: {addModify: false, modelId: formwork.modelId} }">编辑</router-link></th>
+            <th width="17.5%"><a @click="showdelete(formwork.modelId)"  v-if="formwork.goodsUserNum==0">删除</a></th>
           </tr>
         </thead>
         <tbody>

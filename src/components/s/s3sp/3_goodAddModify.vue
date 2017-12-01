@@ -140,14 +140,6 @@
               </tr>
             </tbody>
         </table>
-      <!--  <i v-if="sukShow" style="color:red; font-style:normal;">商品库存/重量/拍获价不能为空</i>
-        <i v-if="sukShow1" style="color:red; font-style:normal;">
-          <span v-show="countMode==1">商品重量/拍获价/市场价不能为负数</span>
-          <span v-show="countMode==2">商品重量/拍获价不能为负数</span>
-        </i>
-        <i v-if="sukShow2" style="color:red; font-style:normal;">商品库存请输入正整数</i>
-        <i v-if="sukShow3" style="color:red; font-style:normal;">商品拍获价/市场价/供货价不能超过999999.99元</i>-->
-
         <i v-if="sukShow" style="color:red; font-style:normal;">商品库存不能为空且为大于或等于0的正整数<br/></i>
         <i v-if="sukShow1" style="color:red; font-style:normal;">商品重量不能为空且为大于0的数字<br/></i>
         <i v-if="sukShow2" style="color:red; font-style:normal;">商品拍获价不能为空且为大于0的数字，不能超过999999.99元<br/></i>
@@ -180,8 +172,8 @@
               </td>
               <td>
                 <el-tag
-                  :key="tag"
                   v-for="tag in item.itemValue"
+                  :key="tag.spec_name"
                   closable
                   :disable-transitions="false"
                   @close="handleClose(tag.spec_name,index)">
@@ -528,7 +520,7 @@
               },
               success: function (result) {
                 that.goodsBrandName=result.content.brandName
-                console.log(that.goodsBrandName)
+                //console.log(that.goodsBrandName)
               }
             })
           }
@@ -1119,13 +1111,18 @@
             con.setAttribute('id', 'ulcon')
             document.getElementById('ulcon').ondragover = function (ev) {
               ev.preventDefault()
+              ev.stopPropagation()
             }
             document.getElementById('ulcon').ondrop = function (ev) {
+              //var ev = event || window.event
               ev.preventDefault()
+              ev.stopPropagation()
               var id = ev.dataTransfer.getData('Img')
               var startLocation = id.substring(5, id.length)
-              console.log('startLocation:' + startLocation)
-              var toElem = ev.toElement
+              //console.log('startLocation:' + startLocation)
+              var toElem = ev.toElement || ev.target
+              //console.log(ev)
+              //console.log(ev.target)
               if (toElem != undefined && toElem.src != undefined) {
                 var endLocation // 替换位置
                 for (var i = 0; i < that.goodsMainImages.length; i++) {
@@ -1144,6 +1141,7 @@
                     that.tempGoodsMainImages.push(that.goodsMainImages[j])
                   }
                 }
+                //console.log('tempGoodsMainImages',that.tempGoodsMainImages)
                 that.goodsMainImages = []
                 for (var k = 0; k < that.tempGoodsMainImages.length; k++) {
                   that.goodsMainImages.push(that.tempGoodsMainImages[k])
@@ -1152,7 +1150,6 @@
                 for (var n = 0; n < that.goodsMainImages.length; n++) {
                   that.fileList.push(eval('(' + '{url:"' + that.goodsMainImages[n] + '"}' + ')'))
                 }
-
                 $('.el-upload-list__item-thumbnail').click()
                 // $('.el-icon-upload-success .el-icon-check').text('::before')
                 // 重新赋值id
@@ -1167,6 +1164,7 @@
                 con.setAttribute('id','ulcon')
                 document.getElementById('ulcon').ondragover = function (ev) {
                   ev.preventDefault()
+                  ev.stopPropagation()
                 }
               }
             }
@@ -1312,7 +1310,7 @@
               that.goodsMainImages.push(result.content.goodsMainImages[i])
             }
             that.picture()
-            console.log("that.fileList="+that.fileList)
+            //console.log("that.fileList="+that.fileList)
             if(result.content.skuFlag==1){
               that.$('#skuFlag0').hide()
             }else{
