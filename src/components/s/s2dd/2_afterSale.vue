@@ -237,6 +237,9 @@
           that.show_tip('开始时间不能大于结束时间')
           return
         }
+        if ( that.totalCount == 0 ) {
+          return;
+        }
         // search_params: { expectation: '', afterSaleStatus: '', condition: '', startTime: '', endTime: '',hasMedia:'' }
         let url=that.localbase + 'm2c.scm/order/export/saleafter?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+'&status='+that.search_params.afterSaleStatus+'&orderType='+that.search_params.expectation+'&condition='+that.search_params.condition+'&startTime='+that.search_params.startTime+'&mediaInfo='+that.search_params.hasMedia+'&endTime='+that.search_params.endTime;
         window.location.href=url
