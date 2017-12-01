@@ -49,7 +49,7 @@
         </tr>
       </table>
       <el-table
-        ref="multipleTable" id="multipleTable" :show-header=false
+        id="multipleTable" :show-header=false
         :data="orderStoreData"
         tooltip-effect="dark"
         style="z-index:1;">
