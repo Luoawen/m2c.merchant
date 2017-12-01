@@ -206,7 +206,8 @@
       </div>
 
       <p class="back">
-        <button @click="postfrom">完成</button>
+        <!-- <button @click="postfrom">完成</button> -->
+        <el-button   type="primary" size="medium" @click="postfrom" >完成</el-button>
       </p>
     </div>
     <!--弹框-->
@@ -226,7 +227,7 @@
             <div class="search_tit">选择商品：</div>
             <div class="clear">
               <input class="input form-control fl" type="text" placeholder="请输入商品名称" v-model="goods_query_item.condition" />
-              <button class="sort fl  btn-search" @click="goodsChoose">搜索</button>
+              <button class="sort fl " @click="goodsChoose">搜索</button>
               <div class="right">
               </div>
             </div>
@@ -449,7 +450,7 @@
               <span>{{shopResult.pageCount}}</span>
               <button>下一页</button>
               <span>到</span>
-              <input style="width:24px;height:24px;display: inline-block;font-size:9px;" v-model="shop_query_item.pageNum"/>
+              <input style="width:24px;height:24px;display: inline-block;font-size:14px;" v-model="shop_query_item.pageNum"/>
               <span>页</span>
             </div>
             <div class="modal-footer footer">
@@ -564,7 +565,7 @@
           <div class="shop_choose_sort clear">
             <div class="fl">
               <input placeholder="请输入商品名称进行搜索" class="form-control sort_input fl" v-model="goods_query_item.condition"/>
-              <button class="sort btn-search" @click="goodsChoose()">搜索</button>
+              <button class="sort" @click="goodsChoose()">搜索</button>
             </div>
           </div>
           <!--商品-->
@@ -2136,7 +2137,7 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     word-break: break-all;
-    font-size: 12px;
+    font-size: 14px;
 }
 .pickSpecificationsStyle{
     width: 60px;
@@ -2219,10 +2220,9 @@
         min-height: 320px;
       }
       .info-content {
-        mix-width: 1100px;
+        min-width: 1100px;
         background: rgba(255, 255, 255, 1);
         padding: 10px 0 30px 30px;
-      //  background: #ccc;
         margin-bottom: 10px;
         font-size: 10px;
         a {
@@ -2230,7 +2230,7 @@
         }
         h4 {
           line-height: 32px;
-          font-size: 12px;
+          font-size:14px;
           font-weight: bold;
           color: #333;
           margin-bottom: 10px;
@@ -2326,7 +2326,7 @@
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
                     -webkit-line-clamp: 1;
-                    font-size: 9px;
+                    font-size: 14px;
                     padding-bottom: 0px;
                   }
                   .icon_dele {
@@ -2388,7 +2388,7 @@
             width: 360px;
             height: 24px;
             border-radius: 2px;
-            font-size: 9px;
+            font-size: 14px;
             display: inline-block!important;
           }
           .set_xs {
@@ -2459,7 +2459,7 @@
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
                     -webkit-line-clamp: 1;
-                    font-size: 9px;
+                    font-size: 14px;
                     padding-bottom: 0px;
                   }
                   .icon_dele {
@@ -2482,7 +2482,6 @@
                 border-radius: 50%;
                 background-color: #BFC1CB;
                 color: #fff;
-                // font-size:
                 text-align: center;
                 line-height: 22px;
               }
@@ -2634,7 +2633,7 @@
             background: rgba(0, 134, 255, 1);
             border-radius: 2px;
             margin-left: 10px;
-            font-size: 11px;
+            font-size: 12px;
             color: rgba(255, 255, 255, 1);
             line-height: 24px;
             border: none;
@@ -2647,7 +2646,7 @@
             height: 24px;
             background: rgba(255, 255, 255, 1);
             border-radius: 2px;
-            font-size: 9px;
+            font-size: 14px;
           }
           .a_btn {
             padding: 0 10px;

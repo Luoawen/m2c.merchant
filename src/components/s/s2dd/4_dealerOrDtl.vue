@@ -789,6 +789,11 @@
           that.show_tip("输入金额不能位负数")
           return
         }
+        var pattern =/^[0-9]+([.]\d{1,2})?$/;
+        if(!pattern.test(that.$(".a6_input").val())){
+          that.show_tip("请输入数字(例:0.00),最高保留两位小数");
+          return
+        }
         if(that.streetAddr==''){
           that.show_tip("请输入详细地址")
           return

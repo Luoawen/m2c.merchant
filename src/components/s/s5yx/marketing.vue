@@ -193,7 +193,6 @@
       }
        ,deleteGoods (row,to){//终止
         let that = this
-        let target = event.target
         sessionStorage.setItem('full_cut_id', row.fullCutId)
           if (confirm('确定要终止该满减?')) {
               that.$.ajax({
@@ -248,7 +247,7 @@
       // },
       goto ($event,path) {
         let that = this
-        console.log(event.target,"event.target")
+        console.log($event.target,"event.target")
         // let path = event.target.getAttribute('path')
         if (!path) return
         if (that.active_path === path) {

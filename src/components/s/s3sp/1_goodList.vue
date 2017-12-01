@@ -19,24 +19,8 @@
             </el-date-picker>
             <el-input v-model="search_goods_params.condition" placeholder="输入商品名称/编码/条形码/品牌" title="输入商品名称/编码/条形码/品牌"></el-input>
             <el-button type="primary" size="medium" @click="goodsStoreSearch()" class="btn-search">搜索</el-button>
-            <!-- <div class="search" style="width: 400px;float: left">
-              <el-input placeholder="输入商品名称 / 编码 / 条形码 / 品牌" v-model="search_goods_params.condition" class="input-with-select">
-                <el-button slot="append" icon="el-icon-search" @click.native="goodsStoreSearch()"></el-button>
-              </el-input>
-            </div> -->
             <el-button type="primary" size="medium" @click="newGoods" class="fr">新增</el-button>
             <el-button type="primary" size="medium" icon="el-icon-download" @click.native="exportSearch()" class="fr">导出</el-button>
-             <!-- <el-dropdown  @command="handleCommand">
-                <el-button type="primary">
-                  批量操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="putaway">批量上架</el-dropdown-item>
-                  <el-dropdown-item command="soldout">批量下架</el-dropdown-item>
-                  <el-dropdown-item command="delete">批量删除</el-dropdown-item>
-                  <el-dropdown-item command="export">导出</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>-->
           </div>
           <div class="good_info" style="margin-top: 20px;">
             <el-table
@@ -76,9 +60,6 @@
                 <template slot-scope="scope"><img v-bind:src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;display:inline-block;float:left;"/>
                 <a class="ellipsis2" :title="scope.row.goodsName">
                     {{scope.row.goodsName}}
-                    <!-- <div class="goodsName">
-                      {{scope.row.goodsName}}
-                    </div> -->
                   </a>
                 </template>
               </el-table-column>
@@ -153,10 +134,6 @@
               :data="goodsCheckStoreData"
               tooltip-effect="dark"
               style="width: 100%">
-              <!-- <el-table-column
-                type="selection"
-                width="55">
-              </el-table-column> -->
               <el-table-column
                 label="操作"
                 width="120"
@@ -238,11 +215,6 @@
           <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="selectedOptions3" change-on-select placeholder="商品分类":props="goodsClassifyProps"></el-cascader><!--商品分类-->
           <el-input v-model="search_goodsCheck_params.condition" placeholder="输入商品名称/编码/条形码/品牌" title="输入商品名称/编码/条形码/品牌"></el-input>
           <el-button type="primary" size="medium" @click="goodsDeleteStore()" class="btn-search" >搜索</el-button>
-          <!-- <div class="search" style="width: 400px;float: left">
-            <el-input placeholder="输入商品名称 / 编码 / 条形码 / 品牌" v-model="search_goodsCheck_params.condition" class="input-with-select">
-              <el-button slot="append" icon="el-icon-search" @click.native="goodsDeleteStore()"></el-button>
-            </el-input>
-          </div> -->
         </div>
         <el-table
           ref="multipleTable"
@@ -272,9 +244,6 @@
             <template slot-scope="scope"><img :src="scope.row.goodsImageUrl" style="width: 60px;height: 60px;display:inline-block;float:left;"/>
               <a class="ellipsis2" :title="scope.row.goodsName">
                 {{scope.row.goodsName}}
-                <!-- <div class="goodsName">
-                  {{scope.row.goodsName}}
-                </div> -->
               </a>
             </template>
           </el-table-column>
@@ -317,6 +286,19 @@
         </div>
       </el-tab-pane>
     </el-tabs>
+    <!-- 删除弹框 -->
+      <div class="delectGoodBg" v-if="delectGoodBg"></div>
+     <div class="delectGoodCon" v-if="delectGood" >
+          <div class="agreetc_header">
+            <span>提示</span>
+            <span class="fr" @click="delectGoodHide()">X</span>
+          </div>
+          <div class="agreetc_body">请确认是否删除</div>
+          <div class="agreetc_footer">
+            <button type="button" class="btn save" @click = "deleteConfirmFn()">确认</button>
+            <button type="button" class="btn cancel" @click="delectGoodHide()">取消</button>
+          </div>
+        </div>
   </div>
 </template>
 
@@ -325,6 +307,10 @@
     name: '',
     data () {
       return {
+        delete_paramsRow:[],
+       delete_params_goodsTo:'',
+        delectGoodBg: false, // 弹层背景
+        delectGood: false, // 删除盒子
         time:'',
         goodsStorePageRows:10,
         goodsStoreCurrentPage: 1,
@@ -376,6 +362,11 @@
       }
     },
     methods: {
+      deleteConfirmFn (){
+        let that =this
+        that.deleteGoods(that.delete_paramsRow,that.delete_params_goodsTo)
+        
+      },
       //时间赋值
       timeCheck () {
         let that = this
@@ -440,11 +431,14 @@
           data: {},
           success: function (result) {
             if (result.status === 200){
+               
               // 获取商品列表
               if(to === 'a'){
                 that.goodsStore()
+               that. delectGoodHide()
               } else if(to === 'b'){
                 that.goodsCheckStore()
+                that. delectGoodHide()
               }
             } else {
               alert('商品删除异常');
@@ -648,8 +642,27 @@
             that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId,approveStatus:approveStatus,from:to}});
           }
         } else if (action === '_delete') {
-          that.deleteGoods(row,to);
+          if(to=='a'){
+          that.delete_params_goodsTo= 'a'
+          }else{
+            that.delete_params_goodsTo= 'b'
+          }
+          that.delete_paramsRow=row
+          that.delectGoodShow()
+          // that.deleteGoods(row,to);
         }
+      },
+         // 删除盒子显示
+      delectGoodShow () {
+        let that = this
+        that.delectGood = true
+        that.delectGoodBg = true
+      },
+      // 删除盒子隐藏
+      delectGoodHide () {
+        let that = this
+        that.delectGood = false
+        that.delectGoodBg = false
       }
       ,goodsDeleteStore () {
         let that = this
@@ -877,6 +890,8 @@
       }
     }
   }
+
+
   /*详情*/
   #myTabContent{position:relative;}
   .goodInfo{position:absolute;top:0;left:0;width:100%;height:840px;padding-top:40px;background:#fff;z-index:99;}
@@ -884,9 +899,65 @@
   .goodInfo div img{width:60px;height:60px; display:inline-block;}
   .goodInfo button{width:150px;height:50px;border:1px solid #ccc; text-align: center;}
   /*删除*/
-  .delectGoodBg{position:absolute;top:0;left:0;width:100%;height:880px;background:rgba(0,0,0,0.6);z-index:99;}
-  .delectGoodWrap{position:absolute;width:380px;height:280px;padding:10px;border-radius:10px;top:50%;left:50%;margin-left:-200px;background:#fff;z-index:99;}
-  .delectGoodWrap p{line-height:50px;}
+  .delectGoodBg{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:999;}
+  .delectGoodCon {
+  width: 400px;
+  height: 280px;
+  background: #fff;
+  z-index: 9999;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  margin-left: -200px;
+  margin-top: -180px;
+  background: #FFFFFF;
+  border-radius: 4px;
+  .agreetc_header{
+    width: 100%;
+    height: 50px;
+    background: #DFE9F6;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 16px;
+    span {
+      display: inline-block;
+      line-height: 50px;
+    }
+  }
+  .agreetc_body{
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #FFFFFF;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 20px;
+  color: #333333;
+  line-height: 150px;
+}
+.agreetc_footer{
+  height: 80px;
+  padding-top: 10px;
+  padding-left: 50%;
+  .btn {
+    width: 80px;
+    height: 30px;
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+  }
+
+  .save {
+    margin-left: -110px;
+    background: #0086FF;
+  }
+  .cancel {
+    margin-left: 40px;
+    background: #FFF;
+    border: 1px solid #CCCCCC;
+    color: #444;
+  }
+}
+}
   .blueBtn,.defultBtn{background:rgb(96, 174, 246);width:80px;height:30px;border-radius:4px;text-align: center;color:#fff;}
   .defultBtn{background:#ccc;}
   /*修改/新增*/
