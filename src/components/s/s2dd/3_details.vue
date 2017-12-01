@@ -72,7 +72,7 @@
                   <div class="wobse top">
                     {{orderDetail.goodsInfo.goodsName}}
                   </div>
-                  <div class="btm">
+                  <div class="btm" v-if="orderDetail.goodsInfo.skuName != ''">
                     规格： {{orderDetail.goodsInfo.skuName}}
                   </div>
                 </div>

@@ -129,7 +129,7 @@
         			<div class="a1_img mr10 fl"><img :src="JSON.parse(goods.goodsImage == ''? '[]': goods.goodsImage)[0]" /></div>
             	<div>
               <div class="wose wid mt10">{{goods.goodsName}}</div>
-              <div class="blue">规格：{{goods.skuName == ''?'默认':goods.skuName}}</div>
+              <div class="blue" v-if="goods.skuName != ''">规格：{{goods.skuName}}</div>
             	</div>
         		</td>
             <td class="a2">{{goods.mediaResId!=''?(typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].name : ''):''}}
@@ -210,7 +210,7 @@
         			<div class="a1_img mr10 fl"><img :src="JSON.parse(goods.goodsImage == ''? '[]': goods.goodsImage)[0]"/></div>
             	<div>
               <div class="wose wid mt20">{{goods.goodsName}}</div>
-              <div class="blue">规格：{{goods.skuName == ''?'默认':goods.skuName}}</div>
+              <div class="blue" v-if="goods.skuName != ''">规格：{{goods.skuName}}</div>
             	</div>
         		</td>
         		<td>{{goods.sellNum}}</td>
