@@ -145,7 +145,7 @@ body{
 	width: 0.32rem;
 	height: 0.32rem;
 	flex-direction: row;
-	background: url(../images/icoCommodityAdmit.png) no-repeat center;
+	background: url(../images/ico_commodity_admit@3x.png) no-repeat center;
 }
 .good_bs04 .tit6{
 	font-size: 0.24rem;
@@ -276,7 +276,7 @@ body{
 .icoCommodityService{
 	width: 0.48rem;
 	height: 0.48rem;
-	background: url(../images/icoCommodityService.png) no-repeat center;
+	background: url(../images/ico_commodity_service@3x.png) no-repeat center;
 	display: inline-block;
 	margin-right: 0.4rem;
 	margin-top: 0.15rem;
@@ -284,7 +284,7 @@ body{
 .icoCommodityCart{
 	width: 0.48rem;
 	height: 0.48rem;
-	background: url(../images/icoCommodityCart.png) no-repeat center;
+	background: url(../images/ico_commodity_cart@3x.png) no-repeat center;
 	display: inline-block;
 	margin-right: 0.4rem;
 	margin-top: 0.15rem;
@@ -292,7 +292,7 @@ body{
 .icoCommodityCollectDefault{
 	width: 0.48rem;
 	height: 0.48rem;
-	background: url(../images/icoCommodityCollectDefault.png) no-repeat center;
+	background: url(../images/ico_commodity_collect_default@3x.png) no-repeat center;
 	display: inline-block;
 	margin-right: 0.4rem;
 	margin-top: 0.15rem;
