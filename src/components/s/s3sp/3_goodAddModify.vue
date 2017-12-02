@@ -127,7 +127,7 @@
                     <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkWeight(good.weight,index,'weight',goodsSKUs)"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkPhotographPrice(good.photographPrice,index,'photographPrice',goodsSKUs)"></el-input>
+                    <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkPhotographPrice(good.photographPrice,index,'photographPrice',goodsSKUs,good.supplyPrice)"></el-input>
                 </td>
                 <td>
                   <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkMarketPrice(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
@@ -229,7 +229,7 @@
                   <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkWeight(good.weight,index,'weight',goodsSKUs)"></el-input>
               </td>
               <td>
-                  <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkPhotographPrice(good.photographPrice,index,'photographPrice',goodsSKUs)"></el-input>
+                  <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkPhotographPrice(good.photographPrice,index,'photographPrice',goodsSKUs,good.supplyPrice)"></el-input>
               </td>
               <td>
                 <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkMarketPrice(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
@@ -269,7 +269,7 @@
         <i v-if="sukShow2" style="color:red; font-style:normal;">商品库存请输入正整数</i>-->
         <i v-if="sukShow" style="color:red; font-style:normal;">商品库存不能为空且为大于或等于0的正整数<br/></i>
         <i v-if="sukShow1" style="color:red; font-style:normal;">商品重量不能为空且为大于0的数字<br/></i>
-        <i v-if="sukShow2" style="color:red; font-style:normal;">商品拍获价不能为空且为大于0的数字，不能超过999999.99元<br/></i>
+        <i v-if="sukShow2" style="color:red; font-style:normal;">商品拍获价不能为空且为大于0的数字，不能小于供货价，不能超过999999.99元<br/></i>
         <i v-if="sukShow3" style="color:red; font-style:normal;">商品市场价为大于0的数字，不能超过999999.99元<br/></i>
         <i v-if="sukShow4" style="color:red; font-style:normal;">商品供货价不能为空且为大于0的数字，不能大于拍获价，不能超过999999.99元<br/></i>
         <i v-if="sukShow5" style="color:red; font-style:normal;">商品编码为1-30字符的字母或数字且不能重复</i>
@@ -593,14 +593,15 @@
           list[index][arr] = val
         }, 0)
       },
-      checkPhotographPrice (val, index, arr, list) {
+      checkPhotographPrice (val, index, arr, list, val1) {
         setTimeout(() => {
           if (val && $.isNumeric(val) && val > 0) {
-            if (val > 999999.99) {
+            if (val > 999999.99 || parseFloat(val) < parseFloat(val1)) {
               this.sukShow2 = true
             } else {
               val = Number(val).toFixed(2)
               this.sukShow2 = false
+              this.sukShow4 = false
             }
           } else {
             val = ''
@@ -636,6 +637,7 @@
             } else {
               val = Number(val).toFixed(2)
               this.sukShow4 = false
+              this.sukShow2 = false
             }
           } else {
             val = ''
@@ -739,13 +741,23 @@
       // 批量设置
       setUpSure(){
         let that = this
-        console.log(that.goodsSKUs.length)
+
         for(var i=0;i<that.goodsSKUs.length;i++){
-          that.$set(that.goodsSKUs[i],'availableNum',that.setUp.availableNum)
-          that.$set(that.goodsSKUs[i],'weight',that.setUp.weight)
-          that.$set(that.goodsSKUs[i],'photographPrice',that.setUp.photographPrice)
-          that.$set(that.goodsSKUs[i],'marketPrice',that.setUp.marketPrice)
-          that.$set(that.goodsSKUs[i],'supplyPrice',that.setUp.supplyPrice)
+          if(that.setUp.availableNum!=''&&that.setUp.availableNum!=undefined){
+            that.$set(that.goodsSKUs[i],'availableNum',that.setUp.availableNum)
+          }
+          if(that.setUp.weight!=''&&that.setUp.weight!=undefined){
+            that.$set(that.goodsSKUs[i],'weight',that.setUp.weight)
+          }
+          if(that.setUp.photographPrice!=''&&that.setUp.photographPrice!=undefined){
+            that.$set(that.goodsSKUs[i],'photographPrice',that.setUp.photographPrice)
+          }
+          if(that.setUp.photographPrice!=''&&that.setUp.photographPrice!=undefined){
+            that.$set(that.goodsSKUs[i],'marketPrice',that.setUp.marketPrice)
+          }
+          if(that.setUp.photographPrice!=''&&that.setUp.photographPrice!=undefined){
+            that.$set(that.goodsSKUs[i],'supplyPrice',that.setUp.supplyPrice)
+          }
         }
       },
       // 取消
