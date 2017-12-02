@@ -404,6 +404,7 @@
         tbody{
           tr{
             height: 40px;
+            td{padding-left:40px;}
           }
           tr:nth-child(2n){
             background:#f4f5fa;
