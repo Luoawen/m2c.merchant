@@ -528,6 +528,9 @@
             if (res.status == 200) {
               that.getDealerOrders();
             }
+            else if(res.status === 103) {
+              that.show_tip('已不符合售后申请同意无效！')
+            }
             that.agreeApplyShow = false;
             that.Agreeshow = false;
           }

@@ -573,6 +573,9 @@
                   // 获取订单操作列表
                   that.loadOrderDetail()
                 }
+                else if(result.status === 103) {
+                  that.show_tip('已不符合售后申请同意无效！')
+                }
               }
             })
           }).catch(() => {
@@ -605,6 +608,9 @@
             if (result.status === 200){
               // 获取订单操作列表
               that.loadOrderDetail()
+            }
+            else if(result.status === 103) {
+              that.show_tip('已不符合售后申请同意无效！')
             }
             that.showMask = false;
             that.showRt = false;
