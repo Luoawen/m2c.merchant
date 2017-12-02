@@ -83,7 +83,7 @@ html,body{font-family:MicrosoftYaHei!important}
 
 /* 提示框样式 */
 .show_tip_cover{background-color:rgba(0,0,0,.7);z-index:99999;display:flex;display:-webkit-flex;position:fixed;left:0;right:0;top:0;bottom:0;}
-.show_tip_frame{position:relative;margin:auto;width:320px;background-color:white;border-radius:5px;}
+.show_tip_frame{position:relative;margin:auto;width:320px;height:200px;background-color:white;border-radius:5px;}
 .show_tip_frame_in{animation:show_tip_animation .3s;-webkit-animation:show_tip_animation .3s}
 .show_tip_frame_logo{margin-top:10px;background:no-repeat center center/39px;height:60px}
 .show_tip_frame_content{max-height:200px;overflow:auto;margin:5px 0 15px;line-height:28px;text-align:center;color:#4a4a4a;font-size:16px}
