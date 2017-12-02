@@ -752,10 +752,10 @@
           if(that.setUp.photographPrice!=''&&that.setUp.photographPrice!=undefined){
             that.$set(that.goodsSKUs[i],'photographPrice',that.setUp.photographPrice)
           }
-          if(that.setUp.photographPrice!=''&&that.setUp.photographPrice!=undefined){
+          if(that.setUp.marketPrice!=''&&that.setUp.marketPrice!=undefined){
             that.$set(that.goodsSKUs[i],'marketPrice',that.setUp.marketPrice)
           }
-          if(that.setUp.photographPrice!=''&&that.setUp.photographPrice!=undefined){
+          if(that.setUp.supplyPrice!=''&&that.setUp.supplyPrice!=undefined){
             that.$set(that.goodsSKUs[i],'supplyPrice',that.setUp.supplyPrice)
           }
         }
