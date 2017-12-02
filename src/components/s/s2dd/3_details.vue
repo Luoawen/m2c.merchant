@@ -26,7 +26,7 @@
               </div>
               <div>
                 <span class="tit01">关联订货号:</span>
-                <span class="ml20">{{orderDetail.orderId}}</span>
+                <router-link :to="{name:'dealerOrDtl',query:{dealerOrderId: orderDetail.orderId,orderId: orderIdSplic}}" target="_blank"><span class="ml20">{{orderDetail.orderId}}</span></router-link>
               </div>
               <div>
                 <span class="tit01">订单总额:</span>
@@ -86,12 +86,9 @@
               <td class="a6">
                 <!--状态，0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
-
                 <div class="oprs" v-show="orderDetail.status==0 || orderDetail.status==1||orderDetail.status==2">
                   <el-button size="mini" @click="handleAgree()">同意申请</el-button>
                 </div>
-
-
                 <!-- 用户期望退款--> <!-- 1.商户同意售后 2.商户同意退款 3.商户确认退款 -->
                 <div class="oprs" v-show="orderDetail.status==4 && orderDetail.orderType==2"><!-- 商户同意退款 -->
                   <el-button size="mini" style="margin:-1px 0 0 -1px;" @click="agreedRefund()">同意退款</el-button>
@@ -99,8 +96,6 @@
                 <!--<div class="oprs" v-show="orderDetail.status==9 && orderDetail.orderType==2">
                   <el-button size="mini" round @click="confirmRefund()">确认退款</el-button>
                 </div>-->
-
-
                 <!-- 用户期望退货--> <!-- 1.商户同意售后 2.用户返回货物 3.商家确认收货 4.商户同意退款 5.商户确认退款 -->
                 <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==0">
                   <el-button size="mini" @click="confirmReceipt()">确认收货</el-button>
@@ -347,6 +342,7 @@
           ,dealerId:''
           ,doStatus: -2
         },
+        orderIdSplic:'',
         operatingRecords:[],
         logistics:{
           afterSellOrderId:'',
@@ -434,6 +430,7 @@
               that.orderDetail.rejectReason=_content.rejectReason
               that.orderDetail.dealerId = _content.dealerId;
               that.orderDetail.doStatus = _content.doStatus;
+              that.orderIdSplic = _content.orderId.slice(0,_content.orderId.length-1)
               that.setReturnData(result.content)
             }
           }
