@@ -146,8 +146,8 @@
         <p>{{item.remark == '' ? '暂无' : item.remark}}</p>
       </div>
       <p class="back">
-        <button @click="postform">完成</button>
-        <button style="margin-left: 100px;" @click="itemback">返回</button>
+         <el-button  type="primary" size="medium"   @click="postform" > 完成 </el-button> 
+         <el-button  type="primary" size="medium"  style="margin-left: 100px;"  @click="itemback" > 返回 </el-button> 
       </p>
     </div>
     <!--作用范围为全店的商品筛选弹窗s-->
@@ -201,19 +201,17 @@
       </div>
     </div>
     <!--作用范围为全店的商品商家筛选弹窗e-->
-    <!--作用范围商品筛选弹框s-->
+    <!--作用范围 商品筛选弹框s-->
     <div class="modal fade frame_layer01" v-if="item.rangeType===2" id="choose_goods"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
       <div class="modal-dialog frame" style="background:#fff;">
         <div class="frame_total ">
-          <div class="modal-header">
-            <h5 class="modal-title text-center">
-              <div type="button" class="guanb"  @click.stop="closeBox()"   data-dismiss="modal" aria-hidden="true" style="right:-20px;"></div>
-            </h5>
+          <div class="modal-header"  style="text-align:center;padding:10px !important" >
+                <span>选择商品</span>
+              <div type="button" class="guanb"  @click.stop="closeBox()"   data-dismiss="modal" aria-hidden="true" ></div>
           </div>
-          <div class="search">
-            <div class="search_tit">选择商品：</div>
-            <div class="clear">
-              <input class="input form-control fl" v-model="goods_query_item.condition" type="text" placeholder="请输入商品标题或者编号进行搜索" />
+          <div class="search" style="height:10px">
+            <div class="clear" style='padding-left:20px;margin-top:15px' >
+              <input class="input form-control fl"   v-model="goods_query_item.condition" type="text" placeholder="请输入商品标题或者编号进行搜索" />
               <button class="sort fl " @click="goodsSelect()">搜索</button>
               <div class="right">
               </div>
@@ -880,7 +878,7 @@
 </script>
 
 <style lang="scss" scoped>
-//  商户名称显示两行 超出部分省略
+// 商户名称显示两行 超出部分省略
 .dealerName{
 display: -webkit-box;
 -webkit-line-clamp: 2;
@@ -917,7 +915,6 @@ overflow: hidden;
     z-index: 100;
     }
   .content{
-    //   background: red;
     margin-left:20px;
     margin-top:10px;
     .info-content{
@@ -968,60 +965,6 @@ overflow: hidden;
         div.intr{
           width:480px;
         }
-        /*.range{
-            flex:1;
-            .goods{
-                width:520px;
-                height: 210px;
-                padding:25px 45px;
-                background: #F5F5F5;
-                position: relative;
-                z-index: -1;
-                ul{
-                    list-style: none;
-                    display: flex;
-                    margin:0;
-                    padding:0;
-                    justify-content:space-between;
-                    // flex-direction: row-reverse ;
-                    // color:red;
-
-                    li{
-                       width:100px;
-                       p{
-                           width:100%;
-                           height:40px;
-                           font-size: 12px;
-                           padding:6px 6px 12px 8px ;
-                           overflow: hidden;
-                           text-overflow: ellipsis;
-                       }
-                    }
-                 }
-                 .control{
-                    width: 22px;
-                    height: 22px;
-                    position: absolute;
-                    top:50%;
-                    transform: translateY(-50%);
-                    border-radius: 50%;
-                    background-color: #BFC1CB;
-                    color:#fff;
-                    // font-size:
-                    text-align: center;
-                    line-height: 22px;
-                }
-                .more{
-                    text-align: right;
-                }
-                .left{
-                    left:12px;
-                }
-                .right{
-                    right:12px;
-                }
-            }
-        }*/
         .range {
           flex: 1;
           line-height: 24px;
@@ -1121,18 +1064,9 @@ overflow: hidden;
     }
     .back{
       text-align: left;
+      text-indent: 20px;
       padding-top: 27px;
       padding-bottom: 27px;
-      button{
-        width:110px;
-        height:40px;
-        background:rgba(17,210,235,1);
-        border-radius: 2px ;
-        font-size:14px;
-        color:rgba(255,255,255,1);
-        line-height:20px;
-        border: none;
-      }
     }
   }
   /*选择品类*/
@@ -1244,8 +1178,6 @@ overflow: hidden;
     .frame {
       width: 890px;
       height: 714px;
-      padding-left: 20px;
-      padding-right: 20px;
       .frame_total {
         width: 100%;
         height: 100%;
@@ -1356,10 +1288,10 @@ overflow: hidden;
       .goods_body {
         margin-top: 40px;
         max-height: 255px;
+        padding-left: 20px;
         .goods {
           width: 47%;
           height: 120px;
-          // background-color: red;
           border: 1px solid #ccc;
           h6 {
             padding-left: 10px;

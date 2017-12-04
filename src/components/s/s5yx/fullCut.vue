@@ -1,69 +1,94 @@
 <template>
   <div class="marketingFullCutbox">
     <div class="content">
-      <div class="info-content">
-        <h4>基础信息</h4>
+      <div class="info-content" >
+        <el-row :gutter="20">   
+             <h4>基础信息</h4>
+          </el-row>
         <div class="base wrap">
-          <div class="set">
-            <span class="wid70">满减名称：</span>
-            <input type="text" id='fullCutName' class="form-control set_name" placeholder="1-11个字符" maxlength="11" v-model="params.full_cut_name" @blur="formValidator(1)">
-            <div class="set_bz" style="color: red;" v-show="tip_show.name">名称为最多11位汉字数字英文,不能为空</div>
-          </div>
-          <div class="set">
-            <span class="wid70">有效期：</span>
-            <input type="date" id='todayDate' class="form-control expiry_date" v-model="params.expiration_time_start" :min="todayDate" :max="params.expiration_time_end" @blur="formValidator(3)"/>
-            <span class="">&nbsp;&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <input type="date" id='exactlyToday'  class="form-control expiry_date" v-model="params.expiration_time_end" :min="params.expiration_time_start" @blur="formValidator(4)"/>
-            <div class="set_bz" style="color: red;" v-show="tip_show.time">有效期不能为空</div>
-          </div>
-          <div class="set">
-            <span class="wid70">数量（张）</span>
-            <input class="small-input form-control set_name" type="number" placeholder="请输入数量" v-model="params.total_num" oninput="if(value > 99999){value = 0}" @blur="formValidator(2)">
-            <div class="set_bz"><span style="color: red;" v-show="tip_show.total_num">满减数量最多5位正整数</span>注：填0即为不限制数量</div>
-          </div>
+          <el-row >
+            <el-col :span="2" class="alginRight"><i class='red'>*</i> 满减名称：</el-col>
+            <el-col :span="9">
+              <el-input id='fullCutName'  placeholder="1-11个字符" :maxlength="11" v-model="params.full_cut_name" @blur="formValidator(1)" ></el-input>
+              <i class="redTip red" v-show="tip_show.name">名称为最多11位汉字数字英文,不能为空</i>
+            </el-col>
+          </el-row>
+          <el-row >
+              <el-col :span="2" class="alginRight"><i class='red'>*</i> 有效期：</el-col>
+              <el-col :span="8">
+                <el-date-picker 
+                    v-model="params.expiration_time_start"
+                    :min="todayDate"
+                    id='todayDate'
+                    type="date"
+                    :picker-options="pickerBeginDateBefore"
+                    placeholder="开始日期"
+                   @blur="formValidator(3)">
+              </el-date-picker>-- &nbsp;
+               <el-date-picker
+                    v-model="params.expiration_time_end"
+                    id='exactlyToday'
+                    type="date"
+                    placeholder="结束日期"
+                    :picker-options="pickerBeginDateAfter"
+                    @change="formValidator(4)">
+              </el-date-picker></br>
+              <span class="set_bz" style="color: red; " v-show="tip_show.time">请正确填写有效期</span>
+              </el-col>
+            </el-row>
+          <el-row >
+            <el-col :span="2" class="alginRight"><i class='red'>*</i> 数量（张）：</el-col>
+            <el-col :span="9">
+                <el-input type="number" placeholder="请输入数量" v-model="params.total_num"  @blur="formValidator(2)"></el-input>
+              <div class="set_bz"><span style="color: red;" v-show="tip_show.total_num">满减数量最多5位正整数</span>注：填0即为不限制数量</div>
+            </el-col>
+          </el-row>
         </div>
       </div>
       <div class="info-content">
-        <h4>条件设置</h4>
+      <h4>条件设置</h4>
         <div class="base rule clear">
           <div class="intr col-xs-6">
-            <p>门槛及内容</p>
-            <div class="set clear" >
-              <span class="wid70 color_g fl">形式</span>
-              <select class="form-control set_xs fl" v-model="params.full_cut_type" @change="selectlevel(params.full_cut_type,params.threshold_type)">
-                <option value="1">减钱</option>
-                <option value="2">打折</option>
-                <option value="3">换购</option>
-              </select>
-              <!-- 换购加上点击选择商品 -->
-              <span class="fl" style="margin-left:10px;" v-show="showlevel5 || showlevel6">
-                <a @click="openGoodsExcahnge()">点击选择换购商品</a>
-              </span>
-            </div>
-            <div class="set clear" >
-              <span class="wid70 color_g fl">门槛</span>
-              <select class="form-control set_xs" v-model="params.threshold_type" @change="selectlevel(params.full_cut_type,params.threshold_type)">
-                <option value="1">金额</option>
-                <option value="2">件数</option>
-              </select>
-            </div>
+              <p>门槛及内容</p> 
+              <el-row >
+                <el-col :span="2" class="alginRight"><i class='red'>*</i>形式：</el-col>
+                <el-col :span="10">
+                  <el-select v-model="params.full_cut_type"  placeholder="请选择"  @change="selectlevel(params.full_cut_type,params.threshold_type)" >
+                      <el-option v-for="item in fullCutType" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                </el-select>
+                  <!-- 换购加上点击选择商品 -->
+                  <span style="margin-left:10px;" v-show="showlevel5 || showlevel6">
+                    <a @click="openGoodsExcahnge()">点击选择换购商品</a>
+                  </span>
+                </el-col>
+              </el-row>
+               <el-row >
+                <el-col :span="2" class="alginRight"><i class='red'>*</i>门槛：</el-col>
+                <el-col :span="10">
+                  <el-select v-model="params.threshold_type"  placeholder="请选择"  @change="selectlevel(params.full_cut_type,params.threshold_type)">
+                      <el-option v-for="item in thresholdType" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                </el-select>
+                </el-col>
+              </el-row>
             <!--满元减钱-->
             <div class="sale clear" v-show="showlevel1" v-for="(fullCut, index) in fullCutList">
               <b class="fl " style="margin-left:20px;margin-right:10px;">层级<span>{{index + 1}}</span></b>
               <span>
                 <input type="hidden" v-model="fullCut.level" />
                 <span class="fl">满</span>
-                <input class="form-control fl money_i" v-model="fullCut.threshold" />
+                <input class="form-control fl money_i" style='height:24px; fontSize:12px '   v-model="fullCut.threshold" />
                 <span class="fl">元</span>
                 <span class="fl">减</span>
-                <input class="form-control fl money_i" v-model="fullCut.money" />
+                <input class="form-control fl money_i" style='height:24px; fontSize:12px '   v-model="fullCut.money" />
                 <span class="fl">元</span>
               </span>
               <a @click="addDiscount(index + 1, 1)" :style="index == fullCutList.length - 1 ? '' : 'display:none;'">增加一级优惠</a>
               <i class="icon_dele" @click="deleteDiscount(index)"></i>
             </div>
             <!--满件减钱-->
-            <div class="sale clear" v-show="showlevel2" v-for="(fullCut, index) in fullCutList">
+            <div class="sale clear" v-show="showlevel2" style="fontSize:12px"   v-for="(fullCut, index) in fullCutList">
               <b class="fl " style="margin-left:20px;margin-right:10px;">层级<span>{{index + 1}}</span></b>
               <span>
                 <span class="fl">满</span>
@@ -77,35 +102,35 @@
               <i class="icon_dele" @click="deleteDiscount(index)"></i>
             </div>
             <!--满元打折-->
-            <div class="sale clear" v-show="showlevel3" v-for="(fullCut, index) in fullCutList" >
+            <div class="sale clear" v-show="showlevel3" style="fontSize:12px" v-for="(fullCut, index) in fullCutList" >
               <b class="fl " style="margin-left:20px;margin-right:10px;">层级<span>{{index + 1}}</span></b>
               <span>
                 <span class="fl">满</span>
-                <input class="form-control fl money_i" v-model="fullCut.threshold" />
+                <input class="form-control fl money_i"    v-model="fullCut.threshold" />
                 <span class="fl">元</span>
                 <span class="fl">打</span>
-                <input class="form-control fl money_i" v-model="fullCut.discount"  />
+                <input class="form-control fl money_i"  v-model="fullCut.discount"  />
                 <span class="fl">折</span>
               </span>
               <a @click="addDiscount(index + 1, 3)" v-show="index == fullCutList.length - 1">增加一级优惠</a>
               <i class="icon_dele" @click="deleteDiscount(index)"></i>
             </div>
             <!--满件打折-->
-            <div class="sale clear" v-show="showlevel4" v-for="(fullCut, index) in fullCutList">
-              <b class="fl " style="margin-left:20px;margin-right:10px;">层级<span>{{index + 1}}</span></b>
+            <div class="sale clear" style="fontSize:12px" v-show="showlevel4" v-for="(fullCut, index) in fullCutList">
+              <b class="fl " style="margin-left:20px;margin-right:10px; ">层级<span>{{index + 1}}</span></b>
               <span>
                 <span class="fl">满</span>
-                <input class="form-control fl money_i" v-model="fullCut.threshold" />
+                <input class="form-control fl money_i" style="fontSize:12px"    v-model="fullCut.threshold" />
                 <span class="fl">件</span>
                 <span class="fl">打</span>
-                <input class="form-control fl money_i" v-model="fullCut.discount" />
+                <input class="form-control fl money_i"   v-model="fullCut.discount" />
                 <span class="fl">折</span>
               </span>
               <a @click="addDiscount(index + 1, 4)" v-show="index == fullCutList.length - 1">增加一级优惠</a>
               <i class="icon_dele" @click="deleteDiscount(index)"></i>
             </div>
             <!--满元换购-->
-            <div class="sale clear" style="padding-left:20px;" v-show="showlevel5" v-for="(fullCut, index) in fullCutList">
+            <div class="sale clear" style="padding-left:20px; fontSize:12px" v-show="showlevel5" v-for="(fullCut, index) in fullCutList">
               <span>
                 <span class="fl">满</span>
                 <input class="form-control fl money_i" v-model="fullCut.threshold" />
@@ -116,13 +141,13 @@
               </span>
             </div>
             <!--满件换购-->
-            <div class="sale clear"  style="padding-left:20px;" v-show="showlevel6" v-for="(fullCut, index) in fullCutList">
+            <div class="sale clear"  style="padding-left:20px; fontSize:12px" v-show="showlevel6" v-for="(fullCut, index) in fullCutList">
               <span>
                 <span class="fl">满</span>
                 <input class="form-control fl money_i" v-model="fullCut.threshold" />
                 <span class="fl">件</span>
                 <span class="fl">加</span>
-                <input class="form-control fl money_i" v-model="fullCut.buyingPrice" />
+                <input class="form-control fl money_i"  v-model="fullCut.buyingPrice" />
                 <span class="fl">元换购</span>
               </span>
             </div>
@@ -143,12 +168,12 @@
               </span>
               <span>
                 <span class="color_g">每人优惠</span>
-                <input class="form-control wid70" style="height:24px;" v-model="params.num_per_one" type="number" oninput="if(value.length > 5){value=value.slice(0,5)}" @blur="formValidator(5)"/>
+                <input class="form-control wid70" style="height:24px; fontSize:12px " v-model="params.num_per_one" type="number" oninput="if(value.length > 5){value=value.slice(0,5)}" @blur="formValidator(5)"/>
                 <span>次</span>
               </span>
               <span v-if="params.num_per_one > 1">
                 <span class="color_g">每天优惠</span>
-                <input class="form-control wid70" style="height:24px;" v-model="params.num_per_day" type="number" oninput="if(value.length > 5){value=value.slice(0,5)}" @blur="formValidator(6)"/>
+                <input class="form-control wid70" style="height:24px; fontSize:12px" v-model="params.num_per_day" type="number" oninput="if(value.length > 5){value=value.slice(0,5)}" @blur="formValidator(6)"/>
                 <span>次</span>
               </span>
               <div class="set_bz" style="color: red;" v-show="tip_show.num_per_one">每人优惠次数必须大于0且小于满减总次数</div>
@@ -156,15 +181,20 @@
             </div>
           </div>
           <div class="range col-xs-6">
-            <div>
-              <span class="wid70 fl">作用范围</span>
-              <select class="form-control range_of_action fl" v-model="params.range_type" @change="rangeSelect(params.range_type)">
-                <option value="0">全店</option>
-                <option value="2">商品</option>
-              </select>
-              <a v-show="rang_type_show.goods" @click="openGoodsChoose">点我选择商品</a>
-              <a v-show="rang_type_show.all" @click="openFullRange">设置需要单独排除，不参与这次满减的商品</a>
-            </div>
+           <el-row >
+               <el-col :span="3" class="alginRight"><i class='red'>*</i>作用范围：</el-col>
+                <el-col :span="16">
+                  <el-select v-model="params.range_type"  placeholder="请选择"  @change="rangeSelect(params.range_type)" >
+                      <el-option v-for="item in rangeTypeSelect" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                </el-select>
+                  <!-- 换购加上点击选择商品 -->
+                  <span style="margin-left:6px; height:36px" >
+                      <a v-show="rang_type_show.goods" @click="openGoodsChoose">点我选择商品</a>
+                      <a v-show="rang_type_show.all" @click="openFullRange">设置需要单独排除，不参与这次满减的商品</a>
+                  </span>
+                </el-col>
+              </el-row>
             <div class="goods" v-show="rang_type_show.goods" >
               <p>已选<span>{{chooseGoodsList.length}}</span>件商品</p>
               <ul>
@@ -200,14 +230,12 @@
           </div>
         </div>
       </div>
-      <div class="info-content info-content_bz">
+      <div class="info-content info-content_bz" style="margin-top:0px">
         <h4>备注</h4>
         <textarea placeholder="请输入备注内容，备注中的内容不会展示给用户哦~" class="form-control" v-model="params.remark" maxlength="255"></textarea>
       </div>
-
       <p class="back">
-        <!-- <button @click="postfrom">完成</button> -->
-        <el-button   type="primary" size="medium" @click="postfrom" >完成</el-button>
+        <el-button  type="primary" size="medium" @click="postfrom" >完成</el-button>
       </p>
     </div>
     <!--弹框-->
@@ -218,15 +246,13 @@
     <div class="modal fade frame_layer01" id="choose_goods"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
       <div class="modal-dialog frame" style="background:#fff;">
         <div class="frame_total ">
-          <div class="modal-header">
-            <h5 class="modal-title text-center">
-              <div type="button" class="guanb"    @click.stop="closeBox($event)"    aria-hidden="true" style="right:-20px;"></div>
-            </h5>
+          <div class="modal-header"  style="text-align:center;padding:10px !important">
+            <span>选择商品</span>
+              <div type="button" class="guanb"  @click.stop="closeBox($event)"    aria-hidden="true" data-dismiss='modal'></div>
           </div>
           <div class="search">
-            <div class="search_tit">选择商品：</div>
-            <div class="clear">
-              <input class="input form-control fl" type="text" placeholder="请输入商品名称" v-model="goods_query_item.condition" />
+            <div class="clear"  style='padding-left:20px'>
+              <input class="input form-control fl"  style="padding:0"   type="text" placeholder="请输入商品名称" v-model="goods_query_item.condition" />
               <button class="sort fl " @click="goodsChoose">搜索</button>
               <div class="right">
               </div>
@@ -398,70 +424,6 @@
       </div>
     </div>
     <!--商品筛选已选商品全部弹窗e-->
-    <!--单独成本设置选择商家s-->
-    <div class="modal fade" id="shop_cost_choose"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
-      <div class="modal-dialog shopchoose"  style="margin:20px 0px;">
-        <div class="">
-          <div class="modal-content frame_total">
-            <div class="modal-header">
-              <h5 class="modal-title text-center ">
-                选择商家</h5>
-              <div class="guanb" data-dismiss="modal" aria-hidden="true"></div>
-            </div>
-            <div class="modal-body">
-              <div class="shop_choose_sort clear">
-                <div class="fl">
-                  <input placeholder="请输入商家名称进行搜索" class="form-control sort_input fl" v-model="shop_query_item.dealerName"/>
-                  <button class="sort" @click="shopSelect()">搜索</button>
-                </div>
-                <div class="ml28 fl">
-                  <label class="fl">商家分类列表</label>
-                  <select class="form-control sort_select fl" v-model="shop_query_item.dealerClassify">
-                    <option value="">全部</option>
-                    <option v-for="shopClassify in shopClassifyList" :value="shopClassify.dealerClassifyId">
-                      {{shopClassify.dealerClassifyName}}
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div class="shop_body">
-                <div class="shop_choose">
-                  <div class="shop_choosebox fl" v-for="shop in shopResult.content" style="position:relative;" @mouseenter="shop.isCostShow = true" @mouseleave="shop.isCostShow = false">
-                    <div @click="openShopCost(shop.dealerId, shop.cost.platform, shop.cost.dealer)">
-                      <div class="tit">{{shop.shopName}}</div>
-                      <div class="img"><img :src="shop.shopIcon" /></div>
-                    </div>
-                    <div class="set_cd" v-show="shop.isCost&&shop.isCostShow">
-                      <span>平台承担:</span>
-                      <span>{{shop.cost.platform}}% </span>
-                      <span>商家承担:</span>
-                      <span>{{shop.cost.dealer}}%</span>
-                    </div>
-                    <div class="fc" v-show="shop.isCost">
-                    </div>
-                    <div class="fcimg" v-show="shop.isCost"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="page">
-              <button >上一页</button>
-              <span>{{shopResult.pageNumber}}</span>/
-              <span>{{shopResult.pageCount}}</span>
-              <button>下一页</button>
-              <span>到</span>
-              <input style="width:24px;height:24px;display: inline-block;font-size:14px;" v-model="shop_query_item.pageNum"/>
-              <span>页</span>
-            </div>
-            <div class="modal-footer footer">
-              <button type="button" class="btn save" data-dismiss="modal">取消</button>
-              <button type="button" class="btn cancel" data-dismiss="modal">确认</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--单独成本设置选择商家e-->
     <!--作用范围为全店的商品商家筛选弹窗s-->
     <div class="modal fade frame_layer01" id="full_range_dialog"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
       <div class="modal-dialog shop_goodchoose"    style="margin:10% 30%;">
@@ -475,8 +437,8 @@
           <!--商品条件-->
           <div class="shop_choose_sort clear" :style="tab_flag == 'goods' ? '' : 'display:none;'">
             <div class="fl">
-              <input placeholder="请输入商品名称进行搜索" class="form-control sort_input fl" v-model="goods_query_item.condition"/>
-              <button class="sort btn-search" @click="goodsChoose()">搜索</button>
+              <input placeholder="请输入商品名称进行搜索"  style="padding:0" class="form-control sort_input fl" v-model="goods_query_item.condition"/>
+              <button class="sort " @click="goodsChoose()">搜索</button>
             </div>
           </div>
           <!--商家条件-->
@@ -685,6 +647,49 @@
     name: '',
     data () {
       return {
+        pickerBeginDateBefore:{
+          // 小于今天的有效期不能使用
+          disabledDate : (time) => {
+            let beginDateVal = new Date();
+            if(beginDateVal){
+              return time.getTime() < beginDateVal
+            }
+          }
+        },
+         pickerBeginDateAfter:{
+           // 大于有效期的开始时间能够使用
+          disabledDate : (time) => {
+            //  let that = this
+            let beginDateVal = this.params.expiration_time_start || new Date() ;
+            if(beginDateVal){
+              return time.getTime() < beginDateVal 
+            }
+          }
+        },
+        fullCutType:[{
+          value: '1',
+          label: '减钱'
+        }, {
+          value: '2',
+          label: '打折'
+        }, {
+          value: '3',
+          label: '换购'
+        }],
+        thresholdType:[{
+          value: '1',
+          label: '金额'
+        }, {
+          value: '2',
+          label: '件数'
+        }],
+        rangeTypeSelect:[{
+          value: '0',
+          label: '全店'
+        }, {
+          value: '2',
+          label: '商品'
+        }],
         // 标记打开的是哪个面板
         panelFlag:'',
         modalShadow:false,
@@ -735,9 +740,9 @@
           total_num: '', // 满减总数
           expiration_time_start: '', // 有效期开始时间
           expiration_time_end: '', // 有效期结束世间
-          full_cut_type: 1, // 满减形式，1：减钱，2：打折，3：换购
-          threshold_type: 1, // 门槛类型，1：金额，2：件数
-          range_type: 2, // 作用范围，0：全店，1：商家，2：商品，3：品类
+          full_cut_type: '1', // 满减形式，1：减钱，2：打折，3：换购
+          threshold_type: '1', // 门槛类型，1：金额，2：件数
+          range_type: '2', // 作用范围，0：全店，1：商家，2：商品，3：品类
           dealer_ids: [], // 商家ID列表
           goods_ids: [], // 商品ID列表
           goods_classifys: [], // 商品品类列表
@@ -758,9 +763,7 @@
     created: function () {
       var that = this
       that.params.full_cut_id = that.guid()
-      var date = new Date()
-      that.todayDate = that.formatDate(date, 'yyyy-MM-dd')
-      that.params.expiration_time_start = that.todayDate
+     
       // console.log(that.params.creator)
     },
     methods: {
@@ -799,6 +802,12 @@
       postfrom () {
         let that = this
         var flag = that.formValidator(0)
+         if(that.params.expiration_time_end < that.params.expiration_time_start){
+              that.tip_show.time = true
+             that.$("#fullCutName").select();
+             that.$("#exactlyToday").focus();
+             return;
+              }
         if (flag) {
           for (var i = 0; i < that.fullCutList.length; i++) {
             that.fullCutList[i].level = i + 1
@@ -869,7 +878,8 @@
           }
         }
         if (flag == 0 || flag == 3) {
-          if (that.params.expiration_time_start == '') {
+          console.log(that.params.expiration_time_start,that.params.expiration_time_start)
+          if (that.params.expiration_time_start == ''||null) {
             that.tip_show.time = true
             return false
           } else{
@@ -877,7 +887,9 @@
           }
         }
         if (flag == 0 || flag == 4) {
-          if (that.params.expiration_time_end == '') {
+          let that = this
+             console.log('that.params.expiration_time_end',that.params.expiration_time_end)
+          if (that.params.expiration_time_end == ''||null) {
             that.tip_show.time = true
              that.$("#fullCutName").select();
              that.$("#exactlyToday").focus();
@@ -2119,11 +2131,23 @@
           that.rang_type_show.all = false
         }
       }
+    },
+    mounted () {
+        let that = this
+       var date = new Date()
+      //that.todayDate = that.formatDate(date, 'yyyy-MM-dd')
+      that.$nextTick(()=>{
+        that.params.expiration_time_start = date
+      console.log(this.params.expiration_time_start)
+      })
+      
     }
   }
 </script>
 
 <style lang="scss" scoped>
+// input[type="number"]{-moz-appearance:textfield;-moz-box-shadow:none;}
+.alginRight{text-align: left; line-height:42px;color:#666;}
 .frame{
       margin-top: 100px;
 }
@@ -2203,7 +2227,7 @@
     border: 1px solid #0078E4;
     line-height: 20px;
     text-align: center;
-    font-size:10px;
+    font-size:12px;
     color: #0078E4;
     position: absolute;
     left: 50%;
@@ -2222,15 +2246,15 @@
       .info-content {
         min-width: 1100px;
         background: rgba(255, 255, 255, 1);
-        padding: 10px 0 30px 30px;
+        padding: 2px 0 20px 30px;
         margin-bottom: 10px;
-        font-size: 10px;
+        font-size: 12px;
         a {
           color: #0086FF;
         }
         h4 {
-          line-height: 32px;
-          font-size:14px;
+          line-height: 16px;
+          font-size:16px;
           font-weight: bold;
           color: #333;
           margin-bottom: 10px;
@@ -2257,6 +2281,7 @@
           border-radius: 2px;
         }
         .sale {
+          font-size:10px;
           .icon_dele {
             width: 13px;
             height: 13px;
@@ -2283,11 +2308,7 @@
           }
         }
         .base {
-          /*width: 480px;
-          display: flex;*/
           div.intr {
-            /*width:480px;*/
-            /*width: 50%;*/
             .goods{
               border: 1px solid #e5e5e5;
               overflow: hidden;
@@ -2297,16 +2318,10 @@
               background: rgba(245, 245, 245, 1);
               margin-top: 20px;
               position: relative;
-              /*z-index: 99;*/
               ul {
                 list-style: none;
-                /*display: flex;*/
                 margin: 0;
                 padding: 0;
-                /*justify-content:space-between;*/
-                // flex-direction: row-reverse ;
-                // color:red;
-
                 li {
                   width: 160px;
                   background: #fff;
@@ -2351,7 +2366,7 @@
                 color: #fff;
                 // font-size:
                 text-align: center;
-                line-height: 22px;
+                line-height: 36px;
               }
               .more {
                 text-align: right;
@@ -2362,7 +2377,7 @@
                   padding-right: 5px;
                   height: 30px;
                   line-height: 30px;
-                  font-size: 9px;
+                  font-size: 12px;
                   padding-bottom: 0px;
                   background: #fff;
                   border-radius: 5px;
@@ -2377,12 +2392,6 @@
                 right: 12px;
               }
             }
-          }
-          .set {
-            /*flex:1;*/
-            margin-bottom: 20px;
-            line-height: 24px;
-            margin-top: 20px;
           }
           .set_name {
             width: 360px;
@@ -2399,17 +2408,11 @@
 
           }
           .set_bz {
-            font-size: 9px;
+            font-size: 12px;
             color: rgba(191, 193, 203, 1);
-            line-height: 13px;
-            margin-left: 70px;
-            margin-top: 10px;
-          }
-          .expiry_date {
-            width: 160px;
-            /*height:24px;*/
-            border-radius: 2px;
-            display: inline-block!important;
+            line-height: 1;
+            margin-left: 8px;
+            margin-top: 5px;
           }
           .range {
             flex: 1;
@@ -2428,7 +2431,7 @@
               min-height: 210px;
               padding: 20px 20px;
               background: rgba(245, 245, 245, 1);
-              margin-top: 20px;
+              margin-top: 10px;
               position: relative;
               /*z-index: 99;*/
               ul {
@@ -2454,12 +2457,12 @@
                     padding-right: 5px;
                     height: 30px;
                     line-height: 30px;
+                    font-size: 12px;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
                     -webkit-line-clamp: 1;
-                    font-size: 14px;
                     padding-bottom: 0px;
                   }
                   .icon_dele {
@@ -2494,7 +2497,7 @@
                   padding-right: 5px;
                   height: 30px;
                   line-height: 30px;
-                  font-size: 9px;
+                  font-size: 12px;
                   padding-bottom: 0px;
                   background: #fff;
                   border-radius: 5px;
@@ -2523,18 +2526,8 @@
       }
       .back {
         text-align: left;
-        padding-top: 27px;
+        padding-left: 30px;
         padding-bottom: 27px;
-        button {
-          width: 110px;
-          height: 40px;
-          background: rgba(17, 210, 235, 1);
-          border-radius: 2px;
-          font-size: 14px;
-          color: rgba(255, 255, 255, 1);
-          line-height: 20px;
-          border: none;
-        }
       }
     }
     ul {
@@ -2547,8 +2540,6 @@
       .frame {
         width: 890px;
         height: 714px;
-        padding-left: 20px;
-        padding-right: 20px;
         .frame_total {
           width: 100%;
           height: 100%;
@@ -2556,7 +2547,7 @@
 
         }
         .tc_shop {
-          font-size: 9px;
+          font-size: 12px;
           width: 100%;
           min-height: 155px;
           border-bottom: 2px solid #E5E5E5;
@@ -2626,6 +2617,7 @@
           height: 30px;
           line-height: 30px;
           margin-left: 0px;
+          margin-top:20px;
           position: relative;
           .sort {
             width: 60px;
@@ -2658,12 +2650,12 @@
           }
         }
         .goods_body {
-          margin-top: 40px;
+          margin-top: 20px;
           max-height: 255px;
+          padding-left: 20px;
           .goods {
             width: 47%;
             height: 120px;
-            // background-color: red;
             border: 1px solid #ccc;
             h6 {
               padding-left: 10px;
@@ -2695,7 +2687,7 @@
               border: 1px solid #979797;
               width: 52px;
               height: 20px;
-              font-size: 9px;
+              font-size: 12px;
               background: #fff;
             }
           }
@@ -2714,7 +2706,7 @@
               line-height: 30px;
               margin: 0;
               width: 100%;
-              font-size: 8px;
+              font-size: 12px;
               background: rgba(245, 245, 245, 1);
               border-bottom: 1px solid #ccc;
               white-space: nowrap;
@@ -2815,7 +2807,7 @@
             width: 228px;
             height: 24px;
             border-radius: 2px;
-            font-size: 9px;
+            font-size: 12px;
           }
           .sort {
             width: 60px;
@@ -2875,7 +2867,7 @@
             margin-bottom: 10px;
             .tit {
               background: rgba(245, 245, 245, 1);
-              font-size: 9px;
+              font-size: 12px;
               height: 30px;
               line-height: 30px;
               padding-left: 10px;
@@ -2893,7 +2885,7 @@
         .specification_tab {
           margin-left: 20px;
           .tit {
-            font-size: 10px;
+            font-size: 12px;
             color: rgba(119, 119, 119, 1);
             line-height: 14px;
           }
@@ -2905,7 +2897,7 @@
             td {
               height: 37px;
               width: 85px;
-              font-size: 9px;
+              font-size:12px;
               text-align: center;
               border: 1px solid #E5E5E5;
             }
@@ -2947,7 +2939,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         background: rgba(245, 245, 245, 1);
-        font-size: 9px;
+        font-size: 12px;
         width: 90px;
       }
       .modal-header {
@@ -2973,7 +2965,7 @@
           width: 228px;
           height: 24px;
           border-radius: 2px;
-          font-size: 9px;
+          font-size: 12px;
         }
         .sort {
           width: 60px;
@@ -3022,7 +3014,7 @@
               height: 40px;
               background: #fff;
               border: 1px solid #e5e5e5;
-              font-size: 10px;
+              font-size: 12px;
               position: absolute;
               right: -50px;
               top: -44px;
@@ -3038,7 +3030,7 @@
               border: 1px solid #BFC1CB;
               padding-left: 25px;
               padding-top: 5px;
-              font-size: 9px;
+              font-size: 12px;
               border-radius: 2px;
               left: 20px;
               top: -40px;
@@ -3046,7 +3038,7 @@
             }
             .tit {
               background: rgba(245, 245, 245, 1);
-              font-size: 9px;
+              font-size: 12px;
               height: 30px;
               line-height: 30px;
               padding-left: 10px;
@@ -3071,14 +3063,14 @@
             border: 1px solid #979797;
             width: 52px;
             height: 20px;
-            font-size: 9px;
+            font-size: 12px;
             background: #fff;
           }
           .rb{
             width:24px;
             height:24px;
             display: inline-block;
-            font-size:9px;
+            font-size:12px;
           }
         }
       }
@@ -3118,7 +3110,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         background: rgba(245, 245, 245, 1);
-        font-size: 9px;
+        font-size: 12px;
         width: 90px;
       }
       .modal-header {
@@ -3158,7 +3150,7 @@
           width: 228px;
           height: 24px;
           border-radius: 2px;
-          font-size: 9px;
+          font-size: 12px;
         }
         .sort {
           width: 60px;
@@ -3204,7 +3196,7 @@
             margin-bottom: 10px;
             .tit {
               background: rgba(245, 245, 245, 1);
-              font-size: 9px;
+              font-size: 12px;
               height: 30px;
               line-height: 30px;
               padding-left: 10px;
@@ -3262,7 +3254,7 @@
             width:24px;
             height:24px;
             display: inline-block;
-            font-size:9px;
+            font-size:12px;
           }
         }
       }
@@ -3297,7 +3289,7 @@
       background: #fff;
       .modal-header {
         background: rgba(245, 245, 245, 1);
-        font-size: 10px;
+        font-size: 12px;
         color: rgba(119, 119, 119, 1);
         h5{
           height: 40px;
