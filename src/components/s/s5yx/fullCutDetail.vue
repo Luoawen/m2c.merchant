@@ -9,7 +9,7 @@
                      <p>有效期：
                        <span v-text="item.expirationTimeStart"></span>
                        <span>~</span>
-                       <span v-text="item.expirationTimeEnd"></span>
+                       <span v-html="item.expirationTimeEnd"></span>
                      </p>
                   </div>
                   <div>
@@ -124,8 +124,8 @@
             <h4>备注</h4>
             <p>{{item.remark == '' ? '暂无' : item.remark}}</p>
         </div>
-        <p class="back" @click="itemback">
-            <button>返回</button>
+        <p class="back" >
+            <el-button  type="primary" size="medium"   @click="itemback" > 返回 </el-button> 
         </p>
     </div>
   </div>
@@ -187,7 +187,6 @@
 
 <style lang="scss" scoped>
 .content{
-//   background: red;
     margin-left:20px;
     margin-top:10px;
     .info-content{
@@ -238,60 +237,6 @@
             div.intr{
                 width:480px;
             }
-            /*.range{
-                flex:1;
-                .goods{
-                    width:520px;
-                    height: 210px;
-                    padding:25px 45px;
-                    background: #F5F5F5;
-                    position: relative;
-                    z-index: -1;
-                    ul{
-                        list-style: none;
-                        display: flex;
-                        margin:0;
-                        padding:0;
-                        justify-content:space-between;
-                        // flex-direction: row-reverse ;
-                        // color:red;
-
-                        li{
-                           width:100px;
-                           p{
-                               width:100%;
-                               height:40px;
-                               font-size: 12px;
-                               padding:6px 6px 12px 8px ;
-                               overflow: hidden;
-                               text-overflow: ellipsis;
-                           }
-                        }
-                     }
-                     .control{
-                        width: 22px;
-                        height: 22px;
-                        position: absolute;
-                        top:50%;
-                        transform: translateY(-50%);
-                        border-radius: 50%;
-                        background-color: #BFC1CB;
-                        color:#fff;
-                        // font-size:
-                        text-align: center;
-                        line-height: 22px;
-                    }
-                    .more{
-                        text-align: right;
-                    }
-                    .left{
-                        left:12px;
-                    }
-                    .right{
-                        right:12px;
-                    }
-                }
-            }*/
             .range {
               flex: 1;
               line-height: 24px;
@@ -391,18 +336,9 @@
     }
     .back{
         text-align: left;
+        text-indent: 20px;
         padding-top: 27px;
         padding-bottom: 27px;
-        button{
-          width:110px;
-          height:40px;
-          background:rgba(17,210,235,1);
-          border-radius: 2px ;
-          font-size:14px;
-          color:rgba(255,255,255,1);
-          line-height:20px;
-          border: none;
-        }
     }
 }
 </style>

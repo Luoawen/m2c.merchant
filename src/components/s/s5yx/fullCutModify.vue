@@ -146,8 +146,8 @@
         <p>{{item.remark == '' ? '暂无' : item.remark}}</p>
       </div>
       <p class="back">
-        <button @click="postform">完成</button>
-        <button style="margin-left: 100px;" @click="itemback">返回</button>
+         <el-button  type="primary" size="medium"   @click="postform" > 完成 </el-button> 
+         <el-button  type="primary" size="medium"  style="margin-left: 100px;"  @click="itemback" > 返回 </el-button> 
       </p>
     </div>
     <!--作用范围为全店的商品筛选弹窗s-->
@@ -880,7 +880,7 @@
 </script>
 
 <style lang="scss" scoped>
-//  商户名称显示两行 超出部分省略
+// 商户名称显示两行 超出部分省略
 .dealerName{
 display: -webkit-box;
 -webkit-line-clamp: 2;
@@ -917,7 +917,6 @@ overflow: hidden;
     z-index: 100;
     }
   .content{
-    //   background: red;
     margin-left:20px;
     margin-top:10px;
     .info-content{
@@ -968,60 +967,6 @@ overflow: hidden;
         div.intr{
           width:480px;
         }
-        /*.range{
-            flex:1;
-            .goods{
-                width:520px;
-                height: 210px;
-                padding:25px 45px;
-                background: #F5F5F5;
-                position: relative;
-                z-index: -1;
-                ul{
-                    list-style: none;
-                    display: flex;
-                    margin:0;
-                    padding:0;
-                    justify-content:space-between;
-                    // flex-direction: row-reverse ;
-                    // color:red;
-
-                    li{
-                       width:100px;
-                       p{
-                           width:100%;
-                           height:40px;
-                           font-size: 12px;
-                           padding:6px 6px 12px 8px ;
-                           overflow: hidden;
-                           text-overflow: ellipsis;
-                       }
-                    }
-                 }
-                 .control{
-                    width: 22px;
-                    height: 22px;
-                    position: absolute;
-                    top:50%;
-                    transform: translateY(-50%);
-                    border-radius: 50%;
-                    background-color: #BFC1CB;
-                    color:#fff;
-                    // font-size:
-                    text-align: center;
-                    line-height: 22px;
-                }
-                .more{
-                    text-align: right;
-                }
-                .left{
-                    left:12px;
-                }
-                .right{
-                    right:12px;
-                }
-            }
-        }*/
         .range {
           flex: 1;
           line-height: 24px;
@@ -1121,18 +1066,9 @@ overflow: hidden;
     }
     .back{
       text-align: left;
+      text-indent: 20px;
       padding-top: 27px;
       padding-bottom: 27px;
-      button{
-        width:110px;
-        height:40px;
-        background:rgba(17,210,235,1);
-        border-radius: 2px ;
-        font-size:14px;
-        color:rgba(255,255,255,1);
-        line-height:20px;
-        border: none;
-      }
     }
   }
   /*选择品类*/
