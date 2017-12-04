@@ -28,12 +28,10 @@
           </el-date-picker>
         </el-col> 
         <el-col :span='3'>
-            <!-- <input class="form-control search_input  " v-model="search_params.full_cut_no" placeholder="满减编号" @blur="formValidator(1)"> -->
             <el-input v-model="search_params.full_cut_no" placeholder="满减编号"  @blur="formValidator(1)" ></el-input>
         </el-col>
         <el-col :span='3'>
-           <!-- <input class="form-control search_input" v-model="search_params.full_cut_name" placeholder="满减名称"> -->
-            <el-input v-model="search_params.full_cut_name" placeholder="满减名称"  maxlength="11"  ></el-input>
+            <el-input v-model="search_params.full_cut_name" placeholder="满减名称"  :maxlength="11"  ></el-input>
         </el-col>
       </el-row>
         <el-row width="50%"> 
@@ -69,8 +67,7 @@
               </el-table-column>
               <el-table-column
                prop="fullCutNo"
-                label="编号"
-                        >
+                label="编号">
               </el-table-column>
               <el-table-column
                 prop="fullCutName"
@@ -114,7 +111,20 @@
                 </el-pagination>
             </div>
           </div>
+       <!-- 遮罩层s -->
+    <div v-show="modalShadow" class="modal-backdrop fade in" style="z-index:1;"></div>
+       <!-- 遮罩层e -->
+      <!-- 确认删除框 -->
+    <div class="delectSizeWrap" v-show="modalShadow">
+      <div class="delectSizeCon">
+        <p>请确认是否终止该活动</p>
+        <button class="blueBtn" @click="delete_confirm()">确定</button>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button class="defultBtn" @click="deleteCancle()">取消</button>
+        <a class="colseDelectBox" @click="deleteCancle()"><span><img
+          src="../../../assets/images/ico_close.png" height="24" width="24"/></span></a>
+      </div>
 
+    </div>
   </div>
 </template>
 
@@ -123,7 +133,10 @@
     name: '',
     data () {
       return {
-        time:'',
+        deleteRow:'',
+        modalShadow:false,
+        takeover:'',
+        time:[],
         goodsStoreData:[],
         goodsStorePageRows:10,
         goodsStoreCurrentPage: 1,
@@ -180,6 +193,32 @@
       }
     },
     methods: {
+      deleteCancle(){
+        let that =this
+        that.modalShadow= false
+      },
+      delete_confirm(){
+        let that =this
+        that.modalShadow= false
+              that.$.ajax({
+                type: 'post',
+                url: that.base +'m2c.market/fullcut/stop/' + that.deleteRow.fullCutId,
+                data: {
+                  // token: sessionStorage.getItem('mToken')
+                  token:sessionStorage.getItem('access_token')
+                },
+                success: function (result) {
+                  if (result.status == 200) {
+                    console.log('status:', result.status)
+                     that.show_tip("满减终止成功!")
+                    that.getFullCutList()
+                  } else {
+                    that.show_tip("满减终止失败!")
+                  }
+                }
+              })
+
+      },
          //时间赋值
       timeCheck () {
         let that = this
@@ -216,25 +255,9 @@
        ,deleteGoods (row,to){//终止
         let that = this
         sessionStorage.setItem('full_cut_id', row.fullCutId)
-          if (confirm('确定要终止该满减?')) {
-              that.$.ajax({
-                type: 'post',
-                url: that.base +'m2c.market/fullcut/stop/' + row.fullCutId,
-                data: {
-                  // token: sessionStorage.getItem('mToken')
-                  token:sessionStorage.getItem('access_token')
-                },
-                success: function (result) {
-                  if (result.status == 200) {
-                    console.log('status:', result.status)
-                     that.show_tip("满减终止成功!")
-                    that.getFullCutList()
-                  } else {
-                    that.show_tip("满减终止失败!")
-                  }
-                }
-              })
-            }
+        // 弹框弹出
+          that.modalShadow= true
+          that.deleteRow = row
       },
       formatDate (date, fmt) {
         let that = this
@@ -328,6 +351,56 @@
 </script>
 
 <style lang="scss" scoped>
+.delectSizeWrap {
+    position: fixed;
+    width: 380px;
+    height: 280px;
+    padding: 10px;
+    border-radius: 10px;
+    top: 40%;
+    left: 50%;
+    margin-left: -200px;
+    background: #fff;
+    z-index: 999;
+      p {
+      line-height: 200px;
+      font-size: 18px;
+      color: #333333;
+      text-align: center;
+    }
+      .colseDelectBox {
+    position: absolute;
+    left: 335px;
+    top: 25px;
+    border-radius: 5px;
+  }
+    .blueBtn,
+  .defultBtn {
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 14px;
+    border: none !important;
+  }
+  .blueBtn {
+    background: #0086FF;
+    border-radius: 2px;
+    font-size: 14px;
+    color: #FFFFFF;
+    margin-left: 85px;
+  }
+
+  .defultBtn {
+    background: #ccc;
+    border: 1px solid #CCCCCC;
+    font-size: 14px;
+    border-radius: 4px;
+    text-align: center;
+    color: #fff;
+  }
+  }
+
 .modal-open{
   #handle{display:flex}
   #handle.in{z-index:2000}
