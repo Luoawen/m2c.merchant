@@ -2656,7 +2656,6 @@
           .goods {
             width: 47%;
             height: 120px;
-            // background-color: red;
             border: 1px solid #ccc;
             h6 {
               padding-left: 10px;

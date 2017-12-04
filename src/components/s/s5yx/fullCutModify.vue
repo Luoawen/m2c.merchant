@@ -201,19 +201,17 @@
       </div>
     </div>
     <!--作用范围为全店的商品商家筛选弹窗e-->
-    <!--作用范围商品筛选弹框s-->
+    <!--作用范围 商品筛选弹框s-->
     <div class="modal fade frame_layer01" v-if="item.rangeType===2" id="choose_goods"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1051;">
       <div class="modal-dialog frame" style="background:#fff;">
         <div class="frame_total ">
-          <div class="modal-header">
-            <h5 class="modal-title text-center">
-              <div type="button" class="guanb"  @click.stop="closeBox()"   data-dismiss="modal" aria-hidden="true" style="right:-20px;"></div>
-            </h5>
+          <div class="modal-header"  style="text-align:center;padding:10px !important" >
+                <span>选择商品</span>
+              <div type="button" class="guanb"  @click.stop="closeBox()"   data-dismiss="modal" aria-hidden="true" ></div>
           </div>
-          <div class="search">
-            <div class="search_tit">选择商品：</div>
-            <div class="clear">
-              <input class="input form-control fl" v-model="goods_query_item.condition" type="text" placeholder="请输入商品标题或者编号进行搜索" />
+          <div class="search" style="height:10px">
+            <div class="clear" style='padding-left:20px;margin-top:15px' >
+              <input class="input form-control fl"   v-model="goods_query_item.condition" type="text" placeholder="请输入商品标题或者编号进行搜索" />
               <button class="sort fl " @click="goodsSelect()">搜索</button>
               <div class="right">
               </div>
@@ -1180,8 +1178,6 @@ overflow: hidden;
     .frame {
       width: 890px;
       height: 714px;
-      padding-left: 20px;
-      padding-right: 20px;
       .frame_total {
         width: 100%;
         height: 100%;
@@ -1292,10 +1288,10 @@ overflow: hidden;
       .goods_body {
         margin-top: 40px;
         max-height: 255px;
+        padding-left: 20px;
         .goods {
           width: 47%;
           height: 120px;
-          // background-color: red;
           border: 1px solid #ccc;
           h6 {
             padding-left: 10px;
