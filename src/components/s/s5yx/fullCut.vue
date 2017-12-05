@@ -652,7 +652,7 @@
           disabledDate : (time) => {
             let beginDateVal = new Date();
             if(beginDateVal){
-              return time.getTime() < beginDateVal
+              return time.getTime()+24*60*60*1000 < beginDateVal 
             }
           }
         },
