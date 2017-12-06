@@ -79,7 +79,11 @@
               </td>
               <td class="a2">{{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].name : ''):''}}
                 <br>{{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].cateName:''):''}}</td>
-              <td class="a3">{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</td>
+              <td class="a3">
+                <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.specialPrice/100).toFixed(2)}}</template>
+                <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</p>
+                <!-- {{(orderDetail.goodsInfo.price/100).toFixed(2)}} -->
+              </td>
               <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
               <td class="a5">{{(orderDetail.goodsInfo.totalPrice/100).toFixed(2)}}</td>
               <td class="a5">{{((orderDetail.backMoney + orderDetail.backFreight)/100).toFixed(2)}}</td>
@@ -228,7 +232,11 @@
             </div>
           </div>
         </td>
-        <td class="a3">{{(orderDetail.goodsInfo.price).toFixed(2)/100}}</td>
+        <td class="a3">
+          <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.specialPrice/100).toFixed(2)}}</template>
+          <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</p>
+          <!-- {{(orderDetail.goodsInfo.price/100).toFixed(2)}} -->
+        </td>
         <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
         <td class="a5">{{(orderDetail.goodsInfo.totalPrice).toFixed(2)/100}}</td>
         <td class="a5">{{(orderDetail.backMoney).toFixed(2)/100}}</td>
@@ -950,13 +958,16 @@ display:-webkit-box;
         line-height: 40px;
       }
     }
+    table td p.lineThrough{text-decoration:line-through;font-size:12px;color:#999;}
     .customerdetail_container{
+      
       .detail_table{
         margin: auto;
         border: 1px solid #e7e7e7;
         width: 99%;
         td{
           padding-left: 10px;
+          p.lineThrough{text-decoration:line-through;font-size:12px;color:#999;}
         }
         .a1{
           width: 22%;

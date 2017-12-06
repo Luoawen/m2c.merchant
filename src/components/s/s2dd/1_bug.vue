@@ -170,7 +170,8 @@
                   </div>
                 </div>
                 <div class="a2 fl mt20" id="a2" style="width: 14%;">
-                  {{(goodsItem.discountPrice/100).toFixed(2)}}
+                  <template v-if="goodsItem.isSpecial==1">特惠价 {{(goodsItem.specialPrice/100).toFixed(2)}}</template>
+                  <p :class="{'lineThrough':goodsItem.isSpecial==1}">{{(goodsItem.discountPrice/100).toFixed(2)}}</p>
                 </div>
                 <div class="a3 fl mt20" id="a3" style="width: 18%;text-align: center;padding-right: 40px;">
                   {{goodsItem.sellNum}}
@@ -896,6 +897,7 @@
               margin-left:10px;
             }
           }
+          p.lineThrough{text-decoration:line-through;font-size:12px;color:#999;}
         }
         td{
           padding-left: 30px;

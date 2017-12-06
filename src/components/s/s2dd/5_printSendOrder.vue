@@ -68,7 +68,11 @@
   					<td>{{++index}}</td>
   					<td>{{goods.goodsName}}</td>
   					<td>{{goods.skuName}}</td>
-  					<td>{{goods.price/100}}</td>
+  					<td>
+              <!-- {{goods.price/100}} -->
+              <template v-if="goods.isSpecial==1">特惠价 {{(goods.specialPrice/100).toFixed(2)}}</template>
+              <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.price/100).toFixed(2)}}</p>
+            </td>
   					<td>{{goods.sellNum}}</td>
   					<td>{{((goods.price * goods.sellNum)/100).toFixed(2)}}</td>
   				</tr>
@@ -351,7 +355,8 @@
 					height: 40px;
 					line-height: 40px;
 					border: 1px solid #ccc;
-					text-align: center;
+          text-align: center;
+          p.lineThrough{text-decoration:line-through;font-size:12px;color:#999;}
 				}
 			}
 		}

@@ -136,7 +136,10 @@
               <br>{{goods.mediaResId!=''?(typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].cateName:''):''}}</td>
             <td class="a3">{{goods.sellNum}}</td>
             <td class="a4">{{goods.unitName}}</td>
-            <td class="a5">{{goods.isChange==0?(goods.price/100).toFixed(2):(goods.changePrice/100).toFixed(2)}}</td>
+            <td class="a5">
+              <template v-if="goods.isSpecial==1">特惠价 {{(goods.specialPrice/100).toFixed(2)}}</template>
+              <p :class="{'lineThrough':goods.isSpecial==1}">{{goods.isChange==0?(goods.price/100).toFixed(2):(goods.changePrice/100).toFixed(2)}}</p>
+            </td>
             <td class="a5">{{(goods.totalPrice/100).toFixed(2)}}</td>
             <td class="a6">
             	<span :id="'spanFreight' + index" v-show="!fModify">{{(goods.freight).toFixed(2)}}</span>
@@ -1117,7 +1120,7 @@
         width: 99%;
         margin-top: 20px;
         .fh{
-    		background: #fff;
+        background: #fff;
     	 }
        .deliver_tb{
          background: #fff;
@@ -1137,6 +1140,7 @@
        }
         td{
           padding-left: 20px;
+          p.lineThrough{text-decoration:line-through;font-size:12px;color:#999;}
         }
         .a1_img{
             img{
