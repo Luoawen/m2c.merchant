@@ -365,7 +365,7 @@
       deleteConfirmFn (){
         let that =this
         that.deleteGoods(that.delete_paramsRow,that.delete_params_goodsTo)
-        
+
       },
       //时间赋值
       timeCheck () {
@@ -431,7 +431,7 @@
           data: {},
           success: function (result) {
             if (result.status === 200){
-               
+
               // 获取商品列表
               if(to === 'a'){
                 that.goodsStore()
@@ -568,7 +568,7 @@
           that.show_tip('开始时间不能大于结束时间')
           return
         }
-        let url=that.localbase + 'm2c.scm/goods/export?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+'&goodsClassifyId='+that.search_goods_params.goodsClassifyId+'&goodsStatus='+that.search_goods_params.goodsStatus+'&condition='+that.search_goods_params.condition+'&startTime='+that.search_goods_params.startTime+'&endTime='+that.search_goods_params.endTime;
+        let url=that.localbase + 'm2c.scm/goods/export?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+'&goodsClassifyId='+that.search_goods_params.goodsClassifyId+'&goodsStatus='+that.search_goods_params.goodsStatus+'&condition='+that.search_goods_params.condition+'&startTime='+that.search_goods_params.startTime+'&endTime='+that.search_goods_params.endTime + "&exportStatus=0";
         window.location.href=url
       }
 
