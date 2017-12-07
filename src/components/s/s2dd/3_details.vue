@@ -39,8 +39,9 @@
                 <span class="ml20">{{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货退款':orderDetail.orderType==2?'仅退款':'-'}}</span>
               </div>
               <div>
-                <span class="tit01">售后金额:</span>
-                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((orderDetail.backMoney + orderDetail.backFreight)/100).toFixed(2)}}元（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight/100).toFixed(2)}}元）</span>
+                <span class="tit01">售后总额:</span>
+                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((orderDetail.backMoney + orderDetail.backFreight)/100).toFixed(2)}}元
+                  <span v-if="orderDetail.orderType !=2">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight/100).toFixed(2)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1">（运费待商家确认） </span></span>
               </div>
               <div>
                 <span class="tit01">申请时间:</span>
@@ -77,17 +78,22 @@
                   </div>
                 </div>
               </td>
-              <td class="a2">{{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].name : ''):''}}
-                <br>{{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].cateName:''):''}}</td>
-              <td class="a3">
-                <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.specialPrice/100).toFixed(2)}}</template>
-                <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</p>
-                <!-- {{(orderDetail.goodsInfo.price/100).toFixed(2)}} -->
+              <td class="a2">
+                {{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].name : '--'):'--'}}
+                <br>
+                {{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].cateName:'--'):'--'}}</td>
+              <td class="a3" v-if ="orderDetail.goodsInfo.isSpecial==1"  >
+                <span >特惠价 {{(orderDetail.goodsInfo.specialPrice/100).toFixed(2)}}</span>
+                 <br>
+                <span ><s>{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</s></span>
+              </td>
+               <td class="a3" v-if ="orderDetail.goodsInfo.isSpecial==0"  >
+                <span >{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</span>
               </td>
               <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
               <td class="a5">{{(orderDetail.goodsInfo.totalPrice/100).toFixed(2)}}</td>
               <td class="a5">{{((orderDetail.backMoney + orderDetail.backFreight)/100).toFixed(2)}}</td>
-              <td class="a6">
+              <td class="a6" >
                 <!--状态，0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
                 <div class="oprs" v-show="orderDetail.status==0 || orderDetail.status==1||orderDetail.status==2">
@@ -303,11 +309,12 @@
       <div class="hptczp_body">
         <div class="linh40">
           <span class=" wid80">
-            <span style="color: red;">*</span>
+            <span style="color: red;">*</span> 
             运费退款
           </span>
-          <span> <el-input-number v-model="pRtFreight" :controls="false" :min="-1" :max="(orderDetail.orderFreight - hasRtFreight)/100" ></el-input-number></span>
+          <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderDetail.orderFreight - hasRtFreight)/100" :placeholder="'最多可退'+(orderDetail.orderFreight - hasRtFreight)/100 +'元'" @change="pRtFreightChange"></el-input></span>
           <span>元</span>
+            <P class="pl10">运费退款不能大于订单实际剩余运费</P>
         </div>
         <div class="linh40 pl10">
           <span class="wid80">售后金额</span>
@@ -315,7 +322,7 @@
         </div>
         <div class="linh40 pl10">
           <span class=" wid80">售后总额</span>
-          <span>{{(orderDetail.backMoney/100 + pRtFreight).toFixed(2)}}元</span>
+          <span>{{(orderDetail.backMoney/100 + rtFreight).toFixed(2)}}元</span>
         </div>
       </div>
       <div class="hptczp_footer">
@@ -378,7 +385,8 @@
         formLabelWidth: '120px',
         shipments:[],
         _map: {}
-        ,pRtFreight:0
+        ,pRtFreight:''
+        ,rtFreight:0
         ,showMask: false
         ,showRt: false,
         goodses: [],
@@ -389,7 +397,49 @@
         , hasRtFreight : 0
       }
     },
+    // watch: {
+    //   'pRtFreight': {
+    //     handler: function (val, oldVal) {
+    //       alert(0)
+    //       let that = this
+    //       if (val != oldVal) {
+    //         alert(0)
+    //         that.$nextTick(function () {
+    //           that.rtFreight = val
+    //         })
+    //       } else {
+    //         return false
+    //       }
+    //     },
+    //     deep: true
+    //   },
+    // },
     methods: {
+      pRtFreightChange(){
+        let that = this
+        var re = /^[0-9]+\.?[0-9]*$/ 
+        if (!re.test(that.pRtFreight)) {
+          that.pRtFreight = 0
+        }else{
+          let hasRtFreight = (that.orderDetail.orderFreight - that.hasRtFreight)/100
+          if(parseFloat(that.pRtFreight) > hasRtFreight){
+            that.pRtFreight = hasRtFreight
+            that.show_tip("不能大于实际剩余运费")
+            that.$nextTick(function () {
+            that.rtFreight = parseFloat(that.pRtFreight)
+          })
+            return
+          }
+          if(parseFloat(that.pRtFreight) < 0){
+            that.show_tip("不能为负数")
+            return
+          }
+          that.$nextTick(function () {
+            that.rtFreight = parseFloat(that.pRtFreight)
+          })
+        }
+        
+      },
       // 获取全部订单信息
       handleClick(tab, event) {
         if (tab.paneName==='first'){
@@ -596,7 +646,7 @@
       , agreeRtMoneyApply () {
        // 同意退款申请，未来发货时需要输入的金额
         let that = this;
-        if (that.pRtFreight < 0) {
+        if (that.pRtFreight < 0 || that.pRtFreight == '') {
           that.show_tip('退款运费不能为小于0的数字或空！');
           return;
         }
@@ -639,9 +689,15 @@
             cancelButtonText: '取消',
             inputType:'textarea',
            }).then(({ value }) => {
-
-             if (value.length > 200) {
-               that.show_tip("原因输入太长，不能大于200字!");
+             alert("哈哈哈")
+             // 没有写理由的情况下 确认按钮是默认的取消
+             console.log('value' , value );
+             if (value.length<=0 || value ==null ) {
+               that.show_tip("请输入拒绝理由");
+              return;
+            }
+             if (value.length > 100) {
+               that.show_tip("原因输入太长，不能大于100字!");
                return;
              }
              that.$.ajax({
@@ -724,6 +780,7 @@
             }
           }
         })
+        return false
       }//商户确认退款
       ,confirmReceipt(){
         let that = this
@@ -1009,6 +1066,9 @@ display:-webkit-box;
         }
         .a6{
           width:10%;
+          .oprs{
+            margin:4px 0;
+          }
           .btm{
             background: #FFFFFF;
             border: 1px solid #CCCCCC;
@@ -1212,6 +1272,12 @@ display:-webkit-box;
       padding-right: 10px;
       padding-top: 5px;
       padding-bottom: 5px;
+    }
+    p{
+      margin-left:78px;  
+      color:rgb(107,107,107);
+      font-size: 12px;
+      line-height: 18px;
     }
   }
   .hptczp_footer{
