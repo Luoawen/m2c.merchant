@@ -98,7 +98,7 @@
         pageRows:10,
         currentPage: 1,
         totalCount:0,
-
+        isChangePage : false,
         inoutTypes:[{
           value: '',
           label: '收入方式'
@@ -167,6 +167,9 @@
       // 获取全部订单信息
       orderStore () {
         let that = this
+         if(!that.isChangePage){
+          that.currentPage = 1
+        }
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.trading/web/accounting/dealer/inout/detail/page',
@@ -190,6 +193,7 @@
             }
           }
         })
+        that.isChangePage = false
       },
       exportDetail () {
         let that = this
@@ -204,6 +208,7 @@
       ,handleCurrentChange(val) {
         let that = this
         that.currentPage=val
+        that.isChangePage = true
         that.orderStore();
       }
       ,handleCommand (index,row,action) {

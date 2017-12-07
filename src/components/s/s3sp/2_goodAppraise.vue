@@ -292,7 +292,8 @@
         time: '',
         imgWrap:false, //图片盒子显示隐藏
         rowIndex:0,
-        imgIndex:0
+        imgIndex:0,
+        isChangePage:false,
       }
     },
     methods: {
@@ -348,6 +349,7 @@
       goodsCommentHandleCurrentChange (val) {
         let that = this
         that.goodsCommentCurrentPage = val
+        that.isChangePage = true
         that.get_comment_info()
       },
       cancel () {
@@ -379,6 +381,9 @@
       // 获取结算单列表
       get_comment_info () {
         let that = this
+         if(!that.isChangePage){
+          that.currentPage = 1
+        }
         that.advancedShow = false
         if (that.search_params.startTime > that.search_params.endTime) {
           that.show_tip('开始时间不能大于结束时间')
@@ -411,6 +416,7 @@
             }
           }
         })
+        that.isChangePage = false
       },
       showtchp (n) {
         var that = this

@@ -336,6 +336,7 @@
         ,agreeApplyShow: false
         ,backMoney:0
         ,orderFreight:0
+        ,isChangePage:false //搜索时是否是页码切换请求 以判断是否要重置页码
       }
     },
     methods: {
@@ -387,6 +388,9 @@
     },
     getDealerOrders () {
       let that = this
+      if(!that.isChangePage){
+        that.currentPage = 1
+      }
       that.is_Success = false
       that.$.ajax({
         type: 'get',
@@ -416,6 +420,7 @@
           console.log(res);
         }
       })
+       that.isChangePage = false
     },
     exportSearch (){
       let that = this
@@ -485,6 +490,7 @@
       ,handlePageChange (sz) {
         let that = this;
         that.pageIndex = sz;
+        that.isChangePage = true
         that.getDealerOrders();
       }
       ,gotoDetail(dealerOrId, orderId) {

@@ -285,6 +285,7 @@
         city_show: false,
         modifyLocal: '',
         isBrandApprove: false,
+        isChangePage:false,
       }
     },
     watch: {
@@ -383,6 +384,7 @@
       ,bindsCurrentChange(val) {
         let that = this
         that.bindsCurrentPage=val
+         that.isChangePage = true
         that.get_comment_info();
       },
       bindsApproveSizeChange(val) {
@@ -393,6 +395,7 @@
       ,bindsApproveCurrentChange(val) {
         let that = this
         that.bindsApproveCurrentPage=val
+        that.isChangePage = true
         that.get_comment_info1();
       },
       handleCommand (index,row,action,to) {
@@ -706,6 +709,9 @@
       // 获取商品库列表
       get_comment_info () {
         let that = this
+        if(!that.isChangePage){
+          that.bindsCurrentPage = 1
+        }
         that.$.ajax({
           type: 'get',
           url: that.base + 'm2c.scm/brand',
@@ -727,10 +733,14 @@
             }
           }
         })
+        that.isChangePage = false
       },
       // 获取审核列表
       get_comment_info1 () {
         let that = this
+         if(!that.isChangePage){
+          that.bindsApproveCurrentPage = 1
+        }
         that.$.ajax({
           type: 'get',
           url: that.base + 'm2c.scm/brand/approve',
@@ -753,6 +763,7 @@
             }
           }
         })
+        that.isChangePage = false
       }
     },
     mounted () {

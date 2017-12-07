@@ -146,7 +146,8 @@
         // 搜索参数
         search_params: { dealerOrderId: '', condition: '', startTime: '', endTime: '', SettleStatus: '' },
         orderStoreData: [{settleId:'123456789',dealerOrderId:'123456789',goodsTotalAmount:'3456',afterSellAmount:'45',serviceTotalCharge:'345678',activityTotalAmount:'234567',settleTotalAmount:'6543',settleStatus:1,updatedTime:'345678'}],
-        time: ''
+        time: '',
+        isChangePage:false,
       }
     },
     methods: {
@@ -163,6 +164,9 @@
       // 获取全部订单信息
       orderStore () {
         let that = this
+        if(!that.isChangePage){
+          that.currentPage = 1
+        }
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.trading/web/settle/dealer/pager.web',
@@ -191,6 +195,7 @@
             }
           }
         })
+         that.isChangePage = false
       }
       ,handleSizeChange(val) {
         let that = this
@@ -200,6 +205,7 @@
       ,handleCurrentChange(val) {
         let that = this
         that.currentPage=val
+        that.isChangePage = true
         that.orderStore();
       }
       ,handleCommand (index,row,action) {

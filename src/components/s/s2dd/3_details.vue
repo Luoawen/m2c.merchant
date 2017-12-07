@@ -393,6 +393,7 @@
         mediaResInfos:{}
         ,isGetUserRuning : false
         , hasRtFreight : 0
+        ,isChangePage:false
       }
     },
     // watch: {
@@ -525,6 +526,9 @@
       }
       ,operatingRecord() {
         let that = this
+        if(!that.isChangePage){
+            that.currentPage = 1
+        }
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.scm/order/logs/res',
@@ -560,6 +564,7 @@
             }
           }
         })
+        that.isChangePage = false
       }
       ,handleSizeChange(val) {
         let that = this
@@ -569,6 +574,7 @@
       ,handleCurrentChange(val) {
         let that = this
         that.currentPage=val
+        that.isChangePage = true
         that.operatingRecord();
       }
       ,afterselllogistics() {

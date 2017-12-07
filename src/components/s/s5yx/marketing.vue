@@ -189,7 +189,8 @@
         }, {
           value: 2,
           label: '无可用'
-        }]
+        }],
+        isChangePage:false //搜索时是否是页码切换请求 以判断是否要重置页码
       }
     },
     methods: {
@@ -238,6 +239,7 @@
       ,goodsStoreHandleCurrentChange(val) {
         let that = this
         that.goodsStoreCurrentPage=val
+         that.isChangePage = true
         that.getFullCutList()
       },
         handleCommand (index,row,action,to) {
@@ -315,6 +317,9 @@
       // 获取满减列表
       getFullCutList () {
         let that = this
+         if(!that.isChangePage){
+          that.goodsStoreCurrentPage = 1
+        }
         this.$("[data-toggle='popover']").popover('hide')
        that.$.ajax({
          type:'get',
@@ -340,6 +345,7 @@
           that.goodsStoreTotalCount = result.totalCount
         }
       })
+      that.isChangePage = false
       },
        
     },

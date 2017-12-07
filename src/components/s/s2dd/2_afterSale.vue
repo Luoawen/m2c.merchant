@@ -170,6 +170,7 @@
         search_params: { expectation: '', afterSaleStatus: '', condition: '', startTime: '', endTime: '',hasMedia:'' }
         ,orderStoreData:[],
         time:''
+        ,isChangePage:false
       }
     },
     methods: {
@@ -187,6 +188,9 @@
       // 获取全部订单信息
       orderStore () {
         let that = this;
+        if(!that.isChangePage){
+          that.currentPage = 1
+        }
         console.log("that.pageRows==" + that.pageRows + ";"+ that.currentPage);
         that.$.ajax({
           type: 'get',
@@ -214,6 +218,7 @@
             }
           }
         })
+         that.isChangePage = false
       }
       ,handleSizeChange(val) {
         let that = this
@@ -222,6 +227,7 @@
       }
       ,handleCurrentChange(val) {
         let that = this
+        that.isChangePage = true
         that.currentPage=val
         that.orderStore();
       }

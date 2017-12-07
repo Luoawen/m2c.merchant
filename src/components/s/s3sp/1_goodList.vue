@@ -358,7 +358,8 @@
         goodsDelStorePageRows:10,
         goodsDelStoreCurrentPage: 1,
         goodsDelStoreTotalCount:0,
-        goodsDelStoreData:[]
+        goodsDelStoreData:[],
+        isChangePage:false,
       }
     },
     methods: {
@@ -520,6 +521,9 @@
 
       ,goodsStore () {
         let that = this
+        if(!that.isChangePage){
+          that.currentPage = 1
+        }
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.scm/goods',
@@ -543,6 +547,7 @@
             }
           }
         })
+        that.isChangePage = false
       },
       goodsStoreSearch () {
         let that = this
@@ -560,6 +565,7 @@
       ,goodsStoreHandleCurrentChange(val) {
         let that = this
         that.goodsStoreCurrentPage=val
+        that.isChangePage = true
         that.goodsStore();
       }
       ,exportSearch (){
@@ -574,6 +580,9 @@
 
       ,goodsCheckStore () {
         let that = this
+         if(!that.isChangePage){
+          that.currentPage = 1
+        }
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.scm/goods/approve',
@@ -597,6 +606,7 @@
             }
           }
         })
+        that.isChangePage= false
       }
       ,goodsCheckStoreSearch (){
         let that = this
@@ -614,6 +624,7 @@
       ,goodsCheckStoreHandleCurrentChange(val) {
         let that = this
         that.goodsCheckStoreCurrentPage=val
+        that.isChangePage = true;
         that.goodsCheckStore();
       }
       ,handleCommand (index,row,action,to) {
@@ -666,6 +677,9 @@
       }
       ,goodsDeleteStore () {
         let that = this
+         if(!that.isChangePage){
+          that.currentPage = 1
+        }
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.scm/goods',
@@ -675,6 +689,7 @@
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
             rows: that.goodsDelStorePageRows,                     // 每页多少条数据
             pageNum: that.goodsDelStoreCurrentPage,    // 请求第几页*/
+            condition:that.search_goodsCheck_params.condition.replace(/\s+/g,''),
             goodsClassifyId:that.selectedOptions3[that.selectedOptions3.length-1],
             delStatus:2,
           },
@@ -686,6 +701,7 @@
             }
           }
         })
+         that.isChangePage = false
       }
       ,goodsDelStoreHandleSizeChange(val) {
         let that = this
@@ -695,6 +711,7 @@
       ,goodsDelStoreHandleCurrentChange(val) {
         let that = this
         that.goodsDelStoreCurrentPage=val
+        that.isChangePage =true;
         that.goodsDeleteStore();
       }
   },

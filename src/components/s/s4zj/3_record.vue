@@ -109,6 +109,7 @@
         // 搜索参数
         search_params: { dealerOrderId: '',condition: '', startTime: '', endTime: '',SettleStatus:'' }
         ,orderStoreData:[]
+        ,isChangePage:false
       }
     },
     methods: {
@@ -126,6 +127,9 @@
       // 获取全部订单信息
       orderStore () {
         let that = this
+         if(!that.isChangePage){
+          that.currentPage = 1
+        }
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.trading/web/withdrawal/dealer/list',
@@ -148,6 +152,7 @@
             }
           }
         })
+        that.isChangePage = false
       }
       ,handleSizeChange(val) {
         let that = this
@@ -157,6 +162,7 @@
       ,handleCurrentChange(val) {
         let that = this
         that.currentPage=val
+        that.isChangePage = true
         that.orderStore();
       }
       ,handleCommand (index,row,action) {
