@@ -127,10 +127,13 @@
         	<tr>
         		<td class="a1 clear">
         			<div class="a1_img mr10 fl"><img :src="JSON.parse(goods.goodsImage == ''? '[]': goods.goodsImage)[0]" /></div>
-            	<div>
-              <div class="wose wid mt10">{{goods.goodsName}}</div>
+            	<!-- <div> -->
+              <div class="wose wid mt10">
+                <i v-if="goods.isChange==1" class="changeGood"></i>
+                {{goods.goodsName}}
+              </div>
               <div class="blue" v-if="goods.skuName != ''">规格：{{goods.skuName}}</div>
-            	</div>
+            	<!-- </div> -->
         		</td>
             <td class="a2">{{goods.mediaResId!=''?(typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].name : ''):''}}
               <br>{{goods.mediaResId!=''?(typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].cateName:''):''}}</td>
@@ -211,10 +214,10 @@
         	<tr>
         		<td class="a1 clear">
         			<div class="a1_img mr10 fl"><img :src="JSON.parse(goods.goodsImage == ''? '[]': goods.goodsImage)[0]"/></div>
-            	<div>
-              <div class="wose wid mt20">{{goods.goodsName}}</div>
+              <div class="wose wid mt10">
+                <i v-if="goods.isChange==1" class="changeGood"></i>
+                {{goods.goodsName}}</div>
               <div class="blue" v-if="goods.skuName != ''">规格：{{goods.skuName}}</div>
-            	</div>
         		</td>
         		<td>{{goods.sellNum}}</td>
         		<td>{{(orderStatus==1 || orderStatus==0)? (goods.sellNum - goods.afNum) : 0}}</td>
@@ -1309,6 +1312,7 @@
     float: right;
   }
   .wose{
+    height:48px;padding-top:5px;
     overflow : hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -1316,6 +1320,7 @@
     -webkit-box-orient: vertical;
   }
   .blue{
+    float: left;
   	font-size: 12px;
 		color: #999;
   }

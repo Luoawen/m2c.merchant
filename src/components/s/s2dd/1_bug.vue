@@ -165,7 +165,7 @@
                 <div class="a1 fl" id="a1" style="width:50%;">
                   <div class="a1_img mr10 fl"><img :src="JSON.parse(goodsItem.goodsImage == ''? '[]': goodsItem.goodsImage)[0]"/></div>
                   <div class="fl">
-                    <div class="wose wid">{{goodsItem.goodsName}}</div>
+                    <div class="wose wid"><i v-if="goodsItem.isChange==1" class="changeGood"></i>{{goodsItem.goodsName}}</div>
                     <div class="blue" v-if="goodsItem.skuName != ''">规格：{{goodsItem.skuName}}</div>
                   </div>
                 </div>

@@ -70,6 +70,7 @@
                 <div class="a1tab fl mr20"><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage == ''? '[]': orderDetail.goodsInfo.goodsImage)[0]"/></div>
                 <div class="a1tit fl">
                   <div class="wobse top">
+                    <i v-if="orderDetail.goodsInfo.isChange==0" class="changeGood"></i>
                     {{orderDetail.goodsInfo.goodsName}}
                   </div>
                   <div class="btm" v-if="orderDetail.goodsInfo.skuName != ''">
@@ -183,22 +184,18 @@
                </el-table-column>
              </el-table>
            </div>
-
-         <div class="page_pus" style="margin-top: 20px;float: right;margin-right: 30px;height: 60px;">
-           <el-pagination
-             @size-change="handleSizeChange"
-             @current-change="handleCurrentChange"
-             :current-page="currentPage"
-             :page-sizes="[5, 10, 20, 30]"
-             :page-size="pageRows"
-             layout="total, sizes, prev, pager, next, jumper"
-             :total="totalCount">
-           </el-pagination>
+           <div class="page_pus" style="margin-top: 20px;float: right;margin-right: 30px;height: 60px;">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[5, 10, 20, 30]"
+              :page-size="pageRows"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalCount">
+            </el-pagination>
+           </div>
          </div>
-
-         </div>
-
-
       </el-tab-pane>
     </el-tabs>
 <div>
@@ -225,6 +222,7 @@
           <div class="a1tab fl mr20"><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage == ''? '[]': orderDetail.goodsInfo.goodsImage)[0]" style="width: 60px ;height: 60px"/></div>
           <div class="a1tit fl">
             <div class="wobse top">
+              <i v-if="orderDetail.goodsInfo.isChange==1" class="changeGood"></i>
               {{orderDetail.goodsInfo.goodsName}}
             </div>
             <div class="btm">
@@ -982,6 +980,7 @@ display:-webkit-box;
             }
           }
           .a1tit{
+            width:180px;
             .top{
               width:85%;
               height: 40px;

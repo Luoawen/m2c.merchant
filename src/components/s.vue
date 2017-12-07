@@ -237,6 +237,7 @@ body {
       -webkit-appearance:none;
       background: url(../assets/images/ico_arrows.png) no-repeat scroll right center transparent;
     }
+  i.changeGood{line-height:30px;width:24px;height:14px;background:url(../assets/images/ico_huan.png) no-repeat 0 0;display:inline-block;margin-right:6px;}
   i.red{
     color: red;display:inline-block;padding-right:6px;font-size:12px;
 		font-style: normal;
