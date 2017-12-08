@@ -102,28 +102,17 @@
                 </div>
                 <!-- 用户期望退款--> <!-- 1.商户同意售后 2.商户同意退款 3.商户确认退款 -->
                 <div class="oprs" v-show="orderDetail.status==4 && orderDetail.orderType==2"><!-- 商户同意退款 -->
-                  <el-button size="mini" style="margin:-1px 0 0 -1px;" @click="agreedRefund()">同意退款</el-button>
+                  <el-button size="mini" style="margin:-1px 0 0 -1px;" @click="agreedRefund()">确认退款</el-button>
                 </div>
-                <!--<div class="oprs" v-show="orderDetail.status==9 && orderDetail.orderType==2">
-                  <el-button size="mini" round @click="confirmRefund()">确认退款</el-button>
-                </div>-->
-                <!-- 用户期望退货--> <!-- 1.商户同意售后 2.用户返回货物 3.商家确认收货 4.商户同意退款 5.商户确认退款 -->
-                <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==0">
-                  <el-button size="mini" @click="confirmReceipt()">确认收货</el-button>
-                </div>
-                <div class="btm" v-show="orderDetail.status==6 && orderDetail.orderType==1">
-                  <el-button size="mini" @click="agreedRefund()">同意退款</el-button>
-                </div>
-                <!--<div class="btm" v-show="orderDetail.status==9 && orderDetail.orderType==0">
-                  <el-button size="mini" @click="confirmRefund()">确认退款</el-button>
-                </div>-->
-                <!-- 用户期望换货--> <!-- 1.商户同意售后 2.用户返回货物 3.商家确认收货 4.商户填写物流信息 5.商户确认发货 -->
+                
                 <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==1">
-                  <el-button size="mini" @click="confirmReceipt()">确认收货</el-button>
-                </div>
-                <div class="oprs" v-show="orderDetail.status==6 && orderDetail.orderType==0">
+                  <el-button size="mini" @click="agreedRefund()">确认退款</el-button>
+                </div>              
+
+                <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==0">
                   <el-button size="mini" @click="shipment()">发货</el-button>
                 </div>
+
                 <div class="oprs" v-show="orderDetail.status==0 || orderDetail.status==1||orderDetail.status==2">
                   <el-button size="mini" @click="handleRejected()">拒绝申请</el-button>
                 </div>
