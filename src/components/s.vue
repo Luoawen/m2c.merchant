@@ -173,10 +173,10 @@
           this.$('[path="' + this.$route.path + '"]').addClass('avter')
           this.$('[path="' + this.$route.path + '"]').parent(".content_container").css('display','block')
           if(this.$route.meta.title==''||this.$route.meta.title==undefined){
-            document.title = '拍获-商家平台'
+            document.title = '商家平台-拍获'
             this.$('.right_nav_content').text('')
           }else{
-            document.title = this.$route.meta.title+'-拍获-商家平台'
+            document.title = this.$route.meta.title+'-商家平台-拍获'
             this.$('.right_nav_content').text(' > ' + this.$route.meta.title)
           }
         })
