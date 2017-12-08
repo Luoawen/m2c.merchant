@@ -110,12 +110,14 @@
                 <!-- 用户期望退货--> <!-- 1.商户同意售后 2.用户返回货物 3.商家确认收货 4.商户同意退款 5.商户确认退款 -->
                 <!--div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==0">
                   <el-button size="mini" @click="confirmReceipt()">确认收货</el-button>
+
                 </div-->
 
                 <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==1">
                   <el-button size="mini" @click="agreedRefund()">确认退款</el-button>
                 </div>
 
+                </div>
                 <!--<div class="btm" v-show="orderDetail.status==9 && orderDetail.orderType==0">
                   <el-button size="mini" @click="confirmRefund()">确认退款</el-button>
                 </div>-->
@@ -126,6 +128,7 @@
                 </div-->
 
                 <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==0">
+
                   <el-button size="mini" @click="shipment()">发货</el-button>
                 </div>
 
@@ -489,6 +492,7 @@
               that.orderDetail.doStatus = _content.doStatus;
               that.orderIdSplic = _content.orderId.slice(0,_content.orderId.length-1)
               that.setReturnData(result.content)
+              console.log('that.orderDetail.status',that.orderDetail.status) 
             }
           }
         })
@@ -963,6 +967,14 @@
   }
 </script>
 <style lang="scss" scoped>
+.building{
+  font-size:20px;color:#666;
+  padding:240px 0;
+  line-height:40px;
+  margin-top:100px;
+  text-align: center;
+  background:url(../../../assets/images/image_repair.png) no-repeat center top;
+}
 .mt20{
   margin-top: 20px;
 }
