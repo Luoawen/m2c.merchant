@@ -71,7 +71,7 @@
                 <div class="a1tab fl mr20"><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage == ''? '[]': orderDetail.goodsInfo.goodsImage)[0]"/></div>
                 <div class="a1tit fl">
                   <div class="wobse top">
-                    <i v-if="orderDetail.goodsInfo.isChange==0" class="changeGood"></i>
+                    <i v-if="orderDetail.goodsInfo.isChange==1" class="changeGood"></i>
                     {{orderDetail.goodsInfo.goodsName}}
                   </div>
                   <div class="btm" v-if="orderDetail.goodsInfo.skuName != ''">
@@ -104,10 +104,10 @@
                 <div class="oprs" v-show="orderDetail.status==4 && orderDetail.orderType==2"><!-- 商户同意退款 -->
                   <el-button size="mini" style="margin:-1px 0 0 -1px;" @click="agreedRefund()">确认退款</el-button>
                 </div>
-                
+
                 <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==1">
                   <el-button size="mini" @click="agreedRefund()">确认退款</el-button>
-                </div>              
+                </div>
 
                 <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==0">
                   <el-button size="mini" @click="shipment()">发货</el-button>
@@ -125,7 +125,7 @@
       <el-tab-pane label="售后物流" name="second">
         <div class="logistics" style="padding-bottom:20px"  >
           <!--没有物流的情况 -->
-          <h3  class="building"  v-if="orderDetail.status <=4"> 暂无物流信息</h3> 
+          <h3  class="building"  v-if="orderDetail.status <=4"> 暂无物流信息</h3>
           <el-row v-if ="orderDetail.status>=5">
            <el-col :span='8'>
               <span class="tit01">售后状态:</span>
@@ -152,7 +152,7 @@
                         <div class="a1tab fl mr20" ><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage == ''? '[]': orderDetail.goodsInfo.goodsImage)[0]"  style="width:80px;height:80px;margin:10px"/></div>
                         <div class="a1tit fl">
                           <div class="wobse top">
-                            <i v-if="orderDetail.goodsInfo.isChange==0" class="changeGood"></i>
+                            <i v-if="orderDetail.goodsInfo.isChange==1" class="changeGood"></i>
                             {{orderDetail.goodsInfo.goodsName}}
                           </div>
                           <div class="btm" v-if="orderDetail.goodsInfo.skuName != ''">
@@ -341,7 +341,7 @@
       <div class="hptczp_body">
         <div class="linh40">
           <span class=" wid80">
-            <span style="color: red;">*</span> 
+            <span style="color: red;">*</span>
             运费退款
           </span>
           <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderDetail.orderFreight - hasRtFreight)/100" :placeholder="'最多可退'+(orderDetail.orderFreight - hasRtFreight)/100 +'元'" @change="pRtFreightChange"></el-input></span>
@@ -450,7 +450,7 @@
     methods: {
       pRtFreightChange(){
         let that = this
-        var re = /^[0-9]+\.?[0-9]*$/ 
+        var re = /^[0-9]+\.?[0-9]*$/
         if (!re.test(that.pRtFreight)) {
           that.pRtFreight = 0
         }else{
@@ -471,7 +471,7 @@
             that.rtFreight = parseFloat(that.pRtFreight)
           })
         }
-        
+
       },
       // 获取全部订单信息
       handleClick(tab, event) {
@@ -523,7 +523,7 @@
               that.orderDetail.doStatus = _content.doStatus;
               that.orderIdSplic = _content.orderId.slice(0,_content.orderId.length-1)
               that.setReturnData(result.content)
-              console.log('that.orderDetail.status',that.orderDetail.status) 
+              console.log('that.orderDetail.status',that.orderDetail.status)
             }
           }
         })
@@ -1064,7 +1064,7 @@ display:-webkit-box;
     }
     table td p.lineThrough{text-decoration:line-through;font-size:12px;color:#999;}
     .customerdetail_container{
-      
+
       .detail_table{
         margin: auto;
         border: 1px solid #e7e7e7;
@@ -1322,7 +1322,7 @@ display:-webkit-box;
       padding-bottom: 5px;
     }
     p{
-      margin-left:78px;  
+      margin-left:78px;
       color:rgb(107,107,107);
       font-size: 12px;
       line-height: 18px;
