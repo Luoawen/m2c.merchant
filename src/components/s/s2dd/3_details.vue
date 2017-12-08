@@ -111,24 +111,19 @@
                 <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==0">
                   <el-button size="mini" @click="confirmReceipt()">确认收货</el-button>
                 </div>
-
                 <div class="btm" v-show="orderDetail.status==6 && orderDetail.orderType==1">
                   <el-button size="mini" @click="agreedRefund()">同意退款</el-button>
                 </div>
-
                 <!--<div class="btm" v-show="orderDetail.status==9 && orderDetail.orderType==0">
                   <el-button size="mini" @click="confirmRefund()">确认退款</el-button>
                 </div>-->
-
                 <!-- 用户期望换货--> <!-- 1.商户同意售后 2.用户返回货物 3.商家确认收货 4.商户填写物流信息 5.商户确认发货 -->
                 <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==1">
                   <el-button size="mini" @click="confirmReceipt()">确认收货</el-button>
                 </div>
-
                 <div class="oprs" v-show="orderDetail.status==6 && orderDetail.orderType==0">
                   <el-button size="mini" @click="shipment()">发货</el-button>
                 </div>
-
                 <div class="oprs" v-show="orderDetail.status==0 || orderDetail.status==1||orderDetail.status==2">
                   <el-button size="mini" @click="handleRejected()">拒绝申请</el-button>
                 </div>
@@ -137,36 +132,87 @@
             </tbody>
           </table>
         </div>
-
       </el-tab-pane>
       <el-tab-pane label="售后物流" name="second">
-        <div class="logistics" >
-
-          <div class="col-sm-4 detail_cen" style="line-height: 40px;">
-            <div >
+        <div class="logistics" style="padding-bottom:20px"  >
+          <!--没有物流的情况 -->
+          <h3  class="building"  v-if="orderDetail.status <=4"> 暂无物流信息</h3> 
+          <el-row>
+           <el-col :span='8'>
               <span class="tit01">售后状态:</span>
-              <span class="ml20">
-                <!-- {{logistics.status==0?'申请退货':logistics.status==1?'申请换货':logistics.status==2?'申请退款':logistics.status==3?'拒绝申请':logistics.status==4?'同意申请':logistics.status==5?'客户寄出':logistics.status==6?'商家收到':logistics.status==7?'商家寄出':logistics.status==8?'客户收到':logistics.status==9?'同意退款':logistics.status==10?'已退款':logistics.status==11?'售后完成':logistics.status==12?'售后关闭':logistics.status==-1?'已取消':'-'}} -->
+              <span class="ml20" >
                 {{orderDetail.orderType==0?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==1?'待商家同意':logistics.status==4?'待顾客寄回商品':(logistics.status==5||logistics.status==6)?'待商家发货':logistics.status==7?'待顾客收货':logistics.status>=8?'售后已完成':'--'):orderDetail.orderType==1?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==0?'待商家同意':logistics.status==4?'待顾客寄回商品':(logistics.status==5||logistics.status==6)?'待商家确认退款':logistics.status>=9?'售后已完成':'--'):orderDetail.orderType==2?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==2?'待商家同意':logistics.status==4?'待商家确认退款':logistics.status>=9?'售后已完成':'--'):'--'}}
               </span>
-            </div>
+           </el-col>
+          <el-col :span='4'>
+              <span class="tit01">售后单号:</span><span class="ml20">{{logistics.afterSellOrderId}}</span>
+          </el-col>
+          </el-row>
+          <div class=" detail_cen" style="line-height: 40px;"  v-if ="orderDetail.status>=5">
             <div>
-              <span class="tit01">售后单号:</span>
-              <span class="ml20">{{logistics.afterSellOrderId}}</span>
+              <table class="mt20 " style="width:80%;border:1px solid rgb(215, 215, 215); ">
+                <thead style="background:rgb(223, 233, 246)">
+                <tr style="margin-left:40px" >
+                  <td class=""><span style="margin-left:20px;width:50%">商品信息</span> <span style="margin-left:50%">换货数</span></td>
+                  <td ></td>
+                </tr>
+                </thead>
+                <tbody style="border:1px solid rgb(215, 215, 215);" >
+                  <tr >
+                      <td class=" clear">
+                        <div class="a1tab fl mr20" ><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage == ''? '[]': orderDetail.goodsInfo.goodsImage)[0]"  style="width:80px;height:80px;margin:10px"/></div>
+                        <div class="a1tit fl">
+                          <div class="wobse top">
+                            <i v-if="orderDetail.goodsInfo.isChange==0" class="changeGood"></i>
+                            {{orderDetail.goodsInfo.goodsName}}
+                          </div>
+                          <div class="btm" v-if="orderDetail.goodsInfo.skuName != ''">
+                            规格： {{orderDetail.goodsInfo.skuName}}
+                          </div>
+                        </div>
+                        <span style="margin-left:38%;"> {{orderDetail.goodsInfo.sellNum}}</span>
+                      </td>
+                      <td >
+                      </td>
+                  </tr>
+                <!--只退货的情况-->
+                   <tr style="border:1px solid rgb(215, 215, 215);" >
+                       <td style="width:100%" >
+                          <h3 style="color:rgb(0, 102, 204);padding-left:12px" >顾客寄回商品</h3>
+                        <div class="col-sm-8 detail_cen" style="line-height: 40px;">
+                          <div>
+                            <span class="tit01">物流公司:</span>
+                            <span class="ml20">{{logistics.status < 5 ? '--' :logistics.backExpressName}}</span>
+                          </div>
+                          <div>
+                            <span class="tit01">物流单号:</span>
+                            <span class="ml20">{{logistics.status < 5 ? '--' : logistics.backExpressNo}}</span>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;跟踪物流信息，请前往快递官网查看,<a target="_blank"  href="http://www.kuaidi100.com/?from=openv">前往</a>
+                          </div>
+                        </div>
+                       </td>
+                      <td></td>
+                    </tr>
+                    <tr style="border:1px solid rgb(215, 215, 215);" v-if ="orderDetail.orderType==0 && logistics.status==7" >
+                     <td style="width:100%">
+                        <h3 style="color:rgb(0, 102, 204);padding-left:12px" >商家重新发货</h3>
+                <!--退换货（增加寄出的）的情况-->
+                        <div class="col-sm-8 detail_cen">
+                          <span class="tit01">物流公司:</span> <span class="ml20">{{logistics.status < 5 ? '--' :logistics.status >= 7? logistics.expressName : logistics.backExpressName}}</span>
+                        </div>
+                        <div class="col-sm-8 detail_cen" >
+                          <span class="tit01">物流单号:</span>
+                          <span class="ml20">{{logistics.status < 5 ? '--' :logistics.status >= 7? logistics.expressNo : logistics.backExpressNo}}</span>
+                          跟踪物流信息，请前往快递官网查看, <a target="_blank" href="http://www.kuaidi100.com/?from=openv">前往</a>
+                        </div>
+                     </td>
+                     <td></td>
+                    </tr>
+                </tbody>
+              </table>
             </div>
-            <div>
-              <span class="tit01">物流公司:</span>
-              <span class="ml20">{{logistics.status < 5 ? '--' :logistics.status >= 7? logistics.expressName : logistics.backExpressName}}</span>
-            </div>
-            <div>
-              <span class="tit01">物流单号:</span>
-              <span class="ml20">{{logistics.status < 5 ? '--' :logistics.status >= 7? logistics.expressNo : logistics.backExpressNo}}</span>
-            </div>
-
           </div>
-
         </div>
-
       </el-tab-pane>
       <el-tab-pane label="操作记录" name="third">
          <div class="ops_red">
@@ -489,6 +535,7 @@
               that.orderDetail.doStatus = _content.doStatus;
               that.orderIdSplic = _content.orderId.slice(0,_content.orderId.length-1)
               that.setReturnData(result.content)
+              console.log('that.orderDetail.status',that.orderDetail.status) 
             }
           }
         })
@@ -963,6 +1010,14 @@
   }
 </script>
 <style lang="scss" scoped>
+.building{
+  font-size:20px;color:#666;
+  padding:240px 0;
+  line-height:40px;
+  margin-top:100px;
+  text-align: center;
+  background:url(../../../assets/images/image_repair.png) no-repeat center top;
+}
 .mt20{
   margin-top: 20px;
 }
