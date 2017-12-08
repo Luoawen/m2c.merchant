@@ -112,7 +112,7 @@
                   <el-button size="mini" @click="confirmReceipt()">确认收货</el-button>
                 </div-->
 
-                <div class="btm" v-show="orderDetail.status==5 && orderDetail.orderType==1">
+                <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==1">
                   <el-button size="mini" @click="agreedRefund()">确认退款</el-button>
                 </div>
 
