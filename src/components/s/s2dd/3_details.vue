@@ -126,16 +126,16 @@
         <div class="logistics" style="padding-bottom:20px"  >
           <!--没有物流的情况 -->
           <h3  class="building"  v-if="orderDetail.status <=4"> 暂无物流信息</h3> 
-          <el-row>
+          <el-row v-if ="orderDetail.status>=5">
            <el-col :span='8'>
               <span class="tit01">售后状态:</span>
               <span class="ml20" >
                 {{orderDetail.orderType==0?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==1?'待商家同意':logistics.status==4?'待顾客寄回商品':(logistics.status==5||logistics.status==6)?'待商家发货':logistics.status==7?'待顾客收货':logistics.status>=8?'售后已完成':'--'):orderDetail.orderType==1?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==0?'待商家同意':logistics.status==4?'待顾客寄回商品':(logistics.status==5||logistics.status==6)?'待商家确认退款':logistics.status>=9?'售后已完成':'--'):orderDetail.orderType==2?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==2?'待商家同意':logistics.status==4?'待商家确认退款':logistics.status>=9?'售后已完成':'--'):'--'}}
               </span>
            </el-col>
-          <el-col :span='4'>
-              <span class="tit01">售后单号:</span><span class="ml20">{{logistics.afterSellOrderId}}</span>
-          </el-col>
+            <el-col :span='4'>
+                <span class="tit01">售后单号:</span><span class="ml20">{{logistics.afterSellOrderId}}</span>
+            </el-col>
           </el-row>
           <div class=" detail_cen" style="line-height: 40px;"  v-if ="orderDetail.status>=5">
             <div>
@@ -206,7 +206,6 @@
       <el-tab-pane label="操作记录" name="third">
          <div class="ops_red">
            <div class="ops_tabs">
-
              <el-table
                :data="operatingRecords"
                style="width: 100%">
