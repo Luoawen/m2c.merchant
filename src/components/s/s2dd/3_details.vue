@@ -102,18 +102,18 @@
                 </div>
                 <!-- 用户期望退款--> <!-- 1.商户同意售后 2.商户同意退款 3.商户确认退款 -->
                 <div class="oprs" v-show="orderDetail.status==4 && orderDetail.orderType==2"><!-- 商户同意退款 -->
-                  <el-button size="mini" style="margin:-1px 0 0 -1px;" @click="agreedRefund()">同意退款</el-button>
+                  <el-button size="mini" style="margin:-1px 0 0 -1px;" @click="agreedRefund()">确认退款</el-button>
                 </div>
                 <!--<div class="oprs" v-show="orderDetail.status==9 && orderDetail.orderType==2">
                   <el-button size="mini" round @click="confirmRefund()">确认退款</el-button>
                 </div>-->
                 <!-- 用户期望退货--> <!-- 1.商户同意售后 2.用户返回货物 3.商家确认收货 4.商户同意退款 5.商户确认退款 -->
-                <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==0">
+                <!--div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==0">
                   <el-button size="mini" @click="confirmReceipt()">确认收货</el-button>
-                </div>
+                </div-->
 
-                <div class="btm" v-show="orderDetail.status==6 && orderDetail.orderType==1">
-                  <el-button size="mini" @click="agreedRefund()">同意退款</el-button>
+                <div class="btm" v-show="orderDetail.status==5 && orderDetail.orderType==1">
+                  <el-button size="mini" @click="agreedRefund()">确认退款</el-button>
                 </div>
 
                 <!--<div class="btm" v-show="orderDetail.status==9 && orderDetail.orderType==0">
@@ -121,11 +121,11 @@
                 </div>-->
 
                 <!-- 用户期望换货--> <!-- 1.商户同意售后 2.用户返回货物 3.商家确认收货 4.商户填写物流信息 5.商户确认发货 -->
-                <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==1">
+                <!--div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==1">
                   <el-button size="mini" @click="confirmReceipt()">确认收货</el-button>
-                </div>
+                </div-->
 
-                <div class="oprs" v-show="orderDetail.status==6 && orderDetail.orderType==0">
+                <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==0">
                   <el-button size="mini" @click="shipment()">发货</el-button>
                 </div>
 
@@ -307,7 +307,7 @@
       <div class="hptczp_body">
         <div class="linh40">
           <span class=" wid80">
-            <span style="color: red;">*</span> 
+            <span style="color: red;">*</span>
             运费退款
           </span>
           <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderDetail.orderFreight - hasRtFreight)/100" :placeholder="'最多可退'+(orderDetail.orderFreight - hasRtFreight)/100 +'元'" @change="pRtFreightChange"></el-input></span>
@@ -416,7 +416,7 @@
     methods: {
       pRtFreightChange(){
         let that = this
-        var re = /^[0-9]+\.?[0-9]*$/ 
+        var re = /^[0-9]+\.?[0-9]*$/
         if (!re.test(that.pRtFreight)) {
           that.pRtFreight = 0
         }else{
@@ -437,7 +437,7 @@
             that.rtFreight = parseFloat(that.pRtFreight)
           })
         }
-        
+
       },
       // 获取全部订单信息
       handleClick(tab, event) {
@@ -1021,7 +1021,7 @@ display:-webkit-box;
     }
     table td p.lineThrough{text-decoration:line-through;font-size:12px;color:#999;}
     .customerdetail_container{
-      
+
       .detail_table{
         margin: auto;
         border: 1px solid #e7e7e7;
@@ -1279,7 +1279,7 @@ display:-webkit-box;
       padding-bottom: 5px;
     }
     p{
-      margin-left:78px;  
+      margin-left:78px;
       color:rgb(107,107,107);
       font-size: 12px;
       line-height: 18px;
