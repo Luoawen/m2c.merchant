@@ -321,7 +321,7 @@
         totalCount: 0,
         dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,//'JXS42ACB6D352E9417FBBCF03908219AAF1',
         // 搜索参数
-        searchParams: { orderStatus: '', afterSellStatus: '', startTime: '', endTime: '', condition: '',orderClassify:'', payWay:'', hasMedia:'', invoice: '',commentStatus:''},
+        searchParams: { orderStatus: '', afterSellStatus: '', startTime: '', endTime: '', condition: '',orderClassify:'', payWay:'', hasMedia:'', invoiceType: '',commentStatus:''},
         afStatus : -2,
         saleAfterNo : '',
         orderStatuses:[{value:'',label:'订单状态'},{value:'0',label:'待付款'},{value:'1',label:'待发货'},{value:'2',label:'待收货'},{value:'3',label:'已完成'},{value:'4',label:'交易完成'},{value:'5',label:'交易关闭'},{value:'-1',label:'已取消'}],
@@ -404,7 +404,7 @@
           ,endTime: that.searchParams.endTime
           ,condition: that.searchParams.condition.replace(/\s+/g,"")
           ,payWay: that.searchParams.payWay
-          ,invoice: that.searchParams.invoice
+          ,invoice: that.searchParams.invoiceType
           ,commentStatus: that.searchParams.commentStatus,
           hasMedia:that.searchParams.hasMedia
           ,pageNum: that.pageIndex
@@ -435,7 +435,7 @@
         '&startTime='+that.searchParams.startTime+
         '&endTime='+that.searchParams.endTime+
         '&payWay='+that.searchParams.payWay+
-        '&invoice='+that.searchParams.invoice+
+        '&invoice='+that.searchParams.invoiceType+
         '&commentStatus='+that.searchParams.commentStatus;
       window.location.href=url
     },
@@ -510,7 +510,7 @@
         that.searchParams.orderClassify='';
         that.searchParams.payWay='';
         that.searchParams.hasMedia='';
-        that.searchParams.invoice='';
+        that.searchParams.invoiceType='';
         that.searchParams.commentStatus='';
         that.searchParams.orderStatus1='';
         that.searchParams.afterSellStatus='';
