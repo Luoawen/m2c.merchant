@@ -58,8 +58,9 @@
             <tr>
               <td class="a1">商品信息</td>
               <td class="a2">广告位信息</td>
-              <td class="a3">单价</td>
               <td class="a4">数量</td>
+              <td class="a4">单位</td>
+              <td class="a3">单价/元</td>
               <td class="a5">商品金额/元</td>
               <td class="a5">售后金额/元</td>
               <td class="a6">操作</td>
@@ -83,7 +84,9 @@
                 {{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].name : '--'):'--'}}
                 <br>
                 {{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].cateName:'--'):'--'}}</td>
-              <td class="a3" v-if ="orderDetail.goodsInfo.isSpecial==1"  >
+              <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
+               <td class="a4">{{orderDetail.goodsInfo.unitName}}</td>
+              <td class="a3" v-if ="orderDetail.goodsInfo.isSpecial==1">
                 <span >特惠价 {{(orderDetail.goodsInfo.specialPrice/100).toFixed(2)}}</span>
                  <br>
                 <span ><s>{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</s></span>
@@ -91,7 +94,6 @@
                <td class="a3" v-if ="orderDetail.goodsInfo.isSpecial==0"  >
                 <span >{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</span>
               </td>
-              <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
               <td class="a5">{{(orderDetail.goodsInfo.totalPrice/100).toFixed(2)}}</td>
               <td class="a5">{{((orderDetail.backMoney + orderDetail.backFreight)/100).toFixed(2)}}</td>
               <td class="a6" >
