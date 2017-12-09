@@ -162,10 +162,10 @@
         that.show_tip("请输入店铺名称")
         return
       }
-//      if (that.storeinformation.service == null || that.storeinformation.service.trim() == ''){
-//        that.show_tip("请输入客服电话")
-//        return
-//      }
+     if (that.storeinformation.service == null || that.storeinformation.service.trim() == ''){
+       that.show_tip("请输入客服电话")
+       return
+     }
       if (that.$("#m11yhgl_img")[0].src.indexOf("undefined") != -1 ) {
         that.show_tip('上传图片不成功')
         return
