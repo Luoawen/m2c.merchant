@@ -35,7 +35,7 @@
         <el-row :gutter="20">
           <el-col :span="3" class="alginRight">关键词：</el-col>
           <el-col :span="9">
-            <el-input v-model="search_params.condition" placeholder="输入商品名称/订单号/顾客姓名/顾客手机号/商家名称/商家ID" title="输入商品名称/订单号/顾客姓名/顾客手机号"></el-input>
+            <el-input v-model="search_params.condition" placeholder="输入商品名称/订单号/顾客姓名/顾客手机号" title="输入商品名称/订单号/顾客姓名/顾客手机号"></el-input>
           </el-col>
           <el-col :span="3" class="alginRight">评价时间：</el-col>
           <el-col :span="9">
