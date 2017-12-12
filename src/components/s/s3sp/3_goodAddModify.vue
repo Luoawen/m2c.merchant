@@ -830,6 +830,14 @@
                 } else {
                   that.show_tip(result.errorMessage)
                   that.goodsGuarantee=[]
+                  for (var k = 0; k < that.goodsSKUs.length; k++) {
+                    that.goodsSKUs[k].marketPrice = that.goodsSKUs[k].marketPrice / 100
+                    that.goodsSKUs[k].photographPrice= that.goodsSKUs[k].photographPrice / 100
+                    that.goodsSKUs[k].showStatus = that.goodsSKUs[k].show
+                    if (that.countMode == 1) {
+                      that.goodsSKUs[k].supplyPrice = that.goodsSKUs[k].supplyPrice / 100
+                    }
+                  }
                 }
               }
             })
