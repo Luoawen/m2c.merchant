@@ -33,7 +33,7 @@
           <th>活动分摊/元
             <div class="icon">
               <div class="tips">
-                <p>平台优惠活动，商家承担的活动成本</p>
+                <p>优惠活动，商家承担的活动成本</p>
               </div>
             </div>
           </th>
