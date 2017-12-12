@@ -287,13 +287,13 @@
       </el-tab-pane>
     </el-tabs>
     <!-- 删除弹框 -->
-      <div class="delectGoodBg" v-if="delectGoodBg"></div>
+    <div class="delectGoodBg" v-if="delectGoodBg"></div>
      <div class="delectGoodCon" v-if="delectGood" >
           <div class="agreetc_header">
             <span>提示</span>
             <span class="fr" @click="delectGoodHide()">X</span>
           </div>
-          <div class="agreetc_body">请确认是否删除</div>
+          <div class="agreetc_body">{{delectCon}}</div>
           <div class="agreetc_footer">
             <button type="button" class="btn save" @click = "deleteConfirmFn()">确认</button>
             <button type="button" class="btn cancel" @click="delectGoodHide()">取消</button>
@@ -360,6 +360,7 @@
         goodsDelStoreTotalCount:0,
         goodsDelStoreData:[],
         isChangePage:false,
+        delectCon:''
       }
     },
     methods: {
@@ -654,9 +655,11 @@
           }
         } else if (action === '_delete') {
           if(to=='a'){
-          that.delete_params_goodsTo= 'a'
+            that.delete_params_goodsTo= 'a'
+            that.delectCon = "是否删除商品?"
           }else{
             that.delete_params_goodsTo= 'b'
+            that.delectCon = "是否删除审核记录?"
           }
           that.delete_paramsRow=row
           that.delectGoodShow()
