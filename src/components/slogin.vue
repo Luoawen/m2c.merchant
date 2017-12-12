@@ -207,7 +207,7 @@ export default {
     }
   },
   beforeCreate () {
-    document.title = '拍获-供应商-登录'
+    document.title = '登录-供应商-拍获'
 		document.querySelector('#favicon').href = '/static/favicon_s.ico'
   },
   mounted () {
