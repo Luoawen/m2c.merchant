@@ -9,12 +9,12 @@ import utf8 from 'utf8'
 import md5 from 'md5'
 import Vuex from 'vuex'
 import store from './vuex/store'
-import VueResource from 'vue-resource'
+//import VueResource from 'vue-resource'
 import Element from 'element-ui'
 import './assets/css/index.css'
 // import 'element-ui/lib/theme-chalk/index.css'
 import 'bootstrap'
-import 'bootstrap-table'
+//import 'bootstrap-table'
 import 'tableexport'
 import './assets/css/bootstrap3.0.min.css'
 import './assets/css/manage.css'
@@ -27,63 +27,63 @@ import '../static/UE/ueditor.all.js'
 import '../static/UE/lang/zh-cn/zh-cn.js'
 import '../static/UE/ueditor.parse.min.js'
 
-Vue.use(VueResource)
+//Vue.use(VueResource)
 Vue.use(Vuex)
 // 关闭生产模式下给出的提示
 Vue.config.productionTip = false
 Vue.use(Element)
 {
   // bootstrap-table中文显示设置
-  (function ($) {
-    'use strict'
-    $.fn.bootstrapTable.locales['zh-CN'] = {
-      formatLoadingMessage: function () {
-        return '正在努力地加载数据中，请稍候……'
-      },
-      formatRecordsPerPage: function (pageNumber) {
-        return '每页显示 ' + pageNumber + ' 条记录'
-      },
-      formatShowingRows: function (pageFrom, pageTo, totalRows) {
-        return '显示第 ' + pageFrom + ' 到第 ' + pageTo + ' 条记录，总共 ' + totalRows + ' 条记录'
-      },
-      formatSearch: function () {
-        return '搜索'
-      },
-      formatNoMatches: function () {
-        return '没有找到匹配的记录'
-      },
-      formatPaginationSwitch: function () {
-        return '隐藏/显示分页'
-      },
-      formatRefresh: function () {
-        return '刷新'
-      },
-      formatToggle: function () {
-        return '切换'
-      },
-      formatColumns: function () {
-        return '列'
-      },
-      formatExport: function () {
-        return '导出数据'
-      },
-      formatClearFilters: function () {
-        return '清空过滤'
-      }
-    }
-    $.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['zh-CN'])
-  })($)
+  // (function ($) {
+  //   'use strict'
+  //   $.fn.bootstrapTable.locales['zh-CN'] = {
+  //     formatLoadingMessage: function () {
+  //       return '正在努力地加载数据中，请稍候……'
+  //     },
+  //     formatRecordsPerPage: function (pageNumber) {
+  //       return '每页显示 ' + pageNumber + ' 条记录'
+  //     },
+  //     formatShowingRows: function (pageFrom, pageTo, totalRows) {
+  //       return '显示第 ' + pageFrom + ' 到第 ' + pageTo + ' 条记录，总共 ' + totalRows + ' 条记录'
+  //     },
+  //     formatSearch: function () {
+  //       return '搜索'
+  //     },
+  //     formatNoMatches: function () {
+  //       return '没有找到匹配的记录'
+  //     },
+  //     formatPaginationSwitch: function () {
+  //       return '隐藏/显示分页'
+  //     },
+  //     formatRefresh: function () {
+  //       return '刷新'
+  //     },
+  //     formatToggle: function () {
+  //       return '切换'
+  //     },
+  //     formatColumns: function () {
+  //       return '列'
+  //     },
+  //     formatExport: function () {
+  //       return '导出数据'
+  //     },
+  //     formatClearFilters: function () {
+  //       return '清空过滤'
+  //     }
+  //   }
+  //   $.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales['zh-CN'])
+  // })($)
   // 设置表格的不可点击按钮
-  {
-    let _onLoadSuccess = 'onLoadSuccess' in $.fn.bootstrapTable.defaults ? $.fn.bootstrapTable.defaults.onLoadSuccess : function () { return }
-    $.fn.bootstrapTable.defaults.onLoadSuccess = function (data) {
-      $("[data-toggle='popover']").popover()
-      $('.page-number.active, .page-last-separator.disabled, .page-first-separator.disabled').click(function () {
-        return false
-      })
-      _onLoadSuccess()
-    }
-  }
+  // {
+  //   let _onLoadSuccess = 'onLoadSuccess' in $.fn.bootstrapTable.defaults ? $.fn.bootstrapTable.defaults.onLoadSuccess : function () { return }
+  //   $.fn.bootstrapTable.defaults.onLoadSuccess = function (data) {
+  //     $("[data-toggle='popover']").popover()
+  //     $('.page-number.active, .page-last-separator.disabled, .page-first-separator.disabled').click(function () {
+  //       return false
+  //     })
+  //     _onLoadSuccess()
+  //   }
+  // }
   // 模态框阴影点击后不关闭
   $.fn.modal.Constructor.DEFAULTS.backdrop = 'static'
 
@@ -161,6 +161,79 @@ Vue.use(Element)
   Vue.prototype.hide_loading = hideLoading
   // 设置md5加密方法
   Vue.prototype.md5 = md5
+  // 扩展ajax
+  {
+    let _ajax = $.ajax
+    $.ajax = function (options) {
+      let _success = 'success' in options ? options.success : function () { return }
+      let _error = 'error' in options ? options.error : function () { return }
+      let _options = $.extend(options, {
+        headers:{'attach':(userInfo!=null||userInfo!=undefined)?attach:""}
+      })
+      _ajax(_options)
+    }
+  }
+  // 封装客户端操作对象
+  let userInfo =JSON.parse(sessionStorage.getItem('mUser'))
+  console.log(userInfo)
+  let attach;
+  if(userInfo){
+    attach={userName:userInfo.dealerName,userId:userInfo.dealerId,browserInfo:browserInfo(),ip:'127.0.0.1',userType:1};
+    console.log('_attach',JSON.stringify(attach))
+    attach =JSON.stringify(attach)
+  }
+  // 抓取浏览器客户端函数
+  function browserInfo (){
+    var browserInfo={system:'',appName:'',version:''}
+    var agent = navigator.userAgent.toLowerCase() ;
+    var system = agent.split(' ')[1].split(' ')[0].split('(')[1];
+    browserInfo.system=system;
+    var regStr_edge = /edge\/[\d.]+/gi;
+    var regStr_ie = /trident\/[\d.]+/gi ;
+    var regStr_ff = /firefox\/[\d.]+/gi;
+    var regStr_chrome = /chrome\/[\d.]+/gi ;
+    var regStr_saf = /safari\/[\d.]+/gi ;
+    var regStr_opera = /opr\/[\d.]+/gi;
+    //IE
+    if(agent.indexOf("trident") > 0){
+      browserInfo.appName=agent.match(regStr_ie)[0].split('/')[0];
+      browserInfo.version=agent.match(regStr_ie)[0].split('/')[1]
+      return browserInfo;
+    }
+    //Edge
+    if(agent.indexOf('edge') > 0){
+      browserInfo.appName=agent.match(regStr_edge)[0].split('/')[0];
+      browserInfo.version=agent.match(regStr_edge)[0].split('/')[1];
+      return browserInfo;
+    }
+    //firefox
+    if(agent.indexOf("firefox") > 0){
+      browserInfo.appName=agent.match(regStr_ff)[0].split('/')[0];
+      browserInfo.version=agent.match(regStr_ff)[0].split('/')[1];
+      return browserInfo;
+    }
+    //Opera
+    if(agent.indexOf("opr")>0){
+      browserInfo.appName=agent.match(regStr_opera)[0].split('/')[0];
+      browserInfo.version=agent.match(regStr_opera)[0].split('/')[1];
+      return browserInfo;
+    }
+    //Safari
+    if(agent.indexOf("safari") > 0 && agent.indexOf("chrome") < 0){
+      browserInfo.appName=agent.match(regStr_saf)[0].split('/')[0];
+      browserInfo.version=agent.match(regStr_saf)[0].split('/')[1];
+      return browserInfo;
+    }
+    //Chrome
+    if(agent.indexOf("chrome") > 0){
+      browserInfo.appName=agent.match(regStr_chrome)[0].split('/')[0];
+      browserInfo.version=agent.match(regStr_chrome)[0].split('/')[1];
+      return browserInfo;
+    }else{
+      // arr.push('请更换主流浏览器，例如chrome,firefox,opera,safari,IE,Edge!')
+      return browserInfo;
+    }
+  }
   // 设置日期时间戳转化的方法
   Vue.prototype.date_format = function (date, fmt) {
     var o = {

@@ -18,7 +18,7 @@
 						<a @click="get_password" class="eyes_box " data-show="1" href="javascript:void(0);"><i class="icon iconfont" >&#xe624;</i></a>
 					</div>
 					<div class="login_s">
-						<button type="submit" @click="login">登&nbsp&nbsp录</button>
+						<button type="submit" @click="login">登&nbsp;&nbsp;录</button>
 					</div>
 					<div class="lost">
 						<a @click="get_forget_passwrod">忘记登录密码？</a>
@@ -81,7 +81,8 @@ export default {
             if (result.token) {
               sessionStorage.setItem('mToken', result.token)
               console.log('登录信息(处理后): ', result)
-              sessionStorage.setItem('mUser', JSON.stringify(result.content))
+							sessionStorage.setItem('mUser', JSON.stringify(result.content))
+							console.log(sessionStorage.getItem('mUser'))
               that.$goRoute('/s/home')
             } else {
               console.log('错误信息: ', result.errorMessage)
