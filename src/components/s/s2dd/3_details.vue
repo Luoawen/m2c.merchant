@@ -41,7 +41,7 @@
               <div>
                 <span class="tit01">售后总额:</span>
                 <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((orderDetail.backMoney + orderDetail.backFreight)/100).toFixed(2)}}元
-                  <span v-if="orderDetail.orderType !=2">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight/100).toFixed(2)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1">（运费待商家确认） </span></span>
+                  <span v-if="orderDetail.orderType !=2">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight/100).toFixed(2)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.orderFreight!=0">（运费待商家确认） </span></span>
               </div>
               <div>
                 <span class="tit01">申请时间:</span>
@@ -335,7 +335,8 @@
   </el-dialog>
   </div>
 
-    <div class="clsMask" v-show="showMask===true"  style=""></div>
+    <div class="clsMask" v-show="showMask===true"  style="">
+    </div>
     <div class="pop_content"  v-show="showRt===true">
       <div class="hptczp_header">
         <span>同意申请</span>
@@ -643,7 +644,7 @@
       }
       ,handleAgree(){
         let that = this
-        if (that.orderDetail.orderType == 2 && that.orderDetail.doStatus == 1) {
+        if (that.orderDetail.orderType == 2 && that.orderDetail.doStatus == 1 && that.orderDetail.orderFreight!=0) {
             that.getHasReturnFreight();
             that.showMask = true;
             that.showRt = true;
@@ -731,6 +732,9 @@
             cancelButtonText: '取消',
             inputType:'textarea',
            }).then(({ value }) => {
+             alert("哈哈哈")
+             // 没有写理由的情况下 确认按钮是默认的取消
+             console.log('value' , value );
              if (value.length<=0 || value ==null ) {
                that.show_tip("请输入拒绝理由");
               return;
