@@ -732,7 +732,7 @@
             cancelButtonText: '取消',
             inputType:'textarea',
            }).then(({ value }) => {
-             alert("哈哈哈")
+             //alert("哈哈哈")
              // 没有写理由的情况下 确认按钮是默认的取消
              console.log('value' , value );
              if (value.length<=0 || value ==null ) {
