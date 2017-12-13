@@ -967,6 +967,7 @@
   }
 </script>
 <style lang="scss" scoped>
+a{text-decoration:none}
 .mt20{
   margin-top: 20px;
 }
