@@ -87,9 +87,11 @@
               <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
                <td class="a4">{{orderDetail.goodsInfo.unitName}}</td>
               <td class="a3" v-if ="orderDetail.goodsInfo.isSpecial==1">
-                <span >特惠价 {{(orderDetail.goodsInfo.specialPrice/100).toFixed(2)}}</span>
+                <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.specialPrice/100).toFixed(2)}}</template>
+                <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</p>
+                <!-- <span >特惠价 {{(orderDetail.goodsInfo.specialPrice/100).toFixed(2)}}</span>
                  <br>
-                <span ><s>{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</s></span>
+                <p class="lineThrough">{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</p> -->
               </td>
                <td class="a3" v-if ="orderDetail.goodsInfo.isSpecial==0"  >
                 <span >{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</span>
