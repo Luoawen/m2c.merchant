@@ -41,7 +41,7 @@
               <div>
                 <span class="tit01">售后总额:</span>
                 <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((orderDetail.backMoney + orderDetail.backFreight)/100).toFixed(2)}}元
-                  <span v-if="orderDetail.orderType !=2">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight/100).toFixed(2)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1">（运费待商家确认） </span></span>
+                  <span v-if="orderDetail.orderType !=2">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight/100).toFixed(2)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.orderFreight!=0">（运费待商家确认） </span></span>
               </div>
               <div>
                 <span class="tit01">申请时间:</span>
@@ -644,7 +644,7 @@
       }
       ,handleAgree(){
         let that = this
-        if (that.orderDetail.orderType == 2 && that.orderDetail.doStatus == 1) {
+        if (that.orderDetail.orderType == 2 && that.orderDetail.doStatus == 1 && that.orderDetail.orderFreight!=0) {
             that.getHasReturnFreight();
             that.showMask = true;
             that.showRt = true;
