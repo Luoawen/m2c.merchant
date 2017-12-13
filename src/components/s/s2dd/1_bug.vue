@@ -280,7 +280,7 @@
             <span style="color: red;">*</span>
             运费退款
           </span>
-          <span> <el-input-number v-model="pRtFreight" :controls="false" :min="0" :max="orderFreight" ></el-input-number></span>
+          <span> <el-input-number v-model="pRtFreight" :controls="false" :min="-1" :max="orderFreight" ></el-input-number></span>
           <span>元</span>
         </div>
         <div class="linh40 pl10">
@@ -601,6 +601,12 @@
       ,agreeRtMoneyApply () {
         // 同意退款申请，未来发货时需要输入的金额
         let that = this
+
+        if (that.pRtFreight < 0 || that.pRtFreight == '') {
+          that.show_tip('退款运费不能为小于0的数字或空！');
+          return;
+        }
+
         that.$.ajax({
           type: 'PUT',
           url: this.base + 'm2c.scm/order/dealer/agree-apply-sale',
