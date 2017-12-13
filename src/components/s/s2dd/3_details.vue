@@ -335,8 +335,7 @@
   </el-dialog>
   </div>
 
-    <div class="clsMask" v-show="showMask===true"  style="">
-    </div>
+    <div class="clsMask" v-show="showMask===true"  style=""></div>
     <div class="pop_content"  v-show="showRt===true">
       <div class="hptczp_header">
         <span>同意申请</span>
@@ -732,9 +731,6 @@
             cancelButtonText: '取消',
             inputType:'textarea',
            }).then(({ value }) => {
-             alert("哈哈哈")
-             // 没有写理由的情况下 确认按钮是默认的取消
-             console.log('value' , value );
              if (value.length<=0 || value ==null ) {
                that.show_tip("请输入拒绝理由");
               return;
