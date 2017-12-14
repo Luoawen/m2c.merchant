@@ -162,78 +162,78 @@ Vue.use(Element)
   // 设置md5加密方法
   Vue.prototype.md5 = md5
   // 扩展ajax
-  {
-    let _ajax = $.ajax
-    $.ajax = function (options) {
-      let _success = 'success' in options ? options.success : function () { return }
-      let _error = 'error' in options ? options.error : function () { return }
-      let _options = $.extend(options, {
-        headers:{'attach':(userInfo!=null||userInfo!=undefined)?attach:""}
-      })
-      _ajax(_options)
-    }
-  }
-  // 封装客户端操作对象
-  let userInfo =JSON.parse(sessionStorage.getItem('mUser'))
-  console.log(userInfo)
-  let attach;
-  if(userInfo){
-    attach={userName:userInfo.dealerName,userId:userInfo.dealerId,browserInfo:browserInfo(),ip:'127.0.0.1',userType:1};
-    console.log('_attach',JSON.stringify(attach))
-    attach =JSON.stringify(attach)
-  }
-  // 抓取浏览器客户端函数
-  function browserInfo (){
-    var browserInfo={system:'',appName:'',version:''}
-    var agent = navigator.userAgent.toLowerCase() ;
-    var system = agent.split(' ')[1].split(' ')[0].split('(')[1];
-    browserInfo.system=system;
-    var regStr_edge = /edge\/[\d.]+/gi;
-    var regStr_ie = /trident\/[\d.]+/gi ;
-    var regStr_ff = /firefox\/[\d.]+/gi;
-    var regStr_chrome = /chrome\/[\d.]+/gi ;
-    var regStr_saf = /safari\/[\d.]+/gi ;
-    var regStr_opera = /opr\/[\d.]+/gi;
-    //IE
-    if(agent.indexOf("trident") > 0){
-      browserInfo.appName=agent.match(regStr_ie)[0].split('/')[0];
-      browserInfo.version=agent.match(regStr_ie)[0].split('/')[1]
-      return browserInfo;
-    }
-    //Edge
-    if(agent.indexOf('edge') > 0){
-      browserInfo.appName=agent.match(regStr_edge)[0].split('/')[0];
-      browserInfo.version=agent.match(regStr_edge)[0].split('/')[1];
-      return browserInfo;
-    }
-    //firefox
-    if(agent.indexOf("firefox") > 0){
-      browserInfo.appName=agent.match(regStr_ff)[0].split('/')[0];
-      browserInfo.version=agent.match(regStr_ff)[0].split('/')[1];
-      return browserInfo;
-    }
-    //Opera
-    if(agent.indexOf("opr")>0){
-      browserInfo.appName=agent.match(regStr_opera)[0].split('/')[0];
-      browserInfo.version=agent.match(regStr_opera)[0].split('/')[1];
-      return browserInfo;
-    }
-    //Safari
-    if(agent.indexOf("safari") > 0 && agent.indexOf("chrome") < 0){
-      browserInfo.appName=agent.match(regStr_saf)[0].split('/')[0];
-      browserInfo.version=agent.match(regStr_saf)[0].split('/')[1];
-      return browserInfo;
-    }
-    //Chrome
-    if(agent.indexOf("chrome") > 0){
-      browserInfo.appName=agent.match(regStr_chrome)[0].split('/')[0];
-      browserInfo.version=agent.match(regStr_chrome)[0].split('/')[1];
-      return browserInfo;
-    }else{
-      // arr.push('请更换主流浏览器，例如chrome,firefox,opera,safari,IE,Edge!')
-      return browserInfo;
-    }
-  }
+  // {
+  //   let _ajax = $.ajax
+  //   $.ajax = function (options) {
+  //     let _success = 'success' in options ? options.success : function () { return }
+  //     let _error = 'error' in options ? options.error : function () { return }
+  //     let _options = $.extend(options, {
+  //       headers:{'attach':(userInfo!=null||userInfo!=undefined)?attach:""}
+  //     })
+  //     _ajax(_options)
+  //   }
+  // }
+  // // 封装客户端操作对象
+  // let userInfo =JSON.parse(sessionStorage.getItem('mUser'))
+  // console.log(userInfo)
+  // let attach;
+  // if(userInfo){
+  //   attach={userName:userInfo.dealerName,userId:userInfo.dealerId,browserInfo:browserInfo(),ip:'127.0.0.1',userType:1};
+  //   console.log('_attach',JSON.stringify(attach))
+  //   attach =JSON.stringify(attach)
+  // }
+  // // 抓取浏览器客户端函数
+  // function browserInfo (){
+  //   var browserInfo={system:'',appName:'',version:''}
+  //   var agent = navigator.userAgent.toLowerCase() ;
+  //   var system = agent.split(' ')[1].split(' ')[0].split('(')[1];
+  //   browserInfo.system=system;
+  //   var regStr_edge = /edge\/[\d.]+/gi;
+  //   var regStr_ie = /trident\/[\d.]+/gi ;
+  //   var regStr_ff = /firefox\/[\d.]+/gi;
+  //   var regStr_chrome = /chrome\/[\d.]+/gi ;
+  //   var regStr_saf = /safari\/[\d.]+/gi ;
+  //   var regStr_opera = /opr\/[\d.]+/gi;
+  //   //IE
+  //   if(agent.indexOf("trident") > 0){
+  //     browserInfo.appName=agent.match(regStr_ie)[0].split('/')[0];
+  //     browserInfo.version=agent.match(regStr_ie)[0].split('/')[1]
+  //     return browserInfo;
+  //   }
+  //   //Edge
+  //   if(agent.indexOf('edge') > 0){
+  //     browserInfo.appName=agent.match(regStr_edge)[0].split('/')[0];
+  //     browserInfo.version=agent.match(regStr_edge)[0].split('/')[1];
+  //     return browserInfo;
+  //   }
+  //   //firefox
+  //   if(agent.indexOf("firefox") > 0){
+  //     browserInfo.appName=agent.match(regStr_ff)[0].split('/')[0];
+  //     browserInfo.version=agent.match(regStr_ff)[0].split('/')[1];
+  //     return browserInfo;
+  //   }
+  //   //Opera
+  //   if(agent.indexOf("opr")>0){
+  //     browserInfo.appName=agent.match(regStr_opera)[0].split('/')[0];
+  //     browserInfo.version=agent.match(regStr_opera)[0].split('/')[1];
+  //     return browserInfo;
+  //   }
+  //   //Safari
+  //   if(agent.indexOf("safari") > 0 && agent.indexOf("chrome") < 0){
+  //     browserInfo.appName=agent.match(regStr_saf)[0].split('/')[0];
+  //     browserInfo.version=agent.match(regStr_saf)[0].split('/')[1];
+  //     return browserInfo;
+  //   }
+  //   //Chrome
+  //   if(agent.indexOf("chrome") > 0){
+  //     browserInfo.appName=agent.match(regStr_chrome)[0].split('/')[0];
+  //     browserInfo.version=agent.match(regStr_chrome)[0].split('/')[1];
+  //     return browserInfo;
+  //   }else{
+  //     // arr.push('请更换主流浏览器，例如chrome,firefox,opera,safari,IE,Edge!')
+  //     return browserInfo;
+  //   }
+  // }
   // 设置日期时间戳转化的方法
   Vue.prototype.date_format = function (date, fmt) {
     var o = {
