@@ -6,7 +6,7 @@
           <div class="detail_tit" v-show="orderDetail.status==3">已拒绝顾客售后申请</div>
           <div class="detail_tit02" v-show="orderDetail.status==0||orderDetail.status==1||orderDetail.status==2">顾客发起售后申请，请处理</div>
           <div class="detail_tit03" v-show="orderDetail.status==4">待顾客寄回商品</div>
-          <div class="detail_tit03" v-show="orderDetail.status==5">顾客寄回商品中，查看物流信息</div>
+          <div class="detail_tit03" v-show="orderDetail.status==5">顾客已寄回商品，收到寄回商品请及时退款给顾客</div>
           <div class="detail_top mt20 clear">
             <div class="col-sm-4 detail_cen">
               <div>
@@ -41,7 +41,7 @@
               <div>
                 <span class="tit01">售后总额:</span>
                 <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((orderDetail.backMoney + orderDetail.backFreight)/100).toFixed(2)}}元
-                  <span v-if="orderDetail.orderType !=2">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight/100).toFixed(2)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.orderFreight!=0">（运费待商家确认） </span></span>
+                  <span v-if="orderDetail.orderType !=2 || orderDetail.status >= 4">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight/100).toFixed(2)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.status < 4">（运费待商家确认） </span></span>
               </div>
               <div>
                 <span class="tit01">申请时间:</span>
@@ -779,7 +779,7 @@
       }//商户拒绝售后
       ,agreedRefund(){
         let that = this;
-        that.$confirm('确定同意退款？', '提示', {
+        that.$confirm('是否确认退款？\n款项将按原路退回给顾客', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
