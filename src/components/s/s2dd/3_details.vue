@@ -14,8 +14,9 @@
                 <span style="color: red;font-size: 15px" class="ml20">
                   <!-- {{orderDetail.status==0?'申请退货退款':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'售后完成':orderDetail.status==11?'售后关闭':orderDetail.status==-1?'已取消':'-'}} -->
                   {{orderDetail.orderType==0?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==1?'待商家同意':orderDetail.status==4?'待顾客寄回商品':(orderDetail.status==5||orderDetail.status==6)?'待商家发货':orderDetail.status==7?'待顾客收货':orderDetail.status>=8?'售后已完成':'--'):orderDetail.orderType==1?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==0?'待商家同意':orderDetail.status==4?'待顾客寄回商品':(orderDetail.status==5||orderDetail.status==6)?'待商家确认退款':orderDetail.status>=9?'售后已完成':'--'):orderDetail.orderType==2?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==2?'待商家同意':orderDetail.status==4?'待商家确认退款':orderDetail.status>=9?'售后已完成':'--'):'--'}}
-                </span>
+                </span>   
               </div>
+              
               <div>
                 <span class="tit01">售后单号:</span>
                 <span class="ml20">{{orderDetail.afterSelldealerOrderId}}</span>
@@ -746,57 +747,6 @@
       ,handleRejected(){
         //  弹出弹框  输入拒绝理由
         let that = this
-<<<<<<< HEAD
-        let title= that.orderDetail.orderType==0?'是否拒绝换货申请?':that.orderDetail.orderType==1?'是否拒绝退货申请?':that.orderDetail.orderType==2?'是否拒绝退款申请?':'-';
-        let titleAisle = that.orderDetail.orderType==0?'拒绝申请换货':that.orderDetail.orderType==1?'拒绝申请退货':that.orderDetail.orderType==2?'拒绝申请退款':'-';
-        that.$confirm(title, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-           that.$prompt('请输入'+titleAisle+'理由', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            inputType:'textarea',
-           }).then(({ value }) => {
-             //alert("哈哈哈")
-             // 没有写理由的情况下 确认按钮是默认的取消
-             console.log('value' , value );
-             if (value.length<=0 || value ==null ) {
-               that.show_tip("请输入拒绝理由");
-              return;
-            }
-             if (value.length > 100) {
-               that.show_tip("原因输入太长，不能大于100字!");
-               return;
-             }
-             that.$.ajax({
-               type: 'PUT',
-               url: this.base + 'm2c.scm/order/dealer/reject-apply-sale',
-               //url: 'http://localhost:8080/m2c.scm/order/dealer/reject-apply-sale',
-               data: {
-                 token: sessionStorage.getItem('mToken'),
-                 isEncry: false,
-                 saleAfterNo:that.orderDetail.afterSelldealerOrderId,
-                 rejectReason: value,                     // 拒绝原因，中文
-                 rejectReasonCode: 99,    // 拒绝原因编码
-                 userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
-                 dealerId:that.orderDetail.dealerId
-               },
-               success: function (result) {
-                 if (result.status === 200){
-                   // 获取订单操作列表
-                   that.loadOrderDetail()
-                 }
-               }
-             })
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: titleAisle+'已取消'
-            });
-          });
-=======
         that.textAreaShow = true;
         // let that = this
         // let title= that.orderDetail.orderType==0?'是否拒绝换货申请?':that.orderDetail.orderType==1?'是否拒绝退货申请?':that.orderDetail.orderType==2?'是否拒绝退款申请?':'-';
@@ -844,7 +794,6 @@
         //       message: titleAisle+'已取消'
         //     });
         //   });
->>>>>>> local_hey
 
         // }).catch(() => {
         //   that.$message({
@@ -884,11 +833,7 @@
       },
       agreedRefund(){
         let that = this;
-<<<<<<< HEAD
         that.$confirm('是否确认退款？\n款项将按原路退回给顾客', '提示', {
-=======
-        that.$confirm('款项将原路退回给顾客', '是否确认退款？', {
->>>>>>> local_hey
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
