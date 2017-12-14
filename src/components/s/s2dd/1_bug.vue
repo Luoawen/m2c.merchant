@@ -276,12 +276,19 @@
       </div>
       <div class="hptczp_body">
         <div class="linh40">
-          <span class=" wid80">
+          <!-- <span class=" wid80">
             <span style="color: red;">*</span>
             运费退款
           </span>
           <span> <el-input-number v-model="pRtFreight" :controls="false" :min="-1" :max="orderFreight" ></el-input-number></span>
+          <span>元</span> -->
+          <span class=" wid80">
+            <span style="color: red;">*</span>
+            运费退款
+          </span>
+          <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderFreight - hasRtFreight)/100" :placeholder="'最多可退'+(orderFreight - hasRtFreight)/100 +'元'" @change="pRtFreightChange"></el-input></span>
           <span>元</span>
+          <P class="pl10">运费退款不能大于订单实际剩余运费</P>
         </div>
         <div class="linh40 pl10">
           <span class="wid80">售后金额</span>
@@ -332,6 +339,7 @@
         mediaInfos:[{value:'',label:'广告位'},{value:'0',label:'无'},{value:'1',label:'有'}], // 广告位
         time:''
         ,pRtFreight:0
+        ,hasRtFreight:0
         ,showRt: false
         ,agreeApplyShow: false
         ,backMoney:0
@@ -340,6 +348,31 @@
       }
     },
     methods: {
+      //
+      pRtFreightChange(){
+        let that = this
+        var re = /^[0-9]+\.?[0-9]*$/
+        if (!re.test(that.pRtFreight)) {
+          that.pRtFreight = 0
+        }else{
+          let hasRtFreight = (that.orderFreight - that.hasRtFreight)/100
+          if(parseFloat(that.pRtFreight) > hasRtFreight){
+            that.pRtFreight = hasRtFreight
+            that.show_tip("不能大于实际剩余运费")
+            that.$nextTick(function () {
+            that.rtFreight = parseFloat(that.pRtFreight)
+          })
+            return
+          }
+          if(parseFloat(that.pRtFreight) < 0){
+            that.show_tip("不能为负数")
+            return
+          }
+          that.$nextTick(function () {
+            that.rtFreight = parseFloat(that.pRtFreight)
+          })
+        }
+      },
       //时间赋值
       timeCheck () {
         let that = this
