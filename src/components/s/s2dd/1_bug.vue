@@ -245,7 +245,7 @@
         <span class="fr" @click="Refuseshow=false">X</span>
       </div>
       <div class="refuse_body">
-        <textarea placeholder="请填写" id="refuse_txt"></textarea>
+        <textarea id="refuse_txt" maxlength="100" minlength="1" placeholder="请输入1-100个字符" ></textarea>
       </div>
       <div class="refuse_footer">
         <button type="button" class="btn save"  @click="handleReject">拒绝</button>
@@ -276,12 +276,19 @@
       </div>
       <div class="hptczp_body">
         <div class="linh40">
-          <span class=" wid80">
+          <!-- <span class=" wid80">
             <span style="color: red;">*</span>
             运费退款
           </span>
           <span> <el-input-number v-model="pRtFreight" :controls="false" :min="-1" :max="orderFreight" ></el-input-number></span>
+          <span>元</span> -->
+          <span class=" wid80">
+            <span style="color: red;">*</span>
+            运费退款
+          </span>
+          <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderFreight - hasRtFreight)/100" :placeholder="'最多可退'+(orderFreight - hasRtFreight)/100 +'元'" @change="pRtFreightChange"></el-input></span>
           <span>元</span>
+          <P class="pl10">运费退款不能大于订单实际剩余运费</P>
         </div>
         <div class="linh40 pl10">
           <span class="wid80">售后金额</span>
@@ -289,7 +296,7 @@
         </div>
         <div class="linh40 pl10">
           <span class=" wid80">售后总额</span>
-          <span>{{(backMoney/100 + pRtFreight).toFixed(2)}}元</span>
+          <span>{{(backMoney/100 + rtFreight).toFixed(2)}}元</span>
         </div>
       </div>
       <div class="hptczp_footer">
@@ -331,7 +338,9 @@
         invoiceTypes:[{value:'',label:'开发票'},{value:'0',label:'个人'},{value:'1',label:'公司'}], // 发票
         mediaInfos:[{value:'',label:'广告位'},{value:'0',label:'无'},{value:'1',label:'有'}], // 广告位
         time:''
-        ,pRtFreight:0
+        ,pRtFreight:null
+        ,rtFreight:0
+        ,hasRtFreight:0
         ,showRt: false
         ,agreeApplyShow: false
         ,backMoney:0
@@ -340,6 +349,35 @@
       }
     },
     methods: {
+      //
+      pRtFreightChange(){
+        let that = this
+        var re = /^[0-9]+\.?[0-9]*$/
+        if (!re.test(that.pRtFreight)) {
+          that.pRtFreight = 0
+          console.log("a")
+          console.log(that.pRtFreight)
+        }else{
+          let hasRtFreight = (that.orderFreight - that.hasRtFreight)/100
+          if(parseFloat(that.pRtFreight) > hasRtFreight){
+            that.pRtFreight = hasRtFreight
+            that.show_tip("不能大于实际剩余运费")
+            that.$nextTick(function () {
+            that.rtFreight = parseFloat(that.pRtFreight)
+          })
+            return
+          }
+          if(parseFloat(that.pRtFreight) < 0){
+            console.log("fushu")
+            that.show_tip("不能为负数")
+            return
+          }
+          that.$nextTick(function () {
+            that.rtFreight = parseFloat(that.pRtFreight)
+          })
+        }
+        console.log(that.pRtFreight)
+      },
       //时间赋值
       timeCheck () {
         let that = this
@@ -601,12 +639,14 @@
       ,agreeRtMoneyApply () {
         // 同意退款申请，未来发货时需要输入的金额
         let that = this
-
-        if (that.pRtFreight < 0 || that.pRtFreight == '') {
-          that.show_tip('退款运费不能为小于0的数字或空！');
+        console.log(that.pRtFreight)
+        if ( that.pRtFreight === '') {
+          that.show_tip('退款运费不能为空！');
           return;
         }
-
+        if(that.pRtFreight < 0 ){
+          that.pRtFreight = 0
+        }
         that.$.ajax({
           type: 'PUT',
           url: this.base + 'm2c.scm/order/dealer/agree-apply-sale',
@@ -1147,6 +1187,12 @@
         padding-right: 10px;
         padding-top: 5px;
         padding-bottom: 5px;
+      }
+      p{
+        margin-left:78px;
+        color:rgb(107,107,107);
+        font-size: 12px;
+        line-height: 18px;
       }
     }
     .hptczp_footer{

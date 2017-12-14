@@ -41,7 +41,9 @@
 
 <style lang="scss">
 .m,.bi,.s,#show_tip{
-  .btn_table{width:auto;padding:0 15px;color:white;border-radius:14px;margin-right:10px;border:none;height:30px;line-height:30px;text-align:center;}
+  .btn_table{width:auto;padding:0 15px;color:white;border-radius:14px;margin-right:10px;border:none;height:30px;line-height:30px;
+  outline:none;
+  text-align:center;}
   #toolbar{margin-left:30px;margin-top:15px;}
   .bootstrap-table{
     margin-left:30px;margin-top:10px;

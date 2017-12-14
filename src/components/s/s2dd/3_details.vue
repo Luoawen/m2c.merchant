@@ -366,7 +366,30 @@
         <button type="button" class="btn cancel" @click="showMask=false;showRt=false" >取消</button>
       </div>
     </div>
-
+    <!-- 遮罩层 -->
+    <div class="v-modal" tabindex="0" v-if="textAreaShow"     style="z-index:2000;"></div>
+      <!--提示 拒绝申请退款理由 输入框-->
+    <div class="el-message-box" style="position:fixed;top:50%;left:40%;z-index:2003;"  v-if="textAreaShow" >
+      <div class="el-message-box__header">
+        <div class="el-message-box__title">
+          <span>提示</span>
+        </div>
+        <button type="button" aria-label="Close" class="el-message-box__headerbtn" @click="textAreaShow=false"><i class="el-message-box__close el-icon-close"></i></button>
+      </div>
+      <div class="el-message-box__content">
+        <div class="el-message-box__message"><p>请输入拒绝理由</p></div>
+        <div class="el-message-box__input" style="">
+          <div class="el-textarea">
+            <textarea  v-model='textarea'   placeholder="请输入1-100 字符" type="textarea" rows="2" autocomplete="off" maxlength="100"   validateevent="true" class="el-textarea__inner" style="min-height: 33px;"></textarea>
+          </div>
+          <div class="el-message-box__errormsg" style="visibility: hidden;"></div>
+        </div>
+      </div>
+      <div class="el-message-box__btns">
+        <!-- <button type="button" class="el-button el-button--default el-button--small" @click="textAreaShow=false" ><span>取消</span></button> -->
+        <button type="button" class="el-button el-button--default el-button--small el-button--primary" @click="rejectReasonConfirm"><span>确定</span></button>
+        </div>
+      </div>
   </div>
 </template>
 <script>
@@ -374,6 +397,8 @@
     name: '',
     data () {
       return {
+        textarea:'',
+        textAreaShow:false,
         pageRows:5,
         currentPage: 1,
         totalCount:0,
@@ -454,21 +479,22 @@
     methods: {
       pRtFreightChange(){
         let that = this
-        var re = /^[0-9]+\.?[0-9]*$/
+        var re = /^[1-9]+\.?[0-9]*$/
         if (!re.test(that.pRtFreight)) {
           that.pRtFreight = 0
         }else{
           let hasRtFreight = (that.orderDetail.orderFreight - that.hasRtFreight)/100
           if(parseFloat(that.pRtFreight) > hasRtFreight){
             that.pRtFreight = hasRtFreight
-            that.show_tip("不能大于实际剩余运费")
+            // 重新赋值 去掉提示语
+            // that.show_tip("不能大于实际剩余运费")
             that.$nextTick(function () {
             that.rtFreight = parseFloat(that.pRtFreight)
           })
             return
           }
           if(parseFloat(that.pRtFreight) < 0){
-            that.show_tip("不能为负数")
+            // that.show_tip("不能为负数")
             return
           }
           that.$nextTick(function () {
@@ -509,7 +535,6 @@
             if (result.status === 200){
               // 获取商品详情
               let _content = result.content
-              console.log(_content);
               that.orderDetail.afterSelldealerOrderId = _content.afterSellDealerOrderId
               that.orderDetail.backMoney = _content.backMoney
               that.orderDetail.createdDate = that.date_format(new Date(_content.createdDate), 'yyyy-MM-dd hh:mm:ss')
@@ -650,8 +675,8 @@
             that.showRt = true;
             return ;
         }
-        let title= that.orderDetail.orderType==0?'是否同意换货申请?':that.orderDetail.orderType==1?'是否同意退货申请?':that.orderDetail.orderType==2?'是否同意退款申请?':'-'
-        let titleAisle= that.orderDetail.orderType==0?'同意申请换货':that.orderDetail.orderType==1?'同意申请退货':that.orderDetail.orderType==2?'申请退款':'-'
+        let title= '是否同意售后申请?'
+        let titleAisle= that.orderDetail.orderType==0?'同意申请换货':that.orderDetail.orderType==1?'同意申请退货':that.orderDetail.orderType==2?'申请退款':'-' 
           that.$confirm(title, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -689,8 +714,8 @@
       , agreeRtMoneyApply () {
        // 同意退款申请，未来发货时需要输入的金额
         let that = this;
-        if (that.pRtFreight < 0 || that.pRtFreight == '') {
-          that.show_tip('退款运费不能为小于0的数字或空！');
+        if (that.pRtFreight < 0 || that.pRtFreight === '') {
+          that.show_tip('请正确输入退款运费！');
           return;
         }
         that.$.ajax({
@@ -719,7 +744,9 @@
         });
       }
       ,handleRejected(){
+        //  弹出弹框  输入拒绝理由
         let that = this
+<<<<<<< HEAD
         let title= that.orderDetail.orderType==0?'是否拒绝换货申请?':that.orderDetail.orderType==1?'是否拒绝退货申请?':that.orderDetail.orderType==2?'是否拒绝退款申请?':'-';
         let titleAisle = that.orderDetail.orderType==0?'拒绝申请换货':that.orderDetail.orderType==1?'拒绝申请退货':that.orderDetail.orderType==2?'拒绝申请退款':'-';
         that.$confirm(title, '提示', {
@@ -732,7 +759,7 @@
             cancelButtonText: '取消',
             inputType:'textarea',
            }).then(({ value }) => {
-             alert("哈哈哈")
+             //alert("哈哈哈")
              // 没有写理由的情况下 确认按钮是默认的取消
              console.log('value' , value );
              if (value.length<=0 || value ==null ) {
@@ -769,17 +796,99 @@
               message: titleAisle+'已取消'
             });
           });
+=======
+        that.textAreaShow = true;
+        // let that = this
+        // let title= that.orderDetail.orderType==0?'是否拒绝换货申请?':that.orderDetail.orderType==1?'是否拒绝退货申请?':that.orderDetail.orderType==2?'是否拒绝退款申请?':'-';
+        // let titleAisle = that.orderDetail.orderType==0?'拒绝申请换货':that.orderDetail.orderType==1?'拒绝申请退货':that.orderDetail.orderType==2?'拒绝申请退款':'-';
+        // that.$confirm(title, '提示', {
+        //   confirmButtonText: '确定',
+        //   cancelButtonText: '取消',
+        //   type: 'warning'
+        // }).then((value) => {
+        //   //  弹出弹框  输入拒绝理由
+        //    that.$prompt('请输入'+titleAisle+'理由', '提示', {
+        //     confirmButtonText: '确定',
+        //     cancelButtonText: '取消',
+        //     inputType:'textarea',
+        //     inputPlaceholder:"输入1-100 字符",
+        //     inputMaxlength:100,
+        //    }).then(({ value }) => {
+        //      if (value.length<=0 || value ==null ) {
+        //        that.show_tip("请输入拒绝理由");
+        //       return;
+        //     }
+        //      that.$.ajax({
+        //        type: 'PUT',
+        //        url: this.base + 'm2c.scm/order/dealer/reject-apply-sale',
+        //        //url: 'http://localhost:8080/m2c.scm/order/dealer/reject-apply-sale',
+        //        data: {
+        //          token: sessionStorage.getItem('mToken'),
+        //          isEncry: false,
+        //          saleAfterNo:that.orderDetail.afterSelldealerOrderId,
+        //          rejectReason: value,                     // 拒绝原因，中文
+        //          rejectReasonCode: 99,    // 拒绝原因编码
+        //          userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
+        //          dealerId:that.orderDetail.dealerId
+        //        },
+        //        success: function (result) {
+        //          if (result.status === 200){
+        //            // 获取订单操作列表
+        //            that.loadOrderDetail()
+        //          }
+        //        }
+        //      })
+        //   }).catch(() => {
+        //     this.$message({
+        //       type: 'info',
+        //       message: titleAisle+'已取消'
+        //     });
+        //   });
+>>>>>>> local_hey
 
-        }).catch(() => {
-          that.$message({
-            type: 'info',
-            message: titleAisle+'已取消'
-          });
-        });
-      }//商户拒绝售后
-      ,agreedRefund(){
+        // }).catch(() => {
+        //   that.$message({
+        //     type: 'info',
+        //     message: titleAisle+'已取消'
+        //   });
+        // });
+      } ,//商户拒绝售后
+     rejectReasonConfirm () {
+       let that = this
+      //  请输入拒绝理由
+       if (that.textarea.length<=0 || that.textarea ==null ) {
+          that.show_tip("请输入拒绝理由");
+          return;
+        }
+        that.$.ajax({
+            type: 'PUT',
+            url: this.base + 'm2c.scm/order/dealer/reject-apply-sale',
+            //url: 'http://localhost:8080/m2c.scm/order/dealer/reject-apply-sale',
+            data: {
+              token: sessionStorage.getItem('mToken'),
+              isEncry: false,
+              saleAfterNo:that.orderDetail.afterSelldealerOrderId,
+              rejectReason: that.textarea,                     // 拒绝原因，中文
+              rejectReasonCode: 99,    // 拒绝原因编码
+              userId:JSON.parse(sessionStorage.getItem('mUser')).userId,
+              dealerId:that.orderDetail.dealerId
+            },
+            success: function (result) {
+              if (result.status === 200){
+                // 获取订单操作列表
+                that.loadOrderDetail()
+              }
+            }
+          })
+      that.textAreaShow=false
+      },
+      agreedRefund(){
         let that = this;
+<<<<<<< HEAD
         that.$confirm('是否确认退款？\n款项将按原路退回给顾客', '提示', {
+=======
+        that.$confirm('款项将原路退回给顾客', '是否确认退款？', {
+>>>>>>> local_hey
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -931,7 +1040,6 @@
           },
           success: function (result) {
             //console.log('fanjc======')
-            console.log(result);
             if (result.status === 200){
               that._map = {};
               var sz = result.content.length;
@@ -963,7 +1071,6 @@
             mresIdList: '[' + resIds + ']'
           },
           success: function (result) {
-            console.log(result);
             if (result.status == 200) {
               result.content;
               that.mediaResInfos = {};
@@ -975,7 +1082,6 @@
                 that.mediaResInfos[result.content[i].mresId] = a;
               }
               console.log("mediaResInfos:");
-              //console.log(that.mediaResInfos);
             }
           }
         });
@@ -984,6 +1090,7 @@
     mounted () {
       let that = this
       that.loadOrderDetail()
+
     },
     watch: {
       'shipmentForm.expressWay': {
