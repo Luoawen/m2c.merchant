@@ -98,7 +98,7 @@
           label="更新时间"
            width="200"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span >{{date_format(new Date(scope.row.updatedTime), 'yyyy-MM-dd hh:mm:ss')  }}</span></template>
+          <template slot-scope="scope"><span >{{scope.row.updatedTime == undefined ? '-' : date_format(new Date(scope.row.updatedTime), 'yyyy-MM-dd hh:mm:ss')  }}</span></template>
         </el-table-column>
       </el-table>
       <div class="block" style="margin: 20px;float: left">
@@ -145,7 +145,7 @@
 //        }],
         // 搜索参数
         search_params: { dealerOrderId: '', condition: '', startTime: '', endTime: '', SettleStatus: '' },
-        orderStoreData: [{settleId:'123456789',dealerOrderId:'123456789',goodsTotalAmount:'3456',afterSellAmount:'45',serviceTotalCharge:'345678',activityTotalAmount:'234567',settleTotalAmount:'6543',settleStatus:1,updatedTime:'345678'}],
+       orderStoreData: [{settleId:'',dealerOrderId:'',goodsTotalAmount:'',afterSellAmount:'',serviceTotalCharge:'',activityTotalAmount:'',settleTotalAmount:'',settleStatus:'',updatedTime:''}],
         time: '',
         isChangePage:false,
       }
@@ -246,7 +246,7 @@
     margin-left: 48px;
     margin-top: 130px;
     background-color: #fff;
-    
+
     .dropdown{
       display: inline-block;
       font-size: 16px;
