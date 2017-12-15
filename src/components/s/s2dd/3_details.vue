@@ -14,9 +14,9 @@
                 <span style="color: red;font-size: 15px" class="ml20">
                   <!-- {{orderDetail.status==0?'申请退货退款':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'售后完成':orderDetail.status==11?'售后关闭':orderDetail.status==-1?'已取消':'-'}} -->
                   {{orderDetail.orderType==0?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==1?'待商家同意':orderDetail.status==4?'待顾客寄回商品':(orderDetail.status==5||orderDetail.status==6)?'待商家发货':orderDetail.status==7?'待顾客收货':orderDetail.status>=8?'售后已完成':'--'):orderDetail.orderType==1?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==0?'待商家同意':orderDetail.status==4?'待顾客寄回商品':(orderDetail.status==5||orderDetail.status==6)?'待商家确认退款':orderDetail.status>=9?'售后已完成':'--'):orderDetail.orderType==2?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==2?'待商家同意':orderDetail.status==4?'待商家确认退款':orderDetail.status>=9?'售后已完成':'--'):'--'}}
-                </span>   
+                </span>
               </div>
-              
+
               <div>
                 <span class="tit01">售后单号:</span>
                 <span class="ml20">{{orderDetail.afterSelldealerOrderId}}</span>
@@ -281,8 +281,8 @@
           <!-- {{(orderDetail.goodsInfo.price/100).toFixed(2)}} -->
         </td>
         <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
-        <td class="a5">{{(orderDetail.goodsInfo.totalPrice).toFixed(2)/100}}</td>
-        <td class="a5">{{(orderDetail.backMoney).toFixed(2)/100}}</td>
+        <td class="a5">{{(orderDetail.goodsInfo.totalPrice/100).toFixed(2)}}</td>
+        <td class="a5">{{(orderDetail.backMoney/100).toFixed(2)}}</td>
       </tr>
       </tbody>
     </table>
@@ -677,7 +677,7 @@
             return ;
         }
         let title= '是否同意售后申请?'
-        let titleAisle= that.orderDetail.orderType==0?'同意申请换货':that.orderDetail.orderType==1?'同意申请退货':that.orderDetail.orderType==2?'申请退款':'-' 
+        let titleAisle= that.orderDetail.orderType==0?'同意申请换货':that.orderDetail.orderType==1?'同意申请退货':that.orderDetail.orderType==2?'申请退款':'-'
           that.$confirm(title, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

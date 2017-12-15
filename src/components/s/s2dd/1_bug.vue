@@ -286,7 +286,7 @@
             <span style="color: red;">*</span>
             运费退款
           </span>
-          <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderFreight - hasRtFreight)/100" :placeholder="'最多可退'+(orderFreight - hasRtFreight)/100 +'元'" @change="pRtFreightChange"></el-input></span>
+          <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderFreight - hasRtFreight/100)" :placeholder="'最多可退'+(orderFreight - hasRtFreight/100) +'元'" @change="pRtFreightChange"></el-input></span>
           <span>元</span>
           <P class="pl10">运费退款不能大于订单实际剩余运费</P>
         </div>
