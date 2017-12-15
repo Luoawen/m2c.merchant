@@ -145,7 +145,7 @@
 //        }],
         // 搜索参数
         search_params: { dealerOrderId: '', condition: '', startTime: '', endTime: '', SettleStatus: '' },
-       orderStoreData: [{settleId:'',dealerOrderId:'',goodsTotalAmount:'',afterSellAmount:'',serviceTotalCharge:'',activityTotalAmount:'',settleTotalAmount:'',settleStatus:'',updatedTime:''}],
+       orderStoreData: [/*{settleId:'',dealerOrderId:'',goodsTotalAmount:'',afterSellAmount:'',serviceTotalCharge:'',activityTotalAmount:'',settleTotalAmount:'',settleStatus:'',updatedTime:''}*/],
         time: '',
         isChangePage:false,
       }
