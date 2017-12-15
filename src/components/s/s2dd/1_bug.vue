@@ -398,7 +398,7 @@
       that.backMoney = backMoney;
       that.orderFreight = ordFreight / 100;
       console.log(afType + ":===orderStatus ==" + _orderStatus);
-      if (afType == 2 && _orderStatus == 1) {
+      if (afType == 2 && _orderStatus == 1 && that.orderFreight>0) {
         that.getHasReturnFreight(dOrderId, skuID);
         that.showRt = true;
         return ;
