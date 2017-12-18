@@ -5,8 +5,10 @@
         <div class="customerdetail_container">
           <div class="detail_tit" v-show="orderDetail.status==3">已拒绝顾客售后申请</div>
           <div class="detail_tit02" v-show="orderDetail.status==0||orderDetail.status==1||orderDetail.status==2">顾客发起售后申请，请处理</div>
-          <div class="detail_tit03" v-show="orderDetail.status==4">待顾客寄回商品</div>
-          <div class="detail_tit03" v-show="orderDetail.status==5">顾客已寄回商品，收到寄回商品请及时退款给顾客</div>
+          <div class="detail_tit03" v-show="orderDetail.status==4 && orderDetail.orderType!=2">待顾客寄回商品</div>
+          <div class="detail_tit03" v-show="orderDetail.status==4 && orderDetail.orderType==2">请及时退款给顾客</div>
+          <div class="detail_tit03" v-show="orderDetail.status==5 && orderDetail.orderType==1">顾客已寄回商品，收到寄回商品请及时退款给顾客</div>
+          <div class="detail_tit03" v-show="orderDetail.status==5 && orderDetail.orderType==0">顾客已寄回商品，收到寄回商品请及时发货</div>
           <div class="detail_top mt20 clear">
             <div class="col-sm-4 detail_cen">
               <div>
