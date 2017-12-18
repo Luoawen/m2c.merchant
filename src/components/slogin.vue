@@ -18,7 +18,7 @@
 						<a @click="get_password" class="eyes_box " data-show="1" href="javascript:void(0);"><i class="icon iconfont" >&#xe624;</i></a>
 					</div>
 					<div class="login_s">
-						<button type="submit"  @click="login"  :disabled='signInDisable' >{{signInText}}</button> 
+						<button type="submit"  @click="login"   ref='submitButton' >登&nbsp;&nbsp; 录</button> 
 					</div>
 					<div class="lost">
 						<a @click="get_forget_passwrod">忘记登录密码？</a>
@@ -35,12 +35,12 @@
 		<div class="modal_password" v-show="forget_password">
 			<p>忘记密码</p>
 			<div class="modal_refund_close"  @click="close_tip">登录 &nbsp;></div>
-			<input placeholder="请输入注册的手机号码" class="public_input_phone"  v-model="mobile" maxlength="11" @input="get_phone">
+			<input placeholder="请输入注册的手机号码"  oninput="if(value.length>11)value=value.slice(0,11)"  type="number"  class="public_input_phone"  v-model.number="mobile"  maxlength="11"  @input="get_phone" >
 			<input placeholder="4位数验证码" class="hone_code public_input_code" v-model="verifyCode" maxlength="4" minlength="4">
 			<button @click="get_code" v-bind:class="{ phone_right:isActive }" :disabled="disabled">{{ timerCodeMsg }}</button>
 			<!-- <input type="password" placeholder="新密码" class="public_input_password" v-model="newPass"> -->
 			<input type="password" placeholder="请输入6-16位新密码" maxlength="16" minlength="6" class="public_input_password" v-model="confirmPass">
-			<button class="complete_button" @click="pass_forget_passwrod" v-bind:class="{ phone_right:isActive_pass }" >确认修改</button>
+			<button class="complete_button" @click="pass_forget_passwrod" v-bind:class="{ phone_right:isActive_pass }"  ref='confirmButton'   >确认修改</button>
 		</div>
 	</div>
 </template>
@@ -51,8 +51,6 @@ export default {
   name: '',
   data () {
     return {
-			signInText:'登 录',
-			signInDisable:true,
       mobile: '',
       verifyCode: '',
       newPass: '',
@@ -75,31 +73,29 @@ export default {
       if (that.login_params.password.length < 6) that.show_tip('请输入6到16位有效密码')
 			if (that.login_params.password.length > 16) that.show_tip('请输入6到16位有效密码')
       if (that.login_params.password.length >= 6 && that.login_params.password.length <= 16) {
+					that.$refs.submitButton.innerHTML = '登录中，请稍后...'
+					that.$refs.submitButton.disabled = true
         that.$.ajax({
           method: 'post',
           url: that.base + 'm2c.users/user/dlogin',
           data: Object.assign({}, that.login_params, {password: that.md5(that.login_params.password)}),
           success: function (result) {
-            console.log('登录信息: ', result)
+						that.$refs.submitButton.innerHTML = '登 录'
+						that.$refs.submitButton.disabled = false
             if (result.token) {
 							sessionStorage.setItem('mToken', result.token)
 							sessionStorage.setItem('token', result.token)
-              console.log('登录信息(处理后): ', result)
+              // console.log('登录信息(处理后): ', result)
 							sessionStorage.setItem('mUser', JSON.stringify(result.content))
 							console.log(sessionStorage.getItem('mUser'))
-							if(result.status === 200 || result.status === '200' ){
-								that.signInDisable = fasle
-								that.signInText = '登录中，请稍后...'
-
-							}
 							that.$message('登录成功');
               that.$goRoute('/s/home')
             } else {
-              console.log('错误信息: ', result.errorMessage)
+              // console.log('错误信息: ', result.errorMessage)
               that.show_tip(result.errorMessage)
             }
           }
-        })
+				})
       }
     },
     // 显示隐藏密码
@@ -127,15 +123,16 @@ export default {
     },
     get_phone () {
       let that = this
-      var phone = that.$('.public_input_phone').val()
-      if (!((/^1[34578]\d{9}$/).test(phone))) this.isActive = false
+			let phone = that.$('.public_input_phone').val().slice(0,11)
+      if (!((/^1[34578]\d{9}$/).test(phone))) {this.isActive = false}
       else this.isActive = true
     },
     pass_forget_passwrod () {
-      let that = this
+			let that = this
       if (that.confirmPass.length < 6) that.show_tip('请输入6到16位有效密码')
       if (that.confirmPass.length > 16) that.show_tip('请输入6到16位有效密码')
       if (that.confirmPass.length >= 6 && that.confirmPass.length <= 16) {
+				that.$refs.confirmButton.innerHTML = '修改中，请稍后...'
         that.$.ajax({
           method: 'post',
           url: that.base + 'm2c.users/user/findPassword',
@@ -146,15 +143,17 @@ export default {
             newPass: that.md5(that.confirmPass)
           },
           success: function (result) {
-            console.log('修改密码: ', result)
+						that.$refs.confirmButton.innerHTML = '确认修改'
+            // console.log('修改密码: ', result)
             if (result.status === 200) {
-              that.show_tip('密码修改成功')
+							that.$message('修改成功');
               that.close_tip()
 							that.timerCodeMsg = '获取验证码'
 							that.isActive = true
 							that.disabled = false
             } else {
-              that.show_tip(result.errorMessage)
+							console.log(result.errorMessage,'result.errorMessage')
+							that.show_tip(result.errorMessage)  
             }
           }
           // error: function (err) {
