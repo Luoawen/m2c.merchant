@@ -9,16 +9,16 @@
 					<span>商家登录</span>
 					<div class="username">
 						<i class="username_i public_i"></i>
-						<input type="text" maxlength="11" placeholder="用户名" v-model="login_params.mobile" @keydown.enter="login">
+						<input type="number"  oninput="if(value.length>11) value=value.slice(0,11)" placeholder="11位数手机号" v-model="login_params.mobile" @keydown.enter="login">
 					</div>
 					<div class="password">
 						<i class="password_i public_i"></i>
-						<input type="password" class="mima_dd" placeholder="密码" v-model="login_params.password" @keydown.enter="login">
+						<input type="password" class="mima_dd" placeholder="6-16位密码" v-model="login_params.password" @keydown.enter="login">
 						<input type="text" class="mima_wz" placeholder="密码" v-model="login_params.password" @keydown.enter="login" style="display:none;">
 						<a @click="get_password" class="eyes_box " data-show="1" href="javascript:void(0);"><i class="icon iconfont" >&#xe624;</i></a>
 					</div>
 					<div class="login_s">
-						<button type="submit" @click="login">登&nbsp;&nbsp;录</button>
+						<button type="submit"  @click="login"  :disabled='signInDisable' >{{signInText}}</button> 
 					</div>
 					<div class="lost">
 						<a @click="get_forget_passwrod">忘记登录密码？</a>
@@ -32,18 +32,15 @@
 				<p class="finfo">Copyright © 2017 深圳市美图溪信息技术有限公司 &nbsp;|&nbsp; 粤ICP 备17077016号
 				</p>
 			</div>
-		<!-- 忘记密码提示框样式 -->
-		<div class="modal_password_bg" v-show="forget_password"></div>
-		<!-- 忘记密码 -->
 		<div class="modal_password" v-show="forget_password">
 			<p>忘记密码</p>
-			<div class="modal_refund_close"  @click="close_tip"></div>
-			<input placeholder="手机号码" class="public_input_phone"  v-model="mobile" maxlength="11" @input="get_phone">
-			<input placeholder="手机验证码" class="hone_code public_input_code" v-model="verifyCode" maxlength="4" minlength="4">
+			<div class="modal_refund_close"  @click="close_tip">登录 &nbsp;></div>
+			<input placeholder="请输入注册的手机号码" class="public_input_phone"  v-model="mobile" maxlength="11" @input="get_phone">
+			<input placeholder="4位数验证码" class="hone_code public_input_code" v-model="verifyCode" maxlength="4" minlength="4">
 			<button @click="get_code" v-bind:class="{ phone_right:isActive }" :disabled="disabled">{{ timerCodeMsg }}</button>
 			<!-- <input type="password" placeholder="新密码" class="public_input_password" v-model="newPass"> -->
 			<input type="password" placeholder="请输入6-16位新密码" maxlength="16" minlength="6" class="public_input_password" v-model="confirmPass">
-			<button class="complete_button" @click="pass_forget_passwrod" v-bind:class="{ phone_right:isActive_pass }" >完成</button>
+			<button class="complete_button" @click="pass_forget_passwrod" v-bind:class="{ phone_right:isActive_pass }" >确认修改</button>
 		</div>
 	</div>
 </template>
@@ -54,6 +51,8 @@ export default {
   name: '',
   data () {
     return {
+			signInText:'登 录',
+			signInDisable:true,
       mobile: '',
       verifyCode: '',
       newPass: '',
@@ -68,9 +67,13 @@ export default {
   },
   methods: {
     login () {
-      let that = this
+			let that = this
+			if(!(/^1[3|4|5|6|7|8|9][0-9]\d{4,8}$/.test(that.login_params.mobile))){ 
+ 					that.show_tip('请输入手机号码')
+ 					 return false; 
+ 			} 
       if (that.login_params.password.length < 6) that.show_tip('请输入6到16位有效密码')
-      if (that.login_params.password.length > 16) that.show_tip('请输入6到16位有效密码')
+			if (that.login_params.password.length > 16) that.show_tip('请输入6到16位有效密码')
       if (that.login_params.password.length >= 6 && that.login_params.password.length <= 16) {
         that.$.ajax({
           method: 'post',
@@ -83,6 +86,12 @@ export default {
               console.log('登录信息(处理后): ', result)
 							sessionStorage.setItem('mUser', JSON.stringify(result.content))
 							console.log(sessionStorage.getItem('mUser'))
+							if(result.status === 200 || result.status === '200' ){
+								that.signInDisable = fasle
+								that.signInText = '登录中，请稍后...'
+
+							}
+							that.$message('登录成功');
               that.$goRoute('/s/home')
             } else {
               console.log('错误信息: ', result.errorMessage)
@@ -221,11 +230,35 @@ export default {
 
 <style lang="scss">
 @media screen and (min-width:500px) and (max-width:1200px){
-	#login_form_slogin {
+	#login_form_slogin .modal_password{
 		left: 50.3%;
 	}
 }
 ::-ms-reveal{display: none;}
+// placeholder  字体颜色
+		:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+				color: #ccc; opacity:1; 
+		}
+		::-moz-placeholder { /* Mozilla Firefox 19+ */
+				color: #ccc; opacity:1; 
+		}
+
+		input:-ms-input-placeholder{
+				color: #ccc; opacity:1; 
+		}
+
+		input::-webkit-input-placeholder{
+				color: #ccc; opacity:1; 
+		}
+		// 去掉数字类型input 框 右边的加减符号
+		input[type='number'] {
+    -moz-appearance:textfield;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
 .slogin {
 	width: 100%;
 	height: 100%;
@@ -370,17 +403,6 @@ export default {
 				cursor: pointer;
 			}
 		}
-	.modal_password_bg {
-		position: fixed;
-		z-index: 9999;
-		top: 0px;
-		left: 0px;
-		width: 100%;
-		height: 100%;
-		opacity: 0.3;
-		background: #000000;
-		filter: Alpha(opacity=30);
-    }
 	.modal_password {
 		width: 400px;
 		height: 480px;
@@ -388,25 +410,26 @@ export default {
 		border-radius: 8px;
 		position: fixed;
 		z-index: 99999;
-		top: 46.3%;
-		left: 50%;
-		margin-top: -240px;
-		margin-left: -200px;
+		top: 15.6%;
+		left: 58.3%;
 		text-align: center;
 		.modal_refund_close {
-      width: 24px;
+      width: 50px;
       height: 24px;
       cursor: pointer;
       position: absolute;
-      top: 10px;
-      right: 5px;
-      background: url(../assets/images/ico_close.png) no-repeat;
+      top: 56px;
+      right: 46px;
+			color:#333333 ;
     }
 		p {
 			font-size: 28px;
 			color: #333333;
 			margin-top: 40px;
 			margin-bottom: 40px;
+			line-height: 40px;
+			text-align: left;
+			padding-left: 50px;
 		}
 		input {
 			width: 300px;
