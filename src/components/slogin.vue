@@ -79,7 +79,8 @@ export default {
           success: function (result) {
             console.log('登录信息: ', result)
             if (result.token) {
-              sessionStorage.setItem('mToken', result.token)
+							sessionStorage.setItem('mToken', result.token)
+							sessionStorage.setItem('token', result.token)
               console.log('登录信息(处理后): ', result)
 							sessionStorage.setItem('mUser', JSON.stringify(result.content))
 							console.log(sessionStorage.getItem('mUser'))
