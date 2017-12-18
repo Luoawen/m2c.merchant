@@ -358,7 +358,7 @@
           console.log("a")
           console.log(that.pRtFreight)
         }else{
-          let hasRtFreight = (that.orderFreight - that.hasRtFreight)/100
+          let hasRtFreight = (that.orderFreight - that.hasRtFreight/100);
           if(parseFloat(that.pRtFreight) > hasRtFreight){
             that.pRtFreight = hasRtFreight
             that.show_tip("不能大于实际剩余运费")
