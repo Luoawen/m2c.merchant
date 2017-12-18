@@ -164,7 +164,6 @@ Vue.use(Element)
   // 扩展ajax
   {
     let _ajax = $.ajax
-    
     $.ajax = function (options) {
       let _success = 'success' in options ? options.success : function () { return }
       let _error = 'error' in options ? options.error : function () { return }
