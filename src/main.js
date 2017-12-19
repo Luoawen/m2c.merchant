@@ -26,7 +26,6 @@ import '../static/UE/ueditor.config.js'
 import '../static/UE/ueditor.all.js'
 import '../static/UE/lang/zh-cn/zh-cn.js'
 import '../static/UE/ueditor.parse.min.js'
-
 //Vue.use(VueResource)
 Vue.use(Vuex)
 // 关闭生产模式下给出的提示
