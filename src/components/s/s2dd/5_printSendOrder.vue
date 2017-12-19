@@ -85,7 +85,7 @@
           <td></td>
           <td>商品金额/元</td>
           <td>
-            {{(goodsTotalMoney/100).toFixed(2)}}
+            {{(totalPrice/100).toFixed(2)}}
           </td>
         </tr>
         <tr>
