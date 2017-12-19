@@ -209,7 +209,7 @@ export default {
     }
   },
   beforeCreate () {
-    document.title = '登录-商家-拍获'
+    document.title = '登录-商家平台-拍获'
 		document.querySelector('#favicon').href = '/static/favicon_s.ico'
   },
   mounted () {

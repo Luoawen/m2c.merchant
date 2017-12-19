@@ -66,7 +66,7 @@
     <!-- 退出-->
     <div class="modal_refund_s" v-show="sign_out_tip.isShow">
       <div class="modal_refund_top">提示<div class="modal_refund_close"  @click="sign_out_tips_close"></div></div>
-      <div class="modal_refund_content">是否退出商家服务平台?</div>
+      <div class="modal_refund_content">是否退出商家平台?</div>
       <div>
         <button class="button_refund1" @click="sign_out">退出</button>
         <button class="button_refund2" @click="sign_out_tips_close">取消</button>
