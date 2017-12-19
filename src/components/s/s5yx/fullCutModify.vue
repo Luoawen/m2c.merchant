@@ -225,7 +225,7 @@
                   <h6>{{goods.goodsName}}</h6>
                   <img class="fl" :src="goods.goodsImageUrl"/>
                   <div>
-                    <!-- <div>供应商</div> -->
+                    <!-- <div>商家</div> -->
                     <div class="goodsInfoText" >{{goods.dealerName}}</div>
                     <div>价格<b>{{goods.goodsPrice/100}}元</b></div>
                      <div class="pickSpecificationsStyle" :vaule='goods.isChooseSpecification' @click.stop="chooseSpecification(goods, index)">{{goods.isChooseSpecification}}</div>
