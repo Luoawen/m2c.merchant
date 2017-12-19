@@ -74,7 +74,7 @@
               <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.price/100).toFixed(2)}}</p>
             </td>
   					<td>{{goods.sellNum}}</td>
-  					<td>{{((goods.price * goods.sellNum)/100).toFixed(2)}}</td>
+  					<td>{{((goods.totalPrice)/100).toFixed(2)}}</td>
   				</tr>
   			</tbody>
         <tbody>
@@ -85,7 +85,7 @@
           <td></td>
           <td>商品金额/元</td>
           <td>
-            {{(totalPrice/100).toFixed(2)}}
+            {{(goodsTotalMoney/100).toFixed(2)}}
           </td>
         </tr>
         <tr>
@@ -160,6 +160,7 @@
         Deliver: false,
         strOrderStatus: '',
         orderStatus: 0,
+        totalPrice:0,
         dealerOrderId: '',
         createdDate: '',
         payWay: '',
@@ -288,7 +289,7 @@
       let that = this;
       that.goodses = goodses;
       for(var i = 0; i < that.goodses.length;i++){
-        that.goodsTotalMoney += goodses[i].sellNum * goodses[i].price;
+        that.goodsTotalMoney += goodses[i].totalPrice;
       }
       that.totalData = totalData;
       that.expressNum = 0;

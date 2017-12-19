@@ -258,7 +258,8 @@ body {
   }
   div.icon:hover div.tips{display:block;}
   .content{
-    width: 100%;
+    margin:25px;
+    margin-top:145px;
     min-height: 500px;
     padding:25px;
     background-color: #fff;

@@ -1,13 +1,13 @@
 <template>
   <div class="home clear">
     <p class="setUp">
-      开店时间：2017年10月01日（已开店66天）
+      开店时间：{{createdDate}}（已开店{{dayTimes}}天）
     </p>
     <el-row :gutter="10" class="dataTotal">
       <el-col :span="6">
         <div class="box">
           <h5>商品在售<span>当前累计</span></h5>
-          <p>0<span>个</span></p>
+          <p>{{}}<span>个</span></p>
           <router-link :to="{name:'goodList'}">查看明细</router-link>
         </div>
       </el-col>
@@ -261,14 +261,39 @@ export default {
       time:'',
       dataList:[],
       chartLine: null,
+      createdDate:'',
+      dayTimes:''
     }
   },
   methods: {
     handleClick(tab, event) {
       console.log(tab, event);
+    },
+    // 获取开店时间及日期
+    getShopTime(){
+      let that = this
+      that.$.ajax({
+        method: 'get',
+        url: that.base + 'm2c.scm/shop/sys/shopcreatedtime',
+        data: {
+          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+        },
+        success: function (result) {
+          if(result.status === 200){
+            that.createdDate = that.date_format(new Date(result.content.createdDate), 'yyyy-MM-dd').replace(/(.+?)\-(.+?)\-(.+)/,"$1年$2月$3日")
+            that.dayTimes = result.content.dayTimes
+          }else{
+            that.$message({
+              type: 'info',
+              message: titleAisle+'已取消'
+            })
+          }
+        }
+      })
     }
   },
   mounted () {
+    this.getShopTime()
     var echarts = require('echarts');
     this.chartLine = echarts.init(document.getElementById('chartLine'))
     // 引入 ECharts 主模块
