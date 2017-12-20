@@ -1,39 +1,25 @@
 <template>
   <div class="content clear">
     <div class="searchWarp search" >
-      <el-row :gutter="20" >  
-        <el-col :span='3' >
-          <el-select v-model="search_params.status">
-            <el-option v-for="item in statuses" :key="item.value" :label="item.label" :value="item.value"></el-option>
-          </el-select>
-        </el-col>  
-         <el-col :span='3' >
-          <el-select v-model="search_params.full_cut_type">
-            <el-option v-for="item in fullCtuType" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        <el-select v-model="search_params.status">
+          <el-option v-for="item in statuses" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
-        </el-col>
-        <el-col :span='3' >
-            <el-select v-model="search_params.use_type">
-               <el-option v-for="item in useType " :key="item.value" :label="item.label" :value="item.value"></el-option>
-           </el-select >
-        </el-col>  
-         <el-col :span='5' style="margin:7px 10px 0 0" >
-            <el-date-picker
-            v-model="time"
-            type="daterange"
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期" value-format="yyyy-MM-dd"
-            @change="timeCheck">
-          </el-date-picker>
-        </el-col> 
-        <el-col :span='3'>
-            <el-input v-model="search_params.full_cut_no" placeholder="满减编号"  @blur="formValidator(1)" ></el-input>
-        </el-col>
-        <el-col :span='3'>
-            <el-input v-model="search_params.full_cut_name" placeholder="满减名称"  :maxlength="11"  ></el-input>
-        </el-col>
-      </el-row>
+        <el-select v-model="search_params.full_cut_type">
+          <el-option v-for="item in fullCtuType" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+        <el-select v-model="search_params.use_type">
+            <el-option v-for="item in useType " :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select >
+        <el-date-picker
+          v-model="time"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期" value-format="yyyy-MM-dd"
+         @change="timeCheck">
+        </el-date-picker>
+        <el-input v-model="search_params.full_cut_no" placeholder="满减编号"  @blur="formValidator(1)" ></el-input>
+        <el-input v-model="search_params.full_cut_name" placeholder="满减名称"  :maxlength="11"  ></el-input>
         <el-row width="50%"> 
            <el-col>
               <el-button type="primary" size="medium"  @click="goto($event,'/s/fullCut')"  path="/s/fullCut" >新增满减</el-button>  
