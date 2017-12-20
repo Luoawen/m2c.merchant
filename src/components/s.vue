@@ -225,7 +225,8 @@ html {
 // @media screen and (min-width:1681px) and (max-width:1920px){html{font-size:18px}}
 
 body {
-  background: #F4F5FA; // height: 100%;
+  background: #F4F5FA; 
+  height: 100%;
 }
   ::-ms-reveal{display: none;}
   label{font-weight: normal;}
