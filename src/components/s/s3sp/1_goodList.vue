@@ -818,6 +818,9 @@
       } else if (that.$route.query.activeName == 'delete'){
         that.goodsDeleteStore()
       } else{
+        if(that.$route.query.goodsStatus===2){
+          that.search_goods_params.goodsStatus = '2'
+        }
         that.goodsStore()
       }
       that.goodsClassify()

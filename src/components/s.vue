@@ -52,7 +52,7 @@
 				<div path='/s/information' class="content_s">店铺信息</div>
 				<div path='/s/administer' class="content_s">品牌管理</div>
 				<div path='/s/formwork' class="content_s">运费模板</div>
-				<div path='/s/address' class="content_s">售后地址</div>
+				<div path='/s/address' class="content_s">通用设置</div>
 			</div>
     </div>
     <div class="right_nav">
@@ -165,19 +165,19 @@
         that.$('#modal_tip').modal('show')
       },
       change(){
-        console.log(this.$route.path)
-        console.log(this.$route.meta.title)
-        let path = this.$route.path
+        let path = this.$route.meta.pathR!=undefined?this.$route.meta.pathR:this.$route.path
         this.$nextTick(()=>{
           this.$('.content_s').removeClass('avter')
-          this.$('[path="' + this.$route.path + '"]').addClass('avter')
-          this.$('[path="' + this.$route.path + '"]').parent(".content_container").css('display','block')
+          this.$('.public_nav').removeClass('avter')
+          this.$('[path="' + path + '"]').addClass('avter')
+          this.$('[path="' + path + '"]').parent(".content_container").css('display','block')
           if(this.$route.meta.title==''||this.$route.meta.title==undefined){
             document.title = '商家平台-拍获'
             this.$('.right_nav_content').text('')
           }else{
             document.title = this.$route.meta.title+'-商家平台-拍获'
-            this.$('.right_nav_content').text(' > ' + this.$route.meta.title)
+            let bread = this.$route.meta.bread!=undefined?this.$route.meta.bread:this.$route.meta.title
+            this.$('.right_nav_content').text(' > ' + bread)
           }
         })
       }

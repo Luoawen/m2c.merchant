@@ -680,7 +680,7 @@
   .content{
     .soloSearchBox{position:absolute;top:0;left:0;height:auto;padding:20px;width:100%;background:#fff;z-index:2;
       h4 a.close{
-        opacity:1;display:inline-block;width:24px;height:24px;float:right; mergin-right:20px;background:url(../../../assets/images/ico_close.png) no-repeat center center;
+        opacity:1;display:inline-block;width:24px;height:24px;float:right;background:url(../../../assets/images/ico_close.png) no-repeat center center;
       }
       .searcWrap{width:100%;height:auto;position:relative;}
       .mess{
