@@ -33,7 +33,7 @@
               </div>
               <div>
                 <span class="tit01">订单总额:</span>
-                <span class="ml20">{{(orderDetail.orderTotalMoney/100).toFixed(2)}}元（含运费<span>{{(orderDetail.orderFreight/100).toFixed(2)}}</span>元）</span>
+                <span class="ml20">{{(orderDetail.orderTotalMoney)}}元（含运费<span>{{(orderDetail.orderFreight)}}</span>元）</span>
               </div>
             </div>
             <div class="col-sm-4 detail_cen">
@@ -43,8 +43,8 @@
               </div>
               <div>
                 <span class="tit01">售后总额:</span>
-                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((orderDetail.backMoney + orderDetail.backFreight)/100).toFixed(2)}}元
-                  <span v-if="orderDetail.orderType !=2 || orderDetail.status >= 4">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight/100).toFixed(2)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.status < 4">（运费待商家确认） </span></span>
+                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((orderDetail.backMoney + orderDetail.backFreight)).toFixed(2)}}元
+                  <span v-if="orderDetail.orderType !=2 || orderDetail.status >= 4">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.status < 4">（运费待商家确认） </span></span>
               </div>
               <div>
                 <span class="tit01">申请时间:</span>
@@ -90,17 +90,17 @@
               <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
                <td class="a4">{{orderDetail.goodsInfo.unitName}}</td>
               <td class="a3" v-if ="orderDetail.goodsInfo.isSpecial==1">
-                <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.specialPrice/100).toFixed(2)}}</template>
-                <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</p>
-                <!-- <span >特惠价 {{(orderDetail.goodsInfo.specialPrice/100).toFixed(2)}}</span>
+                <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.specialPrice)}}</template>
+                <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.price)}}</p>
+                <!-- <span >特惠价 {{(orderDetail.goodsInfo.specialPrice)}}</span>
                  <br>
-                <p class="lineThrough">{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</p> -->
+                <p class="lineThrough">{{(orderDetail.goodsInfo.price)}}</p> -->
               </td>
                <td class="a3" v-if ="orderDetail.goodsInfo.isSpecial==0"  >
-                <span >{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</span>
+                <span >{{(orderDetail.goodsInfo.price)}}</span>
               </td>
-              <td class="a5">{{(orderDetail.goodsInfo.totalPrice/100).toFixed(2)}}</td>
-              <td class="a5">{{((orderDetail.backMoney + orderDetail.backFreight)/100).toFixed(2)}}</td>
+              <td class="a5">{{(orderDetail.goodsInfo.totalPrice)}}</td>
+              <td class="a5">{{((orderDetail.backMoney + orderDetail.backFreight)).toFixed(2)}}</td>
               <td class="a6" >
                 <!--状态，0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
@@ -278,13 +278,13 @@
           </div>
         </td>
         <td class="a3">
-          <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.specialPrice/100).toFixed(2)}}</template>
-          <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.price/100).toFixed(2)}}</p>
-          <!-- {{(orderDetail.goodsInfo.price/100).toFixed(2)}} -->
+          <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.specialPrice)}}</template>
+          <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.price)}}</p>
+          <!-- {{(orderDetail.goodsInfo.price)}} -->
         </td>
         <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
-        <td class="a5">{{(orderDetail.goodsInfo.totalPrice/100).toFixed(2)}}</td>
-        <td class="a5">{{(orderDetail.backMoney/100).toFixed(2)}}</td>
+        <td class="a5">{{(orderDetail.goodsInfo.totalPrice)}}</td>
+        <td class="a5">{{(orderDetail.backMoney)}}</td>
       </tr>
       </tbody>
     </table>
@@ -351,17 +351,17 @@
             <span style="color: red;">*</span>
             运费退款
           </span>
-          <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderDetail.orderFreight - hasRtFreight)/100" :placeholder="'最多可退'+(orderDetail.orderFreight - hasRtFreight)/100 +'.00元'" @change="pRtFreightChange"></el-input></span>
+          <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderDetail.orderFreight - hasRtFreight)" :placeholder="'最多可退'+(orderDetail.orderFreight - hasRtFreight) +'.00元'" @change="pRtFreightChange"></el-input></span>
           <span>元</span>
             <P class="pl10">运费退款不能大于订单实际剩余运费</P>
         </div>
         <div class="linh40 pl10">
           <span class="wid80">售后金额</span>
-          <span>{{(orderDetail.backMoney/100).toFixed(2)}}元</span>
+          <span>{{(orderDetail.backMoney)}}元</span>
         </div>
         <div class="linh40 pl10">
           <span class=" wid80">售后总额</span>
-          <span>{{(orderDetail.backMoney/100 + rtFreight).toFixed(2)}}元</span>
+          <span>{{(orderDetail.backMoney + rtFreight).toFixed(2)}}元</span>
         </div>
       </div>
       <div class="hptczp_footer">
@@ -486,7 +486,7 @@
         if (!re.test(that.pRtFreight)) {
           that.pRtFreight = 0
         }else{
-          let hasRtFreight = (that.orderDetail.orderFreight - that.hasRtFreight)/100
+          let hasRtFreight = (that.orderDetail.orderFreight - that.hasRtFreight)
           if(parseFloat(that.pRtFreight) > hasRtFreight){
             that.pRtFreight = hasRtFreight
             // 重新赋值 去掉提示语
@@ -571,7 +571,7 @@
         that.goodses = goodses
         var resIds = '';
         /*that.goodses.forEach(function(val, index) {
-          val.freight = val.freight/100;
+          val.freight = val.freight;
           //val.mediaResId='18AD16F1F35C569E4C1785DF22FA47652789';
           if(typeof(val.mediaResId)=='undefined' || val.mediaResId==null ||  val.mediaResId=='')
             ;//val.mediaResId = '-'
@@ -582,7 +582,7 @@
           }
           that.expressNum += val.sellNum;
         });*/
-          that.goodses.freight = that.goodses/100;
+          that.goodses.freight = that.goodses;
           if(typeof(that.goodses.mediaResId)=='undefined' || that.goodses.mediaResId==null ||  that.goodses.mediaResId=='')
             ;//val.mediaResId = '-'
           else {

@@ -20,10 +20,10 @@
             <el-input v-model="search_goods_params.condition" placeholder="输入商品名称/编码/条形码/品牌" title="输入商品名称/编码/条形码/品牌"></el-input>
             <el-button type="primary" size="medium" @click="goodsStoreSearch()" class="btn-search">搜索</el-button>
             <div style="width:100px;position:relative; right:280px; top:7px" class = "fr">
-              <el-button type="default" size="medium"    id="lotsOptionBtn" @click.stop='lotsOptionShow = !lotsOptionShow'> 批量操作 </el-button>  
+              <el-button type="default" size="medium"    id="lotsOptionBtn" @click.stop='lotsOptionShow = !lotsOptionShow'> 批量操作 </el-button>
                 <div v-show = 'lotsOptionShow' class='lotsOptionShowStyle'>
                   <ul class=" el-select-dropdown__list" id="lotsOptionselection">
-                    <li class="el-select-dropdown__item" @click.stop='lotsOptionGoods(1)'>批量上架</li>  
+                    <li class="el-select-dropdown__item" @click.stop='lotsOptionGoods(1)'>批量上架</li>
                     <li class="el-select-dropdown__item" @click.stop='lotsOptionGoods(2)'>批量下架</li>
                   </ul>
                 </div>
@@ -87,7 +87,7 @@
                 prop="goodsPrice"
                 label="拍货价/元"
                 show-overflow-tooltip>
-                <template slot-scope="scope"><span >{{scope.row.goodsPrice/100}}</span></template>
+                <template slot-scope="scope"><span >{{scope.row.goodsPrice}}</span></template>
               </el-table-column>
               <el-table-column
                 prop="stockNum"
@@ -189,7 +189,7 @@
                 prop="goodsPrice"
                 label="拍货价/元"
                 show-overflow-tooltip>
-                <template slot-scope="scope"><span >{{scope.row.goodsPrice/100}}</span></template>
+                <template slot-scope="scope"><span >{{scope.row.goodsPrice}}</span></template>
               </el-table-column>
               <el-table-column
                 prop="stockNum"
@@ -271,7 +271,7 @@
             prop="goodsPrice"
             label="拍货价/元"
             show-overflow-tooltip>
-            <template slot-scope="scope"><span >{{scope.row.goodsPrice/100}}</span></template>
+            <template slot-scope="scope"><span >{{scope.row.goodsPrice}}</span></template>
           </el-table-column>
           <el-table-column
             prop="stockNum"
@@ -336,7 +336,7 @@
       return {
         agreeTypeFlag:'',// 判断同意类型
         agreeGoodBg:false,// 弹层背景
-        agreeGood: false, 
+        agreeGood: false,
         goodsIds:'',
         // approveIds:'',
         multipleSelectionGoods:[], // 商品库 存储checkbox选中的对象
@@ -421,14 +421,14 @@
         // 弹出确认弹层
          that.agreeGoodBg =true
          that.agreeGood = true
-        if(flag === 1){   
+        if(flag === 1){
           that.agreeTypeFlag = 1
-        }else{ 
+        }else{
           that.agreeTypeFlag = 2
         }
       },
       agree_confirm(){
-        let that = this 
+        let that = this
         //商品库批量同意上下架 商品审核申请批量同意上架
           that.$.ajax({
             url: that.base +(that.agreeTypeFlag === 1 ?'m2c.scm/web/goods/up/shelfbatch?token=' : that.agreeTypeFlag === 2 ?'m2c.scm/web/goods/off/shelfbatch?token=':'')+sessionStorage.getItem('mToken')+'&goodsIds='+that.goodsIds,
@@ -803,7 +803,7 @@
     created() {
       // 点击到弹框外其他地方 弹框收起
       let body = document.querySelector('body')
-      body.addEventListener('click',(e)=>{       
+      body.addEventListener('click',(e)=>{
       if(e.target.id === 'lotsOptionBtn' || e.target.id === 'lotsOptionBtnselection'){
           this.lotsOptionShow = true
       }else {

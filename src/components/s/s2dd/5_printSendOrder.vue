@@ -21,7 +21,7 @@
   					</div>
   					<div class="tit">
   						<span class="tit_span">订单总额：</span>
-  						<span>{{(goodsMoney/100).toFixed(2)}}</span>
+  						<span>{{(goodsMoney)}}</span>
   					</div>
   					<div class="tit">
   						<span class="tit_span1">收货地址：</span>
@@ -46,7 +46,7 @@
   				</div>
   				<div class="tit">
   						<span class="tit_span">优惠金额：</span>
-  						<span>{{(freeMoney).toFixed(2)}}</span>
+  						<span>{{(freeMoney)}}</span>
   				</div>
   			</el-col>
 			</el-row>
@@ -69,12 +69,12 @@
   					<td>{{goods.goodsName}}</td>
   					<td>{{goods.skuName}}</td>
   					<td>
-              <!-- {{goods.price/100}} -->
-              <template v-if="goods.isSpecial==1">特惠价 {{(goods.specialPrice/100).toFixed(2)}}</template>
-              <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.price/100).toFixed(2)}}</p>
+              <!-- {{goods.price}} -->
+              <template v-if="goods.isSpecial==1">特惠价 {{(goods.specialPrice)}}</template>
+              <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.price)}}</p>
             </td>
   					<td>{{goods.sellNum}}</td>
-  					<td>{{((goods.totalPrice)/100).toFixed(2)}}</td>
+  					<td>{{((goods.totalPrice))}}</td>
   				</tr>
   			</tbody>
         <tbody>
@@ -85,7 +85,7 @@
           <td></td>
           <td>商品金额/元</td>
           <td>
-            {{(goodsTotalMoney/100).toFixed(2)}}
+            {{(goodsTotalMoney)}}
           </td>
         </tr>
         <tr>
@@ -94,7 +94,7 @@
           <td></td>
           <td></td>
           <td>运费/元</td>
-          <td>{{(totalFreight/100).toFixed(2)}}</td>
+          <td>{{(totalFreight)}}</td>
         </tr>
         <tr>
           <td></td>
@@ -102,7 +102,7 @@
           <td></td>
           <td></td>
           <td>优惠金额/元</td>
-          <td>{{freeMoney.toFixed(2)}}</td>
+          <td>{{freeMoney}}</td>
         </tr>
         <tr>
           <td></td>
@@ -110,7 +110,7 @@
           <td></td>
           <td></td>
           <td>订单总额/元</td>
-          <td>{{(goodsMoney/100).toFixed(2)}}</td>
+          <td>{{(goodsMoney)}}</td>
         </tr>
         </tbody>
   		</table>
@@ -268,7 +268,7 @@
       console.log(data.provinceCode)
       that.area = data.areaCounty;
       that.phone = data.revPhone;
-      that.freeMoney = (data.plateformDiscount + data.dealerDiscount)/100;
+      that.freeMoney = (data.plateformDiscount + data.dealerDiscount);
       that.revPerson = data.revPerson;
       that.streetAddr = data.streetAddr;
       that.recvAddr = data.province + data.city + data.areaCounty + data.streetAddr;
@@ -294,7 +294,7 @@
       that.totalData = totalData;
       that.expressNum = 0;
       that.goodses.forEach(function(val, index) {
-        val.freight = val.freight/100;
+        val.freight = val.freight;
         if(typeof(val.mediaResId)=='undefined' || val.mediaResId==null ||  val.mediaResId=='')
           val.mediaResId = '-';
         that.expressNum +=val.sellNum;

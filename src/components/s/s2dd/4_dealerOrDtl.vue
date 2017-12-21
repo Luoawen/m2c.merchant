@@ -140,12 +140,12 @@
             <td class="a3">{{goods.sellNum}}</td>
             <td class="a4">{{goods.unitName}}</td>
             <td class="a5">
-              <template v-if="goods.isSpecial==1">特惠价 {{(goods.specialPrice/100).toFixed(2)}}</template>
-              <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.price/100).toFixed(2)}}</p>
+              <template v-if="goods.isSpecial==1">特惠价 {{(goods.specialPrice)}}</template>
+              <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.price)}}</p>
             </td>
-            <td class="a5">{{(goods.totalPrice/100).toFixed(2)}}</td>
+            <td class="a5">{{(goods.totalPrice)}}</td>
             <td class="a6">
-            	<span :id="'spanFreight' + index" v-show="!fModify">{{(goods.freight).toFixed(2)}}</span>
+            	<span :id="'spanFreight' + index" v-show="!fModify">{{(goods.freight)}}</span>
             	<i class="ico_compile" @click="modifyFreight1(true)" v-show="orderStatus === 0 ? !fModify : fModify"></i>
             	<!--点击ico_compile后会出现input-->
             	<input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.freight" type="number"/>
@@ -163,11 +163,11 @@
 							<div>订单总额</div>
         		</td>
         		<td class="pr40">
-        			<div>{{(totalData.totalOrderPrice/100).toFixed(2)}}</div>
-							<div>{{(totalData.totalFreight/100).toFixed(2)}}</div>
-							<div>{{(totalData.plateformDiscount/100).toFixed(2)}}</div>
-							<!--<div>{{totalData.dealerDiscount/100}}</div>-->
-							<div class="redcolor" style="font-size: 18px;">{{(totalData.orderPrice/100).toFixed(2)}}</div>
+        			<div>{{(totalData.totalOrderPrice)}}</div>
+							<div>{{(totalData.totalFreight)}}</div>
+							<div>{{(totalData.plateformDiscount)}}</div>
+							<!--<div>{{totalData.dealerDiscount}}</div>-->
+							<div class="redcolor" style="font-size: 18px;">{{(totalData.orderPrice)}}</div>
         		</td>
         	</tr>
         </tbody>
@@ -618,7 +618,7 @@
         that.expressNum = 0;
         var resIds = '';
         that.goodses.forEach(function(val, index) {
-          val.freight = val.freight/100;
+          val.freight = val.freight;
           //val.mediaResId='18AD16F1F35C569E4C1785DF22FA47652789';
           if(typeof(val.mediaResId)=='undefined' || val.mediaResId==null ||  val.mediaResId=='')
             ;//val.mediaResId = '-'

@@ -35,7 +35,7 @@
             </div>
             <span>当前累计</span>
           </h5>
-          <p>{{money.settleAmount == undefined || '' ? '--' :(money.settleAmount/100).toFixed(2)}}<span>元</span></p>
+          <p>{{money.settleAmount == undefined || '' ? '--' :(money.settleAmount)}}<span>元</span></p>
           <router-link :to="{name:'countQuery',query:{SettleStatus:'1'}}">查看结算</router-link>
         </div>
       </el-col>
@@ -49,7 +49,7 @@
             </div>
             <span>当前剩余</span>
           </h5>
-          <p>{{money.tradableAmount == undefined  ? '--' : (money.tradableAmount/100).toFixed(2)}}<span>元</span></p>
+          <p>{{money.tradableAmount == undefined  ? '--' : (money.tradableAmount)}}<span>元</span></p>
           <el-button v-if="money.tradableAmount==undefined||money.tradableAmount<=0" disabled>提现</el-button>
           <router-link v-if="money.tradableAmount>0" :to="{name:'survey'}" >提现</router-link>
         </div>
@@ -545,7 +545,7 @@ export default {
     this.getReportData()
     this.getReportDataList()
     this.getDataList()
-    
+
     console.log(this.month)
   }
 }

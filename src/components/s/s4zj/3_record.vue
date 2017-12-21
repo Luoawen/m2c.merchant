@@ -35,7 +35,7 @@
         <el-table-column
           label="申请金额/元"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{(scope.row.amount/100).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span>{{(scope.row.amount)}}</span></template>
         </el-table-column>
         <el-table-column
           label="提现状态"

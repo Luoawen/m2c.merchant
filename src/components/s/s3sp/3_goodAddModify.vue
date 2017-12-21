@@ -600,7 +600,7 @@
       checkWeight (val, index, arr, list) { // 校验重量
         setTimeout(() => {
           if (val && $.isNumeric(val) && val > 0) {
-            val = Number(val).toFixed(2)
+            val = Number(val).toFixed(2)    //这里不能删
             this.sukShow1 = false
           } else {
             val = ''
@@ -615,7 +615,7 @@
             if (val > 999999.99 || parseFloat(val) < parseFloat(val1)) {
               this.sukShow2 = true
             } else {
-              val = Number(val).toFixed(2)
+              val = Number(val)
               this.sukShow2 = false
               this.sukShow4 = false
             }
@@ -633,7 +633,7 @@
               this.sukShow3 = true
             } else {
               this.sukShow3 = false
-              val = Number(val).toFixed(2)
+              val = Number(val)
             }
           } else {
             if (val == '') {
@@ -651,7 +651,7 @@
             if (val > 999999.99 || parseFloat(val) > parseFloat(val1)) {
               this.sukShow4 = true
             } else {
-              val = Number(val).toFixed(2)
+              val = Number(val)
               this.sukShow4 = false
               this.sukShow2 = false
             }
@@ -680,7 +680,7 @@
       },
       checkWeightSubmit (val) { // 校验重量
         if (val && $.isNumeric(val) && val > 0) {
-          val = Number(val).toFixed(2)
+          val = Number(val).toFixed(2)     //这里不能删
           this.sukShow1 = false
         } else {
           val = ''
@@ -1338,10 +1338,10 @@
             that.data.goodsMinQuantity = result.content.goodsMinQuantity.toString()
             that.data.goodsKeyWord = result.content.goodsKeyWord.join()
             for(var p=0;p<result.content.goodsSKUs.length;p++){
-              that.goodsSKUs[p].marketPrice=result.content.goodsSKUs[p].marketPrice/100
-              that.goodsSKUs[p].photographPrice=result.content.goodsSKUs[p].photographPrice/100
+              that.goodsSKUs[p].marketPrice=result.content.goodsSKUs[p].marketPrice
+              that.goodsSKUs[p].photographPrice=result.content.goodsSKUs[p].photographPrice
               if(result.content.goodsSKUs[p].supplyPrice!=''){
-                that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice/100
+                that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice
               }
             }
             for(var i=0;i<result.content.goodsMainImages.length;i++){

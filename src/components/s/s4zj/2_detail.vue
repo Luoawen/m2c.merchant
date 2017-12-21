@@ -41,12 +41,12 @@
         <el-table-column
           label="收入/元"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>+{{scope.row.inoutType == 1 ?(scope.row.amount/100).toFixed(2):(1-1).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span>+{{scope.row.inoutType == 1 ?(scope.row.amount):(1-1).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column
           label="支出/元"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span v-if="scope.row.amount>=0">-{{scope.row.inoutType == 2 ?(scope.row.amount/100).toFixed(2):(1-1).toFixed(2)}}</span> <span v-if="scope.row.amount <0">{{scope.row.inoutType == 2 ?(scope.row.amount/100).toFixed(2):(1-1).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span v-if="scope.row.amount>=0">-{{scope.row.inoutType == 2 ?(scope.row.amount):(1-1).toFixed(2)}}</span> <span v-if="scope.row.amount <0">{{scope.row.inoutType == 2 ?(scope.row.amount):(1-1).toFixed(2)}}</span></template>
         </el-table-column>
         <!--<el-table-column
           label="商家信息"
