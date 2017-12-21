@@ -80,7 +80,7 @@ export default new Router({
           path: 'details',
           name: 'details',
           component: details,
-          meta: { title: '售后单详情' }
+          meta: { title: '售后单详情',bread: '售后单>售后单详情', pathR:'/s/afterSale' }
         },
         {
           path: 'detail',
@@ -104,13 +104,13 @@ export default new Router({
           path: 'goodAddModify',
           name: 'goodAddModify',
           component: goodAddModify,
-          meta: {title: '商品修改新增'}
+          meta: {title: '商品修改新增',bread: '商品列表>商品修改新增', pathR:'/s/goodList'}
         },
         {
           path: 'gooddetail',
           name: 'gooddetail',
           component: gooddetail,
-          meta: {title: '商品详情'}
+          meta: {title: '商品详情',bread: '商品列表>商品详情', pathR:'/s/goodList'}
         },
         {
           path: 'survey',
@@ -122,7 +122,7 @@ export default new Router({
           path: 'fullCutDetail',
           name: 'fullCutDetail',
           component: fullCutDetail,
-          meta: {title: '满减详情'}
+          meta: {title: '满减详情',bread: '工具>满减详情', pathR:'/s/marketing'}
         },
         {
           path: 'record',
@@ -140,7 +140,7 @@ export default new Router({
           path: 'cash',
           name: 'cash',
           component: cash,
-          meta: {title: '提现申请'}
+          meta: {title: '提现申请',bread: '资金概况>提现申请', pathR:'/s/survey'}
         },
         {
           path: 'marketing',
@@ -152,13 +152,13 @@ export default new Router({
           path: 'fullCut',
           name: 'fullCut',
           component: fullCut,
-          meta: {title: '满减新增'}
+          meta: {title: '满减新增',bread: '工具>满减新增', pathR:'/s/marketing'}
         },
         {
           path: 'fullCutModify',
           name: 'fullCutModify',
           component: fullCutModify,
-          meta: {title: '满减修改'}
+          meta: {title: '满减修改',bread: '工具>满减修改', pathR:'/s/marketing'}
         },
         {
           path: 'data',
@@ -188,7 +188,7 @@ export default new Router({
           path: 'address',
           name: 'address',
           component: address,
-          meta: {title:'售后地址'}
+          meta: {title:'通用设置'}
         },
         {
           path: 'transact',
@@ -217,19 +217,19 @@ export default new Router({
           path: 'formworkadd',
           name: 'formworkadd',
           component: formworkadd,
-          meta: {title:'运费模板'}
+          meta: {title:'运费模板',bread: '运费模板>运费模板新增修改', pathR:'/s/formwork'}
         },
         {
           path: 'printSendOrder',
           name: 'printSendOrder',
           component: printSendOrder,
-          meta: {title:'发货单详情'}
+          meta: {title:'发货单详情', pathR:'/s/bug'}
         },
         {
           path: 'dealerOrDtl',
           name: 'dealerOrDtl',
           component: dealerOrDtl,
-          meta: { title: '订货单详情' }
+          meta: { title: '订货单详情' ,bread: '订货单>订货单详情', pathR:'/s/bug'}
         }
       ]
     }

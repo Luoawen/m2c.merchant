@@ -216,10 +216,13 @@
       }
     },
     mounted () {
+      let that = this
+      if(that.$route.query.SettleStatus==='1'){
+        that.search_params.SettleStatus = '1'
+      }
       this.orderStore()
     }
   }
-
 </script>
 <style lang="scss" scoped>
   table{ table-layout:fixed;}

@@ -7,8 +7,8 @@
       <el-col :span="6">
         <div class="box">
           <h5>商品在售<span>当前累计</span></h5>
-          <p>{{}}<span>个</span></p>
-          <router-link :to="{name:'goodList'}">查看明细</router-link>
+          <p>{{goodNum == undefined || '' ? '--' : goodNum}}<span>个</span></p>
+          <router-link :to="{name:'goodList',query:{goodsStatus:2}}">查看明细</router-link>
         </div>
       </el-col>
       <el-col :span="6">
@@ -21,8 +21,8 @@
             </div>
             <span>本月累计</span>
           </h5>
-          <p>0<span>元</span></p>
-          <router-link :to="{name:'goodList'}">查看明细</router-link>
+          <p>{{sellMoney == undefined || '' ? '--' : sellMoney}}<span>元</span></p>
+          <router-link :to="{name:'bug'}">查看明细</router-link>
         </div>
       </el-col>
       <el-col :span="6">
@@ -35,8 +35,8 @@
             </div>
             <span>当前累计</span>
           </h5>
-          <p>0<span>元</span></p>
-          <router-link :to="{name:'goodList'}">查看结算</router-link>
+          <p>{{money.settleAmount == undefined || '' ? '--' :(money.settleAmount/100).toFixed(2)}}<span>元</span></p>
+          <router-link :to="{name:'countQuery',query:{SettleStatus:'1'}}">查看结算</router-link>
         </div>
       </el-col>
       <el-col :span="6">
@@ -49,8 +49,9 @@
             </div>
             <span>当前剩余</span>
           </h5>
-          <p>0<span>元</span></p>
-          <router-link :to="{name:'goodList'}">提现</router-link>
+          <p>{{money.tradableAmount == undefined  ? '--' : (money.tradableAmount/100).toFixed(2)}}<span>元</span></p>
+          <el-button v-if="money.tradableAmount==undefined||money.tradableAmount<=0" disabled>提现</el-button>
+          <router-link v-if="money.tradableAmount>0" :to="{name:'survey'}" >提现</router-link>
         </div>
       </el-col>
     </el-row>
@@ -65,67 +66,68 @@
                   <div>订单数
                     <div class="icon">
                       <div class="tips">
-                        <p>已付款的金额统计</p>
+                        <p>当天已付款订单数</p>
                       </div>
                     </div>
                   </div>
-                  <h4>0</h4>
+                  <h4>{{reportData.orderNum}}</h4>
                 </el-col>
                 <el-col :span="8">
                   <div>退货订单数
                     <div class="icon">
                       <div class="tips">
-                        <p>已付款的金额统计</p>
+                        <p>申请退款、退货退款，且当天商家已同意的售后单数</p>
                       </div>
                     </div>
                   </div>
-                  <h4>0</h4>
+                  <h4>{{reportData.orderRefundNum}}</h4>
                 </el-col>
                 <el-col :span="8">
                   <div>商品新增数
                     <div class="icon">
                       <div class="tips">
-                        <p>已付款的金额统计</p>
+                        <p>当天审核已通过的商品数量</p>
                       </div>
                     </div>
                   </div>
-                  <h4>0</h4>
+                  <h4>{{reportData.goodsAddNum}}</h4>
                 </el-col>
               </el-row>
-              <el-row :gutter="10">
+              <el-row :gutter="20">
                 <el-col :span="8">
-                  <div>销售金额
+                  <div>订单数
                     <div class="icon">
                       <div class="tips">
-                        <p>已付款的金额统计</p>
+                        <p>当天已付款订单数</p>
                       </div>
                     </div>
                   </div>
-                  <h4>0</h4>
+                  <h4>{{reportData.orderNum}}</h4>
                 </el-col>
                 <el-col :span="8">
-                  <div>退款金额
+                  <div>退货订单数
                     <div class="icon">
                       <div class="tips">
-                        <p>已付款的金额统计</p>
+                        <p>申请退款、退货退款，且当天商家已同意的售后单数</p>
                       </div>
                     </div>
                   </div>
-                  <h4>0</h4>
+                  <h4>{{reportData.orderRefundNum}}</h4>
                 </el-col>
                 <el-col :span="8">
-                  <div>评论新增数
+                  <div>商品新增数
                     <div class="icon">
                       <div class="tips">
-                        <p>已付款的金额统计</p>
+                        <p>当天审核已通过的商品数量</p>
                       </div>
                     </div>
                   </div>
-                  <h4>0</h4>
+                  <h4>{{reportData.goodsAddNum}}</h4>
                 </el-col>
               </el-row>
             </el-tab-pane>
-            <el-tab-pane label="昨日数据" name="second"><el-row :gutter="20">
+            <el-tab-pane label="昨日数据" name="second">
+              <el-row :gutter="20">
                 <el-col :span="8">
                   <div>订单数
                     <div class="icon">
@@ -198,9 +200,9 @@
           <h5>商品销售榜
             <span class="timeChoose">
               <el-date-picker
-                v-model="time"
-                type="date"
-                placeholder="选择日期">
+                v-model="month"
+                type="month" value-format="yyyy-MM"
+                placeholder="选择月">
               </el-date-picker>
             </span>
           </h5>
@@ -210,23 +212,30 @@
               style="width:96%;margin:10px auto;">
               <el-table-column
                 type='index'
-                label="排行">
-                <template slot-scope="scope">
-                  <i class="el-icon-time"></i>
-                  <span style="margin-left: 10px">{{ scope.index }}</span>
+                label="排行"
+                width="120">
+                <template slot-scope="scope" class="pl26">
+                  <span :class="{'red':scope.row.index===1||scope.row.index===2||scope.row.index===3}">
+                    <i class="no1" v-if="scope.row.index===1"></i>
+                    <i class="no2" v-if="scope.row.index===2"></i>
+                    <i class="no3" v-if="scope.row.index===3"></i>
+                    {{ scope.row.index }}
+                  </span>
                 </template>
               </el-table-column>
               <el-table-column
-                prop="name"
                 label="商品名称"
                 width="260">
+                <template slot-scope="scope">
+                  <a class="ellipsis">{{ scope.row.goodsName }}</a>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="address"
+                prop="goodsSaleNum"
                 label="销量">
               </el-table-column>
             </el-table>
-            <router-link v-if="dataList.length!=0" class="more" :to="{name:'goodList'}">查看更多></router-link>
+            <p><router-link v-if="dataList.length!=0" class="more" :to="{name:'goodList'}">查看更多></router-link></p>
           </div>
         </div>
       </el-col>
@@ -240,8 +249,10 @@
                 <p>已付款的金额统计</p>
               </div>
             </div>
-            <span>近7日数据</span></h5>
-          <div id="chartLine" style="width:100%; height:400px;"></div>
+            <span>近7日数据</span>
+          </h5>
+          <p>单位/元</p><p class="x">单位/日</p>
+          <div id="chartLine" style="width:520px; height:250px;"></div>
         </div>
       </el-col>
     </el-row>
@@ -257,17 +268,111 @@ export default {
   name: '',
   data () {
     return {
-      activeData:'first',
-      time:'',
-      dataList:[],
-      chartLine: null,
-      createdDate:'',
-      dayTimes:''
+      activeData:'first', // 今日/昨日数据
+      time:'', // 时间
+      dataList:[
+        {
+            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
+            "goodsId": "SP767C1B5AF7E246F58D6ACCB173E9C526",
+            "goodsName": "洗面奶——ktt",
+            "goodsSaleNum": 9,
+            "id": 112,
+            "month": 201712
+        },
+        {
+            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
+            "goodsId": "SP5447D2189A074200BE89110CAD923E09",
+            "goodsName": "鞋子 -kkt",
+            "goodsSaleNum": 3,
+            "id": 111,
+            "month": 201712
+        },
+        {
+            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
+            "goodsId": "SPAB0959ED0504411CB5EAF441DE73E8A2",
+            "goodsName": "洗衣机——ktt家",
+            "goodsSaleNum": 1,
+            "id": 113,
+            "month": 201712
+        },
+        {
+            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
+            "goodsId": "SPC6D40B0AB69348B2AA017C1AFA97FD4E",
+            "goodsName": "爬爬服-ktt",
+            "goodsSaleNum": 1,
+            "id": 114,
+            "month": 201712
+        },
+        {
+            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
+            "goodsId": "SPFA785E27B8614517A29D89ADA1AD3A4F",
+            "goodsName": "简约牛仔裤-ktt",
+            "goodsSaleNum": 1,
+            "id": 117,
+            "month": 201712
+        },
+        {
+            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
+            "goodsId": "SPC6D40B0AB69348B2AA017C1AFA97FD4E",
+            "goodsName": "爬爬服-ktt",
+            "goodsSaleNum": 1,
+            "id": 114,
+            "month": 201712
+        },
+        {
+            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
+            "goodsId": "SPFA785E27B8614517A29D89ADA1AD3A4F",
+            "goodsName": "简约牛仔裤-ktt",
+            "goodsSaleNum": 1,
+            "id": 117,
+            "month": 201712
+        }
+    ],
+
+      chartLine: null, // 初始化折线图
+      createdDate:'', // 开店日期
+      dayTimes:'', // 开店天数
+      goodNum:0, // 在售商品数量
+      sellMoney:0, // 累计销售金额
+      reportData:{}, // 7日销售数据
+      xAxis:[], // 7日销售X轴
+      reportDataList:[], // 7日销售数值
+      reportRatioList:[], // 7日销售环比
+      month:'', // 搜索排行榜月份
+      money:{} // 待结算金额，可用金额
+    }
+  },
+  computed: {
+    // 计算属性的 getter
+    // month: function () {
+    //   let date=new Date
+    //   let year=date.getFullYear()
+    //   let month=date.getMonth()+1
+    //   month =(month<10 ? "0"+month:month);
+    //   let mydate = (year.toString()+'-'+month.toString())
+    //   return mydate
+    // }
+  },
+  watch: {
+    'month': {
+      handler: function (val, oldVal) {
+        let that = this
+        if (val != oldVal) {
+          that.$nextTick(function () {
+            let month = val.slice(0,4).toString() + val.slice(5,7).toString()
+            console.log(val,month)
+            that.getDataList(month)
+          })
+        } else {
+          return false
+        }
+      },
+      deep: true
     }
   },
   methods: {
     handleClick(tab, event) {
-      console.log(tab, event);
+      this.getReportData()
     },
     // 获取开店时间及日期
     getShopTime(){
@@ -285,61 +390,233 @@ export default {
           }else{
             that.$message({
               type: 'info',
-              message: titleAisle+'已取消'
+              message: result.errorMessage
             })
           }
         }
       })
-    }
+    },
+    // 获取商品数量
+    getGoodNum(){
+      let that = this
+      that.$.ajax({
+        method: 'get',
+        url: that.base + 'm2c.scm/web/goods/for/sale/num',
+        data: {
+          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+        },
+        success: function (result) {
+          if(result.status === 200){
+            that.goodNum = result.content
+          }else{
+            that.$message({
+              type: 'info',
+              message: result.errorMessage
+            })
+          }
+        }
+      })
+    },
+    // 获取累计销售金额
+    getSellMoney(){
+      let that = this
+      that.$.ajax({
+        method: 'get',
+        url: that.base + 'm2c.scm/web/dealer/report/this/month/sell/money',
+        data: {
+          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+        },
+        success: function (result) {
+          if(result.status === 200){
+            that.sellMoney = result.content
+          }else{
+            that.$message({
+              type: 'info',
+              message: result.errorMessage
+            })
+          }
+        }
+      })
+    },
+    // 获取待结算金额和可用金额
+    amount () {
+      let that = this
+      that.$.ajax({
+        type: 'get',
+        url: this.base + 'm2c.trading/web/account/dealer/amount.web',
+        data: {
+          token: sessionStorage.getItem('mToken'),
+          correlationId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+        },
+        success: function (result) {
+          if (result.status === 200){
+            that.content = result.content
+            console.log(that.content)
+          }
+        }
+      })
+    },
+    // 获取今日或昨日数据
+    getReportData(){
+      let that = this
+      that.$.ajax({
+        method: 'get',
+        url: that.base + 'm2c.scm/web/dealer/report/day',
+        data: {
+          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+          timeType: that.activeData == 'first' ? '1':'2'
+        },
+        success: function (result) {
+          if(result.status === 200){
+            that.reportData = result.content
+          }else{
+            that.$message({
+              type: 'info',
+              message: result.errorMessage
+            })
+          }
+        }
+      })
+    },
+    // 获取7日数据折线图
+    getReportDataList(){
+      let that = this
+      that.$.ajax({
+        method: 'get',
+        url: that.base + 'm2c.scm/web/dealer/report/7/days/sell/money',
+        data: {
+          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
+        },
+        success: function (result) {
+          if(result.status === 200){
+            //that.reportDataList = result.content
+            that.setEchart(result.content)
+          }else{
+            that.$message({
+              type: 'info',
+              message: result.errorMessage
+            })
+          }
+        }
+      })
+    },
+    setEchart(data){
+      // 引入 ECharts 主模块
+      let that = this
+      for(let i=0;i<data.length;i++){
+        that.xAxis.push(data[i].time)
+        that.reportDataList.push(data[i].sellMoney)
+        that.reportRatioList.push(data[i].ratioFlag==0?'--':data[i].ratio)
+      }
+      let echarts = require('echarts');
+      this.chartLine = echarts.init(document.getElementById('chartLine'))
+      this.chartLine.setOption({
+        tooltip : {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              //backgroundColor: '#0086FF'
+            }
+          }
+        },
+        itemStyle:{
+            normal:{
+                color: "#0086FF"
+            }
+        },
+        lineStyle:{
+            normal:{
+                width:10,  //连线粗细
+                color: "#0086FF"  //连线颜色
+            }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis : [
+          {
+            type : 'category',
+            boundaryGap : false,
+            data : that.xAxis
+          }
+        ],
+        yAxis : [
+          {
+            type : 'value'
+          }
+        ],
+        series : [
+          {
+            name:'销售金额',
+            type:'line',
+            stack: '金额',
+            areaStyle: {normal: {
+              color:'#0086FF'
+            }},
+            data:that.reportDataList
+          },
+          {
+            name:'环比',
+            type:'line',
+            stack: '金额',
+            areaStyle: {normal: {
+              color:'#F5BD23',
+              lineStyle:{
+                color:'#F5BD23',
+              }
+            }},
+            data:that.reportRatioList
+          }
+        ]
+      })
+    },
+    // 获取销售排行
+    getDataList(val){
+      let that = this
+      let date=new Date
+      let year=date.getFullYear()
+      let month=date.getMonth()+1
+      month =(month<10 ? "0"+month:month);
+      let mydate = (year.toString()+month.toString())
+      that.$.ajax({
+        method: 'get',
+        url: that.base + 'm2c.scm/web/goods/sales/list/top5',
+        data: {
+          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+          month:that.month==''?mydate:val
+        },
+        success: function (result) {
+          if(result.status === 200){
+            that.$nextTick(()=>{
+              that.dataList = result.content
+              for(let i=0;i<result.content.length;i++){
+                that.dataList[i].index = i+1
+              }
+            })
+            console.log(that.dataList)
+          }else{
+            that.$message({
+              type: 'info',
+              message: result.errorMessage
+            })
+          }
+        }
+      })
+    },
   },
   mounted () {
     this.getShopTime()
-    var echarts = require('echarts');
-    this.chartLine = echarts.init(document.getElementById('chartLine'))
-    // 引入 ECharts 主模块
-    this.chartLine.setOption({
-      tooltip : {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          label: {
-            backgroundColor: '#0086FF'
-          }
-        }
-      },
-      toolbox: {
-        feature: {
-          saveAsImage: {}
-        }
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-      },
-      xAxis : [
-        {
-          type : 'category',
-          boundaryGap : false,
-          data : ['周一','周二','周三','周四','周五','周六','周日']
-        }
-      ],
-      yAxis : [
-        {
-          type : 'value'
-        }
-      ],
-      series : [
-        {
-          name:'邮件营销',
-          type:'line',
-          stack: '总量',
-          areaStyle: {normal: {}},
-          data:[120, 132, 101, 134, 90, 230, 210]
-        }
-      ]
-    })
+    this.getGoodNum()
+    this.getSellMoney()
+    this.getReportData()
+    this.getReportDataList()
+    this.getDataList()
+    
+    console.log(this.month)
   }
 }
 </script>
@@ -360,30 +637,26 @@ export default {
   .dataInfo .box,.echart .box{border-radius:0;text-align:center;padding-bottom:0px;}
   .dataInfo h5,.echart h5{font-size:16px;color:#333;text-align:left;line-height:50px;padding:0 20px;margin:0;border-bottom:1px solid #dfe4ed;}
   .echart h5 span{font-size:12px;color:#666;float:right;}
+  .echart .box{padding-bottom:20px;text-align: left;}
+  .echart .box p{position:absolute;margin-left:20px;margin-top:15px;color:#666;}
+  .echart .box p.x{margin-top:215px;margin-left:520px;}
   .dataInfo .box .el-col{padding:10px 0 ;}
-  .height300{height:290px;}
+  .height300{height:290px; text-align:left;
+    p{text-align: center;}
+  .pl26{padding-left:26px;}
+    i.no1,i.no2,i.no3{float: left;margin-left:-26px;display:inline-block;width:16px;height:16px;line-height:40px;background:url(../../../assets/images/no.1.png) no-repeat;margin-top:2px;}
+    i.no2{background:url(../../../assets/images/no.2.png) no-repeat;}
+    i.no3{background:url(../../../assets/images/no.3.png) no-repeat;}
+    span{display: inline-block;font-size: 14px;color:#999;float:left;margin-left:26px;}
+    span.red{color:#FD3242;}
+  }
   .el-tabs__header .el-tabs__active-bar,.el-tabs__header .el-tabs__item{padding:0 20px;}
   .el-tabs__content{width:100%;}
   .box div.icon{text-align: left;top:2px;}
   .box div.icon div.tips p{text-align: left;padding:0;}
   .echart{top:-105px;}
   a.more{color:#667991;font-size:12px; text-decoration:underline;}
-  /*<el-row :gutter="10" class="dataInfo">
-      <el-col :span="12">
-        <h5>数据概要</h5>
-        <el-tabs v-model="activeData" @tab-click="handleClick">
-          <el-tab-pane label="今日数据" name="first">
-            <el-row :gutter="10">
-              <el-col :span="8">
-                <p>订单数
-                  <div class="icon">
-                    <div class="tips">
-                      <p>已付款的金额统计</p>
-                    </div>
-                  </div>
-                </p>
-                <h4>0</h4>
-              </el-col>*/
+  
 </style>
 <style>
 .dataInfo .el-tabs__nav{float:right !important;}
@@ -399,4 +672,8 @@ export default {
   text-align: center;
   background:url(../../../assets/images/image_upgrade.png) no-repeat center top;
 }
+.height300 .el-table td,.height300 .el-table th{padding:8px 0;padding-left:20px;}
+.height300 .el-table td{background:#fff;}
+.height300 .el-table{border-left:1px solid #E6E8F2;border-right:1px solid #E6E8F2;}
+.box .is-disabled{width:80px;height:25px;border: 1px solid #CCCCCC;border-radius: 3px;display:inline-block;line-height:24px;font-size:13px;padding:0;}
 </style>

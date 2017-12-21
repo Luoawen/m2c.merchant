@@ -1216,12 +1216,15 @@
       // 获取商品保障
       that.$.ajax({
         type: 'get',
-        url: that.localbase + 'm2c.scm/goods/guarantee',
+        url: that.localbase + 'm2c.scm/goods/guarantee/list',
         data:{
-          token: sessionStorage.getItem('mToken')
+          token: sessionStorage.getItem('mToken'),
+          dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId
         },
         success: function (result) {
           that.goodsGuaranteeList = result.content
+          console.log(result.content)
+          console.log(that.goodsGuaranteeList)
         }
       })
       // 获取规格值
