@@ -147,7 +147,7 @@
         delectGood:false,
         delectGoodBg:false,
         error1:false, // 保存时未填写保障名 提示
-        activeName:this.$route.query.activeName==undefined?'first':this.$route.query.activeName,
+        activeName:'first',
         guaranteeId:'', // 删除的id
         // 上送参数
         search_params: {
@@ -297,8 +297,12 @@
                 type: 'success',
                 message: '保存成功'
               })
-              that.getGuarantee()
-              that.topBoxShow = false
+              if(that.$route.query.goodsId!=undefined){
+                that.$router.push({name:'goodAddModify',query:{goodsId:that.$route.query.goodsId,fromPath:'guarantee',handle_toggle:that.$route.query.handle_toggle}})
+              }else{
+                that.getGuarantee()
+                that.topBoxShow = false
+              }
             }else{
               that.$message({
                 type: 'warning',
@@ -644,8 +648,11 @@
           // that.province_all_add_modify_2 = result.content
         }
       })
-      if(that.$route.query.activeName =='second'){
+      if(that.$route.query.goodsId !=undefined){
+        that.activeName = 'second'
+        that.add()
         that.getGuarantee()
+        that.topBoxShow = true
       }
     }
   }

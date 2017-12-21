@@ -164,6 +164,38 @@
 					</template>
       		<div class="tit0 mt20 mb20 clear"><b>商品详情</b></div>
       		<div class="div_detail">
+						<div class="clear mt20" v-if="data.approveStatus == ''|| data.approveStatus == undefined">
+      				<span class="tit01 fl">商品识别图</span>
+      				<span class="t_img fl recognizedImg">
+								<!-- <template v-for="file in goodsRecognized"> -->
+								<template v-for="(file,index) in goodsRecognized">
+									<div class="conimg" @click="imgWrapShow(index)">
+										<img class="conimg mr10 fl" :src="file" />
+										<div><i class="el-icon-zoom-in"></i></div>
+									</div>
+								</template>
+								<a v-if="goodsRecognized.length>9">查看更多</a>
+							</span>
+      			</div>
+						<!-- 图片弹层 -->
+            <div class="hptczp" v-show="imgWrap"></div>
+            <div class="imgWrap" v-show="imgWrap">
+							<div class="imgUl">
+								<ul>
+									<li>
+										<img :src="goodsRecognized[imgIndex]" />
+									</li>
+								</ul>
+							</div>
+							<div class="ctrl">
+								<a @click="prev" class="prev" v-if="imgIndex > 0"></a>
+								<a @click="next" class="next" v-if="imgIndex < goodsRecognized.length-1"></a>
+							</div>
+							<a class="close" @click="imgWrap=!imgWrap"></a>
+            </div>
+						<div class="clear">
+							<span class="t_img fl" v-if="goodsRecognized.length>0" style="font-size:12px;color:#999;display:block;margin-left:110px;">用于客户端拍摄广告图识别商品</span>
+						</div>
       			<div class="clear">
       				<span class="tit01 fl">商品主图</span>
       				<span class="t_img fl">
@@ -260,10 +292,31 @@
 				goodsKeyWord:'',
 				goodsGuarantee:[],
 				countMode:'',
-				info:''
+				info:'',
+				goodsRecognized:['http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg','http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg'],
+				imgWrap:false, //图片盒子显示隐藏
+        imgIndex:0,
       }
     },
     methods: {
+			// 图片放大
+      imgWrapShow(index){
+        let that = this
+        that.imgWrap = true
+        that.imgIndex = index
+      },
+      prev(){
+        let that = this
+        if(that.imgIndex > 0){
+          that.imgIndex--
+        }
+      },
+      next(){
+        let that = this
+        if(that.imgIndex < that.goodsRecognized.length-1){
+          that.imgIndex++
+        }
+      },
 			goBack(){
         if(this.$route.query.from=='a'){
 					this.$router.push({name:'goodList',query:{activeName:'first'}})
@@ -309,6 +362,7 @@
 					that.goodsSpecifications = result.content.goodsSpecifications
 					that.goodsSKUs = result.content.goodsSKUs
 					that.fileList = result.content.goodsMainImages
+					//that.goodsRecognized = result.content.goodsRecognized
 					that.info=result.content.goodsDesc
 					that.goodsKeyWord = result.content.goodsKeyWord.join("/")
 					that.goodsGuarantee = result.content.goodsGuarantee
@@ -319,6 +373,64 @@
   }
 </script>
 <style lang="scss" scoped>
+.hptczp{
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  background: #000;
+  z-index: 999;
+  opacity: 0.5;
+
+}
+  .imgWrap{
+    width:660px;
+    height:660px;
+    // background: #ffffff;
+    // border-radius:10px;
+    position: fixed;
+    top:50%;left:50%;
+    margin-top:-330px;
+    margin-left:-330px;
+    z-index: 999;
+    a.close{
+      display:inline-block;width:30px;height:30px;opacity: 1;
+      position: absolute;top:-60px;right:-200px; background:url(../../../assets/images/ico_close_close.png) no-repeat 0 0;
+    }
+    div.imgUl{
+      width:600px;
+      height:600px;
+      position: absolute;
+      top:0px;left:0px;
+      vertical-align: middle;
+      display: table;
+      ul{
+        width:600px;
+        height:600px;
+        li{
+          line-height:600px;text-align:center;
+          width:600px;
+          height:600px;
+          img{max-width:600px;max-height:600px;}
+        }
+      }
+    }
+    div.ctrl{
+      position: absolute;
+      top:260px;
+      left:-130px;
+      width:920px;
+      a{
+        width:50px;height:50px;display:inline-block;position:absolute;
+      }
+      a.prev{top:0;left:0px;background:url(../../../assets/images/ico_leftarrows_pressed.png) no-repeat 0 0;opacity:0.4}
+      a.next{top:0;right:0px;background:url(../../../assets/images/ico_rightarrows_pressed.png) no-repeat 0 0;opacity:0.4}
+      a.prev:hover{transition: all 0.2s ease;opacity:1}
+      a.next:hover{transition: all 0.2s ease;opacity:1}
+    }
+  }
 .goods_detail{
   /*background: #fff;*/
   padding: 20px 30px;
@@ -382,7 +494,25 @@
   		.tab_detail{
   			border: 1px solid #E5E5E5;
   			margin: auto;
-  			width: 95%;
+				width: 95%;
+				.conimg{
+          width: 100px;
+          height: 100px;
+          position: relative;
+          display: inline-block;float:left;margin-right:10px;
+          div{
+            position: absolute;
+            width:100px;height:100px;
+            top: 0;
+            left: 0;
+            background:rgba(255,255,255,0.5);
+            display: none;
+            i{width:16px;height:16px;position:absolute;top:44px;left:44px;}
+          }
+        }
+        .conimg:hover div{
+          display: block;
+        }
   			tr{
   				min-height: 40px;
   				border-bottom: 1px solid #E5E5E5;
