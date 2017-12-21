@@ -396,7 +396,7 @@
       that.saleAfterNo = afterNo;
       that.Agreeshow = true;
       that.backMoney = backMoney;
-      that.orderFreight = ordFreight / 100;
+      that.orderFreight = ordFreight ;
       console.log(afType + ":===orderStatus ==" + _orderStatus);
       if (afType == 2 && _orderStatus == 1 && that.orderFreight>0) {
         that.getHasReturnFreight(dOrderId, skuID);
