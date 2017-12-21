@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="tit02 clear">
-          <span style="font-size: 30px">{{content.settleAmount == undefined || '' ? '-' :(content.settleAmount/100).toFixed(2)}}</span>
+          <span style="font-size: 30px">{{content.settleAmount == undefined || '' ? '-' :(content.settleAmount)}}</span>
         </div>
       </div>
       <div class="survey_c_tbox fl mr20">
@@ -27,7 +27,7 @@
           <router-link class="fr" :to="{name:'record'}">详情</router-link>
         </div>
         <div class="tit02 clear">
-          <span style="font-size: 30px">{{content.tradableingAmount ==  null ? '-' : (content.tradableingAmount/100).toFixed(2)}}</span>
+          <span style="font-size: 30px">{{content.tradableingAmount ==  null ? '-' : (content.tradableingAmount)}}</span>
         </div>
       </div>
       <div class="survey_c_tbox fl mr20">
@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="tit02 clear">
-          <span style="font-size: 30px">{{content.tradableAmount == undefined  ? '-' : (content.tradableAmount/100).toFixed(2)}}</span>
+          <span style="font-size: 30px">{{content.tradableAmount == undefined  ? '-' : (content.tradableAmount)}}</span>
           <el-button @click="pullMoney()" size="mini" type="primary"> 提现 </el-button>
         </div>
       </div>
@@ -69,7 +69,7 @@
         <tbody>
           <tr v-for="item in contents" class="clear">
             <td>{{item.withdrawalId}}</td>
-            <td>{{(item.amount/100).toFixed(2)}}</td>
+            <td>{{(item.amount)}}</td>
             <td>{{item.wdStatus == 0?'处理中':item.wdStatus == 1?'待审批':item.wdStatus == 2?'待转账':item.wdStatus == 3?'不通过':item.wdStatus == 4?'已转账':item.wdStatus == 5?'作废':'-'}}</td>
             <td>{{date_format(new Date(item.createdTime), 'yyyy-MM-dd hh:mm:ss')  }}</td>
           </tr>
@@ -219,7 +219,7 @@
           },
           success: function (result) {
             if (result.status === 200){
-              that.platePositisCache = result.content.toFixed(2)
+              that.platePositisCache = result.content
             }
           }
         })

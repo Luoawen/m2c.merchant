@@ -98,9 +98,9 @@
 									<td>无</td>
 									<td>{{good.availableNum}}</td>
 									<td>{{good.weight}}</td>
-									<td>{{good.photographPrice/100}}</td>
-									<td>{{good.marketPrice/100}}</td>
-									<td v-if="countMode==1">{{good.supplyPrice/100}}</td>
+									<td>{{good.photographPrice}}</td>
+									<td>{{good.marketPrice}}</td>
+									<td v-if="countMode==1">{{good.supplyPrice}}</td>
             			<td v-if="countMode==2">{{data.serviceRate}}</td>
 									<td>{{good.goodsCode}}</td>
 								</tr>
@@ -153,9 +153,9 @@
 									</td>
 									<td>{{good.availableNum}}</td>
 									<td>{{good.weight}}</td>
-									<td>{{good.photographPrice/100}}</td>
-									<td>{{good.marketPrice/100}}</td>
-									<td v-if="countMode==1">{{good.supplyPrice/100}}</td>
+									<td>{{good.photographPrice}}</td>
+									<td>{{good.marketPrice}}</td>
+									<td v-if="countMode==1">{{good.supplyPrice}}</td>
             			<td v-if="countMode==2">{{data.serviceRate}}</td>
 									<td>{{good.goodsCode}}</td>
 								</tr>
