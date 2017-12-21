@@ -80,12 +80,28 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
-        <el-form-item label="商品保障">
-          <el-checkbox-group v-model="goodsGuarantCheck">
-            <el-checkbox v-for="(guarantee,index) in goodsGuaranteeList" :key="guarantee.guaranteeId" :label="guarantee.guaranteeId">{{guarantee.guaranteeDesc}}</el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
+      <el-row :gutter="20" style="width:100%;">
+        <el-col :span="24">
+          <el-form-item label="商品保障" class="graySpan">
+            <el-checkbox-group v-model="goodsGuarantCheck">
+              <el-row :gutter="10" style="width:100%;">
+                <template v-for="(guarantee,index) in goodsGuaranteeList" v-if="guarantee.isDefault===1">
+                  <el-col :span="5">
+                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
+                  </el-col>
+                </template>
+              </el-row>
+              <el-row :gutter="10" style="width:100%;margin-left:0;">
+                <template v-for="(guarantee,index) in goodsGuaranteeList" v-if="guarantee.isDefault===0">
+                  <el-col :span="11">
+                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
+                  </el-col>
+                </template>
+              </el-row>
+            </el-checkbox-group>
+          </el-form-item>
+        </el-col>
+        <router-link :to="{name:'address',query:{activeName:'second'}}" class="addGuarantee">新增商品保障</router-link>
       </el-row>
     </el-form>
       <el-row>
@@ -1348,6 +1364,9 @@
   }
 </script>
 <style lang="scss" scoped>
+  .graySpan span{color:#999;}
+  .graySpan .el-row{margin-bottom:0;}
+  a.addGuarantee{margin-left:115px;padding-left:20px;margin-top:-10px;float:left;background:url(../../../assets/images/ico_add.png) no-repeat;}
   .dropdown1{
       display: inline-block;
       font-size: 16px;
@@ -1479,7 +1498,7 @@
  .el-upload-list--picture .el-upload-list__item{float:left;width:100px;height:100px;padding:0;margin-top:0;box-sizing:initial;border:none;border-right:20px solid #fff; border-radius:0;}
  .el-upload-list--picture .el-upload-list__item-thumbnail{width:100px;height:100px;float:left;position:static;margin-left:0;border-radius:4px; border:1px solid #c0ccda}
  .el-upload{width:100px;height:100px;display:inline-block;float:left;overflow:hidden;margin-right:20px;}
-  .el-upload .el-icon-plus{width:98px;height:98px;background:#fff url(../../../assets/images/ico_add_ disabled.png) no-repeat center center;border:1px dotted #B7C9E1;}
+  .el-upload .el-icon-plus{width:98px;height:98px;background:#fff url(../../../assets/images/ico_add.png) no-repeat center center;border:1px dotted #B7C9E1;}
 
  .el-icon-plus:before{content:'';}
 </style>

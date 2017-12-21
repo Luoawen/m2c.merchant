@@ -71,7 +71,7 @@
       						商品保障
       					</td>
       					<td class="a2" colspan="3">
-      						<div class="wobse">{{goodsGuarantee}}</div>
+      						<div class="wobse"><p v-for="(item,index) in goodsGuarantee">{{index+1}}.{{item.guaranteeName}}<span v-if="item.guaranteeDesc !=undefined && item.guaranteeDesc !=''">-{{item.guaranteeDesc}}</span></p></div>
       					</td>
       				</tr>
       		</table>
@@ -258,7 +258,7 @@
 				goodsSKUs:[],
 				fileList:[],
 				goodsKeyWord:'',
-				goodsGuarantee:'',
+				goodsGuarantee:[],
 				countMode:'',
 				info:''
       }
@@ -311,7 +311,7 @@
 					that.fileList = result.content.goodsMainImages
 					that.info=result.content.goodsDesc
 					that.goodsKeyWord = result.content.goodsKeyWord.join("/")
-					that.goodsGuarantee = result.content.goodsGuarantee.join("/")
+					that.goodsGuarantee = result.content.goodsGuarantee
           that.countMode = result.content.settlementMode
 				}
 			})
@@ -400,7 +400,10 @@
   			.a2{
   				width: 36%;
   				text-align: left;
-  				padding-left: 10px;
+					padding-left: 10px;
+					p{padding-top:6px;
+						span{color:#999;}
+					}
   			}
   			.a3{
   				width: 13.8%;

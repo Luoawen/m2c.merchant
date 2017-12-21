@@ -57,7 +57,7 @@
     </el-row>
     <el-row :gutter="10" class="dataInfo">
       <el-col :span="12">
-        <div class="box">
+        <div class="box" style="height:245px;">
           <h5>数据概要</h5>
           <el-tabs v-model="activeData" @tab-click="handleClick" style="margin-top:-50px;">
             <el-tab-pane label="今日数据" name="first">
@@ -70,59 +70,53 @@
                       </div>
                     </div>
                   </div>
-                  <h4>{{reportData.orderNum}}</h4>
+                  <h4>{{reportData.orderNum == undefined  ? '--' :reportData.orderNum}}</h4>
                 </el-col>
                 <el-col :span="8">
                   <div>退货订单数
                     <div class="icon">
-                      <div class="tips">
-                        <p>申请退款、退货退款，且当天商家已同意的售后单数</p>
+                      <div class="tips" style="width:160px;">
+                        <p>顾客申请退款、退货退款，且当天商家已同意的售后单数</p>
                       </div>
                     </div>
                   </div>
-                  <h4>{{reportData.orderRefundNum}}</h4>
+                  <h4>{{reportData.orderRefundNum == undefined  ? '--' :reportData.orderRefundNum}}</h4>
                 </el-col>
                 <el-col :span="8">
                   <div>商品新增数
                     <div class="icon">
                       <div class="tips">
-                        <p>当天审核已通过的商品数量</p>
+                        <p>当天审核已通过的商品数目</p>
                       </div>
                     </div>
                   </div>
-                  <h4>{{reportData.goodsAddNum}}</h4>
+                  <h4>{{reportData.goodsAddNum == undefined  ? '--' :reportData.goodsAddNum}}</h4>
                 </el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="8">
-                  <div>订单数
+                  <div>销售金额
                     <div class="icon">
                       <div class="tips">
-                        <p>当天已付款订单数</p>
+                        <p>当天已付款订单金额</p>
                       </div>
                     </div>
                   </div>
-                  <h4>{{reportData.orderNum}}</h4>
+                  <h4>{{reportData.sellMoney == undefined  ? '--' :reportData.sellMoney}}</h4>
                 </el-col>
                 <el-col :span="8">
-                  <div>退货订单数
+                  <div>退款金额
                     <div class="icon">
-                      <div class="tips">
-                        <p>申请退款、退货退款，且当天商家已同意的售后单数</p>
+                      <div class="tips" style="width:160px;">
+                        <p>申请退款、退货退款，且当天商家已同意的售后金额</p>
                       </div>
                     </div>
                   </div>
-                  <h4>{{reportData.orderRefundNum}}</h4>
+                  <h4>{{reportData.refundMoney == undefined  ? '--' :reportData.refundMoney}}</h4>
                 </el-col>
                 <el-col :span="8">
-                  <div>商品新增数
-                    <div class="icon">
-                      <div class="tips">
-                        <p>当天审核已通过的商品数量</p>
-                      </div>
-                    </div>
-                  </div>
-                  <h4>{{reportData.goodsAddNum}}</h4>
+                  <div>评论新增数</div>
+                  <h4>{{reportData.goodsCommentNum == undefined  ? '--' :reportData.goodsCommentNum}}</h4>
                 </el-col>
               </el-row>
             </el-tab-pane>
@@ -132,63 +126,57 @@
                   <div>订单数
                     <div class="icon">
                       <div class="tips">
-                        <p>已付款的金额统计</p>
+                        <p>当天已付款订单数</p>
                       </div>
                     </div>
                   </div>
-                  <h4>0</h4>
+                  <h4>{{reportData.orderNum == undefined  ? '--' :reportData.orderNum}}</h4>
                 </el-col>
                 <el-col :span="8">
                   <div>退货订单数
                     <div class="icon">
-                      <div class="tips">
-                        <p>已付款的金额统计</p>
+                      <div class="tips" style="width:160px;">
+                        <p>顾客申请退款、退货退款，且当天商家已同意的售后单数</p>
                       </div>
                     </div>
                   </div>
-                  <h4>0</h4>
+                  <h4>{{reportData.orderRefundNum == undefined  ? '--' :reportData.orderRefundNum}}</h4>
                 </el-col>
                 <el-col :span="8">
                   <div>商品新增数
                     <div class="icon">
                       <div class="tips">
-                        <p>已付款的金额统计</p>
+                        <p>当天审核已通过的商品数目</p>
                       </div>
                     </div>
                   </div>
-                  <h4>0</h4>
+                  <h4>{{reportData.goodsAddNum == undefined  ? '--' :reportData.goodsAddNum}}</h4>
                 </el-col>
               </el-row>
-              <el-row :gutter="10">
+              <el-row :gutter="20">
                 <el-col :span="8">
                   <div>销售金额
                     <div class="icon">
                       <div class="tips">
-                        <p>已付款的金额统计</p>
+                        <p>当天已付款订单金额</p>
                       </div>
                     </div>
                   </div>
-                  <h4>0</h4>
+                  <h4>{{reportData.sellMoney == undefined  ? '--' :reportData.sellMoney}}</h4>
                 </el-col>
                 <el-col :span="8">
                   <div>退款金额
                     <div class="icon">
-                      <div class="tips">
-                        <p>已付款的金额统计</p>
+                      <div class="tips" style="width:160px;">
+                        <p>申请退款、退货退款，且当天商家已同意的售后金额</p>
                       </div>
                     </div>
                   </div>
-                  <h4>0</h4>
+                  <h4>{{reportData.refundMoney == undefined  ? '--' :reportData.refundMoney}}</h4>
                 </el-col>
                 <el-col :span="8">
-                  <div>评论新增数
-                    <div class="icon">
-                      <div class="tips">
-                        <p>已付款的金额统计</p>
-                      </div>
-                    </div>
-                  </div>
-                  <h4>0</h4>
+                  <div>评论新增数</div>
+                  <h4>{{reportData.goodsCommentNum == undefined  ? '--' :reportData.goodsCommentNum}}</h4>
                 </el-col>
               </el-row>
             </el-tab-pane>
@@ -252,7 +240,7 @@
             <span>近7日数据</span>
           </h5>
           <p>单位/元</p><p class="x">单位/日</p>
-          <div id="chartLine" style="width:520px; height:250px;"></div>
+          <div id="chartLine" style="width:90%; height:350px;"></div>
         </div>
       </el-col>
     </el-row>
@@ -270,70 +258,12 @@ export default {
     return {
       activeData:'first', // 今日/昨日数据
       time:'', // 时间
-      dataList:[
-        {
-            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
-            "goodsId": "SP767C1B5AF7E246F58D6ACCB173E9C526",
-            "goodsName": "洗面奶——ktt",
-            "goodsSaleNum": 9,
-            "id": 112,
-            "month": 201712
-        },
-        {
-            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
-            "goodsId": "SP5447D2189A074200BE89110CAD923E09",
-            "goodsName": "鞋子 -kkt",
-            "goodsSaleNum": 3,
-            "id": 111,
-            "month": 201712
-        },
-        {
-            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
-            "goodsId": "SPAB0959ED0504411CB5EAF441DE73E8A2",
-            "goodsName": "洗衣机——ktt家",
-            "goodsSaleNum": 1,
-            "id": 113,
-            "month": 201712
-        },
-        {
-            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
-            "goodsId": "SPC6D40B0AB69348B2AA017C1AFA97FD4E",
-            "goodsName": "爬爬服-ktt",
-            "goodsSaleNum": 1,
-            "id": 114,
-            "month": 201712
-        },
-        {
-            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
-            "goodsId": "SPFA785E27B8614517A29D89ADA1AD3A4F",
-            "goodsName": "简约牛仔裤-ktt",
-            "goodsSaleNum": 1,
-            "id": 117,
-            "month": 201712
-        },
-        {
-            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
-            "goodsId": "SPC6D40B0AB69348B2AA017C1AFA97FD4E",
-            "goodsName": "爬爬服-ktt",
-            "goodsSaleNum": 1,
-            "id": 114,
-            "month": 201712
-        },
-        {
-            "dealerId": "JXSA99A918C7F2C4E6F917FCD9840C7AA19",
-            "goodsId": "SPFA785E27B8614517A29D89ADA1AD3A4F",
-            "goodsName": "简约牛仔裤-ktt",
-            "goodsSaleNum": 1,
-            "id": 117,
-            "month": 201712
-        }
-    ],
-
+      dataList:[],
       chartLine: null, // 初始化折线图
       createdDate:'', // 开店日期
       dayTimes:'', // 开店天数
-      goodNum:0, // 在售商品数量
-      sellMoney:0, // 累计销售金额
+      goodNum:null, // 在售商品数量
+      sellMoney:null, // 累计销售金额
       reportData:{}, // 7日销售数据
       xAxis:[], // 7日销售X轴
       reportDataList:[], // 7日销售数值
@@ -637,9 +567,9 @@ export default {
   .dataInfo .box,.echart .box{border-radius:0;text-align:center;padding-bottom:0px;}
   .dataInfo h5,.echart h5{font-size:16px;color:#333;text-align:left;line-height:50px;padding:0 20px;margin:0;border-bottom:1px solid #dfe4ed;}
   .echart h5 span{font-size:12px;color:#666;float:right;}
-  .echart .box{padding-bottom:20px;text-align: left;}
+  .echart .box{padding-bottom:20px;text-align: left;position:relative;}
   .echart .box p{position:absolute;margin-left:20px;margin-top:15px;color:#666;}
-  .echart .box p.x{margin-top:215px;margin-left:520px;}
+  .echart .box p.x{margin-top:315px;right:20px;}
   .dataInfo .box .el-col{padding:10px 0 ;}
   .height300{height:290px; text-align:left;
     p{text-align: center;}
@@ -651,18 +581,20 @@ export default {
     span.red{color:#FD3242;}
   }
   .el-tabs__header .el-tabs__active-bar,.el-tabs__header .el-tabs__item{padding:0 20px;}
-  .el-tabs__content{width:100%;}
   .box div.icon{text-align: left;top:2px;}
   .box div.icon div.tips p{text-align: left;padding:0;}
   .echart{top:-105px;}
   a.more{color:#667991;font-size:12px; text-decoration:underline;}
-  
+  div.icon div.tips{padding:0 6px;}
+  .echart .box div.icon div.tips p{position:static;}
+  div.icon div.tips p{margin:0;}
 </style>
 <style>
 .dataInfo .el-tabs__nav{float:right !important;}
 .dataInfo .el-tabs__item{height:50px;line-height:50px;}
 .dataInfo .el-input{margin:0;float:right;}
 .dataInfo .el-tabs__nav-wrap::after{height:1px;}
+.dataInfo .el-tabs__content{width:100%; overflow:visible;}
 /* .dataInfo #tab-first,.dataInfo #tab-second,.dataInfo .el-tabs__active-bar{width:96px;text-align:center;padding:0;} */
 .building{
   font-size:20px;color:#666;

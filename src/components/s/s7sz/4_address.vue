@@ -147,7 +147,7 @@
         delectGood:false,
         delectGoodBg:false,
         error1:false, // 保存时未填写保障名 提示
-        activeName:'first',
+        activeName:this.$route.query.activeName==undefined?'first':this.$route.query.activeName,
         guaranteeId:'', // 删除的id
         // 上送参数
         search_params: {
@@ -340,8 +340,9 @@
       //tab切换
       handleTabClick (tab, event) {
         let that = this
-        if(that.activeName=='second')
-        that.getGuarantee()
+        if(that.activeName=='second'){
+          that.getGuarantee()
+        }
       },
       // 获取商品保障列表
       getGuarantee(){
@@ -643,6 +644,9 @@
           // that.province_all_add_modify_2 = result.content
         }
       })
+      if(that.$route.query.activeName =='second'){
+        that.getGuarantee()
+      }
     }
   }
 </script>
