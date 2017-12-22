@@ -549,6 +549,7 @@
       // 获取商品详情
       getGoodsInfo(){
         let that = this
+        //alert(0)
         that.goodsId=that.$route.query.goodsId
         that.$.ajax({
           type: 'get',
@@ -560,13 +561,10 @@
             that.disabled = true
             that.data = result.content
             that.serviceRate = result.content.serviceRate
-            for(var i=0,len=that.goodsGuaranteeList.length;i<len;i++){
-              for(var j=0,len=result.content.goodsGuarantee.length;j<len;j++){
-                if(result.content.goodsGuarantee[j]===that.goodsGuaranteeList[i].guaranteeDesc){
-                  that.goodsGuarantCheck.push(that.goodsGuaranteeList[i].guaranteeId)
-                }
-              }
+            for(var j=0,len=result.content.goodsGuarantee.length;j<len;j++){
+              that.goodsGuarantCheck.push(result.content.goodsGuarantee[j].guaranteeId)
             }
+            console.log(that.goodsGuarantCheck)
             that.data.skuFlag = result.content.skuFlag.toString()
             that.goodsSpecifications = result.content.goodsSpecifications
             that.goodsSKUs = result.content.goodsSKUs
@@ -596,10 +594,9 @@
       },
       // 新增商品保障
       addGuarantee(){
-        sessionStorage.setItem('data',this.data)
-        sessionStorage.setItem('serviceRate',this.serviceRate)
-        sessionStorage.setItem('goodsSpecifications',this.goodsSpecifications)
+        sessionStorage.setItem('data',JSON.stringify(this.data))
         sessionStorage.setItem('goodsSKUs',this.goodsSKUs)
+        sessionStorage.setItem('goodsGuarantCheck',this.goodsGuarantCheck)
         this.$router.push({name:'address',query:{goodsId:this.goodsId,handle_toggle:this.handle_toggle}})
       },
       unitChange (item) {
@@ -1296,8 +1293,8 @@
         },
         success: function (result) {
           that.goodsGuaranteeList = result.content
-          console.log(result.content)
-          console.log(that.goodsGuaranteeList)
+          // console.log(result.content)
+          // console.log(that.goodsGuaranteeList)
         }
       })
       // 获取规格值
@@ -1361,37 +1358,44 @@
       })
       if(that.$route.query.fromPath === 'guarantee'){
         if(that.$route.query.handle_toggle === 'add'){
-          this.data = sessionStorage.getItem('data')
-          this.serviceRate = sessionStorage.getItem('serviceRate')
-          this.goodsSpecifications = sessionStorage.getItem('goodsSpecifications')
+          that.handle_toggle = 'add'
+          console.log(sessionStorage.getItem('goodsSKUs').length)
+          this.data = JSON.parse(sessionStorage.getItem('data'))
           this.goodsSKUs = sessionStorage.getItem('goodsSKUs')
+          this.goodsGuarantCheck = sessionStorage.getItem('goodsGuarantCheck')
+          sessionStorage.setItem('data','')
+          sessionStorage.setItem('goodsSKUs','')
+          sessionStorage.setItem('goodsGuarantCheck','')
         }else{
-          if(sessionStorage.getItem('data') == undefined || sessionStorage.getItem('data' == "{skuFlag: '0' ,goodsMinQuantity:'',goodsBarCode:'',goodsKeyWord:'',goodsShelves:'1',goodsClassifyId:''}")){
+          if(sessionStorage.getItem('data') == ''){
             //alert('请求')
             that.getGoodsInfo()
           }else{
-            //alert('本地')
-            this.data = sessionStorage.getItem('data')
-            this.serviceRate = sessionStorage.getItem('serviceRate')
-            this.goodsSpecifications = sessionStorage.getItem('goodsSpecifications')
+            this.data = JSON.parse(sessionStorage.getItem('data'))
             this.goodsSKUs = sessionStorage.getItem('goodsSKUs')
+            this.goodsGuarantCheck = sessionStorage.getItem('goodsGuarantCheck')
+            sessionStorage.setItem('data','')
+            sessionStorage.setItem('goodsSKUs','')
+            sessionStorage.setItem('goodsGuarantCheck','')
           }
         }
+      }else{
+        if (that.handle_toggle === 'add') {
+          that.$.ajax({
+            type: 'get',
+            url: that.localbase + 'm2c.scm/goods/approve/id',
+            data: {
+              token: sessionStorage.getItem('mToken')
+            },
+            success: function (result) {
+              that.goodsId = result.content
+            }
+          })
+        } else {
+          that.getGoodsInfo()
+        }
       }
-      if (that.handle_toggle === 'add') {
-        that.$.ajax({
-          type: 'get',
-          url: that.localbase + 'm2c.scm/goods/approve/id',
-          data: {
-            token: sessionStorage.getItem('mToken')
-          },
-          success: function (result) {
-            that.goodsId = result.content
-          }
-        })
-      } else {
-        that.getGoodsInfo()
-      }
+      
     }
   }
 </script>
