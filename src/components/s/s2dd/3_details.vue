@@ -43,7 +43,7 @@
               </div>
               <div>
                 <span class="tit01">售后总额:</span>
-                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((orderDetail.backMoney + orderDetail.backFreight)).toFixed(2)}}元
+                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight))).toFixed(2)}}元
                   <span v-if="orderDetail.orderType !=2 || orderDetail.status >= 4">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.status < 4">（运费待商家确认） </span></span>
               </div>
               <div>
@@ -90,17 +90,17 @@
               <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
                <td class="a4">{{orderDetail.goodsInfo.unitName}}</td>
               <td class="a3" v-if ="orderDetail.goodsInfo.isSpecial==1">
-                <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.specialPrice)}}</template>
-                <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.price)}}</p>
+                <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.strSpecialPrice)}}</template>
+                <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.strPrice)}}</p>
                 <!-- <span >特惠价 {{(orderDetail.goodsInfo.specialPrice)}}</span>
                  <br>
                 <p class="lineThrough">{{(orderDetail.goodsInfo.price)}}</p> -->
               </td>
                <td class="a3" v-if ="orderDetail.goodsInfo.isSpecial==0"  >
-                <span >{{(orderDetail.goodsInfo.price)}}</span>
+                <span >{{(orderDetail.goodsInfo.strPrice)}}</span>
               </td>
-              <td class="a5">{{(orderDetail.goodsInfo.totalPrice)}}</td>
-              <td class="a5">{{((orderDetail.backMoney + orderDetail.backFreight)).toFixed(2)}}</td>
+              <td class="a5">{{(orderDetail.goodsInfo.strTotalPrice)}}</td>
+              <td class="a5">{{(parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight)).toFixed(2)}}</td>
               <td class="a6" >
                 <!--状态，0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
@@ -351,7 +351,7 @@
             <span style="color: red;">*</span>
             运费退款
           </span>
-          <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderDetail.orderFreight - hasRtFreight)" :placeholder="'最多可退'+(orderDetail.orderFreight - hasRtFreight) +'.00元'" @change="pRtFreightChange"></el-input></span>
+          <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(parseFloat(orderDetail.orderFreight) - hasRtFreight)" :placeholder="'最多可退'+((parseFloat(orderDetail.orderFreight) - hasRtFreight).toFixed(2)) +'元'" @change="pRtFreightChange"></el-input></span>
           <span>元</span>
             <P class="pl10">运费退款不能大于订单实际剩余运费</P>
         </div>
@@ -361,7 +361,7 @@
         </div>
         <div class="linh40 pl10">
           <span class=" wid80">售后总额</span>
-          <span>{{(orderDetail.backMoney + rtFreight).toFixed(2)}}元</span>
+          <span>{{(parseFloat(orderDetail.backMoney) + rtFreight).toFixed(2)}}元</span>
         </div>
       </div>
       <div class="hptczp_footer">
@@ -486,7 +486,7 @@
         if (!re.test(that.pRtFreight)) {
           that.pRtFreight = 0
         }else{
-          let hasRtFreight = (that.orderDetail.orderFreight - that.hasRtFreight)
+          let hasRtFreight = (parseFloat(that.orderDetail.orderFreight) - that.hasRtFreight)
           if(parseFloat(that.pRtFreight) > hasRtFreight){
             that.pRtFreight = hasRtFreight
             // 重新赋值 去掉提示语
@@ -539,20 +539,20 @@
               // 获取商品详情
               let _content = result.content
               that.orderDetail.afterSelldealerOrderId = _content.afterSellDealerOrderId
-              that.orderDetail.backMoney = _content.backMoney
+              that.orderDetail.backMoney = _content.strBackMoney
               that.orderDetail.createdDate = that.date_format(new Date(_content.createdDate), 'yyyy-MM-dd hh:mm:ss')
               that.orderDetail.orderId = _content.orderId
               that.orderDetail.goodsInfo=_content.goodsInfo
               that.mediaId = that.orderDetail.goodsInfo.mediaResId
-              that.orderDetail.orderTotalMoney=_content.orderTotalMoney
-              that.orderDetail.orderFreight=_content.orderFreight
-              that.orderDetail.backFreight=_content.backFreight
+              that.orderDetail.orderTotalMoney=_content.strOrderTotalMoney
+              that.orderDetail.orderFreight=_content.strOrderFreight
+              that.orderDetail.backFreight=_content.strBackFreight
               that.orderDetail.orderType=_content.orderType
               that.orderDetail.reason=_content.reason
               that.orderDetail.status=_content.status
               that.orderDetail.rejectReason=_content.rejectReason
               that.orderDetail.dealerId = _content.dealerId;
-              that.orderDetail.doStatus = _content.doStatus;
+              that.orderDetail.doStatus = _content.doStatus;//dealer order status
               that.orderIdSplic = _content.orderId.slice(0,_content.orderId.length-1)
               that.setReturnData(result.content)
               console.log('that.orderDetail.status',that.orderDetail.status)
@@ -672,7 +672,7 @@
       }
       ,handleAgree(){
         let that = this
-        if (that.orderDetail.orderType == 2 && that.orderDetail.doStatus == 1 && that.orderDetail.orderFreight!=0) {
+        if (that.orderDetail.orderType == 2 && that.orderDetail.doStatus == 1 && parseFloat(that.orderDetail.orderFreight)!=0) {
             that.getHasReturnFreight();
             that.showMask = true;
             that.showRt = true;
@@ -875,7 +875,7 @@
           },
           success: function (result) {
             if (result.status === 200){
-              that.hasRtFreight = result.content.costFt;
+              that.hasRtFreight = parseFloat(result.content.strCostFt);
             }
           }
         })

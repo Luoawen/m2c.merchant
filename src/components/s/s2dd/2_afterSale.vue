@@ -74,7 +74,7 @@
         <el-table-column
           label="售后总额/元"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{((scope.row.backMoney + scope.row.rtFreight)).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span>{{((parseFloat(scope.row.strBackMoney) + parseFloat(scope.row.strRtFreight))).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column
           label="售后状态"

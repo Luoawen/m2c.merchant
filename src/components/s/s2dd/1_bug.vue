@@ -170,8 +170,8 @@
                   </div>
                 </div>
                 <div class="a2 fl mt20" id="a2" style="width: 14%;">
-                  <template v-if="goodsItem.isSpecial==1">特惠价 {{(goodsItem.specialPrice)}}</template>
-                  <p :class="{'lineThrough':goodsItem.isSpecial==1}">{{(goodsItem.discountPrice)}}</p>
+                  <template v-if="goodsItem.isSpecial==1">特惠价 {{(goodsItem.strSpecialPrice)}}</template>
+                  <p :class="{'lineThrough':goodsItem.isSpecial==1}">{{(goodsItem.strDiscountPrice)}}</p>
                 </div>
                 <div class="a3 fl mt20" id="a3" style="width: 18%;text-align: center;padding-right: 40px;">
                   {{goodsItem.sellNum}}
@@ -193,7 +193,7 @@
               </div>
               <div class="cont col-sm-4" style="width:40%;">
                 <div class="a5" style="width:25%;">
-                  {{((item.goodsMoney + item.orderFreight - item.dealerDiscount - item.plateDiscount)).toFixed(2)}}
+                  {{((parseFloat(item.strGoodsMoney) + parseFloat(item.strOrderFreight) - parseFloat(item.strDealerDiscount) - parseFloat(item.strPlateDiscount))).toFixed(2)}}
                 </div>
                 <div class="a6 mt10" style="width:28%;">
                   {{date_format(new Date(item.createdDate), 'yyyy-MM-dd hh:mm:ss')}}

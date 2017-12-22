@@ -140,10 +140,10 @@
             <td class="a3">{{goods.sellNum}}</td>
             <td class="a4">{{goods.unitName}}</td>
             <td class="a5">
-              <template v-if="goods.isSpecial==1">特惠价 {{(goods.specialPrice)}}</template>
-              <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.price)}}</p>
+              <template v-if="goods.isSpecial==1">特惠价 {{(goods.strSpecialPrice)}}</template>
+              <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.strPrice)}}</p>
             </td>
-            <td class="a5">{{(goods.totalPrice)}}</td>
+            <td class="a5">{{(goods.strTotalPrice)}}</td>
             <td class="a6">
             	<span :id="'spanFreight' + index" v-show="!fModify">{{(goods.freight)}}</span>
             	<i class="ico_compile" @click="modifyFreight1(true)" v-show="orderStatus === 0 ? !fModify : fModify"></i>
@@ -163,9 +163,9 @@
 							<div>订单总额</div>
         		</td>
         		<td class="pr40">
-        			<div>{{(totalData.totalOrderPrice)}}</div>
-							<div>{{(totalData.totalFreight)}}</div>
-							<div>{{(totalData.plateformDiscount)}}</div>
+        			<div>{{(totalData.strTotalOrderPrice)}}</div>
+							<div>{{(totalData.strTotalFreight)}}</div>
+							<div>{{(totalData.strPlateformDiscount)}}</div>
 							<!--<div>{{totalData.dealerDiscount}}</div>-->
 							<div class="redcolor" style="font-size: 18px;">{{(totalData.orderPrice)}}</div>
         		</td>
