@@ -145,10 +145,10 @@
             </td>
             <td class="a5">{{(goods.strTotalPrice)}}</td>
             <td class="a6">
-            	<span :id="'spanFreight' + index" v-show="!fModify">{{(goods.freight)}}</span>
+            	<span :id="'spanFreight' + index" v-show="!fModify">{{(goods.strFreight)}}</span>
             	<i class="ico_compile" @click="modifyFreight1(true)" v-show="orderStatus === 0 ? !fModify : fModify"></i>
             	<!--点击ico_compile后会出现input-->
-            	<input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.freight" type="number"/>
+            	<input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.strFreight" type="number"/>
             </td>
         	</tr>
         </tbody>
