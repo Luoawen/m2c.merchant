@@ -70,11 +70,11 @@
   					<td>{{goods.skuName}}</td>
   					<td>
               <!-- {{goods.price}} -->
-              <template v-if="goods.isSpecial==1">特惠价 {{(goods.specialPrice)}}</template>
-              <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.price)}}</p>
+              <template v-if="goods.isSpecial==1">特惠价 {{(goods.strSpecialPrice)}}</template>
+              <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.strPrice)}}</p>
             </td>
   					<td>{{goods.sellNum}}</td>
-  					<td>{{((goods.totalPrice))}}</td>
+  					<td>{{((goods.strTotalPrice))}}</td>
   				</tr>
   			</tbody>
         <tbody>
@@ -85,7 +85,7 @@
           <td></td>
           <td>商品金额/元</td>
           <td>
-            {{(goodsTotalMoney)}}
+            {{(goodsTotalMoney.toFixed(2))}}
           </td>
         </tr>
         <tr>
@@ -194,7 +194,7 @@
         ,expressPerson: '',
         freeMoney:'',
         dealerName:JSON.parse(sessionStorage.getItem('mUser')).dealerName,
-        totalFreight:0,
+        totalFreight:'',
         custmerTel:''
       }
     },
@@ -242,7 +242,7 @@
       },
     setReturnData: function (data) {
       let that = this;
-      that.totalFreight = data.totalFreight
+      that.totalFreight = data.strTotalFreight
      // that.dealerName = data.dealerName
       that.orderId = data.orderId;
       that.goodsMoney = data.orderPrice;
@@ -268,7 +268,7 @@
       console.log(data.provinceCode)
       that.area = data.areaCounty;
       that.phone = data.revPhone;
-      that.freeMoney = (data.plateformDiscount + data.dealerDiscount);
+      that.freeMoney = (parseFloat(data.strDealerDiscount) + parseFloat(data.strPlateformDiscount)).toFixed(2);
       that.revPerson = data.revPerson;
       that.streetAddr = data.streetAddr;
       that.recvAddr = data.province + data.city + data.areaCounty + data.streetAddr;
@@ -289,7 +289,7 @@
       let that = this;
       that.goodses = goodses;
       for(var i = 0; i < that.goodses.length;i++){
-        that.goodsTotalMoney += goodses[i].totalPrice;
+        that.goodsTotalMoney += parseFloat(goodses[i].strTotalPrice);
       }
       that.totalData = totalData;
       that.expressNum = 0;
