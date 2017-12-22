@@ -92,7 +92,9 @@ export default {
               that.$goRoute('/s/home')
             } else {
               // console.log('错误信息: ', result.errorMessage)
-              that.show_tip(result.errorMessage)
+							that.show_tip(result.errorMessage)
+							console.log(result,"------------")
+							// 账号不存在 result.errorMessage
             }
           }
 				})
