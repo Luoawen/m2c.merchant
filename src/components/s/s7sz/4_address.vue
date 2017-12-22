@@ -277,6 +277,7 @@
         that.guarantee = {}
         that.topBoxShow = false
         that.error1 = false
+        that.$route.query.goodsId = ''
       },
       // 点击保存
       save(){
@@ -297,7 +298,7 @@
                 type: 'success',
                 message: '保存成功'
               })
-              if(that.$route.query.goodsId!=undefined){
+              if(that.$route.query.goodsId!=undefined && that.$route.query.goodsId!=''){
                 that.$router.push({name:'goodAddModify',query:{goodsId:that.$route.query.goodsId,fromPath:'guarantee',handle_toggle:that.$route.query.handle_toggle}})
               }else{
                 that.getGuarantee()

@@ -168,13 +168,13 @@
       				<span class="tit01 fl">商品识别图</span>
       				<span class="t_img fl recognizedImg">
 								<!-- <template v-for="file in goodsRecognized"> -->
-								<template v-for="(file,index) in goodsRecognized">
+								<template v-for="(file,index) in goodsRecognized" v-if="index<6">
 									<div class="conimg" @click="imgWrapShow(index)">
 										<img class="conimg mr10 fl" :src="file" />
 										<div><i class="el-icon-zoom-in"></i></div>
 									</div>
 								</template>
-								<a v-if="goodsRecognized.length>9">查看更多</a>
+								<a v-if="goodsRecognized.length>6" @click="imgWrapShow(0)" class="lookMore">查看更多</a>
 							</span>
       			</div>
 						<!-- 图片弹层 -->
@@ -191,10 +191,21 @@
 								<a @click="prev" class="prev" v-if="imgIndex > 0"></a>
 								<a @click="next" class="next" v-if="imgIndex < goodsRecognized.length-1"></a>
 							</div>
+							<div class="ctrlImg">
+								<a @click="prevImg" class="prevImg"><</a>
+								<div class="ctrlImgUl">
+									<ul id="ctrlImgUl">
+										<li v-for="(file,index) in goodsRecognized" class="mr10 fl" :class="{'active':index==imgIndex}" @click="checkImg(index)">
+											<img :src="file" />
+										</li>
+									</ul>
+								</div>
+								<a @click="nextImg" class="nextImg">></a>
+							</div>
 							<a class="close" @click="imgWrap=!imgWrap"></a>
             </div>
 						<div class="clear">
-							<span class="t_img fl" v-if="goodsRecognized.length>0" style="font-size:12px;color:#999;display:block;margin-left:110px;">用于客户端拍摄广告图识别商品</span>
+							<span class="t_img fl" v-if="goodsRecognized.length>0" style="font-size:12px;color:#999;display:block;margin:10px 0;margin-left:120px;">用于客户端拍摄广告图识别商品</span>
 						</div>
       			<div class="clear">
       				<span class="tit01 fl">商品主图</span>
@@ -293,7 +304,38 @@
 				goodsGuarantee:[],
 				countMode:'',
 				info:'',
-				goodsRecognized:['http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg','http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg'],
+				goodsRecognized:[
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+				],
 				imgWrap:false, //图片盒子显示隐藏
         imgIndex:0,
       }
@@ -301,22 +343,55 @@
     methods: {
 			// 图片放大
       imgWrapShow(index){
-        let that = this
-        that.imgWrap = true
-        that.imgIndex = index
+				let that = this
+				that.imgWrap = true
+				that.imgIndex = index
+				let l = that.goodsRecognized.length * 74 + 'px'
+				document.getElementById('ctrlImgUl').style.width=l
       },
       prev(){
         let that = this
         if(that.imgIndex > 0){
           that.imgIndex--
         }
+				let i = Math.ceil((that.imgIndex+1)/8)-1
+				document.getElementById('ctrlImgUl').style.marginLeft = -i*'592'+'px'
       },
       next(){
         let that = this
         if(that.imgIndex < that.goodsRecognized.length-1){
           that.imgIndex++
         }
-      },
+				let i = Math.ceil((that.imgIndex+1)/8)-1
+				document.getElementById('ctrlImgUl').style.marginLeft = -i*'592'+'px'
+			},
+			// 小图
+			nextImg(){
+				let that = this
+				let l = Math.ceil(that.goodsRecognized.length/8)
+				let i = Math.ceil((that.imgIndex+1)/8)-1
+				if(i<l-1)
+				i++
+				console.log(i)
+				document.getElementById('ctrlImgUl').style.marginLeft = -i*'592'+'px'
+				that.imgIndex = i*8
+				console.log(that.imgIndex)
+			},
+			prevImg(){
+				let that = this
+				let l = Math.ceil(that.goodsRecognized.length/8)
+				let i = Math.ceil((that.imgIndex+1)/8)-1
+				if(i>0)
+				i--
+				console.log(i)
+				document.getElementById('ctrlImgUl').style.marginLeft = -i*'592'+'px'
+				that.imgIndex = i*8
+				console.log(that.imgIndex)
+			},
+			checkImg(index){
+				let that = this
+				that.imgIndex = index
+			},
 			goBack(){
         if(this.$route.query.from=='a'){
 					this.$router.push({name:'goodList',query:{activeName:'first'}})
@@ -362,6 +437,7 @@
 					that.goodsSpecifications = result.content.goodsSpecifications
 					that.goodsSKUs = result.content.goodsSKUs
 					that.fileList = result.content.goodsMainImages
+					// 识别图 临时注释
 					//that.goodsRecognized = result.content.goodsRecognized
 					that.info=result.content.goodsDesc
 					that.goodsKeyWord = result.content.goodsKeyWord.join("/")
@@ -373,28 +449,59 @@
   }
 </script>
 <style lang="scss" scoped>
-.hptczp{
-  width: 100%;
-  height: 100%;
-  display: block;
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  background: #000;
-  z-index: 999;
-  opacity: 0.5;
-
-}
+	.toggle-enter-active{
+    transition:all .5s ease;
+    height:px2rem(180);
+  }
+  .toggle-leave-active{
+    transition:all .5s ease;
+    height:0;
+    opacity: 0;
+  }
+  .toggle-leave{
+    opacity: 1;
+    height:px2rem(180);
+  }
+  .toggle-enter{
+    opacity:0;
+    height: 0;
+  }
+	.hptczp{
+		width: 100%;
+		height: 100%;
+		display: block;
+		position: fixed;
+		left: 0px;
+		top: 0px;
+		background: #000;
+		z-index: 999;
+		opacity: 0.5;
+	}
   .imgWrap{
-    width:660px;
-    height:660px;
+    width:670px;
+    height:685px;
     // background: #ffffff;
     // border-radius:10px;
     position: fixed;
     top:50%;left:50%;
-    margin-top:-330px;
-    margin-left:-330px;
+    margin-top:-343px;
+    margin-left:-335px;
     z-index: 999;
+		.ctrlImg{width:100%;height:70px;margin-top:15px;position: absolute;top:615px;left:0; 
+			a.prevImg,a.nextImg{display:inline-block;width:30px;height:70px;margin-right:5px;background:#fff;float:left;border-radius:5px;opacity:0.6;padding-left:10px;line-height: 70px;font-size:34px;font-family: "宋体";color:#999;text-decoration:none;transition: all .3s ease;}
+			a.nextImg{padding-left:6px;}
+			a.prevImg:hover,a.nextImg:hover{opacity:1; text-decoration:none; cursor:pointer;padding-left:10px;}
+			a.prevImg:hover{padding-left:6px;}
+			.ctrlImgUl{width:600px;height:70px;border-radius:5px;background:#fff;padding:5px 10px;margin-right:5px;float:left;overflow: hidden;
+				ul{width:auto; list-style:none;transition: all .3s ease;
+					li{width:60px;height:60px;margin-right:14px;
+						img{width:100%;height:100%;}
+					}
+					li.active{border:4px solid #18DCF6;}
+				}
+			}
+			a.nextImg{margin-right:0px;}
+		}
     a.close{
       display:inline-block;width:30px;height:30px;opacity: 1;
       position: absolute;top:-60px;right:-200px; background:url(../../../assets/images/ico_close_close.png) no-repeat 0 0;
@@ -403,12 +510,12 @@
       width:600px;
       height:600px;
       position: absolute;
-      top:0px;left:0px;
+      top:0px;left:35px;
       vertical-align: middle;
       display: table;
       ul{
         width:600px;
-        height:600px;
+        height:600px;white-space:nowrap; float: left;list-style-type:none;
         li{
           line-height:600px;text-align:center;
           width:600px;
@@ -495,24 +602,6 @@
   			border: 1px solid #E5E5E5;
   			margin: auto;
 				width: 95%;
-				.conimg{
-          width: 100px;
-          height: 100px;
-          position: relative;
-          display: inline-block;float:left;margin-right:10px;
-          div{
-            position: absolute;
-            width:100px;height:100px;
-            top: 0;
-            left: 0;
-            background:rgba(255,255,255,0.5);
-            display: none;
-            i{width:16px;height:16px;position:absolute;top:44px;left:44px;}
-          }
-        }
-        .conimg:hover div{
-          display: block;
-        }
   			tr{
   				min-height: 40px;
   				border-bottom: 1px solid #E5E5E5;
@@ -571,13 +660,33 @@
   		.div_detail{
   			margin: auto;
   			width: 95%;
-  			padding-left: 30px;
+				padding-left: 30px;
+				a.lookMore{display:inline-block;width:100px;height:100px; border:1px solid #E6E8F2;text-align: center;line-height: 100px;color:#667991; cursor:pointer;}
+				.conimg{
+          width: 100px;
+          height: 100px;
+          position: relative;
+          display: inline-block;float:left;margin-right:20px;
+          div{
+            position: absolute;
+            width:100px;height:100px;
+            top: 0;
+            left: 0;
+            background:rgba(255,255,255,0.5);
+            display: none;
+            i{width:16px;height:16px;position:absolute;top:44px;left:44px;}
+          }
+        }
+        .conimg:hover div{
+          display: block;
+        }
   			.tit01{
   				font-size: 14px;
 					color: #666666;
 					display: inline-block;
 					line-height: 40px;
 					margin-right: 20px;
+					width:100px;text-align:right;
   			}
   			.t_img{
   				img{
