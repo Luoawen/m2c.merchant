@@ -80,12 +80,29 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
-        <el-form-item label="商品保障">
-          <el-checkbox-group v-model="goodsGuarantCheck">
-            <el-checkbox v-for="(guarantee,index) in goodsGuaranteeList" :key="guarantee.guaranteeId" :label="guarantee.guaranteeId">{{guarantee.guaranteeDesc}}</el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
+      <el-row :gutter="20" style="width:100%;">
+        <el-col :span="24">
+          <el-form-item label="商品保障" class="graySpan">
+            <el-checkbox-group v-model="goodsGuarantCheck">
+              <el-row :gutter="10" style="width:100%;">
+                <template v-for="(guarantee,index) in goodsGuaranteeList" v-if="guarantee.isDefault===1">
+                  <el-col :span="5">
+                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
+                  </el-col>
+                </template>
+              </el-row>
+              <el-row :gutter="10" style="width:100%;margin-left:0;">
+                <template v-for="(guarantee,index) in goodsGuaranteeList" v-if="guarantee.isDefault===0">
+                  <el-col :span="10">
+                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId" class="ellipsis" style="width:100%;">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
+                  </el-col>
+                </template>
+              </el-row>
+            </el-checkbox-group>
+          </el-form-item>
+        </el-col>
+        <!-- :to="{name:'address',query:{activeName:'second'}}" -->
+        <a class="addGuarantee" @click="addGuarantee">新增商品保障</a>
       </el-row>
     </el-form>
       <el-row>
@@ -529,6 +546,62 @@
       }
     },
     methods: {
+      // 获取商品详情
+      getGoodsInfo(){
+        let that = this
+        that.goodsId=that.$route.query.goodsId
+        that.$.ajax({
+          type: 'get',
+          url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId:that.localbase + 'm2c.scm/goods/approve/' + that.$route.query.goodsId,
+          data: {
+            token: sessionStorage.getItem('mToken')
+          },
+          success: function (result) {
+            that.disabled = true
+            that.data = result.content
+            that.serviceRate = result.content.serviceRate
+            for(var i=0,len=that.goodsGuaranteeList.length;i<len;i++){
+              for(var j=0,len=result.content.goodsGuarantee.length;j<len;j++){
+                if(result.content.goodsGuarantee[j]===that.goodsGuaranteeList[i].guaranteeDesc){
+                  that.goodsGuarantCheck.push(that.goodsGuaranteeList[i].guaranteeId)
+                }
+              }
+            }
+            that.data.skuFlag = result.content.skuFlag.toString()
+            that.goodsSpecifications = result.content.goodsSpecifications
+            that.goodsSKUs = result.content.goodsSKUs
+            that.data.goodsMinQuantity = result.content.goodsMinQuantity.toString()
+            that.data.goodsKeyWord = result.content.goodsKeyWord.join()
+            for(var p=0;p<result.content.goodsSKUs.length;p++){
+              that.goodsSKUs[p].marketPrice=result.content.goodsSKUs[p].marketPrice
+              that.goodsSKUs[p].photographPrice=result.content.goodsSKUs[p].photographPrice
+              if(result.content.goodsSKUs[p].supplyPrice!=''){
+                that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice
+              }
+            }
+            for(var i=0;i<result.content.goodsMainImages.length;i++){
+              that.fileList.push(eval('(' + '{url:"'+ result.content.goodsMainImages[i] + '"}' + ')'))
+              that.goodsMainImages.push(result.content.goodsMainImages[i])
+            }
+            that.picture()
+            //console.log("that.fileList="+that.fileList)
+            if(result.content.skuFlag==1){
+              that.$('#skuFlag0').hide()
+            }else{
+              that.$('#skuFlag1').hide()
+            }
+            that.$refs.ue.setUEContent(result.content.goodsDesc)
+          }
+        })
+      },
+      // 新增商品保障
+      addGuarantee(){
+        sessionStorage.setItem('data',this.data)
+        sessionStorage.setItem('serviceRate',this.serviceRate)
+        sessionStorage.setItem('goodsSpecifications',this.goodsSpecifications)
+        sessionStorage.setItem('goodsSKUs',this.goodsSKUs)
+        this.$router.push({name:'address',query:{goodsId:this.goodsId,handle_toggle:this.handle_toggle}})
+      },
       unitChange (item) {
         let that = this
         if (that.units && that.units != '' && that.units != null && that.units.length > 0) {
@@ -540,7 +613,7 @@
           }
         }
       },
-      checkGoodsCode (val, index, arr, list) {  // 校验商品编码
+      checkGoodsCode (val, index, arr, list) { // 校验商品编码
         let that = this
         setTimeout(() => {
           var re = /^[0-9a-zA-Z]{1,30}$/
@@ -584,7 +657,7 @@
       checkWeight (val, index, arr, list) { // 校验重量
         setTimeout(() => {
           if (val && $.isNumeric(val) && val > 0) {
-            val = Number(val).toFixed(2)
+            val = Number(val).toFixed(2)    //这里不能删
             this.sukShow1 = false
           } else {
             val = ''
@@ -599,7 +672,7 @@
             if (val > 999999.99 || parseFloat(val) < parseFloat(val1)) {
               this.sukShow2 = true
             } else {
-              val = Number(val).toFixed(2)
+              val = Number(val)
               this.sukShow2 = false
               this.sukShow4 = false
             }
@@ -617,7 +690,7 @@
               this.sukShow3 = true
             } else {
               this.sukShow3 = false
-              val = Number(val).toFixed(2)
+              val = Number(val)
             }
           } else {
             if (val == '') {
@@ -635,7 +708,7 @@
             if (val > 999999.99 || parseFloat(val) > parseFloat(val1)) {
               this.sukShow4 = true
             } else {
-              val = Number(val).toFixed(2)
+              val = Number(val)
               this.sukShow4 = false
               this.sukShow2 = false
             }
@@ -664,7 +737,7 @@
       },
       checkWeightSubmit (val) { // 校验重量
         if (val && $.isNumeric(val) && val > 0) {
-          val = Number(val).toFixed(2)
+          val = Number(val).toFixed(2)     //这里不能删
           this.sukShow1 = false
         } else {
           val = ''
@@ -831,11 +904,11 @@
                   that.show_tip(result.errorMessage)
                   that.goodsGuarantee=[]
                   for (var k = 0; k < that.goodsSKUs.length; k++) {
-                    that.goodsSKUs[k].marketPrice = that.goodsSKUs[k].marketPrice / 100
-                    that.goodsSKUs[k].photographPrice= that.goodsSKUs[k].photographPrice / 100
+                    that.goodsSKUs[k].marketPrice = that.goodsSKUs[k].marketPrice
+                    that.goodsSKUs[k].photographPrice= that.goodsSKUs[k].photographPrice
                     that.goodsSKUs[k].showStatus = that.goodsSKUs[k].show
                     if (that.countMode == 1) {
-                      that.goodsSKUs[k].supplyPrice = that.goodsSKUs[k].supplyPrice / 100
+                      that.goodsSKUs[k].supplyPrice = that.goodsSKUs[k].supplyPrice
                     }
                   }
                 }
@@ -1216,12 +1289,15 @@
       // 获取商品保障
       that.$.ajax({
         type: 'get',
-        url: that.localbase + 'm2c.scm/goods/guarantee',
+        url: that.localbase + 'm2c.scm/goods/guarantee/list',
         data:{
-          token: sessionStorage.getItem('mToken')
+          token: sessionStorage.getItem('mToken'),
+          dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId
         },
         success: function (result) {
           that.goodsGuaranteeList = result.content
+          console.log(result.content)
+          console.log(that.goodsGuaranteeList)
         }
       })
       // 获取规格值
@@ -1283,6 +1359,25 @@
           that.models = result.content
         }
       })
+      if(that.$route.query.fromPath === 'guarantee'){
+        if(that.$route.query.handle_toggle === 'add'){
+          this.data = sessionStorage.getItem('data')
+          this.serviceRate = sessionStorage.getItem('serviceRate')
+          this.goodsSpecifications = sessionStorage.getItem('goodsSpecifications')
+          this.goodsSKUs = sessionStorage.getItem('goodsSKUs')
+        }else{
+          if(sessionStorage.getItem('data') == undefined || sessionStorage.getItem('data' == "{skuFlag: '0' ,goodsMinQuantity:'',goodsBarCode:'',goodsKeyWord:'',goodsShelves:'1',goodsClassifyId:''}")){
+            //alert('请求')
+            that.getGoodsInfo()
+          }else{
+            //alert('本地')
+            this.data = sessionStorage.getItem('data')
+            this.serviceRate = sessionStorage.getItem('serviceRate')
+            this.goodsSpecifications = sessionStorage.getItem('goodsSpecifications')
+            this.goodsSKUs = sessionStorage.getItem('goodsSKUs')
+          }
+        }
+      }
       if (that.handle_toggle === 'add') {
         that.$.ajax({
           type: 'get',
@@ -1295,56 +1390,15 @@
           }
         })
       } else {
-        that.goodsId=that.$route.query.goodsId
-        that.$.ajax({
-          type: 'get',
-          url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId:that.localbase + 'm2c.scm/goods/approve/' + that.$route.query.goodsId,
-          data: {
-            token: sessionStorage.getItem('mToken')
-          },
-          success: function (result) {
-            that.disabled = true
-            that.data = result.content
-            that.serviceRate = result.content.serviceRate
-            for(var i=0,len=that.goodsGuaranteeList.length;i<len;i++){
-              for(var j=0,len=result.content.goodsGuarantee.length;j<len;j++){
-                if(result.content.goodsGuarantee[j]===that.goodsGuaranteeList[i].guaranteeDesc){
-                  that.goodsGuarantCheck.push(that.goodsGuaranteeList[i].guaranteeId)
-                }
-              }
-            }
-            that.data.skuFlag = result.content.skuFlag.toString()
-            that.goodsSpecifications = result.content.goodsSpecifications
-            that.goodsSKUs = result.content.goodsSKUs
-            that.data.goodsMinQuantity = result.content.goodsMinQuantity.toString()
-            that.data.goodsKeyWord = result.content.goodsKeyWord.join()
-            for(var p=0;p<result.content.goodsSKUs.length;p++){
-              that.goodsSKUs[p].marketPrice=result.content.goodsSKUs[p].marketPrice/100
-              that.goodsSKUs[p].photographPrice=result.content.goodsSKUs[p].photographPrice/100
-              if(result.content.goodsSKUs[p].supplyPrice!=''){
-                that.goodsSKUs[p].supplyPrice=result.content.goodsSKUs[p].supplyPrice/100
-              }
-            }
-            for(var i=0;i<result.content.goodsMainImages.length;i++){
-              that.fileList.push(eval('(' + '{url:"'+ result.content.goodsMainImages[i] + '"}' + ')'))
-              that.goodsMainImages.push(result.content.goodsMainImages[i])
-            }
-            that.picture()
-            //console.log("that.fileList="+that.fileList)
-            if(result.content.skuFlag==1){
-              that.$('#skuFlag0').hide()
-            }else{
-              that.$('#skuFlag1').hide()
-            }
-            that.$refs.ue.setUEContent(result.content.goodsDesc)
-          }
-        })
+        that.getGoodsInfo()
       }
-
     }
   }
 </script>
 <style lang="scss" scoped>
+  .graySpan span{color:#999;}
+  .graySpan .el-row{margin-bottom:0;}
+  a.addGuarantee{margin-left:115px;padding-left:20px;margin-top:-10px;float:left;background:url(../../../assets/images/ico_add.png) no-repeat;}
   .dropdown1{
       display: inline-block;
       font-size: 16px;
@@ -1476,7 +1530,7 @@
  .el-upload-list--picture .el-upload-list__item{float:left;width:100px;height:100px;padding:0;margin-top:0;box-sizing:initial;border:none;border-right:20px solid #fff; border-radius:0;}
  .el-upload-list--picture .el-upload-list__item-thumbnail{width:100px;height:100px;float:left;position:static;margin-left:0;border-radius:4px; border:1px solid #c0ccda}
  .el-upload{width:100px;height:100px;display:inline-block;float:left;overflow:hidden;margin-right:20px;}
-  .el-upload .el-icon-plus{width:98px;height:98px;background:#fff url(../../../assets/images/ico_add_ disabled.png) no-repeat center center;border:1px dotted #B7C9E1;}
+  .el-upload .el-icon-plus{width:98px;height:98px;background:#fff url(../../../assets/images/ico_add.png) no-repeat center center;border:1px dotted #B7C9E1;}
 
  .el-icon-plus:before{content:'';}
 </style>

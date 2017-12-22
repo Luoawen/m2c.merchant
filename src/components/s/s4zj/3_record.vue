@@ -35,7 +35,7 @@
         <el-table-column
           label="申请金额/元"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{(scope.row.amount/100).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span>{{(scope.row.amount)}}</span></template>
         </el-table-column>
         <el-table-column
           label="提现状态"
@@ -46,7 +46,7 @@
           label="更新时间"
           width="300"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{scope.row.updatedTime == ''?'-':(date_format(new Date(scope.row.updatedTime), 'yyyy-MM-dd hh:mm:ss'))}}</span></template>
+          <template slot-scope="scope"><span>{{scope.row.updatedTime == ''?(date_format(new Date(scope.row.createdTime), 'yyyy-MM-dd hh:mm:ss')):(date_format(new Date(scope.row.updatedTime), 'yyyy-MM-dd hh:mm:ss'))}}</span></template>
         </el-table-column>
       </el-table>
       <div class="block fl" style="margin:20px;">

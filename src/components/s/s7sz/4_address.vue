@@ -1,56 +1,138 @@
 <template>
   <div class="sz content clear">
-    <form class="form-horizontal" action="" method="post" v-on:submit.prevent>
-      <div class="form-group search_cell">
-        <label class="col-sm-2 control-label"><span style="color: red">*</span>售后地址：</label>
-        <div class="col-sm-3">
-          <select class="form-control area_select col-sm-1" v-model="search_params.province"
-                  id="search_params_province_select" style="margin-bottom:5px;">
-           <!-- <option value=""></option>-->
-            <option v-for="(cell,index) in province_all_search" :key="index" :value="cell.code">
-              {{cell.name}}
-            </option>
-          </select>
-          <select class="form-control area_select col-sm-1" v-model="search_params.city" id="search_params_city_select"
-                  style="margin-bottom:5px;" v-if="city_show">
-            <option v-for="(cell,index) in city_all_search" :key="index" :value="cell.code">
-              {{cell.name}}
-            </option>
-          </select>
-          <select class="form-control area_select col-sm-1" v-model="search_params.regionCode"
-                  id="search_params_regionCode_select" v-if="area_show">
-            <option v-for="(cell,index) in area_all_search" :key="index" :value="cell.code">
-              {{cell.name}}
-            </option>
-          </select>
-        </div>
+    <el-tabs v-model="activeName" @tab-click="handleTabClick">
+      <el-tab-pane label="售后地址" name="first">
+        <form class="form-horizontal" action="" method="post" v-on:submit.prevent>
+          <div class="form-group search_cell">
+            <label class="col-sm-2 control-label"><span style="color: red">*</span>售后地址：</label>
+            <div class="col-sm-3">
+              <select class="form-control area_select col-sm-1" v-model="search_params.province"
+                      id="search_params_province_select" style="margin-bottom:5px;">
+              <!-- <option value=""></option>-->
+                <option v-for="(cell,index) in province_all_search" :key="index" :value="cell.code">
+                  {{cell.name}}
+                </option>
+              </select>
+              <select class="form-control area_select col-sm-1" v-model="search_params.city" id="search_params_city_select"
+                      style="margin-bottom:5px;" v-if="city_show">
+                <option v-for="(cell,index) in city_all_search" :key="index" :value="cell.code">
+                  {{cell.name}}
+                </option>
+              </select>
+              <select class="form-control area_select col-sm-1" v-model="search_params.regionCode"
+                      id="search_params_regionCode_select" v-if="area_show">
+                <option v-for="(cell,index) in area_all_search" :key="index" :value="cell.code">
+                  {{cell.name}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">详细地址：</label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" id="input1" placeholder="1-50字符" v-model="search_params.detail" maxlength="50">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">联系人姓名：</label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" id="input2" placeholder="1-10字符" v-model="search_params.person"maxlength="10">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">联系电话：</label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" maxlength="11" id="input3" placeholder="请填写" v-model="search_params.tel">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <el-button type="primary" size="medium" @click="isAdd == true?add_address():modify_address()">保存
+              </el-button>
+            <!-- <button type="submit" class="btn btn-default btn-lg" @click="cancel()">取消</button>-->
+            </div>
+          </div>
+        </form>
+      </el-tab-pane>
+      <el-tab-pane label="商品保障" name="second">
+        <el-button type="primary" size="medium" @click="add()" v-if="dataList.length<10">新增</el-button>
+        <el-table
+          :data="dataList"
+          style="width:96%;margin:10px auto;">
+          <el-table-column
+            label="操作"
+            width="180">
+            <template slot-scope="scope">
+              <el-col :span="12">
+                <el-button v-if="scope.row.isDefault===0"
+                  @click.native.prevent="handleCommand(scope.$index, scope.row,'_edit')"
+                  type="text"
+                  size="small">
+                  编辑
+                </el-button>
+                <el-button v-if="scope.row.isDefault===0"
+                  @click.native.prevent="handleCommand(scope.$index, scope.row,'_delete')"
+                  type="text"
+                  size="small">
+                  删除
+                </el-button>
+              </el-col>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="guaranteeName"
+            label="标题"
+            width="260">
+          </el-table-column>
+          <el-table-column
+            label="内容">
+            <template slot-scope="scope">
+              <a class="ellipsis" :title="scope.row.guaranteeDesc">{{ scope.row.guaranteeDesc}}</a>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+    </el-tabs>
+    <!--新增商品保障-->
+    <div class="topBox" v-if="topBoxShow">
+      <h4>新增商品保障<a class="close" @click="topBoxShow=!topBoxShow"></a></h4>
+      <el-row :gutter="20">
+        <el-col :span="3" class="alginRight"><i class="red">*</i>标题</el-col>
+        <el-col :span="9">
+          <el-input v-model="guarantee.guaranteeName" placeholder="输入标题" :maxlength="10"></el-input>
+          <i class="red redTip" v-if="error1" style="padding-top:0;margin-top:-4px;position:absolute;">商品保障名不能为空</i>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="3" class="alginRight">内容</el-col>
+        <el-col :span="9">
+          <el-input
+            type="textarea"
+            placeholder="请输入内容" :maxlength="50"
+            v-model="guarantee.guaranteeDesc">
+          </el-input>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" class="mt20">
+        <el-col :span="20" :offset="3">
+          <el-button type="primary" size="medium" @click="save()">确定</el-button>
+          <el-button size="medium" @click="clear()">取消</el-button>
+        </el-col>
+      </el-row>
+    </div>
+    <!-- 删除弹框 -->
+    <div class="delectGoodBg" v-if="delectGoodBg"></div>
+    <div class="delectGoodCon" v-if="delectGood">
+      <div class="agreetc_header">
+        <span>提示</span>
+        <span class="fr" @click="delectGoodHide()">X</span>
       </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">详细地址：</label>
-        <div class="col-sm-3">
-          <input type="text" class="form-control" id="input1" placeholder="1-50字符" v-model="search_params.detail" maxlength="50">
-        </div>
+      <div class="agreetc_body">是否删除商品保障？</div>
+      <div class="agreetc_footer">
+        <button type="button" class="btn save" @click = "deleteConfirmFn()">确认</button>
+        <button type="button" class="btn cancel" @click="delectGoodHide()">取消</button>
       </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">联系人姓名：</label>
-        <div class="col-sm-3">
-          <input type="text" class="form-control" id="input2" placeholder="1-10字符" v-model="search_params.person"maxlength="10">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">联系电话：</label>
-        <div class="col-sm-3">
-          <input type="text" class="form-control" maxlength="11" id="input3" placeholder="请填写" v-model="search_params.tel">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <el-button type="primary" size="medium" @click="isAdd == true?add_address():modify_address()">保存
-          </el-button>
-         <!-- <button type="submit" class="btn btn-default btn-lg" @click="cancel()">取消</button>-->
-        </div>
-      </div>
-    </form>
+    </div>
   </div>
 </template>
 <script>
@@ -58,24 +140,24 @@
   export default {
     data () {
       return {
-        name: '',
-        // 搜索参数
+        dataList: [],//商品保障列表数据
+        guarantee:{},//新增商品保障
+        topBoxShow:false, //新增弹层
+        handle_toggle: 'add', // 区别新增还是修改
+        delectGood:false,
+        delectGoodBg:false,
+        error1:false, // 保存时未填写保障名 提示
+        activeName:'first',
+        guaranteeId:'', // 删除的id
+        // 上送参数
         search_params: {
-          accNo: '',
-          mediaName: '',
           province: '',
           proName: '',
           city: '',
           cityName: '',
           regionCode: '',
           areaName: '',
-          parCate: '',
-          cate: '',
-          cooperWay: '',
-          staff: '',
           addr: '',
-          regisDateStart: '',
-          regisDateEnd: '',
           detail: '',
           person: '',
           tel: ''
@@ -86,16 +168,6 @@
         city_all_search: [],
         // 所有的区(供搜索使用)
         area_all_search: [],
-        // 所有的省份(供新增搜索删除(上)使用)
-        province_all_add_modify_1: [],
-        // 所有的城市(供新增搜索删除(上)使用)
-        city_all_add_modify_1: [],
-        // 所有的省份(供新增搜索删除(下)使用)
-        province_all_add_modify_2: [],
-        // 所有的城市(供新增搜索删除(下)使用)
-        city_all_add_modify_2: [],
-        // 所有的区域(供新增搜索删除(下)使用)
-        area_all_add_modify_2: [],
         // 售后id
         addressId: '',
         dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
@@ -168,6 +240,128 @@
       }
     },
     methods: {
+      //删除确认
+      deleteConfirmFn (){
+        let that =this
+        that.$.ajax({
+          type: 'DELETE',
+          url: this.localbase + 'm2c.scm/web/goods/guarantee/del/'+that.guaranteeId,
+          success: function (res) {
+            if(res.status === 200){
+              that.delectGoodHide()
+              that.getGuarantee()
+            }else{
+              that.$message({
+                type: 'warning',
+                message: res.errorMessage
+              })
+            }
+          }
+        })
+      },
+      // 删除盒子显示
+      delectGoodShow () {
+        let that = this
+        that.delectGood = true
+        that.delectGoodBg = true
+      },
+      // 删除盒子隐藏
+      delectGoodHide () {
+        let that = this
+        that.delectGood = false
+        that.delectGoodBg = false
+      },
+      // 点击取消
+      clear(){
+        let that = this
+        that.guarantee = {}
+        that.topBoxShow = false
+        that.error1 = false
+      },
+      // 点击保存
+      save(){
+        let that = this
+        if(that.guarantee.guaranteeName==''||that.guarantee.guaranteeName==undefined){
+          that.error1 = true
+          return false
+        }
+        that.$.ajax({
+          type: that.handle_toggle==='add'?'post':'put',
+          url: that.handle_toggle==='add'? that.localbase + 'm2c.scm/web/goods/guarantee':that.localbase + 'm2c.scm/web/goods/guarantee/'+that.guarantee.guaranteeId,
+          data:Object.assign({
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
+          },that.guarantee),
+          success: function (res) {
+            if(res.status === 200){
+              that.$message({
+                type: 'success',
+                message: '保存成功'
+              })
+              if(that.$route.query.goodsId!=undefined){
+                that.$router.push({name:'goodAddModify',query:{goodsId:that.$route.query.goodsId,fromPath:'guarantee',handle_toggle:that.$route.query.handle_toggle}})
+              }else{
+                that.getGuarantee()
+                that.topBoxShow = false
+              }
+            }else{
+              that.$message({
+                type: 'warning',
+                message: res.errorMessage
+              })
+            }
+          }
+        })
+      },
+      // 新增保障
+      add(){
+        let that = this
+        that.handle_toggle = 'add'
+        that.topBoxShow = true
+        that.$.ajax({
+          type: 'get',
+          url: this.localbase + 'm2c.scm/web/goods/guarantee/id',
+          success: function (res) {
+            that.guarantee.guaranteeId = res.content
+            console.log(that.guarantee.guaranteeId)
+          }
+        })
+      },//SPBZ7F4C2D096DF24854957508C1545B46A4
+        //SPBZ7F4C2D096DF24854957508C1545B46A4
+      // 保障列表按钮点击
+      handleCommand (index,row,action) {
+        let that = this
+        if (action === '_edit') {
+          that.topBoxShow = true
+          that.guarantee.guaranteeId = row.guaranteeId
+          that.guarantee.guaranteeName = row.guaranteeName
+          that.guarantee.guaranteeDesc = row.guaranteeDesc
+          that.handle_toggle = 'edit'
+        }else if(action === '_delete'){
+          that.guaranteeId = row.guaranteeId
+          that.delectGoodShow()
+        }
+      },
+      //tab切换
+      handleTabClick (tab, event) {
+        let that = this
+        if(that.activeName=='second'){
+          that.getGuarantee()
+        }
+      },
+      // 获取商品保障列表
+      getGuarantee(){
+        let that = this
+        that.$.ajax({
+          type: 'get',
+          url: this.localbase + 'm2c.scm/goods/guarantee/list',
+          data:{
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+          },
+          success: function (res) {
+            that.dataList = res.content
+          }
+        })
+      },
       // 重置
       reset_add_modify_params_bind () {
         let that = this
@@ -450,10 +644,16 @@
         success: function (result) {
           // // console.log('获得的省份信息列表: ', result)
           that.province_all_search = result.content
-          that.province_all_add_modify_1 = result.content
-          that.province_all_add_modify_2 = result.content
+          // that.province_all_add_modify_1 = result.content
+          // that.province_all_add_modify_2 = result.content
         }
       })
+      if(that.$route.query.goodsId !=undefined){
+        that.activeName = 'second'
+        that.add()
+        that.getGuarantee()
+        that.topBoxShow = true
+      }
     }
   }
 </script>
@@ -471,6 +671,81 @@
       }
       button, .save {
         margin-right: 60px;
+      }
+    }
+  }
+  .topBox{position:absolute;top:0;left:0;height:auto;padding:0 20px;padding-bottom:20px;width:100%;background:#fff;z-index:2;
+    .el-row{margin-bottom:15px;}
+    .el-input{width:100%;}
+    h4{
+      line-height:50px;
+      margin-bottom:10px;
+      font-size:18px;
+      color:#333;
+      a{
+        opacity:1;display:inline-block;width:24px;height:24px;float:right; margin-top:10px;background:url(../../../assets/images/ico_close.png) no-repeat center center;
+      }
+    }
+    .alginRight{text-align: right; line-height:50px;color:#666;}
+  }
+  a.ellipsis{text-decoration:none;color:#666;}
+  /*删除*/
+  .delectGoodBg{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:999;}
+  .delectGoodCon {
+    width: 400px;
+    height: 280px;
+    background: #fff;
+    z-index: 9999;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -180px;
+    background: #FFFFFF;
+    border-radius: 4px;
+    .agreetc_header{
+      width: 100%;
+      height: 50px;
+      background: #DFE9F6;
+      padding-left: 20px;
+      padding-right: 20px;
+      font-size: 16px;
+      span {
+        display: inline-block;
+        line-height: 50px;
+      }
+    }
+    .agreetc_body{
+      padding-left: 20px;
+      padding-right: 20px;
+      background: #FFFFFF;
+      margin-top: 10px;
+      text-align: center;
+      font-size: 20px;
+      color: #333333;
+      line-height: 150px;
+    }
+    .agreetc_footer{
+      height: 80px;
+      padding-top: 10px;
+      padding-left: 50%;
+      .btn {
+        width: 80px;
+        height: 30px;
+        border: none;
+        border-radius: 2px;
+        color: #fff;
+      }
+
+      .save {
+        margin-left: -110px;
+        background: #0086FF;
+      }
+      .cancel {
+        margin-left: 40px;
+        background: #FFF;
+        border: 1px solid #CCCCCC;
+        color: #444;
       }
     }
   }

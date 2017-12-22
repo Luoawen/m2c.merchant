@@ -67,27 +67,27 @@
         <el-table-column
           label="订货金额/元"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{(scope.row.goodsTotalAmount/100).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span>{{(scope.row.goodsTotalAmount)}}</span></template>
         </el-table-column>
         <el-table-column
           label="售后金额/元"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{(scope.row.afterSellAmount/100).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span>{{(scope.row.afterSellAmount)}}</span></template>
         </el-table-column>
         <el-table-column
           label="服务费/元"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{scope.row.serviceTotalCharge == undefined ? '-':(scope.row.serviceTotalCharge/100).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span>{{scope.row.serviceTotalCharge == undefined ? '-':(scope.row.serviceTotalCharge)}}</span></template>
         </el-table-column>
         <el-table-column
           label="活动分摊/元"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{scope.row.activityTotalAmount == undefined ? '-':(scope.row.activityTotalAmount/100).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span>{{scope.row.activityTotalAmount == undefined ? '-':(scope.row.activityTotalAmount)}}</span></template>
         </el-table-column>
         <el-table-column
           label="结算总额/元"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{scope.row.settleTotalAmount == undefined ? '-':(scope.row.settleTotalAmount/100).toFixed(2)}}</span></template>
+          <template slot-scope="scope"><span>{{scope.row.settleTotalAmount == undefined ? '-':(scope.row.settleTotalAmount)}}</span></template>
         </el-table-column>
         <el-table-column
           label="结算状态"
@@ -216,10 +216,13 @@
       }
     },
     mounted () {
+      let that = this
+      if(that.$route.query.SettleStatus==='1'){
+        that.search_params.SettleStatus = '1'
+      }
       this.orderStore()
     }
   }
-
 </script>
 <style lang="scss" scoped>
   table{ table-layout:fixed;}

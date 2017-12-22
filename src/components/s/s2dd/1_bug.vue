@@ -170,8 +170,8 @@
                   </div>
                 </div>
                 <div class="a2 fl mt20" id="a2" style="width: 14%;">
-                  <template v-if="goodsItem.isSpecial==1">特惠价 {{(goodsItem.specialPrice/100).toFixed(2)}}</template>
-                  <p :class="{'lineThrough':goodsItem.isSpecial==1}">{{(goodsItem.discountPrice/100).toFixed(2)}}</p>
+                  <template v-if="goodsItem.isSpecial==1">特惠价 {{(goodsItem.strSpecialPrice)}}</template>
+                  <p :class="{'lineThrough':goodsItem.isSpecial==1}">{{(goodsItem.strDiscountPrice)}}</p>
                 </div>
                 <div class="a3 fl mt20" id="a3" style="width: 18%;text-align: center;padding-right: 40px;">
                   {{goodsItem.sellNum}}
@@ -193,7 +193,7 @@
               </div>
               <div class="cont col-sm-4" style="width:40%;">
                 <div class="a5" style="width:25%;">
-                  {{((item.goodsMoney + item.orderFreight - item.dealerDiscount - item.plateDiscount)/100).toFixed(2)}}
+                  {{((parseFloat(item.strGoodsMoney) + parseFloat(item.strOrderFreight) - parseFloat(item.strDealerDiscount) - parseFloat(item.strPlateDiscount))).toFixed(2)}}
                 </div>
                 <div class="a6 mt10" style="width:28%;">
                   {{date_format(new Date(item.createdDate), 'yyyy-MM-dd hh:mm:ss')}}
@@ -286,17 +286,17 @@
             <span style="color: red;">*</span>
             运费退款
           </span>
-          <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderFreight - hasRtFreight/100)" :placeholder="'最多可退'+(orderFreight - hasRtFreight/100) +'元'" @change="pRtFreightChange"></el-input></span>
+          <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderFreight - hasRtFreight)" :placeholder="'最多可退'+(orderFreight - hasRtFreight) +'元'" @change="pRtFreightChange"></el-input></span>
           <span>元</span>
           <P class="pl10">运费退款不能大于订单实际剩余运费</P>
         </div>
         <div class="linh40 pl10">
           <span class="wid80">售后金额</span>
-          <span>{{(backMoney/100).toFixed(2)}}元</span>
+          <span>{{(backMoney)}}元</span>
         </div>
         <div class="linh40 pl10">
           <span class=" wid80">售后总额</span>
-          <span>{{(backMoney/100 + rtFreight).toFixed(2)}}元</span>
+          <span>{{(backMoney + rtFreight).toFixed(2)}}元</span>
         </div>
       </div>
       <div class="hptczp_footer">
@@ -358,7 +358,7 @@
           console.log("a")
           console.log(that.pRtFreight)
         }else{
-          let hasRtFreight = (that.orderFreight - that.hasRtFreight/100);
+          let hasRtFreight = (that.orderFreight - that.hasRtFreight);
           if(parseFloat(that.pRtFreight) > hasRtFreight){
             that.pRtFreight = hasRtFreight
             that.show_tip("不能大于实际剩余运费")
@@ -396,7 +396,7 @@
       that.saleAfterNo = afterNo;
       that.Agreeshow = true;
       that.backMoney = backMoney;
-      that.orderFreight = ordFreight / 100;
+      that.orderFreight = ordFreight ;
       console.log(afType + ":===orderStatus ==" + _orderStatus);
       if (afType == 2 && _orderStatus == 1 && that.orderFreight>0) {
         that.getHasReturnFreight(dOrderId, skuID);
@@ -680,7 +680,7 @@
   .content{
     .soloSearchBox{position:absolute;top:0;left:0;height:auto;padding:20px;width:100%;background:#fff;z-index:2;
       h4 a.close{
-        opacity:1;display:inline-block;width:24px;height:24px;float:right; mergin-right:20px;background:url(../../../assets/images/ico_close.png) no-repeat center center;
+        opacity:1;display:inline-block;width:24px;height:24px;float:right;background:url(../../../assets/images/ico_close.png) no-repeat center center;
       }
       .searcWrap{width:100%;height:auto;position:relative;}
       .mess{

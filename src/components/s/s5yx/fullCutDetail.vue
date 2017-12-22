@@ -34,8 +34,8 @@
                           <div v-for="fullCutItem in item.itemList">
                             <p>
                               层级<span v-text="fullCutItem.level"></span>
-                              &nbsp;--&nbsp;门槛&nbsp;:&nbsp;满&nbsp;<span v-text="fullCutItem.threshold/100"></span>&nbsp;
-                              元减&nbsp;<span v-text="fullCutItem.money/100"></span>&nbsp;元
+                              &nbsp;--&nbsp;门槛&nbsp;:&nbsp;满&nbsp;<span v-text="fullCutItem.threshold"></span>&nbsp;
+                              元减&nbsp;<span v-text="fullCutItem.money"></span>&nbsp;元
                             </p>
                           </div>
                         </div>
@@ -45,7 +45,7 @@
                             <p>
                               层级<span v-text="fullCutItem.level"></span>
                               &nbsp;--&nbsp;门槛&nbsp;:&nbsp;满&nbsp;<span v-text="fullCutItem.threshold"></span>&nbsp;
-                              件减&nbsp;<span v-text="fullCutItem.money/100"></span>&nbsp;元
+                              件减&nbsp;<span v-text="fullCutItem.money"></span>&nbsp;元
                             </p>
                           </div>
                         </div>
@@ -54,7 +54,7 @@
                           <div v-for="fullCutItem in item.itemList">
                             <p>
                               层级<span v-text="fullCutItem.level"></span>
-                              &nbsp;--&nbsp;门槛&nbsp;:&nbsp;满&nbsp;<span v-text="fullCutItem.threshold/100"></span>&nbsp;
+                              &nbsp;--&nbsp;门槛&nbsp;:&nbsp;满&nbsp;<span v-text="fullCutItem.threshold"></span>&nbsp;
                               元打&nbsp;<span v-text="fullCutItem.discount"></span>&nbsp;折
                             </p>
                           </div>
@@ -73,8 +73,8 @@
                         <div class="tier" v-if="item.fullCutType===3&&item.thresholdType==1">
                           <div v-for="fullCutItem in item.itemList">
                             <p>
-                              满&nbsp;<span v-text="fullCutItem.threshold/100"></span>
-                              &nbsp;元加上&nbsp;<span v-text="fullCutItem.buyingPrice/100"></span>&nbsp;
+                              满&nbsp;<span v-text="fullCutItem.threshold"></span>
+                              &nbsp;元加上&nbsp;<span v-text="fullCutItem.buyingPrice"></span>&nbsp;
                               元换购商品
                             </p>
                             <p><span v-for="goods in exchangeGoodsList">&nbsp;{{goods.goodsName}}&nbsp;</span></p>
@@ -85,7 +85,7 @@
                           <div v-for="fullCutItem in item.itemList">
                             <p>
                               满&nbsp;<span v-text="fullCutItem.threshold"></span>
-                              &nbsp;件加上&nbsp;<span v-text="fullCutItem.buyingPrice/100"></span>&nbsp;
+                              &nbsp;件加上&nbsp;<span v-text="fullCutItem.buyingPrice"></span>&nbsp;
                               元换购商品
                             </p>
                             <p><span v-for="goods in exchangeGoodsList">&nbsp;{{goods.goodsName}}&nbsp;</span></p>
@@ -125,7 +125,7 @@
             <p>{{item.remark == '' ? '暂无' : item.remark}}</p>
         </div>
         <p class="back" >
-            <el-button  type="primary" size="medium"   @click="itemback" > 返回 </el-button> 
+            <el-button  type="primary" size="medium"   @click="itemback" > 返回 </el-button>
         </p>
     </div>
   </div>
@@ -152,7 +152,7 @@
 //        url: 'http://localhost:8080/m2c.market/fullcut/detail/' + sessionStorage.getItem('full_cut_id'),
         url: that.base + 'm2c.market/fullcut/detail/' + sessionStorage.getItem('full_cut_id'),
         data: {
-          token: sessionStorage.getItem('access_token'), 
+          token: sessionStorage.getItem('access_token'),
           isEncry: false
         },
         success: function (result) {

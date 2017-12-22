@@ -162,7 +162,7 @@ export default {
           },
           success: function (result) {
             if (result.status === 200){
-							that.tradableAmount = result.content.tradableAmount/100
+							that.tradableAmount = result.content.tradableAmount
 							if(that.tradableAmount==0){
 								that.isdisable = true
 							}
