@@ -19,7 +19,16 @@
             </el-date-picker>
             <el-input v-model="search_goods_params.condition" placeholder="输入商品名称/编码/条形码/品牌" title="输入商品名称/编码/条形码/品牌"></el-input>
             <el-button type="primary" size="medium" @click="goodsStoreSearch()" class="btn-search">搜索</el-button>
-            <el-button type="primary" size="medium" @click="newGoods" class="fr">新增</el-button>
+            <div style="width:100px;position:relative; right:280px; top:7px" class = "fr">
+              <el-button type="default" size="medium"    id="lotsOptionBtn" @click.stop='lotsOptionShow = !lotsOptionShow'> 批量操作 </el-button>
+                <div v-show = 'lotsOptionShow' class='lotsOptionShowStyle'>
+                  <ul class=" el-select-dropdown__list" id="lotsOptionselection">
+                    <li class="el-select-dropdown__item" @click.stop='lotsOptionGoods(1)'>批量上架</li>
+                    <li class="el-select-dropdown__item" @click.stop='lotsOptionGoods(2)'>批量下架</li>
+                  </ul>
+                </div>
+            </div>
+            <el-button type="primary" size="medium" @click="newGoods"  style='margin-top:6px;margin-left:4px'  class="fr">新增</el-button>
             <el-button type="primary" size="medium" icon="el-icon-download" @click.native="exportSearch()" class="fr">导出</el-button>
           </div>
           <div class="good_info" style="margin-top: 20px;">
@@ -27,7 +36,9 @@
               ref="multipleTable"
               :data="goodsStoreData"
               tooltip-effect="dark"
-              style="width: 100%">
+              style="width: 100%"
+              @selection-change="handleSelectionChangeGoods"
+              >
               <el-table-column
                 type="selection"
                 width="55">
@@ -76,7 +87,7 @@
                 prop="goodsPrice"
                 label="拍货价/元"
                 show-overflow-tooltip>
-                <template slot-scope="scope"><span >{{scope.row.goodsPrice/100}}</span></template>
+                <template slot-scope="scope"><span >{{scope.row.goodsPrice}}</span></template>
               </el-table-column>
               <el-table-column
                 prop="stockNum"
@@ -178,7 +189,7 @@
                 prop="goodsPrice"
                 label="拍货价/元"
                 show-overflow-tooltip>
-                <template slot-scope="scope"><span >{{scope.row.goodsPrice/100}}</span></template>
+                <template slot-scope="scope"><span >{{scope.row.goodsPrice}}</span></template>
               </el-table-column>
               <el-table-column
                 prop="stockNum"
@@ -260,7 +271,7 @@
             prop="goodsPrice"
             label="拍货价/元"
             show-overflow-tooltip>
-            <template slot-scope="scope"><span >{{scope.row.goodsPrice/100}}</span></template>
+            <template slot-scope="scope"><span >{{scope.row.goodsPrice}}</span></template>
           </el-table-column>
           <el-table-column
             prop="stockNum"
@@ -289,16 +300,32 @@
     <!-- 删除弹框 -->
     <div class="delectGoodBg" v-if="delectGoodBg"></div>
      <div class="delectGoodCon" v-if="delectGood" >
-          <div class="agreetc_header">
-            <span>提示</span>
-            <span class="fr" @click="delectGoodHide()">X</span>
-          </div>
-          <div class="agreetc_body">{{delectCon}}</div>
-          <div class="agreetc_footer">
-            <button type="button" class="btn save" @click = "deleteConfirmFn()">确认</button>
-            <button type="button" class="btn cancel" @click="delectGoodHide()">取消</button>
-          </div>
+        <div class="agreetc_header">
+          <span>提示</span>
+          <span class="fr" @click="delectGoodHide()">X</span>
         </div>
+      <div class="agreetc_body">{{delectCon}}</div>
+      <div class="agreetc_footer">
+        <button type="button" class="btn save" @click = "deleteConfirmFn()">确认</button>
+        <button type="button" class="btn cancel" @click="delectGoodHide()">取消</button>
+      </div>
+    </div>
+        <!--商品库批量上下架确认弹框 商品审核 同意上架商品 -->
+    <div class="delectGoodBg" v-if="agreeGoodBg"></div>
+    <div class="delectGoodWrap" v-if="agreeGoodBg">
+      <div class="delectGoodCon" v-if="agreeGood" >
+        <div class="agreetc_header">
+           <span>提示</span>
+          <span class="fr" style='cursor:pointer' @click="agreeGoodHide()">X</span>
+        </div>
+          <div class="agreetc_body" v-if="agreeTypeFlag===1? true:false">是否上架商品？</div>
+          <div class="agreetc_body" v-if="agreeTypeFlag===2? true:false">是否下架商品？</div>
+        <div class="agreetc_footer">
+          <button type="button" class="btn save" @click = "agree_confirm()">确认</button>
+          <button type="button" class="btn cancel" @click="agreeGoodHide()">取消</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -307,8 +334,17 @@
     name: '',
     data () {
       return {
+        agreeTypeFlag:'',// 判断同意类型
+        agreeGoodBg:false,// 弹层背景
+        agreeGood: false,
+        goodsIds:'',
+        // approveIds:'',
+        multipleSelectionGoods:[], // 商品库 存储checkbox选中的对象
+        multipleSelection:[], // 商品审核 存储checkbox选中的对象
+        lotsOptionShow: false, //批量操作下拉框显示
+        lotsOptionShow:false,
         delete_paramsRow:[],
-       delete_params_goodsTo:'',
+        delete_params_goodsTo:'',
         delectGoodBg: false, // 弹层背景
         delectGood: false, // 删除盒子
         time:'',
@@ -364,10 +400,57 @@
       }
     },
     methods: {
+         //商品库获取复选框选中对象
+      handleSelectionChangeGoods(val) {
+        this.multipleSelectionGoods = val;
+         console.log('this.multipleSelectionGoods',this.multipleSelectionGoods)
+      },
+         //商品库 批量操作
+      lotsOptionGoods(flag){
+        let that = this
+        if(that.multipleSelectionGoods.length<=0){
+            that.$message({
+            message:'请选择品牌',
+            center: true,
+            duration:1000,
+            type:'info',
+          });
+        return;
+        }
+        that.goodsIds = that.multipleSelectionGoods.map(function(item){return item.goodsId}).toString()
+        // 弹出确认弹层
+         that.agreeGoodBg =true
+         that.agreeGood = true
+        if(flag === 1){
+          that.agreeTypeFlag = 1
+        }else{
+          that.agreeTypeFlag = 2
+        }
+      },
+      agree_confirm(){
+        let that = this
+        //商品库批量同意上下架 商品审核申请批量同意上架
+          that.$.ajax({
+            url: that.base +(that.agreeTypeFlag === 1 ?'m2c.scm/web/goods/up/shelfbatch?token=' : that.agreeTypeFlag === 2 ?'m2c.scm/web/goods/off/shelfbatch?token=':'')+sessionStorage.getItem('mToken')+'&goodsIds='+that.goodsIds,
+            type:'PUT',
+            data: {},
+            success: function (result) {
+              // 获取商品列表
+            that.agreeTypeFlag = ''
+            that.goodsStore()
+            that.agreeGoodHide()
+            }
+          })
+      },
+      // 同意盒子隐藏
+      agreeGoodHide () {
+        let that = this
+        that.agreeGood = false
+        that.agreeGoodBg = false
+      },
       deleteConfirmFn (){
         let that =this
         that.deleteGoods(that.delete_paramsRow,that.delete_params_goodsTo)
-
       },
       //时间赋值
       timeCheck () {
@@ -413,18 +496,18 @@
           }
         })
       },
-    goodsClassify () {//商品分类树
-      let that = this
-      that.$.ajax({
-        type: 'GET',
-        url: that.localbase + 'm2c.scm/goods/classify/tree',
-        data: {parentClassifyId:-1},
-        success: function (result) {
-          that.goodsClassifys=result.content;
-          //that.goodsClassifys.unshift({"parentClassifyId":'',"classifyId":'',"serviceRate":'',"classifyName":"全部" });
-        }
-      })
-    }
+      goodsClassify () {//商品分类树
+        let that = this
+        that.$.ajax({
+          type: 'GET',
+          url: that.localbase + 'm2c.scm/goods/classify/tree',
+          data: {parentClassifyId:-1},
+          success: function (result) {
+            that.goodsClassifys=result.content;
+            //that.goodsClassifys.unshift({"parentClassifyId":'',"classifyId":'',"serviceRate":'',"classifyName":"全部" });
+          }
+        })
+      }
       ,deleteGoods (row,to){//删除商品
         let that = this
         that.$.ajax({
@@ -578,7 +661,6 @@
         let url=that.localbase + 'm2c.scm/goods/export?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+'&goodsClassifyId='+that.search_goods_params.goodsClassifyId+'&goodsStatus='+that.search_goods_params.goodsStatus+'&condition='+that.search_goods_params.condition+'&startTime='+that.search_goods_params.startTime+'&endTime='+that.search_goods_params.endTime;
         window.location.href=url
       }
-
       ,goodsCheckStore () {
         let that = this
          if(!that.isChangePage){
@@ -718,6 +800,17 @@
         that.goodsDeleteStore();
       }
   },
+    created() {
+      // 点击到弹框外其他地方 弹框收起
+      let body = document.querySelector('body')
+      body.addEventListener('click',(e)=>{
+      if(e.target.id === 'lotsOptionBtn' || e.target.id === 'lotsOptionBtnselection'){
+          this.lotsOptionShow = true
+      }else {
+          this.lotsOptionShow = false
+      }
+      },false)
+    },
     mounted () {
       let that = this
       if (that.$route.query.activeName == 'second') {
@@ -725,6 +818,9 @@
       } else if (that.$route.query.activeName == 'delete'){
         that.goodsDeleteStore()
       } else{
+        if(that.$route.query.goodsStatus===2){
+          that.search_goods_params.goodsStatus = '2'
+        }
         that.goodsStore()
       }
       that.goodsClassify()
@@ -732,6 +828,17 @@
   }
 </script>
 <style lang="scss" scoped>
+  .lotsOptionShowStyle {
+    position:absolute;
+    top:32px;
+    z-index:2;
+    border:1px solid transparent;
+    border-radius:6px;
+    li{
+        background:#fff
+    }
+    li:hover{background:rgb(236, 245, 255) }
+  }
   .ico_msg{
     width: 16px;
     height: 16px;

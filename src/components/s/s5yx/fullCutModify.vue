@@ -44,8 +44,8 @@
               <div v-for="fullCutItem in item.itemList">
                 <p>
                   层级<span v-text="fullCutItem.level"></span>
-                  &nbsp;--&nbsp;门槛&nbsp;:&nbsp;满&nbsp;<span v-text="fullCutItem.threshold/100"></span>&nbsp;
-                  元减&nbsp;<span v-text="fullCutItem.money/100"></span>&nbsp;元
+                  &nbsp;--&nbsp;门槛&nbsp;:&nbsp;满&nbsp;<span v-text="fullCutItem.threshold"></span>&nbsp;
+                  元减&nbsp;<span v-text="fullCutItem.money"></span>&nbsp;元
                 </p>
               </div>
             </div>
@@ -55,7 +55,7 @@
                 <p>
                   层级<span v-text="fullCutItem.level"></span>
                   &nbsp;--&nbsp;门槛&nbsp;:&nbsp;满&nbsp;<span v-text="fullCutItem.threshold"></span>&nbsp;
-                  件减&nbsp;<span v-text="fullCutItem.money/100"></span>&nbsp;元
+                  件减&nbsp;<span v-text="fullCutItem.money"></span>&nbsp;元
                 </p>
               </div>
             </div>
@@ -64,7 +64,7 @@
               <div v-for="fullCutItem in item.itemList">
                 <p>
                   层级<span v-text="fullCutItem.level"></span>
-                  &nbsp;--&nbsp;门槛&nbsp;:&nbsp;满&nbsp;<span v-text="fullCutItem.threshold/100"></span>&nbsp;
+                  &nbsp;--&nbsp;门槛&nbsp;:&nbsp;满&nbsp;<span v-text="fullCutItem.threshold"></span>&nbsp;
                   元打&nbsp;<span v-text="fullCutItem.discount"></span>&nbsp;折
                 </p>
               </div>
@@ -83,8 +83,8 @@
             <div class="tier" v-if="item.fullCutType===3&&item.thresholdType==1">
               <div v-for="fullCutItem in item.itemList">
                 <p>
-                  满&nbsp;<span v-text="fullCutItem.threshold/100"></span>
-                  &nbsp;元加上&nbsp;<span v-text="fullCutItem.buyingPrice/100"></span>&nbsp;
+                  满&nbsp;<span v-text="fullCutItem.threshold"></span>
+                  &nbsp;元加上&nbsp;<span v-text="fullCutItem.buyingPrice"></span>&nbsp;
                   元换购商品
                 </p>
                 <p><span v-for="goods in exchangeGoodsList">&nbsp;{{goods.goodsName}}&nbsp;</span></p>
@@ -95,7 +95,7 @@
               <div v-for="fullCutItem in item.itemList">
                 <p>
                   满&nbsp;<span v-text="fullCutItem.threshold"></span>
-                  &nbsp;件加上&nbsp;<span v-text="fullCutItem.buyingPrice/100"></span>&nbsp;
+                  &nbsp;件加上&nbsp;<span v-text="fullCutItem.buyingPrice"></span>&nbsp;
                   元换购商品
                 </p>
                 <p><span v-for="goods in exchangeGoodsList">&nbsp;{{goods.goodsName}}&nbsp;</span></p>
@@ -146,8 +146,8 @@
         <p>{{item.remark == '' ? '暂无' : item.remark}}</p>
       </div>
       <p class="back">
-         <el-button  type="primary" size="medium"   @click="postform" > 完成 </el-button> 
-         <el-button  type="primary" size="medium"  style="margin-left: 100px;"  @click="itemback" > 返回 </el-button> 
+         <el-button  type="primary" size="medium"   @click="postform" > 完成 </el-button>
+         <el-button  type="primary" size="medium"  style="margin-left: 100px;"  @click="itemback" > 返回 </el-button>
       </p>
     </div>
     <!--作用范围为全店的商品筛选弹窗s-->
@@ -175,7 +175,7 @@
                 <img class="fl" :src="goods.goodsImageUrl"/>
                 <div>
                   <div class="goodsInfoText">{{goods.dealerName}}</div>
-                  <div>{{goods.goodsPrice/100}}元</div>
+                  <div>{{goods.goodsPrice}}元</div>
                    <!--<div class="pickSpecificationsStyle" :vaule='goods.isChooseSpecification' @click.stop="chooseSpecification(goods,index)">{{goods.isChooseSpecification}}</div>-->
                 </div>
                 <div class="fc" v-show="goods.isRemoved"></div>
@@ -227,7 +227,7 @@
                   <div>
                     <!-- <div>商家</div> -->
                     <div class="goodsInfoText" >{{goods.dealerName}}</div>
-                    <div>价格<b>{{goods.goodsPrice/100}}元</b></div>
+                    <div>价格<b>{{goods.goodsPrice}}元</b></div>
                      <div class="pickSpecificationsStyle" :vaule='goods.isChooseSpecification' @click.stop="chooseSpecification(goods, index)">{{goods.isChooseSpecification}}</div>
                   </div>
                 </div>
@@ -388,7 +388,7 @@
       }
     },
     methods: {
-       // 页码  
+       // 页码
        pageGoods (pageNum, pageCount) {
         var that = this
         if (pageNum <= 1) {
@@ -727,7 +727,7 @@
                     result.content[i].isRemoved = 1
                 }
               }
-              // 循环 选择(适用)范畴列表  
+              // 循环 选择(适用)范畴列表
               for (var j = 0; j < that.chooseGoodsList.length; j++) {
                 if (result.content[i].goodsId === that.chooseGoodsList[j].goodsId) {
                   result.content[i].isChoosed = 1
@@ -749,7 +749,7 @@
         } else if (goods.isRemoved == 1) {
           goods.isRemoved = 0
         }
-        // 
+        //
         var flag = true
         for (var i = 0; i < that.removeGoodsList.length; i++) {
           if (that.removeGoodsList[i].goodsId === goods.goodsId) {
@@ -779,7 +779,7 @@
            goods.isChooseSpecification='编辑  '
            goods.skuFlag = 1
         }
-        // 
+        //
         var flag = true
         for (var i = 0; i < that.chooseGoodsList.length; i++) {
           if (that.chooseGoodsList[i].goodsId === goods.goodsId) {

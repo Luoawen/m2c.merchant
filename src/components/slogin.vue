@@ -170,7 +170,9 @@ export default {
       that.mobile = ''
       that.verifyCode = ''
       that.newPass = ''
-      that.confirmPass = ''
+			that.confirmPass = ''
+			that.login_params.password = ''
+		
     },
     get_code () {
 			let that = this
@@ -235,7 +237,7 @@ export default {
 	}
 }
 ::-ms-reveal{display: none;}
-// placeholder  字体颜色
+		// placeholder  字体颜色
 		:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
 				color: #ccc; opacity:1; 
 		}
@@ -262,8 +264,6 @@ margin: 0;
 .slogin {
 	width: 100%;
 	height: 100%;
-	// height:auto;
-	// min-height: 100%;
 	position: absolute;
 	top: 0px;
 	left: 0px;
