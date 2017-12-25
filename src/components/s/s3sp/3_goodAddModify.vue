@@ -868,11 +868,11 @@
               return
             }
             for (var k = 0; k < that.goodsSKUs.length; k++) {
-              that.goodsSKUs[k].marketPrice = parseFloat(that.goodsSKUs[k].marketPrice * 100).toFixed()
-              that.goodsSKUs[k].photographPrice= parseFloat(that.goodsSKUs[k].photographPrice  * 100).toFixed()
+              that.goodsSKUs[k].marketPrice = parseFloat(that.goodsSKUs[k].marketPrice).toFixed()
+              that.goodsSKUs[k].photographPrice= parseFloat(that.goodsSKUs[k].photographPrice).toFixed()
               that.goodsSKUs[k].showStatus = that.goodsSKUs[k].show
               if (that.countMode == 1) {
-                that.goodsSKUs[k].supplyPrice = parseFloat(that.goodsSKUs[k].supplyPrice * 100).toFixed()
+                that.goodsSKUs[k].supplyPrice = parseFloat(that.goodsSKUs[k].supplyPrice).toFixed()
               }
             }
             let a = {
@@ -1395,7 +1395,7 @@
           that.getGoodsInfo()
         }
       }
-      
+
     }
   }
 </script>

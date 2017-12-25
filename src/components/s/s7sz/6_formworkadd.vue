@@ -1051,8 +1051,8 @@
           that.postageModelRules.push(that.postageModelRule)
         }
         for (var i = 0; i < that.postageModelRules.length; i++) {
-          that.postageModelRules[i].continuedPostage = parseFloat(that.postageModelRules[i].continuedPostage * 100).toFixed(2)
-          that.postageModelRules[i].firstPostage = parseFloat(that.postageModelRules[i].firstPostage * 100).toFixed(2)
+          that.postageModelRules[i].continuedPostage = parseFloat(that.postageModelRules[i].continuedPostage).toFixed(2)
+          that.postageModelRules[i].firstPostage = parseFloat(that.postageModelRules[i].firstPostage).toFixed(2)
         }
         that.$.ajax({
           type: that.addModify === 'add' ? 'post' : 'put',
@@ -1117,8 +1117,8 @@
             that.modifyFlag = result.content.chargeType
             if (that.formwork.postageModelRules.length > 0) {
               for (var i = 0; i < that.formwork.postageModelRules.length; i++) {
-                that.formwork.postageModelRules[i].firstPostage = that.formwork.postageModelRules[i].firstPostage / 100
-                that.formwork.postageModelRules[i].continuedPostage = that.formwork.postageModelRules[i].continuedPostage / 100
+                that.formwork.postageModelRules[i].firstPostage = that.formwork.postageModelRules[i].firstPostage
+                that.formwork.postageModelRules[i].continuedPostage = that.formwork.postageModelRules[i].continuedPostage
               }
             }
             for(var j=0;j<result.content.postageModelRules.length;j++){
