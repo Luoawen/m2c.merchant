@@ -737,9 +737,9 @@
             expressPhone: that.expressPhone,
             expressWay: that.expressWay,
             expressCode: that.expressCode,
-            dealerOrderId: that.dealerOrderId,
-            userId: JSON.parse(sessionStorage.getItem('mUser')).userId,
-            OrderId: that.orderNo,
+            dealerOrderId: that.dealerOrderId
+            ,userId: JSON.parse(sessionStorage.getItem('mUser')).userId,
+            orderId: that.orderNo,
             shopName: that.shopName
           },
           success: function (result) {
