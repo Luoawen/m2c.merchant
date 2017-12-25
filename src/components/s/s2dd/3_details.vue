@@ -459,7 +459,8 @@
         mediaResInfos:{}
         ,isGetUserRuning : false
         , hasRtFreight : 0
-        ,isChangePage:false
+        ,isChangePage:false,
+        shopName:''
       }
     },
     // watch: {
@@ -961,6 +962,8 @@
             expressPerson:that.shipmentForm.expressPerson,
             expressWay:that.shipmentForm.expressWay,
             phone:that.shipmentForm.phone,
+            orderId: that.orderDetail.orderId,
+            shopName: that.shopName
           },
           success: function (result) {
             if (result.status === 200){
@@ -1032,12 +1035,27 @@
             }
           }
         });
+      },
+      // 查找经销商信息
+      getDealerMess () {
+        const that = this
+        that.$.ajax({
+          type: 'get',
+          url: this.localbase + 'm2c.scm/shop/sys/shopInfo',
+          data: {
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
+          },
+          success: function (res) {
+            console.log(res)
+            that.shopName = res.content.shopName
+          }
+        })
       }
     },
     mounted () {
       let that = this
       that.loadOrderDetail()
-
+      that.getDealerMess()
     },
     watch: {
       'shipmentForm.expressWay': {
