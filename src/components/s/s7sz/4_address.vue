@@ -660,6 +660,7 @@
 </script>
 
 <style lang="scss" scoped>
+  .el-button--small{padding:0;}
   .sz {
     .form-horizontal{padding-top:20px;padding-left:0;}
     .control-label{font-weight:normal;}

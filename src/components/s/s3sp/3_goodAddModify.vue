@@ -308,7 +308,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :offset=2 :span=21 >
+        <el-col :offset='2' :span='21' >
           <p class="marginTop20">最多上传5张主图，可以通过拖曳图片调整顺序</p>
         </el-col>
       </el-row>
@@ -595,8 +595,11 @@
       // 新增商品保障
       addGuarantee(){
         sessionStorage.setItem('data',JSON.stringify(this.data))
-        sessionStorage.setItem('goodsSKUs',this.goodsSKUs)
-        sessionStorage.setItem('goodsGuarantCheck',this.goodsGuarantCheck)
+        sessionStorage.setItem('goodsSKUs',JSON.stringify(this.goodsSKUs))
+        sessionStorage.setItem('goodsGuarantCheck',JSON.stringify(this.goodsGuarantCheck))
+        sessionStorage.setItem('fileList',JSON.stringify(this.fileList))
+        sessionStorage.setItem('goodsDesc',this.$refs.ue.getUEContent())
+        sessionStorage.setItem('goodsMainImages',JSON.stringify(this.goodsMainImages))
         this.$router.push({name:'address',query:{goodsId:this.goodsId,handle_toggle:this.handle_toggle}})
       },
       unitChange (item) {
@@ -877,7 +880,7 @@
             }
             let a = {
               token: sessionStorage.getItem('mToken'),
-              goodsId: that.goodsId,
+              goodsId: that.goodsId==''?that.$route.query.goodsId:that.goodsId,
               dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
               dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName,
               goodsSKUs: JSON.stringify(that.goodsSKUs),
@@ -1359,24 +1362,32 @@
       if(that.$route.query.fromPath === 'guarantee'){
         if(that.$route.query.handle_toggle === 'add'){
           that.handle_toggle = 'add'
-          console.log(sessionStorage.getItem('goodsSKUs').length)
           this.data = JSON.parse(sessionStorage.getItem('data'))
-          this.goodsSKUs = sessionStorage.getItem('goodsSKUs')
-          this.goodsGuarantCheck = sessionStorage.getItem('goodsGuarantCheck')
+          this.goodsSKUs = JSON.parse(sessionStorage.getItem('goodsSKUs'))
+          this.goodsGuarantCheck = JSON.parse(sessionStorage.getItem('goodsGuarantCheck'))
+          this.fileList = JSON.parse(sessionStorage.getItem('fileList'))
+          this.$refs.ue.setUEContent(sessionStorage.getItem('goodsDesc'))
           sessionStorage.setItem('data','')
           sessionStorage.setItem('goodsSKUs','')
           sessionStorage.setItem('goodsGuarantCheck','')
+          sessionStorage.setItem('fileList','')
         }else{
           if(sessionStorage.getItem('data') == ''){
             //alert('请求')
             that.getGoodsInfo()
           }else{
+            //that.getGoodsInfo()
             this.data = JSON.parse(sessionStorage.getItem('data'))
-            this.goodsSKUs = sessionStorage.getItem('goodsSKUs')
-            this.goodsGuarantCheck = sessionStorage.getItem('goodsGuarantCheck')
+            this.goodsSKUs = JSON.parse(sessionStorage.getItem('goodsSKUs'))
+            this.goodsGuarantCheck = JSON.parse(sessionStorage.getItem('goodsGuarantCheck'))
+            this.fileList = JSON.parse(sessionStorage.getItem('fileList'))
+            this.goodsMainImages = JSON.parse(sessionStorage.getItem('goodsMainImages'))
+            this.$refs.ue.setUEContent(sessionStorage.getItem('goodsDesc'))
             sessionStorage.setItem('data','')
             sessionStorage.setItem('goodsSKUs','')
             sessionStorage.setItem('goodsGuarantCheck','')
+            sessionStorage.setItem('fileList','')
+            sessionStorage.setItem('goodsMainImages','')
           }
         }
       }else{
@@ -1401,7 +1412,7 @@
 </script>
 <style lang="scss" scoped>
   .graySpan span{color:#999;}
-  .graySpan .el-row{margin-bottom:0;}
+  .graySpan .el-row,.graySpan .el-row .el-col-10{margin-bottom:0;height:45px;}
   a.addGuarantee{margin-left:115px;padding-left:20px;margin-top:-10px;float:left;background:url(../../../assets/images/ico_add.png) no-repeat;}
   .dropdown1{
       display: inline-block;
