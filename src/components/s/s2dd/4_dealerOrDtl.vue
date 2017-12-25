@@ -741,7 +741,6 @@
             userId: JSON.parse(sessionStorage.getItem('mUser')).userId,
             OrderId: that.orderNo,
             shopName: that.shopName
-            //{"totalCount":1,"forbidTime":0,"forbidType":0,"userId":"HYAFD261B52B5C493685FBC5CC69DBD90F","mobile":"13222225555","icon":"http://dl.m2c2017.com/1head/20171124/zG9L193313.jpg","username":"沃兹","groupType":4,"sysMsgSwitch":1,"orderMsgSwitch":1,"sex":1,"age":23,"salerId":"","areaProvince":"河北省","areaDistrict":"秦皇岛市","provinceCode":"130000","mediaId":"","mediaName":"","districtCode":"130300","dealerName":"沃兹的商店","dealerId":"JXSC66F5E3D51614F89847EFFE6C2296EE3"}
           },
           success: function (result) {
             console.log(result);
