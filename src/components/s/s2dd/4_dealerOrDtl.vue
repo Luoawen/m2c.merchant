@@ -428,7 +428,8 @@
         ,orderNo:''
         ,mediaResInfos : {}
         ,isGetUserRuning: false
-        ,_map :{}
+        ,_map :{},
+        shopName:''
       }
     },
     watch: {
@@ -737,7 +738,9 @@
             expressWay: that.expressWay,
             expressCode: that.expressCode,
             dealerOrderId: that.dealerOrderId
-            ,userId: JSON.parse(sessionStorage.getItem('mUser')).userId
+            ,userId: JSON.parse(sessionStorage.getItem('mUser')).userId,
+            orderId: that.orderNo,
+            shopName: that.shopName
           },
           success: function (result) {
             console.log(result);
@@ -946,12 +949,28 @@
             }
           }
         });
-      }
+      },
+      // 查找经销商信息
+      getDealerMess () {
+        const that = this
+        that.$.ajax({
+          type: 'get',
+          url: this.localbase + 'm2c.scm/shop/sys/shopInfo',
+          data: {
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
+          },
+          success: function (res) {
+            console.log(res)
+            that.shopName = res.content.shopName
+          }
+        })
+      },
     }
     ,mounted () {
       let that = this;
       that.dealerOrderId = that.$route.query.dealerOrderId;
       that.orderNo = that.$route.query.orderId
+      that.getDealerMess()
       that.getDealerOrderInfo();
       that.$.ajax({
         url: that.base + 'm2c.support/regn/provs',
