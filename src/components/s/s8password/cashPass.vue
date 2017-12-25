@@ -191,10 +191,8 @@
               if(that.$route.query.from == 'cash'){
                 that.$router.push({name:'cash'})
               }
-            } else if (result.status === 3) {
-              that.show_tip('验证码不正确')
-            } else {
-              that.show_tip('修改失败')
+            }else {
+              that.show_tip(result.errorMessage)
             }
           }
         })
