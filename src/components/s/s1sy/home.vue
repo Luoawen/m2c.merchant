@@ -466,22 +466,10 @@ export default {
             }
           },
           formatter: function(a){
-            // let end_obj = []
-            // for(let i in a){
-            //   let obj = {name:'', datas:[]}
-            //   obj.name = a[i].time
-            //   obj.value = a[i]['sellMoney']
-            //   obj.ratio = a[i]['ratio']
-            //   end_obj.push(obj);
-            // }
-            // return (end_obj['name']
-            //   +'</br>金额:'+end_obj['value']
-            //   +'<br>环比:'+end_obj['ratio']
-            // );
-            //console.log(a[0].data.datas[1])
-            return (a[0].name
-              +'</br><i class="blueRadius"> </i>金额:'+a[0].data.value
-              +'<br><i class="yellowRadius"> </i>环比:'+ (a[0].data.datas[1]==0 ? '--': a[0].data.datas[0]+'%')
+            return ('<p>'+a[0].name
+              +'</br><i class="blueRadius"> </i>销售金额: '+a[0].data.value
+              +'<br><i class="yellowRadius"> </i>环比: '+ (a[0].data.datas[1]==0 ? '--': a[0].data.datas[0]+'%')
+              +'</p>'
             );
             
             //return (JSON.stringify(a)[0].name);
@@ -523,6 +511,8 @@ export default {
           {
             //name:'销售金额',
             type:'line',
+            symbol:'circle',
+            symbolSize: 8,
             //stack: '金额',
             label: {
               normal: {
@@ -611,7 +601,6 @@ export default {
   .home{padding:20px;}
   .el-row{margin-bottom:10px;}
   p.setUp{color: #667991;}
-  .dataInfo{z-index:2;}
   .dataTotal .box,.dataInfo .box,.echart .box{background:#fff;height:auto;border-radius:5px;text-align: center;padding-bottom:20px;}
   .dataTotal h5{text-align:left;background: #E6E8F2;font-size:16px;color: #667991;line-height:50px;padding:0 20px;
     div.icon{top:2px;}
@@ -641,7 +630,7 @@ export default {
   .box div.icon{text-align: left;top:2px;}
   .box div.icon div.tips p{text-align: left;padding:0;}
   .echart{top:-105px;}
-  a.more{color:#667991;font-size:12px; text-decoration:underline;}
+  a.more{color:#667991;font-size:12px; text-decoration:underline;position:absolute;z-index:2;}
   div.icon div.tips{padding:0 6px;}
   .echart .box div.icon div.tips p{position:static;}
   div.icon div.tips p{margin:0;}
@@ -665,5 +654,7 @@ export default {
 .height300 .el-table td{background:#fff;}
 .height300 .el-table{border-left:1px solid #E6E8F2;border-right:1px solid #E6E8F2;}
 .box .is-disabled{width:80px;height:25px;border: 1px solid #CCCCCC;border-radius: 3px;display:inline-block;line-height:24px;font-size:13px;padding:0;}
-#chartLine i{display:inline-block;width:10px;height:10px;background:#0086FF;border-radius:5px;margin-right:4px;}
+#chartLine i{display:inline-block;width:10px;height:10px;background:#F5BD23;border-radius:5px;margin-right:4px;}
+#chartLine i.blueRadius{background:#0086FF;}
+#chartLine p{padding:0px 10px;padding-top:5px; line-height:24px;}
 </style>
