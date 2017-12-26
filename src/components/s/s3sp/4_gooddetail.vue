@@ -304,42 +304,11 @@
 				goodsGuarantee:[],
 				countMode:'',
 				info:'',
-				goodsRecognized:[
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-				],
+				goodsRecognized:[],
 				imgWrap:false, //图片盒子显示隐藏
 				imgIndex:0, //大图
 				ulIndex:0, //小图
-				ulLength:2 //小图页数
+				ulLength:1 //小图页数
       }
     },
     methods: {
@@ -449,8 +418,8 @@
 					that.goodsSpecifications = result.content.goodsSpecifications
 					that.goodsSKUs = result.content.goodsSKUs
 					that.fileList = result.content.goodsMainImages
-					//that.goodsRecognized = result.content.goodsRecognized==undefined?[]:result.content.goodsRecognized
-					//that.ulLength = Math.ceil(that.goodsRecognized.length/8)
+					that.goodsRecognized = result.content.goodsRecognized==undefined?[]:result.content.goodsRecognized
+					that.ulLength = Math.ceil(that.goodsRecognized.length/8)
 					that.info=result.content.goodsDesc
 					that.goodsKeyWord = result.content.goodsKeyWord.join("/")
 					that.goodsGuarantee = result.content.goodsGuarantee
