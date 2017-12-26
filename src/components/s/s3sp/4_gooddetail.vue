@@ -402,12 +402,13 @@
 					isDelete:that.$route.query.from=='c'?'2':''
 				},
 				success: function (result) {
+					//console.log(result.content.goodsRecognized)
 					that.data = result.content
 					that.data.skuFlag = result.content.skuFlag.toString()
 					that.goodsSpecifications = result.content.goodsSpecifications
 					that.goodsSKUs = result.content.goodsSKUs
 					that.fileList = result.content.goodsMainImages
-					that.goodsRecognized = result.content.goodsRecognized
+					that.goodsRecognized = result.content.goodsRecognized==undefined?[]:result.content.goodsRecognized
 					that.info=result.content.goodsDesc
 					that.goodsKeyWord = result.content.goodsKeyWord.join("/")
 					that.goodsGuarantee = result.content.goodsGuarantee
