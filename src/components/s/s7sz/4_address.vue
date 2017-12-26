@@ -354,7 +354,7 @@
         let that = this
         that.$.ajax({
           type: 'get',
-          url: this.localbase + 'm2c.scm/goods/guarantee/list',
+          url: this.localbase + 'm2c.scm/web/goods/guarantee/list',
           data:{
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
           },
@@ -391,7 +391,7 @@
         const that = this
         that.$.ajax({
           type: 'get',
-          url: this.localbase + 'm2c.scm/after/sale/address/id',
+          url: this.localbase + 'm2c.scm/web/after/sale/address/id',
           success: function (res) {
             console.log('获取的id', res)
             that.addressId = res.content
@@ -403,7 +403,7 @@
         const that = this
         that.$.ajax({
           type: 'get',
-          url: this.localbase + 'm2c.scm/after/sale/address',
+          url: this.localbase + 'm2c.scm/web/after/sale/address',
           data: {
             dealerId: that.dealerId
           },
@@ -507,7 +507,7 @@
         }
         that.$.ajax({
           type: 'post',
-          url: this.localbase + 'm2c.scm/after/sale/address',
+          url: this.localbase + 'm2c.scm/web/after/sale/address',
           data: {
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
             addressId: that.addressId,
@@ -608,7 +608,7 @@
         }
         that.$.ajax({
           type: 'put',
-          url: this.localbase + 'm2c.scm/after/sale/address',
+          url: this.localbase + 'm2c.scm/web/after/sale/address',
           data: {
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
             addressId: that.addressId,
