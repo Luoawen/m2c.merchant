@@ -1056,7 +1056,7 @@
         }
         that.$.ajax({
           type: that.addModify === 'add' ? 'post' : 'put',
-          url: that.localbase + 'm2c.scm/postage',
+          url: that.localbase + 'm2c.scm/web/postage',
           data: {
             token: sessionStorage.getItem('mToken'),
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
@@ -1095,7 +1095,7 @@
         that.addModify = 'add'
         that.$.ajax({
           type: 'get',
-          url: that.localbase + 'm2c.scm/postage/id',
+          url: that.localbase + 'm2c.scm/web/postage/id',
           data: {
             token: sessionStorage.getItem('mToken')
           },
@@ -1108,7 +1108,7 @@
         that.addModify = 'modify'
         that.$.ajax({
           type: 'get',
-          url: that.localbase + 'm2c.scm/postage/' + that.$route.query.modelId,
+          url: that.localbase + 'm2c.scm/web/postage/' + that.$route.query.modelId,
           data: {
             token: sessionStorage.getItem('mToken')
           },

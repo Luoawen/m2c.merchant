@@ -84,7 +84,7 @@ export default {
       let that = this
       that.$.ajax({
         method: 'delete',
-        url: this.localbase + 'm2c.scm/postage?dealerId=' + that.dealerId +'&modelId=' + n,
+        url: this.localbase + 'm2c.scm/web/postage?dealerId=' + that.dealerId +'&modelId=' + n,
         data: {
           token: sessionStorage.getItem('mToken')
         },
@@ -103,7 +103,7 @@ export default {
       const that = this
       that.$.ajax({
         method: 'get',
-        url: this.localbase + 'm2c.scm/postage',
+        url: this.localbase + 'm2c.scm/web/postage',
         data: {
           token: sessionStorage.getItem('mToken'),
           dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
