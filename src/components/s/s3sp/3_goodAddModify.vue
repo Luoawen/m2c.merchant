@@ -1317,7 +1317,7 @@
       // 获取规格
       that.$.ajax({
         type: 'get',
-        url: that.localbase + 'm2c.scm/stantard',
+        url: that.localbase + 'm2c.scm/web/stantard',
         data:{
           token: sessionStorage.getItem('mToken')
         },
@@ -1328,7 +1328,7 @@
       // 获取商家结算模式
       that.$.ajax({
         type: 'get',
-        url: that.localbase + 'm2c.scm/dealer/sys/' + JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+        url: that.localbase + 'm2c.scm/dealer/sys/web/' + JSON.parse(sessionStorage.getItem('mUser')).dealerId,
         data:{
           token: sessionStorage.getItem('mToken')
         },
@@ -1339,7 +1339,7 @@
       // 获取商品品牌
       that.$.ajax({
         type: 'get',
-        url: that.localbase + 'm2c.scm/brand/choice',
+        url: that.localbase + 'm2c.scm/web/brand/choice',
         data:{
           token: sessionStorage.getItem('mToken'),
           dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
@@ -1351,7 +1351,7 @@
       // 获取计量单位
       that.$.ajax({
         type: 'get',
-        url: that.localbase + 'm2c.scm/unit',
+        url: that.localbase + 'm2c.scm/web/unit',
         data:{
           token: sessionStorage.getItem('mToken')
         },
@@ -1362,7 +1362,7 @@
       // 获取运费模板列表
       that.$.ajax({
         type: 'get',
-        url: that.localbase + 'm2c.scm/postage',
+        url: that.localbase + 'm2c.scm/web/postage',
         data:{
           token: sessionStorage.getItem('mToken'),
           dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
