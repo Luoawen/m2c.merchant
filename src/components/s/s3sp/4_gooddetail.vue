@@ -426,7 +426,7 @@
 			let that = this
 			that.$.ajax({
 				type: 'get',
-				url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId:that.localbase + 'm2c.scm/goods/approve/' + that.$route.query.goodsId,
+				url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/web/goods/' + that.$route.query.goodsId:that.localbase + 'm2c.scm/web/goods/approve/' + that.$route.query.goodsId,
 				//url:that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId,
 				data:{
 					token: sessionStorage.getItem('mToken')
@@ -487,7 +487,7 @@
     margin-top:-343px;
     margin-left:-335px;
     z-index: 999;
-		.ctrlImg{width:100%;height:70px;margin-top:15px;position: absolute;top:615px;left:0; 
+		.ctrlImg{width:100%;height:70px;margin-top:15px;position: absolute;top:615px;left:0;
 			a.prevImg,a.nextImg{display:inline-block;width:30px;height:70px;margin-right:5px;background:#fff;float:left;border-radius:5px;opacity:0.6;padding-left:10px;line-height: 70px;font-size:34px;font-family: "宋体";color:#999;text-decoration:none;transition: all .3s ease;}
 			a.nextImg{padding-left:6px;}
 			a.prevImg:hover,a.nextImg:hover{opacity:1; text-decoration:none; cursor:pointer;padding-left:10px;}
