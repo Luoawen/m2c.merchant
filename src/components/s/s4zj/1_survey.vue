@@ -212,7 +212,7 @@
         let that = this
         that.$.ajax({
           type: 'get',
-          url: this.base + 'm2c.scm/dealer/sys/dealerDeposit',
+          url: this.base + 'm2c.scm/dealer/sys/web/dealerDeposit',
           data: {
             token: sessionStorage.getItem('mToken'),
             dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
