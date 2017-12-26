@@ -883,11 +883,11 @@
               return
             }
             for (var k = 0; k < that.goodsSKUs.length; k++) {
-              that.goodsSKUs[k].marketPrice = parseFloat(that.goodsSKUs[k].marketPrice).toFixed()
-              that.goodsSKUs[k].photographPrice= parseFloat(that.goodsSKUs[k].photographPrice).toFixed()
+              that.goodsSKUs[k].marketPrice = parseFloat(that.goodsSKUs[k].marketPrice).toFixed(2)
+              that.goodsSKUs[k].photographPrice= parseFloat(that.goodsSKUs[k].photographPrice).toFixed(2)
               that.goodsSKUs[k].showStatus = that.goodsSKUs[k].show
               if (that.countMode == 1) {
-                that.goodsSKUs[k].supplyPrice = parseFloat(that.goodsSKUs[k].supplyPrice).toFixed()
+                that.goodsSKUs[k].supplyPrice = parseFloat(that.goodsSKUs[k].supplyPrice).toFixed(2)
               }
             }
             let a = {
