@@ -267,6 +267,7 @@ body {
     position: relative;
     box-sizing: border-box;
     .searcWrap{width:100%;height:auto;position:relative;}
+    .line{height:1px;margin-left:-25px;margin-right:-25px;background:#dfe4ed;position:absolute;width:100%;top:64px;}
   }
   .clear{
     clear: both;

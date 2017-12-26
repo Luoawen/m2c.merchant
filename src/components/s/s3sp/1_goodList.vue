@@ -1,5 +1,6 @@
 <template>
   <div class="content clear">
+    <div class="line"></div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane label="商品库" name="first">
         <div role="tabpanel" class="tab-pane fade in active" aria-labelledby="home-tab">
