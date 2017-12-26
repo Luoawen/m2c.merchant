@@ -290,9 +290,10 @@ export default {
         let that = this
         if (val != oldVal) {
           that.$nextTick(function () {
-            let month = val.slice(0,4).toString() + val.slice(5,7).toString()
-            console.log(val,month)
-            that.getDataList(month)
+            // let month = val.slice(0,4).toString() + val.slice(5,7).toString()
+            // console.log(val,month)
+            //that.month = month
+            that.getDataList()
           })
         } else {
           return false
@@ -548,19 +549,21 @@ export default {
       this.chartLine.setOption(option)
     },
     // 获取销售排行
-    getDataList(val){
+    getDataList(){
       let that = this
-      let date=new Date
-      let year=date.getFullYear()
-      let month=date.getMonth()+1
-      month =(month<10 ? "0"+month:month);
-      let mydate = (year.toString()+month.toString())
+      // let date=new Date
+      // let year=date.getFullYear()
+      // let month=date.getMonth()+1
+      // month =(month<10 ? "0"+month:month);
+      // let mydate = (year.toString()+month.toString())
+      //that.month = mydate
       that.$.ajax({
         method: 'get',
         url: that.base + 'm2c.scm/web/goods/sales/list/top5',
         data: {
           dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-          month:that.month==''?mydate:val
+          month:(that.month).slice(0,4).toString()+(that.month).slice(5,7).toString()
+          //val.slice(0,4).toString() + val.slice(5,7).toString()
         },
         success: function (result) {
           if(result.status === 200){
@@ -588,6 +591,13 @@ export default {
     this.getReportData()
     this.getReportDataList()
     this.getDataList()
+    let that = this
+    let date=new Date
+    let year=date.getFullYear()
+    let month=date.getMonth()+1
+    month =(month<10 ? "0"+month:month);
+    let mydate = (year.toString()+'-'+month.toString())
+    this.month = mydate
     // this.$nextTick(()=>{
     //   this.setEchart()
     // })
@@ -601,6 +611,7 @@ export default {
   .home{padding:20px;}
   .el-row{margin-bottom:10px;}
   p.setUp{color: #667991;}
+  .dataInfo{z-index:2;}
   .dataTotal .box,.dataInfo .box,.echart .box{background:#fff;height:auto;border-radius:5px;text-align: center;padding-bottom:20px;}
   .dataTotal h5{text-align:left;background: #E6E8F2;font-size:16px;color: #667991;line-height:50px;padding:0 20px;
     div.icon{top:2px;}

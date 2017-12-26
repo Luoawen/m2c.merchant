@@ -192,7 +192,7 @@
 								<a @click="next" class="next" v-if="imgIndex < goodsRecognized.length-1"></a>
 							</div>
 							<div class="ctrlImg">
-								<a @click="prevImg" class="prevImg" disabled='true'><</a>
+								<a @click="prevImg" class="prevImg" v-show="ulIndex > 0"><span></span></a>
 								<div class="ctrlImgUl">
 									<ul id="ctrlImgUl">
 										<li v-for="(file,index) in goodsRecognized" class="mr10 fl" :class="{'active':index==imgIndex}" @click="checkImg(index)">
@@ -200,9 +200,9 @@
 										</li>
 									</ul>
 								</div>
-								<a @click="nextImg" class="nextImg" disabled='true'>></a>
+								<a @click="nextImg" class="nextImg" v-show="ulIndex < ulLength-1"><span></span></a>
 							</div>
-							<a class="close" @click="imgWrap=!imgWrap"></a>
+							<a class="close" @click="imgWrapHide"></a>
             </div>
 						<div class="clear">
 							<span class="t_img fl" v-if="goodsRecognized.length>0" style="font-size:12px;color:#999;display:block;margin:10px 0;margin-left:120px;">用于客户端拍摄广告图识别商品</span>
@@ -337,7 +337,9 @@
 					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
 				],
 				imgWrap:false, //图片盒子显示隐藏
-        imgIndex:0,
+				imgIndex:0, //大图
+				ulIndex:0, //小图
+				ulLength:2 //小图页数
       }
     },
     methods: {
@@ -354,43 +356,51 @@
         if(that.imgIndex > 0){
           that.imgIndex--
         }
-				let i = Math.ceil((that.imgIndex+1)/8)-1
-				document.getElementById('ctrlImgUl').style.marginLeft = -i*'592'+'px'
+				that.ulIndex = Math.ceil((that.imgIndex+1)/8)-1
+				document.getElementById('ctrlImgUl').style.marginLeft = -that.ulIndex*'592'+'px'
       },
       next(){
         let that = this
         if(that.imgIndex < that.goodsRecognized.length-1){
           that.imgIndex++
         }
-				let i = Math.ceil((that.imgIndex+1)/8)-1
-				document.getElementById('ctrlImgUl').style.marginLeft = -i*'592'+'px'
+				that.ulIndex = Math.ceil((that.imgIndex+1)/8)-1
+				document.getElementById('ctrlImgUl').style.marginLeft = -that.ulIndex*'592'+'px'
 			},
 			// 小图
 			nextImg(){
 				let that = this
-				let l = Math.ceil(that.goodsRecognized.length/8)
-				let i = Math.ceil((that.imgIndex+1)/8)-1
-				if(i<l-1)
-				i++
-				console.log(i)
-				document.getElementById('ctrlImgUl').style.marginLeft = -i*'592'+'px'
-				that.imgIndex = i*8
+				that.ulLength = Math.ceil(that.goodsRecognized.length/8)
+				that.ulIndex = Math.ceil((that.imgIndex+1)/8)-1
+				if(that.ulIndex<that.ulLength-1)
+				that.ulIndex++
+				console.log(that.ulIndex)
+				document.getElementById('ctrlImgUl').style.marginLeft = -that.ulIndex*'592'+'px'
+				that.imgIndex = that.ulIndex*8
 				console.log(that.imgIndex)
 			},
 			prevImg(){
 				let that = this
-				let l = Math.ceil(that.goodsRecognized.length/8)
-				let i = Math.ceil((that.imgIndex+1)/8)-1
-				if(i>0)
-				i--
-				console.log(i)
-				document.getElementById('ctrlImgUl').style.marginLeft = -i*'592'+'px'
-				that.imgIndex = i*8
+				that.ulLength = Math.ceil(that.goodsRecognized.length/8)
+				that.ulIndex = Math.ceil((that.imgIndex+1)/8)-1
+				if(that.ulIndex>0)
+				that.ulIndex--
+				console.log(that.ulIndex)
+				document.getElementById('ctrlImgUl').style.marginLeft = -that.ulIndex*'592'+'px'
+				that.imgIndex = that.ulIndex*8
 				console.log(that.imgIndex)
 			},
 			checkImg(index){
 				let that = this
 				that.imgIndex = index
+			},
+			// 关闭弹层
+			imgWrapHide(){
+				let that = this
+				that.imgIndex = 0
+				that.ulIndex = 0
+				that.imgWrap = false
+				document.getElementById('ctrlImgUl').style.marginLeft = '0px'
 			},
 			goBack(){
         if(this.$route.query.from=='a'){
@@ -440,6 +450,7 @@
 					that.goodsSKUs = result.content.goodsSKUs
 					that.fileList = result.content.goodsMainImages
 					//that.goodsRecognized = result.content.goodsRecognized==undefined?[]:result.content.goodsRecognized
+					//that.ulLength = Math.ceil(that.goodsRecognized.length/8)
 					that.info=result.content.goodsDesc
 					that.goodsKeyWord = result.content.goodsKeyWord.join("/")
 					that.goodsGuarantee = result.content.goodsGuarantee
@@ -450,6 +461,7 @@
   }
 </script>
 <style lang="scss" scoped>
+	
 	.hptczp{
 		width: 100%;
 		height: 100%;
@@ -462,6 +474,12 @@
 		opacity: 0.5;
 	}
   .imgWrap{
+		//禁用选中
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+		-khtml-user-select: none;
+		user-select: none;
     width:670px;
     height:685px;
     // background: #ffffff;
@@ -472,11 +490,13 @@
     margin-left:-335px;
     z-index: 999;
 		.ctrlImg{width:100%;height:70px;margin-top:15px;position: absolute;top:615px;left:0;
-			a.prevImg,a.nextImg{display:inline-block;width:30px;height:70px;margin-right:5px;background:#fff;float:left;border-radius:5px;opacity:0.6;padding-left:10px;line-height: 70px;font-size:34px;font-family: "宋体";color:#999;text-decoration:none;transition: all .3s ease;}
-			a.nextImg{padding-left:6px;}
+			a.prevImg,a.nextImg{display:inline-block;width:30px;height:70px;margin-right:5px;background:#fff;float:left;border-radius:5px;opacity:0.6;padding-left:10px;line-height: 84px;transition: all .3s ease;position:absolute;top:0;left:0;}
+			a.prevImg span,a.nextImg span{display: inline-block;width:10px;height:24px;background:url(../../../assets/images/nextImg.png) no-repeat 0 0;}
+			a.prevImg span{background:url(../../../assets/images/prevImg.png) no-repeat 0 0;}
+			a.nextImg{padding-left:6px;left:640px;}
 			a.prevImg:hover,a.nextImg:hover{opacity:1; text-decoration:none; cursor:pointer;padding-left:10px;}
 			a.prevImg:hover{padding-left:6px;}
-			.ctrlImgUl{width:600px;height:70px;border-radius:5px;background:#fff;padding:5px 10px;margin-right:5px;float:left;overflow: hidden;
+			.ctrlImgUl{position:absolute;left:35px;width:600px;height:70px;border-radius:5px;background:#fff;padding:5px 10px;margin-right:5px;float:left;overflow: hidden;
 				ul{width:auto; list-style:none;transition: all .3s ease;
 					li{width:60px;height:60px;margin-right:14px;
 						img{width:100%;height:100%;}
@@ -827,6 +847,4 @@
 .border_b{
   border-bottom: 1px solid #e5e5e5;
 }
-
-
 </style>
