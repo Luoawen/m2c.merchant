@@ -30,7 +30,7 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="发行量" class="ml50">
-                <el-input  v-model="couponParams.total_num" :maxlength="5" @blur="formValidator(2)">
+                <el-input  v-model="couponParams.total_num" :maxlength="5" maxlength placeholder="最大100000张" @blur="formValidator(2)">
                   <i slot="suffix" class="el-input__icon fontstyle">张</i>
                 </el-input>
               </el-form-item>
@@ -670,9 +670,13 @@ export default {
         if (_this.couponParams.total_num == '') {
           _this.couponParams.total_num = 0
         }
+        if(_this.couponParams.total_num > 100000){
+          _this.warning('最多发行100000张')
+          return false
+        }
         if (!/^[0-9]{1,5}$/.test(_this.couponParams.total_num)) {
           _this.couponParams.total_num = 0
-          _this.warning('优惠券数量最多5位正整数，填0为不限制数量')
+          _this.warning('优惠券数量最多100000，填0为不限制数量')
           return false
         }
       }
