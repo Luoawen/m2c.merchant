@@ -360,7 +360,7 @@
       reply () {
         let that = this
         that.$.ajax({
-          url: that.base + 'm2c.scm/goods/comment/reply',
+          url: that.base + 'm2c.scm/web/goods/comment/reply',
           type: 'put',
           cache: false,
           pagination: true,
@@ -391,7 +391,7 @@
         }
         that.is_Success = false
         that.$.ajax({
-          url: that.base + 'm2c.scm/goods/comment',
+          url: that.base + 'm2c.scm/web/goods/comment',
           cache: false,
           pagination: true,
           data: {
