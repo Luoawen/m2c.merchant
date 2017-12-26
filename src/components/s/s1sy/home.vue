@@ -269,7 +269,8 @@ export default {
       reportDataList:[], // 7日销售数值
       reportRatioList:[], // 7日销售环比
       month:'', // 搜索排行榜月份
-      money:{} // 待结算金额，可用金额
+      money:{}, // 待结算金额，可用金额
+      datas:[]
     }
   },
   computed: {
@@ -420,7 +421,14 @@ export default {
         success: function (result) {
           if(result.status === 200){
             //that.reportDataList = result.content
-            that.setEchart(result.content)
+            that.datas = result.content
+            for(let i=0;i<that.datas.length;i++){
+              that.xAxis.push(that.datas[i].time)
+              that.reportDataList.push(that.datas[i].sellMoney)
+              that.reportRatioList.push(that.datas[i].ratioFlag==0?'--':that.datas[i].ratio)
+            }
+            // that.setEchart(result.content)
+            that.setEchart()
           }else{
             that.$message({
               type: 'info',
@@ -430,17 +438,23 @@ export default {
         }
       })
     },
+    analysis(data){
+      var end_obj = []
+      for(let i in data){
+        var obj = {name:'', datas:[]}
+        obj.name = data[i].time
+        obj.value = data[i]['sellMoney']
+        obj.datas[0] = data[i]['ratio']
+        end_obj.push(obj);
+      }
+      return end_obj
+    },
     setEchart(data){
       // 引入 ECharts 主模块
       let that = this
-      for(let i=0;i<data.length;i++){
-        that.xAxis.push(data[i].time)
-        that.reportDataList.push(data[i].sellMoney)
-        that.reportRatioList.push(data[i].ratioFlag==0?'--':data[i].ratio)
-      }
       let echarts = require('echarts');
       this.chartLine = echarts.init(document.getElementById('chartLine'))
-      this.chartLine.setOption({
+      let option ={
         tooltip : {
           trigger: 'axis',
           axisPointer: {
@@ -448,7 +462,27 @@ export default {
             label: {
               //backgroundColor: '#0086FF'
             }
-          }
+          },
+          formatter: function(a){
+            let end_obj = []
+            for(let i in a){
+              let obj = {name:'', datas:[]}
+              obj.name = a[i].time
+              obj.value = a[i]['sellMoney']
+              obj.ratio = a[i]['ratio']
+              end_obj.push(obj);
+            }
+            // return (end_obj['name']
+            //   +'</br>金额:'+end_obj['value']
+            //   +'<br>环比:'+end_obj['ratio']
+            // );
+            return (a[0].name
+              +'</br>金额:'+a[0].data.value
+              +'<br>环比:'+a[0].data.datas
+            );
+            console.log(a[0].data.value)
+            //return (JSON.stringify(a)[0].name);
+          }, 
         },
         itemStyle:{
             normal:{
@@ -476,33 +510,40 @@ export default {
         ],
         yAxis : [
           {
-            type : 'value'
+            type : 'value',
+            boundaryGap : false,
+            min: 0,
+            data : that.reportDataList
           }
         ],
         series : [
           {
-            name:'销售金额',
+            //name:'销售金额',
             type:'line',
-            stack: '金额',
+            //stack: '金额',
+            label: {
+              normal: {
+                show: true,
+                position: 'top'
+              }
+            },
             areaStyle: {normal: {
               color:'#0086FF'
             }},
-            data:that.reportDataList
+            data:[],
           },
-          {
-            name:'环比',
-            type:'line',
-            stack: '金额',
-            areaStyle: {normal: {
-              color:'#F5BD23',
-              lineStyle:{
-                color:'#F5BD23',
-              }
-            }},
-            data:that.reportRatioList
-          }
         ]
-      })
+      }
+      let datas = that.datas;
+      var name = [];
+      for(let i in datas){
+        name.push(datas[i].time);
+      }
+      option.series[0].data = that.analysis(that.datas);
+      //option.tooltip.formatter = that.analysis(that.datas)
+      option.xAxis.data = name;
+      console.log(option.series[0].data)
+      this.chartLine.setOption(option)
     },
     // 获取销售排行
     getDataList(val){
@@ -545,7 +586,9 @@ export default {
     this.getReportData()
     this.getReportDataList()
     this.getDataList()
-
+    // this.$nextTick(()=>{
+    //   this.setEchart()
+    // })
     console.log(this.month)
   }
 }
