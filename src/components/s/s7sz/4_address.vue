@@ -718,6 +718,9 @@
         display: inline-block;
         line-height: 50px;
       }
+      span.fr{
+        cursor: pointer;
+      }
     }
     .agreetc_body{
       padding-left: 20px;
