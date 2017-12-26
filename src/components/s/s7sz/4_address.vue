@@ -101,7 +101,7 @@
         <el-col :span="3" class="alginRight"><i class="red">*</i>标题</el-col>
         <el-col :span="9">
           <el-input v-model="guarantee.guaranteeName" placeholder="输入标题" :maxlength="10"></el-input>
-          <i class="red redTip" v-if="error1" style="padding-top:0;margin-top:-4px;position:absolute;">商品保障名不能为空</i>
+          <i class="red redTip" v-if="error1" style="padding-top:0;margin-top:-4px;position:absolute;">请输入标题</i>
         </el-col>
       </el-row>
       <el-row :gutter="20">
