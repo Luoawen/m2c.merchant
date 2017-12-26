@@ -445,6 +445,7 @@ export default {
         obj.name = data[i].time
         obj.value = data[i]['sellMoney']
         obj.datas[0] = data[i]['ratio']
+        obj.datas[1] = data[i]['ratioFlag']
         end_obj.push(obj);
       }
       return end_obj
@@ -476,11 +477,12 @@ export default {
             //   +'</br>金额:'+end_obj['value']
             //   +'<br>环比:'+end_obj['ratio']
             // );
+            //console.log(a[0].data.datas[1])
             return (a[0].name
-              +'</br>金额:'+a[0].data.value
-              +'<br>环比:'+a[0].data.datas
+              +'</br><i class="blueRadius"> </i>金额:'+a[0].data.value
+              +'<br><i class="yellowRadius"> </i>环比:'+ (a[0].data.datas[1]==0 ? '--': a[0].data.datas[0]+'%')
             );
-            console.log(a[0].data.value)
+            
             //return (JSON.stringify(a)[0].name);
           }, 
         },
@@ -595,6 +597,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   a:hover{ text-decoration: none;}
+  
   .home{padding:20px;}
   .el-row{margin-bottom:10px;}
   p.setUp{color: #667991;}
@@ -651,4 +654,5 @@ export default {
 .height300 .el-table td{background:#fff;}
 .height300 .el-table{border-left:1px solid #E6E8F2;border-right:1px solid #E6E8F2;}
 .box .is-disabled{width:80px;height:25px;border: 1px solid #CCCCCC;border-radius: 3px;display:inline-block;line-height:24px;font-size:13px;padding:0;}
+#chartLine i{display:inline-block;width:10px;height:10px;background:#0086FF;border-radius:5px;margin-right:4px;}
 </style>
