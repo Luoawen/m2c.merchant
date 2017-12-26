@@ -418,7 +418,14 @@
 					that.goodsSpecifications = result.content.goodsSpecifications
 					that.goodsSKUs = result.content.goodsSKUs
 					that.fileList = result.content.goodsMainImages
-					that.goodsRecognized = result.content.goodsRecognized==undefined?[]:result.content.goodsRecognized
+					//that.goodsRecognized = result.content.goodsRecognized==undefined?[]:result.content.goodsRecognized
+					if(result.content.goodsRecognized==undefined){
+						that.goodsRecognized = []
+					}else{
+						for( let i=0;i<result.content.goodsRecognized.length;i++){
+							that.goodsRecognized.push(result.content.goodsRecognized[i].recognizedUrl)
+						}
+					}
 					that.ulLength = Math.ceil(that.goodsRecognized.length/8)
 					that.info=result.content.goodsDesc
 					that.goodsKeyWord = result.content.goodsKeyWord.join("/")

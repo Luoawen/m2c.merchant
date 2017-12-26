@@ -511,8 +511,8 @@ export default {
           {
             //name:'销售金额',
             type:'line',
-            symbol:'circle',
-            symbolSize: 8,
+            symbol:'circle',//拐点样式 circle|rectangle|triangle|diamond|emptyCircle|emptyRectangle|emptyTriangle|emptyDiamond|image://+图片
+            symbolSize: 8,//拐点大小
             //stack: '金额',
             label: {
               normal: {
