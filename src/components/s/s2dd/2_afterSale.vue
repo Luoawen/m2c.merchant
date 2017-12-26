@@ -194,7 +194,7 @@
         console.log("that.pageRows==" + that.pageRows + ";"+ that.currentPage);
         that.$.ajax({
           type: 'get',
-          url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselllist',
+          url: this.base + 'm2c.scm/dealerorderafter/web/dealerorderafterselllist',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,

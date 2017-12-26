@@ -526,7 +526,7 @@
         let that = this
         that.$.ajax({
           type: 'get',
-          url: this.base + 'm2c.scm/dealerorderafter/dealerorderafterselldetail',
+          url: this.base + 'm2c.scm/dealerorderafter/web/dealerorderafterselldetail',
           //url: 'http://localhost:8080/m2c.scm/dealerorderafter/dealerorderafterselldetail',
           data: {
             token: sessionStorage.getItem('mToken'),
@@ -599,7 +599,7 @@
         }
         that.$.ajax({
           type: 'get',
-          url: this.base + 'm2c.scm/order/logs/res',
+          url: this.base + 'm2c.scm/order/web/logs/res',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
@@ -649,7 +649,7 @@
         let that = this
         that.$.ajax({
           type: 'get',
-          url: this.base + 'm2c.scm/aftersellorder/manager/aftreselllogistics',
+          url: this.base + 'm2c.scm/aftersellorder/web/manager/aftreselllogistics',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
@@ -689,7 +689,7 @@
             let that = this
             that.$.ajax({
               type: 'PUT',
-              url: this.base + 'm2c.scm/order/dealer/agree-apply-sale',
+              url: this.base + 'm2c.scm/order/web/dealer/agree-apply-sale',
               //url: 'http://localhost:8080/m2c.scm/order/dealer/agree-apply-sale',
               data: {
                 token: sessionStorage.getItem('mToken'),
@@ -724,7 +724,7 @@
         }
         that.$.ajax({
           type: 'PUT',
-          url: this.base + 'm2c.scm/order/dealer/agree-apply-sale',
+          url: this.base + 'm2c.scm/order/web/dealer/agree-apply-sale',
           //url: 'http://localhost:8080/m2c.scm/order/dealer/agree-apply-sale',
           data: {
             token: sessionStorage.getItem('mToken'),
@@ -814,7 +814,7 @@
         }
         that.$.ajax({
             type: 'PUT',
-            url: this.base + 'm2c.scm/order/dealer/reject-apply-sale',
+            url: this.base + 'm2c.scm/order/web/dealer/reject-apply-sale',
             //url: 'http://localhost:8080/m2c.scm/order/dealer/reject-apply-sale',
             data: {
               token: sessionStorage.getItem('mToken'),
@@ -844,7 +844,7 @@
           let that = this
           that.$.ajax({
             type: 'PUT',
-            url: this.base + 'm2c.scm/order/aftersale/dealer/agree-rt-money',
+            url: this.base + 'm2c.scm/order/web/aftersale/dealer/agree-rt-money',
             //url: 'http://localhost:8080/m2c.scm/order/aftersale/dealer/agree-rt-money',
             data: {
               token: sessionStorage.getItem('mToken'),
@@ -866,7 +866,7 @@
         let that = this
         that.$.ajax({
           type: 'GET',
-          url: this.base + 'm2c.scm/dealerorderafter/cost/freight',
+          url: this.base + 'm2c.scm/dealerorderafter/web/cost/freight',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
@@ -886,7 +886,7 @@
         let that = this
         that.$.ajax({
           type: 'PUT',
-          url: this.base + 'm2c.scm/order/aftersale/dealer-rev',
+          url: this.base + 'm2c.scm/order/web/aftersale/dealer-rev',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
@@ -907,7 +907,7 @@
         that.dialogVisible = true
         that.$.ajax({
           type: 'GET',
-          url: this.base + 'm2c.scm/order/dealer/express',
+          url: this.base + 'm2c.scm/order/web/dealer/express',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
@@ -949,7 +949,7 @@
         }
         that.$.ajax({
           type: 'PUT',
-          url: this.base + 'm2c.scm/order/aftersale/dealer/ship',
+          url: this.base + 'm2c.scm/order/web/aftersale/dealer/ship',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
