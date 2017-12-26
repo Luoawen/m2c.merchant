@@ -24,10 +24,20 @@ const record = r => require.ensure([], () => r(require('@/components/s/s4zj/3_re
 const countQuery = r => require.ensure([], () => r(require('@/components/s/s4zj/4_countQuery')), 's')
 const cash = r => require.ensure([], () => r(require('@/components/s/s4zj/5_cash')), 's')
 // s5右侧内容
+const tools = r => require.ensure([], () => r(require('@/components/s/s5yx/tools')), 's')
+    // s5 满减功能
 const marketing = r => require.ensure([], () => r(require('@/components/s/s5yx/marketing')), 's')
 const fullCut = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCut')), 's')
 const fullCutDetail = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCutDetail')), 's')
 const fullCutModify = r => require.ensure([], () => r(require('@/components/s/s5yx/fullCutModify')), 's')
+    //  s5 优惠券功能
+const coupon_cash_dealer = r => require.ensure([], () => r(require('@/components/s/s5yx/coupon_cash_dealer')), 's')
+const coupon_detail_dealer = r => require.ensure([], () => r(require('@/components/s/s5yx/coupon_detail_dealer')), 's')
+const coupon_discount_dealer = r => require.ensure([], () => r(require('@/components/s/s5yx/coupon_discount_dealer')), 's')
+const coupon_list = r => require.ensure([], () => r(require('@/components/s/s5yx/coupon_list')), 's')
+const coupon_modify_dealer = r => require.ensure([], () => r(require('@/components/s/s5yx/coupon_modify_dealer')), 's')
+const couponShare = r => require.ensure([], () => r(require('@/components/s/s5yx/couponShare')), 's')
+const couponShareRecord = r => require.ensure([], () => r(require('@/components/s/s5yx/couponShareRecord')), 's')
 // s6右侧内容
 const data = r => require.ensure([], () => r(require('@/components/s/s6sj/data')), 's')
 // s7右侧内容
@@ -143,10 +153,58 @@ export default new Router({
           meta: {title: '提现申请',bread: '资金概况>提现申请', pathR:'/s/survey'}
         },
         {
+          path: 'marketingTools',
+          name: 'marketingTools',
+          component: tools,
+          meta: {title: '工具'}
+        },
+        {
+          path: 'coupon_cash_dealer',
+          name: 'coupon_cash_dealer',
+          component: coupon_cash_dealer,
+          meta: {title: '代金券'}
+        },
+        {
+          path: 'coupon_detail_dealer',
+          name: 'coupon_detail_dealer',
+          component: coupon_detail_dealer,
+          meta: {title: '优惠券详情'}
+        },
+        {
+          path: 'coupon_discount_dealer',
+          name: 'coupon_discount_dealer',
+          component: coupon_discount_dealer,
+          meta: {title: '折扣券'}
+        },
+        {
+          path: 'coupon_list',
+          name: 'coupon_list',
+          component: coupon_list,
+          meta: {title: '优惠券列表'}
+        },
+        {
+          path: 'coupon_modify_dealer',
+          name: 'coupon_modify_dealer',
+          component: coupon_modify_dealer,
+          meta: {title: '修改代金券'}
+        },
+        {
+          path: 'couponShare',
+          name: 'couponShare',
+          component: couponShare,
+          meta: {title: '发放代金券'}
+        },
+        {
+          path: 'couponShareRecord',
+          name: 'couponShareRecord',
+          component: couponShareRecord,
+          meta: {title: '代金券发放记录'}
+        },
+        {
           path: 'marketing',
           name: 'marketing',
           component: marketing,
-          meta: {title: '工具'}
+          meta: {title: '满减列表'}
         },
         {
           path: 'fullCut',

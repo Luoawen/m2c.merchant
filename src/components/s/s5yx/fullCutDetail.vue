@@ -150,7 +150,7 @@
       let that = this
       that.$.ajax({
 //        url: 'http://localhost:8080/m2c.market/fullcut/detail/' + sessionStorage.getItem('full_cut_id'),
-        url: that.base + 'm2c.market/fullcut/detail/' + sessionStorage.getItem('full_cut_id'),
+        url: that.base + 'm2c.market/web/fullcut/detail/' + sessionStorage.getItem('full_cut_id'),
         data: {
           token: sessionStorage.getItem('access_token'),
           isEncry: false

@@ -27,7 +27,6 @@
               <el-button type="primary" size="medium" @click="getFullCutList()" class="btn-search">搜索</el-button>
            </el-col>
         </el-row>
-
     </div>
          <div class="good_info" style="margin-top: 20px;">
             <el-table
@@ -189,7 +188,7 @@
         that.modalShadow= false
               that.$.ajax({
                 type: 'post',
-                url: that.base +'m2c.market/fullcut/stop/' + that.deleteRow.fullCutId,
+                url: that.base +'m2c.market/web/fullcut/stop/' + that.deleteRow.fullCutId,
                 data: {
                   // token: sessionStorage.getItem('mToken')
                   token:sessionStorage.getItem('access_token')
@@ -309,7 +308,7 @@
         this.$("[data-toggle='popover']").popover('hide')
        that.$.ajax({
          type:'get',
-         url: that.base + 'm2c.market/fullcut/page',
+         url: that.base + 'm2c.market/web/fullcut/page',
         data: {
             token: sessionStorage.getItem('access_token'),
             full_cut_no:that.search_params.full_cut_no,
@@ -366,7 +365,7 @@
     top: 25px;
     border-radius: 5px;
   }
-    .blueBtn,
+  .blueBtn,
   .defultBtn {
     width: 80px;
     height: 30px;

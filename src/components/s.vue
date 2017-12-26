@@ -44,7 +44,7 @@
 			</div>
       <div class="public_nav" @click="slide" ><i class="nav_marketing"></i>营销</div>
       <div class="content_container">
-				<div path='/s/marketing' class="content_s">工具</div>
+				<div path='/s/marketingTools' class="content_s">工具</div>
 			</div>
       <!-- <div class="public_nav" path='/s/data'><i class="nav_data"></i>数据</div> -->
       <div class="public_nav" @click="slide"><i class="nav_setting"></i>设置</div>
