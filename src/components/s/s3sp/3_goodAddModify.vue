@@ -87,14 +87,14 @@
               <el-row :gutter="10" style="width:100%;">
                 <template v-for="(guarantee,index) in goodsGuaranteeList" v-if="guarantee.isDefault===1">
                   <el-col :span="5">
-                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
+                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId" :title="guarantee.guaranteeName+' '+guarantee.guaranteeDesc">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
                   </el-col>
                 </template>
               </el-row>
               <el-row :gutter="10" style="width:100%;margin-left:0;" v-if="goodsGuaranteeList.length>4">
                 <template v-for="(guarantee,index) in goodsGuaranteeList" v-if="guarantee.isDefault===0">
                   <el-col :span="10">
-                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId" class="ellipsis" style="width:100%;">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
+                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId" class="ellipsis" style="width:100%;" :title="guarantee.guaranteeName+' '+guarantee.guaranteeDesc">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
                   </el-col>
                 </template>
               </el-row>

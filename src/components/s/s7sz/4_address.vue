@@ -304,6 +304,7 @@
               }else{
                 that.getGuarantee()
                 that.topBoxShow = false
+                that.guarantee = {}
               }
             }else{
               that.$message({
