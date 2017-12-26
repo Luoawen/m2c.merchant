@@ -398,7 +398,8 @@
 				url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId:that.localbase + 'm2c.scm/goods/approve/' + that.$route.query.goodsId,
 				//url:that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId,
 				data:{
-					token: sessionStorage.getItem('mToken')
+					token: sessionStorage.getItem('mToken'),
+					isDelete:that.$route.query.from=='c'?'2':''
 				},
 				success: function (result) {
 					that.data = result.content
@@ -417,23 +418,6 @@
   }
 </script>
 <style lang="scss" scoped>
-	.toggle-enter-active{
-    transition:all .5s ease;
-    height:px2rem(180);
-  }
-  .toggle-leave-active{
-    transition:all .5s ease;
-    height:0;
-    opacity: 0;
-  }
-  .toggle-leave{
-    opacity: 1;
-    height:px2rem(180);
-  }
-  .toggle-enter{
-    opacity:0;
-    height: 0;
-  }
 	.hptczp{
 		width: 100%;
 		height: 100%;
