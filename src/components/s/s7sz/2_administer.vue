@@ -404,7 +404,7 @@
           if(to=='a'){
             that.goodInfoShow = true
             that.$.ajax({
-              url: that.localbase + 'm2c.scm/brand/' + row.brandId,
+              url: that.localbase + 'm2c.scm/web/brand/' + row.brandId,
               success: function (result) {
                 that.goodInfo = result.content
               }
@@ -412,7 +412,7 @@
           }else{
             that.goodInfoShow = true
             that.$.ajax({
-              url: that.localbase + 'm2c.scm/brand/approve/' + row.approveId,
+              url: that.localbase + 'm2c.scm/web/brand/approve/' + row.approveId,
               success: function (result) {
                 that.goodInfo = result.content
                 console.warn(that.goodInfo)
@@ -427,7 +427,7 @@
             that.changeGoodShow = true
             // let row = this.$('#table').bootstrapTable('getSelections')[0]
             that.$.ajax({
-              url: that.localbase + 'm2c.scm/brand/' + row.brandId,
+              url: that.localbase + 'm2c.scm/web/brand/' + row.brandId,
               success: function (result) {
                 that.add_modify_params = result.content
                 /* 初始化图片 */
@@ -443,7 +443,7 @@
             that.changeGoodShow = true
             // let row = this.$('#table').bootstrapTable('getSelections')[0]
             that.$.ajax({
-              url: that.localbase + 'm2c.scm/brand/approve/' + row.approveId,
+              url: that.localbase + 'm2c.scm/web/brand/approve/' + row.approveId,
               success: function (result) {
                 that.add_modify_params = result.content
                 /* 初始化图片 */
@@ -501,7 +501,7 @@
         that.city_show = false
         that.$.ajax({
           type: 'get',
-          url: that.localbase + 'm2c.scm/brand/approve/id',
+          url: that.localbase + 'm2c.scm/web/brand/approve/id',
           data: {
             token: sessionStorage.getItem('mToken')
           },
@@ -618,7 +618,7 @@
           }
           that.$.ajax({
             type: that.handle_toggle === 'add' ? 'post' : that.activeName == 'first' ? 'post' : 'put',
-            url: that.handle_toggle === 'add' ? (that.localbase + 'm2c.scm/brand/approve') : that.activeName == 'first' ? that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.brandId : that.localbase + 'm2c.scm/brand/approve/' + that.add_modify_params.approveId,
+            url: that.handle_toggle === 'add' ? (that.localbase + 'm2c.scm/web/brand/approve') : that.activeName == 'first' ? that.localbase + 'm2c.scm/web/brand/approve/' + that.add_modify_params.brandId : that.localbase + 'm2c.scm/web/brand/approve/' + that.add_modify_params.approveId,
             // data: Object.assign({}, that.add_modify_params, that.touxiang_change ? {icon: that.add_modify_params_imgurl} : {}, {
             data: Object.assign({
               token: sessionStorage.getItem('mToken'),
@@ -649,7 +649,7 @@
         // that.reset_add_modify_params_bind()
         that.$.ajax({
           type: 'delete',
-          url: that.localbase + 'm2c.scm/brand/approve/' + that.deleteApproveId,
+          url: that.localbase + 'm2c.scm/web/brand/approve/' + that.deleteApproveId,
           data: {
             token: sessionStorage.getItem('mToken')
           },
@@ -670,7 +670,7 @@
         // that.reset_add_modify_params_bind()
         that.$.ajax({
           type: 'delete',
-          url: that.localbase + 'm2c.scm/brand/' + that.delete_params.brandId,
+          url: that.localbase + 'm2c.scm/web/brand/' + that.delete_params.brandId,
           data: {
             token: sessionStorage.getItem('mToken')
           },
@@ -714,7 +714,7 @@
         }
         that.$.ajax({
           type: 'get',
-          url: that.base + 'm2c.scm/brand',
+          url: that.base + 'm2c.scm/web/brand',
           data: {
             token: sessionStorage.getItem('mToken'),
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
@@ -743,7 +743,7 @@
         }
         that.$.ajax({
           type: 'get',
-          url: that.base + 'm2c.scm/brand/approve',
+          url: that.base + 'm2c.scm/web/brand/approve',
           data: {
             token: sessionStorage.getItem('mToken'),
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
