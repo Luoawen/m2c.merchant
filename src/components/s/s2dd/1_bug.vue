@@ -182,7 +182,7 @@
                     <div class="">
                       {{goodsItem.afOrderType==0?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==1?'待商家同意':goodsItem.afStatus==4?'待顾客寄回商品':(goodsItem.afStatus==5||goodsItem.afStatus==6)?'待商家发货':goodsItem.afStatus==7?'待顾客收货':goodsItem.afStatus>=8?'售后已完成':'--'):goodsItem.afOrderType==1?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==0?'待商家同意':goodsItem.afStatus==4?'待顾客寄回商品':(goodsItem.afStatus==5||goodsItem.afStatus==6)?'待商家确认退款':goodsItem.afStatus>=9?'售后已完成':'--'):goodsItem.afOrderType==2?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==2?'待商家同意':goodsItem.afStatus==4?'待商家确认退款':goodsItem.afStatus>=9?'售后已完成':'--'):'--'}}
                       </div>
-                    <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.backMoney, item.orderFreight, item.dealerOrderId, goodsItem.skuId)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
+                    <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.strBackMoney, item.strOrderFreight, item.dealerOrderId, goodsItem.skuId)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
                     <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" v-show="goodsItem.afStatus>=0 && goodsItem.afStatus<=2">拒绝</button></div>
                   </div>
                   <div v-show="goodsItem.afStatus==3">
@@ -286,13 +286,13 @@
             <span style="color: red;">*</span>
             运费退款
           </span>
-          <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderFreight - hasRtFreight)" :placeholder="'最多可退'+(orderFreight - hasRtFreight) +'元'" @change="pRtFreightChange"></el-input></span>
+          <span> <el-input v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderFreight - hasRtFreight)" :placeholder="'最多可退'+(orderFreight - hasRtFreight).toFixed(2) +'元'" @change="pRtFreightChange"></el-input></span>
           <span>元</span>
           <P class="pl10">运费退款不能大于订单实际剩余运费</P>
         </div>
         <div class="linh40 pl10">
           <span class="wid80">售后金额</span>
-          <span>{{(backMoney)}}元</span>
+          <span>{{(backMoney).toFixed(2)}}元</span>
         </div>
         <div class="linh40 pl10">
           <span class=" wid80">售后总额</span>
@@ -395,8 +395,8 @@
       that.afStatus=_st;
       that.saleAfterNo = afterNo;
       that.Agreeshow = true;
-      that.backMoney = backMoney;
-      that.orderFreight = ordFreight ;
+      that.backMoney = parseFloat(backMoney);
+      that.orderFreight = parseFloat(ordFreight);
       console.log(afType + ":===orderStatus ==" + _orderStatus);
       if (afType == 2 && _orderStatus == 1 && that.orderFreight>0) {
         that.getHasReturnFreight(dOrderId, skuID);
@@ -419,7 +419,7 @@
         },
         success: function (result) {
           if (result.status === 200){
-            that.hasRtFreight = result.content.costFt;
+            that.hasRtFreight = result.content.strCostFt;
           }
         }
       })

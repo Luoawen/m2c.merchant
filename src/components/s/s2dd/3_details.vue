@@ -44,7 +44,7 @@
               <div>
                 <span class="tit01">售后总额:</span>
                 <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight))).toFixed(2)}}元
-                  <span v-if="orderDetail.orderType !=2 || orderDetail.status >= 4">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.status < 4">（运费待商家确认） </span></span>
+                  <span v-if="(orderDetail.orderType !=2 && orderDetail.orderType!=0) || orderDetail.status >= 4">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.status < 4">（运费待商家确认） </span></span>
               </div>
               <div>
                 <span class="tit01">申请时间:</span>
@@ -100,7 +100,7 @@
                 <span >{{(orderDetail.goodsInfo.strPrice)}}</span>
               </td>
               <td class="a5">{{(orderDetail.goodsInfo.strTotalPrice)}}</td>
-              <td class="a5">{{(parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight)).toFixed(2)}}</td>
+              <td class="a5">{{orderDetail.orderType!=0?(parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight)).toFixed(2) : '--'}}</td>
               <td class="a6" >
                 <!--状态，0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
@@ -291,12 +291,13 @@
 
     <div class="col-sm-4 detail_cen" style="width:100%;height:350px;">
       <div style="padding-left: 46px;font-size: 15px; font-weight: 800; line-height: 46px;">
+        <span class="redcolor">*</span>
         <span class="tit01" style="margin-right: 10px;">配送方式:</span>
         <el-radio v-model="shipmentForm.expressWay" label="0">物流发货</el-radio>
         <el-radio v-model="shipmentForm.expressWay" label="1" >自有物流</el-radio>
       </div>
       <el-form :model="shipmentForm" v-show="shipmentForm.expressWay==0">
-        <el-form-item label="物流公司:" :label-width="formLabelWidth">
+        <el-form-item label="物流公司:" :label-width="formLabelWidth" required>
           <el-select v-model="shipmentForm.expressCode" filterable placeholder="请选择物流公司" @change="selectShipment(shipmentForm.expressCode)">
             <el-option
               v-for="item in shipments"
@@ -306,7 +307,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="物流单号:" :label-width="formLabelWidth">
+        <el-form-item label="物流单号:" :label-width="formLabelWidth" required>
           <el-input v-model="shipmentForm.expressNo" auto-complete="off" width="200" maxlength="30"></el-input>
         </el-form-item>
         <el-form-item label="备注:" :label-width="formLabelWidth">
@@ -314,13 +315,13 @@
         </el-form-item>
       </el-form>
       <el-form :model="shipmentForm" v-show="shipmentForm.expressWay==1">
-        <el-form-item label="配送员姓名:" :label-width="formLabelWidth">
+        <el-form-item label="配送员姓名:" :label-width="formLabelWidth" required>
           <el-input v-model="shipmentForm.expressPerson" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="配送员手机号:" :label-width="formLabelWidth">
+        <el-form-item label="配送员手机号:" :label-width="formLabelWidth" required>
           <el-input v-model="shipmentForm.phone" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="运单号:" :label-width="formLabelWidth">
+        <el-form-item label="运单号:" :label-width="formLabelWidth" required>
           <el-input v-model="shipmentForm.expressNo" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注:" :label-width="formLabelWidth">
@@ -939,12 +940,15 @@
         if(that.shipmentForm.expressWay==1){
           if(that.shipmentForm.expressPerson == '' || that.shipmentForm.expressPerson == undefined){
             that.show_tip("请输入配送员姓名")
+            return;
           }
           if(that.shipmentForm.phone == '' || that.shipmentForm.phone == undefined){
             that.show_tip("请输入配送员电话")
+            return;
           }
           if(that.shipmentForm.expressNo == '' || that.shipmentForm.expressNo == undefined){
             that.show_tip("请输入运单号")
+            return;
           }
         }
         that.$.ajax({
