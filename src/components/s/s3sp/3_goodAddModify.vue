@@ -553,7 +553,7 @@
         that.goodsId=that.$route.query.goodsId
         that.$.ajax({
           type: 'get',
-          url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/goods/' + that.$route.query.goodsId:that.localbase + 'm2c.scm/goods/approve/' + that.$route.query.goodsId,
+          url: (that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined)?that.localbase + 'm2c.scm/web/goods/' + that.$route.query.goodsId:that.localbase + 'm2c.scm/web/goods/approve/' + that.$route.query.goodsId,
           data: {
             token: sessionStorage.getItem('mToken')
           },
@@ -625,7 +625,7 @@
             if(val != ''){
               this.$.ajax({
                 type: 'get',
-                url: this.localbase + 'm2c.scm/goods/code',
+                url: this.localbase + 'm2c.scm/web/goods/code',
                 data:{
                   token: sessionStorage.getItem('mToken'),
                   dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
@@ -906,7 +906,7 @@
             console.log(a.goodsSKUs)
             that.$.ajax({
               type: that.handle_toggle === 'add' ? 'post' : 'put',
-              url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/goods' : that.localbase + 'm2c.scm/goods/approve',
+              url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/web/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/web/goods' : that.localbase + 'm2c.scm/web/goods/approve',
               data:Object.assign(that.data,a),
               success: function (result) {
                 if (result.status === 200) {
@@ -941,7 +941,7 @@
           // 根据分类id获取分类名
           that.$.ajax({
             type: 'get',
-            url: that.localbase + 'm2c.scm/goods/classify/service/rate',
+            url: that.localbase + 'm2c.scm/web/goods/classify/service/rate',
             data:{
               token: sessionStorage.getItem('mToken'),
               classifyId:children[children.length-1]
@@ -1043,7 +1043,7 @@
           if(JSON.stringify(arr).indexOf(JSON.stringify(state))===-1){
               that.$.ajax({
                 type: 'post',
-                url: that.localbase + 'm2c.scm/goods/spec/value',
+                url: that.localbase + 'm2c.scm/web/goods/spec/value',
                 //url:'http://10.0.40.23:8080/m2c.scm/goods/spec/value',
                 data: {
                   token: sessionStorage.getItem('mToken'),
@@ -1077,7 +1077,7 @@
         let that = this
         that.$.ajax({
           type: 'GET',
-          url: that.localbase + 'm2c.scm/goods/classify/tree',
+          url: that.localbase + 'm2c.scm/web/goods/classify/tree',
           data: {parentClassifyId:-1},
           success: function (result) {
             that.goodsClassifys=result.content;
@@ -1186,7 +1186,7 @@
         let that = this
         that.$.ajax({
           type: 'get',
-          url: that.localbase + 'm2c.scm/goods/spec/value',
+          url: that.localbase + 'm2c.scm/web/goods/spec/value',
           data:{
             token: sessionStorage.getItem('mToken'),
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
@@ -1301,7 +1301,7 @@
       // 获取商品保障
       that.$.ajax({
         type: 'get',
-        url: that.localbase + 'm2c.scm/goods/guarantee/list',
+        url: that.localbase + 'm2c.scm/web/goods/guarantee/list',
         data:{
           token: sessionStorage.getItem('mToken'),
           dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId
@@ -1406,7 +1406,7 @@
         if (that.handle_toggle === 'add') {
           that.$.ajax({
             type: 'get',
-            url: that.localbase + 'm2c.scm/goods/approve/id',
+            url: that.localbase + 'm2c.scm/web/goods/approve/id',
             data: {
               token: sessionStorage.getItem('mToken')
             },

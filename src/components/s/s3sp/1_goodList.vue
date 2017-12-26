@@ -500,7 +500,7 @@
         let that = this
         that.$.ajax({
           type: 'GET',
-          url: that.localbase + 'm2c.scm/goods/classify/tree',
+          url: that.localbase + 'm2c.scm/web/goods/classify/tree',
           data: {parentClassifyId:-1},
           success: function (result) {
             that.goodsClassifys=result.content;
@@ -512,7 +512,7 @@
         let that = this
         that.$.ajax({
           type: 'DELETE',
-          url: to === 'a' ? that.localbase + 'm2c.scm/goods/' + row.goodsId:that.localbase + 'm2c.scm/goods/approve/' + row.goodsId,
+          url: to === 'a' ? that.localbase + 'm2c.scm/web/goods/' + row.goodsId:that.localbase + 'm2c.scm/web/goods/approve/' + row.goodsId,
           data: {},
           success: function (result) {
             if (result.status === 200){
@@ -535,7 +535,7 @@
         let that = this
           that.$.ajax({
             type: 'put',
-            url: that.localbase + 'm2c.scm/goods/up/shelf/' + row.goodsId,
+            url: that.localbase + 'm2c.scm/web/goods/up/shelf/' + row.goodsId,
             data: {},
             success: function (result) {
               if (result.status == 200){
@@ -551,7 +551,7 @@
         let that = this
         that.$.ajax({
           type: 'put',
-          url: that.localbase + 'm2c.scm/goods/off/shelf/' + row.goodsId,
+          url: that.localbase + 'm2c.scm/web/goods/off/shelf/' + row.goodsId,
           data: {},
           success: function (result) {
             if (result.status == 200){
@@ -610,7 +610,7 @@
         }
         that.$.ajax({
           type: 'get',
-          url: this.base + 'm2c.scm/goods',
+          url: this.base + 'm2c.scm/web/goods',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
@@ -658,7 +658,7 @@
           that.show_tip('开始时间不能大于结束时间')
           return
         }
-        let url=that.localbase + 'm2c.scm/goods/export?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+'&goodsClassifyId='+that.search_goods_params.goodsClassifyId+'&goodsStatus='+that.search_goods_params.goodsStatus+'&condition='+that.search_goods_params.condition+'&startTime='+that.search_goods_params.startTime+'&endTime='+that.search_goods_params.endTime;
+        let url=that.localbase + 'm2c.scm/web/goods/export?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+'&goodsClassifyId='+that.search_goods_params.goodsClassifyId+'&goodsStatus='+that.search_goods_params.goodsStatus+'&condition='+that.search_goods_params.condition+'&startTime='+that.search_goods_params.startTime+'&endTime='+that.search_goods_params.endTime;
         window.location.href=url
       }
       ,goodsCheckStore () {
@@ -668,7 +668,7 @@
         }
         that.$.ajax({
           type: 'get',
-          url: this.base + 'm2c.scm/goods/approve',
+          url: this.base + 'm2c.scm/web/goods/approve',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
@@ -767,7 +767,7 @@
         }
         that.$.ajax({
           type: 'get',
-          url: this.base + 'm2c.scm/goods',
+          url: this.base + 'm2c.scm/web/goods',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
