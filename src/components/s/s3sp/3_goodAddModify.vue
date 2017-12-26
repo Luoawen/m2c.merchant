@@ -68,7 +68,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="11">
-          <el-form-item label="商品条形码"  prop="goodsBarCode">
+          <el-form-item label="商品条形码" prop="goodsBarCode">
             <el-input v-model="data.goodsBarCode" placeholder="请输入内容"></el-input>
           </el-form-item>
         </el-col>
@@ -91,7 +91,7 @@
                   </el-col>
                 </template>
               </el-row>
-              <el-row :gutter="10" style="width:100%;margin-left:0;">
+              <el-row :gutter="10" style="width:100%;margin-left:0;" v-if="goodsGuaranteeList.length>4">
                 <template v-for="(guarantee,index) in goodsGuaranteeList" v-if="guarantee.isDefault===0">
                   <el-col :span="10">
                     <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId" class="ellipsis" style="width:100%;">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
@@ -783,6 +783,18 @@
       },
       stantardIdChange(item,index){
         let that=this
+        console.log(that.goodsSpecifications)
+        let option = 0
+        for(let j = 0;j<that.goodsSpecifications.length;j++){
+          if(that.goodsSpecifications[j].standardId == item.standardId){
+            option++
+          }
+        }
+        if(option>1){
+          that.$message('规格不能重复')
+          item.standardId = ''
+          return false
+        }
         that.standardId=item.standardId
         for(var i=0;i<that.stantards.length;i++){
           if(that.standardId==that.stantards[i].stantardId){

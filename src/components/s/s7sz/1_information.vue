@@ -138,7 +138,7 @@
       const that = this
       that.$.ajax({
         type: 'get',
-        url: this.localbase + 'm2c.scm/shop/sys/shopInfo',
+        url: this.localbase + 'm2c.scm/shop/sys/web/shopInfo',
         data: {
           dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
         },
@@ -181,7 +181,7 @@
       that.modify_imgStep(function () {
         that.$.ajax({
           type: methodStr,
-          url: that.localbase + 'm2c.scm/shop/sys/shopInfo',
+          url: that.localbase + 'm2c.scm/shop/sys/web/shopInfo',
           data: {
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
             shopId: that.storeinformation.shopId,
