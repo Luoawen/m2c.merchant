@@ -508,9 +508,9 @@
       customerfreight () {
         var that = this
         that.$.ajax({
-          //url: that.base + 'm2c.scm/order/dealer/sendOrderDetail',
+          //url: that.base + 'm2c.scm/order/web/dealer/sendOrderDetail',
           //url: 'http://localhost:8080/m2c.scm/dealer/sendOrderDetail',
-          url: that.base + 'm2c.scm/order/dealer/expressDetail',
+          url: that.base + 'm2c.scm/order/web/dealer/expressDetail',
           type: 'get',
           cache: false,
           pagination: true,
@@ -552,8 +552,8 @@
       ,getDealerOrderInfo () {
         let that = this;
         that.$.ajax({
-          url: that.base + 'm2c.scm/order/dealer/orderdetail',
-          //url: 'http://localhost:8080/m2c.scm/order/dealer/orderdetail',
+          url: that.base + 'm2c.scm/order/web/dealer/orderdetail',
+          //url: 'http://localhost:8080/m2c.scm/order/web/dealer/orderdetail',
           type: 'get',
           cache: false,
           pagination: true,
@@ -637,7 +637,7 @@
         that.is_Success = false
         that.$.ajax({
           type: 'get',
-          url: that.base + 'm2c.scm/order/logs/' + that.dealerOrderId,
+          url: that.base + 'm2c.scm/order/web/logs/' + that.dealerOrderId,
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
@@ -723,8 +723,8 @@
           }
         }
         that.$.ajax({
-          url: that.base + 'm2c.scm/order/dealer/sendOrder',
-          //url: 'http://localhost:8080/m2c.scm/order/dealer/sendOrder',
+          url: that.base + 'm2c.scm/order/web/dealer/sendOrder',
+          //url: 'http://localhost:8080/m2c.scm/order/web/dealer/sendOrder',
           type: 'put',
           cache: false,
           pagination: true,
@@ -825,8 +825,8 @@
         freightStr = '{' + freightStr + '}';
         // 发请求
         that.$.ajax({
-          url: that.base + 'm2c.scm/dealerorder/addrfreight',
-          //url: 'http://localhost:8080/m2c.scm/dealerorder/addrfreight',
+          url: that.base + 'm2c.scm/dealerorder/web/addrfreight',
+          //url: 'http://localhost:8080/m2c.scm/dealerorder/web/addrfreight',
           type: 'put',
           cache: false,
           pagination: true,
@@ -860,7 +860,7 @@
         let that = this
         that.$.ajax({
           type: 'GET',
-          url: this.base + 'm2c.scm/order/dealer/express',
+          url: this.base + 'm2c.scm/order/web/dealer/express',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false
@@ -955,7 +955,7 @@
         const that = this
         that.$.ajax({
           type: 'get',
-          url: this.localbase + 'm2c.scm/shop/sys/shopInfo',
+          url: this.localbase + 'm2c.scm/shop/sys/web/shopInfo',
           data: {
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
           },

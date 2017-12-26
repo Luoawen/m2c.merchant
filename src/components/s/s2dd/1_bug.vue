@@ -409,7 +409,7 @@
       let that = this
       that.$.ajax({
         type: 'GET',
-        url: this.base + 'm2c.scm/dealerorderafter/cost/freight',
+        url: this.base + 'm2c.scm/dealerorderafter/web/cost/freight',
         data: {
           token: sessionStorage.getItem('mToken'),
           isEncry: false,
@@ -432,8 +432,8 @@
       that.is_Success = false
       that.$.ajax({
         type: 'get',
-        url: that.localbase + 'm2c.scm/dealerorder/dealerorderlist',
-        //url: 'http://localhost:8080/m2c.scm/dealerorder/dealerorderlist',
+        url: that.localbase + 'm2c.scm/dealerorder/web/dealerorderlist',
+        //url: 'http://localhost:8080/m2c.scm/dealerorder/web/dealerorderlist',
         data: {
           dealerId: that.dealerId
           ,orderStatus: that.searchParams.orderStatus
@@ -466,7 +466,7 @@
         that.show_tip('开始时间不能大于结束时间')
         return
       }
-      let url=that.localbase + 'm2c.scm/order/export/dealerorderlist?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+
+      let url=that.localbase + 'm2c.scm/order/export/web/dealerorderlist?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+
         '&orderStatus='+that.searchParams.orderStatus+
         '&afterSellStatus='+that.searchParams.afterSellStatus+
         '&condition='+that.searchParams.condition+
@@ -484,7 +484,7 @@
         return
       }
       //searchParams: { orderStatus: '', afterSellStatus: '', startTime: '', endTime: '', condition: '',orderClassify:'', payWay:'', hasMedia:'', invoice: '',commentStatus:''},
-      let url=that.localbase + 'm2c.scm/order/export/dealerorderlist?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+
+      let url=that.localbase + 'm2c.scm/order/export/web/dealerorderlist?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+
         '&orderStatus='+that.searchParams.orderStatus+
         '&afterSellStatus='+that.searchParams.afterSellStatus+
         '&startTime='+that.searchParams.startTime+
@@ -561,8 +561,8 @@
         let that = this;
         that.$.ajax({
           type: 'put',
-          url: that.localbase + 'm2c.scm/order/dealer/agree-apply-sale',
-          //url: 'http://localhost:8080/m2c.scm/dealerorder/dealerorderlist',
+          url: that.localbase + 'm2c.scm/order/web/dealer/agree-apply-sale',
+          //url: 'http://localhost:8080/m2c.scm/dealerorder/web/dealerorderlist',
           data: {
             dealerId: that.dealerId
             ,saleAfterNo: that.saleAfterNo,
@@ -616,8 +616,8 @@
         }
         that.$.ajax({
           type: 'PUT',
-          url: that.base + 'm2c.scm/order/dealer/reject-apply-sale',
-          //url: 'http://localhost:8080/m2c.scm/order/dealer/reject-apply-sale',
+          url: that.base + 'm2c.scm/order/web/dealer/reject-apply-sale',
+          //url: 'http://localhost:8080/m2c.scm/order/web/dealer/reject-apply-sale',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
@@ -649,8 +649,8 @@
         }
         that.$.ajax({
           type: 'PUT',
-          url: this.base + 'm2c.scm/order/dealer/agree-apply-sale',
-          //url: 'http://localhost:8080/m2c.scm/order/dealer/agree-apply-sale',
+          url: this.base + 'm2c.scm/order/web/dealer/agree-apply-sale',
+          //url: 'http://localhost:8080/m2c.scm/order/web/dealer/agree-apply-sale',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
