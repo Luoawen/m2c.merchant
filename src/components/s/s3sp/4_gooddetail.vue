@@ -192,7 +192,7 @@
 								<a @click="next" class="next" v-if="imgIndex < goodsRecognized.length-1"></a>
 							</div>
 							<div class="ctrlImg">
-								<a @click="prevImg" class="prevImg"><</a>
+								<a @click="prevImg" class="prevImg" disabled='true'><</a>
 								<div class="ctrlImgUl">
 									<ul id="ctrlImgUl">
 										<li v-for="(file,index) in goodsRecognized" class="mr10 fl" :class="{'active':index==imgIndex}" @click="checkImg(index)">
@@ -200,7 +200,7 @@
 										</li>
 									</ul>
 								</div>
-								<a @click="nextImg" class="nextImg">></a>
+								<a @click="nextImg" class="nextImg" disabled='true'>></a>
 							</div>
 							<a class="close" @click="imgWrap=!imgWrap"></a>
             </div>
@@ -304,7 +304,38 @@
 				goodsGuarantee:[],
 				countMode:'',
 				info:'',
-				goodsRecognized:[],
+				goodsRecognized:[
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
+					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
+				],
 				imgWrap:false, //图片盒子显示隐藏
         imgIndex:0,
       }
@@ -408,7 +439,7 @@
 					that.goodsSpecifications = result.content.goodsSpecifications
 					that.goodsSKUs = result.content.goodsSKUs
 					that.fileList = result.content.goodsMainImages
-					that.goodsRecognized = result.content.goodsRecognized==undefined?[]:result.content.goodsRecognized
+					//that.goodsRecognized = result.content.goodsRecognized==undefined?[]:result.content.goodsRecognized
 					that.info=result.content.goodsDesc
 					that.goodsKeyWord = result.content.goodsKeyWord.join("/")
 					that.goodsGuarantee = result.content.goodsGuarantee
