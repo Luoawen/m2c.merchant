@@ -1362,7 +1362,7 @@
       // 获取运费模板列表
       that.$.ajax({
         type: 'get',
-        url: that.localbase + 'm2c.scm/postage',
+        url: that.localbase + 'm2c.scm/web/postage',
         data:{
           token: sessionStorage.getItem('mToken'),
           dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
