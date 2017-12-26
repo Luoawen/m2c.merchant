@@ -1,5 +1,6 @@
 <template>
   <div class="sz content clear">
+    <div class="line"></div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane label="售后地址" name="first">
         <form class="form-horizontal" action="" method="post" v-on:submit.prevent>
