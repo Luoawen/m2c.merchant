@@ -464,14 +464,14 @@ export default {
             }
           },
           formatter: function(a){
-            let end_obj = []
-            for(let i in a){
-              let obj = {name:'', datas:[]}
-              obj.name = a[i].time
-              obj.value = a[i]['sellMoney']
-              obj.ratio = a[i]['ratio']
-              end_obj.push(obj);
-            }
+            // let end_obj = []
+            // for(let i in a){
+            //   let obj = {name:'', datas:[]}
+            //   obj.name = a[i].time
+            //   obj.value = a[i]['sellMoney']
+            //   obj.ratio = a[i]['ratio']
+            //   end_obj.push(obj);
+            // }
             // return (end_obj['name']
             //   +'</br>金额:'+end_obj['value']
             //   +'<br>环比:'+end_obj['ratio']

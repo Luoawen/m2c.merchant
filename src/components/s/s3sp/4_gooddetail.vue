@@ -304,38 +304,7 @@
 				goodsGuarantee:[],
 				countMode:'',
 				info:'',
-				goodsRecognized:[
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-					'http://dl.m2c2017.com/4ueditor/20171219/tE0S224107.jpg',
-					'http://dl.m2c2017.com/1head/20171219/yUQf224510.jpg',
-				],
+				goodsRecognized:[],
 				imgWrap:false, //图片盒子显示隐藏
         imgIndex:0,
       }
@@ -437,8 +406,7 @@
 					that.goodsSpecifications = result.content.goodsSpecifications
 					that.goodsSKUs = result.content.goodsSKUs
 					that.fileList = result.content.goodsMainImages
-					// 识别图 临时注释
-					//that.goodsRecognized = result.content.goodsRecognized
+					that.goodsRecognized = result.content.goodsRecognized
 					that.info=result.content.goodsDesc
 					that.goodsKeyWord = result.content.goodsKeyWord.join("/")
 					that.goodsGuarantee = result.content.goodsGuarantee
