@@ -397,8 +397,7 @@ export default {
 		},
 		// 下载
 		download () {
-			location.href=`${this.base}m2c.market/coupon/read/user/excel/count`
-			
+			location.href=`${this.base}m2c.market/coupon/import/user/excel/template`
 		},
 		// 确定发送
 		send(){
