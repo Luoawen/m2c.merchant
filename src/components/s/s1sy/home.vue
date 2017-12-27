@@ -581,6 +581,7 @@ export default {
     this.getReportData()
     this.getReportDataList()
     this.getDataList()
+    this.amount()
     let that = this
     let date=new Date
     let year=date.getFullYear()
