@@ -1,5 +1,6 @@
 <template>
   <div class="content clear" style="min-height:600px;">
+    <div class="line"></div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane label="品牌库" name="first">
         <div class="searchWrap">

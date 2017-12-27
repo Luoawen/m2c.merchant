@@ -87,14 +87,14 @@
               <el-row :gutter="10" style="width:100%;">
                 <template v-for="(guarantee,index) in goodsGuaranteeList" v-if="guarantee.isDefault===1">
                   <el-col :span="5">
-                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
+                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId" :title="guarantee.guaranteeName+' '+guarantee.guaranteeDesc">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
                   </el-col>
                 </template>
               </el-row>
               <el-row :gutter="10" style="width:100%;margin-left:0;" v-if="goodsGuaranteeList.length>4">
                 <template v-for="(guarantee,index) in goodsGuaranteeList" v-if="guarantee.isDefault===0">
                   <el-col :span="10">
-                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId" class="ellipsis" style="width:100%;">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
+                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId" class="ellipsis" style="width:100%;" :title="guarantee.guaranteeName+' '+guarantee.guaranteeDesc">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
                   </el-col>
                 </template>
               </el-row>
@@ -595,6 +595,7 @@
       // 新增商品保障
       addGuarantee(){
         sessionStorage.setItem('data',JSON.stringify(this.data))
+        sessionStorage.setItem('goodsSpecifications',JSON.stringify(this.goodsSpecifications))
         sessionStorage.setItem('goodsSKUs',JSON.stringify(this.goodsSKUs))
         sessionStorage.setItem('goodsGuarantCheck',JSON.stringify(this.goodsGuarantCheck))
         sessionStorage.setItem('fileList',JSON.stringify(this.fileList))
@@ -1375,9 +1376,11 @@
         if(that.$route.query.handle_toggle === 'add'){
           that.handle_toggle = 'add'
           this.data = JSON.parse(sessionStorage.getItem('data'))
+          this.goodsSpecifications = JSON.parse(sessionStorage.getItem('goodsSpecifications'))
           this.goodsSKUs = JSON.parse(sessionStorage.getItem('goodsSKUs'))
           this.goodsGuarantCheck = JSON.parse(sessionStorage.getItem('goodsGuarantCheck'))
           this.fileList = JSON.parse(sessionStorage.getItem('fileList'))
+          this.goodsMainImages = JSON.parse(sessionStorage.getItem('goodsMainImages'))
           this.$refs.ue.setUEContent(sessionStorage.getItem('goodsDesc'))
           sessionStorage.setItem('data','')
           sessionStorage.setItem('goodsSKUs','')
@@ -1390,11 +1393,13 @@
           }else{
             //that.getGoodsInfo()
             this.data = JSON.parse(sessionStorage.getItem('data'))
+            this.goodsSpecifications = JSON.parse(sessionStorage.getItem('goodsSpecifications'))
             this.goodsSKUs = JSON.parse(sessionStorage.getItem('goodsSKUs'))
             this.goodsGuarantCheck = JSON.parse(sessionStorage.getItem('goodsGuarantCheck'))
             this.fileList = JSON.parse(sessionStorage.getItem('fileList'))
             this.goodsMainImages = JSON.parse(sessionStorage.getItem('goodsMainImages'))
             this.$refs.ue.setUEContent(sessionStorage.getItem('goodsDesc'))
+            this.disabled = true
             sessionStorage.setItem('data','')
             sessionStorage.setItem('goodsSKUs','')
             sessionStorage.setItem('goodsGuarantCheck','')

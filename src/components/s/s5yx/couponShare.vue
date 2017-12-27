@@ -398,18 +398,19 @@ export default {
 		// 下载
 		download () {
 			location.href=`${this.base}m2c.market/coupon/read/user/excel/count`
+			
 		},
 		// 确定发送
 		send(){
 			let that = this
+			if (that.sel_user.mobiles == '') {
+				this.$message.error('还未选择发放的用户')
+				return 
+			}
 			console.log(that.hand_edit_coupon)
 			if (that.hand_edit_coupon.couponId == undefined) {
-				this.$message.error('请选择优惠券！')
+				this.$message.error('还未选择将要发放的优惠券！')
 				return
-			}
-			if (that.sel_user.mobiles == '') {
-				this.$message.error('请选择发放用户')
-				return 
 			}
 			let formDate = {
 					coupon_id:that.hand_edit_coupon.couponId,

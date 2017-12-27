@@ -418,7 +418,14 @@
 					that.goodsSpecifications = result.content.goodsSpecifications
 					that.goodsSKUs = result.content.goodsSKUs
 					that.fileList = result.content.goodsMainImages
-					that.goodsRecognized = result.content.goodsRecognized==undefined?[]:result.content.goodsRecognized
+					//that.goodsRecognized = result.content.goodsRecognized==undefined?[]:result.content.goodsRecognized
+					if(result.content.goodsRecognized==undefined){
+						that.goodsRecognized = []
+					}else{
+						for( let i=0;i<result.content.goodsRecognized.length;i++){
+							that.goodsRecognized.push(result.content.goodsRecognized[i].recognizedUrl)
+						}
+					}
 					that.ulLength = Math.ceil(that.goodsRecognized.length/8)
 					that.info=result.content.goodsDesc
 					that.goodsKeyWord = result.content.goodsKeyWord.join("/")
@@ -438,9 +445,9 @@
 		position: fixed;
 		left: 0px;
 		top: 0px;
-		background: #000;
+		background:rgba(0,0,0,0.5);
 		z-index: 999;
-		opacity: 0.5;
+		opacity:0.5;
 	}
   .imgWrap{
 		//禁用选中

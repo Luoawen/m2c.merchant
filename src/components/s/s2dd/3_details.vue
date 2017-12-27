@@ -29,7 +29,7 @@
               </div>
               <div>
                 <span class="tit01">关联订货号:</span>
-                <router-link :to="{name:'dealerOrDtl',query:{dealerOrderId: orderDetail.orderId,orderId: orderIdSplic}}" target="_blank"><span class="ml20">{{orderDetail.orderId}}</span></router-link>
+                <router-link :to="{name:'dealerOrDtl',query:{dealerOrderId: orderDetail.dealerOrderId,orderId: orderDetail.orderId}}" target="_blank"><span class="ml20">{{orderDetail.dealerOrderId}}</span></router-link>
               </div>
               <div>
                 <span class="tit01">订单总额:</span>
@@ -422,7 +422,6 @@
           ,dealerId:''
           ,doStatus: -2
         },
-        orderIdSplic:'',
         operatingRecords:[],
         logistics:{
           afterSellOrderId:'',
@@ -544,6 +543,7 @@
               that.orderDetail.backMoney = _content.strBackMoney
               that.orderDetail.createdDate = that.date_format(new Date(_content.createdDate), 'yyyy-MM-dd hh:mm:ss')
               that.orderDetail.orderId = _content.orderId
+              that.orderDetail.dealerOrderId = _content.dealerOrderId
               that.orderDetail.goodsInfo=_content.goodsInfo
               that.mediaId = that.orderDetail.goodsInfo.mediaResId
               that.orderDetail.orderTotalMoney=_content.strOrderTotalMoney
@@ -555,7 +555,6 @@
               that.orderDetail.rejectReason=_content.rejectReason
               that.orderDetail.dealerId = _content.dealerId;
               that.orderDetail.doStatus = _content.doStatus;//dealer order status
-              that.orderIdSplic = _content.orderId.slice(0,_content.orderId.length-1)
               that.setReturnData(result.content)
               console.log('that.orderDetail.status',that.orderDetail.status)
             }
@@ -871,7 +870,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            dealerOrderId: that.orderDetail.orderId,
+            dealerOrderId: that.orderDetail.dealerOrderId,
             userId: JSON.parse(sessionStorage.getItem('mUser')).userId,
             skuId: that.orderDetail.goodsInfo.skuId
           },
@@ -1358,7 +1357,7 @@ display:-webkit-box;
   position: fixed;
   left: 0px;
   top: 0px;
-  background: #000;
+  background:rgba(0,0,0,0.5);
   z-index: 999;
   opacity: 0.5;
 }

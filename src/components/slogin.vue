@@ -9,12 +9,12 @@
 					<span>商家登录</span>
 					<div class="username">
 						<i class="username_i public_i"></i>
-						<input type="number"  oninput="if(value.length>11) value=value.slice(0,11)" placeholder="11位数手机号" v-model="login_params.mobile" @keydown.enter="login">
+						<input type="number"  oninput="if(value.length !== 11) value=value.slice(0,11)" placeholder="11位数手机号" v-model.number="login_params.mobile" @keydown.enter="login">
 					</div>
 					<div class="password">
 						<i class="password_i public_i"></i>
-						<input type="password" class="mima_dd" placeholder="6-16位密码" v-model="login_params.password" @keydown.enter="login">
-						<input type="text" class="mima_wz" placeholder="密码" v-model="login_params.password" @keydown.enter="login" style="display:none;">
+						<input type="password" class="mima_dd" placeholder="6-16位密码"  :minlength="6" :maxlength="16"  v-model="login_params.password" @keydown.enter="login">
+						<input type="text" class="mima_wz" placeholder="6-16位密码" :minlength="6" :maxlength="16"   v-model="login_params.password" @keydown.enter="login" style="display:none;">
 						<a @click="get_password" class="eyes_box " data-show="1" href="javascript:void(0);"><i class="icon iconfont" >&#xe624;</i></a>
 					</div>
 					<div class="login_s">
@@ -35,11 +35,11 @@
 		<div class="modal_password" v-show="forget_password">
 			<p>忘记密码</p>
 			<div class="modal_refund_close"  @click="close_tip">登录 &nbsp;></div>
-			<input placeholder="请输入注册的手机号码"  oninput="if(value.length>11)value=value.slice(0,11)"  type="number"  class="public_input_phone"  v-model.number="mobile"  maxlength="11"  @input="get_phone" >
-			<input placeholder="4位数验证码" class="hone_code public_input_code" v-model="verifyCode" maxlength="4" minlength="4">
+			<input  type="number"  placeholder="请输入注册的手机号码"  oninput="if(value.length !== 11)value=value.slice(0,11)"  class="public_input_phone"  v-model.number="mobile"  :length="11"  @input="get_phone" >
+			<input placeholder="4位数验证码" class="hone_code public_input_code" onkeyup="this.value=this.value.replace(/\s+/g,'')"  v-model.number="verifyCode" maxlength="4" minlength="4" >
 			<button @click="get_code" v-bind:class="{ phone_right:isActive }" :disabled="disabled">{{ timerCodeMsg }}</button>
 			<!-- <input type="password" placeholder="新密码" class="public_input_password" v-model="newPass"> -->
-			<input type="password" placeholder="请输入6-16位新密码" maxlength="16" minlength="6" class="public_input_password" v-model="confirmPass">
+			<input type="password" placeholder="请输入6-16位新密码" :maxlength="16" :minlength="6" class="public_input_password" v-model="confirmPass">
 			<button class="complete_button" @click="pass_forget_passwrod" v-bind:class="{ phone_right:isActive_pass }"  ref='confirmButton'   >确认修改</button>
 		</div>
 	</div>
@@ -66,14 +66,22 @@ export default {
   methods: {
     login () {
 			let that = this
-			if(!(/^1[3|4|5|6|7|8|9][0-9]\d{4,8}$/.test(that.login_params.mobile))){ 
+			if(that.login_params.mobile=== ''){ 
  					that.show_tip('请输入手机号码')
+ 					 return ; 
+ 			} 
+			 if(that.login_params.mobile.length < 11){
+				 	that.show_tip('请输入11位数的手机号')
+ 					 return false; 
+			 }
+			if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(that.login_params.mobile))){ 
+ 					that.show_tip('请输入11位数的手机号')
  					 return false; 
  			} 
       if (that.login_params.password.length < 6) that.show_tip('请输入6到16位有效密码')
 			if (that.login_params.password.length > 16) that.show_tip('请输入6到16位有效密码')
       if (that.login_params.password.length >= 6 && that.login_params.password.length <= 16) {
-					that.$refs.submitButton.innerHTML = '登录中，请稍后...'
+					that.$refs.submitButton.innerHTML = '登录中，请稍候'
 					that.$refs.submitButton.disabled = true
         that.$.ajax({
           method: 'post',
@@ -125,21 +133,39 @@ export default {
     },
     get_phone () {
       let that = this
-			let phone = that.$('.public_input_phone').val().slice(0,11)
-      if (!((/^1[34578]\d{9}$/).test(phone))) {this.isActive = false}
+      if (!((/^1[34578]\d{9}$/).test(that.mobile))) {this.isActive = false}
       else this.isActive = true
     },
     pass_forget_passwrod () {
 			let that = this
-      if (that.confirmPass.length < 6) that.show_tip('请输入6到16位有效密码')
-      if (that.confirmPass.length > 16) that.show_tip('请输入6到16位有效密码')
+				if(that.mobile=== ''){ 
+ 					that.show_tip('请输入手机号码')
+ 					 return ; 
+ 			} 
+			if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(that.mobile))){ 
+ 					that.show_tip('请输入11位数的手机号')
+ 					 return false; 
+ 			} 
+			 	if (that.verifyCode == ''){
+				that.show_tip('请输入验证码')
+				 	 return ; }
+			if (!(/^[a-z0-9]+$/).test(that.confirmPass)){
+				that.show_tip('密码格式错误')
+				 	 return ; }
+      if (that.confirmPass.length < 6){
+				that.show_tip('请输入6到16位有效密码')
+				 	 return ; } 
+      if (that.confirmPass.length > 16){
+				 that.show_tip('请输入6到16位有效密码')
+				 	 return ; } 
       if (that.confirmPass.length >= 6 && that.confirmPass.length <= 16) {
-				that.$refs.confirmButton.innerHTML = '修改中，请稍后...'
+				that.$refs.confirmButton.innerHTML = '修改中，请稍候'
         that.$.ajax({
           method: 'post',
           url: that.base + 'm2c.users/user/findPassword',
           data: {
             token: '123',
+						groupType:'4',
             verifyCode: that.verifyCode,
             mobile: that.mobile,
             newPass: that.md5(that.confirmPass)
@@ -158,11 +184,6 @@ export default {
 							that.show_tip(result.errorMessage)  
             }
           }
-          // error: function (err) {
-          //   console.log('错误信息: ', err)
-          //   that.show_tip(JSON.parse(err.responseText).errorMessage)
-          //   that.hide_loading()
-          // }
         })
       }
     },
@@ -178,8 +199,8 @@ export default {
     },
     get_code () {
 			let that = this
-			that.disabled = true
-      if (this.isActive !== true) return
+			that.disabled = false
+			if (that.isActive !== true) return
       that.$.ajax({
         method: 'post',
 				timeout : 2000, //超时时间设置，单位毫秒
@@ -190,22 +211,40 @@ export default {
           mobile: that.mobile
         },
         success: function (result) {
-          console.log('验证码: ', result)
+					console.log('验证码: ', result)
           if (result.status === 200) {
-            let sec = 60
-            for (let i = 0; i <= 60; i++) {
-              window.setTimeout(function () {
-                if (sec !== 0) {
-                  that.timerCodeMsg = sec + '秒后重新获取'
-                  sec--
-                  that.isActive = false
-                } else {
-                  sec = 60
-                  that.timerCodeMsg = '获取验证码'
-                  that.isActive = true
-                }
-              }, i * 1000)
-            }
+							let sec = 59
+							let timerId =	window.setInterval(function(){
+							 that.timerCodeMsg = sec + '秒后重新获取'
+							sec--;
+							that.isActive = false
+							that.disabled = true
+							if(sec<0){
+							timerId=window.clearInterval(timerId) // 清除计时器
+								sec = 59 // 重新赋值
+								// 恢复状态 按钮可用
+							that.timerCodeMsg = '获取验证码'
+							that.isActive = true
+							that.disabled = false
+									}
+						},1000)
+            // let sec = 60
+            // for (let i = 0; i <= 60; i++) {
+            //   window.setTimeout(function () {
+            //     if (sec !== 0) {
+            //       that.timerCodeMsg = sec + '秒后重新获取'
+            //       sec--
+						// 			that.isActive = false
+						// 			that.disabled = true
+            //     } else {
+            //       sec = 60
+            //       that.timerCodeMsg = '获取验证码'
+						// 			that.isActive = true
+						// 			that.disabled = false
+            //     }
+						// 		console.log(sec,i)
+            //   }, i * 1000)
+            // }
           } else {
 						that.disabled = false
           }

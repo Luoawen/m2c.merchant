@@ -1,5 +1,6 @@
 <template>
   <div class="sz content clear">
+    <div class="line"></div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane label="售后地址" name="first">
         <form class="form-horizontal" action="" method="post" v-on:submit.prevent>
@@ -100,7 +101,7 @@
         <el-col :span="3" class="alginRight"><i class="red">*</i>标题</el-col>
         <el-col :span="9">
           <el-input v-model="guarantee.guaranteeName" placeholder="输入标题" :maxlength="10"></el-input>
-          <i class="red redTip" v-if="error1" style="padding-top:0;margin-top:-4px;position:absolute;">商品保障名不能为空</i>
+          <i class="red redTip" v-if="error1" style="padding-top:0;margin-top:-4px;position:absolute;">请输入标题</i>
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -303,6 +304,7 @@
               }else{
                 that.getGuarantee()
                 that.topBoxShow = false
+                that.guarantee = {}
               }
             }else{
               that.$message({
@@ -715,6 +717,9 @@
       span {
         display: inline-block;
         line-height: 50px;
+      }
+      span.fr{
+        cursor: pointer;
       }
     }
     .agreetc_body{

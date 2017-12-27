@@ -1,5 +1,6 @@
 <template>
   <div class="content clear">
+    <div class="line"></div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane label="商品库" name="first">
         <div role="tabpanel" class="tab-pane fade in active" aria-labelledby="home-tab">
@@ -408,9 +409,10 @@
          //商品库 批量操作
       lotsOptionGoods(flag){
         let that = this
+        that.lotsOptionShow =false
         if(that.multipleSelectionGoods.length<=0){
             that.$message({
-            message:'请选择品牌',
+            message:'请选择商品',
             center: true,
             duration:1000,
             type:'info',
@@ -418,6 +420,7 @@
         return;
         }
         that.goodsIds = that.multipleSelectionGoods.map(function(item){return item.goodsId}).toString()
+        console.log(that.goodsIds,'--------------that.goodsIds')
         // 弹出确认弹层
          that.agreeGoodBg =true
          that.agreeGood = true
@@ -804,7 +807,7 @@
       // 点击到弹框外其他地方 弹框收起
       let body = document.querySelector('body')
       body.addEventListener('click',(e)=>{
-      if(e.target.id === 'lotsOptionBtn' || e.target.id === 'lotsOptionBtnselection'){
+      if(e.target.id === 'lotsOptionBtn'|| e.target.id === 'lotsOptionBtnselection'){
           this.lotsOptionShow = true
       }else {
           this.lotsOptionShow = false

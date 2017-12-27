@@ -474,39 +474,45 @@
   position: fixed;
   left: 0px;
   top: 0px;
-  background: #000;
+  background:rgba(0,0,0,0.5);
   z-index: 999;
-  opacity: 0.3;
+  opacity:0.5;
 }
   .imgWrap{
-    width:660px;
-    height:660px;
+    //禁用选中
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+		-khtml-user-select: none;
+		user-select: none;
+    width:670px;
+    height:685px;
     // background: #ffffff;
     // border-radius:10px;
     position: fixed;
     top:50%;left:50%;
-    margin-top:-330px;
-    margin-left:-330px;
+    margin-top:-343px;
+    margin-left:-335px;
     z-index: 999;
     a.close{
       display:inline-block;width:30px;height:30px;
       position: absolute;top:-60px;right:-200px; background:url(../../../assets/images/ico_close_close.png) no-repeat 0 0;
     }
     div.imgUl{
-      width:660px;
-      height:660px;
+      width:600px;
+      height:600px;
       position: absolute;
-      top:0px;left:0px;
+      top:0px;left:35px;
       vertical-align: middle;
       display: table;
       ul{
-        width:660px;
-        height:660px;
+        width:600px;
+        height:600px;white-space:nowrap; float: left;list-style-type:none;
         li{
-          line-height:660px;
-          width:660px;
-          height:660px;
-          img{width:660px;height:auto;}
+          line-height:600px;text-align:center;
+          width:600px;
+          height:600px;
+          img{max-width:600px;max-height:600px;}
         }
       }
     }
