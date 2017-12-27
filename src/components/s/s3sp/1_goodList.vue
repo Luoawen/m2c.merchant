@@ -322,7 +322,7 @@
           <div class="agreetc_body" v-if="agreeTypeFlag===1? true:false">是否上架商品？</div>
           <div class="agreetc_body" v-if="agreeTypeFlag===2? true:false">是否下架商品？</div>
         <div class="agreetc_footer">
-          <button type="button" class="btn save" @click = "agree_confirm()">确认</button>
+          <button type="button" class="btn save" :disabled='noDoubleClick'    @click = "agree_confirm()">确认</button>
           <button type="button" class="btn cancel" @click="agreeGoodHide()">取消</button>
         </div>
       </div>
@@ -335,6 +335,7 @@
     name: '',
     data () {
       return {
+        noDoubleClick:false, //禁止多次点击
         agreeTypeFlag:'',// 判断同意类型
         agreeGoodBg:false,// 弹层背景
         agreeGood: false,
@@ -432,6 +433,7 @@
       },
       agree_confirm(){
         let that = this
+        that.noDoubleClick =true
         //商品库批量同意上下架 商品审核申请批量同意上架
           that.$.ajax({
             url: that.base +(that.agreeTypeFlag === 1 ?'m2c.scm/web/goods/up/shelfbatch?token=' : that.agreeTypeFlag === 2 ?'m2c.scm/web/goods/off/shelfbatch?token=':'')+sessionStorage.getItem('mToken')+'&goodsIds='+that.goodsIds,
@@ -442,6 +444,7 @@
             that.agreeTypeFlag = ''
             that.goodsStore()
             that.agreeGoodHide()
+            that.noDoubleClick =false
             }
           })
       },

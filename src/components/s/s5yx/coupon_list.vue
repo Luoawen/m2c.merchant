@@ -78,7 +78,8 @@
         </el-table-column>
         <el-table-column label="数量（剩余／总数量）" align="center">
           <template slot-scope="scope">
-            <span>{{scope.row.couponTotal === 0 ? '∞' : scope.row.couponRemain}}/{{scope.row.couponTotal === 0 ? '∞' : scope.row.couponTotal}}</span>
+            <!-- <span>{{scope.row.couponTotal === 0 ? '无限制' : scope.row.couponRemain}}/{{scope.row.couponTotal === 0 ? '∞' : scope.row.couponTotal}}</span> -->
+            <span>{{scope.row.couponTotal === 0 ? '无限制' : scope.row.couponRemain + '/' + scope.row.couponTotal}}</span>
           </template>
         </el-table-column>
         <el-table-column label="面值" align="center">
@@ -165,7 +166,7 @@ export default {
         creator: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
         use_status: '',
         page_no: 1,
-        page_size: 10
+        page_size: 10,
       },
     }
   },
@@ -236,7 +237,8 @@ export default {
         creator_type: '',
         use_status: '',
         page_no: 1,
-        page_size: 10
+        page_size: 10,
+        creator: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
       }
       _this.getCouponList()
     },
