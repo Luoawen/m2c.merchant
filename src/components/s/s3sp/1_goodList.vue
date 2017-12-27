@@ -411,7 +411,7 @@
         let that = this
         if(that.multipleSelectionGoods.length<=0){
             that.$message({
-            message:'请选择品牌',
+            message:'请选择商品',
             center: true,
             duration:1000,
             type:'info',

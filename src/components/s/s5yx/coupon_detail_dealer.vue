@@ -46,15 +46,15 @@
                 </i>
                 <span class="mr20 ml20">
                   <span class="mr10 wid80">总共发出</span>
-                  <span>200张</span>
+                  <span>{{couponInfo.couponTotal}}</span>
                 </span>
                 <span class="mr20">
                   <span class="mr10 wid80">已被使用</span>
-                  <span>200张</span>
+                  <span> {{couponInfo.couponTotal-couponInfo.couponRemain}}</span>
                 </span>
                 <span class="mr20">
                   <span class="mr10 wid80">还剩余</span>
-                  <span>0张</span>
+                  <span>{{couponInfo.couponRemain}}</span>
                 </span>
               </span>
             </div>

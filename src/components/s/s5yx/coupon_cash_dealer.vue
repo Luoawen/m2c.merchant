@@ -30,7 +30,7 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="发行量" class="ml50">
-                <el-input  v-model="couponParams.total_num" :maxlength="5" maxlength placeholder="最大100000张" @blur="formValidator(2)">
+                <el-input  v-model="couponParams.total_num" :maxlength="5"  placeholder="最大100000张" @blur="formValidator(2)">
                   <i slot="suffix" class="el-input__icon fontstyle">张</i>
                 </el-input>
               </el-form-item>
@@ -57,9 +57,11 @@
             <div class="tit01" v-if="couponParams.threshold_type == 1 || couponParams.threshold_type == 2">
               <span class="ml60 mr10">满</span>
               <el-form-item>
-                <el-input  v-model="couponParams.coupon_json.threshold" placeholder="最大9999" :maxlength="4" @blur="formValidator(9)">
-                  <i slot="suffix" class="el-input__icon fontstyle" v-if="couponParams.threshold_type == 1">元</i>
-                  <i slot="suffix" class="el-input__icon fontstyle" v-if="couponParams.threshold_type == 2">件</i>
+                <el-input  v-if="couponParams.threshold_type == 1" v-model="couponParams.coupon_json.threshold" placeholder="最大9999" :maxlength="4" @blur="formValidator(9)">
+                  <i slot="suffix" class="el-input__icon fontstyle">元</i>
+                </el-input>
+                  <el-input v-if="couponParams.threshold_type == 2"  v-model="couponParams.coupon_json.threshold" placeholder="最高100" :maxlength="4" @blur="formValidator(9)">
+                  <i slot="suffix" class="el-input__icon fontstyle" >件</i>
                 </el-input>
               </el-form-item>
               <span>可使用该优惠券</span>

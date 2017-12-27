@@ -45,7 +45,7 @@
       <el-col :span="24" class="tablecontainer">
         <el-button  class="tbcolor01" @click="centerDialogVisible = true">新增优惠券</el-button>
         <el-button  class="tbcolor02" @click="gotoSendCoupon()">发放优惠券</el-button>
-        <el-button type="primary" class="sort" @click="getCouponList()">搜索</el-button>
+        <el-button type="primary" class="sort btn-search" @click="getCouponList()">搜索</el-button>
         <el-button plain @click="resetSearchParams()">重置搜索条件</el-button>
       </el-col>
     </div>

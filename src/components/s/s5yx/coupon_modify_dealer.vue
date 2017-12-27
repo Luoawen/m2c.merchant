@@ -500,6 +500,10 @@ export default {
         if (_this.couponParams.total_num == '') {
           _this.couponParams.total_num = 0
         }
+        if (_this.couponParams.total_num == 0) {
+           _this.warning('填0即为不限制数量，修改发行量只能增加不能减少，请谨慎设置')
+          return false
+        }
         if (!/^[0-9]{1,5}$/.test(_this.couponParams.total_num)) {
           _this.couponParams.total_num = 0
           _this.warning('优惠券数量最多5位正整数，填0为不限制数量')
