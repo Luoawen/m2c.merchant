@@ -210,7 +210,7 @@ export default {
 						token: sessionStorage.getItem('mToken'),
 						createdUserId:JSON.parse(sessionStorage.getItem('mUser')).userId,
 						createdUserName:JSON.parse(sessionStorage.getItem('mUser')).username,
-						amount:(that.tradableA*100).toFixed(),
+						amount:that.tradableA.toFixed(2),
 						withdrawalId:that.withdrawalId,
 						correlationId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
 						correlationType:2,
@@ -282,9 +282,7 @@ export default {
     		margin-top: 8px;
     		display: inline-block;
 				text-align: right;
-
 			}
-
     	.tit{
     		font-size: 12px;
 				color: #666666;
