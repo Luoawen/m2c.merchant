@@ -165,6 +165,7 @@ export default {
           url: that.base + 'm2c.users/user/findPassword',
           data: {
             token: '123',
+						groupType:'4',
             verifyCode: that.verifyCode,
             mobile: that.mobile,
             newPass: that.md5(that.confirmPass)
