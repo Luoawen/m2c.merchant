@@ -78,7 +78,6 @@
         </el-table-column>
         <el-table-column label="数量（剩余／总数量）" align="center">
           <template slot-scope="scope">
-            <!-- <span>{{scope.row.couponTotal === 0 ? '无限制' : scope.row.couponRemain}}/{{scope.row.couponTotal === 0 ? '∞' : scope.row.couponTotal}}</span> -->
             <span>{{scope.row.couponTotal === 0 ? '无限制' : scope.row.couponRemain + '/' + scope.row.couponTotal}}</span>
           </template>
         </el-table-column>
