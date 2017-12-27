@@ -46,7 +46,7 @@
                 </i>
                 <span class="mr20 ml20">
                   <span class="mr10 wid80">总共发出</span>
-                  <span>{{couponInfo.couponTotal}}</span>
+                  <span>{{couponInfo.couponTotal ===0 ?'无限制' : couponInfo.couponTotal}}</span>
                 </span>
                 <span class="mr20">
                   <span class="mr10 wid80">已被使用</span>

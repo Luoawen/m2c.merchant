@@ -440,10 +440,19 @@
             type:'PUT',
             data: {},
             success: function (result) {
-              // 获取商品列表
-            that.agreeTypeFlag = ''
-            that.goodsStore()
-            that.agreeGoodHide()
+              if(result.status === 200 ){
+                // 获取商品列表
+              that.agreeTypeFlag = ''
+              that.goodsStore()
+              that.agreeGoodHide()
+              }else{
+              //   that.$message({
+              //   message:result.errorMessage,
+              //   center: true,
+              //   duration:1000,
+              //   type:'info',
+              // });
+              }
             that.noDoubleClick =false
             }
           })

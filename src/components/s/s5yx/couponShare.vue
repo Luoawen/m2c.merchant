@@ -266,7 +266,7 @@
 						<el-progress type="circle" :percentage="100" :width="136"  status="success"></el-progress>
 					</div>
 					<div class="cen">总共发送{{send_result.sendTotal}}位用户 </div>
-					<div class="cen"> <span>发送成功{{send_result.sendSuccess}}位</span> <span >{{send_result.sendfail}}位用户发送失败</span>  <el-button class="dre" v-if="send_result.sendfail != 0" type="primary" plain>导出失败用户</el-button></div>
+					<div class="cen"> <span>发送成功{{send_result.sendSuccess}}位</span> <span >{{send_result.sendfail}}位用户发送失败</span>  <el-button class="dre" v-if="send_result.sendfail != 0" type="primary" @click="exportFailure" plain>导出失败用户</el-button></div>
 					<div slot="footer" class="dialog-footer">
 						<el-button type="primary" @click="result = false">确定</el-button>
 					</div>
@@ -399,6 +399,10 @@ export default {
 		download () {
 			location.href=`${this.base}m2c.market/coupon/import/user/excel/template`
 		},
+		//导出发放失败用户
+		exportFailure (){
+			location.href=`${this.base}m2c.market/coupon/export/send/fail/record/`+ send_record_id
+		},
 		// 确定发送
 		send(){
 			let that = this
@@ -417,7 +421,7 @@ export default {
 				}
 			that.$.ajax({
 				method: 'post',
-				url: that.localbase + 'm2c.market/coupon/platform/batch/send/user',
+				url: that.localbase + 'm2c.market/coupon/dealer/batch/send/user',
 				contentType: 'application/json; charset=utf-8',
 				dataType: 'json',
 				data: JSON.stringify(formDate),
