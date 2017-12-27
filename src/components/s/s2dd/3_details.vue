@@ -44,7 +44,7 @@
               <div>
                 <span class="tit01">售后总额:</span>
                 <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight))).toFixed(2)}}元
-                  <span v-if="(orderDetail.orderType !=2 && orderDetail.orderType!=0) || orderDetail.status >= 4">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.status < 4">（运费待商家确认） </span></span>
+                  <span v-if="(orderDetail.orderType !=0) || orderDetail.status >= 4">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.status < 4">（运费待商家确认） </span></span>
               </div>
               <div>
                 <span class="tit01">申请时间:</span>
