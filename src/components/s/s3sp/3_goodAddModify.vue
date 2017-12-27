@@ -1380,6 +1380,7 @@
           this.goodsSKUs = JSON.parse(sessionStorage.getItem('goodsSKUs'))
           this.goodsGuarantCheck = JSON.parse(sessionStorage.getItem('goodsGuarantCheck'))
           this.fileList = JSON.parse(sessionStorage.getItem('fileList'))
+          this.goodsMainImages = JSON.parse(sessionStorage.getItem('goodsMainImages'))
           this.$refs.ue.setUEContent(sessionStorage.getItem('goodsDesc'))
           sessionStorage.setItem('data','')
           sessionStorage.setItem('goodsSKUs','')
