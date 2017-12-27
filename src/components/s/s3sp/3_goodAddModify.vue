@@ -595,6 +595,7 @@
       // 新增商品保障
       addGuarantee(){
         sessionStorage.setItem('data',JSON.stringify(this.data))
+        sessionStorage.setItem('goodsSpecifications',JSON.stringify(this.goodsSpecifications))
         sessionStorage.setItem('goodsSKUs',JSON.stringify(this.goodsSKUs))
         sessionStorage.setItem('goodsGuarantCheck',JSON.stringify(this.goodsGuarantCheck))
         sessionStorage.setItem('fileList',JSON.stringify(this.fileList))
@@ -1375,6 +1376,7 @@
         if(that.$route.query.handle_toggle === 'add'){
           that.handle_toggle = 'add'
           this.data = JSON.parse(sessionStorage.getItem('data'))
+          this.goodsSpecifications = JSON.parse(sessionStorage.getItem('goodsSpecifications'))
           this.goodsSKUs = JSON.parse(sessionStorage.getItem('goodsSKUs'))
           this.goodsGuarantCheck = JSON.parse(sessionStorage.getItem('goodsGuarantCheck'))
           this.fileList = JSON.parse(sessionStorage.getItem('fileList'))
@@ -1390,11 +1392,13 @@
           }else{
             //that.getGoodsInfo()
             this.data = JSON.parse(sessionStorage.getItem('data'))
+            this.goodsSpecifications = JSON.parse(sessionStorage.getItem('goodsSpecifications'))
             this.goodsSKUs = JSON.parse(sessionStorage.getItem('goodsSKUs'))
             this.goodsGuarantCheck = JSON.parse(sessionStorage.getItem('goodsGuarantCheck'))
             this.fileList = JSON.parse(sessionStorage.getItem('fileList'))
             this.goodsMainImages = JSON.parse(sessionStorage.getItem('goodsMainImages'))
             this.$refs.ue.setUEContent(sessionStorage.getItem('goodsDesc'))
+            this.disabled = true
             sessionStorage.setItem('data','')
             sessionStorage.setItem('goodsSKUs','')
             sessionStorage.setItem('goodsGuarantCheck','')
