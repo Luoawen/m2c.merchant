@@ -445,9 +445,9 @@
 		position: fixed;
 		left: 0px;
 		top: 0px;
-		background: #000;
+		background:rgba(0,0,0,0.5);
 		z-index: 999;
-		opacity: 0.5;
+		opacity:0.5;
 	}
   .imgWrap{
 		//禁用选中
