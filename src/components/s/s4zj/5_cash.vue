@@ -138,14 +138,14 @@ export default {
 			// 校验是否超过可提现金额
 			checkTradab () {
 				let that = this
-				if (that.tradableA == '') {
+				if ((that.tradableA).replace(/(^\s+)|(\s+$)/g, "") == '') {
 					that.isEmpty = true
 				} else {
 					that.isEmpty = false
-					if(that.tradableA > that.tradableAmount){
+					if(Number(that.tradableA) > Number(that.tradableAmount)){
 						that.checkShow = true
 					}
-					if(that.tradableA <= 0){
+					if(Number(that.tradableA) <= 0){
             that.isEmpty = true
           }
 				}
