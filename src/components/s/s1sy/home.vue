@@ -557,12 +557,10 @@ export default {
         },
         success: function (result) {
           if(result.status === 200){
-            that.$nextTick(()=>{
-              that.dataList = result.content
-              for(let i=0;i<result.content.length;i++){
-                that.dataList[i].index = i+1
-              }
-            })
+            that.dataList = result.content
+            for(let i=0;i<result.content.length;i++){
+              that.dataList[i].index = i+1
+            }
             console.log(that.dataList)
           }else{
             that.$message({
