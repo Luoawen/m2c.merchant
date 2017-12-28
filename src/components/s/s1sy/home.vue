@@ -133,7 +133,7 @@
                   <h4>{{reportData.orderNum == undefined  ? '--' :reportData.orderNum}}</h4>
                 </el-col>
                 <el-col :span="8">
-                  <div>退货订单数
+                  <div>退款订单数
                     <div class="icon">
                       <div class="tips" style="width:160px;">
                         <p>顾客申请退款、退货退款，且当天商家已同意的售后单数</p>
