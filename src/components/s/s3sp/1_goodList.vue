@@ -447,7 +447,7 @@
             if(result.status === 300 ){
               that.show_tip(result.errorMessage)
             }
-          },
+          }
         })
       },
       // 同意盒子隐藏
@@ -455,6 +455,7 @@
         let that = this
         that.agreeGood = false
         that.agreeGoodBg = false
+        that.noDoubleClick =false  
       },
       deleteConfirmFn (){
         let that =this
