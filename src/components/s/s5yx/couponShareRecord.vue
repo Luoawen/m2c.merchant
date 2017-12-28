@@ -48,15 +48,15 @@
 						</el-table>
       	</div>
       	<div class="fr mt10">
-            		<el-pagination 
-									@size-change="handleSizeChange"
-									@current-change="handleCurrentChange" 
-									:current-page="pagination.pageNum" 
-									:page-sizes="[5,10, 20, 50, 100]" 
-									:page-size="pagination.rows" 
-									layout="total, sizes, prev, pager, next, jumper" 
-									:total="pagination.total">
-									</el-pagination>
+					<el-pagination 
+						@size-change="handleSizeChange"
+						@current-change="handleCurrentChange" 
+						:current-page="pagination.pageNum" 
+						:page-sizes="[5,10, 20, 50, 100]" 
+						:page-size="pagination.rows" 
+						layout="total, sizes, prev, pager, next, jumper" 
+						:total="pagination.total">
+					</el-pagination>
         </div>
         </div>
       </el-col>
@@ -68,14 +68,14 @@ export default {
    data() {
      return {	
 			 time:'',
-     	params: {coupon_name:'',start_date:'',end_date:''},
+     	params: {coupon_name:'',start_date:'',end_date:'',dealer_id:JSON.parse(sessionStorage.getItem('mUser')).dealerId},
 			send_list:[],
 			pagination:{rows:10,total:0,pageNum:1}
    }
    },
 	 watch: {
 	 'time': {
-        handler (val, oldVal) {
+        handler (val, oldVal) {	
           let that = this
           if (!oldVal) return
           if (val == oldVal) return
@@ -89,7 +89,7 @@ export default {
 	},
    methods: {
 		derive (item) {
-			let url = `${this.base}m2c.market/coupon/export/send/fail/record/` + item.sendRecordId
+			let url = `${this.base}m2c.market/web/coupon/export/send/fail/record/` + item.sendRecordId
 			location.href = url
 		},
 		get_send () {
@@ -105,7 +105,7 @@ export default {
 			console.log('formData',formData)
 			that.$.ajax({
 				method: 'get',
-				url: that.localbase + 'm2c.market/coupon/send/record/page',
+				url: that.localbase + 'm2c.market/web/coupon/send/record/page',
 				data: formData, 
 				success: function(res) {
 					if (res.status == 200) {

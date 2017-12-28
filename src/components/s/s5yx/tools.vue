@@ -36,7 +36,8 @@
           </div>
         </div>
       </div>
-      <div class="tools" @click="toCoupon()">
+      <!-- 优惠券入口 -->
+      <!-- <div class="tools" @click="toCoupon()">
         <div class="tools_top tools_bg02">
         </div>
         <div class="tools_body">
@@ -45,7 +46,7 @@
             <p>管理平台和商家创建的优惠 和新增平台优惠券<i class="tools_in ml10"></i></p>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
