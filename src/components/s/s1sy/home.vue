@@ -382,7 +382,7 @@ export default {
         },
         success: function (result) {
           if (result.status === 200){
-            that.content = result.content
+            that.money = result.content
             console.log(that.content)
           }
         }
