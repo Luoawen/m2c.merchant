@@ -995,6 +995,9 @@
         display: inline-block;
         line-height: 50px;
       }
+      span.fr{
+        cursor: pointer;
+      }
     }
     .TowAgreeshow_body{
       text-align: center;

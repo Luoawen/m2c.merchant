@@ -174,6 +174,9 @@ export default {
       display: inline-block;
       line-height: 50px;
     }
+    span.fr{
+      cursor: pointer;
+    }
   }
 }
 .agreetc_header,.refuse_header{
@@ -186,6 +189,9 @@ export default {
   span{
     display: inline-block;
     line-height: 50px;
+  }
+  span.fr{
+    cursor: pointer;
   }
 }
 .fr{

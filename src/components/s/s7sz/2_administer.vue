@@ -1031,6 +1031,9 @@ em.bread{position:fixed; top:80px;left:367px;font-style:normal;color:#333;z-inde
       display: inline-block;
       line-height: 50px;
     }
+    span.fr{
+      cursor: pointer;
+    }
   }
 }
 
@@ -1044,6 +1047,9 @@ em.bread{position:fixed; top:80px;left:367px;font-style:normal;color:#333;z-inde
   span {
     display: inline-block;
     line-height: 50px;
+  }
+  span.fr{
+    cursor: pointer;
   }
 }
 .fr{
