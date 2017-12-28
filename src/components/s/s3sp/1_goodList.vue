@@ -435,27 +435,20 @@
         let that = this
         that.noDoubleClick =true
         //商品库批量同意上下架 商品审核申请批量同意上架
-          that.$.ajax({
-            url: that.base +(that.agreeTypeFlag === 1 ?'m2c.scm/web/goods/up/shelfbatch?token=' : that.agreeTypeFlag === 2 ?'m2c.scm/web/goods/off/shelfbatch?token=':'')+sessionStorage.getItem('mToken')+'&goodsIds='+that.goodsIds,
-            type:'PUT',
-            data: {},
-            success: function (result) {
-              if(result.status === 200 ){
-                // 获取商品列表
-              that.agreeTypeFlag = ''
-              that.goodsStore()
-              that.agreeGoodHide()
-              }else{
-              //   that.$message({
-              //   message:result.errorMessage,
-              //   center: true,
-              //   duration:1000,
-              //   type:'info',
-              // });
-              }
+        that.$.ajax({
+          url: that.base +(that.agreeTypeFlag === 1 ?'m2c.scm/web/goods/up/shelfbatch?token=' : that.agreeTypeFlag === 2 ?'m2c.scm/web/goods/off/shelfbatch?token=':'')+sessionStorage.getItem('mToken')+'&goodsIds='+that.goodsIds,
+          type:'PUT',
+          data: {},
+          success: function (result) {
+            that.agreeTypeFlag = ''
+            that.goodsStore()
             that.noDoubleClick =false
+            that.agreeGoodHide()
+            if(result.status === 300 ){
+              that.show_tip(result.errorMessage)
             }
-          })
+          },
+        })
       },
       // 同意盒子隐藏
       agreeGoodHide () {
