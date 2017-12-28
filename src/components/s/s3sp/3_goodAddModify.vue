@@ -601,7 +601,7 @@
         sessionStorage.setItem('fileList',JSON.stringify(this.fileList))
         sessionStorage.setItem('goodsDesc',this.$refs.ue.getUEContent())
         sessionStorage.setItem('goodsMainImages',JSON.stringify(this.goodsMainImages))
-        this.$router.push({name:'address',query:{goodsId:this.goodsId,handle_toggle:this.handle_toggle}})
+        this.$router.push({name:'address',query:{goodsId:this.goodsId==''?this.$route.query.goodsId:this.goodsId,handle_toggle:this.handle_toggle==''?this.$route.query.handle_toggle:this.handle_toggle}})
       },
       unitChange (item) {
         let that = this
