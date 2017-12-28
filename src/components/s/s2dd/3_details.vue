@@ -278,13 +278,13 @@
           </div>
         </td>
         <td class="a3">
-          <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.specialPrice)}}</template>
-          <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.price)}}</p>
+          <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.strSpecialPrice)}}</template>
+          <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.strPrice)}}</p>
           <!-- {{(orderDetail.goodsInfo.price)}} -->
         </td>
         <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
-        <td class="a5">{{(orderDetail.goodsInfo.totalPrice)}}</td>
-        <td class="a5">{{(orderDetail.backMoney)}}</td>
+        <td class="a5">{{(orderDetail.goodsInfo.strTotalPrice)}}</td>
+        <td class="a5">{{orderDetail.orderType !=0 ? (orderDetail.backMoney) : '--'}}</td>
       </tr>
       </tbody>
     </table>
