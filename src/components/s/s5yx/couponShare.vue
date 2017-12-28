@@ -115,9 +115,9 @@
 							<div class="form_top">
 								<el-form :inline="true"  class="demo-form-inline">
 									<el-form-item   style='line-height:50px' label="选择发放人群">
-										<el-input v-model="user_list_parmas.mobileOrUserId" placeholder="请输入手机号/账号/用户编号"></el-input>
+										<el-input v-model="user_list_parmas.mobile" placeholder="请输入手机号/账号/用户编号"></el-input>
 									</el-form-item>
-									<el-form-item style='line-height:50px'  label="注册">
+									<!-- <el-form-item style='line-height:50px'  label="注册">
 										<div class="search_cell">
 											<el-date-picker
 												v-model="time"
@@ -131,7 +131,7 @@
 												>
 											</el-date-picker>
 										</div>
-									</el-form-item>
+									</el-form-item> -->
 									<el-form-item>
 										<el-button type="primary"  size='medium'  @click="get_user_list">查询</el-button>
 										<el-button type=""   size='medium' @click="reset_user_params">清空查询条件</el-button>
@@ -154,11 +154,11 @@
 									</el-table-column>
 									<el-table-column prop="userId" label="用户编号">
 									</el-table-column>
-									<el-table-column prop="createdDate" label="新增时间" width="250">
+									<!-- <el-table-column prop="createdDate" label="新增时间" width="250">
 										<template slot-scope="scope">
 											<span>{{date_format(new Date(scope.row.createdDate),'yy-MM-dd hh:mm:ss')}}</span>
 										</template>
-									</el-table-column>
+									</el-table-column> -->
 								</el-table>
 								<div class="fr mt10">
 									<el-pagination 
@@ -266,7 +266,7 @@
 						<el-progress type="circle" :percentage="100" :width="136"  status="success"></el-progress>
 					</div>
 					<div class="cen">总共发送{{send_result.sendTotal}}位用户 </div>
-					<div class="cen"> <span>发送成功{{send_result.sendSuccess}}位</span> <span >{{send_result.sendfail}}位用户发送失败</span>  <el-button class="dre" v-if="send_result.sendfail != 0" type="primary" @click="exportFailure" plain>导出失败用户</el-button></div>
+					<div class="cen"> <span>发送成功{{send_result.sendSuccess}}位</span> <span >{{send_result.sendfail}}位用户发送失败</span>  <el-button class="dre" v-if="send_result.sendfail !== 0 "  type="primary" @click="exportFailure" plain>导出失败用户</el-button></div>
 					<div slot="footer" class="dialog-footer">
 						<el-button type="primary" @click="result = false">确定</el-button>
 					</div>
@@ -296,11 +296,11 @@ export default {
 			sel_user:{mobiles:'',total:0},
 			sel_user_mobiles:[],
 			//  查询用户列表参数
-			user_list_parmas: { mobileOrUserId: '', startTime: '', endTime: ''},
+			user_list_parmas: { mobile: '', startTime: '', endTime: '',dealer_id:JSON.parse(sessionStorage.getItem('mUser')).dealerId },
 			// 用户列表  分页
-			pagination: { rows: 5, pageNum: 1, total: 0 },
+			pagination: { rows: 5, page_num: 1, total: 0 },
 			// 查询代金或折扣券列表参数
-			cashAndDiscount_parmas: { coupon_no: '', coupon_name: '', page_no: 1, page_size: 15 },
+			cashAndDiscount_parmas: { coupon_no: '', coupon_name: '', page_no: 1, page_size: 15 ,dealer_id:JSON.parse(sessionStorage.getItem('mUser')).dealerId},
 			// 优惠券请求页数
 			pre: 1,
 			// 手动
@@ -401,7 +401,7 @@ export default {
 		},
 		//导出发放失败用户
 		exportFailure (){
-			location.href=`${this.base}m2c.market/coupon/export/send/fail/record/`+ send_record_id
+			location.href=`${this.base}m2c.market/coupon/export/send/fail/record/`+this.send_result.sendRecordId
 		},
 		// 确定发送
 		send(){
@@ -421,7 +421,7 @@ export default {
 				}
 			that.$.ajax({
 				method: 'post',
-				url: that.localbase + 'm2c.market/coupon/dealer/batch/send/user',
+				url: that.localbase + 'm2c.market/web/coupon/dealer/batch/send/user',
 				contentType: 'application/json; charset=utf-8',
 				dataType: 'json',
 				data: JSON.stringify(formDate),
@@ -450,9 +450,10 @@ export default {
 			let formData = new FormData()
 			formData.append("upfile",that.excel_file)
 			formData.append('coupon_id',that.hand_edit_coupon.couponId)
+			formData.append('dealer_id',JSON.parse(sessionStorage.getItem('mUser')).dealerId)
 			that.$.ajax({
 				method: 'post',
-				url: that.localbase + 'm2c.market/coupon/platform/read/excel/batch/send',
+				url: that.localbase + 'm2c.market/web/coupon/dealer/read/excel/batch/send',
 				// contentType: 'application/json; charset=utf-8',
 				// dataType: 'json',
 				contentType: false,
@@ -537,7 +538,7 @@ export default {
 			let that = this
 			that.$.ajax({
 				method: 'get',
-				url: that.localbase + 'm2c.market/coupon/cashAndDiscount/page',
+				url: that.localbase + 'm2c.market/web/coupon/dealer/cashAndDiscount/page',
 				data: that.cashAndDiscount_parmas,
 				success: function(res) {
 					if (res.status == 200) {
@@ -576,13 +577,11 @@ export default {
 			}
 			that.$.ajax({
 				method: 'get',
-				url: that.localbase + 'm2c.users/user/getUserInfoByMobileAndCreateTime',
+				url: that.localbase + 'm2c.market/web/coupon/dealer/user/page',
 				data: Object.assign(that.user_list_parmas,that.pagination),
 				success: function(res) {
 					if (res.status == 200) {
-						// if (res.content.length > 0) {
-							that.user_list = res.content
-						// }
+						that.user_list = res.content
 						that.pagination.total = res.totalCount
 						console.log('that.user_list',that.user_list)
 					}
@@ -591,7 +590,7 @@ export default {
 		},
 		// reset_user_params
 		reset_user_params() {
-            this.user_list_parmas.mobileOrUserId= ''
+            this.user_list_parmas.mobile= ''
 			this.time = null
 		},
 		// 用于生成领取规则ID
