@@ -44,7 +44,7 @@
       let that = this
       var dealerId = JSON.parse(sessionStorage.getItem('mUser')).dealerId
       that.$.ajax({
-        url: that.base + 'm2c.scm/dealer/web/sys/'+ dealerId,
+        url: that.base + 'm2c.scm/dealer/sys/web/'+ dealerId,
         type: 'get',
         data: {
         },
