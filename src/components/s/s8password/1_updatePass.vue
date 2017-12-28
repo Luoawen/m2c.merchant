@@ -191,6 +191,7 @@
             token: sessionStorage.getItem('mToken'),
             codeType: 2,
             mobile: that.userPhone,
+            groupType:'4',
             newPass: that.md5(pass).toLowerCase(),
             verifyCode: verifyCode
           },
