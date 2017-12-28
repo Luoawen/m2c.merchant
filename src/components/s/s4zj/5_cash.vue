@@ -111,11 +111,11 @@ export default {
 			// 下一步
 			passWordShow () {
 				let that = this
-				if (that.tradableA == '') {
+				if ((that.tradableA).replace(/(^\s+)|(\s+$)/g, "") == '') {
 					that.isEmpty = true
 				} else {
 					that.isEmpty = false
-					if(that.tradableA > that.tradableAmount){
+					if(parseFloat(that.tradableA) > parseFloat(that.tradableAmount)){
 						that.checkShow = true
 					}else{
 						that.passWord = false
@@ -142,10 +142,10 @@ export default {
 					that.isEmpty = true
 				} else {
 					that.isEmpty = false
-					if(Number(that.tradableA) > Number(that.tradableAmount)){
+					if(parseFloat(that.tradableA) > parseFloat(that.tradableAmount)){
 						that.checkShow = true
 					}
-					if(Number(that.tradableA) <= 0){
+					if(parseFloat(that.tradableA) <= 0){
             that.isEmpty = true
           }
 				}
