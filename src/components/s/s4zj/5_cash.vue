@@ -210,7 +210,7 @@ export default {
 						token: sessionStorage.getItem('mToken'),
 						createdUserId:JSON.parse(sessionStorage.getItem('mUser')).userId,
 						createdUserName:JSON.parse(sessionStorage.getItem('mUser')).username,
-						amount:that.tradableA.toFixed(2),
+						amount:that.tradableA,
 						withdrawalId:that.withdrawalId,
 						correlationId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
 						correlationType:2,
