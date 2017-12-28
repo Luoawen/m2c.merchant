@@ -35,11 +35,11 @@
 		<div class="modal_password" v-show="forget_password">
 			<p>忘记密码</p>
 			<div class="modal_refund_close"  @click="close_tip">登录 &nbsp;></div>
-			<input  type="number"  placeholder="请输入注册的手机号码"  oninput="if(value.length !== 11)value=value.slice(0,11)"  class="public_input_phone"  v-model.number="mobile"  :length="11"  @input="get_phone" >
-			<input placeholder="4位数验证码" class="hone_code public_input_code" onkeyup="this.value=this.value.replace(/\s+/g,'')"  v-model.number="verifyCode" maxlength="4" minlength="4" >
+			<input  type="number"  placeholder="请输入注册的手机号码"  oninput="if(value.length !== 11)value=value.slice(0,11)"  class="public_input_phone"  v-model.number="mobile"  :maxlength="11" :minlength='11'  @input="get_phone" >
+			<input placeholder="4位数验证码"  type= 'number'  class="hone_code public_input_code" onkeyup="if(value.length !== 4)value=value.slice(0,4)"  v-model="verifyCode" :maxlength="4" >
 			<button @click="get_code" v-bind:class="{ phone_right:isActive }" :disabled="disabled">{{ timerCodeMsg }}</button>
 			<!-- <input type="password" placeholder="新密码" class="public_input_password" v-model="newPass"> -->
-			<input type="password" placeholder="请输入6-16位新密码" :maxlength="16" :minlength="6" class="public_input_password" v-model="confirmPass">
+			<input type="password" placeholder="请输入6-16位新密码" :maxlength="16" :minlength="6" class="public_input_password" v-model="confirmPass" >
 			<button class="complete_button" @click="pass_forget_passwrod" v-bind:class="{ phone_right:isActive_pass }"  ref='confirmButton'   >确认修改</button>
 		</div>
 	</div>
@@ -48,7 +48,7 @@
 <script>
 import '../assets/css/iconfont_s/iconfont.css'
 export default {
-  name: '',
+  name: '', 
   data () {
     return {
       mobile: '',
@@ -70,11 +70,7 @@ export default {
  					that.show_tip('请输入手机号码')
  					 return ; 
  			} 
-			 if(that.login_params.mobile.length < 11){
-				 	that.show_tip('请输入11位数的手机号')
- 					 return false; 
-			 }
-			if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(that.login_params.mobile))){ 
+			if(!(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/.test(that.login_params.mobile))){ 
  					that.show_tip('请输入11位数的手机号')
  					 return false; 
  			} 
@@ -133,7 +129,7 @@ export default {
     },
     get_phone () {
       let that = this
-      if (!((/^1[34578]\d{9}$/).test(that.mobile))) {this.isActive = false}
+      if (!((/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/).test(that.mobile))) {this.isActive = false}
       else this.isActive = true
     },
     pass_forget_passwrod () {
@@ -142,22 +138,19 @@ export default {
  					that.show_tip('请输入手机号码')
  					 return ; 
  			} 
-			if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(that.mobile))){ 
+			if(!(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/.test(that.mobile))){ 
  					that.show_tip('请输入11位数的手机号')
  					 return false; 
  			} 
-			 	if (that.verifyCode == ''){
-				that.show_tip('请输入验证码')
-				 	 return ; }
-			if (!(/^[a-z0-9]+$/).test(that.confirmPass)){
+			if (that.verifyCode == ''){
+			that.show_tip('请输入验证码')
+					return ; }
+			if (that.confirmPass == ''){
+			that.show_tip('请输入新密码')
+					return ; }
+			if (!(/^[A-Za-z\d\s~!@#%^&*_-]{6,16}$/).test(that.confirmPass)){
 				that.show_tip('密码格式错误')
 				 	 return ; }
-      if (that.confirmPass.length < 6){
-				that.show_tip('请输入6到16位有效密码')
-				 	 return ; } 
-      if (that.confirmPass.length > 16){
-				 that.show_tip('请输入6到16位有效密码')
-				 	 return ; } 
       if (that.confirmPass.length >= 6 && that.confirmPass.length <= 16) {
 				that.$refs.confirmButton.innerHTML = '修改中，请稍候'
         that.$.ajax({
