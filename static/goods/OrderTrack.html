@@ -21,7 +21,7 @@
 </style>
 <body>
 <div class="goodcontainer" id="orderTrack">
-	<div class="logistics_cen clear" v-if="logistics.length>0">
+	<div class="logistics_cen clear" v-show="logistics.length>0">
 		<div class="clear" v-for="(item,index) in logistics">
 		<div class="logistics_left fl" >
 			<div class="tit01" v-text="item.time"></div>
@@ -37,14 +37,14 @@
 				</div>
 			</div>
 			<div class="fl tit">
-				<div class="tit01"  v-show="index == 0 ">{{state==0?'运输过程中':state==1?'已揽件':state==2?'疑难':state==3?'已签收':state==4?'已退签':state==5?'派件中':state==6?'正在退回':state==7?'待清关':state==8?'清关中':state==9?'已清关':state==10?'清关异常':state==11?'收件人拒签':'-'}}</div>
+				<div class="tit01"  v-show="index == 0 " v-text="state==0?'运输过程中':state==1?'已揽件':state==2?'疑难':state==3?'已签收':state==4?'已退签':state==5?'派件中':state==6?'正在退回':state==7?'待清关':state==8?'清关中':state==9?'已清关':state==10?'清关异常':state==11?'收件人拒签':'-'" ></div>
 				<div class="tit02" v-text="item.context"></div>
 			</div>
 		</div>
 		</div>
 	</div>
-  <div class="logistics_cen clear" v-else="logistics.length==0" style="font-size: 0.3rem;text-align: center;">
-    <label>暂无相关物流信息</label>
+  <div class="logistics_cen clear" v-show="logistics.length==0" style="font-size: 0.3rem;text-align: center;">
+    <label v-text="isLoader==1?'暂无相关物流信息':''"></label>
   </div>
 </div>
 <script type="text/javascript" src="cssJs/js/jquery-1.10.1.min.js" ></script>

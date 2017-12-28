@@ -7,6 +7,7 @@ var vm = new Vue({
   data:{
     logistics:[],
     state:0,
+    isLoader:0
   },
   computed: {
     //权限按钮
@@ -29,10 +30,17 @@ var vm = new Vue({
         type: 'get',
         success: function (data) {
           if(JSON.parse(data.content).status =200){
-            that.logistics=JSON.parse(data.content).data;
-            that.state=JSON.parse(data.content).state;
+           that.logistics=JSON.parse(data.content).data;
+           console.log(that.logistics.length)
+           that.state=JSON.parse(data.content).state;
+            if(that.logistics.length<=0){
+              that.isLoader=1;
+            }
           }
-        }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+          that.isLoader=1;
+        },
       });
     },
     getApiUrl :function  () {
@@ -45,7 +53,7 @@ var vm = new Vue({
       } else if (href.includes('m2c2017local')) { // 本地环境
         apiUrl = 'http://api.m2c2017local.com:80/'
       } else if (href.includes('localhost')) { // 本地环境
-        apiUrl = 'http://api.m2c2017local.com:80/'
+        apiUrl = 'http://api.m2c2017test.com:80/'
       } else { // 演示环境
         apiUrl = 'http://api.m2c2017.com:80/'
       }
