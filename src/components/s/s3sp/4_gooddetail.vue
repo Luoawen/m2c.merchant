@@ -167,6 +167,7 @@
 						<div class="clear mt20" v-if="data.approveStatus == ''|| data.approveStatus == undefined">
       				<span class="tit01 fl">商品识别图</span>
       				<span class="t_img fl recognizedImg">
+								<i class="nothing" v-if="goodsRecognized.length==0">--</i>
 								<!-- <template v-for="file in goodsRecognized"> -->
 								<template v-for="(file,index) in goodsRecognized" v-if="index<6">
 									<div class="conimg" @click="imgWrapShow(index)">
@@ -210,6 +211,7 @@
       			<div class="clear">
       				<span class="tit01 fl">商品主图</span>
       				<span class="t_img fl">
+								<i class="nothing" v-if="fileList.length==0">--</i>
 								<template v-for="file in fileList">
 									<img :src='file'/>
 								</template>
@@ -218,9 +220,10 @@
       			<div class="clear mt20">
       				<span class="tit01 fl">图文详情</span>
 							<span class="t_img fl">
-      				<div v-html="info">
-								{{info}}
-							</div>
+								<i class="nothing" v-if="info==''">--</i>
+								<div v-html="info">
+									{{info}}
+								</div>
 							</span>
       			</div>
       		</div>
@@ -437,7 +440,9 @@
   }
 </script>
 <style lang="scss" scoped>
-	
+	i.nothing{
+		display:inline-block;
+	}
 	.hptczp{
 		width: 100%;
 		height: 100%;
@@ -669,6 +674,7 @@
 					width:100px;text-align:right;
   			}
   			.t_img{
+					margin-top:10px;
   				img{
   					width: 101px;
   					height: 101px;

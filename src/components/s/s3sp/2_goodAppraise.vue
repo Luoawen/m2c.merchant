@@ -239,7 +239,7 @@
           <tr v-if='comment.replyCommentContent '>
             <td>
             </td>
-            <td colspan="6">
+            <td colspan="7">
               <div class="tdhf">
                 <div class="nr">
                   回复内容:
@@ -495,7 +495,7 @@
   top: 0px;
   background:rgba(0,0,0,0.5);
   z-index: 999;
-  opacity:0.5;
+  opacity:0.3;
 }
   .imgWrap{
     //禁用选中

@@ -111,7 +111,7 @@ export default {
 			// 下一步
 			passWordShow () {
 				let that = this
-				if ((that.tradableA).replace(/(^\s+)|(\s+$)/g, "") == '') {
+				if ((that.tradableA).replace(/(^\s+)|(\s+$)/g, "") == ''||parseFloat(that.tradableA) <= 0) {
 					that.isEmpty = true
 				} else {
 					that.isEmpty = false
@@ -138,7 +138,7 @@ export default {
 			// 校验是否超过可提现金额
 			checkTradab () {
 				let that = this
-				if ((that.tradableA).replace(/(^\s+)|(\s+$)/g, "") == '') {
+				if ((that.tradableA).replace(/(^\s+)|(\s+$)/g, "") == ''||parseFloat(that.tradableA) <= 0) {
 					that.isEmpty = true
 				} else {
 					that.isEmpty = false
