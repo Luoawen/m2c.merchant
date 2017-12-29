@@ -640,7 +640,7 @@ export default {
         }
         console.log('rebody:', JSON.stringify(rebody))
         _this.$.ajax({
-         url: _this.localbase + 'm2c.market/coupon/creation',
+         url: _this.localbase + 'm2c.market/web/coupon/creation',
           // url: 'http://localhost:8080/m2c.market/coupon/creation',
           contentType: 'application/json', // 必须有
           type: 'post',
