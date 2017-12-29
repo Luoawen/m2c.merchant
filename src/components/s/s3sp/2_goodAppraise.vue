@@ -85,6 +85,17 @@
               </el-option>
             </el-select>
           </el-col>
+           <el-col :span="3" class="alginRight">评价级别：</el-col>
+          <el-col :span="9">
+            <el-select v-model="search_params.commentLevel" placeholder="评价级别">
+              <el-option
+                v-for="commentLevel in commentLeveles"
+                :key="commentLevel.value"
+                :label="commentLevel.label"
+                :value="commentLevel.value">
+              </el-option>
+            </el-select>
+          </el-col>
         </el-row>
         <el-row :gutter="20" class="mt20">
           <el-col :span="20" :offset="3">
@@ -155,6 +166,7 @@
             <td width="120px">操作</td>
             <td width="320px;">评论内容</td>
             <td>评价星级</td>
+            <td>评价级别</td>
             <td>商品信息</td>
             <td>订单号</td>
             <td>顾客信息</td>
@@ -162,9 +174,9 @@
           </tr>
         </thead>
         <tbody v-if="goodsCommentTotalCount==0">
-        <tr style="height: 50px;text-align:center">
-          <td colspan="7">暂无数据</td>
-        </tr>
+          <tr style="height: 50px;text-align:center">
+            <td colspan="7">暂无数据</td>
+          </tr>
         </tbody>
         <tbody v-for="(comment,index) in datacomment">
           <tr>
@@ -203,6 +215,11 @@
             </td>
             <td>
               <span>{{comment.starLevel}}</span>星
+            </td>
+            <td>
+              <span v-if="comment.commentLevel ==1 " > 好评</span>
+              <span v-else-if="comment.commentLevel ==3" > 差评</span>
+              <span v-else > 中评</span>
             </td>
             <td>
               <a class="ellipsis2" :title="comment.goodsName">{{comment.goodsName}}</a><br/><br/>
@@ -275,10 +292,11 @@
       return {
         is_Success: false,
         // 搜索参数
-        search_params: {condition: '', replyStatus: '', starLevel: '', startTime: '', endTime: '', imageStatus: ''},
+        search_params: {condition: '', replyStatus: '', starLevel: '', startTime: '',commentLevel:'', endTime: '', imageStatus: ''},
         reply_params: {commentId: '', replyContent: ''},
         replyStatuses: [{value: '', label: '回复状态'}, {value: '1', label: '未回复'}, {value: '2', label: '已回复'}], // 回复状态
         leveles: [{value: '', label: '评价星级'}, {value: '1', label: '1星'}, {value: '2', label: '2星'}, {value: '3', label: '3星'}, {value: '4', label: '4星'}, {value: '5', label: '5星'}], // 评价星级
+        commentLeveles: [{value: '', label: '全部'}, {value: '1', label: '好评'}, {value: '2', label: '中评'}, {value: '3', label: '差评'}], // 评价级别
         imageStatuses:[{value: '', label: '图片情况'}, {value: '1', label: '无图'}, {value: '2', label: '有图'}], // 图片情况
         datacomment: '',
         showhptc: false,
@@ -399,6 +417,7 @@
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // 商户ID
             replyStatus: that.search_params.replyStatus,
             starLevel: that.search_params.starLevel,
+            commentLevel: that.search_params.commentLevel,
             startTime: that.search_params.startTime,
             endTime: that.search_params.endTime,
             condition: that.search_params.condition.replace(/\s+/g,""),

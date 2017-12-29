@@ -249,7 +249,7 @@ export default {
         _this.searchParams.end_time = _this.formatDate(_this.searchParams.time[1], 'yyyy-MM-dd')
       }
       _this.$.ajax({
-        url: _this.localbase + 'm2c.market/coupon/page',
+        url: _this.localbase + 'm2c.market/web/coupon/page',
 //        url: 'http://localhost:8080/m2c.market/coupon/page',
         data: Object.assign({}, {token: sessionStorage.getItem('access_token'), isEncry: false}, _this.searchParams),
         success: function (result) {
