@@ -167,7 +167,7 @@ Vue.use(Element)
       let _success = 'success' in options ? options.success : function () { return }
       let _error = 'error' in options ? options.error : function () { return }
       let _options = $.extend(options, {
-        headers:{'attach':(sessionStorage.getItem('mUser')!=null||sessionStorage.getItem('mUser')!=undefined)?attach:'',
+        headers:{'attach':(sessionStorage.getItem('mUser')!=null||sessionStorage.getItem('mUser')!=undefined)?getattach():"aaa",
         'X-Authorization': sessionStorage.getItem('token')},
         success: function (result) {
           if (result.status === 800000 || result.status === 800001 || result.status === 800002 || result.status === 800003 || result.status === 800004) {
@@ -184,13 +184,15 @@ Vue.use(Element)
     }
   }
   // 封装客户端操作对象
-  let userInfo =JSON.parse(sessionStorage.getItem('mUser'))
-  console.log(userInfo)
-  let attach;
-  if(userInfo){
-    attach={userName:encodeURI(userInfo.dealerName),userId:userInfo.dealerId,browserInfo:browserInfo(),ip:'127.0.0.1',userType:1};
-    console.log('_attach',JSON.stringify(attach))
-    attach =JSON.stringify(attach)
+  function getattach(){
+    console.log('userInfo',JSON.parse(sessionStorage.getItem('mUser')))
+    let attach;
+    if(sessionStorage.getItem('mUser')){
+      let userInfo =JSON.parse(sessionStorage.getItem('mUser'))
+      attach={userName:encodeURI(userInfo.dealerName),userId:userInfo.dealerId,browserInfo:browserInfo(),ip:'127.0.0.1',userType:1};
+      console.log('_attach',JSON.stringify(attach))
+      return JSON.stringify(attach)
+    }
   }
   // 抓取浏览器客户端函数
   function browserInfo (){
