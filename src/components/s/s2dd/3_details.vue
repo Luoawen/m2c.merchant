@@ -690,7 +690,7 @@
             that.$.ajax({
               type: 'PUT',
               url: this.base + 'm2c.scm/order/web/dealer/agree-apply-sale',
-              //url: 'http://localhost:8080/m2c.scm/order/dealer/agree-apply-sale',
+              //url: 'http://localhost:8080/m2c.scm/order/web/dealer/agree-apply-sale',
               data: {
                 token: sessionStorage.getItem('mToken'),
                 isEncry: false,
@@ -725,7 +725,7 @@
         that.$.ajax({
           type: 'PUT',
           url: this.base + 'm2c.scm/order/web/dealer/agree-apply-sale',
-          //url: 'http://localhost:8080/m2c.scm/order/dealer/agree-apply-sale',
+          //url: 'http://localhost:8080/m2c.scm/order/web/dealer/agree-apply-sale',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
