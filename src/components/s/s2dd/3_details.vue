@@ -321,7 +321,7 @@
         <el-form-item label="配送员手机号:" :label-width="formLabelWidth" required>
           <el-input v-model="shipmentForm.phone" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="运单号:" :label-width="formLabelWidth" required>
+        <el-form-item label="运单号:" :label-width="formLabelWidth">
           <el-input v-model="shipmentForm.expressNo" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注:" :label-width="formLabelWidth">
@@ -945,10 +945,10 @@
             that.show_tip("请输入配送员电话")
             return;
           }
-          if(that.shipmentForm.expressNo == '' || that.shipmentForm.expressNo == undefined){
+          /*if(that.shipmentForm.expressNo == '' || that.shipmentForm.expressNo == undefined){
             that.show_tip("请输入运单号")
             return;
-          }
+          }*/
         }
         that.$.ajax({
           type: 'PUT',
