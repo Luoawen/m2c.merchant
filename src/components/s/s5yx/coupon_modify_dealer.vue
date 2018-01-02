@@ -472,7 +472,7 @@ export default {
         }
         console.log('rebody:', JSON.stringify(rebody))
         _this.$.ajax({
-         url: _this.localbase + 'm2c.market/coupon/modify',
+         url: _this.localbase + 'm2c.market/web/coupon/modify',
           // url: 'http://localhost:8080/m2c.market/coupon/modify',
           contentType: 'application/json', // 必须有
           type: 'post',
@@ -541,7 +541,7 @@ export default {
   mounted () {
     let _this = this
     _this.$.ajax({
-     url: _this.localbase + 'm2c.market/coupon/detail/' + sessionStorage.getItem('coupon_id'),
+     url: _this.localbase + 'm2c.market/web/coupon/detail/' + sessionStorage.getItem('coupon_id'),
       // url: 'http://localhost:8080/m2c.market/coupon/detail/' + sessionStorage.getItem('coupon_id'),
       data: {},
       success: function (result) {

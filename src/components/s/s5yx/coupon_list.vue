@@ -263,7 +263,7 @@ export default {
       if (confirm('确定要终止该优惠券?')) {
         _this.$.ajax({
           type: 'post',
-          url: _this.localbase + 'm2c.market/coupon/end/' + couponId,
+          url: _this.localbase + 'm2c.market/web/coupon/end/' + couponId,
 //          url: 'http://localhost:8080/m2c.market/coupon/end/' + couponId,
           success: function (result) {
             if (result.status === 200) {
