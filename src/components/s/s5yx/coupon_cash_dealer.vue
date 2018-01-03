@@ -700,6 +700,13 @@ export default {
           return false
         }
       }
+      if (_this.couponParams.coupon_json.threshold !== '' &&
+          _this.couponParams.coupon_json.money !== '' &&
+          _this.couponParams.threshold_type === '1' &&
+          parseInt(_this.couponParams.coupon_json.threshold) <= parseInt(_this.couponParams.coupon_json.money)) {
+          _this.warning('优惠券优惠金额不能大于门槛金额')
+          return false
+        }
       if (flag == 0 || flag == 9) {
         if (_this.couponParams.threshold_type === '1' || _this.couponParams.threshold_type === '2') {
           if (!/^[1-9]\d{0,3}$/.test(_this.couponParams.coupon_json.threshold)) {

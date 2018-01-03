@@ -950,7 +950,7 @@
                 alert('满减门槛金额/件数和优惠金额必须为正整数')
                 return false
               }
-              if (that.params.threshold_type == 1 && parseInt(that.fullCutList[i].threshold) < parseInt(that.fullCutList[i].money)) {
+              if (that.params.threshold_type == 1 && parseInt(that.fullCutList[i].threshold) <= parseInt(that.fullCutList[i].money)) {
                 alert('满减优惠金额不能大于门槛金额')
                 return false
               }
@@ -972,7 +972,7 @@
                 alert('满减门槛金额/件数必须为正整数')
                 return false
               }
-              if (!/^[0-9]{1}(.[0-9]{0,2})?$/.test(that.fullCutList[i].discount)) {
+              if (!/^[0-9]{1}(.[0-9]{0,2})?$/.test(that.fullCutList[i].discount || parseFloat(that.fullCutList[i].discount) == 0)) {
                 alert('优惠折扣必须为0-10之间的最多两位小数')
                 return false
               }
