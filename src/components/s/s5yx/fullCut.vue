@@ -58,8 +58,7 @@
                       </el-option>
                 </el-select>
                   <!-- 换购加上点击选择商品 -->
-                  <span style="margin-left:10px;" v-show="showlevel5 || showlevel6">
-                    <a @click="openGoodsExcahnge()">点击选择换购商品</a>
+                  <span style="margin-left:6px;" v-show="showlevel5 || showlevel6"><a @click="openGoodsExcahnge()">点击选择换购商品</a>
                   </span>
                 </el-col>
               </el-row>
@@ -547,13 +546,14 @@
               </div>
             </div>
             <div class="page">
-              <button>上一页</button>
+              <button @click="pageGoods(goodsResult.pageNumber - 1, goodsResult.pageCount)">上一页</button>
               <span>{{goodsResult.pageNumber}}</span>/
               <span>{{goodsResult.pageCount}}</span>
-              <button>下一页</button>
+              <button @click="pageGoods(goodsResult.pageNumber + 1, goodsResult.pageCount)">下一页</button>
               <span>到</span>
-              <input style="" class="rb" v-model="goods_query_item.pageNum"/>
+              <input style="width:24px;height:24px;display: inline-block;font-size:9px;" class="rb" v-model="goods_query_item.pageNum"/>
               <span>页</span>
+              <button @click="pageGoods(goods_query_item.pageNum, goodsResult.pageCount)">GO</button>
             </div>
           </div>
           <div class="footer">
@@ -1946,7 +1946,6 @@
           }
         }
       },
-
       cancelExchange(){
         var that = this
         for (var i = 0; i < that.goodsResult.content.length; i++) {
@@ -2037,7 +2036,7 @@
       //   层级level
       selectlevel (situation, threshold) {
         var that = this
-        that.exchangeGoodsList = []
+        // that.exchangeGoodsList = []
         that.fullCutList = [{threshold: '', discount: '', money: '', level: '', buyingPrice: '', goodsIds: ''}]
         //满多少减多少
         if (situation == 1 && threshold == 1) {
