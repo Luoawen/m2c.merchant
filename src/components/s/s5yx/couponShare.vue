@@ -366,7 +366,7 @@ export default {
 			// 存一次上传的文件
 			this.excel_file = target.files[0]
 			this.$.ajax({
-				url:  `${this.base}m2c.market/coupon/read/user/excel/count`,
+				url:  `${this.base}m2c.market/web/coupon/read/user/excel/count`,
 				type: "POST",
 				data: formData,
 				/**
@@ -397,11 +397,11 @@ export default {
 		},
 		// 下载
 		download () {
-			location.href=`${this.base}m2c.market/coupon/import/user/excel/template`
+			location.href=`${this.base}m2c.market/web/coupon/import/user/excel/template`
 		},
 		//导出发放失败用户
 		exportFailure (){
-			location.href=`${this.base}m2c.market/coupon/export/send/fail/record/`+this.send_result.sendRecordId
+			location.href=`${this.base}m2c.market/web/coupon/export/send/fail/record/`+this.send_result.sendRecordId
 		},
 		// 确定发送
 		send(){
@@ -590,8 +590,9 @@ export default {
 		},
 		// reset_user_params
 		reset_user_params() {
-            this.user_list_parmas.mobile= ''
+      this.user_list_parmas.mobile= ''
 			this.time = null
+			this.get_user_list()
 		},
 		// 用于生成领取规则ID
 		S4() {

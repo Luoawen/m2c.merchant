@@ -219,10 +219,10 @@ export default {
     }
   },
   created () {
-    console.log("sessionStorage.getItem('coupon_id')"+ sessionStorage.getItem('coupon_id'))
+    // console.log("sessionStorage.getItem('coupon_id')"+ sessionStorage.getItem('coupon_id'))
     let _this = this
     _this.$.ajax({
-     url: _this.localbase + 'm2c.market/coupon/detail/' + sessionStorage.getItem('coupon_id'),
+     url: _this.localbase + 'm2c.market/web/coupon/detail/' + sessionStorage.getItem('coupon_id'),
       // url: 'http://localhost:8080/m2c.market/coupon/detail/' + sessionStorage.getItem('coupon_id'),
       data: {
       },

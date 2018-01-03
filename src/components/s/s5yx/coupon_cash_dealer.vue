@@ -1617,13 +1617,13 @@ export default {
                 width: 15px;
                 height: 7px;
                 display: inline-block;
-                // background: url(../../../assets/images/icon_open.png) no-repeat center;
+                background: url(../../../assets/images/icon_open.png) no-repeat center;
               }
               .icon_open02{
                 width: 15px;
                 height: 7px;
                 display: inline-block;
-                // background: url(../../../assets/images/icon_open02.png) no-repeat center;
+                background: url(../../../assets/images/icon_open02.png) no-repeat center;
               }
             }
             .img{
