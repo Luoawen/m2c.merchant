@@ -2036,7 +2036,7 @@
       //   层级level
       selectlevel (situation, threshold) {
         var that = this
-        // that.exchangeGoodsList = []
+        that.exchangeGoodsList = []
         that.fullCutList = [{threshold: '', discount: '', money: '', level: '', buyingPrice: '', goodsIds: ''}]
         //满多少减多少
         if (situation == 1 && threshold == 1) {
