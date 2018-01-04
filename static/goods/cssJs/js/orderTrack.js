@@ -12,7 +12,7 @@ var vm = new Vue({
   computed: {
     //权限按钮
   },
-  created:function(){
+  mounted:function(){
 
     this.loadLogisticsInfo();
 
@@ -29,17 +29,22 @@ var vm = new Vue({
         },
         type: 'get',
         success: function (data) {
-          if(JSON.parse(data.content).status =200){
-           that.logistics=JSON.parse(data.content).data;
-           console.log(that.logistics.length)
-           that.state=JSON.parse(data.content).state;
-            if(that.logistics.length<=0){
+          if(data.status =200){
+            console.log(JSON.parse(data.content));
+            if(JSON.parse(data.content).status=="200"){
+              that.logistics=JSON.parse(data.content).data;
+              console.log(that.logistics.length)
+              that.state=JSON.parse(data.content).state;
               that.isLoader=1;
+            }else{
+              that.isLoader=2;
             }
+          }else{
+            that.isLoader=2;
           }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-          that.isLoader=1;
+          that.isLoader=2;
         },
       });
     },

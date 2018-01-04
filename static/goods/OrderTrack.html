@@ -20,33 +20,37 @@
     }
 </style>
 <body>
-<div class="goodcontainer" id="orderTrack">
-	<div class="logistics_cen clear" v-show="logistics.length>0">
-		<div class="clear" v-for="(item,index) in logistics">
-		<div class="logistics_left fl" >
-			<div class="tit01" v-text="item.time"></div>
-		</div>
-		<div class="logistics_right fl">
-      <div class="xian fl poi1 mt3" v-show="index == 0 ">
-        <div class="bg fl poi2">
+  <div id="orderTrack">
+    <div v-show="isLoader==0"></div>
+    <div class="logistics_cen clear" v-show="isLoader==1" style="display:none;">
+      <div class="clear" v-for="(item,index) in logistics">
+        <div class="logistics_left fl" >
+          <div class="tit01" v-text="item.time"></div>
+        </div>
+        <div class="logistics_right fl">
+          <div class="xian fl poi1 mt3" v-show="index == 0 ">
+            <div class="bg fl poi2">
+            </div>
+          </div>
+          <div class="xian fl poi1" v-show="index > 0 ">
+            <div class="bg02 fl poi2">
+
+            </div>
+          </div>
+          <div class="fl tit">
+            <div class="tit01"  v-show="index == 0 " v-text="state==0?'运输过程中':state==1?'已揽件':state==2?'疑难':state==3?'已签收':state==4?'已退签':state==5?'派件中':state==6?'正在退回':state==7?'待清关':state==8?'清关中':state==9?'已清关':state==10?'清关异常':state==11?'收件人拒签':'-'" ></div>
+            <div class="tit02"  v-text="item.context"></div>
+          </div>
         </div>
       </div>
-			<div class="xian fl poi1" v-show="index > 0 ">
-				<div class="bg02 fl poi2">
+    </div>
+    <div v-show="isLoader==2">
+      <div class="tips" style="margin-top: 2em; text-align: center;"><img src="images/default_logistics.png" style="width: 3em; height: 3em;"> <div class="tipsInfo" style="font-size: 0.3em;color:#777777;margin:0em;padding:0em;">暂无物流信息</div> <div class="tipsInfo" style="font-size: 0.2em;padding-top:0.5em;color:#777777">如有疑问，请联系店铺客服</div></div>
 
-				</div>
-			</div>
-			<div class="fl tit">
-				<div class="tit01"  v-show="index == 0 " v-text="state==0?'运输过程中':state==1?'已揽件':state==2?'疑难':state==3?'已签收':state==4?'已退签':state==5?'派件中':state==6?'正在退回':state==7?'待清关':state==8?'清关中':state==9?'已清关':state==10?'清关异常':state==11?'收件人拒签':'-'" ></div>
-				<div class="tit02" v-text="item.context"></div>
-			</div>
-		</div>
-		</div>
-	</div>
-  <div class="logistics_cen clear" v-show="logistics.length==0" style="font-size: 0.3rem;text-align: center;">
-    <label v-text="isLoader==1?'暂无相关物流信息':''"></label>
+    </div>
   </div>
-</div>
+
+
 <script type="text/javascript" src="cssJs/js/jquery-1.10.1.min.js" ></script>
 <script type="text/javascript" src="cssJs/js/vue.js" ></script>
 <script type="text/javascript" src="cssJs/js/orderTrack.js" ></script>
