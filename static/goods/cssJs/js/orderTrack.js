@@ -29,7 +29,7 @@ var vm = new Vue({
         },
         type: 'get',
         success: function (data) {
-          if(data.status =200){
+          if(data.status ==200){
             console.log(JSON.parse(data.content));
             if(JSON.parse(data.content).status=="200"){
               that.logistics=JSON.parse(data.content).data;
