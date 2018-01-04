@@ -4,10 +4,11 @@
       <el-col :span="24"><h4>基本信息</h4></el-col>
     </el-row>
     <el-form :model="data" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-row :gutter="20">
+      <el-row :gutter="20" style="margin-bottom:0;">
         <el-col :span="11">
           <el-form-item label="商品名称" prop="goodsName">
             <el-input v-model="data.goodsName"   placeholder="1-50字符" :maxlength="50" ></el-input>
+            <i class="red fl" style="margin-top:-8px;color:#999;line-height:20px;">请将商品关键信息设置在前十字，以便刺激顾客购买</i>
           </el-form-item>
         </el-col>
         <el-col :span="11">
@@ -84,7 +85,7 @@
         <el-col :span="24">
           <el-form-item label="商品保障" class="graySpan">
             <el-checkbox-group v-model="goodsGuarantCheck">
-              <el-row :gutter="10" style="width:100%;">
+              <el-row :gutter="10" style="width:100%; margin-top:6px;">
                 <template v-for="(guarantee,index) in goodsGuaranteeList" v-if="guarantee.isDefault===1">
                   <el-col :span="5">
                     <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId" :title="guarantee.guaranteeName+' '+guarantee.guaranteeDesc">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
@@ -1502,7 +1503,8 @@
   .infoBox{width:96%; margin:20px 2%;background:#fff;padding:20px 3%;float:left;position:relative;z-index:1;}
   .infoBox h4{color:#333;line-height:30px;margin-left:-5%;}
   .el-row {
-    margin-bottom: 20px;width:80%;margin-left:4%;
+    // margin-bottom: 20px;
+    width:80%;margin-left:4%;
     &:last-child {
       margin-bottom: 0;
     }
@@ -1563,6 +1565,6 @@
  .el-upload-list--picture .el-upload-list__item-thumbnail{width:100px;height:100px;float:left;position:static;margin-left:0;border-radius:4px; border:1px solid #c0ccda}
  .el-upload{width:100px;height:100px;display:inline-block;float:left;overflow:hidden;margin-right:20px;}
   .el-upload .el-icon-plus{width:98px;height:98px;background:#fff url(../../../assets/images/ico_add.png) no-repeat center center;border:1px dotted #B7C9E1;}
-
+.demo-ruleForm .el-form-item__label{line-height:50px;}
  .el-icon-plus:before{content:'';}
 </style>

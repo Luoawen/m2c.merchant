@@ -15,7 +15,6 @@
         <button type="button" class="fah" v-show="bModify||fModify" @click="saveDealerOrder()">保存</button>
         <button type="button" class="fah" v-show="bModify||fModify" @click="bModify = false,fModify = false">取消</button>
       </span>
-
     </div>
     <!-- 订货单详情 -->
     <div v-show="showactive" class="customerdetail_container">

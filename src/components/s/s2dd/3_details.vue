@@ -1,5 +1,5 @@
 <template>
-  <div class="detail">
+  <div class="detail content">
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="售后单详情" name="first">
         <div class="customerdetail_container">
@@ -132,7 +132,9 @@
       <el-tab-pane label="售后物流" name="second">
         <div class="logistics" style="padding-bottom:20px"  >
           <!--没有物流的情况 -->
-          <h3  class="building"  v-if="orderDetail.status <=4"> 暂无物流信息</h3>
+          <h3  class="building" v-if="orderDetail.status <=4">暂无物流信息<br />
+            <el-button type="primary" @click="addLogistics">添加物流信息</el-button>
+          </h3>
           <el-row v-if ="orderDetail.status>=5">
            <el-col :span='8'>
               <span class="tit01">售后状态:</span>
@@ -154,56 +156,57 @@
                 </tr>
                 </thead>
                 <tbody style="border:1px solid rgb(215, 215, 215);" >
-                  <tr >
-                      <td class=" clear">
-                        <div class="a1tab fl mr20" ><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage == ''? '[]': orderDetail.goodsInfo.goodsImage)[0]"  style="width:80px;height:80px;margin:10px"/></div>
-                        <div class="a1tit fl">
-                          <div class="wobse top">
-                            <i v-if="orderDetail.goodsInfo.isChange==1" class="changeGood"></i>
-                            {{orderDetail.goodsInfo.goodsName}}
-                          </div>
-                          <div class="btm" v-if="orderDetail.goodsInfo.skuName != ''">
-                            规格： {{orderDetail.goodsInfo.skuName}}
-                          </div>
+                  <tr>
+                    <td class=" clear">
+                      <div class="a1tab fl mr20" ><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage == ''? '[]': orderDetail.goodsInfo.goodsImage)[0]"  style="width:80px;height:80px;margin:10px"/></div>
+                      <div class="a1tit fl">
+                        <div class="wobse top">
+                          <i v-if="orderDetail.goodsInfo.isChange==1" class="changeGood"></i>
+                          {{orderDetail.goodsInfo.goodsName}}
                         </div>
-                        <span style="margin-left:38%;"> {{orderDetail.goodsInfo.sellNum}}</span>
-                      </td>
-                      <td >
-                      </td>
+                        <div class="btm" v-if="orderDetail.goodsInfo.skuName != ''">
+                          规格： {{orderDetail.goodsInfo.skuName}}
+                        </div>
+                      </div>
+                      <span style="margin-left:38%;"> {{orderDetail.goodsInfo.sellNum}}</span>
+                    </td>
+                    <td >
+                    </td>
+                  </tr>
+                  <tr style="border:1px solid rgb(215, 215, 215);" v-if ="orderDetail.orderType==0 && logistics.status==7" >
+                    <td style="width:100%">
+                      <h3 style="color:rgb(0, 102, 204);padding-left:12px;font-size:16px;" >商家重新发货</h3>
+                      <!--退换货（增加寄出的）的情况-->
+                      <div class="col-sm-8 detail_cen">
+                        <span class="tit01">物流公司:</span> <span class="ml20">{{logistics.status < 5 ? '--' :logistics.status >= 7? logistics.expressName : logistics.backExpressName}}</span>
+                      </div>
+                      <div class="col-sm-8 detail_cen" >
+                        <span class="tit01">物流单号:</span>
+                        <span class="ml20" v-if="logistics.status < 5">--</span>
+                        <span class="ml20" v-if="logistics.status >= 5 && logistics.status<7">{{logistics.expressNo}}<a class="ml20" @click="getQueryExpress(logistics.expressNo)">查看物流跟踪信息</a></span>
+                        <span class="ml20" v-if="logistics.status >= 7">{{logistics.backExpressNo}}<a class="ml20" @click="getQueryExpress(logistics.backExpressNo)">查看物流跟踪信息</a></span>
+                      </div>
+                    </td>
+                    <td></td>
                   </tr>
                 <!--只退货的情况-->
-                   <tr style="border:1px solid rgb(215, 215, 215);" >
-                       <td style="width:100%" >
-                          <h3 style="color:rgb(0, 102, 204);padding-left:12px;font-size:16px;" >顾客寄回商品</h3>
-                        <div class="col-sm-8 detail_cen" style="line-height: 40px;">
-                          <div>
-                            <span class="tit01">物流公司:</span>
-                            <span class="ml20">{{logistics.status < 5 ? '--' :logistics.backExpressName}}</span>
-                          </div>
-                          <div>
-                            <span class="tit01">物流单号:</span>
-                            <span class="ml20">{{logistics.status < 5 ? '--' : logistics.backExpressNo}}</span>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;跟踪物流信息，请前往快递官网查看,<a target="_blank"  href="http://www.kuaidi100.com/?from=openv">前往</a>
-                          </div>
-                        </div>
-                       </td>
-                      <td></td>
-                    </tr>
-                    <tr style="border:1px solid rgb(215, 215, 215);" v-if ="orderDetail.orderType==0 && logistics.status==7" >
-                     <td style="width:100%">
-                        <h3 style="color:rgb(0, 102, 204);padding-left:12px;font-size:16px;" >商家重新发货</h3>
-                <!--退换货（增加寄出的）的情况-->
-                        <div class="col-sm-8 detail_cen">
-                          <span class="tit01">物流公司:</span> <span class="ml20">{{logistics.status < 5 ? '--' :logistics.status >= 7? logistics.expressName : logistics.backExpressName}}</span>
-                        </div>
-                        <div class="col-sm-8 detail_cen" >
-                          <span class="tit01">物流单号:</span>
-                          <span class="ml20">{{logistics.status < 5 ? '--' :logistics.status >= 7? logistics.expressNo : logistics.backExpressNo}}</span>
-                          跟踪物流信息，请前往快递官网查看, <a target="_blank" href="http://www.kuaidi100.com/?from=openv">前往</a>
-                        </div>
-                     </td>
-                     <td></td>
-                    </tr>
+                  <tr style="border:1px solid rgb(215, 215, 215);" >
+                    <td style="width:100%" >
+                      <h3 style="color:rgb(0, 102, 204);padding-left:12px;font-size:16px;" >顾客寄回商品</h3>
+                    <div class="col-sm-8 detail_cen" style="line-height: 40px;">
+                      <div>
+                        <span class="tit01">物流公司:</span>
+                        <span class="ml20">{{logistics.status < 5 ? '--' :logistics.backExpressName}}</span>
+                      </div>
+                      <div>
+                        <span class="tit01">物流单号:</span>
+                        <span class="ml20" v-if="logistics.status < 5">--</span>
+                        <span class="ml20" v-if="logistics.status >= 5">{{logistics.backExpressNo}}<a class="ml20" @click="getQueryExpress(logistics.backExpressNo)">查看物流跟踪信息</a></span>
+                      </div>
+                    </div>
+                    </td>
+                    <td></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -245,100 +248,98 @@
          </div>
       </el-tab-pane>
     </el-tabs>
-<div>
+    <div>
+      <el-dialog
+        title="提示"
+        :visible.sync="dialogVisible"
+        width="700"
+        :modal-append-to-body="false" >
 
-  <el-dialog
-    title="提示"
-    :visible.sync="dialogVisible"
-     width="700"
-    :modal-append-to-body="false" >
-
-    <table style="margin: auto;border: 1px solid #e7e7e7;width: 100%;">
-      <thead style="background: #DFE9F6; line-height: 40px; height: 40px;">
+        <table style="margin: auto;border: 1px solid #e7e7e7;width: 100%;">
+          <thead style="background: #DFE9F6; line-height: 40px; height: 40px;">
+              <tr>
+                <td class="a1">商品信息</td>
+                <td class="a3">单价</td>
+                <td class="a4">数量</td>
+                <td class="a5">商品金额/元</td>
+                <td class="a5">售后金额/元</td>
+              </tr>
+          </thead>
+          <tbody>
           <tr>
-            <td class="a1">商品信息</td>
-            <td class="a3">单价</td>
-            <td class="a4">数量</td>
-            <td class="a5">商品金额/元</td>
-            <td class="a5">售后金额/元</td>
+            <td class="a1 clear">
+              <div class="a1tab fl mr20"><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage == ''? '[]': orderDetail.goodsInfo.goodsImage)[0]" style="width: 60px ;height: 60px"/></div>
+              <div class="a1tit fl">
+                <div class="wobse top">
+                  <i v-if="orderDetail.goodsInfo.isChange==1" class="changeGood"></i>
+                  {{orderDetail.goodsInfo.goodsName}}
+                </div>
+                <div class="btm">
+                  规格： {{orderDetail.goodsInfo.skuName}}
+                </div>
+              </div>
+            </td>
+            <td class="a3">
+              <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.strSpecialPrice)}}</template>
+              <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.strPrice)}}</p>
+              <!-- {{(orderDetail.goodsInfo.price)}} -->
+            </td>
+            <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
+            <td class="a5">{{(orderDetail.goodsInfo.strTotalPrice)}}</td>
+            <td class="a5">{{orderDetail.orderType !=0 ? (orderDetail.backMoney) : '--'}}</td>
           </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td class="a1 clear">
-          <div class="a1tab fl mr20"><img :src="JSON.parse(orderDetail.goodsInfo.goodsImage == ''? '[]': orderDetail.goodsInfo.goodsImage)[0]" style="width: 60px ;height: 60px"/></div>
-          <div class="a1tit fl">
-            <div class="wobse top">
-              <i v-if="orderDetail.goodsInfo.isChange==1" class="changeGood"></i>
-              {{orderDetail.goodsInfo.goodsName}}
-            </div>
-            <div class="btm">
-              规格： {{orderDetail.goodsInfo.skuName}}
-            </div>
+          </tbody>
+        </table>
+
+        <div class="col-sm-4 detail_cen" style="width:100%;height:350px;">
+          <div style="padding-left: 46px;font-size: 15px; font-weight: 800; line-height: 46px;">
+            <span class="redcolor">*</span>
+            <span class="tit01" style="margin-right: 10px;">配送方式:</span>
+            <el-radio v-model="shipmentForm.expressWay" label="0">物流发货</el-radio>
+            <el-radio v-model="shipmentForm.expressWay" label="1" >自有物流</el-radio>
           </div>
-        </td>
-        <td class="a3">
-          <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.strSpecialPrice)}}</template>
-          <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.strPrice)}}</p>
-          <!-- {{(orderDetail.goodsInfo.price)}} -->
-        </td>
-        <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
-        <td class="a5">{{(orderDetail.goodsInfo.strTotalPrice)}}</td>
-        <td class="a5">{{orderDetail.orderType !=0 ? (orderDetail.backMoney) : '--'}}</td>
-      </tr>
-      </tbody>
-    </table>
+          <el-form :model="shipmentForm" v-show="shipmentForm.expressWay==0">
+            <el-form-item label="物流公司:" :label-width="formLabelWidth" required>
+              <el-select v-model="shipmentForm.expressCode" filterable placeholder="请选择物流公司" @change="selectShipment(shipmentForm.expressCode)">
+                <el-option
+                  v-for="item in shipments"
+                  :key="item.expressCode"
+                  :label="item.expressName"
+                  :value="item.expressCode">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="物流单号:" :label-width="formLabelWidth" required>
+              <el-input v-model="shipmentForm.expressNo" auto-complete="off" width="200" maxlength="30"></el-input>
+            </el-form-item>
+            <el-form-item label="备注:" :label-width="formLabelWidth">
+              <el-input v-model="shipmentForm.noted" auto-complete="off" width="200" maxlength="200"></el-input>
+            </el-form-item>
+          </el-form>
+          <el-form :model="shipmentForm" v-show="shipmentForm.expressWay==1">
+            <el-form-item label="配送员姓名:" :label-width="formLabelWidth" required>
+              <el-input v-model="shipmentForm.expressPerson" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="配送员手机号:" :label-width="formLabelWidth" required>
+              <el-input v-model="shipmentForm.phone" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="运单号:" :label-width="formLabelWidth">
+              <el-input v-model="shipmentForm.expressNo" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="备注:" :label-width="formLabelWidth">
+              <el-input v-model="shipmentForm.noted" auto-complete="off" maxlength="200"></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
 
-    <div class="col-sm-4 detail_cen" style="width:100%;height:350px;">
-      <div style="padding-left: 46px;font-size: 15px; font-weight: 800; line-height: 46px;">
-        <span class="redcolor">*</span>
-        <span class="tit01" style="margin-right: 10px;">配送方式:</span>
-        <el-radio v-model="shipmentForm.expressWay" label="0">物流发货</el-radio>
-        <el-radio v-model="shipmentForm.expressWay" label="1" >自有物流</el-radio>
-      </div>
-      <el-form :model="shipmentForm" v-show="shipmentForm.expressWay==0">
-        <el-form-item label="物流公司:" :label-width="formLabelWidth" required>
-          <el-select v-model="shipmentForm.expressCode" filterable placeholder="请选择物流公司" @change="selectShipment(shipmentForm.expressCode)">
-            <el-option
-              v-for="item in shipments"
-              :key="item.expressCode"
-              :label="item.expressName"
-              :value="item.expressCode">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="物流单号:" :label-width="formLabelWidth" required>
-          <el-input v-model="shipmentForm.expressNo" auto-complete="off" width="200" maxlength="30"></el-input>
-        </el-form-item>
-        <el-form-item label="备注:" :label-width="formLabelWidth">
-          <el-input v-model="shipmentForm.noted" auto-complete="off" width="200" maxlength="200"></el-input>
-        </el-form-item>
-      </el-form>
-      <el-form :model="shipmentForm" v-show="shipmentForm.expressWay==1">
-        <el-form-item label="配送员姓名:" :label-width="formLabelWidth" required>
-          <el-input v-model="shipmentForm.expressPerson" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="配送员手机号:" :label-width="formLabelWidth" required>
-          <el-input v-model="shipmentForm.phone" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="运单号:" :label-width="formLabelWidth">
-          <el-input v-model="shipmentForm.expressNo" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="备注:" :label-width="formLabelWidth">
-          <el-input v-model="shipmentForm.noted" auto-complete="off" maxlength="200"></el-input>
-        </el-form-item>
-      </el-form>
+
+
+        <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleShipment()">确 定</el-button>
+        </span>
+      </el-dialog>
     </div>
-
-
-
-    <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="handleShipment()">确 定</el-button>
-    </span>
-  </el-dialog>
-  </div>
-
     <div class="clsMask" v-show="showMask===true"  style="">
     </div>
     <div class="pop_content"  v-show="showRt===true">
@@ -371,7 +372,7 @@
       </div>
     </div>
     <!-- 遮罩层 -->
-    <div class="v-modal" tabindex="0" v-if="textAreaShow"     style="z-index:2000;"></div>
+    <div class="v-modal" tabindex="0" v-if="textAreaShow" style="z-index:2000;"></div>
       <!--提示 拒绝申请退款理由 输入框-->
     <div class="el-message-box" style="position:fixed;top:50%;left:40%;z-index:2003;"  v-if="textAreaShow" >
       <div class="el-message-box__header">
@@ -392,8 +393,73 @@
       <div class="el-message-box__btns">
         <!-- <button type="button" class="el-button el-button--default el-button--small" @click="textAreaShow=false" ><span>取消</span></button> -->
         <button type="button" class="el-button el-button--default el-button--small el-button--primary" @click="rejectReasonConfirm"><span>确定</span></button>
-        </div>
       </div>
+    </div>
+    <!--添加物流信息-->
+    <div class="addLogisticsBox" v-if="addLogisticsShow">
+      <h4>添加物流信息<a class="close" @click="close"></a></h4>
+        <el-row :gutter="20">
+          <el-col :span="3" class="alginRight"><i class="red">*</i>物流公司</el-col>
+          <el-col :span="9">
+            <el-select v-model="addExpressCode" filterable placeholder="请选择" @change="checkExpressCode(addExpressCode)">
+              <el-option
+                v-for="item in shipments"
+                :key="item.expressCode"
+                :label="item.expressName"
+                :value="item.expressCode">
+              </el-option>
+            </el-select>
+            <!-- <el-autocomplete
+              class="inline-input"
+              v-model="item.state1"
+              @focus='query(item.standardId)'
+              :fetch-suggestions="querySearch"
+              placeholder="请输入内容"
+              @select="handleSelect(item.standardId)"
+              @keyup.enter.native="specValueClick(item.state1,index)"
+            ></el-autocomplete> -->
+          </el-col>
+          <el-col :span="6">
+            <i class="red redTips" style="line-height:50px;" v-show="checkExpShow">请选择物流公司</i>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="3" class="alginRight"><i class="red">*</i>物流单号</el-col>
+          <el-col :span="9">
+            <el-input v-model="addLogisticsCode" placeholder="请填写" :maxlength="30" @blur="checkLogisticsCode(addLogisticsCode)"></el-input>
+          </el-col>
+          <el-col :span="6">
+            <i class="red redTips" style="line-height:50px;" v-show="checkLogiShow">请输入物流单号</i>
+            <i class="red redTips" style="line-height:50px;" v-show="checkLogiShow1">物流单号输入不合法</i>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" class="mt20">
+          <el-col :span="20" :offset="3">
+            <el-button type="primary" size="medium" @click="submiteAdd()">确定添加</el-button>
+            <el-button size="medium" @click="close()">取消</el-button>
+            <i class="red ml20">请仔细填写物流信息，一旦确定，不可修改！</i>
+          </el-col>
+        </el-row>
+    </div>
+    <!--查看物流跟踪信息-->
+    <div class="hptczp" v-if="logisticShow"></div>
+    <div class="infoBox" v-if="logisticShow">
+      <h4>物流跟踪信息<a class="close bg-ico_close02" @click="logisticShow=!logisticShow"></a></h4>
+      <ul>
+        <li v-for="(item,index) in logisticInfo">
+          <p>{{item.context}}</p>
+          <h5>
+            <span>{{item.time[1]}}</span>
+            <span class="fontSamll">{{item.time[0]}}</span>
+          </h5>
+        </li>
+      </ul>
+      <h6>如快递有问题，请先拨打快递公司电话咨询<el-button size="medium" @click="logisticShow=!logisticShow" class="fr mr20" style="margin-top:8px;">关闭查询结果</el-button></h6>
+    </div>
+    <!--
+      重构商家管理平台营销模块80%，补充1.1.1版本迭代bug修改内容
+      完成商家管理平台营销模块重构，商家管理平台1.1.2新需求 物流查看 商家平台天机物流信息功能
+    -->
   </div>
 </template>
 <script>
@@ -460,7 +526,15 @@
         ,isGetUserRuning : false
         , hasRtFreight : 0
         ,isChangePage:false,
-        shopName:''
+        shopName:'',
+        addLogisticsShow:false, // 添加物流信息弹层
+        addExpressCode:'', // 添加物流信息物流公司编码
+        addLogisticsCode:'', // 添加物流信息物流单号
+        checkExpShow: false, // 物流公司不能为空
+        checkLogiShow:false, // 物流单号不能为空
+        checkLogiShow1:false, // 物流单号校验规则
+        logisticShow:false, // 物流单弹层
+        logisticInfo:[], // 物流信息
       }
     },
     // watch: {
@@ -481,6 +555,127 @@
     //   },
     // },
     methods: {
+      //物流单详情
+      getQueryExpress(nu){
+        let that = this
+        that.logisticShow = true
+        console.log(nu)
+        // that.logisticInfo = [{"time":"2017-12-22 11:18:20","ftime":"2017-12-22 11:18:20","context":"[深圳市] 快件离开 [深圳中心]已发往[深圳西乡]"},{"time":"2017-12-22 10:57:24","ftime":"2017-12-22 10:57:24","context":"[深圳市] 快件到达 [深圳中心]"},{"time":"2017-12-22 05:47:17","ftime":"2017-12-22 05:47:17","context":"[东莞市] 快件离开 [东莞中心]已发往[深圳中心]"},{"time":"2017-12-22 05:40:53","ftime":"2017-12-22 05:40:53","context":"[东莞市] 快件到达 [东莞中心]"},{"time":"2017-12-21 23:14:18","ftime":"2017-12-21 23:14:18","context":"[东莞市] 快件离开 [东莞虎门]已发往[深圳中心]"},{"time":"2017-12-21 23:08:03","ftime":"2017-12-21 23:08:03","context":"[东莞市] [东莞虎门]的虎门六部已收件 电话:18033454661"}]
+        // let obj = {'context':'添加售后物流信息','time':that.tool.date.format(new Date(1515029924000), 'yyyy-MM-dd hh:mm:ss')}
+        //     that.logisticInfo.push(obj)
+        // if(that.logisticInfo!==''){
+        //   for(let i = 0;i<that.logisticInfo.length;i++){
+        //     that.logisticInfo[i].time = that.logisticInfo[i].time.split(" ")
+        //   }
+        // }
+        // console.log(that.logisticInfo)
+        that.$.ajax({
+          type: 'get',
+          url: this.base + 'm2c.scm/order/web/expressInfo',
+          data: {
+            com:that.addExpressCode,
+            nu:nu
+          },
+          success: function (result) {
+            if (result.status === 200){
+              that.logisticInfo = result.content.resData
+              let obj = {'context':'添加售后物流信息','time':that.date_format(new Date(res.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
+              }
+              that.logisticInfo.push(obj)
+              for(let i = 0;i<that.logisticInfo.length;i++){
+                that.logisticInfo[i].time = that.logisticInfo[i].time.split(" ")
+              }
+              console.log(that.logisticInfo)
+            }
+            else{
+              that.$message({
+                type:'warning',
+                message:result.errorMessage
+              })
+            }
+          }
+        });
+      },
+      //添加物流信息校验物流公司
+      checkExpressCode(val){
+        if(val!=''){
+          this.checkExpShow = false
+          return
+        }else{
+          this.checkExpShow = true
+          return
+        }
+      },
+      //添加物流信息校验物流单号
+      checkLogisticsCode(val){
+        let re = /^[a-zA-Z0-9]{1,30}$/
+        if(val!=''){
+          this.checkLogiShow = false
+          if (!re.test(val)) {
+            this.checkLogiShow1 = true
+          } else {
+            this.checkLogiShow1 = false
+          }
+        }else{
+          this.checkLogiShow = true
+        }
+        
+      },
+      //添加物流信息
+      addLogistics(){
+        this.addLogisticsShow = true
+      },
+      //关闭添加物流信息弹层
+      close(){
+        this.addLogisticsShow = false
+        this.addExpressCode = ''
+        this.addLogisticsCode = ''
+      },
+      //提交添加物流信息
+      submiteAdd(){
+        let that = this
+        if(that.addExpressCode===''){
+          that.checkExpShow = true
+          return false
+        }else if(that.addLogisticsCode===''){
+          that.checkLogiShow = true
+          return false
+        }else{
+          let expressName
+          for(let i=0;i<that.shipments.length;i++){
+            if(that.addExpressCode===that.shipments[i].expressCode){
+              expressName = that.shipments[i].expressName
+            }
+          }
+          that.$.ajax({
+            type: 'POST',
+            url: this.base + 'm2c.scm/order/web/rigisterExpress',
+            data: {
+              com: that.addExpressCode,
+              nu: that.addLogisticsCode,
+              shipType:1,
+              expressName:expressName,
+              saleAfterNo: that.orderDetail.afterSelldealerOrderId,
+              userId: JSON.parse(sessionStorage.getItem('mUser')).userId,
+              skuId: that.orderDetail.goodsInfo.skuId
+            },
+            success: function (result) {
+              if (result.status === 200){
+                that.afterselllogistics()
+                that.addLogisticsShow = false
+              }
+              else{
+                that.$message({
+                  type:'warning',
+                  message:result.errorMessage
+                })
+              }
+              that.showMask = false;
+              that.showRt = false;
+            }
+          });
+        }
+      },
       pRtFreightChange(){
         let that = this
         var re = /^[0-9]+\.?[0-9]*$/
@@ -905,6 +1100,10 @@
       ,shipment(){
         let that = this
         that.dialogVisible = true
+      },
+      // 获取快递公司
+      getshipInfo(){
+        let that = this
         that.$.ajax({
           type: 'GET',
           url: this.base + 'm2c.scm/order/web/dealer/express',
@@ -919,7 +1118,8 @@
             }
           }
         })
-      }//商户发货
+      }
+      //商户发货
       ,selectShipment(value){
         let that = this
         let choosenItem = this.shipments.filter(item => item.expressCode === value)[0];
@@ -1059,6 +1259,7 @@
       let that = this
       that.loadOrderDetail()
       that.getDealerMess()
+      that.getshipInfo()
     },
     watch: {
       'shipmentForm.expressWay': {
@@ -1120,11 +1321,45 @@ display:-webkit-box;
 -webkit-box-orient:vertical;
 -webkit-line-clamp:2;
 }
+.addLogisticsBox{position:absolute;top:0;left:0;height:auto;padding:20px;width:100%;background:#fff;z-index:2;
+  h4 a.close{
+    opacity:1;display:inline-block;width:24px;height:24px;float:right; mergin-right:20px;background:url(../../../assets/images/ico_close.png) no-repeat center center;
+  }
+  .alginRight{text-align: right; line-height:50px;color:#666;}
+}
+.hptczp {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0.5;
+}
+.infoBox{width:780px;height:800px;position:fixed;top:50%;left:50%;margin-top:-400px;margin-left:-390px;background:#fff;border-radius:5px;    z-index: 999;overflow: hidden;
+  h4{background:#DFE9F6;width:100%;height:50px;line-height: 50px;text-indent: 1.5em;color:#666;font-size:16px;margin:0;}
+  a.close{display:inline-block;width:50px; height:50px;position:absolute;top:0; right:0;background:url(../../../assets/images/ico_close.png) no-repeat center center;opacity:1;}
+  h6{height:50px;line-height: 50px;text-indent:20px;color:#999;font-size:12px;width:100%;background: #F5F5F5;margin:0;position:absolute;bottom:0px;}
+  ul{width:800px;height:670px;padding:20px 55px 10px;overflow-y:auto;overflow-x:hidden;
+    li{float:left;height:75px;width:670px;position: relative;
+      p{border-left:1px solid #efefef;padding-left:67px;width:640px;padding-top:20px;line-height:55px;margin-left:50px;color:#999; letter-spacing: 1px;}
+      h5{width:100px;height:55px;background:#fff;position:absolute;top:20px;left:0;text-align:center;line-height:22px;padding:5px 0;            span{color:#999;}
+        span.fontSamll{font-size:12px;display: block;}
+      }
+    }
+    li:nth-child(1){
+      h5 span,p{color:#0086FF;}
+      p{border-left:none;}
+    }
+  }
+}
 .detail{
     /*width: 1583px;*/
     min-height: 84px;
-    margin-left: 0px;
-  padding-left: 30px;
+    // margin-left: 0px;
+    padding-left: 30px;
     margin-top: 130px;
     background-color: #fff;
     .nav{
@@ -1444,4 +1679,7 @@ display:-webkit-box;
     padding-left: 10px;
   }
 }
+</style>
+<style>
+.addLogisticsBox .el-input,.addLogisticsBox .el-select{width:100%;}
 </style>
