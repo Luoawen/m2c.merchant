@@ -1,268 +1,308 @@
 <template>
-  <div class="detail poi1">
-    <div class="nav clear">
-      <span :class="{active:showactive}" @click="customerdetail"><a>订货单详情</a></span>
-      <span :class="{active:showactive02}" @click="customerfreight"><a>发货详情</a></span>
-      <span :class="{active:showactive03}" @click="customerecord"><a>操作记录</a></span>
-      <!--<button type="button" class="btn btn-info pull-right operation">修改地址</button>-->
-      <!--<button type="button">修改运费</button>-->
-      <span class="fr" v-show="showactive">
+  <div class="detail poi1 content">
+    <div class="line"></div>
+    <div class="nav clear" v-show="activeName==='first'">
+      <span class="fr">
       <a v-show="!bModify">
-      	<i class="ico_print"></i>
-      	<span class="dy" @click="gotoprint()">打印</span>
+        <i class="ico_print"></i>
+        <span class="dy" @click="gotoprint()">打印</span>
       </a>
       <button type="button" class="fah" v-show="!bModify && orderStatus == 1" @click="Deliver=true">发货</button>
         <button type="button" class="fah" v-show="bModify||fModify" @click="saveDealerOrder()">保存</button>
         <button type="button" class="fah" v-show="bModify||fModify" @click="bModify = false,fModify = false">取消</button>
       </span>
     </div>
-    <!-- 订货单详情 -->
-    <div v-show="showactive" class="customerdetail_container">
-      <!-- 拒绝结果，做法根据后台返回数据判断v-show -->
-      <!-- <div class="detail_tit02">顾客发起售后申请，请处理</div> -->
-      <!--待收货状态会出现收货单，请注意-->
-      <div class="detail_tit" v-show="showAfter">售后单：<span>{{strSaleAfterNo}}</span></div>
-      <div class="detail_top mt20 clear">
-        <div class="col-sm-9 detail_cen">
-          <div>
-            <span class="tit01">订单状态</span>
-            <span class="ml20 redcolor" style="font-size: 18px;">{{strOrderStatus}}</span>
-          </div>
-          <div class="clear">
-          	<div class="col-sm-4 pad0">
-            <span class="tit01">订货号</span>
-            <span class="ml20">{{dealerOrderId}}</span>
-            </div>
-            <div class="col-sm-4 pad0">
-            <span class="tit01">下单时间</span>
-            <span class="ml20">{{createdDate}}</span>
-            </div>
-          </div>
-          <div class="clear">
-          	<div class="col-sm-4 pad0">
-            <span class="tit01">支付方式</span>
-            <span class="ml20">{{payWay === 1 ? '支付宝': payWay === 2 ? '微信': '--'}}</span>
-           	</div>
-           	<div class="col-sm-4 pad0">
-            <span class="tit01">支付时间</span>
-            <span class="ml20">{{payTime==''?'--':payTime}}</span>
-            </div>
-            <div class="col-sm-4 pad0">
-            <span class="tit01">支付单号</span>
-            <span class="ml20">{{payNo==''?'--':payNo}}</span>
-            </div>
-          </div>
-
-        </div>
-        <div class="col-sm-11 detail_cen">
-        <div>
-          <span class="tit01">收货信息</span>
-          <span class="ml20">
-          	<span>{{recvAddr}}</span>
-          	<i class="ico_compile" v-show="orderStatus === 0||orderStatus === 1 ? !bModify : bModify" @click="modifyFreight(true)"></i>
-          </span>
-        </div>
-        	<!--点击ico_compile后出现编辑地址-->
-        <div class="clear" v-show="bModify">
-        		<span class="tit01 fl"></span>
-          	<span class="ml20 fl">
-          	<span class="fl mr20">
-          		<select class="bj_select form-control" v-model="provinceCode" id="province_select">
-          			<option v-for="(cell,index) in province_all_search" :key="index" :value="cell.code">
-                  {{cell.name}}
-                </option>
-          		</select>
-          	</span>
-          	<span  class="fl mr20">
-          		<select class="bj_select form-control" v-model="cityCode" id="city_select">
-          			<option v-for="(cell,index) in city_all_search" :key="index" :value="cell.code">
-                  {{cell.name}}
-                </option>
-          		</select>
-          	</span>
-          	<span  class="fl mr20">
-          		<select class="bj_select form-control" v-model="areaCode" id="area_select">
-          			<option v-for="(cell,index) in area_all_search" :key="index" :value="cell.code">
-                  {{cell.name}}
-                </option>
-          		</select>
-          	</span>
-          	<span class="fl mr20">
-          		<input class="bj02_select form-control" maxlength="20" v-model="streetAddr"/>
-          	</span>
-              <span class="fl mr20">
-          		<input class="bj_select form-control" maxlength="10" v-model="revPerson"/>
-          	</span>
-              <span class="fl mr20">
-          		<input class="bj_select form-control" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" v-model="phone"/>
-          	</span>
-          	</span>
-        </div>
-        <div>
-          <span class="tit01">发票信息</span>
-          <span class="ml20">{{invoiceInfo==''?'--':invoiceInfo}}</span>
-        </div>
-
-        <div>
-          <span class="tit01">买家留言</span>
-          <span class="ml20 ">{{noted==''?'--':noted}}</span>
-        </div>
-        </div>
-      </div>
-
-      <table class="mt20 detail_table">
-        <thead>
-          <tr>
-            <td class="a1">商品信息</td>
-            <td class="a2">广告位信息</td>
-            <td class="a3">数量</td>
-            <td class="a4">单位</td>
-            <td class="a5">单价/元</td>
-            <td class="a5">商品金额/元</td>
-            <td class="a6">运费</td>
-            <td class="a7">售后信息</td>
-          </tr>
-        </thead>
-        <tbody id="goodsTabBody" v-for="(goods,index) in goodses">
-        	<tr>
-        		<td class="a1 clear">
-        			<div class="a1_img mr10 fl"><img :src="JSON.parse(goods.goodsImage == ''? '[]': goods.goodsImage)[0]" /></div>
-            	<!-- <div> -->
-              <div class="wose wid mt10">
-                <i v-if="goods.isChange==1" class="changeGood"></i>
-                {{goods.goodsName}}
+    <el-tabs v-model="activeName" @tab-click="handleTabClick">
+      <el-tab-pane label="订货单详情" name="first">
+        
+        <!-- 订货单详情 -->
+        <div class="customerdetail_container">
+          <!-- 拒绝结果，做法根据后台返回数据判断v-show -->
+          <!-- <div class="detail_tit02">顾客发起售后申请，请处理</div> -->
+          <!--待收货状态会出现收货单，请注意-->
+          <div class="detail_tit" v-show="showAfter">售后单：<span>{{strSaleAfterNo}}</span></div>
+          <div class="detail_top mt20 clear">
+            <div class="col-sm-9 detail_cen">
+              <div>
+                <span class="tit01">订单状态</span>
+                <span class="ml20 redcolor" style="font-size: 18px;">{{strOrderStatus}}</span>
               </div>
-              <div class="blue" v-if="goods.skuName != ''">规格：{{goods.skuName}}</div>
-            	<!-- </div> -->
-        		</td>
-            <td class="a2">{{goods.mediaResId!=''?(typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].name : ''):''}}
-              <br>{{goods.mediaResId!=''?(typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].cateName:''):''}}</td>
-            <td class="a3">{{goods.sellNum}}</td>
-            <td class="a4">{{goods.unitName}}</td>
-            <td class="a5">
-              <template v-if="goods.isSpecial==1">特惠价 {{(goods.strSpecialPrice)}}</template>
-              <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.strPrice)}}</p>
-            </td>
-            <td class="a5">{{(goods.strTotalPrice)}}</td>
-            <td class="a6">
-            	<span :id="'spanFreight' + index" v-show="!fModify">{{(goods.strFreight)}}</span>
-            	<i class="ico_compile" @click="modifyFreight1(true)" v-show="orderStatus === 0 ? !fModify : fModify"></i>
-            	<!--点击ico_compile后会出现input-->
-            	<input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.strFreight" type="number"/>
-            </td>
-            <td class="a7">
-              <span v-if="goods.afterSellOrderId ==''"> --</span>
-              <span v-else class='iconTips'>
-                &nbsp;&nbsp;&nbsp;<a  @click='gotoAfterSales(goods.afterSellOrderId)' target='_blank'>              
-                  {{goods.afterOrderType==0?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==1?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家发货':goods.afterSellStatus==7?'待顾客收货':goods.afterSellStatus>=8?'售后已完成':'--'):goods.afterOrderType==1?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==0?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):goods.afterOrderType==2?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==2?'待商家同意':goods.afterSellStatus==4?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):'--'}}
-                </a>
-              </span>
-            </td>
-        	</tr>
-        </tbody>
-        <tbody class="js_num">
-        	<tr>
-        		<td colspan="5"></td>
-            <td></td>
-        		<td>
-        			<div>商品总额</div>
-							<div>运费</div>
-							<div>优惠金额</div>
-							<!--<div>商家优惠券</div>-->
-							<div>订单总额</div>
-        		</td>
-        		<td class="pr40">
-        			<div>{{(totalData.strTotalOrderPrice)}}</div>
-							<div>{{(totalData.strTotalFreight)}}</div>
-							<div>{{(totalData.strPlateformDiscount)}}</div>
-							<!--<div>{{totalData.dealerDiscount}}</div>-->
-							<div class="redcolor" style="font-size: 18px;">{{(totalData.orderPrice)}}</div>
-        		</td>
-        	</tr>
-        </tbody>
-      </table>
-    </div>
-    <!-- 发货详情 -->
-    <div v-show="showactive02" class="customerdetail_container">
-      <div class="detail_top mt20 clear">
-        <div class="col-sm-9 detail_cen">
-          <div>
-            <span class="tit01">订单状态</span>
-            <span class="ml20 redcolor" style="font-size: 18px;">{{strOrderStatus}}</span>
-          </div>
-          <div>
-            <span class="tit01">订货号</span>
-            <span class="ml20">{{dealerOrderId}}</span>
-            <!--<span class="tit01">下单时间</span>
-            <span class="ml20">{{createdDate}}</span>-->
-          </div>
-        </div>
-        <div class="col-sm-11 detail_cen">
-          <div>
-            <span class="tit01">收货信息</span>
-            <span class="ml20">{{recvAddr}}</span>
-          </div>
-        </div>
-      </div>
+              <div class="clear">
+                <div class="col-sm-4 pad0">
+                <span class="tit01">订货号</span>
+                <span class="ml20">{{dealerOrderId}}</span>
+                </div>
+                <div class="col-sm-4 pad0">
+                <span class="tit01">下单时间</span>
+                <span class="ml20">{{createdDate}}</span>
+                </div>
+              </div>
+              <div class="clear">
+                <div class="col-sm-4 pad0">
+                <span class="tit01">支付方式</span>
+                <span class="ml20">{{payWay === 1 ? '支付宝': payWay === 2 ? '微信': '--'}}</span>
+                </div>
+                <div class="col-sm-4 pad0">
+                <span class="tit01">支付时间</span>
+                <span class="ml20">{{payTime==''?'--':payTime}}</span>
+                </div>
+                <div class="col-sm-4 pad0">
+                <span class="tit01">支付单号</span>
+                <span class="ml20">{{payNo==''?'--':payNo}}</span>
+                </div>
+              </div>
 
-      <table class="mt20 detail_table">
-        <thead>
-        	<tr class="fh">
-      		<td colspan="2">{{orderStatus === 1 ? '待发货数：' + expressNum : orderStatus == 2 ? '待收货数：' + expressNum: orderStatus > 2 ? '已收货数：' + expressNum:'--'}}</td>
-      		<td>
-      			<button class="fah fr mr10" @click="deliver" v-show="orderStatus==1">发货</button>
-      		</td>
-      	</tr>
-        <tr>
-          <td class="a1">商品信息</td>
-          <td class="a2">订货数</td>
-          <td class="a3">待发货数</td>
-        </tr>
-        </thead>
-        <tbody id="sendTabBody" v-for="(goods,index) in goodses">
-        	<tr>
-        		<td class="a1 clear">
-        			<div class="a1_img mr10 fl"><img :src="JSON.parse(goods.goodsImage == ''? '[]': goods.goodsImage)[0]"/></div>
-              <div class="wose wid mt10">
-                <i v-if="goods.isChange==1" class="changeGood"></i>
-                {{goods.goodsName}}</div>
-              <div class="blue" v-if="goods.skuName != ''">规格：{{goods.skuName}}</div>
-        		</td>
-        		<td>{{goods.sellNum}}</td>
-        		<td>{{(orderStatus==1 || orderStatus==0)? (goods.sellNum - goods.afNum) : 0}}</td>
-        	</tr>
-        </tbody>
-        <tbody class="deliver_tb">
-          <tr>
-            <td colspan="3">
-            <div class="mt10 mb10">
-              <span class="mr20 tit_tb">配送方式</span>
+            </div>
+            <div class="col-sm-11 detail_cen">
+            <div>
+              <span class="tit01">收货信息</span>
               <span class="ml20">
-                <span>{{orderStatus>=2? (expressWay==0?'物流发货':expressWay==1?'自有物流':'-') :'-'}}
-                  <span class="mr20 tit_tbb">{{orderStatus>=2? (expressWay==0?'物流公司':expressWay==1?'配送员':''):''}}</span>
-                  <span class="ml20">{{expressWay==0?expressName:expressWay==1?expressPerson+'， '+expressPhone:''}}</span>
+                <span>{{recvAddr}}</span>
+                <i class="ico_compile" v-show="orderStatus === 0||orderStatus === 1 ? !bModify : bModify" @click="modifyFreight(true)"></i>
+              </span>
+            </div>
+              <!--点击ico_compile后出现编辑地址-->
+            <div class="clear" v-show="bModify">
+                <span class="tit01 fl"></span>
+                <span class="ml20 fl">
+                <span class="fl mr20">
+                  <select class="bj_select form-control" v-model="provinceCode" id="province_select">
+                    <option v-for="(cell,index) in province_all_search" :key="index" :value="cell.code">
+                      {{cell.name}}
+                    </option>
+                  </select>
                 </span>
-              </span>
+                <span  class="fl mr20">
+                  <select class="bj_select form-control" v-model="cityCode" id="city_select">
+                    <option v-for="(cell,index) in city_all_search" :key="index" :value="cell.code">
+                      {{cell.name}}
+                    </option>
+                  </select>
+                </span>
+                <span  class="fl mr20">
+                  <select class="bj_select form-control" v-model="areaCode" id="area_select">
+                    <option v-for="(cell,index) in area_all_search" :key="index" :value="cell.code">
+                      {{cell.name}}
+                    </option>
+                  </select>
+                </span>
+                <span class="fl mr20">
+                  <input class="bj02_select form-control" maxlength="20" v-model="streetAddr"/>
+                </span>
+                  <span class="fl mr20">
+                  <input class="bj_select form-control" maxlength="10" v-model="revPerson"/>
+                </span>
+                  <span class="fl mr20">
+                  <input class="bj_select form-control" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" v-model="phone"/>
+                </span>
+                </span>
             </div>
-            <div class="mt10 mb10" v-show="expressWay==0">
-              <span class="mr20 tit_tb">物流单号</span>
-              <span class="ml20" v-if="orderStatus>=2">
-                {{expressNo}}<a class="ml20" @click="getQueryExpress(expressNo)">查看物流跟踪信息</a>
-              </span>
-              <span class="ml20" v-if="orderStatus<2">--</span>
+            <div>
+              <span class="tit01">发票信息</span>
+              <span class="ml20">{{invoiceInfo==''?'--':invoiceInfo}}</span>
             </div>
-            <div class="mt10 mb10">
-              <span class="mr20 tit_tb">备注</span>
-              <span class="ml20">
-              <span>{{orderStatus>=2? expressNote:'--'}}</span>
-              </span>
-            </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
 
-    </div>
+            <div>
+              <span class="tit01">买家留言</span>
+              <span class="ml20 ">{{noted==''?'--':noted}}</span>
+            </div>
+            </div>
+          </div>
+
+          <table class="mt20 detail_table">
+            <thead>
+              <tr>
+                <td class="a1">商品信息</td>
+                <td class="a2">广告位信息</td>
+                <td class="a3">数量</td>
+                <td class="a4">单位</td>
+                <td class="a5">单价/元</td>
+                <td class="a5">商品金额/元</td>
+                <td class="a6">运费</td>
+                <td class="a7">售后信息</td>
+              </tr>
+            </thead>
+            <tbody id="goodsTabBody" v-for="(goods,index) in goodses">
+              <tr>
+                <td class="a1 clear">
+                  <div class="a1_img mr10 fl"><img :src="JSON.parse(goods.goodsImage == ''? '[]': goods.goodsImage)[0]" /></div>
+                  <!-- <div> -->
+                  <div class="wose wid mt10">
+                    <i v-if="goods.isChange==1" class="changeGood"></i>
+                    {{goods.goodsName}}
+                  </div>
+                  <div class="blue" v-if="goods.skuName != ''">规格：{{goods.skuName}}</div>
+            	<!-- </div> -->
+                </td>
+                <td class="a2">{{goods.mediaResId!=''?(typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].name : ''):''}}
+                  <br>{{goods.mediaResId!=''?(typeof(mediaResInfos[goods.mediaResId])!='undefined'?mediaResInfos[goods.mediaResId].cateName:''):''}}</td>
+                <td class="a3">{{goods.sellNum}}</td>
+                <td class="a4">{{goods.unitName}}</td>
+                <td class="a5">
+                  <template v-if="goods.isSpecial==1">特惠价 {{(goods.strSpecialPrice)}}</template>
+                  <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.strPrice)}}</p>
+                </td>
+                <td class="a5">{{(goods.strTotalPrice)}}</td>
+                <td class="a6">
+                  <span :id="'spanFreight' + index" v-show="!fModify">{{(goods.strFreight)}}</span>
+                  <i class="ico_compile" @click="modifyFreight1(true)" v-show="orderStatus === 0 ? !fModify : fModify"></i>
+                  <!--点击ico_compile后会出现input-->
+                  <input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.strFreight" type="number"/>
+                </td>
+                <td class="a7">
+                  <span v-if="goods.afterSellOrderId ==''"> --</span>
+                  <span v-else class='iconTips'>
+                    &nbsp;&nbsp;&nbsp;<a  @click='gotoAfterSales(goods.afterSellOrderId)' target='_blank'>              
+                      {{goods.afterOrderType==0?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==1?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家发货':goods.afterSellStatus==7?'待顾客收货':goods.afterSellStatus>=8?'售后已完成':'--'):goods.afterOrderType==1?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==0?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):goods.afterOrderType==2?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==2?'待商家同意':goods.afterSellStatus==4?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):'--'}}
+                    </a>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="js_num">
+              <tr>
+                <td colspan="5"></td>
+                <td></td>
+                <td>
+                  <div>商品总额</div>
+                  <div>运费</div>
+                  <div>优惠金额</div>
+                  <!--<div>商家优惠券</div>-->
+                  <div>订单总额</div>
+                </td>
+                <td class="pr40">
+                  <div>{{(totalData.strTotalOrderPrice)}}</div>
+                  <div>{{(totalData.strTotalFreight)}}</div>
+                  <div>{{(totalData.strPlateformDiscount)}}</div>
+                  <!--<div>{{totalData.dealerDiscount}}</div>-->
+                  <div class="redcolor" style="font-size: 18px;">{{(totalData.orderPrice)}}</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="发货详情" name="second">
+        <!-- 发货详情 -->
+        <div class="customerdetail_container">
+          <div class="detail_top mt20 clear">
+            <div class="col-sm-9 detail_cen">
+              <div>
+                <span class="tit01">订单状态</span>
+                <span class="ml20 redcolor" style="font-size: 18px;">{{strOrderStatus}}</span>
+              </div>
+              <div>
+                <span class="tit01">订货号</span>
+                <span class="ml20">{{dealerOrderId}}</span>
+                <!--<span class="tit01">下单时间</span>
+                <span class="ml20">{{createdDate}}</span>-->
+              </div>
+            </div>
+            <div class="col-sm-11 detail_cen">
+              <div>
+                <span class="tit01">收货信息</span>
+                <span class="ml20">{{recvAddr}}</span>
+              </div>
+            </div>
+          </div>
+
+          <table class="mt20 detail_table">
+            <thead>
+              <tr class="fh">
+              <td colspan="2">{{orderStatus === 1 ? '待发货数：' + expressNum : orderStatus == 2 ? '待收货数：' + expressNum: orderStatus > 2 ? '已收货数：' + expressNum:'--'}}</td>
+              <td>
+                <button class="fah fr mr10" @click="deliver" v-show="orderStatus==1">发货</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="a1">商品信息</td>
+              <td class="a2">订货数</td>
+              <td class="a3">待发货数</td>
+            </tr>
+            </thead>
+            <tbody id="sendTabBody" v-for="(goods,index) in goodses">
+              <tr>
+                <td class="a1 clear">
+                  <div class="a1_img mr10 fl"><img :src="JSON.parse(goods.goodsImage == ''? '[]': goods.goodsImage)[0]"/></div>
+                  <div class="wose wid mt10">
+                    <i v-if="goods.isChange==1" class="changeGood"></i>
+                    {{goods.goodsName}}</div>
+                  <div class="blue" v-if="goods.skuName != ''">规格：{{goods.skuName}}</div>
+                </td>
+                <td>{{goods.sellNum}}</td>
+                <td>{{(orderStatus==1 || orderStatus==0)? (goods.sellNum - goods.afNum) : 0}}</td>
+              </tr>
+            </tbody>
+            <tbody class="deliver_tb">
+              <tr>
+                <td colspan="3">
+                <div class="mt10 mb10">
+                  <span class="mr20 tit_tb">配送方式</span>
+                  <span class="ml20">
+                    <span>{{orderStatus>=2? (expressWay==0?'物流发货':expressWay==1?'自有物流':'--') :'--'}}
+                      <span class="mr20 tit_tbb">{{orderStatus>=2? (expressWay==0?'物流公司':expressWay==1?'配送员':''):''}}</span>
+                      <span class="ml20">{{expressWay==0?expressName:expressWay==1?expressPerson+'， '+expressPhone:''}}</span>
+                    </span>
+                  </span>
+                </div>
+                <div class="mt10 mb10" v-show="expressWay==0">
+                  <span class="mr20 tit_tb">物流单号</span>
+                  <span class="ml20" v-if="orderStatus>=2">
+                    {{expressNo}}<a class="ml20" @click="getQueryExpress(expressNo)">查看物流跟踪信息</a>
+                  </span>
+                  <span class="ml20" v-if="orderStatus<2">--</span>
+                </div>
+                <div class="mt10 mb10">
+                  <span class="mr20 tit_tb">备注</span>
+                  <span class="ml20">
+                  <span>{{orderStatus>=2? expressNote:'--'}}</span>
+                  </span>
+                </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="操作记录" name="third">
+        <!-- 操作记录 -->
+        <div>
+            <!--<table id="logTable" style="table-layout:fixed"></table>-->
+          <div class="ops_red">
+            <div class="ops_tabs">
+              <el-table
+                :data="operatingRecords"
+                style="width: 100%">
+                <el-table-column
+                  prop="optTime"
+                  label="操作时间">
+                  <template slot-scope="scope">{{date_format(new Date(scope.row.optTime), 'yyyy-MM-dd hh:mm:ss')  }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="optContent"
+                  label="操作内容">
+                </el-table-column>
+                <el-table-column
+                  prop="optUserStr"
+                  label="操作人">
+                </el-table-column>
+              </el-table>
+            </div>
+            <div class="page_pus" style="margin-top: 20px;float: right;margin-right: 30px;height: 60px;">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[5, 10, 20, 30]"
+                :page-size="pageRows"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalCount">
+              </el-pagination>
+            </div>
+          </div>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
   	<!--发货弹层-->
   	<div class="poi2 deliver col-sm-12" v-show="Deliver===true">
     <div class="poi1">
@@ -274,13 +314,13 @@
         <span>配送方式</span>
         </span>
         <template>
-          <el-radio v-model="expressWay" label="0" @click="expressCheck(0)" >物流发货</el-radio>
+          <el-radio v-model="expressWay" label="0" @click="expressCheck(0)">物流发货</el-radio>
           <el-radio v-model="expressWay" label="1" @click="expressCheck(1)">自有物流</el-radio>
         </template>
         <div class="tit03 clear">若有自己的配送车队，可选自有物流</div>
       </div>
       <div class="deliver_type01 clear" id ='deliverCompany'>
-        <div class=""  v-show="expressWay != 1">
+        <div class="" v-show="expressWay != 1">
         <span class="mr20 tit01 mt10 fl">
         <span class="redcolor">*</span>
         <span style="line-height:30px">物流公司</span>
@@ -341,46 +381,7 @@
       </div>
       </div>
   	</div>
-    <!-- 操作记录 -->
-    <div v-show="showactive03">
-        <!--<table id="logTable" style="table-layout:fixed"></table>-->
-      <div class="ops_red">
-        <div class="ops_tabs">
-
-          <el-table
-            :data="operatingRecords"
-            style="width: 100%">
-            <el-table-column
-              prop="optTime"
-              label="操作时间">
-              <template slot-scope="scope">{{date_format(new Date(scope.row.optTime), 'yyyy-MM-dd hh:mm:ss')  }}</template>
-            </el-table-column>
-            <el-table-column
-              prop="optContent"
-              label="操作内容">
-            </el-table-column>
-            <el-table-column
-              prop="optUserStr"
-              label="操作人">
-            </el-table-column>
-          </el-table>
-        </div>
-
-        <div class="page_pus" style="margin-top: 20px;float: right;margin-right: 30px;height: 60px;">
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[5, 10, 20, 30]"
-            :page-size="pageRows"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalCount">
-          </el-pagination>
-        </div>
-
-      </div>
-    </div>
-        <!--查看物流跟踪信息-->
+    <!--查看物流跟踪信息-->
     <div class="hptczp" v-if="logisticShow"></div>
     <div class="infoBox" v-if="logisticShow">
       <h4>物流跟踪信息<a class="close bg-ico_close02" @click="logisticShow=!logisticShow"></a></h4>
@@ -405,9 +406,7 @@
         goodsMoney: 0,
         orderFreight: 0,
         is_Success: false,
-        showactive: true,
-        showactive02: false,
-        showactive03: false,
+        activeName:'first',
         showAfter: false,
         Deliver: false,
         strOrderStatus: '',
@@ -522,6 +521,17 @@
       }
     },
     methods: {
+      handleTabClick (tab, event) {//tab切换
+        let that = this
+        if (tab.paneName==='first'){
+          that.getDealerOrderInfo()
+          that.getDealerMess()
+        }else if (tab.paneName==='second'){
+          that.customerfreight()
+        }else if (tab.paneName==='third'){
+          that.get_log_info()
+        }
+      },
       //物流单详情
       getQueryExpress(nu){
         let that = this
@@ -540,12 +550,12 @@
           type: 'get',
           url: this.base + 'm2c.scm/order/web/expressInfo',
           data: {
-            com:that.logistics.backExpressCode,
+            com:that.expressCode,
             nu:nu
           },
           success: function (result) {
             if (result.status === 200){
-              if(result.content.resData === ''){
+              if(result.content.resData === '' || result.content === ''){
                 that.logisticInfo = []
               }else{
                 that.logisticInfo = result.content.resData
@@ -598,13 +608,6 @@
         this.expressName =item.expressName
         this.expressCode =item.expressCode
       },
-      // 获取全部订单信息
-      customerdetail () {
-        var that = this
-        that.showactive = true;
-        that.showactive02 = false;
-        that.showactive03 = false;
-      },
       customerfreight () {
         var that = this
         that.$.ajax({
@@ -619,25 +622,22 @@
           },
           success: function (result) {
             if (result.status === 200) {
-              that.expressNote  =result.content[0].expressNote
-              that.expressNo    =result.content[0].expressNo
-              that.expressName  =result.content[0].expressName
-              that.expressWay   =result.content[0].expressWay
-              that.expressPerson=result.content[0].expressPerson
-              that.expressPhone =result.content[0].expressPhone
-              that.expressCode  =result.content[0].expressCode
+              for(let i=0;i<result.content.length;i++){
+                if(result.content[i].expressNo!==''){
+                  that.expressNote  =result.content[i].expressNote
+                  that.expressNo    =result.content[i].expressNo
+                  that.expressName  =result.content[i].expressName
+                  that.expressWay   =result.content[i].expressWay
+                  that.expressPerson=result.content[i].expressPerson
+                  that.expressPhone =result.content[i].expressPhone
+                  that.expressCode  =result.content[i].expressCode
+                  return
+                }
+                return
+              }
             }
           }
         })
-        that.showactive02 = true;
-        that.showactive = false;
-        that.showactive03 = false;
-      },
-      customerecord () {
-        var that = this
-        that.showactive03 = true;
-        that.showactive02 = false;
-        that.showactive = false;
       },
       deliver () {
         var that = this
@@ -668,17 +668,15 @@
             }
           }
         })
-
         that.get_log_info();
         that.shipment();
       },
 
       setReturnData: function (data) {
         let that = this;
-
           that.goodsMoney = data.orderPrice;
           that.orderFreight = data.orderFreight;
-        that.orderStatus = data.orderStatus;
+          that.orderStatus = data.orderStatus;
           that.strOrderStatus = data.orderStatus === 0? '待付款': data.orderStatus === 1? '待发货': data.orderStatus === 2? '待收货': data.orderStatus === 3? '已完成': data.orderStatus === 4? '交易完成': data.orderStatus === 5? '交易关闭': data.orderStatus === -1? '已取消': '--';
           //that.dealerOrderId = dealerOrderId;
           var d = new Date(data.createdDate);
@@ -1133,11 +1131,6 @@ a{text-decoration:none}
 	padding:0px;
 }
 .detail{
-    width:95%;
-    min-height: 84px;
-    margin-left: 48px;
-    margin-top: 130px;
-    background-color: #fff;
     .deliver{
     	background: #fff;
     	height: auto;
@@ -1254,7 +1247,10 @@ a{text-decoration:none}
       }
       height: 38px;
       line-height: 38px;
-      border-bottom:1px solid #e7e7e7 ;
+      position: absolute;
+      right: 0;
+      z-index:2;
+      //border-bottom:1px solid #e7e7e7 ;
       span{
         display: inline-block;
         padding-left: 30px;
