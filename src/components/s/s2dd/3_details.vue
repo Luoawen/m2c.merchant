@@ -274,14 +274,14 @@
                   <i v-if="orderDetail.goodsInfo.isChange==1" class="changeGood"></i>
                   {{orderDetail.goodsInfo.goodsName}}
                 </div>
-                <div class="btm">
+                <div class="btm" v-if="orderDetail.goodsInfo.skuName != ''" >
                   规格： {{orderDetail.goodsInfo.skuName}}
                 </div>
               </div>
             </td>
             <td class="a3">
-              <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.strSpecialPrice)}}</template>
-              <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.strPrice)}}</p>
+              <p  style='margin:0'  v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.strSpecialPrice)}}</p>
+              <p  style='margin:0'   :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.strPrice)}}</p> 
               <!-- {{(orderDetail.goodsInfo.price)}} -->
             </td>
             <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
