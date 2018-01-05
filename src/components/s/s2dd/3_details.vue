@@ -721,8 +721,8 @@
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-            afterSellOrderId:sessionStorage.getItem('afterSale:afterSellOrderId')
-            ,userId: JSON.parse(sessionStorage.getItem('mUser')).userId
+            afterSellOrderId: sessionStorage.getItem('afterSale:afterSellOrderId'),
+            userId: JSON.parse(sessionStorage.getItem('mUser')).userId
           },
           success: function (result) {
             if (result.status === 200){
