@@ -120,6 +120,7 @@
             <td class="a5">单价/元</td>
             <td class="a5">商品金额/元</td>
             <td class="a6">运费</td>
+            <td class="a7">售后信息</td>
           </tr>
         </thead>
         <tbody id="goodsTabBody" v-for="(goods,index) in goodses">
@@ -149,11 +150,19 @@
             	<!--点击ico_compile后会出现input-->
             	<input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.strFreight" type="number"/>
             </td>
+            <td class="a7">
+              <!-- 没有这个情况下  没有售后状态 待后台更新验证 -->
+              <!-- <pre>{{goods.afterSellOrderId}}</pre> -->
+              <router-link :to="{name: 'details', params: {task_id: 1}}" target='_blank'>              
+                {{goods.afterOrderType==0?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==1?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家发货':goods.afterSellStatus==7?'待顾客收货':goods.afterSellStatus>=8?'售后已完成':'--'):goods.afterOrderType==1?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==0?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):goods.afterOrderType==2?(sgoods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==2?'待商家同意':goods.afterSellStatus==4?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):'--'}}
+              </router-link>
+            </td>
         	</tr>
         </tbody>
         <tbody class="js_num">
         	<tr>
         		<td colspan="5"></td>
+            <td></td>
         		<td>
         			<div>商品总额</div>
 							<div>运费</div>
@@ -269,16 +278,18 @@
         </template>
         <div class="tit03 clear">若有自己的配送车队，可选自有物流</div>
       </div>
-      <div class="deliver_type01 clear">
+      <div class="deliver_type01 clear" id ='deliverCompany'>
         <div class=""  v-show="expressWay != 1">
         <span class="mr20 tit01 mt10 fl">
         <span class="redcolor">*</span>
-        <span style="line-height:40px">物流公司</span>
+        <span style="line-height:30px">物流公司</span>
         </span>
         <span>
-          <select class="form-control deliver_input fl" placeholder="请选择" v-model="expressCode" id="ship_select">
-            <option v-for="(item,index) in shipments" :key="index" :value="item.expressCode">{{item.expressName}}</option>
-          </select>
+          <el-autocomplete popper-class="my-autocomplete"  v-model="expressName"  id="ship_select"  :fetch-suggestions="querySearch" placeholder="" @select="handleSelect">
+            <template slot-scope="props">
+              <div class="name" >{{props.item.expressName}}</div>
+            </template>
+          </el-autocomplete>
         </span>
         </div>
         <div class="" v-show="expressWay == 1">
@@ -555,10 +566,31 @@
           }
         });
       },
+      // 打印
       gotoprint(dealerOrId) {
         let that = this
         //var path='printSendOrder';
         that.$router.push({name : 'printSendOrder',query: {dealerOrderId: that.dealerOrderId,orderNo:that.orderNo}})
+      },
+      // 物流模糊搜索
+      querySearch(queryString, cb) {
+        var restaurants = this.shipments;
+        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        // 调用 callback 返回建议列表的数据
+        console.log('results----',results)
+        if(results.length=== 0){
+          results =[{expressName:'暂无数据'}]
+        }
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.expressName.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      handleSelect(item) {
+        this.expressName =item.expressName
+        this.expressCode =item.expressCode
       },
       // 获取全部订单信息
       customerdetail () {
@@ -774,16 +806,7 @@
             return
           }
         }
-        let select = document.querySelector('#ship_select')
-        if (select !== null) {
-          let options = select.options
-          let index = select.selectedIndex
-          if (index === -1) {
-            //that.expressName = ''
-          } else {
-            that.expressName = options[index].text
-          }
-        }
+        // console.log('that.expressName',that.expressName )
         that.$.ajax({
           url: that.base + 'm2c.scm/order/web/dealer/sendOrder',
           //url: 'http://localhost:8080/m2c.scm/order/web/dealer/sendOrder',
@@ -1076,6 +1099,7 @@
     }
   }
 }
+#ship_select{width:30%;}
 a{text-decoration:none}
 .mt20{
   margin-top: 20px;
@@ -1462,3 +1486,13 @@ a{text-decoration:none}
   }
 
 </style>
+<style>
+#ship_select .el-input{
+    width:100%; 
+    border: 1px solid transparent;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    color: #555;
+}
+
+</style>
+
