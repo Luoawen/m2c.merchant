@@ -121,6 +121,7 @@
             <td class="a5">单价/元</td>
             <td class="a5">商品金额/元</td>
             <td class="a6">运费</td>
+            <td class="a7">售后信息</td>
           </tr>
         </thead>
         <tbody id="goodsTabBody" v-for="(goods,index) in goodses">
@@ -150,11 +151,19 @@
             	<!--点击ico_compile后会出现input-->
             	<input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.strFreight" type="number"/>
             </td>
+            <td class="a7">
+              <!-- 没有这个情况下  没有售后状态 待后台更新验证 -->
+              <!-- <pre>{{goods.afterSellOrderId}}</pre> -->
+              <router-link :to="{name: 'details', params: {task_id: 1}}" target='_blank'>              
+                {{goods.afterOrderType==0?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==1?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家发货':goods.afterSellStatus==7?'待顾客收货':goods.afterSellStatus>=8?'售后已完成':'--'):goods.afterOrderType==1?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==0?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):goods.afterOrderType==2?(sgoods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==2?'待商家同意':goods.afterSellStatus==4?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):'--'}}
+              </router-link>
+            </td>
         	</tr>
         </tbody>
         <tbody class="js_num">
         	<tr>
         		<td colspan="5"></td>
+            <td></td>
         		<td>
         			<div>商品总额</div>
 							<div>运费</div>
@@ -273,7 +282,7 @@
         <div class=""  v-show="expressWay != 1">
         <span class="mr20 tit01 mt10 fl">
         <span class="redcolor">*</span>
-        <span style="line-height:40px">物流公司</span>
+        <span style="line-height:30px">物流公司</span>
         </span>
         <span>
           <el-autocomplete popper-class="my-autocomplete"  v-model="expressName"  id="ship_select"  :fetch-suggestions="querySearch" placeholder="" @select="handleSelect">
