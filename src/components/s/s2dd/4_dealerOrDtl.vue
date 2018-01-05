@@ -236,14 +236,15 @@
             </div>
             <div class="mt10 mb10" v-show="expressWay==0">
               <span class="mr20 tit_tb">物流单号</span>
-              <span class="ml20">
-              <span>{{orderStatus>=2? expressNo:'-'}}</span>
+              <span class="ml20" v-if="orderStatus>=2">
+                {{expressNo}}<a class="ml20" @click="getQueryExpress(expressNo)">查看物流跟踪信息</a>
               </span>
+              <span class="ml20" v-if="orderStatus<2">--</span>
             </div>
             <div class="mt10 mb10">
               <span class="mr20 tit_tb">备注</span>
               <span class="ml20">
-              <span>{{orderStatus>=2? expressNote:'-'}}</span>
+              <span>{{orderStatus>=2? expressNote:'--'}}</span>
               </span>
             </div>
             </td>
@@ -367,6 +368,21 @@
 
       </div>
     </div>
+        <!--查看物流跟踪信息-->
+    <div class="hptczp" v-if="logisticShow"></div>
+    <div class="infoBox" v-if="logisticShow">
+      <h4>物流跟踪信息<a class="close bg-ico_close02" @click="logisticShow=!logisticShow"></a></h4>
+      <ul>
+        <li v-for="(item,index) in logisticInfo">
+          <p>{{item.context}}</p>
+          <h5>
+            <span>{{item.time[1]}}</span>
+            <span class="fontSamll">{{item.time[0]}}</span>
+          </h5>
+        </li>
+      </ul>
+      <h6>如快递有问题，请先拨打快递公司电话咨询<el-button size="medium" @click="logisticShow=!logisticShow" class="fr mr20" style="margin-top:8px;">关闭查询结果</el-button></h6>
+    </div>
   </div>
 </template>
 <script>
@@ -428,7 +444,9 @@
         ,mediaResInfos : {}
         ,isGetUserRuning: false
         ,_map :{},
-        shopName:''
+        shopName:'',
+        logisticShow:false, // 物流单弹层
+        logisticInfo:[], // 物流信息
       }
     },
     watch: {
@@ -492,6 +510,51 @@
       }
     },
     methods: {
+      //物流单详情
+      getQueryExpress(nu){
+        let that = this
+        that.logisticShow = true
+        console.log(nu)
+        // that.logisticInfo = [{"time":"2017-12-22 11:18:20","ftime":"2017-12-22 11:18:20","context":"[深圳市] 快件离开 [深圳中心]已发往[深圳西乡]"},{"time":"2017-12-22 10:57:24","ftime":"2017-12-22 10:57:24","context":"[深圳市] 快件到达 [深圳中心]"},{"time":"2017-12-22 05:47:17","ftime":"2017-12-22 05:47:17","context":"[东莞市] 快件离开 [东莞中心]已发往[深圳中心]"},{"time":"2017-12-22 05:40:53","ftime":"2017-12-22 05:40:53","context":"[东莞市] 快件到达 [东莞中心]"},{"time":"2017-12-21 23:14:18","ftime":"2017-12-21 23:14:18","context":"[东莞市] 快件离开 [东莞虎门]已发往[深圳中心]"},{"time":"2017-12-21 23:08:03","ftime":"2017-12-21 23:08:03","context":"[东莞市] [东莞虎门]的虎门六部已收件 电话:18033454661"}]
+        // let obj = {'context':'添加售后物流信息','time':that.tool.date.format(new Date(1515029924000), 'yyyy-MM-dd hh:mm:ss')}
+        //     that.logisticInfo.push(obj)
+        // if(that.logisticInfo!==''){
+        //   for(let i = 0;i<that.logisticInfo.length;i++){
+        //     that.logisticInfo[i].time = that.logisticInfo[i].time.split(" ")
+        //   }
+        // }
+        // console.log(that.logisticInfo)
+        that.$.ajax({
+          type: 'get',
+          url: this.base + 'm2c.scm/order/web/expressInfo',
+          data: {
+            com:that.logistics.backExpressCode,
+            nu:nu
+          },
+          success: function (result) {
+            if (result.status === 200){
+              if(result.content.resData === ''){
+                that.logisticInfo = []
+              }else{
+                that.logisticInfo = result.content.resData
+              }
+              let obj = {'context':'添加售后物流信息','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
+              }
+              that.logisticInfo.push(obj)
+              for(let i = 0;i<that.logisticInfo.length;i++){
+                that.logisticInfo[i].time = that.logisticInfo[i].time.split(" ")
+              }
+              console.log(that.logisticInfo)
+            }
+            else{
+              that.$message({
+                type:'warning',
+                message:result.errorMessage
+              })
+            }
+          }
+        });
+      },
       gotoprint(dealerOrId) {
         let that = this
         //var path='printSendOrder';
@@ -985,6 +1048,34 @@
   }
 </script>
 <style lang="scss" scoped>
+.hptczp {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0.5;
+}
+.infoBox{width:780px;height:800px;position:fixed;top:50%;left:50%;margin-top:-400px;margin-left:-390px;background:#fff;border-radius:5px;    z-index: 999;overflow: hidden;
+  h4{background:#DFE9F6;width:100%;height:50px;line-height: 50px;text-indent: 1.5em;color:#666;font-size:16px;margin:0;}
+  a.close{display:inline-block;width:50px; height:50px;position:absolute;top:0; right:0;background:url(../../../assets/images/ico_close.png) no-repeat center center;opacity:1;}
+  h6{height:50px;line-height: 50px;text-indent:20px;color:#999;font-size:12px;width:100%;background: #F5F5F5;margin:0;position:absolute;bottom:0px;}
+  ul{width:800px;height:670px;padding:20px 55px 10px;overflow-y:auto;overflow-x:hidden;
+    li{float:left;height:75px;width:670px;position: relative;
+      p{border-left:1px solid #efefef;padding-left:67px;width:640px;padding-top:20px;line-height:55px;margin-left:50px;color:#999; letter-spacing: 1px;}
+      h5{width:100px;height:55px;background:#fff;position:absolute;top:20px;left:0;text-align:center;line-height:22px;padding:5px 0;            span{color:#999;}
+        span.fontSamll{font-size:12px;display: block;}
+      }
+    }
+    li:nth-child(1){
+      h5 span,p{color:#0086FF;}
+      p{border-left:none;}
+    }
+  }
+}
 a{text-decoration:none}
 .mt20{
   margin-top: 20px;

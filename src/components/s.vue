@@ -273,6 +273,7 @@ body {
     clear: both;
     overflow: hidden;
   }
+  ul{list-style:none;}
   .ellipsis{
     overflow: hidden;
     text-overflow:ellipsis;
@@ -372,7 +373,7 @@ body {
       ul {
         margin-top: 30px;
         margin-left: 40px;
-        list-style-type: none;
+        list-style: none;
         li {
           margin-bottom: 10px;
           position: relative;

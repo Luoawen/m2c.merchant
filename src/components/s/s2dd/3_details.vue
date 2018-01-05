@@ -151,8 +151,8 @@
               <table class="mt20 " style="width:80%;border:1px solid rgb(215, 215, 215); ">
                 <thead style="background:rgb(223, 233, 246)">
                 <tr style="margin-left:40px" >
-                  <td class=""><span style="margin-left:20px;width:50%">商品信息</span> <span style="margin-left:50%">换货数</span></td>
-                  <td ></td>
+                  <td class=""><span style="margin-left:20px;width:50%">商品信息</span> </td>
+                  <td ><span>换货数</span></td>
                 </tr>
                 </thead>
                 <tbody style="border:1px solid rgb(215, 215, 215);" >
@@ -168,13 +168,13 @@
                           规格： {{orderDetail.goodsInfo.skuName}}
                         </div>
                       </div>
-                      <span style="margin-left:38%;"> {{orderDetail.goodsInfo.sellNum}}</span>
                     </td>
-                    <td >
+                    <td>
+                      <span> {{orderDetail.goodsInfo.sellNum}}</span>
                     </td>
                   </tr>
                   <tr style="border:1px solid rgb(215, 215, 215);" v-if ="orderDetail.orderType==0 && logistics.status==7" >
-                    <td style="width:100%">
+                    <td colspan="2">
                       <h3 style="color:rgb(0, 102, 204);padding-left:12px;font-size:16px;" >商家重新发货</h3>
                       <!--退换货（增加寄出的）的情况-->
                       <div class="col-sm-8 detail_cen">
@@ -187,25 +187,23 @@
                         <span class="ml20" v-if="logistics.status >= 7">{{logistics.backExpressNo}}<a class="ml20" @click="getQueryExpress(logistics.backExpressNo)">查看物流跟踪信息</a></span>
                       </div>
                     </td>
-                    <td></td>
                   </tr>
                 <!--只退货的情况-->
                   <tr style="border:1px solid rgb(215, 215, 215);" >
-                    <td style="width:100%" >
+                    <td colspan="2">
                       <h3 style="color:rgb(0, 102, 204);padding-left:12px;font-size:16px;" >顾客寄回商品</h3>
-                    <div class="col-sm-8 detail_cen" style="line-height: 40px;">
-                      <div>
-                        <span class="tit01">物流公司:</span>
-                        <span class="ml20">{{logistics.status < 5 ? '--' :logistics.backExpressName}}</span>
+                      <div class="col-sm-8 detail_cen" style="line-height: 40px;">
+                        <div>
+                          <span class="tit01">物流公司:</span>
+                          <span class="ml20">{{logistics.status < 5 ? '--' :logistics.backExpressName}}</span>
+                        </div>
+                        <div>
+                          <span class="tit01">物流单号:</span>
+                          <span class="ml20" v-if="logistics.status < 5">--</span>
+                          <span class="ml20" v-if="logistics.status >= 5">{{logistics.backExpressNo}}<a class="ml20" @click="getQueryExpress(logistics.backExpressNo)">查看物流跟踪信息</a></span>
+                        </div>
                       </div>
-                      <div>
-                        <span class="tit01">物流单号:</span>
-                        <span class="ml20" v-if="logistics.status < 5">--</span>
-                        <span class="ml20" v-if="logistics.status >= 5">{{logistics.backExpressNo}}<a class="ml20" @click="getQueryExpress(logistics.backExpressNo)">查看物流跟踪信息</a></span>
-                      </div>
-                    </div>
                     </td>
-                    <td></td>
                   </tr>
                 </tbody>
               </table>
@@ -310,10 +308,10 @@
               </el-select>
             </el-form-item>
             <el-form-item label="物流单号:" :label-width="formLabelWidth" required>
-              <el-input v-model="shipmentForm.expressNo" auto-complete="off" width="200" maxlength="30"></el-input>
+              <el-input v-model="shipmentForm.expressNo" auto-complete="off" width="200" :maxlength="30"></el-input>
             </el-form-item>
             <el-form-item label="备注:" :label-width="formLabelWidth">
-              <el-input v-model="shipmentForm.noted" auto-complete="off" width="200" maxlength="200"></el-input>
+              <el-input v-model="shipmentForm.noted" auto-complete="off" width="200" :maxlength="200"></el-input>
             </el-form-item>
           </el-form>
           <el-form :model="shipmentForm" v-show="shipmentForm.expressWay==1">
@@ -327,7 +325,7 @@
               <el-input v-model="shipmentForm.expressNo" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="备注:" :label-width="formLabelWidth">
-              <el-input v-model="shipmentForm.noted" auto-complete="off" maxlength="200"></el-input>
+              <el-input v-model="shipmentForm.noted" auto-complete="off" :maxlength="200"></el-input>
             </el-form-item>
           </el-form>
         </div>
@@ -385,7 +383,7 @@
         <div class="el-message-box__message"><p>请输入拒绝理由</p></div>
         <div class="el-message-box__input" style="">
           <div class="el-textarea">
-            <textarea  v-model='textarea'   placeholder="请输入1-100 字符" type="textarea" rows="2" autocomplete="off" maxlength="100"   validateevent="true" class="el-textarea__inner" style="min-height: 33px;"></textarea>
+            <textarea  v-model='textarea'   placeholder="请输入1-100 字符" type="textarea" rows="2" autocomplete="off" :maxlength="100"   validateevent="true" class="el-textarea__inner" style="min-height: 33px;"></textarea>
           </div>
           <div class="el-message-box__errormsg" style="visibility: hidden;"></div>
         </div>
@@ -409,15 +407,6 @@
                 :value="item.expressCode">
               </el-option>
             </el-select>
-            <!-- <el-autocomplete
-              class="inline-input"
-              v-model="item.state1"
-              @focus='query(item.standardId)'
-              :fetch-suggestions="querySearch"
-              placeholder="请输入内容"
-              @select="handleSelect(item.standardId)"
-              @keyup.enter.native="specValueClick(item.state1,index)"
-            ></el-autocomplete> -->
           </el-col>
           <el-col :span="6">
             <i class="red redTips" style="line-height:50px;" v-show="checkExpShow">请选择物流公司</i>
@@ -573,13 +562,17 @@
           type: 'get',
           url: this.base + 'm2c.scm/order/web/expressInfo',
           data: {
-            com:that.addExpressCode,
+            com:that.logistics.backExpressCode,
             nu:nu
           },
           success: function (result) {
             if (result.status === 200){
-              that.logisticInfo = result.content.resData
-              let obj = {'context':'添加售后物流信息','time':that.date_format(new Date(res.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
+              if(result.content.resData === ''){
+                that.logisticInfo = []
+              }else{
+                that.logisticInfo = result.content.resData
+              }
+              let obj = {'context':'添加售后物流信息','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
               }
               that.logisticInfo.push(obj)
               for(let i = 0;i<that.logisticInfo.length;i++){
@@ -661,6 +654,7 @@
             },
             success: function (result) {
               if (result.status === 200){
+                that.loadOrderDetail()
                 that.afterselllogistics()
                 that.addLogisticsShow = false
               }
@@ -854,14 +848,15 @@
             if (result.status === 200){
               //售后物流信息
               let _content = result.content
-              that.logistics.afterSellOrderId=_content.afterSellOrderId;
-              that.logistics.expressName=_content.expressName;
-              that.logistics.expressNo=_content.expressNo;
-              that.logistics.backExpressName=_content.backExpressName;
-              that.logistics.backExpressNo=_content.backExpressNo;
-              that.logistics.orderType=_content.orderType;
-              that.logistics.goodsInfo=_content.goodsInfo;
-              that.logistics.status=_content.status;
+              that.logistics = _content
+              // that.logistics.afterSellOrderId=_content.afterSellOrderId;
+              // that.logistics.expressName=_content.expressName;
+              // that.logistics.expressNo=_content.expressNo;
+              // that.logistics.backExpressName=_content.backExpressName;
+              // that.logistics.backExpressNo=_content.backExpressNo;
+              // that.logistics.orderType=_content.orderType;
+              // that.logistics.goodsInfo=_content.goodsInfo;
+              // that.logistics.status=_content.status;
             }
           }
         })
