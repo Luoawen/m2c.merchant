@@ -1,5 +1,6 @@
 <template>
   <div class="detail content">
+    <div class="line"></div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="售后单详情" name="first">
         <div class="customerdetail_container">
@@ -567,7 +568,7 @@
           },
           success: function (result) {
             if (result.status === 200){
-              if(result.content.resData === ''){
+              if(result.content.resData === '' || result.content === ''){
                 that.logisticInfo = []
               }else{
                 that.logisticInfo = result.content.resData
@@ -1174,7 +1175,6 @@
         //dialogVisible = false
       }
       ,getUserByIds(ids) {
-        console.log('fanjc======getUserByIds')
         let that = this;
         if (that.isGetUserRuning)
           return;
@@ -1354,12 +1354,6 @@ display:-webkit-box;
   }
 }
 .detail{
-    /*width: 1583px;*/
-    min-height: 84px;
-    // margin-left: 0px;
-    padding-left: 30px;
-    margin-top: 130px;
-    background-color: #fff;
     .nav{
       .active{
         border-bottom:1px solid #0086FF;

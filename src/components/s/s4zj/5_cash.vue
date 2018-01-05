@@ -6,7 +6,7 @@
     		① 提现收款账号为合同签约的银行账号；若有改动，请及时知会商家对应的平台负责人；因您提供的账号所产生的损失，平台概不负责；
 			</div>
 			<div class="tit">
-				② 每月最多可提现3次，每次不限制提现金额；
+				② 提现时间固定为每月的1号、10号、20号，每次不限制提现金额；
 			</div>
 			<div class="tit">
 			③ 只有可用金额才可提现，申请提现后，款项从可用金额冻结为提现中金额；平台财务确认打款后提现中金额清零；申请被拒绝，款项从提现中金额变为可用金额，可再次提现；
@@ -111,16 +111,34 @@ export default {
 			// 下一步
 			passWordShow () {
 				let that = this
-				if ((that.tradableA).replace(/(^\s+)|(\s+$)/g, "") == ''||parseFloat(that.tradableA) <= 0) {
-					that.isEmpty = true
-				} else {
-					that.isEmpty = false
-					if(parseFloat(that.tradableA) > parseFloat(that.tradableAmount)){
-						that.checkShow = true
-					}else{
-						that.passWord = false
+				that.$.ajax({
+					type: 'get',
+					url: this.base + 'm2c.trading/web/withdrawal/currentTime',
+					data: {},
+					success: function (result) {
+						if (result.status === 200){
+							let dd = that.date_format(new Date(result.content), 'dd')
+							if(dd==='01'||dd==='10'||dd==='20'){
+								if ((that.tradableA).replace(/(^\s+)|(\s+$)/g, "") == ''||parseFloat(that.tradableA) <= 0) {
+									that.isEmpty = true
+								} else {
+									that.isEmpty = false
+									if(parseFloat(that.tradableA) > parseFloat(that.tradableAmount)){
+										that.checkShow = true
+									}else{
+										that.passWord = false
+									}
+								}
+							}else{
+								that.$message({
+									type: 'info',
+									message: '提现时间为每月的1号、10号、20号'
+								})
+								return false
+							}
+						}
 					}
-				}
+				})
 			},
 
       //点击取消
