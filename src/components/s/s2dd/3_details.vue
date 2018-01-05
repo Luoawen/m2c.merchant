@@ -195,11 +195,11 @@
                       <div class="col-sm-8 detail_cen" style="line-height: 40px;">
                         <div>
                           <span class="tit01">物流公司:</span>
-                          <span class="ml20">{{logistics.status < 5 ? '--' :logistics.backExpressName}}</span>
+                          <span class="ml20">{{logistics.status < 5 ||logistics.backExpressName == ''? '--' :logistics.backExpressName}}</span>
                         </div>
                         <div>
                           <span class="tit01">物流单号:</span>
-                          <span class="ml20" v-if="logistics.status < 5">--</span>
+                          <span class="ml20" v-if="logistics.status < 5||logistics.backExpressName == ''">--</span>
                           <span class="ml20" v-if="logistics.status >= 5">{{logistics.backExpressNo}}<a class="ml20" @click="getQueryExpress(logistics.backExpressNo)">查看物流跟踪信息</a></span>
                         </div>
                       </div>
