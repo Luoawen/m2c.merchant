@@ -7,7 +7,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label">店铺名称：</label>
             <div class="col-sm-6">
-              <input type="text" class="form-control" maxlength="20" id="inputEmail3" placeholder="1-20字符" v-model="storeinformation.appellation">
+              <input type="text" class="form-control" maxlength="15" id="inputEmail3" placeholder="1-15字符" v-model="storeinformation.appellation">
             </div>
           </div>
           <div class="form-group">

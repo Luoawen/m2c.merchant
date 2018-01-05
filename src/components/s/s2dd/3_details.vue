@@ -90,7 +90,7 @@
               <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
                <td class="a4">{{orderDetail.goodsInfo.unitName}}</td>
               <td class="a3" v-if ="orderDetail.goodsInfo.isSpecial==1">
-                <template v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.strSpecialPrice)}}</template>
+                <p v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.strSpecialPrice)}}</p>
                 <p :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.strPrice)}}</p>
                 <!-- <span >特惠价 {{(orderDetail.goodsInfo.specialPrice)}}</span>
                  <br>
@@ -310,10 +310,10 @@
               </el-select>
             </el-form-item>
             <el-form-item label="物流单号:" :label-width="formLabelWidth" required>
-              <el-input v-model="shipmentForm.expressNo" auto-complete="off" width="200" maxlength="30"></el-input>
+              <el-input v-model="shipmentForm.expressNo" auto-complete="off" width="200" :maxlength="30"></el-input>
             </el-form-item>
             <el-form-item label="备注:" :label-width="formLabelWidth">
-              <el-input v-model="shipmentForm.noted" auto-complete="off" width="200" maxlength="200"></el-input>
+              <el-input v-model="shipmentForm.noted" auto-complete="off" width="200" :maxlength="200"></el-input>
             </el-form-item>
           </el-form>
           <el-form :model="shipmentForm" v-show="shipmentForm.expressWay==1">
@@ -327,7 +327,7 @@
               <el-input v-model="shipmentForm.expressNo" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="备注:" :label-width="formLabelWidth">
-              <el-input v-model="shipmentForm.noted" auto-complete="off" maxlength="200"></el-input>
+              <el-input v-model="shipmentForm.noted" auto-complete="off" :maxlength="200"></el-input>
             </el-form-item>
           </el-form>
         </div>
@@ -385,7 +385,7 @@
         <div class="el-message-box__message"><p>请输入拒绝理由</p></div>
         <div class="el-message-box__input" style="">
           <div class="el-textarea">
-            <textarea  v-model='textarea'   placeholder="请输入1-100 字符" type="textarea" rows="2" autocomplete="off" maxlength="100"   validateevent="true" class="el-textarea__inner" style="min-height: 33px;"></textarea>
+            <textarea  v-model='textarea'   placeholder="请输入1-100 字符" type="textarea" rows="2" autocomplete="off" :maxlength="100"   validateevent="true" class="el-textarea__inner" style="min-height: 33px;"></textarea>
           </div>
           <div class="el-message-box__errormsg" style="visibility: hidden;"></div>
         </div>
@@ -1286,6 +1286,9 @@
   text-align: center;
   background:url(../../../assets/images/image_repair.png) no-repeat center top;
 }
+td{
+  padding-left:6px
+}
 .mt20{
   margin-top: 20px;
 }
@@ -1390,6 +1393,7 @@ display:-webkit-box;
         .a1{
           width: 22%;
           padding-top: 20px;
+          padding-left: 20px;
           padding-bottom: 20px;
           .a1tab{
             width: 50px;
@@ -1682,4 +1686,7 @@ display:-webkit-box;
 </style>
 <style>
 .addLogisticsBox .el-input,.addLogisticsBox .el-select{width:100%;}
+label.el-form-item__label{
+      line-height: 50px !important;}
 </style>
+
