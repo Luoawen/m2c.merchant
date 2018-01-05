@@ -151,11 +151,12 @@
             	<input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.strFreight" type="number"/>
             </td>
             <td class="a7">
-              <!-- 没有这个情况下  没有售后状态 待后台更新验证 -->
-              <!-- <pre>{{goods.afterSellOrderId}}</pre> -->
-              <router-link :to="{name: 'details', params: {task_id: 1}}" target='_blank'>              
-                {{goods.afterOrderType==0?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==1?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家发货':goods.afterSellStatus==7?'待顾客收货':goods.afterSellStatus>=8?'售后已完成':'--'):goods.afterOrderType==1?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==0?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):goods.afterOrderType==2?(sgoods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==2?'待商家同意':goods.afterSellStatus==4?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):'--'}}
-              </router-link>
+              <span v-if="goods.afterSellOrderId ==''"> --</span>
+              <span v-else class='iconTips'>
+                &nbsp;&nbsp;&nbsp;<a  @click='gotoAfterSales(goods.afterSellOrderId)' target='_blank'>              
+                  {{goods.afterOrderType==0?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==1?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家发货':goods.afterSellStatus==7?'待顾客收货':goods.afterSellStatus>=8?'售后已完成':'--'):goods.afterOrderType==1?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==0?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):goods.afterOrderType==2?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==2?'待商家同意':goods.afterSellStatus==4?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):'--'}}
+                </a>
+              </span>
             </td>
         	</tr>
         </tbody>
@@ -503,6 +504,11 @@
       }
     },
     methods: {
+      //跳转到售后详情页面
+      gotoAfterSales (afterSellOrderId) {
+        sessionStorage.setItem('afterSale:afterSellOrderId',afterSellOrderId)
+        this.$router.push({name:'details'})
+      },
       // 打印
       gotoprint(dealerOrId) {
         let that = this
@@ -1123,6 +1129,12 @@ a{text-decoration:none}
 				border: none;
 				margin-top: 5px;
     	}
+      .iconTips{
+        text-indent: 2em;
+        width: 16px;
+    		height: 16px;
+    		background: url(../../../assets/images/ico_hint_hint.png) 0 3px no-repeat;
+      }
     .nav{
     	.ico_print{
     		width: 16px;
