@@ -689,6 +689,7 @@
           if (val && $.isNumeric(val) && val >= 0) {
             if (val > 999999.99 || val == 0) {
               this.sukShow3 = true
+              return false
             } else {
               this.sukShow3 = false
               val = Number(val)
@@ -698,6 +699,7 @@
               this.sukShow3 = false
             } else {
               this.sukShow3 = true
+              return false
             }
           }
           list[index][arr] = val
@@ -877,12 +879,18 @@
                 that.show_tip("您还有信息未完善！")
                 return
               }
+              that.checkMarketPrice (that.goodsSKUs[k].marketPrice)
+              if (that.sukShow3 == true) {
+                //that.show_tip("商品市场价为大于0的数字，不能超过999999.99元")
+                return
+              }
             }
             if (that.goodsMainImages.length <= 0) {
               that.show_tip("您还有信息未完善！")
               that.imgShowList = true
               return
             }
+            
             for (var k = 0; k < that.goodsSKUs.length; k++) {
               that.goodsSKUs[k].marketPrice = parseFloat(that.goodsSKUs[k].marketPrice).toFixed(2)
               that.goodsSKUs[k].photographPrice= parseFloat(that.goodsSKUs[k].photographPrice).toFixed(2)
