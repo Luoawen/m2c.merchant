@@ -1,7 +1,14 @@
 <template>
   <div class="sz content clear">
-    <el-button type="primary" size="medium" @click="goAdd">新增</el-button>
-    <template v-for="(formwork,index) in formworks">
+     <!-- -->
+    <template v-if="formworks.length===0">
+      <!--没有模板的情况 -->
+      <h3 class="building">暂无运费模板<br />
+        <el-button type="primary" size="medium" @click="goAdd">新增</el-button>
+      </h3>
+    </template>
+    <template v-for="(formwork,index) in formworks" v-if="formworks.length>0">
+      <el-button type="primary" size="medium" @click="goAdd">新增</el-button>
       <table class="table table-bordered">
         <thead>
           <tr class="active">
@@ -31,9 +38,6 @@
           </tr>
         </tbody>
       </table>
-
-
-
     </template>
     <!--是否删除  弹框-->
     <div class="agreetc_content" v-show="deleteShow" >
@@ -124,6 +128,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.building{
+  font-size:20px;color:#666;
+  padding:240px 0;
+  line-height:40px;
+  margin-top:100px;
+  text-align: center;
+  background:url(../../../assets/images/image_repair.png) no-repeat center top;
+}
 .sz{
     .add{
       margin: 31px 44px 5px 0;
