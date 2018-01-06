@@ -92,10 +92,9 @@ export default {
               // console.log('登录信息(处理后): ', result)
 							sessionStorage.setItem('mUser', JSON.stringify(result.content))
 							console.log(sessionStorage.getItem('mUser'))
-							that.$message('登录成功');
               that.$goRoute('/s/home')
+							that.$message('登录成功');
             } else {
-              // console.log('错误信息: ', result.errorMessage)
 							that.show_tip(result.errorMessage)
 							console.log(result,"------------")
 							// 账号不存在 result.errorMessage
