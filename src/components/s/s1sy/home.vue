@@ -190,6 +190,8 @@
               <el-date-picker
                 v-model="month"
                 type="month" value-format="yyyy-MM"
+                format = 'yyyy年MM月'
+                :picker-options="pickerBeginDate"
                 placeholder="选择月">
               </el-date-picker>
             </span>
@@ -256,6 +258,14 @@ export default {
   name: '',
   data () {
     return {
+        pickerBeginDate:{ //可选时间小于等于本月的时间
+          disabledDate : (time) => {
+            let maxMonth = new Date() ;
+            if(maxMonth){
+              return time.getTime() > maxMonth
+            }
+          }
+        },
       activeData:'first', // 今日/昨日数据
       time:'', // 时间
       dataList:[],
