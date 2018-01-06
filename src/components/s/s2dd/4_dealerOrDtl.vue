@@ -139,7 +139,7 @@
                 <td class="a3">{{goods.sellNum}}</td>
                 <td class="a4">{{goods.unitName}}</td>
                 <td class="a5">
-                  <template v-if="goods.isSpecial==1">特惠价 {{(goods.strSpecialPrice)}}</template>
+                  <p v-if="goods.isSpecial==1">特惠价 {{(goods.strSpecialPrice)}}</p>
                   <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.strPrice)}}</p>
                 </td>
                 <td class="a5">{{(goods.strTotalPrice)}}</td>
@@ -1133,6 +1133,7 @@ a{text-decoration:none}
 .detail{
     .deliver{
     	background: #fff;
+      z-index: 10;
     	height: auto;
       top: 0px;
       left: 0px;
@@ -1312,6 +1313,7 @@ a{text-decoration:none}
         }
         .a5{
           width:8%;
+          p{margin:0}
         }
         .a6{
           width:10%;

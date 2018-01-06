@@ -249,7 +249,7 @@
     </el-tabs>
     <div>
       <el-dialog
-        title="提示"
+        title="商家发货"
         :visible.sync="dialogVisible"
         width="700"
         :modal-append-to-body="false" >
@@ -1172,7 +1172,6 @@
             }
           }
         })
-        //dialogVisible = false
       }
       ,getUserByIds(ids) {
         let that = this;
