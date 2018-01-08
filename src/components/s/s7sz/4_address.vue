@@ -275,10 +275,14 @@
       // 点击取消
       clear(){
         let that = this
-        that.guarantee = {}
-        that.topBoxShow = false
-        that.error1 = false
-        that.$route.query.goodsId = ''
+        if(that.$route.query.goodsId!=undefined && that.$route.query.goodsId!=''){
+          that.$router.push({name:'goodAddModify',query:{goodsId:that.$route.query.goodsId,fromPath:'guarantee',handle_toggle:that.$route.query.handle_toggle}})
+        }else{
+          that.guarantee = {}
+          that.topBoxShow = false
+          that.error1 = false
+          that.$route.query.goodsId = ''
+        }
       },
       // 点击保存
       save(){
