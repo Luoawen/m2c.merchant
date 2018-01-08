@@ -152,9 +152,9 @@
                 <td class="a7">
                   <span v-if="goods.afterSellOrderId ==''"> --</span>
                   <span v-else class='iconTips'>
-                    &nbsp;&nbsp;&nbsp;<a  @click='gotoAfterSales(goods.afterSellOrderId)' target='_blank'>              
+                    &nbsp;&nbsp;&nbsp;<router-link  :to="{name:'details',query:{'afterSellOrderId':goods.afterSellOrderId}} " target='_blank'>              
                       {{goods.afterOrderType==0?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==1?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家发货':goods.afterSellStatus==7?'待顾客收货':goods.afterSellStatus>=8?'售后已完成':'--'):goods.afterOrderType==1?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==0?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):goods.afterOrderType==2?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==2?'待商家同意':goods.afterSellStatus==4?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):'--'}}
-                    </a>
+                    </router-link>
                   </span>
                 </td>
               </tr>
@@ -576,11 +576,6 @@
             }
           }
         });
-      },
-      //跳转到售后详情页面
-      gotoAfterSales (afterSellOrderId) {
-        sessionStorage.setItem('afterSale:afterSellOrderId',afterSellOrderId)
-        this.$router.push({name:'details'})
       },
       // 打印
       gotoprint(dealerOrId) {

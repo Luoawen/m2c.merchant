@@ -1251,6 +1251,7 @@
     },
     mounted () {
       let that = this
+      sessionStorage.setItem('afterSale:afterSellOrderId',that.$route.query.afterSellOrderId)
       that.loadOrderDetail()
       that.getDealerMess()
       that.getshipInfo()
