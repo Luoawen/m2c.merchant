@@ -552,15 +552,17 @@
           data: {
             com:that.expressCode,
             nu:nu
+            // com:'yuantong',
+            // nu:812517398349
           },
           success: function (result) {
             if (result.status === 200){
               if(result.content.resData === '' || result.content === ''){
                 that.logisticInfo = []
               }else{
-                that.logisticInfo = result.content.resData
+                that.logisticInfo = JSON.parse(result.content.resData).data
               }
-              let obj = {'context':'添加售后物流信息','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
+              let obj = {'context':'商家发货','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
               }
               that.logisticInfo.push(obj)
               for(let i = 0;i<that.logisticInfo.length;i++){

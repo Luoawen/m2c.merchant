@@ -571,7 +571,7 @@
               if(result.content.resData === '' || result.content === ''){
                 that.logisticInfo = []
               }else{
-                that.logisticInfo = result.content.resData
+                that.logisticInfo = JSON.parse(result.content.resData).data
               }
               let obj = {'context':'添加售后物流信息','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
               }
