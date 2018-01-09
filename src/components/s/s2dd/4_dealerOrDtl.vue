@@ -621,7 +621,7 @@
           success: function (result) {
             if (result.status === 200) {
               for(let i=0;i<result.content.length;i++){
-                if(result.content[i].expressNo!==''){
+                if(result.content[i].expressCode!=='' || result.content[i].expressPhone!==''){
                   that.expressNote  =result.content[i].expressNote
                   that.expressNo    =result.content[i].expressNo
                   that.expressName  =result.content[i].expressName
