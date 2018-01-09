@@ -438,7 +438,7 @@
         ,expressNo: ''
         ,expressName: ''
         ,expressCode: ''
-        ,expressWay: '0'
+        ,expressWay: ''
         ,expressPhone: ''
         ,expressPerson: ''
         ,province_all_search: []
@@ -832,7 +832,7 @@
             console.log(result);
             if (result.status === 200) {
               that.Deliver = false;
-              that.customerdetail();
+              //that.customerdetail();
               that.getDealerOrderInfo();
               that.show_tip('发货成功！');
             }

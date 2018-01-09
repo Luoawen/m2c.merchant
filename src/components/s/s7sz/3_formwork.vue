@@ -7,37 +7,40 @@
         <el-button type="primary" size="medium" @click="goAdd">新增</el-button>
       </h3>
     </template>
-    <template v-for="(formwork,index) in formworks" v-if="formworks.length>0">
+    <template v-if="formworks.length>0">
       <el-button type="primary" size="medium" @click="goAdd">新增</el-button>
-      <table class="table table-bordered">
-        <thead>
-          <tr class="active">
-            <th width="30%">模板名称</th>
-            <th width="17.5%">{{formwork.modelName}}</th>
-            <th width="17.5%" class="some">
-              <p style="margin:0;" v-if="formwork.goodsUserNum==0">已有{{formwork.goodsUserNum}}个商品使用 </p>
-              <router-link v-if="formwork.goodsUserNum!=0" :to="{name:'goodList'}">已有{{formwork.goodsUserNum}}个商品使用 </router-link></th>
-            <th width="17.5%" class="act"><router-link :to="{ name:'formworkadd', query: {addModify: false, modelId: formwork.modelId} }">编辑</router-link></th>
-            <th width="17.5%"><a @click="showdelete(formwork.modelId)"  v-if="formwork.goodsUserNum==0">删除</a></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="active">
-            <th scope="row">可配送至</th>
-            <td>{{formwork.chargeType==1?'首件/个':'首重/kg'}}</td>
-            <td>运费/元</td>
-            <td>{{formwork.chargeType==1?'续件/个':'续重/kg'}}</td>
-            <td>续费/元</td>
-          </tr>
-          <tr v-for="(postageModelRule,index) in formwork.postageModelRules">
-            <th scope="row">{{postageModelRule.defaultFlag==0 ?'全国（默认运费）':postageModelRule.address}}</th>
-            <td>{{formwork.chargeType==1?postageModelRule.firstPiece:postageModelRule.firstWeight}}</td>
-            <td>{{postageModelRule.firstPostage}}</td>
-            <td>{{formwork.chargeType==1?postageModelRule.continuedPiece:postageModelRule.continuedWeight}}</td>
-            <td>{{postageModelRule.continuedPostage}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <template v-for="(formwork,index) in formworks">
+        <table class="table table-bordered">
+          <thead>
+            <tr class="active">
+              <th width="30%">模板名称</th>
+              <th width="17.5%">{{formwork.modelName}}</th>
+              <th width="17.5%" class="some">
+                <p style="margin:0;" v-if="formwork.goodsUserNum==0">已有{{formwork.goodsUserNum}}个商品使用 </p>
+                <router-link v-if="formwork.goodsUserNum!=0" :to="{name:'goodList'}">已有{{formwork.goodsUserNum}}个商品使用 </router-link></th>
+              <th width="17.5%" class="act"><router-link :to="{ name:'formworkadd', query: {addModify: false, modelId: formwork.modelId} }">编辑</router-link></th>
+              <th width="17.5%"><a @click="showdelete(formwork.modelId)"  v-if="formwork.goodsUserNum==0">删除</a></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="active">
+              <th scope="row">可配送至</th>
+              <td>{{formwork.chargeType==1?'首件/个':'首重/kg'}}</td>
+              <td>运费/元</td>
+              <td>{{formwork.chargeType==1?'续件/个':'续重/kg'}}</td>
+              <td>续费/元</td>
+            </tr>
+            <tr v-for="(postageModelRule,index) in formwork.postageModelRules">
+              <th scope="row">{{postageModelRule.defaultFlag==0 ?'全国（默认运费）':postageModelRule.address}}</th>
+              <td>{{formwork.chargeType==1?postageModelRule.firstPiece:postageModelRule.firstWeight}}</td>
+              <td>{{postageModelRule.firstPostage}}</td>
+              <td>{{formwork.chargeType==1?postageModelRule.continuedPiece:postageModelRule.continuedWeight}}</td>
+              <td>{{postageModelRule.continuedPostage}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
+      
     </template>
     <!--是否删除  弹框-->
     <div class="agreetc_content" v-show="deleteShow" >
