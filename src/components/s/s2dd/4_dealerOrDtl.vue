@@ -830,7 +830,6 @@
             console.log(result);
             if (result.status === 200) {
               that.Deliver = false;
-              that.customerdetail();
               that.getDealerOrderInfo();
               that.show_tip('发货成功！');
             }

@@ -22,7 +22,7 @@
 						</el-date-picker>
   				</el-form-item>
   				<el-form-item>
-    			<el-button type="primary" size='medium '  style="margin-top:9px"   @click="get_send">查询</el-button>
+    			<el-button type="primary" size='medium '  class="btn-search" style="margin-top:9px"   @click="get_send">查询</el-button>
   				</el-form-item>
 					</el-form>
       	<div class="table">
@@ -146,7 +146,7 @@ export default {
 		padding-left: 10px;
 		padding-top: 15px;
 		padding-right: 30px;
-		padding-bottom: 10px;
+		padding-bottom: 60px;
 	}
 }
 .mt30{

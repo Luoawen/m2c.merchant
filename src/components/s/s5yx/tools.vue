@@ -43,7 +43,7 @@
         <div class="tools_body">
           <div class="tools_body_left" >
             <div class="tools_heading">优惠券</div>
-            <p>管理平台和商家创建的优惠 和新增平台优惠券<i class="tools_in ml10"></i></p>
+            <p>管理和新增本商家的优惠券<i class="tools_in ml10"></i></p>
           </div>
         </div>
       </div>

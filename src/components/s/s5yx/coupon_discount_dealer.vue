@@ -556,15 +556,8 @@ export default {
     removeGoods (goodsInfo) {
       let _this = this
       if (goodsInfo.isRemoved == 0) { // 未选中的商品被排除
-        if (_this.removeGoodsList.length < 30) {
           _this.removeGoodsList.push(goodsInfo)
           goodsInfo.isRemoved = 1
-        } else {
-          _this.$message({
-            message: '最多排除30个商品',
-            type: 'warning'
-          })
-        }
       } else if (goodsInfo.isRemoved == 1) { // 已排除的商品被取消
         goodsInfo.isRemoved = 0
         for (let i = 0; i < _this.removeGoodsList.length; i++) {

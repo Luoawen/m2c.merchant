@@ -28,7 +28,10 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="发行量" class="ml66 coupon_input">
-                <el-input  v-model="couponParams.total_num" :maxlength="5" @blur="formValidator(2)">
+                <div class="mt6" v-if="couponInfo.couponTotal == 0">
+                  <span class="ml10">不限制</span>
+                </div>
+                <el-input v-if="couponInfo.couponTotal > 0" v-model="couponParams.total_num" :maxlength="5" @blur="formValidator(2)">
                   <i slot="suffix" class="el-input__icon fontstyle">张</i>
                 </el-input>
               </el-form-item>
@@ -490,9 +493,14 @@ export default {
     formValidator (flag) {
       let _this = this
       // flag--1:名称，2：总数，3：时间，7:平台成本,8:商家成本，
-      if (flag == 0 || flag == 1) {
-        if (!/^[\u4e00-\u9fa5a-zA-Z0-9]{1,11}$/.test(_this.couponParams.coupon_name)) {
-          _this.warning('名称为最多11位汉字数字英文,不能为空')
+       if (flag == 0 || flag == 1) {
+        if (!/^[\u4e00-\u9fa5a-zA-Z0-9`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]{1,22}$/.test(_this.couponParams.coupon_name)) {
+          _this.warning('名称只能为汉字数字英文特殊字符,不能为空')
+          return false
+        }
+        let realLength = _this.getStrLength(_this.couponParams.coupon_name)
+        if (realLength > 11) {
+          _this.warning('优惠券名称不能超过11个字')
           return false
         }
       }
@@ -500,16 +508,12 @@ export default {
         if (_this.couponParams.total_num == '') {
           _this.couponParams.total_num = 0
         }
-        if (_this.couponParams.total_num == 0) {
-           _this.warning('填0即为不限制数量，修改发行量只能增加不能减少，请谨慎设置')
-          return false
-        }
         if (!/^[0-9]{1,5}$/.test(_this.couponParams.total_num)) {
           _this.couponParams.total_num = 0
           _this.warning('优惠券数量最多5位正整数，填0为不限制数量')
           return false
         }
-        if (parseInt(_this.couponParams.total_num) < parseInt(_this.couponInfo.couponTotal)) {
+        if (parseInt(_this.couponParams.total_num) > 0 && parseInt(_this.couponParams.total_num) < parseInt(_this.couponInfo.couponTotal)) {
           _this.warning('优惠券数量只能增加不能减少')
           return false
         }
@@ -536,6 +540,21 @@ export default {
     back () {
       let _this = this
       _this.$goRoute({path: 'coupon_list'})
+    },
+    getStrLength (str) {
+      let realLength = 0
+      if (str && str.trim().length > 0) {
+        str = str.trim()
+        for (let i = 0; i < str.length; i++) {
+          let charCode = str.charCodeAt(i)
+          if ((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)) {
+            realLength += 0.5
+          } else {
+            realLength += 1
+          }
+        }
+        return realLength
+      }
     }
   },
   mounted () {

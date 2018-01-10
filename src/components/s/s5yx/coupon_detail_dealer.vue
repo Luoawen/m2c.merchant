@@ -26,13 +26,13 @@
                 <span v-if="couponInfo.couponForm == 1">{{couponInfo.couponItem.faceValue}}元</span>
                 <span v-if="couponInfo.couponForm == 2">{{couponInfo.couponItem.faceValue}}折</span>
         		  </span>
-        		  <span class="ml100">
+        		  <span class="ml192">
                 <span class="mr20">
-                  <span class="mr10 wid80">发行量</span>
+                  <span class="mr10 wid120">发行量</span>
                   <span v-if="couponInfo.couponTotal > 0">{{couponInfo.couponTotal}}张</span>
                   <span v-if="couponInfo.couponTotal == 0">无限制</span>
                 </span>
-                <span class="mr10 ml20">
+                <!-- <span class="mr10 ml20">
                   <el-button type="primary" size="medium">提醒使用</el-button>
                 </span>
                 <i class="icon-intro02" v-popover:popover1>
@@ -43,7 +43,7 @@
                     trigger="hover"
                     content="仅在还剩余优惠券，未被使用且距离生成优惠券7天之后，可发送推送">
                   </el-popover>
-                </i>
+                </i> -->
                 <span class="mr20 ml20">
                   <span class="mr10 wid80">总共发出</span>
                   <span>{{couponInfo.couponTotal ===0 ?'无限制' : couponInfo.couponTotal}}</span>
@@ -251,6 +251,9 @@ export default {
 }
 .mr20{
 	margin-right: 20px;
+}
+.ml192{
+  margin:192px;
 }
 .Detailcoupons_container{
 	padding: 15px 26px;

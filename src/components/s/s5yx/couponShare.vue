@@ -164,7 +164,6 @@
 									<el-pagination 
 									@size-change="handleSizeChange"
 									@current-change="handleCurrentChange" 
-									:current-page="pagination.pageNum" 
 									:page-sizes="[5,10, 20, 50, 100]" 
 									:page-size="pagination.rows" 
 									layout="total, sizes, prev, pager, next, jumper" 
@@ -263,7 +262,8 @@
 				<!--确认发送结果-->
 				<el-dialog  :visible.sync="result"  width="650px" center  :modal-append-to-body="false"  :close-on-click-modal="false">
 					<div  class="send_suc">
-						<el-progress type="circle" :percentage="100" :width="136"  status="success"></el-progress>
+						<el-progress v-if="send_result.sendfail !== 0 "   type="circle" :percentage="100" :width="136"  status="exception"></el-progress>
+						<el-progress  v-else  type="circle" :percentage="100" :width="136"  status="success"></el-progress>
 					</div>
 					<div class="cen">总共发送{{send_result.sendTotal}}位用户 </div>
 					<div class="cen"> <span>发送成功{{send_result.sendSuccess}}位</span> <span >{{send_result.sendfail}}位用户发送失败</span>  <el-button class="dre" v-if="send_result.sendfail !== 0 "  type="primary" @click="exportFailure" plain>导出失败用户</el-button></div>
@@ -415,9 +415,11 @@ export default {
 				this.$message.error('还未选择将要发放的优惠券！')
 				return
 			}
+			// console.log('that.sel_user.mobiles,',that.sel_user.mobiles)
 			let formDate = {
 					coupon_id:that.hand_edit_coupon.couponId,
 					mobiles:that.sel_user.mobiles,
+					dealer_id:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
 				}
 			that.$.ajax({
 				method: 'post',
@@ -429,11 +431,35 @@ export default {
 					if (res.status == 200) {
 						console.log('发放结果',res.content)
 						that.send_result = res.content
+						// 页面刷新 清空数据
+						that.reset()
+						that.hand_add_show = true
+						that.sel_user.total = 0
+						that.sel_user.mobiles = ''
+						that.get_user_list()
+						// 用去除类的方法 去掉勾选的选项
+
+
+
 					}
 					that.result = true
 				}
 			})
 		},
+		// 移除复选的标志
+		removeCheck  (){
+         let elems = document.getElementsByClassName("el-checkbox");
+        var arr = [];
+        for(var i = 0,len = elems.length;i<len;i++){
+          if(elems[i].className.indexOf("el-checkbox")>=0&&elems[i].className.indexOf("is-disabled")<0){
+            elems[i].style="display:block"
+          }
+        }
+        let checkboxList = document.getElementsByClassName('el-checkbox is-disabled')
+        for(var i =0 ;i< checkboxList.length; i++){
+          checkboxList[i].style="display:none"
+        }
+        },
 		// excel批量发放
 		excel_send () {
 			let that = this
@@ -616,7 +642,7 @@ export default {
 		width:136px;
 		margin-left:50%;
 		transform: translateX(-50%);
-		font-size:18px;
+		font-size:36px;
 	}
 	// 导出按钮样式
 	.dre{
@@ -1292,3 +1318,9 @@ export default {
 	}
 
 </style>
+<style>
+	.el-progress--circle .el-progress__text{
+		font-size: 70px!important;
+	}
+</style>
+

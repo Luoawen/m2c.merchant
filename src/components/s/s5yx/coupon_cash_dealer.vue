@@ -60,7 +60,7 @@
                 <el-input  v-if="couponParams.threshold_type == 1" v-model="couponParams.coupon_json.threshold" placeholder="最大9999" :maxlength="4" @blur="formValidator(9)">
                   <i slot="suffix" class="el-input__icon fontstyle">元</i>
                 </el-input>
-                  <el-input v-if="couponParams.threshold_type == 2"  v-model="couponParams.coupon_json.threshold" placeholder="最高100" :maxlength="4" @blur="formValidator(9)">
+                  <el-input v-if="couponParams.threshold_type == 2"  v-model="couponParams.coupon_json.threshold" placeholder="最高100" :maxlength="3" @blur="formValidator(7)">
                   <i slot="suffix" class="el-input__icon fontstyle" >件</i>
                 </el-input>
               </el-form-item>
@@ -225,6 +225,7 @@
                 <el-radio v-model="couponParams.receive_type" label="1" class="ml10">用户主动领取</el-radio>
                 <el-radio v-model="couponParams.receive_type" label="2">后台派发</el-radio>
               </el-form-item>
+              <pre>{{couponParams.receive_type}}</pre>
               <div class="title02">设置为主动领取后，该优惠券将不可以通过后台进 行发放，用户可在客户端或其他渠道领取该优惠券。</div>
             </div>
           </div>
@@ -257,14 +258,22 @@
               <el-form-item>
                 <el-checkbox v-model="couponParams.is_access" label="1" class="ml10">允许平台发放</el-checkbox>
               </el-form-item>
-              <i class="icon-intro02"></i>
+              <div class="icon-intro02">
+                <div class="tips">
+                 <p>授权则平台可以发放该优惠券</p>
+                </div>
+              </div>
             </div>
             <div class="Basicinbt">
               <span class="linh35">其他规则</span>
               <el-form-item>
-                <el-checkbox v-model="couponParams.is_share" label="1" class="ml10">可与其他营销活动共同使用</el-checkbox>
+                <el-checkbox v-model="couponParams.is_share" label="1" class="ml10">是否可与满减共同使用</el-checkbox>
               </el-form-item>
-              <i class="icon-intro02"></i>
+              <div class="icon-intro02">
+                <div class="tips">
+                 <p>先使用满减，再用优惠券</p>
+                </div>
+              </div>
             </div>
           </div>
           <!--确定提交-->
@@ -560,15 +569,8 @@ export default {
     removeGoods (goodsInfo) {
       let _this = this
       if (goodsInfo.isRemoved == 0) { // 未选中的商品被排除
-        if (_this.removeGoodsList.length < 30) {
           _this.removeGoodsList.push(goodsInfo)
           goodsInfo.isRemoved = 1
-        } else {
-          _this.$message({
-            message: '最多排除30个商品',
-            type: 'warning'
-          })
-        }
       } else if (goodsInfo.isRemoved == 1) { // 已排除的商品被取消
         goodsInfo.isRemoved = 0
         for (let i = 0; i < _this.removeGoodsList.length; i++) {
@@ -672,13 +674,9 @@ export default {
         if (_this.couponParams.total_num == '') {
           _this.couponParams.total_num = 0
         }
-        if(_this.couponParams.total_num > 100000){
-          _this.warning('最多发行100000张')
-          return false
-        }
         if (!/^[0-9]{1,5}$/.test(_this.couponParams.total_num)) {
           _this.couponParams.total_num = 0
-          _this.warning('优惠券数量最多100000，填0为不限制数量')
+          _this.warning('优惠券数量最多5位正整数，填0为不限制数量')
           return false
         }
       }
@@ -708,10 +706,21 @@ export default {
           return false
         }
       if (flag == 0 || flag == 9) {
-        if (_this.couponParams.threshold_type === '1' || _this.couponParams.threshold_type === '2') {
+        if (_this.couponParams.threshold_type === '1') {
           if (!/^[1-9]\d{0,3}$/.test(_this.couponParams.coupon_json.threshold)) {
             _this.couponParams.coupon_json.threshold = ''
             _this.warning('优惠券门槛为最多9999正整数')
+            return false
+          }
+        } else {
+          _this.couponParams.coupon_json.threshold = 0
+        }
+      }
+       if (flag == 0 || flag == 7) {
+        if (_this.couponParams.threshold_type === '2') {
+          if (!/^([1-9][0-9]?|100)$/.test(_this.couponParams.coupon_json.threshold)) {
+            _this.couponParams.coupon_json.threshold = ''
+            _this.warning('优惠券门槛为最高100')
             return false
           }
         } else {
@@ -997,23 +1006,6 @@ export default {
               margin-right: 10px;
               margin-bottom: 10px;
             }
-            .allshop{
-              width:80px;
-              height:28px;
-              line-height: 28px;
-              background:rgba(245,245,245,1);
-              border-radius: 2px ;
-              color: #0086FF;
-              font-size: 12px;
-              text-align: center;
-              cursor: pointer;
-              .icon_open{
-                width: 15px;
-                height: 7px;
-                display: inline-block;
-                background: url(../../../assets/images/icon_open.png) no-repeat center;
-              }
-            }
             .img{
               width: 60px;
               height: 60px;
@@ -1247,13 +1239,18 @@ export default {
         font-family:PingFangSC-Medium;
         color:rgba(0,0,0,1);
       }
-      .icon-intro02{
+      div.icon-intro02{
         width: 15px;
         height: 15px;
         background: url(../../../assets/images/icon-intro02.png) no-repeat center;
         display: inline-block;
         margin-top: 12px;
+        position: relative;
+        div.tips{display:none;width:200px;height:auto;background:#fff;border:1px solid #E5E5E5;border-radius: 4px;box-shadow: 0 1px 0 0 #E5E5E5;position: absolute;top:18px;left:0px; text-indent: 0;padding:6px;font-weight:normal;
+              p{line-height:24px;font-size:12px; color:#666;}
+            }
       }
+     div.icon-intro02:hover div.tips{display:block;}
       .tit{
         display: inline-block;
         width:280px;
@@ -1609,29 +1606,6 @@ export default {
               background: #F5F5F5;
               margin-right: 10px;
               margin-bottom: 10px;
-            }
-            .allshop{
-              width:80px;
-              height:28px;
-              line-height: 28px;
-              background:rgba(245,245,245,1);
-              border-radius: 2px ;
-              color: #0086FF;
-              font-size: 12px;
-              text-align: center;
-              cursor: pointer;
-              .icon_open{
-                width: 15px;
-                height: 7px;
-                display: inline-block;
-                background: url(../../../assets/images/icon_open.png) no-repeat center;
-              }
-              .icon_open02{
-                width: 15px;
-                height: 7px;
-                display: inline-block;
-                background: url(../../../assets/images/icon_open02.png) no-repeat center;
-              }
             }
             .img{
               width: 60px;
