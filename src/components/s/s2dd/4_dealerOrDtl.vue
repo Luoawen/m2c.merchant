@@ -320,7 +320,7 @@
         <div class="tit03 clear">若有自己的配送车队，可选自有物流</div>
       </div>
       <div class="deliver_type01 clear" id ='deliverCompany'>
-        <div class="" v-show="expressWay != 1">
+        <div class="" v-if="expressWay != 1">
         <span class="mr20 tit01 mt10 fl">
         <span class="redcolor">*</span>
         <span style="line-height:30px">物流公司</span>
@@ -333,7 +333,7 @@
           </el-autocomplete>
         </span>
         </div>
-        <div class="" v-show="expressWay == 1">
+        <div class="" v-if="expressWay == 1">
         <span class="mr20 tit01 fl">
           <span class="redcolor">*</span>
           <span>配送员姓名</span>
