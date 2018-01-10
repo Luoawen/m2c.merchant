@@ -168,10 +168,11 @@ Vue.use(Element)
       let _error = 'error' in options ? options.error : function () { return }
       let _options = $.extend(options, {
         headers:{'attach':(sessionStorage.getItem('mUser')!=null||sessionStorage.getItem('mUser')!=undefined)?getattach():"",
-        'X-Authorization': sessionStorage.getItem('token')},
+        // 'X-Authorization': sessionStorage.getItem('token')},
+        'X-Authorization': 'eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJKV1Q6YmQxYTA4ZjgtMTgxNi00MDBiLTliN2MtOTFkODlmYmFkNTkwIiwiaWF0IjoxNTE1NTU0OTEzLCJzdWIiOiJ7XCJhZ2VcIjpcIjBcIixcImFyZWFEaXN0cmljdFwiOlwiXCIsXCJhcmVhUHJvdmluY2VcIjpcIlwiLFwiZGVhbGVySWRcIjpcIkpYUzEzODJBMzY1RjdEOTQzNTA5OTFEODRBRjIzMjMzRkQ3XCIsXCJkZWFsZXJOYW1lXCI6XCLotYTph5HmtYHmnI3liqHotLnnjodcIixcImRpc3RyaWN0Q29kZVwiOlwiXCIsXCJmb3JiaWRUaW1lXCI6XCIwXCIsXCJmb3JiaWRUeXBlXCI6XCIwXCIsXCJncm91cFR5cGVcIjpcIjRcIixcImljb25cIjpcIlwiLFwibWVkaWFJZFwiOlwiXCIsXCJtZWRpYU5hbWVcIjpcIlwiLFwibW9iaWxlXCI6XCIxMzUwMDAwMDA0NlwiLFwib3JkZXJNc2dTd2l0Y2hcIjpcIjFcIixcInBlcm1pc3Npb25LZXlcIjpcIkpXVDpDTElFTlQ6UEVSTUlTU0lPTjpIWTM2NEI5MTMxRDNDOTQwRkM4ODdEOUVGNkIyQjkwRkJCOmFjNDAyNDlhOTgxMTQ1N2VhMjdmZjVkYjRlNDhlOWQ4XCIsXCJwcm92aW5jZUNvZGVcIjpcIlwiLFwic2V4XCI6XCIwXCIsXCJzeXNNc2dTd2l0Y2hcIjpcIjFcIixcInVzZXJJZFwiOlwiSFkzNjRCOTEzMUQzQzk0MEZDODg3RDlFRjZCMkI5MEZCQlwiLFwidXNlck5hbWVcIjpcIuWVhuWutueuoeeQhuWRmFwifSIsImV4cCI6MTUxNTY0MTMxM30.gos-XsBPlNEu72EI6VixFSw43yBvBgfIgTvppSjZMJqLW1_Vl3UU2Zjt8ODYQwqX9ZwNkqtzUMrs_jtMMTMNkRUQd1_9LHJxXMBa9iz7TiXNCfoKA_xtl-XGhmT6S7R7X77OYKkhbAd8_RAC-snlKCMdJt_LP8UWbJ0Jp8hRrsQ'},
         success: function (result) {
           if (result.status === 800000 || result.status === 800001 || result.status === 800002 || result.status === 800003 || result.status === 800004) {
-            this.$message(result.errorMessage)
+            // showTip(result.errorMessage)
             sessionStorage.clear()
             sessionStorage.setItem('loginout', 1)//此段代码意思是在登录页判断 是否需要登出 然后调用登出接口
             window.location.href = window.location.origin
