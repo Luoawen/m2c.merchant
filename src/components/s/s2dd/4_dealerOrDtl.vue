@@ -439,7 +439,7 @@
         ,expressNo: ''
         ,expressName: ''
         ,expressCode: ''
-        ,expressWay: ''
+        ,expressWay: '0'
         ,expressPhone: ''
         ,expressPerson: ''
         ,province_all_search: []
@@ -1240,6 +1240,7 @@ a{text-decoration:none}
     	.dy{
     		padding-left: 0px;
     		line-height: 38px;
+        cursor: pointer;
     	}
       .active{
         border-bottom:1px solid #0086FF;
