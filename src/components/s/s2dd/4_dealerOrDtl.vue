@@ -152,14 +152,14 @@
                 <td class="a7">
                   <span v-if="goods.afterSellOrderId ==''"> --</span>
                   <span v-else class='iconTips'>
-                    &nbsp;&nbsp;&nbsp;<router-link  :to="{name:'details',query:{'afterSellOrderId':goods.afterSellOrderId,from:'details'}} " target='_blank'>              
+                    <router-link  style='margin-left:20px' :to="{name:'details',query:{'afterSellOrderId':goods.afterSellOrderId,from:'details'}} " target='_blank'>              
                       {{goods.afterOrderType==0?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==1?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家发货':goods.afterSellStatus==7?'待顾客收货':goods.afterSellStatus>=8?'售后已完成':'--'):goods.afterOrderType==1?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==0?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):goods.afterOrderType==2?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==2?'待商家同意':goods.afterSellStatus==4?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):'--'}}
                     </router-link>
                   </span>
                 </td>
               </tr>
             </tbody>
-            <tbody class="js_num">
+            <tbody class="js_num"> 
               <tr>
                 <td colspan="5"></td>
                 <td></td>
