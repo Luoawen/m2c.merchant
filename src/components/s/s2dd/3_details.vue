@@ -134,7 +134,7 @@
         <div class="logistics" style="padding-bottom:20px"  >
           <!--没有物流的情况 -->
           <h3  class="building" v-if="orderDetail.status <=4">暂无物流信息<br />
-            <el-button type="primary" @click="addLogistics">添加物流信息</el-button>
+            <el-button type="primary" @click="addLogistics" i-if="logistics.status==4">添加物流信息</el-button>
           </h3>
           <el-row v-if ="orderDetail.status>=5">
            <el-col :span='8'>
@@ -571,7 +571,7 @@
               if(result.content.resData === '' || result.content === ''){
                 that.logisticInfo = []
               }else{
-                that.logisticInfo = result.content.resData
+                that.logisticInfo = JSON.parse(result.content.resData).data
               }
               let obj = {'context':'添加售后物流信息','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
               }

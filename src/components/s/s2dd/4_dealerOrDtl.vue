@@ -7,7 +7,7 @@
         <i class="ico_print"></i>
         <span class="dy" @click="gotoprint()">打印</span>
       </a>
-      <button type="button" class="fah" v-show="!bModify && orderStatus == 1" @click="Deliver=true">发货</button>
+      <button type="button" class="fah" v-show="!bModify && orderStatus == 1 && isShowShip == 0" @click="Deliver=true">发货</button>
         <button type="button" class="fah" v-show="bModify||fModify" @click="saveDealerOrder()">保存</button>
         <button type="button" class="fah" v-show="bModify||fModify" @click="bModify = false,fModify = false">取消</button>
       </span>
@@ -211,7 +211,7 @@
               <tr class="fh">
               <td colspan="2">{{orderStatus === 1 ? '待发货数：' + expressNum : orderStatus == 2 ? '待收货数：' + expressNum: orderStatus > 2 ? '已收货数：' + expressNum:'--'}}</td>
               <td>
-                <button class="fah fr mr10" @click="deliver" v-show="orderStatus==1">发货</button>
+                <button class="fah fr mr10" @click="deliver" v-show="orderStatus==1 && isShowShip == 0">发货</button>
               </td>
             </tr>
             <tr>
@@ -411,6 +411,7 @@
         Deliver: false,
         strOrderStatus: '',
         orderStatus: 0,
+        isShowShip:1,
         dealerOrderId: '',
         createdDate: '',
         payWay: '',
@@ -438,7 +439,7 @@
         ,expressNo: ''
         ,expressName: ''
         ,expressCode: ''
-        ,expressWay: '0'
+        ,expressWay: ''
         ,expressPhone: ''
         ,expressPerson: ''
         ,province_all_search: []
@@ -552,15 +553,17 @@
           data: {
             com:that.expressCode,
             nu:nu
+            // com:'yuantong',
+            // nu:812517398349
           },
           success: function (result) {
             if (result.status === 200){
               if(result.content.resData === '' || result.content === ''){
                 that.logisticInfo = []
               }else{
-                that.logisticInfo = result.content.resData
+                that.logisticInfo = JSON.parse(result.content.resData).data
               }
-              let obj = {'context':'添加售后物流信息','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
+              let obj = {'context':'商家发货','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
               }
               that.logisticInfo.push(obj)
               for(let i = 0;i<that.logisticInfo.length;i++){
@@ -618,7 +621,7 @@
           success: function (result) {
             if (result.status === 200) {
               for(let i=0;i<result.content.length;i++){
-                if(result.content[i].expressNo!==''){
+                if(result.content[i].expressCode!=='' || result.content[i].expressPhone!==''){
                   that.expressNote  =result.content[i].expressNote
                   that.expressNo    =result.content[i].expressNo
                   that.expressName  =result.content[i].expressName
@@ -672,6 +675,7 @@
           that.goodsMoney = data.orderPrice;
           that.orderFreight = data.orderFreight;
           that.orderStatus = data.orderStatus;
+          that.isShowShip = data.isShowShip;
           that.strOrderStatus = data.orderStatus === 0? '待付款': data.orderStatus === 1? '待发货': data.orderStatus === 2? '待收货': data.orderStatus === 3? '已完成': data.orderStatus === 4? '交易完成': data.orderStatus === 5? '交易关闭': data.orderStatus === -1? '已取消': '--';
           //that.dealerOrderId = dealerOrderId;
           var d = new Date(data.createdDate);
@@ -1499,4 +1503,3 @@ a{text-decoration:none}
 }
 
 </style>
-

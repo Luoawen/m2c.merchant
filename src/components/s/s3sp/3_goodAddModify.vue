@@ -635,7 +635,7 @@
                 },
                 success: function (result) {
                   if(result.content!=''){
-                    that.show_tip("商品编码已存在！")
+                    that.$message("商品编码已存在！")
                   }else{
                     return
                   }
@@ -867,27 +867,27 @@
             for (var k = 0; k < that.goodsSKUs.length; k++) {
               that.checkInventorySubmit(that.goodsSKUs[k].availableNum)
               if (that.sukShow == true) {
-                that.show_tip("您还有信息未完善！")
+                that.$message("您还有信息未完善！")
                 return
               }
               that.checkWeightSubmit(that.goodsSKUs[k].weight)
               if (that.sukShow1 == true) {
-                that.show_tip("您还有信息未完善！")
+                that.$message("您还有信息未完善！")
                 return
               }
               that.checkPhotographPriceSubmit(that.goodsSKUs[k].photographPrice)
               if (that.sukShow2 == true) {
-                that.show_tip("您还有信息未完善！")
+                that.$message("您还有信息未完善！")
                 return
               }
-              that.checkMarketPrice (that.goodsSKUs[k].marketPrice)
+              // that.checkMarketPrice (that.goodsSKUs[k].marketPrice)
               if (that.sukShow3 == true) {
-                //that.show_tip("商品市场价为大于0的数字，不能超过999999.99元")
+                that.$message("您还有信息未正确填写！")
                 return
               }
             }
             if (that.goodsMainImages.length <= 0) {
-              that.show_tip("您还有信息未完善！")
+              that.$message("您还有信息未完善！")
               that.imgShowList = true
               return
             }
@@ -920,10 +920,13 @@
               data:Object.assign(that.data,a),
               success: function (result) {
                 if (result.status === 200) {
-                  that.show_tip('保存成功')
+                  that.$message({
+                    type:'success',
+                    message:'保存成功'
+                  })
                   that.$router.push({name:"goodList"})
                 } else {
-                  that.show_tip(result.errorMessage)
+                  that.$message(result.errorMessage)
                   that.goodsGuarantee=[]
                   for (var k = 0; k < that.goodsSKUs.length; k++) {
                     that.goodsSKUs[k].marketPrice = that.goodsSKUs[k].marketPrice
@@ -937,7 +940,7 @@
               }
             })
           } else {
-            that.show_tip("您还有信息未完善！")
+            that.$message("您还有信息未完善！")
             return false;
           }
         })
@@ -1045,7 +1048,7 @@
           that.standardIdShow = true
         }else{
           if (state1 === '' || state1.trim() === '') {
-            that.show_tip('规格值不能为空')
+            that.$message('规格值不能为空')
             return
           }
           let arr = that.restaurants
@@ -1065,7 +1068,7 @@
                   if(result.status==200){
                     that.getValue()
                   }else{
-                    that.show_tip(result.errorMessage)
+                    that.$message(result.errorMessage)
                   }
                 }
               })
@@ -1077,7 +1080,7 @@
             that.mapValue()
             that.goodsSpecifications[index].state1=''
           }else{
-            that.show_tip("该规格值已添加")
+            that.$message("该规格值已添加")
           }
         }
 
@@ -1121,7 +1124,7 @@
         that.dialogImageUrl = file.url
         that.dialogVisible = 1 > 0
         if (file.response.content.url == '' || file.response.content.url == undefined) {
-          that.show_tip(file.response.errorMessage)
+          that.$message(file.response.errorMessage)
         } else {
           that.$nextTick(()=>{
             let l = that.$("#dragImg").find("img").length-1
@@ -1151,7 +1154,7 @@
           that.goodsSpecifications[index].itemValue.splice(that.goodsSpecifications[index].itemValue.indexOf(specName), 1)
           that.mapValue()
         }else{
-          that.show_tip("已有规格不能移除")
+          that.$message("已有规格不能移除")
         }
       },
       // 删除规格行
