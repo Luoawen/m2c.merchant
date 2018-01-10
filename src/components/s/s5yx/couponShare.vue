@@ -143,6 +143,7 @@
 								<el-table :data="user_list" 
 								slot="empty" 
 								stripe  
+								ref="multipleTable"
 								@select-all="sel_all" 
 								@select="sel"
 								:row-key = "get_key"
@@ -205,7 +206,7 @@
 					<div class="b_button">
 						<div class="marauto wid280">
 							<el-button type="primary" @click="send">发放</el-button>
-							<el-button @click="centerDialogVisible02 = true">导入批量发放</el-button>
+							<el-button @click="click_send">导入批量发放</el-button>
 						</div>
 					</div>
 				</div>
@@ -268,7 +269,7 @@
 					<div class="cen">总共发送{{send_result.sendTotal}}位用户 </div>
 					<div class="cen"> <span>发送成功{{send_result.sendSuccess}}位</span> <span >{{send_result.sendfail}}位用户发送失败</span>  <el-button class="dre" v-if="send_result.sendfail !== 0 "  type="primary" @click="exportFailure" plain>导出失败用户</el-button></div>
 					<div slot="footer" class="dialog-footer">
-						<el-button type="primary" @click="result = false">确定</el-button>
+						<el-button type="primary"  @click="send_success">确定</el-button>
 					</div>
 				</el-dialog>
 					<!--新增优惠券-->
@@ -448,60 +449,71 @@ export default {
 		// 确定发送
 		send(){
 			let that = this
+				if (that.hand_edit_coupon.couponId == undefined) {
+					this.$message.error('请选择优惠券！')
+					return
+				}
 			if (that.sel_user.mobiles == '') {
-				this.$message.error('还未选择发放的用户')
+				this.$message.error('请选择发放用户')
 				return 
 			}
-			console.log(that.hand_edit_coupon)
-			if (that.hand_edit_coupon.couponId == undefined) {
-				this.$message.error('还未选择将要发放的优惠券！')
-				return
-			}
-			// console.log('that.sel_user.mobiles,',that.sel_user.mobiles)
-			let formDate = {
-					coupon_id:that.hand_edit_coupon.couponId,
-					mobiles:that.sel_user.mobiles,
-					dealer_id:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-				}
-			that.$.ajax({
-				method: 'post',
-				url: that.localbase + 'm2c.market/web/coupon/dealer/batch/send/user',
-				contentType: 'application/json; charset=utf-8',
-				dataType: 'json',
-				data: JSON.stringify(formDate),
-				success: function(res) {
-					if (res.status == 200) {
-						console.log('发放结果',res.content)
-						that.send_result = res.content
-						// 页面刷新 清空数据
-						that.reset()
-						that.hand_add_show = true
-						that.sel_user.total = 0
-						that.sel_user.mobiles = ''
-						that.get_user_list()
-						// 用去除类的方法 去掉勾选的选项
-
-
-
-					}
-					that.result = true
-				}
-			})
-		},
-		// 移除复选的标志
-		removeCheck  (){
-         let elems = document.getElementsByClassName("el-checkbox");
-        var arr = [];
-        for(var i = 0,len = elems.length;i<len;i++){
-          if(elems[i].className.indexOf("el-checkbox")>=0&&elems[i].className.indexOf("is-disabled")<0){
-            elems[i].style="display:block"
+			   this.$confirm('确认给所选用户发放所选优惠券?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let formDate = {
+            coupon_id: that.hand_edit_coupon.couponId,
+						mobiles: that.sel_user.mobiles,
+						dealer_id:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
           }
+          $.ajax({
+            method: 'post',
+            url: that.localbase + 'm2c.market/web/coupon/dealer/batch/send/user',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify(formDate),
+            success: function (res) {
+              if (res.status == 200) {
+                console.log('发放结果', res.content)
+								that.send_result = res.content
+								// 页面刷新 清空数据
+			// 			that.reset()
+			// 			that.hand_add_show = true
+			// 			that.sel_user.total = 0
+			// 			that.sel_user.mobiles = ''
+			// 			that.get_user_list()
+			// 			// 用去除类的方法 去掉勾选的选项
+              }
+              that.result = true
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消发放'
+          })
+				})
+		},
+		  // 点击导入批量发放
+      click_send () {
+        if (this.hand_edit_coupon.couponId == undefined) {
+          this.$message.error('请选择优惠券！')
+          return
+        } else {
+          this.centerDialogVisible02 = true
         }
-        let checkboxList = document.getElementsByClassName('el-checkbox is-disabled')
-        for(var i =0 ;i< checkboxList.length; i++){
-          checkboxList[i].style="display:none"
-        }
-        },
+      },
+	  // 发送成功后点击确定刷新页面
+      send_success () {
+        // 清空表格选择项
+        this.$refs.multipleTable.clearSelection()
+        this.sel_user = {mobiles: '', total: 0}
+        this.hand_add_show = true
+        this.hand_edit_coupon = {}
+        this.result = false
+        this.sel_user_mobiles = []
+      },
 		// excel批量发放
 		excel_send () {
 			let that = this

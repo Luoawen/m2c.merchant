@@ -30,7 +30,7 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="发行量" class="ml50">
-                <el-input  v-model="couponParams.total_num" :maxlength="5" @blur="formValidator(2)">
+                <el-input  v-model="couponParams.total_num"  placeholder="最大99999" :maxlength="5" @blur="formValidator(2)">
                   <i slot="suffix" class="el-input__icon fontstyle">张</i>
                 </el-input>
               </el-form-item>
