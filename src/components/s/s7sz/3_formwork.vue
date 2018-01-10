@@ -63,7 +63,7 @@ export default {
   name: '',
   data () {
     return {
-      formworks: [],
+      formworks: [1],
       formworkId:'',
       deleteShow:false,
       dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId

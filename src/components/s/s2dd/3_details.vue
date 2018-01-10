@@ -178,15 +178,25 @@
                     <td colspan="2">
                       <h3 style="color:rgb(0, 102, 204);padding-left:12px;font-size:16px;" >商家重新发货</h3>
                       <!--退换货（增加寄出的）的情况-->
-                      <div class="col-sm-8 detail_cen">
-                        <span class="tit01">物流公司:</span> <span class="ml20">{{logistics.status < 5 ? '--' :logistics.status >= 7? logistics.expressName : logistics.backExpressName}}</span>
-                      </div>
-                      <div class="col-sm-8 detail_cen" >
-                        <span class="tit01">物流单号:</span>
-                        <span class="ml20" v-if="logistics.status < 5">--</span>
-                        <span class="ml20" v-if="logistics.status >= 5 && logistics.status<7">{{logistics.expressNo}}<a class="ml20" @click="getQueryExpress(logistics.expressNo)">查看物流跟踪信息</a></span>
-                        <span class="ml20" v-if="logistics.status >= 7">{{logistics.backExpressNo}}<a class="ml20" @click="getQueryExpress(logistics.backExpressNo)">查看物流跟踪信息</a></span>
-                      </div>
+                      <template v-if="logistics.expressWay===0">
+                        <div class="col-sm-8 detail_cen">
+                          <span class="tit01">物流公司:</span> <span class="ml20">{{logistics.expressName!=='' ? logistics.expressName : '--'}}</span>
+                        </div>
+                        <div class="col-sm-8 detail_cen" >
+                          <span class="tit01">物流单号:</span>
+                          <span class="ml20">{{logistics.expressNo!=='' ? logistics.expressNo : '--'}}<a v-if="logistics.expressNo!==''" class="ml20" @click="getQueryExpress(logistics.expressCode,logistics.expressNo)">查看物流跟踪信息</a></span>
+                        </div>
+                      </template>
+                      <template v-if="logistics.expressWay===1">
+                        <div class="col-sm-8 detail_cen">
+                          <span class="tit01">配送方式:</span> <span class="ml20">自有物流</span>
+                        </div>
+                        <div class="col-sm-8 detail_cen" >
+                          <span class="tit01">配送员:</span>
+                          <span class="ml20">{{logistics.expressPerson!=='' ? logistics.expressPerson : '--'}}</span>
+                          <span class="ml20">{{logistics.expressPhone!=='' ? logistics.expressPhone : '--'}}</span>
+                        </div>
+                      </template>
                     </td>
                   </tr>
                 <!--只退货的情况-->
@@ -196,12 +206,11 @@
                       <div class="col-sm-8 detail_cen" style="line-height: 40px;">
                         <div>
                           <span class="tit01">物流公司:</span>
-                          <span class="ml20">{{logistics.status < 5 ||logistics.backExpressName == ''? '--' :logistics.backExpressName}}</span>
+                          <span class="ml20">{{logistics.backExpressName == ''? '--' :logistics.backExpressName}}</span>
                         </div>
                         <div>
                           <span class="tit01">物流单号:</span>
-                          <span class="ml20" v-if="logistics.status < 5||logistics.backExpressName == ''">--</span>
-                          <span class="ml20" v-if="logistics.status >= 5">{{logistics.backExpressNo}}<a class="ml20" @click="getQueryExpress(logistics.backExpressNo)">查看物流跟踪信息</a></span>
+                          <span class="ml20">{{logistics.backExpressNo == ''? '--' :logistics.backExpressNo}}<a class="ml20" v-if="logistics.backExpressNo!==''" @click="getQueryExpress(logistics.backExpressCode,logistics.backExpressNo)">查看物流跟踪信息</a></span>
                         </div>
                       </div>
                     </td>
@@ -546,7 +555,7 @@
     // },
     methods: {
       //物流单详情
-      getQueryExpress(nu){
+      getQueryExpress(com,nu){
         let that = this
         that.logisticShow = true
         console.log(nu)
@@ -563,7 +572,7 @@
           type: 'get',
           url: this.base + 'm2c.scm/order/web/expressInfo',
           data: {
-            com:that.logistics.backExpressCode,
+            com:com,
             nu:nu
           },
           success: function (result) {
