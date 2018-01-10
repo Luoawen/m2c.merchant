@@ -56,10 +56,12 @@
             </div>
             <div class="tit01" v-if="couponParams.threshold_type == 1 || couponParams.threshold_type == 2">
               <span class="ml60 mr10">满</span>
-              <el-form-item>
-                <el-input  v-model="couponParams.coupon_json.threshold" placeholder="最大9999" :maxlength="4" @blur="formValidator(9)">
-                  <i slot="suffix" class="el-input__icon fontstyle" v-if="couponParams.threshold_type == 1">元</i>
-                  <i slot="suffix" class="el-input__icon fontstyle" v-if="couponParams.threshold_type == 2">件</i>
+               <el-form-item>
+                <el-input v-if="couponParams.threshold_type == 1" v-model="couponParams.coupon_json.threshold" placeholder="最大9999" :maxlength="4" @blur="formValidator(9)">
+                  <i slot="suffix" class="el-input__icon fontstyle">元</i>
+                </el-input>
+                <el-input v-if="couponParams.threshold_type == 2" v-model="couponParams.coupon_json.threshold" placeholder="最大100" :maxlength="3" @blur="formValidator(9)">
+                  <i slot="suffix" class="el-input__icon fontstyle">件</i>
                 </el-input>
               </el-form-item>
               <span>可使用该优惠券</span>
@@ -67,7 +69,8 @@
             <div>
               <el-form-item label="作用范围">
                 <el-radio-group v-model="couponParams.range_type" size="small" @change="changeRangeType(couponParams.range_type)">
-                  <el-radio label="2" class="ml10">商品</el-radio>
+                  <el-radio  label="2" class="ml10">商品</el-radio>
+                  <el-radio label="3" >品类</el-radio>
                   <el-radio label="0">全店</el-radio>
                 </el-radio-group>
               </el-form-item>
@@ -160,6 +163,40 @@
                   </div>
                 </div>
               </el-col>
+            </div>
+            <!--作用范围为品类-->
+            <div v-if="couponParams.range_type == 3">
+              <div class="category_container clear02">
+                <div class="category_container_l fl">
+                  <div class="category_container_l_t">
+                    <span>分类列表</span>
+                    <span class="tit07">可多选</span>
+                  </div>
+                  <div class="category_container_l_b">
+                    <el-tree
+                      :data="classifyList"
+                      :props="defaultProps"
+                      node-key="classifyId"
+                      ref="classifyTree"
+                      show-checkbox
+                      default-expand-all
+                      highlight-current
+                      @check-change="getCheckedNodes">
+                    </el-tree>
+                  </div>
+                </div>
+                <div class="category_container_r fl">
+                  <div class="category_container_r_t">
+                    <span>已选 </span><span class="tit08 bluecolor02">{{showClassifyList.length}}</span><span> 个分类</span>
+                  </div>
+                  <div class="category_container_r_b">
+                    <div class="category_container_r_box clear02" v-for="(classify,index) in showClassifyList">
+                      <span class="fl">{{classify.classifyName}}</span>
+                      <span class="tit09 fr" @click="deleteClassify(index, classify)">删除</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <!--作用范围为全店-->
             <div v-if="couponParams.range_type == 0">
@@ -371,6 +408,8 @@ export default {
       goodsResult: '',
       chooseGoodsList: [],
       removeGoodsList: [],
+      showClassifyList: [],
+      classifyList: [],
       couponParams: {
         coupon_id: '', // 优惠券业务ID
         coupon_name: '', // 优惠券名称
@@ -382,7 +421,7 @@ export default {
         coupon_form: '2', // 优惠券形式，1：减钱，2：打折
         threshold_type: '1', // 门槛类型，1：金额，2：件数，3：无条件
         coupon_json: {threshold: '', discount: ''}, // threshold:门槛金额/件数 // discount:优惠券面值
-        range_type: '2', // 作用范围，0：全店，2：商品
+        range_type: '2', // 作用范围，0：全店，2：商品 ,3:品类
         goods_ids: [],
         remove_goods_ids: [],
         receive_type: '1',
@@ -394,6 +433,10 @@ export default {
         is_effect: 1,
         creator_type: 2, // 生成者类型，1：平台，2：商家
         creator: JSON.parse(sessionStorage.getItem('mUser')).dealerId // 生成者，平台或者商家ID
+      },
+      defaultProps: {
+        children: 'subClassify',
+        label: 'classifyName'
       },
       pickerOptions: {
         disabledDate (time) {
@@ -464,13 +507,15 @@ export default {
     openRangeDailog () {
       let _this = this
       _this.rangeDialogVisible = true
+      _this.changeTab('goods')
     },
     // 切换作用范围
     changeRangeType (rangeType) {
       let _this = this
-
+      console.log(rangeType)
       _this.chooseGoodsList = []
       _this.removeGoodsList = []
+      _this.rangeClassifyList = []
 
       if (rangeType === '0') { // 作用范围为全场
         _this.goods_query_item = {goodsClassifyId: '', condition: '', dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, pageNum: 1, rows: 8}
@@ -478,6 +523,25 @@ export default {
       } else if (rangeType === '2') { // 作用范围为商品
         _this.goods_query_item = {goodsClassifyId: '', condition: '', dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, pageNum: 1, rows: 10}
         _this.goodsSelect()
+        _this.classifySelect('-1')
+      } else if (rangeType === '3') { // 作用范围为品类
+        _this.classifySelect('-1')
+      }
+    },
+        // 切换Tab
+    changeTab (flag) {
+      let _this = this
+      _this.tab_flag = flag
+      if (flag === 'goods') {
+        _this.goods_query_item = {goodsClassifyId: '', condition: '', dealerId: '', pageNum: 1, rows: 8}
+        _this.shop_query_item = {dealerName: '', dealerClassify: '', dealerId: '', pageNum: 1, rows: 10000}
+        _this.goodsSelect()
+        _this.classifySelect('-1')
+        _this.shopSelect()
+      } else if (flag === 'shop') {
+        _this.shop_query_item = {dealerName: '', dealerClassify: '', dealerId: '', pageNum: 1, rows: 8}
+        _this.shopSelect()
+        _this.shopClassifySelect()
       }
     },
     // 商品搜索
@@ -552,6 +616,42 @@ export default {
         }
       }
     },
+       // 品类搜索
+    classifySelect (parentClassifyId) {
+      let _this = this
+      $.ajax({
+        type: 'get',
+        url: _this.base + 'm2c.scm/goods/classify/tree',
+        data: {
+          parentClassifyId: parentClassifyId
+        },
+        success: function (result) {
+          _this.classifyList = result.content
+        }
+      })
+    },
+    // 获取已选择的品类
+    getCheckedNodes (data, checked, indeterminate) {
+      let _this = this
+      let nodes = _this.$refs.classifyTree.getCheckedNodes()
+      let ids = _this.$refs.classifyTree.getCheckedKeys()
+      _this.rangeClassifyList = []
+      _this.showClassifyList = []
+      for (let i = 0; i < nodes.length; i++) {
+        let classify = {}
+        classify.classifyId = nodes[i].classifyId
+        classify.classifyName = nodes[i].classifyName
+        _this.rangeClassifyList.push(classify)
+        if (ids.indexOf(nodes[i].parentClassifyId) === -1) { // 不包含该节点父节点
+          _this.showClassifyList.push(classify)
+        }
+      }
+    },
+     // 作用范围为品类，删除品类
+    deleteClassify (index, classify) {
+      let _this = this
+      _this.$refs.classifyTree.setChecked(classify.classifyId, false, true)
+    },
     // 作用范围为全场，添加被排除商品
     removeGoods (goodsInfo) {
       let _this = this
@@ -601,13 +701,26 @@ export default {
         _this.couponParams.remove_goods_ids.push(removeGoods)
       }
     },
+    // 拼装作用范围品类参数
+    makeClassifyIds () {
+      let _this = this
+      _this.couponParams.goods_classifys = []
+      for (var i = 0; i < _this.rangeClassifyList.length; i++) {
+        let classify = {}
+        classify.categoryId = _this.rangeClassifyList[i].classifyId
+        classify.entityName = _this.rangeClassifyList[i].classifyName
+        _this.couponParams.goods_classifys.push(classify)
+      }
+    },
     // 发送添加请求
     postfrom () {
       let _this = this
       let flag = _this.formValidator(0)
       if (flag) {
         _this.makeGoodsIds()
+        _this.makeClassifyIds()
         _this.makeRemoveIds()
+
         let rebody = {
           coupon_id: _this.couponParams.coupon_id,
           coupon_type: _this.couponParams.coupon_type,
@@ -620,6 +733,7 @@ export default {
           coupon_json: JSON.stringify(_this.couponParams.coupon_json),
           range_type: _this.couponParams.range_type,
           goods_ids: JSON.stringify(_this.couponParams.goods_ids),
+          goods_categories: JSON.stringify(_this.couponParams.goods_classifys),
           remove_goodsIds: JSON.stringify(_this.couponParams.remove_goods_ids),
           num_per_one: _this.couponParams.num_per_one,
           num_per_day: _this.couponParams.num_per_day,
@@ -697,6 +811,12 @@ export default {
             _this.warning('优惠券门槛为最多9999正整数')
             return false
           }
+        } else if (_this.couponParams.threshold_type === '2') {
+          if (!/^([1-9]\d{0,1}|100)$/.test(_this.couponParams.coupon_json.threshold)) {
+            _this.couponParams.coupon_json.threshold = ''
+            _this.warning('优惠券门槛为正整数，最多100件')
+            return false
+          }
         } else {
           _this.couponParams.coupon_json.threshold = 0
         }
@@ -735,6 +855,21 @@ export default {
     back () {
       let _this = this
       _this.$goRoute({path: 'coupon_list'})
+    },
+       getStrLength (str) {
+      let realLength = 0
+      if (str && str.trim().length > 0) {
+        str = str.trim()
+        for (let i = 0; i < str.length; i++) {
+          let charCode = str.charCodeAt(i)
+          if ((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)) {
+            realLength += 0.5
+          } else {
+            realLength += 1
+          }
+        }
+        return realLength
+      }
     }
   }
 }

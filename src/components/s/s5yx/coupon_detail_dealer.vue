@@ -89,6 +89,7 @@
         			</span>
         			<span v-if="couponInfo.rangeType == 0">全店</span>
               <span v-if="couponInfo.rangeType == 2">商品</span>
+              <span v-if="couponInfo.rangeType == 3">品类</span>
         		</div>
         		<div class="mt10">
         			<div class="Alreadychosen" v-if="couponInfo.rangeType == 0">
@@ -171,6 +172,24 @@
                   </div>
                 </div>
               </div>
+              <div class="Alreadychosen h250" v-if="couponInfo.rangeType == 3">
+                <div class="Alreadychosen_t">
+                  已选 <span class="bluecolor02">{{showClassifyList.length}}</span> 个品类
+                </div>
+                <div class="Alreadychosen_c overflowy h215">
+                  <el-tree
+                    :data="classifyList"
+                    :props="defaultProps"
+                    :default-checked-keys="rangeClassifyList"
+                    node-key="classifyId"
+                    ref="classifyTree"
+                    show-checkbox
+                    default-expand-all
+                    highlight-current
+                    @check-change="getCheckedNodes">
+                  </el-tree>
+                </div>
+              </div>
         		</div>
         	</div>
         	<div class="mb30">
@@ -209,10 +228,61 @@ export default {
       goods_all_show: false,
       remove_goods_all_show: false,
       couponInfo: '',
-      removeGoodsList: []
+      removeGoodsList: [],
+      rangeClassifyList: [],
+      classifyList: [],
+      showClassifyList: [], 
+         defaultProps: {
+        children: 'subClassify',
+        label: 'classifyName',
+        disabled: 'disabled'
+      }
     }
   },
   methods: {
+    // 获取品类数据
+    classifySelect (parentClassifyId) {
+      let _this = this
+      $.ajax({
+        type: 'get',
+        url: _this.localbase + 'm2c.scm/goods/classify/tree',
+        data: {
+          parentClassifyId: parentClassifyId
+        },
+        success: function (result) {
+          _this.classifyList = result.content
+          // 未被选中的禁用
+          for (let a = 0; a < _this.classifyList.length; a++) {
+            _this.classifyList[a].disabled = true
+            if (_this.classifyList[a].subClassify != null && _this.classifyList[a].subClassify.length > 0) {
+              for (let b = 0; b < _this.classifyList[a].subClassify.length; b++) {
+                _this.classifyList[a].subClassify[b].disabled = true
+                if (_this.classifyList[a].subClassify[b].subClassify != null && _this.classifyList[a].subClassify[b].subClassify.length > 0) {
+                  for (let c = 0; c < _this.classifyList[a].subClassify[b].subClassify.length; c++) {
+                    _this.classifyList[a].subClassify[b].subClassify[c].disabled = true
+                  }
+                }
+              }
+            }
+          }
+        }
+      })
+    },
+    // 渲染获取已选择的品类
+     getCheckedNodes (data, checked, indeterminate) {
+      let _this = this
+      let nodes = _this.$refs.classifyTree.getCheckedNodes()
+      let ids = _this.$refs.classifyTree.getCheckedKeys()
+      _this.showClassifyList = []
+      for (let i = 0; i < nodes.length; i++) {
+        let classify = {}
+        classify.classifyId = nodes[i].classifyId
+        classify.classifyName = nodes[i].classifyName
+        if (ids.indexOf(nodes[i].parentClassifyId) === -1) { // 不包含该节点父节点
+         let a =  _this.showClassifyList.push(classify)
+        }
+      }
+    },
     back () {
       let _this = this
       _this.$goRoute({path: 'coupon_list'})
@@ -221,6 +291,7 @@ export default {
   created () {
     // console.log("sessionStorage.getItem('coupon_id')"+ sessionStorage.getItem('coupon_id'))
     let _this = this
+    _this.classifySelect('-1')
     _this.$.ajax({
      url: _this.localbase + 'm2c.market/web/coupon/detail/' + sessionStorage.getItem('coupon_id'),
       // url: 'http://localhost:8080/m2c.market/coupon/detail/' + sessionStorage.getItem('coupon_id'),
@@ -238,6 +309,15 @@ export default {
             _this.removeGoodsList.push(removeGoods)
           }
           console.log('removeGoodsList:', JSON.stringify(_this.removeGoodsList))
+        }
+        if (_this.couponInfo.rangeType === 3) {
+          for (let i = 0; i < _this.couponInfo.suitableRangeList.length; i++) {
+            _this.rangeClassifyList.push(_this.couponInfo.suitableRangeList[i].categoryId)
+          }
+          setTimeout(() => {
+            _this.getCheckedNodes()
+          }, 1000)
+          console.log('rangeClassifyList:', JSON.stringify(_this.rangeClassifyList))
         }
       }
     })

@@ -60,7 +60,7 @@
                 <el-input  v-if="couponParams.threshold_type == 1" v-model="couponParams.coupon_json.threshold" placeholder="最大9999" :maxlength="4" @blur="formValidator(9)">
                   <i slot="suffix" class="el-input__icon fontstyle">元</i>
                 </el-input>
-                  <el-input v-if="couponParams.threshold_type == 2"  v-model="couponParams.coupon_json.threshold" placeholder="最高100" :maxlength="3" @blur="formValidator(7)">
+                  <el-input v-if="couponParams.threshold_type == 2"  v-model="couponParams.coupon_json.threshold" placeholder="最高100" :maxlength="3" @blur="formValidator(9)">
                   <i slot="suffix" class="el-input__icon fontstyle" >件</i>
                 </el-input>
               </el-form-item>
@@ -710,6 +710,7 @@ export default {
       let flag = _this.formValidator(0)
       if (flag) {
         _this.makeGoodsIds()
+        _this.makeClassifyIds()
         _this.makeRemoveIds()
         let rebody = {
           coupon_id: _this.couponParams.coupon_id,
@@ -801,22 +802,23 @@ export default {
           _this.warning('优惠券优惠金额不能大于门槛金额')
           return false
         }
-      if (flag == 0 || flag == 9) {
+        if (flag == 0 || flag == 9) {
         if (_this.couponParams.threshold_type === '1') {
           if (!/^[1-9]\d{0,3}$/.test(_this.couponParams.coupon_json.threshold)) {
             _this.couponParams.coupon_json.threshold = ''
-            _this.warning('优惠券门槛为最多9999正整数')
+            _this.warning('优惠券门槛为正整数，最多9999元')
             return false
           }
-        } else {
-          _this.couponParams.coupon_json.threshold = 0
-        }
-      }
-       if (flag == 0 || flag == 7) {
-        if (_this.couponParams.threshold_type === '2') {
-          if (!/^([1-9][0-9]?|100)$/.test(_this.couponParams.coupon_json.threshold)) {
+          if (_this.couponParams.coupon_json.threshold !== '' &&
+            _this.couponParams.coupon_json.money !== '' &&
+            parseInt(_this.couponParams.coupon_json.threshold) <= parseInt(_this.couponParams.coupon_json.money)) {
+            _this.warning('优惠券优惠金额不能大于门槛金额')
+            return false
+          }
+        } else if (_this.couponParams.threshold_type === '2') {
+          if (!/^([1-9]\d{0,1}|100)$/.test(_this.couponParams.coupon_json.threshold)) {
             _this.couponParams.coupon_json.threshold = ''
-            _this.warning('优惠券门槛为最高100')
+            _this.warning('优惠券门槛为正整数，最多100件')
             return false
           }
         } else {
