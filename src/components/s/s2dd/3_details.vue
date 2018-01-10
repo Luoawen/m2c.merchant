@@ -501,7 +501,6 @@
         dialogVisible: false,
         // 搜索参数
         search_params: { orderNo: '', keywordType: '', statusFlag: sessionStorage.getItem('statusFlag'), payWay: '', startTime: sessionStorage.getItem('startTime'), endTime: sessionStorage.getItem('endTime'), keyword: '' },
-        dialogVisible: false,
         shipmentForm: {
           expressNo: '',
           expressName: '',
@@ -1364,6 +1363,8 @@ display:-webkit-box;
     }
   }
 }
+.el-dialog__body .a1 .a1tab,.el-dialog__body .a1 .a1tit{padding-top: 20px;
+          padding-bottom: 20px;}
 .detail{
     .nav{
       .active{
