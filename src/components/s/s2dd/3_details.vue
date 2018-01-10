@@ -850,7 +850,6 @@
               //售后物流信息
               let _content = result.content
               that.logistics = _content
-              console.log(that.logistics.status===4)
               // that.logistics.afterSellOrderId=_content.afterSellOrderId;
               // that.logistics.expressName=_content.expressName;
               // that.logistics.expressNo=_content.expressNo;
