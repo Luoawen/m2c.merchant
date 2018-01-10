@@ -196,7 +196,7 @@
 								</div>
 							</div>
 							<div class="mt10">
-								<a class="greycolor02  mr10" @click="goto('coupon_list')">新增优惠券</a>
+								<a class="greycolor02  mr10" @click="new_coupons= true">新增优惠券</a>
 								<a class="bluecolor02" v-show="!hand_add_show" @click="reselect">重新选择优惠券</a>
 							</div>
 						</div>
@@ -271,6 +271,34 @@
 						<el-button type="primary" @click="result = false">确定</el-button>
 					</div>
 				</el-dialog>
+					<!--新增优惠券-->
+				<el-dialog
+					title="选择需要新增的优惠券的类型"
+					:visible.sync="new_coupons"
+					width="30%"
+					center :modal-append-to-body="false"
+         :close-on-click-modal="false"
+					>
+					<div class="add_xzyh clear02">
+						<div :class="['add_xbox', 'fl', 'mr60', create_flag == 'cash' ? 'c_active' : '']" @click="create_flag = 'cash'">
+							<div class="add_xbox_bg"></div>
+							<div class="tit">代金券</div>
+							<div class="tit01">用户使用该优惠券减对 应金额，可后台发放</div>
+							<!--选中的时候请做出判断出现icon_selected-->
+							<i class="icon_selected" v-if="create_flag == 'cash'"></i>
+						</div>
+						<div :class="['add_xbox', 'fl', 'mr60', create_flag == 'discount' ? 'c_active' : '']"  @click="create_flag = 'discount'">
+							<div class="add_xbox_bg"></div>
+							<div class="tit">折扣券</div>
+							<div class="tit01">用户使用该优惠券减对 应折扣，可后台发放</div>
+							<i class="icon_selected" v-if="create_flag == 'discount'"></i>
+						</div>
+					</div>
+					<span slot="footer" class="dialog-footer">
+						<el-button type="primary" @click="gotoCreateVue()">下一步</el-button>
+						<el-button @click="new_coupons = false">取 消</el-button>
+					</span>
+				</el-dialog>
 			</div>
 		</el-col>
 	</div>
@@ -280,6 +308,8 @@
 export default {
 	data() {
 		return {
+			// 新增优惠券
+			new_coupons: false,
 			result:false,
 			// 发送结果
 			send_result:'',
@@ -321,6 +351,7 @@ export default {
 			newaddReceive: false,
 			centerDialogVisible:false,
 			centerDialogVisible02: false,
+			create_flag: 'cash',
 		}
 	},
 	watch: {
@@ -348,6 +379,17 @@ export default {
       }
 	},
 	methods: {
+		// 新增跳转到相应的新增的页面
+		gotoCreateVue () {
+        let _this = this
+        if (_this.create_flag === 'cash') { // 创建代金券
+          _this.$router.push({path: 'coupon_cash_dealer'})
+        }
+        if (_this.create_flag === 'discount') { // 创建折扣券
+          _this.$router.push({path: 'coupon_discount_dealer'})
+        }
+        _this.centerDialogVisible = false
+      },
 		// 给表格唯一的KEY
 		get_key(row){
 			return row.userId
@@ -507,7 +549,7 @@ export default {
 		},
 		handleCurrentChange(val) {
 			console.log(`当前页: ${val}`)
-			this.pagination.pageNum = val
+			this.pagination.page_num = val
 			this.get_user_list()
 		},
 		sel_all(val) {
@@ -597,6 +639,7 @@ export default {
 		// 获取用户列表
 		get_user_list () {
 			let that = this
+		console.warn('that.pagination',that.pagination)
 			if (that.time !== null && that.time !== '') {
 				that.user_list_parmas.startTime = that.date_format(new Date(that.time[0]),"yyyy-MM-dd")
 				that.user_list_parmas.endTime = that.date_format(new Date(that.time[1]),"yyyy-MM-dd")
@@ -637,6 +680,59 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .add_xzyh{
+  	height: 330px;
+  	border-bottom: 1px solid #E5E5E5;
+  	overflow: auto;
+  	.c_active{
+  		border: 1px solid #0086FF!important;
+  		position: relative;
+  		.tit{
+  			color: #0086FF!important;
+  		}
+  		.icon_selected{
+  			position: absolute;
+  			background: url(../../../assets/images/icon_selected.png) no-repeat center;
+  			width:18px;
+				height:18px;
+				right: 0px;
+				bottom: 0px;
+  		}
+  	}
+  	.add_xbox{
+  		width: 200px;
+    	height: 250px;
+    	border: 1px solid #E6E8F2;
+    	padding-top: 36px;
+    	margin-bottom: 20px;
+    	margin-left: 5%;
+    	cursor: pointer;
+  		.add_xbox_bg{
+  		width: 100px;
+  		height: 60px;
+  		background: url(../../../assets/images/icon_quan.png) no-repeat center;
+  		margin: auto;
+  		margin-bottom: 27px;
+  		}
+  		.tit{
+			font-size:16px;
+			font-family:PingFangSC-Medium;
+			color:#333;
+			line-height:22px;
+			margin-bottom: 20px;
+			text-align: center;
+  		}
+  		.tit01{
+  		width: 120px;
+			font-size:12px;
+			font-family:PingFangSC-Light;
+			color:rgba(51,51,51,1);
+			line-height:20px;
+			text-align: center;
+			margin: auto;
+  		}
+  	}
+  }
     //  发送成功的样式
 	.send_suc{
 		width:136px;

@@ -664,9 +664,14 @@ export default {
     formValidator (flag) {
       let _this = this
       // flag--1:名称，2：总数，3：时间,4:面值，5：每人次数,6:每天次数,7:平台成本,8:商家成本，9：门槛
-      if (flag == 0 || flag == 1) {
-        if (!/^[\u4e00-\u9fa5a-zA-Z0-9]{1,11}$/.test(_this.couponParams.coupon_name)) {
-          _this.warning('名称为最多11位汉字数字英文,不能为空')
+       if (flag == 0 || flag == 1) {
+        if (!/^[\u4e00-\u9fa5a-zA-Z0-9`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]{1,22}$/.test(_this.couponParams.coupon_name)) {
+          _this.warning('名称只能为汉字数字英文特殊字符,不能为空')
+          return false
+        }
+        let realLength = _this.getStrLength(_this.couponParams.coupon_name)
+        if (realLength > 11) {
+          _this.warning('优惠券名称不能超过11个字')
           return false
         }
       }

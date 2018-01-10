@@ -186,9 +186,6 @@ export default {
   mounted () {
     let _this = this
     _this.getCouponList()
-    // if( ){
-    //   centerDialogVisible = true
-    // }
   },
   methods: {
     formatDate (date, fmt) {
