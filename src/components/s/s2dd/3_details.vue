@@ -53,7 +53,7 @@
               </div>
               <div>
                 <span class="tit01 fl" v-show="orderDetail.rejectReason!=''">拒绝原因:</span>
-                <span class="ml20 fl" style="width:65%;">{{orderDetail.rejectReason}}</span>
+                <span class="ml20 fl mt10" style="width:65%;">{{orderDetail.rejectReason}}</span>
               </div>
             </div>
           </div>
