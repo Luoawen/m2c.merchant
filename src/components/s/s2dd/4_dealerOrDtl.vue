@@ -558,18 +558,22 @@
           },
           success: function (result) {
             if (result.status === 200){
-              if(result.content.resData === '' || result.content === ''){
-                that.logisticInfo = []
+              if(res.content===''){
+                window.open("http://www.kuaidi100.com/?from=openv")
               }else{
-                that.logisticInfo = JSON.parse(result.content.resData).data
+                if(result.content.resData === '' || result.content === ''){
+                  that.logisticInfo = []
+                }else{
+                  that.logisticInfo = JSON.parse(result.content.resData).data
+                }
+                let obj = {'context':'商家发货','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
+                }
+                that.logisticInfo.push(obj)
+                for(let i = 0;i<that.logisticInfo.length;i++){
+                  that.logisticInfo[i].time = that.logisticInfo[i].time.split(" ")
+                }
+                console.log(that.logisticInfo)
               }
-              let obj = {'context':'商家发货','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
-              }
-              that.logisticInfo.push(obj)
-              for(let i = 0;i<that.logisticInfo.length;i++){
-                that.logisticInfo[i].time = that.logisticInfo[i].time.split(" ")
-              }
-              console.log(that.logisticInfo)
             }
             else{
               that.$message({
