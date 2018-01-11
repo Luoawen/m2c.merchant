@@ -174,7 +174,8 @@
                       <span> {{orderDetail.goodsInfo.sellNum}}</span>
                     </td>
                   </tr>
-                  <tr style="border:1px solid rgb(215, 215, 215);" v-if ="orderDetail.orderType==0 && logistics.status==7" >
+                  <!--换货 且售后状态为商家重新发货之后的情况-->
+                  <tr style="border:1px solid rgb(215, 215, 215);" v-if ="orderDetail.orderType==0 && logistics.status>=7" >
                     <td colspan="2">
                       <h3 style="color:rgb(0, 102, 204);padding-left:12px;font-size:16px;" >商家重新发货</h3>
                       <!--退换货（增加寄出的）的情况-->
@@ -199,8 +200,8 @@
                       </template>
                     </td>
                   </tr>
-                <!--只退货的情况-->
-                  <tr style="border:1px solid rgb(215, 215, 215);" >
+                  <!--退货/换货 且售后状态为顾客寄回商品之后的情况-->
+                  <tr style="border:1px solid rgb(215, 215, 215);" v-if ="(orderDetail.orderType==0||orderDetail.orderType==1) && logistics.status>=5">
                     <td colspan="2">
                       <h3 style="color:rgb(0, 102, 204);padding-left:12px;font-size:16px;" >顾客寄回商品</h3>
                       <div class="col-sm-8 detail_cen" style="line-height: 40px;">
@@ -576,18 +577,21 @@
           },
           success: function (result) {
             if (result.status === 200){
-              if(result.content.resData === '' || result.content === ''){
-                that.logisticInfo = []
+              if(res.content===''){
+                window.open("http://www.kuaidi100.com/?from=openv")
               }else{
-                that.logisticInfo = JSON.parse(result.content.resData).data
+                if(result.content.resData === ''){
+                  that.logisticInfo = []
+                }else{
+                  that.logisticInfo = JSON.parse(result.content.resData).data
+                }
+                let obj = {'context':'添加售后物流信息','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
+                }
+                that.logisticInfo.push(obj)
+                for(let i = 0;i<that.logisticInfo.length;i++){
+                  that.logisticInfo[i].time = that.logisticInfo[i].time.split(" ")
+                }
               }
-              let obj = {'context':'添加售后物流信息','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
-              }
-              that.logisticInfo.push(obj)
-              for(let i = 0;i<that.logisticInfo.length;i++){
-                that.logisticInfo[i].time = that.logisticInfo[i].time.split(" ")
-              }
-              console.log(that.logisticInfo)
             }
             else{
               that.$message({
