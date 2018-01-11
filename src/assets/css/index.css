@@ -3346,7 +3346,7 @@ margin-left:10px
 }
 .el-form-item.is-required .el-form-item__label:before {
 content:'*';
-color:#fa5555;
+color:red;
 margin-right:4px
 }
 .el-form-item.is-error .el-input-group__append .el-input__inner,.el-form-item.is-error .el-input-group__prepend .el-input__inner {

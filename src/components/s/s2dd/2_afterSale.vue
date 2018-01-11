@@ -56,7 +56,7 @@
           label="商品信息"
           width="300">
           <template slot-scope="scope"><img v-bind:src="JSON.parse(scope.row.goodsInfo.goodsImage == ''? '[]': scope.row.goodsInfo.goodsImage)[0]" style="width: 60px;height:60px;margin-right:10px;" class="fl"/>
-          <a class="ellipsis2 width190" style="margin-left:70px;" :title="scope.row.goodsInfo.goodsName">
+          <a class="ellipsis2 width190" style="margin-left:70px;margin-top:8px;" :title="scope.row.goodsInfo.goodsName">
             <i v-if="scope.row.goodsInfo.isChange==1" class="changeGood"></i>
             {{scope.row.goodsInfo.goodsName}}</a>
           </template>

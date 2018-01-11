@@ -176,14 +176,14 @@
                 <div class="a3 fl mt20" id="a3" style="width: 18%;text-align: center;padding-right: 40px;">
                   {{goodsItem.sellNum}}
                 </div>
-                <div class="a4 fl mt10" style="width:14%;text-align:center;">
+                <div class="a4 fl mt20" style="width:14%;text-align:center;">
                   <!-- 有几种情况的不同表现方 -->
-                  <div style="">
-                    <div class="">
+                  <div>
+                    <div>
                       {{goodsItem.afOrderType==0?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==1?'待商家同意':goodsItem.afStatus==4?'待顾客寄回商品':(goodsItem.afStatus==5||goodsItem.afStatus==6)?'待商家发货':goodsItem.afStatus==7?'待顾客收货':goodsItem.afStatus>=8?'售后已完成':'--'):goodsItem.afOrderType==1?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==0?'待商家同意':goodsItem.afStatus==4?'待顾客寄回商品':(goodsItem.afStatus==5||goodsItem.afStatus==6)?'待商家确认退款':goodsItem.afStatus>=9?'售后已完成':'--'):goodsItem.afOrderType==2?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==2?'待商家同意':goodsItem.afStatus==4?'待商家确认退款':goodsItem.afStatus>=9?'售后已完成':'--'):'--'}}
                       </div>
-                    <div class="mt5"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.strBackMoney, item.strOrderFreight, item.dealerOrderId, goodsItem.skuId)" v-show="goodsItem.afStatus<=2 && goodsItem.afStatus>-1">同意</button></div>
-                    <div class="mt5"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" v-show="goodsItem.afStatus>=0 && goodsItem.afStatus<=2">拒绝</button></div>
+                    <div class="mt5" v-if="goodsItem.afStatus<=2 && goodsItem.afStatus>-1"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.strBackMoney, item.strOrderFreight, item.dealerOrderId, goodsItem.skuId)" >同意</button></div>
+                    <div class="mt5 mb10" v-if="goodsItem.afStatus>=0 && goodsItem.afStatus<=2"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" >拒绝</button></div>
                   </div>
                   <div v-show="goodsItem.afStatus==3">
                     <img src="../../../assets/images/ico_explain.png" :title="goodsItem.rejectReason" width="16px"></img>
@@ -192,17 +192,17 @@
               </div>
               </div>
               <div class="cont col-sm-4" style="width:40%;">
-                <div class="a5" style="width:25%;">
+                <div class="a5 fl mt20" style="width:25%;">
                   {{((parseFloat(item.strGoodsMoney) + parseFloat(item.strOrderFreight) - parseFloat(item.strDealerDiscount) - parseFloat(item.strPlateDiscount))).toFixed(2)}}
                 </div>
-                <div class="a6 mt10" style="width:28%;">
+                <div class="a6 fl mt20" style="width:28%;">
                   {{date_format(new Date(item.createdDate), 'yyyy-MM-dd hh:mm:ss')}}
                 </div>
-                <div class="a7 mt10" style="width:28%">
+                <div class="a7 fl mt20" style="width:28%">
                   <div>{{item.revPerson}}</div>
                   <div>{{item.revPhone}}</div>
                 </div>
-                <div class="a8" style="width:10%">
+                <div class="a8 fl mt20" style="width:10%">
                   <span>{{item.orderStatus==0?'待付款': item.orderStatus==1? '待发货' : item.orderStatus==2?'待收货' : item.orderStatus==3 ? '已完成' : item.orderStatus==4 ? '交易完成' : item.orderStatus==5?'交易关闭':item.orderStatus==-1?'已取消': '--'}}</span>
                 </div>
               </div>

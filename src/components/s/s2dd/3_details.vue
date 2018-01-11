@@ -301,7 +301,7 @@
         </table>
 
         <div class="col-sm-4 detail_cen" style="width:100%;height:350px;">
-          <div style="padding-left: 46px;font-size: 15px; font-weight: 800; line-height: 46px;">
+          <div style="padding-left:32px;font-size:14px; line-height:55px;">
             <span class="redcolor">*</span>
             <span class="tit01" style="margin-right: 10px;">配送方式:</span>
             <el-radio v-model="shipmentForm.expressWay" label="0">物流发货</el-radio>
@@ -786,7 +786,7 @@
           that.expressNum += val.sellNum;
         });*/
           that.goodses.freight = that.goodses;
-          if(typeof(that.goodses.mediaResId)=='undefined' || that.goodses.mediaResId==null ||  that.goodses.mediaResId=='')
+          if(typeof(that.goodses.mediaResId)=='undefined' || that.goodses.mediaResId==null || that.goodses.mediaResId=='')
             ;//val.mediaResId = '-'
           else {
             resIds += '"' + that.goodses.mediaResId + '"';
@@ -829,7 +829,6 @@
                   }
               }
               that.totalCount = result.totalCount;
-              console.log('fanjc======' + uIds)
               that.getUserByIds(uIds);
             }
           }
