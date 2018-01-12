@@ -569,19 +569,9 @@
     //   },
     // },
     methods: {
-      //物流单详情
-      getQueryExpress(com,nu,flage){
+      //获取‘查看物流信息’标识
+      getflage(com,nu,flage){
         let that = this
-        console.log(nu)
-        // that.logisticInfo = [{"time":"2017-12-22 11:18:20","ftime":"2017-12-22 11:18:20","context":"[深圳市] 快件离开 [深圳中心]已发往[深圳西乡]"},{"time":"2017-12-22 10:57:24","ftime":"2017-12-22 10:57:24","context":"[深圳市] 快件到达 [深圳中心]"},{"time":"2017-12-22 05:47:17","ftime":"2017-12-22 05:47:17","context":"[东莞市] 快件离开 [东莞中心]已发往[深圳中心]"},{"time":"2017-12-22 05:40:53","ftime":"2017-12-22 05:40:53","context":"[东莞市] 快件到达 [东莞中心]"},{"time":"2017-12-21 23:14:18","ftime":"2017-12-21 23:14:18","context":"[东莞市] 快件离开 [东莞虎门]已发往[深圳中心]"},{"time":"2017-12-21 23:08:03","ftime":"2017-12-21 23:08:03","context":"[东莞市] [东莞虎门]的虎门六部已收件 电话:18033454661"}]
-        // let obj = {'context':'添加售后物流信息','time':that.tool.date.format(new Date(1515029924000), 'yyyy-MM-dd hh:mm:ss')}
-        //     that.logisticInfo.push(obj)
-        // if(that.logisticInfo!==''){
-        //   for(let i = 0;i<that.logisticInfo.length;i++){
-        //     that.logisticInfo[i].time = that.logisticInfo[i].time.split(" ")
-        //   }
-        // }
-        // console.log(that.logisticInfo)
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.scm/order/web/expressInfo',
@@ -598,21 +588,48 @@
                   that.expressLink1 = true
                 }
               }else{
-                that.logisticShow = true
-                if(result.content.resData === ''){
-                  that.logisticInfo = []
-                }else{
-                  that.logisticInfo = JSON.parse(result.content.resData).data
-                }
-                let obj = {'context':'添加售后物流信息','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
-                }
-                that.logisticInfo.push(obj)
-                for(let i = 0;i<that.logisticInfo.length;i++){
-                  that.logisticInfo[i].time = that.logisticInfo[i].time.split(" ")
-                }
+                return
               }
             }
             else{
+              return
+            }
+          }
+        });
+      },
+      //物流单详情
+      getQueryExpress(com,nu){
+        let that = this
+        that.$.ajax({
+          type: 'get',
+          url: this.base + 'm2c.scm/order/web/expressInfo',
+          data: {
+            com:com,
+            nu:nu
+          },
+          success: function (result) {
+            if (result.status === 200){
+              // if(result.content===''){
+              //   if(flage===1){
+              //     that.expressLink = true
+              //   }else{
+              //     that.expressLink1 = true
+              //   }
+              // }else{
+              that.logisticShow = true
+              if(result.content.resData === ''){
+                that.logisticInfo = []
+              }else{
+                that.logisticInfo = JSON.parse(result.content.resData).data
+              }
+              let obj = {'context':'添加售后物流信息','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
+              }
+              that.logisticInfo.push(obj)
+              for(let i = 0;i<that.logisticInfo.length;i++){
+                that.logisticInfo[i].time = that.logisticInfo[i].time.split(" ")
+              }
+              // }
+            }else{
               that.$message({
                 type:'warning',
                 message:result.errorMessage
@@ -882,10 +899,10 @@
               let _content = result.content
               that.logistics = _content
               if(that.logistics.expressNo!==''){
-                that.getQueryExpress(that.logistics.expressCode,that.logistics.expressNo,1)
+                that.getflage(that.logistics.expressCode,that.logistics.expressNo,1)
               }
               if(that.logistics.backExpressNo!==''){
-                that.getQueryExpress(that.logistics.backExpressCode,that.logistics.backExpressNo,0)
+                that.getflage(that.logistics.backExpressCode,that.logistics.backExpressNo,0)
               }
               // that.logistics.afterSellOrderId=_content.afterSellOrderId;
               // that.logistics.expressName=_content.expressName;
