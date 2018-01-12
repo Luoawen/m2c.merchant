@@ -26,7 +26,7 @@
                 <span v-if="couponInfo.couponForm == 1">{{couponInfo.couponItem.faceValue}}元</span>
                 <span v-if="couponInfo.couponForm == 2">{{couponInfo.couponItem.faceValue}}折</span>
         		  </span>
-        		  <span class="ml192">
+        		  <span class="ml147">
                 <span class="mr20">
                   <span class="mr10 wid120">发行量</span>
                   <span v-if="couponInfo.couponTotal > 0">{{couponInfo.couponTotal}}张</span>
@@ -46,11 +46,11 @@
                 </i> -->
                 <span class="mr20 ml20">
                   <span class="mr10 wid80">总共发出</span>
-                  <span>{{couponInfo.couponTotal ===0 ?'无限制' : couponInfo.couponTotal}}</span>
+                  <span>{{couponInfo.couponTotal ===0 ?'无限制' : couponInfo.sendNum}}</span>
                 </span>
                 <span class="mr20">
                   <span class="mr10 wid80">已被使用</span>
-                  <span> {{couponInfo.couponTotal-couponInfo.couponRemain}}</span>
+                  <span> {{couponInfo.usedNum}}</span>
                 </span>
                 <span class="mr20">
                   <span class="mr10 wid80">还剩余</span>
@@ -332,8 +332,8 @@ export default {
 .mr20{
 	margin-right: 20px;
 }
-.ml192{
-  margin:192px;
+.ml147{
+  margin:147px;
 }
 .Detailcoupons_container{
 	padding: 15px 26px;

@@ -264,7 +264,7 @@
             </div>
           </div>
           <!--成本控制-->
-          <div class="BasicinFormation clear">
+          <div class="BasicinFormation clear" v-if="couponParams.receive_type ==='1'">
             <div class="Basicinbt">
               	成本控制
             </div>
@@ -417,6 +417,7 @@ export default {
       showClassifyList: [],
       chooseGoodsList: [],
       removeGoodsList: [],
+      rangeClassifyList: [],
       classifyList: [],
       couponParams: {
         coupon_id: '', // 优惠券业务ID
@@ -523,6 +524,7 @@ export default {
 
       _this.chooseGoodsList = []
       _this.removeGoodsList = []
+      _this.rangeClassifyList = []
 
       if (rangeType === '0') { // 作用范围为全场
         _this.goods_query_item = {goodsClassifyId: '', condition: '', dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, pageNum: 1, rows: 8}
@@ -559,6 +561,7 @@ export default {
         let classify = {}
         classify.classifyId = nodes[i].classifyId
         classify.classifyName = nodes[i].classifyName
+        console.log('classify',classify)
         _this.rangeClassifyList.push(classify)
         if (ids.indexOf(nodes[i].parentClassifyId) === -1) { // 不包含该节点父节点
           _this.showClassifyList.push(classify)
@@ -686,6 +689,7 @@ export default {
     makeClassifyIds () {
       let _this = this
       _this.couponParams.goods_classifys = []
+      console.log(' _this.rangeClassifyList' ,_this.rangeClassifyList)
       for (var i = 0; i < _this.rangeClassifyList.length; i++) {
         let classify = {}
         classify.categoryId = _this.rangeClassifyList[i].classifyId

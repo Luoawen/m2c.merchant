@@ -264,7 +264,7 @@
             </div>
           </div>
           <!--成本控制-->
-          <div class="BasicinFormation clear">
+          <div class="BasicinFormation clear"  v-if="couponParams.receive_type ==='1'">
             <div class="Basicinbt">
               	成本控制
             </div>
@@ -805,7 +805,7 @@ export default {
         }
       }
       if (flag == 0 || flag == 9) {
-        if (_this.couponParams.threshold_type === '1' || _this.couponParams.threshold_type === '2') {
+        if (_this.couponParams.threshold_type === '1' ) {
           if (!/^[1-9]\d{0,3}$/.test(_this.couponParams.coupon_json.threshold)) {
             _this.couponParams.coupon_json.threshold = ''
             _this.warning('优惠券门槛为最多9999正整数')
