@@ -1220,6 +1220,7 @@ a{text-decoration:none}
         text-indent: 2em;
         width: 16px;
     		height: 16px;
+        zoom:0.85 ;
     		background: url(../../../assets/images/ico_hint_hint.png) 0 3px no-repeat;
       }
     .nav{
@@ -1319,10 +1320,10 @@ a{text-decoration:none}
           p{margin:0}
         }
         .a6{
-          width:10%;
+          width:6%;
         }
         .a7{
-          width:7.5%;
+          width:7%;
         }
         .a6_input{
         	border: 1px solid #E6E8F2;
