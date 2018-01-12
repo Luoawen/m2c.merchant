@@ -430,7 +430,7 @@
         <el-row :gutter="20">
           <el-col :span="3" class="alginRight"><i class="red">*</i>物流单号</el-col>
           <el-col :span="9">
-            <el-input v-model="addLogisticsCode" placeholder="请填写" :maxlength="30" @blur="checkLogisticsCode(addLogisticsCode)"></el-input>
+            <el-input v-model="addLogisticsCode" placeholder="请填写" :maxlength="20" @blur="checkLogisticsCode(addLogisticsCode)"></el-input>
           </el-col>
           <el-col :span="6">
             <i class="red redTips" style="line-height:50px;" v-show="checkLogiShow">请输入物流单号</i>
@@ -621,7 +621,7 @@
       },
       //添加物流信息校验物流单号
       checkLogisticsCode(val){
-        let re = /^[a-zA-Z0-9]{1,30}$/
+        let re = /^[a-zA-Z0-9]{1,20}$/
         if(val!=''){
           this.checkLogiShow = false
           if (!re.test(val)) {
@@ -1147,7 +1147,7 @@
       //校验物流单号
       ,vExpressNo(value){
         let that = this
-        let re =/^[a-zA-Z0-9]{1,30}$/
+        let re =/^[a-zA-Z0-9]{1,20}$/
         if(value!=''){
           that.checkexpressNo1 = false
           if(!re.test(value)){
@@ -1162,7 +1162,7 @@
       //校验物流单号 自有物流
       ,vExpressNo1(value){
         let that = this
-        let re =/^[a-zA-Z0-9]{1,30}$/
+        let re =/^[a-zA-Z0-9]{1,20}$/
         if(value!=''){
           if(!re.test(value)){
             that.checkexpressNo2 = true
