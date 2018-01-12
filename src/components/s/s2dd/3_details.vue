@@ -185,7 +185,10 @@
                         </div>
                         <div class="col-sm-8 detail_cen" >
                           <span class="tit01">物流单号:</span>
-                          <span class="ml20">{{logistics.expressNo!=='' ? logistics.expressNo : '--'}}<a v-if="logistics.expressNo!==''" class="ml20" @click="getQueryExpress(logistics.expressCode,logistics.expressNo)">查看物流跟踪信息</a></span>
+                          <span class="ml20">{{logistics.expressNo!=='' ? logistics.expressNo : '--'}}
+                            <a v-if="!expressLink" class="ml20" @click="getQueryExpress(logistics.expressCode,logistics.expressNo)">查看物流跟踪信息</a>
+                            <a v-if="expressLink" href="http://www.kuaidi100.com/?from=openv" target="_blank">查看物流跟踪信息</a>
+                          </span>
                         </div>
                       </template>
                       <template v-if="logistics.expressWay===1">
@@ -211,7 +214,10 @@
                         </div>
                         <div>
                           <span class="tit01">物流单号:</span>
-                          <span class="ml20">{{logistics.backExpressNo == ''? '--' :logistics.backExpressNo}}<a class="ml20" v-if="logistics.backExpressNo!==''" @click="getQueryExpress(logistics.backExpressCode,logistics.backExpressNo)">查看物流跟踪信息</a></span>
+                          <span class="ml20">{{logistics.backExpressNo == ''? '--' :logistics.backExpressNo}}<a class="ml20" v-if="!expressLink1" @click="getQueryExpress(logistics.backExpressCode,logistics.backExpressNo)">查看物流跟踪信息</a>
+                            <a v-if="expressLink1" href="http://www.kuaidi100.com/?from=openv" target="_blank">查看物流跟踪信息</a>
+                          
+                          </span>
                         </div>
                       </div>
                     </td>
@@ -467,6 +473,8 @@
     name: '',
     data () {
       return {
+        expressLink1:false,//顾客
+        expressLink:false,//商家
         textarea:'',
         textAreaShow:false,
         pageRows:5,
@@ -562,7 +570,7 @@
     // },
     methods: {
       //物流单详情
-      getQueryExpress(com,nu){
+      getQueryExpress(com,nu,flage){
         let that = this
         console.log(nu)
         // that.logisticInfo = [{"time":"2017-12-22 11:18:20","ftime":"2017-12-22 11:18:20","context":"[深圳市] 快件离开 [深圳中心]已发往[深圳西乡]"},{"time":"2017-12-22 10:57:24","ftime":"2017-12-22 10:57:24","context":"[深圳市] 快件到达 [深圳中心]"},{"time":"2017-12-22 05:47:17","ftime":"2017-12-22 05:47:17","context":"[东莞市] 快件离开 [东莞中心]已发往[深圳中心]"},{"time":"2017-12-22 05:40:53","ftime":"2017-12-22 05:40:53","context":"[东莞市] 快件到达 [东莞中心]"},{"time":"2017-12-21 23:14:18","ftime":"2017-12-21 23:14:18","context":"[东莞市] 快件离开 [东莞虎门]已发往[深圳中心]"},{"time":"2017-12-21 23:08:03","ftime":"2017-12-21 23:08:03","context":"[东莞市] [东莞虎门]的虎门六部已收件 电话:18033454661"}]
@@ -584,7 +592,11 @@
           success: function (result) {
             if (result.status === 200){
               if(result.content===''){
-                window.open("http://www.kuaidi100.com/?from=openv")
+                if(flage===1){
+                  that.expressLink = true
+                }else{
+                  that.expressLink1 = true
+                }
               }else{
                 that.logisticShow = true
                 if(result.content.resData === ''){
@@ -869,6 +881,12 @@
               //售后物流信息
               let _content = result.content
               that.logistics = _content
+              if(that.logistics.expressNo!==''){
+                that.getQueryExpress(that.logistics.expressCode,that.logistics.expressNo,1)
+              }
+              if(that.logistics.backExpressNo!==''){
+                that.getQueryExpress(that.logistics.backExpressCode,that.logistics.backExpressNo,0)
+              }
               // that.logistics.afterSellOrderId=_content.afterSellOrderId;
               // that.logistics.expressName=_content.expressName;
               // that.logistics.expressNo=_content.expressNo;
