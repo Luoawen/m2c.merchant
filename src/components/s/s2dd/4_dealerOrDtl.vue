@@ -764,7 +764,6 @@
                 }
               }
               that.totalCount = result.totalCount;
-              console.log('fanjc======' + uIds)
               that.getUserByIds(uIds);
             }
           }
@@ -911,7 +910,7 @@
         that.goodses.forEach(function(val, index) {
           if (index > 0)
             freightStr += ',';
-          freightStr += (val.skuId + ':' + val.freight);
+          freightStr += (val.skuId + ':' + val.strFreight);
         });
         freightStr = '{' + freightStr + '}';
         // 发请求

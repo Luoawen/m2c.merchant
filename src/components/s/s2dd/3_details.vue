@@ -309,7 +309,7 @@
           </div>
           <el-form :model="shipmentForm" v-show="shipmentForm.expressWay==0">
             <el-form-item label="物流公司:" :label-width="formLabelWidth" required>
-              <el-select v-model="shipmentForm.expressCode" filterable placeholder="请选择物流公司" @change="selectShipment(shipmentForm.expressCode)">
+              <el-select v-model="shipmentForm.expressCode" filterable placeholder="请选择物流公司" @change="selectShipment(shipmentForm.expressCode)" @blur="vExpress(shipmentForm.expressCode)">
                 <el-option
                   v-for="item in shipments"
                   :key="item.expressCode"
@@ -317,32 +317,36 @@
                   :value="item.expressCode">
                 </el-option>
               </el-select>
+              <i class="red redTip" v-if="checkexpress">请选择物流公司</i>
             </el-form-item>
             <el-form-item label="物流单号:" :label-width="formLabelWidth" required>
-              <el-input v-model="shipmentForm.expressNo" auto-complete="off" width="200" :maxlength="30"></el-input>
+              <el-input v-model="shipmentForm.expressNo" auto-complete="off" width="200" :maxlength="20" @blur="vExpressNo(shipmentForm.expressNo)"></el-input>
+              <i class="red redTip" v-if="checkexpressNo1">请填写物流单号</i>
+              <i class="red redTip" v-if="checkexpressNo">请填写正确的物流单号</i>
             </el-form-item>
             <el-form-item label="备注:" :label-width="formLabelWidth">
-              <el-input v-model="shipmentForm.noted" auto-complete="off" width="200" :maxlength="200"></el-input>
+              <el-input v-model="shipmentForm.noted" auto-complete="off" width="200" :maxlength="100"></el-input>
             </el-form-item>
           </el-form>
           <el-form :model="shipmentForm" v-show="shipmentForm.expressWay==1">
             <el-form-item label="配送员姓名:" :label-width="formLabelWidth" required>
-              <el-input v-model="shipmentForm.expressPerson" auto-complete="off"></el-input>
+              <el-input v-model="shipmentForm.expressPerson" auto-complete="off" @blur="vExpressPerson(shipmentForm.expressPerson)"></el-input>
+              <i class="red redTip" v-if="checkexpPerson">请输入配送员姓名</i>
             </el-form-item>
-            <el-form-item label="配送员手机号:" :label-width="formLabelWidth" required>
-              <el-input v-model="shipmentForm.phone" auto-complete="off"></el-input>
+            <el-form-item label="配送员手机号:" :label-width="formLabelWidth" required >
+              <el-input v-model="shipmentForm.phone" auto-complete="off" :maxlength="11" @blur="vExpressPhone(shipmentForm.phone)"></el-input>
+              <i class="red redTip" v-if="checkexpPhone">请输入配送员手机号</i>
+              <i class="red redTip" v-if="checkexpPhone1">配送员手机号码格式不正确</i>
             </el-form-item>
             <el-form-item label="运单号:" :label-width="formLabelWidth">
-              <el-input v-model="shipmentForm.expressNo" auto-complete="off"></el-input>
+              <el-input v-model="shipmentForm.expressNo" auto-complete="off" @blur="vExpressNo1(shipmentForm.expressNo)"></el-input>
+              <i class="red redTip" v-if="checkexpressNo2">请填写正确的物流单号</i>
             </el-form-item>
             <el-form-item label="备注:" :label-width="formLabelWidth">
-              <el-input v-model="shipmentForm.noted" auto-complete="off" :maxlength="200"></el-input>
+              <el-input v-model="shipmentForm.noted" auto-complete="off" :maxlength="100"></el-input>
             </el-form-item>
           </el-form>
         </div>
-
-
-
         <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="handleShipment()">确 定</el-button>
@@ -456,10 +460,6 @@
       </ul>
       <h6>如快递有问题，请先拨打快递公司电话咨询<el-button size="medium" @click="logisticShow=!logisticShow" class="fr mr20" style="margin-top:8px;">关闭查询结果</el-button></h6>
     </div>
-    <!--
-      重构商家管理平台营销模块80%，补充1.1.1版本迭代bug修改内容
-      完成商家管理平台营销模块重构，商家管理平台1.1.2新需求 物流查看 商家平台天机物流信息功能
-    -->
   </div>
 </template>
 <script>
@@ -499,7 +499,7 @@
           ,backExpressNo:''
           ,orderType : -1
         },
-        dialogVisible: false,
+        dialogVisible: true,
         // 搜索参数
         search_params: { orderNo: '', keywordType: '', statusFlag: sessionStorage.getItem('statusFlag'), payWay: '', startTime: sessionStorage.getItem('startTime'), endTime: sessionStorage.getItem('endTime'), keyword: '' },
         shipmentForm: {
@@ -511,6 +511,13 @@
           phone: '',
           expressWay:'0',
         },
+        checkexpress:false,//请选择物流公司
+        checkexpressNo:false,//物流单号格式不正确
+        checkexpressNo1:false,//物流单号不能为空
+        checkexpressNo2:false,//物流单号格式不正确--自有
+        checkexpPerson:false,//配送员名不能为空
+        checkexpPhone:false,//配送员手机号不能为空
+        checkexpPhone1:false,//配送员手机号码格式不正确
         formLabelWidth: '120px',
         shipments:[],
         _map: {}
@@ -1128,8 +1135,75 @@
         })
       }
       //商户发货
+      //校验物流公司
+      ,vExpress(value){
+        let that = this
+        if(value!=''){
+          that.checkexpress = false
+        }else{
+          that.checkexpress = true
+        }
+      }
+      //校验物流单号
+      ,vExpressNo(value){
+        let that = this
+        let re =/^[a-zA-Z0-9]{1,30}$/
+        if(value!=''){
+          that.checkexpressNo1 = false
+          if(!re.test(value)){
+            that.checkexpressNo = true
+          }else{
+            that.checkexpressNo = false
+          }
+        }else{
+          that.checkexpressNo1 = true
+        }
+      }
+      //校验物流单号 自有物流
+      ,vExpressNo1(value){
+        let that = this
+        let re =/^[a-zA-Z0-9]{1,30}$/
+        if(value!=''){
+          if(!re.test(value)){
+            that.checkexpressNo2 = true
+          }else{
+            that.checkexpressNo2 = false
+          }
+        }else{
+          return
+        }
+      }
+      //校验配送员
+      ,vExpressPerson(value){
+        let that = this
+        if(value===''){
+          that.checkexpPerson = true
+        }else{
+          that.checkexpPerson = false
+        }
+      }
+      //校验配送员手机号
+      ,vExpressPhone(value){
+        let that = this
+        var re = /^(13|14|15|17|18)[0-9]{9}$/
+        if(value!=''){
+          that.checkexpPhone = false
+          if (!re.test(value)) {
+            this.checkexpPhone1 = true
+          } else {
+            this.checkexpPhone1 = false
+          }
+        }else{
+          that.checkexpPhone = true
+        }
+      }
       ,selectShipment(value){
         let that = this
+        if(value!=''){
+          that.checkexpress = false
+        }else{
+          that.checkexpress = true
+        }
         let choosenItem = this.shipments.filter(item => item.expressCode === value)[0];
         that.shipmentForm.expressName=choosenItem.expressName
       }
@@ -1137,22 +1211,33 @@
         let that = this
         //shipmentForm.expressWay==0
         if(that.shipmentForm.expressWay==0){
-            if(that.shipmentForm.expressCode == '' || that.shipmentForm.expressCode == undefined){
-              that.show_tip("请选择物流公司")
-            }
-            if(that.shipmentForm.expressNo == '' || that.shipmentForm.expressNo == undefined){
-              that.show_tip("请输入物流单号")
-            }
+          that.vExpress(that.shipmentForm.expressCode)
+          that.vExpressNo(that.shipmentForm.expressNo)
+          if(that.checkexpress||that.checkexpressNo1||that.checkexpressNo){
+            return
+          }
+            // if(that.shipmentForm.expressCode == '' || that.shipmentForm.expressCode == undefined){
+            //   that.show_tip("请选择物流公司")
+            // }
+            // if(that.shipmentForm.expressNo == '' || that.shipmentForm.expressNo == undefined){
+            //   that.show_tip("请输入物流单号")
+            // }
         }
         if(that.shipmentForm.expressWay==1){
-          if(that.shipmentForm.expressPerson == '' || that.shipmentForm.expressPerson == undefined){
-            that.show_tip("请输入配送员姓名")
-            return;
+          that.vExpressPerson(that.shipmentForm.expressPerson)
+          that.vExpressPhone(that.shipmentForm.phone)
+          that.vExpressNo1(that.shipmentForm.expressNo)
+          if(that.checkexpPhone||that.checkexpPhone1||that.checkexpPerson||that.checkexpressNo2){
+            return
           }
-          if(that.shipmentForm.phone == '' || that.shipmentForm.phone == undefined){
-            that.show_tip("请输入配送员电话")
-            return;
-          }
+          // if(that.shipmentForm.expressPerson == '' || that.shipmentForm.expressPerson == undefined){
+          //   that.show_tip("请输入配送员姓名")
+          //   return;
+          // }
+          // if(that.shipmentForm.phone == '' || that.shipmentForm.phone == undefined){
+          //   that.show_tip("请输入配送员电话")
+          //   return;
+          // }
           /*if(that.shipmentForm.expressNo == '' || that.shipmentForm.expressNo == undefined){
             that.show_tip("请输入运单号")
             return;
@@ -1287,6 +1372,7 @@
   }
 </script>
 <style lang="scss" scoped>
+i.redTip{padding-top:0;}
 .building{
   font-size:20px;color:#666;
   padding:240px 0;
