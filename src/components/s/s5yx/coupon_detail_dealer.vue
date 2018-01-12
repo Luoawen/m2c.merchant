@@ -54,7 +54,7 @@
                 </span>
                 <span class="mr20">
                   <span class="mr10 wid80">还剩余</span>
-                  <span>{{couponInfo.couponRemain}}</span>
+                  <span>{{couponInfo.couponTotal ===0 ?'无限制' :couponInfo.couponRemain}}</span>
                 </span>
               </span>
             </div>
