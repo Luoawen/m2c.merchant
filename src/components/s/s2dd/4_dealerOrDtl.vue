@@ -679,7 +679,7 @@
           that.goodsMoney = data.orderPrice;
           that.orderFreight = data.orderFreight;
           that.orderStatus = data.orderStatus;
-          that.isShowShip = data.isShowShip;
+          that.isShowShip = data.isShowShip;//发货标识 0:不展示，1:展示
           that.strOrderStatus = data.orderStatus === 0? '待付款': data.orderStatus === 1? '待发货': data.orderStatus === 2? '待收货': data.orderStatus === 3? '已完成': data.orderStatus === 4? '交易完成': data.orderStatus === 5? '交易关闭': data.orderStatus === -1? '已取消': '--';
           //that.dealerOrderId = dealerOrderId;
           var d = new Date(data.createdDate);

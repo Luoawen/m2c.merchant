@@ -117,7 +117,7 @@
                   <el-button size="mini" @click="agreedRefund()">确认退款</el-button>
                 </div>
 
-                <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==0">
+                <div class="oprs" v-show="orderDetail.isShowShip==1 && orderDetail.orderType==0">
                   <el-button size="mini" @click="shipment()">发货</el-button>
                 </div>
 
@@ -757,6 +757,7 @@
               that.orderDetail.rejectReason=_content.rejectReason
               that.orderDetail.dealerId = _content.dealerId;
               that.orderDetail.doStatus = _content.doStatus;//dealer order status
+              that.orderDetail.isShowShip = _content.isShowShip;//发货标识 0:不展示，1:展示
               that.setReturnData(result.content)
               console.log('that.orderDetail.status',that.orderDetail.status)
             }
