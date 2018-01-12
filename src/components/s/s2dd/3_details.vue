@@ -577,7 +577,7 @@
           },
           success: function (result) {
             if (result.status === 200){
-              if(res.content===''){
+              if(result.content===''){
                 window.open("http://www.kuaidi100.com/?from=openv")
               }else{
                 if(result.content.resData === ''){
