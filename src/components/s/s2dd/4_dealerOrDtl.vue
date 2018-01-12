@@ -7,7 +7,7 @@
         <i class="ico_print"></i>
         <span class="dy" @click="gotoprint()">打印</span>
       </a>
-      <button type="button" class="fah" v-show="!bModify && orderStatus == 1 && isShowShip == 0" @click="Deliver=true">发货</button>
+      <button type="button" class="fah" v-show="!bModify && orderStatus == 1 && isShowShip == 1" @click="Deliver=true">发货</button>
         <button type="button" class="fah" v-show="bModify||fModify" @click="saveDealerOrder()">保存</button>
         <button type="button" class="fah" v-show="bModify||fModify" @click="bModify = false,fModify = false">取消</button>
       </span>
@@ -211,7 +211,7 @@
               <tr class="fh">
               <td colspan="2">{{orderStatus === 1 ? '待发货数：' + expressNum : orderStatus == 2 ? '待收货数：' + expressNum: orderStatus > 2 ? '已收货数：' + expressNum:'--'}}</td>
               <td>
-                <button class="fah fr mr10" @click="deliver" v-show="orderStatus==1 && isShowShip == 0">发货</button>
+                <button class="fah fr mr10" @click="deliver" v-show="orderStatus==1 && isShowShip == 1">发货</button>
               </td>
             </tr>
             <tr>
@@ -411,7 +411,7 @@
         Deliver: false,
         strOrderStatus: '',
         orderStatus: 0,
-        isShowShip:1,
+        isShowShip:0,
         dealerOrderId: '',
         createdDate: '',
         payWay: '',
