@@ -245,7 +245,7 @@
                     </span>
                   </span>
                 </div>
-                <div class="mt10 mb10" v-show="expressWay==0">
+                <div class="mt10 mb10" v-show="expressWay==0 && expressNo!=''">
                   <span class="mr20 tit_tb">物流单号</span>
                   <span class="ml20" v-if="orderStatus>=2">
                     {{expressNo}}

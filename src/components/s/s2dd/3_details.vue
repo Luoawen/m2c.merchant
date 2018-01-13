@@ -336,7 +336,7 @@
           </el-form>
           <el-form :model="shipmentForm" v-show="shipmentForm.expressWay==1">
             <el-form-item label="配送员姓名:" :label-width="formLabelWidth" required>
-              <el-input v-model="shipmentForm.expressPerson" auto-complete="off" @blur="vExpressPerson(shipmentForm.expressPerson)"></el-input>
+              <el-input v-model="shipmentForm.expressPerson" auto-complete="off" :maxlength="10" @blur="vExpressPerson(shipmentForm.expressPerson)"></el-input>
               <i class="red redTip" v-if="checkexpPerson">请输入配送员姓名</i>
             </el-form-item>
             <el-form-item label="配送员手机号:" :label-width="formLabelWidth" required >
@@ -345,7 +345,7 @@
               <i class="red redTip" v-if="checkexpPhone1">配送员手机号码格式不正确</i>
             </el-form-item>
             <el-form-item label="运单号:" :label-width="formLabelWidth">
-              <el-input v-model="shipmentForm.expressNo" auto-complete="off" @blur="vExpressNo1(shipmentForm.expressNo)"></el-input>
+              <el-input v-model="shipmentForm.expressNo" auto-complete="off" :maxlength="20" @blur="vExpressNo1(shipmentForm.expressNo)"></el-input>
               <i class="red redTip" v-if="checkexpressNo2">请填写正确的物流单号</i>
             </el-form-item>
             <el-form-item label="备注:" :label-width="formLabelWidth">
@@ -898,7 +898,7 @@
               //售后物流信息
               let _content = result.content
               that.logistics = _content
-              if(that.logistics.expressNo!==''){
+              if(that.logistics.expressNo!==''&&that.logistics.expressWay!=='1'){
                 that.getflage(that.logistics.expressCode,that.logistics.expressNo,1)
               }
               if(that.logistics.backExpressNo!==''){
@@ -1627,6 +1627,8 @@ display:-webkit-box;
         }
       }
     }
+    .detail_cen a{color:#337ab7;}
+    .detail_cen a:hover{text-decoration:underline;}
     .agreetc{
       width: 100%;
       height: 100%;
