@@ -248,7 +248,9 @@
                 <div class="mt10 mb10" v-show="expressWay==0">
                   <span class="mr20 tit_tb">物流单号</span>
                   <span class="ml20" v-if="orderStatus>=2">
-                    {{expressNo}}<a class="ml20" @click="getQueryExpress(expressNo)">查看物流跟踪信息</a>
+                    {{expressNo}}
+                    <a class="ml20" v-if="!expressLink" @click="getQueryExpress(expressNo)">查看物流跟踪信息</a>
+                    <a v-if="expressLink" href="http://www.kuaidi100.com/?from=openv" target="_blank">查看物流跟踪信息</a>
                   </span>
                   <span class="ml20" v-if="orderStatus<2">--</span>
                 </div>
@@ -459,6 +461,7 @@
         shopName:'',
         logisticShow:false, // 物流单弹层
         logisticInfo:[], // 物流信息
+        expressLink:false //是否跳转快递100
       }
     },
     watch: {
@@ -533,10 +536,34 @@
           that.get_log_info()
         }
       },
+      //获取‘查看物流信息’标识
+      getflage(com,nu){
+        let that = this
+        that.$.ajax({
+          type: 'get',
+          url: this.base + 'm2c.scm/order/web/expressInfo',
+          data: {
+            com:com,
+            nu:nu
+          },
+          success: function (result) {
+            if (result.status === 200){
+              if(result.content===''){
+                that.expressLink = true
+              }else{
+                return
+              }
+            }
+            else{
+              return
+            }
+          }
+        });
+      },
       //物流单详情
       getQueryExpress(nu){
         let that = this
-        that.logisticShow = true
+        
         console.log(nu)
         // that.logisticInfo = [{"time":"2017-12-22 11:18:20","ftime":"2017-12-22 11:18:20","context":"[深圳市] 快件离开 [深圳中心]已发往[深圳西乡]"},{"time":"2017-12-22 10:57:24","ftime":"2017-12-22 10:57:24","context":"[深圳市] 快件到达 [深圳中心]"},{"time":"2017-12-22 05:47:17","ftime":"2017-12-22 05:47:17","context":"[东莞市] 快件离开 [东莞中心]已发往[深圳中心]"},{"time":"2017-12-22 05:40:53","ftime":"2017-12-22 05:40:53","context":"[东莞市] 快件到达 [东莞中心]"},{"time":"2017-12-21 23:14:18","ftime":"2017-12-21 23:14:18","context":"[东莞市] 快件离开 [东莞虎门]已发往[深圳中心]"},{"time":"2017-12-21 23:08:03","ftime":"2017-12-21 23:08:03","context":"[东莞市] [东莞虎门]的虎门六部已收件 电话:18033454661"}]
         // let obj = {'context':'添加售后物流信息','time':that.tool.date.format(new Date(1515029924000), 'yyyy-MM-dd hh:mm:ss')}
@@ -558,22 +585,19 @@
           },
           success: function (result) {
             if (result.status === 200){
-              if(result.content===''){
-                window.open("http://www.kuaidi100.com/?from=openv")
+              that.logisticShow = true
+              if(result.content.resData === '' || result.content === ''){
+                that.logisticInfo = []
               }else{
-                if(result.content.resData === '' || result.content === ''){
-                  that.logisticInfo = []
-                }else{
-                  that.logisticInfo = JSON.parse(result.content.resData).data
-                }
-                let obj = {'context':'商家发货','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
-                }
-                that.logisticInfo.push(obj)
-                for(let i = 0;i<that.logisticInfo.length;i++){
-                  that.logisticInfo[i].time = that.logisticInfo[i].time.split(" ")
-                }
-                console.log(that.logisticInfo)
+                that.logisticInfo = JSON.parse(result.content.resData).data
               }
+              let obj = {'context':'商家发货','time':that.date_format(new Date(result.content.shipGoodsTime), 'yyyy-MM-dd hh:mm:ss')
+              }
+              that.logisticInfo.push(obj)
+              for(let i = 0;i<that.logisticInfo.length;i++){
+                that.logisticInfo[i].time = that.logisticInfo[i].time.split(" ")
+              }
+              console.log(that.logisticInfo)
             }
             else{
               that.$message({
@@ -633,6 +657,7 @@
                   that.expressPerson=result.content[i].expressPerson
                   that.expressPhone =result.content[i].expressPhone
                   that.expressCode  =result.content[i].expressCode
+                  that.getflage(that.expressCode,that.expressNo)
                   return
                 }
                 return

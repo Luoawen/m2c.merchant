@@ -214,9 +214,9 @@
                         </div>
                         <div>
                           <span class="tit01">物流单号:</span>
-                          <span class="ml20">{{logistics.backExpressNo == ''? '--' :logistics.backExpressNo}}<a class="ml20" v-if="!expressLink1" @click="getQueryExpress(logistics.backExpressCode,logistics.backExpressNo)">查看物流跟踪信息</a>
+                          <span class="ml20">{{logistics.backExpressNo == ''? '--' :logistics.backExpressNo}}
+                            <a class="ml20" v-if="!expressLink1" @click="getQueryExpress(logistics.backExpressCode,logistics.backExpressNo)">查看物流跟踪信息</a>
                             <a v-if="expressLink1" href="http://www.kuaidi100.com/?from=openv" target="_blank">查看物流跟踪信息</a>
-                          
                           </span>
                         </div>
                       </div>
