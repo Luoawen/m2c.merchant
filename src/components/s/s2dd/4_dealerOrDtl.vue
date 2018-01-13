@@ -649,6 +649,9 @@
           success: function (result) {
             if (result.status === 200) {
               for(let i=0;i<result.content.length;i++){
+                if(result.content[i].expressCode!==''&& result.content[i].expressWay!==1){
+                  that.getflage(that.expressCode,that.expressNo)
+                }
                 if(result.content[i].expressCode!=='' || result.content[i].expressPhone!==''){
                   that.expressNote  =result.content[i].expressNote
                   that.expressNo    =result.content[i].expressNo
@@ -657,7 +660,7 @@
                   that.expressPerson=result.content[i].expressPerson
                   that.expressPhone =result.content[i].expressPhone
                   that.expressCode  =result.content[i].expressCode
-                  that.getflage(that.expressCode,that.expressNo)
+                  // that.getflage(that.expressCode,that.expressNo)
                   return
                 }
                 return
