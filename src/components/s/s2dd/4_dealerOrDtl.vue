@@ -14,7 +14,7 @@
     </div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane label="订货单详情" name="first">
-        
+
         <!-- 订货单详情 -->
         <div class="customerdetail_container">
           <!-- 拒绝结果，做法根据后台返回数据判断v-show -->
@@ -152,29 +152,29 @@
                 <td class="a7">
                   <span v-if="goods.afterSellOrderId ==''"> --</span>
                   <span v-else class='iconTips'>
-                    <router-link  style='margin-left:20px' :to="{name:'details',query:{'afterSellOrderId':goods.afterSellOrderId,from:'details'}} " target='_blank'>              
+                    <router-link  style='margin-left:20px' :to="{name:'details',query:{'afterSellOrderId':goods.afterSellOrderId,from:'details'}} " target='_blank'>
                       {{goods.afterOrderType==0?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==1?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家发货':goods.afterSellStatus==7?'待顾客收货':goods.afterSellStatus>=8?'售后已完成':'--'):goods.afterOrderType==1?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==0?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):goods.afterOrderType==2?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==2?'待商家同意':goods.afterSellStatus==4?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):'--'}}
                     </router-link>
                   </span>
                 </td>
               </tr>
             </tbody>
-            <tbody class="js_num"> 
+            <tbody class="js_num">
               <tr>
                 <td colspan="5"></td>
                 <td></td>
                 <td>
                   <div>商品总额</div>
                   <div>运费</div>
-                  <div>优惠金额</div>
-                  <!--<div>商家优惠券</div>-->
+                  <div>满减抵扣</div>
+                  <div>优惠券抵扣</div>
                   <div>订单总额</div>
                 </td>
                 <td class="pr40">
                   <div>{{(totalData.strTotalOrderPrice)}}</div>
                   <div>{{(totalData.strTotalFreight)}}</div>
                   <div>{{(totalData.strPlateformDiscount)}}</div>
-                  <!--<div>{{totalData.dealerDiscount}}</div>-->
+                  <div>{{totalData.strCouponDiscount}}</div>
                   <div class="redcolor" style="font-size: 18px;">{{(totalData.orderPrice)}}</div>
                 </td>
               </tr>
@@ -563,7 +563,7 @@
       //物流单详情
       getQueryExpress(nu){
         let that = this
-        
+
         console.log(nu)
         // that.logisticInfo = [{"time":"2017-12-22 11:18:20","ftime":"2017-12-22 11:18:20","context":"[深圳市] 快件离开 [深圳中心]已发往[深圳西乡]"},{"time":"2017-12-22 10:57:24","ftime":"2017-12-22 10:57:24","context":"[深圳市] 快件到达 [深圳中心]"},{"time":"2017-12-22 05:47:17","ftime":"2017-12-22 05:47:17","context":"[东莞市] 快件离开 [东莞中心]已发往[深圳中心]"},{"time":"2017-12-22 05:40:53","ftime":"2017-12-22 05:40:53","context":"[东莞市] 快件到达 [东莞中心]"},{"time":"2017-12-21 23:14:18","ftime":"2017-12-21 23:14:18","context":"[东莞市] 快件离开 [东莞虎门]已发往[深圳中心]"},{"time":"2017-12-21 23:08:03","ftime":"2017-12-21 23:08:03","context":"[东莞市] [东莞虎门]的虎门六部已收件 电话:18033454661"}]
         // let obj = {'context':'添加售后物流信息','time':that.tool.date.format(new Date(1515029924000), 'yyyy-MM-dd hh:mm:ss')}
@@ -1529,7 +1529,7 @@ a{text-decoration:none}
 </style>
 <style>
 #ship_select .el-input{
-    width:100%; 
+    width:100%;
     border: 1px solid transparent;
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     color: #555;

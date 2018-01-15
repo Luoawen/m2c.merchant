@@ -45,8 +45,8 @@
   						<span>{{createdDate}}</span>
   				</div>
   				<div class="tit">
-  						<span class="tit_span">优惠金额：</span>
-  						<span>{{(freeMoney)}}</span>
+  						<span class="tit_span">优惠总额：</span>
+  						<span>{{(allFreeMoney)}}</span>
   				</div>
   			</el-col>
 			</el-row>
@@ -101,8 +101,16 @@
           <td></td>
           <td></td>
           <td></td>
-          <td>优惠金额/元</td>
+          <td>满减抵扣/元</td>
           <td>{{freeMoney}}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>优惠券抵扣/元</td>
+          <td>{{strCouponDiscount}}</td>
         </tr>
         <tr>
           <td></td>
@@ -158,6 +166,7 @@
         showactive03: false,
         showAfter: false,
         Deliver: false,
+        strCouponDiscount:'',
         strOrderStatus: '',
         orderStatus: 0,
         totalPrice:0,
@@ -192,6 +201,7 @@
         ,expressWay: '0'
         ,expressPhone: ''
         ,expressPerson: '',
+        allFreeMoney:'',
         freeMoney:'',
         dealerName:JSON.parse(sessionStorage.getItem('mUser')).dealerName,
         totalFreight:'',
@@ -268,7 +278,9 @@
       console.log(data.provinceCode)
       that.area = data.areaCounty;
       that.phone = data.revPhone;
-      that.freeMoney = (parseFloat(data.strDealerDiscount) + parseFloat(data.strPlateformDiscount)).toFixed(2);
+      that.allFreeMoney = (parseFloat(data.strDealerDiscount) + parseFloat(data.strPlateformDiscount) + parseFloat(data.strCouponDiscount)).toFixed(2);
+      that.freeMoney = (parseFloat(data.strDealerDiscount) + parseFloat(data.strPlateformDiscount)).toFixed(2)
+      that.strCouponDiscount = data.strCouponDiscount
       that.revPerson = data.revPerson;
       that.streetAddr = data.streetAddr;
       that.recvAddr = data.province + data.city + data.areaCounty + data.streetAddr;
