@@ -64,7 +64,7 @@
             <img v-show='bgShow' id="bgImg" v-model:src="shopBackImg"
                   onerror="this.src='../../../../static/assets/images/icon_uoloading.png';this.onerror=null" >
           </div>
-          <i class="fl">尺寸限制750px*240px，JPG/GIF/PNG RGB模式，500K以内</i><br />
+          <i class="fl">尺寸限制750px*240px，JPG/PNG格式，500K以内</i><br />
           <el-button class="upload fl" onclick="document.querySelector('#bgInput').click()">{{upText}}</el-button>
         </div>
         <div class="clear"></div>
@@ -127,7 +127,7 @@
       let target = $event.target
       let objUrl = this.getObjectURL(target.files[0])
       let size = target.files[0].size
-      if (size >= 1024000 * 1) this.show_tip('图片超过1M了哦')
+      if (size >= 1024000 * 1) this.$message.error('图片超过1M了哦')
       else {
         if (objUrl) {
           this.imgshow = true
@@ -157,7 +157,7 @@
             result = JSON.parse(result)
             // document.querySelector('#m11yhgl_img').src = that.img_url
             if (result.errorMessage && result.errorMessage !== '') {
-              that.show_tip(result.errorMessage)
+              that.$message.error(result.errorMessage)
               that.touxiang_change = true
               return
             }
@@ -218,21 +218,29 @@
             result = JSON.parse(result)
             // document.querySelector('#m11yhgl_img').src = that.img_url
             if (result.errorMessage && result.errorMessage !== '') {
-              that.show_tip(result.errorMessage)
+              that.$message.error(result.errorMessage)
               that.bgChange = true
               return
             }
-            console.log('上传图片成功,返回结果是: ', result)
             that.shopBackImg = result.content.url
             let imgObj = document.getElementById('getWidth')
-            that.getImgWidth = result.content.url
-            imgObj.style.display = 'block'
-            that.width = imgObj.width
-            that.height = imgObj.height
-            console.log(imgObj.width,imgObj.height)
-            that.bgChange = false
-            imgObj.style.display = 'none'
-            callback()
+            that.$nextTick(()=>{
+              that.getImgWidth = result.content.url
+              imgObj.style.display = 'block'
+            })
+            imgObj.onload = function(){
+              that.width = imgObj.width
+              that.height = imgObj.height
+              imgObj.style.display = 'none'
+              if(that.width=='750' && that.height=='240'){
+                that.bgChange = false
+                callback()
+              }else{
+                that.$message.error('请上传750px*240px的图片')
+                return
+              }
+            }
+            // imgObj.style.display = 'none'
           }
         })
       }
@@ -245,10 +253,10 @@
           that.$message.error('请上传店铺背景图')
           return
         }else{
-          if(that.width!='750'&&that.height!='240'){
-            that.$message.error('请上传750px*240px的图片')
-            return
-          }else{
+          // if(that.width!='750' || that.height!='240'){
+          //   that.$message.error('请上传750px*240px的图片')
+          //   return
+          // }else{
             that.$.ajax({
               type: 'post',
               url: that.localbase + 'm2c.scm/shop/sys/web/shopBackImg',
@@ -259,14 +267,14 @@
               },
               success: function (res) {
                 if (res.status === 200) {
-                  that.show_tip('修改成功')
+                  that.$message.success('修改成功')
                   that.getshopBackImg()
                 } else {
-                  that.show_tip('修改失败')
+                  that.$message.error('修改失败')
                 }
               }
             })
-          }
+          // }
         }
       })
     },
@@ -317,19 +325,19 @@
     modifyDealerMess (callback) {
       let that = this
       if (that.storeinformation.appellation == null || that.storeinformation.appellation.trim() == '' || that.storeinformation.appellation.length > 50){
-        that.show_tip("请输入店铺名称")
+        that.$message.error("请输入店铺名称")
         return
       }
      if (that.storeinformation.service == null || that.storeinformation.service.trim() == ''){
-       that.show_tip("请输入客服电话")
+       that.$message.error("请输入客服电话")
        return
      }
       if (that.$("#m11yhgl_img")[0].src.indexOf("undefined") != -1 ) {
-        that.show_tip('上传图片不成功')
+        that.$message.error('上传图片不成功')
         return
       }
       if (that.$("#m11yhgl_img")[0].src == null || that.$("#m11yhgl_img")[0].src.trim() == ''){
-        that.show_tip("请选择图片")
+        that.$message.error("请选择图片")
         return
       }
       var methodStr = "post";
@@ -351,10 +359,10 @@
           },
           success: function (res) {
             if (res.status === 200) {
-              that.show_tip('修改成功')
+              that.$message.success('修改成功')
               that.getDealerMess()
             } else {
-              that.show_tip('修改失败')
+              that.$message.error('修改失败')
             }
           }
         })
@@ -375,6 +383,7 @@
 </script>
 
 <style lang="scss" scoped>
+#getWidth{opacity:0;filter: alpha(opacity=0);position:absolute;}
 .shopGg{width:232px;height:112px;background:url(../../../assets/images/def.png) no-repeat;
   margin-right:20px;
   img{width:100%;height:100%;}
