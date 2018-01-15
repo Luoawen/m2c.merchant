@@ -812,8 +812,8 @@
         // }
         that.mapValue()
         //that.goodsSpecifications = []
-        that.restaurants = []
-        that.getValue()
+        // that.restaurants = []
+        // that.getValue()
         that.standardIdShow = false
       },
       // 清空单规格内值
@@ -1173,7 +1173,7 @@
       query(item){
         console.log(item)
         this.standardId = item
-        //this.getValue()
+        this.getValue()
       },
       querySearch(queryString, cb) {
         let that = this
@@ -1326,7 +1326,7 @@
         }
       })
       // 获取规格值
-      that.getValue()
+      //that.getValue()
       // 获取规格
       that.$.ajax({
         type: 'get',
