@@ -34,7 +34,7 @@
               </div>
               <div>
                 <span class="tit01">订单总额:</span>
-                <span class="ml20">{{(orderDetail.orderTotalMoney)}}元（含运费<span>{{(orderDetail.orderFreight)}}</span>元）</span>
+                <span class="ml20">{{(orderDetail.orderTotalMoney -  parseFloat(orderDetail.couponDiscount))}}元（含运费<span>{{(orderDetail.orderFreight)}}</span>元）</span>
               </div>
             </div>
             <div class="col-sm-4 detail_cen">
@@ -44,7 +44,7 @@
               </div>
               <div>
                 <span class="tit01">售后总额:</span>
-                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight))).toFixed(2)}}元
+                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight) - parseFloat(orderDetail.couponDiscount))).toFixed(2)}}元
                   <span v-if="(orderDetail.orderType !=0) && orderDetail.status >= 4">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.status < 4">（运费待商家确认） </span></span>
               </div>
               <div>
@@ -101,7 +101,7 @@
                 <span >{{(orderDetail.goodsInfo.strPrice)}}</span>
               </td>
               <td class="a5">{{(orderDetail.goodsInfo.strTotalPrice)}}</td>
-              <td class="a5">{{orderDetail.orderType!=0?(parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight)).toFixed(2) : '--'}}</td>
+              <td class="a5">{{orderDetail.orderType!=0?(parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight) - parseFloat(orderDetail.couponDiscount)).toFixed(2) : '--'}}</td>
               <td class="a6" >
                 <!--状态，0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
@@ -296,7 +296,7 @@
             </td>
             <td class="a3">
               <p  style='margin:0'  v-if="orderDetail.goodsInfo.isSpecial==1">特惠价 {{(orderDetail.goodsInfo.strSpecialPrice)}}</p>
-              <p  style='margin:0'   :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.strPrice)}}</p> 
+              <p  style='margin:0'   :class="{'lineThrough':orderDetail.goodsInfo.isSpecial==1}">{{(orderDetail.goodsInfo.strPrice)}}</p>
               <!-- {{(orderDetail.goodsInfo.price)}} -->
             </td>
             <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
@@ -494,7 +494,8 @@
           orderFreight:0,
           backFreight:0
           ,dealerId:''
-          ,doStatus: -2
+          ,doStatus: -2,
+          couponDiscount:''
         },
         operatingRecords:[],
         logistics:{
@@ -661,7 +662,7 @@
         }else{
           this.checkLogiShow = true
         }
-        
+
       },
       //添加物流信息
       addLogistics(){
@@ -794,6 +795,7 @@
               that.orderDetail.dealerId = _content.dealerId;
               that.orderDetail.doStatus = _content.doStatus;//dealer order status
               that.orderDetail.isShowShip = _content.isShowShip;//发货标识 0:不展示，1:展示
+              that.orderDetail.couponDiscount = _content.strcouponDiscount
               that.setReturnData(result.content)
               console.log('that.orderDetail.status',that.orderDetail.status)
             }
