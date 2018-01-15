@@ -18,7 +18,7 @@
         <div class="tools_left">
         </div>
         <div class="tools_body">
-          <div class="tools_body_left">
+          <div class="tools_body_left"> 
             <div class="tools_heading">优惠券</div>
             <p path="/m/couponList">针对全平台所有优惠券进行管理，包括新增、删除</p>
           </div>
@@ -32,7 +32,7 @@
         <div class="tools_body">
           <div class="tools_body_left">
             <div class="tools_heading">满减功能</div>
-            <p>我是满减功能的简单介绍<i class="tools_in ml10"></i></p>
+            <p>针对本商家的所有满减进行管理，包括新增、删除<i class="tools_in ml10"></i></p>
           </div>
         </div>
       </div>
