@@ -233,7 +233,7 @@
                 <td>{{(orderStatus==1 || orderStatus==0)? (goods.sellNum - goods.afNum) : 0}}</td>
               </tr>
             </tbody>
-            <tbody class="deliver_tb">
+            <tbody class="deliver_tb" v-if="(expressWay==0 && expressNo!='')||(expressWay==1 && expressPhone!='')">
               <tr>
                 <td colspan="3">
                 <div class="mt10 mb10">
@@ -650,7 +650,7 @@
             if (result.status === 200) {
               for(let i=0;i<result.content.length;i++){
                 if(result.content[i].expressCode!==''&& result.content[i].expressWay!==1){
-                  that.getflage(that.expressCode,that.expressNo)
+                  that.getflage(result.content[i].expressCode,result.content[i].expressNo)
                 }
                 if(result.content[i].expressCode!=='' || result.content[i].expressPhone!==''){
                   that.expressNote  =result.content[i].expressNote

@@ -18,7 +18,8 @@ import 'bootstrap'
 import 'tableexport'
 import './assets/css/bootstrap3.0.min.css'
 import './assets/css/manage.css'
-
+//引入七牛上传
+require('qiniu-js/dist/qiniu.min');
 // import 'addressCheckbox/js/RegionalChoice.js'
 // import 'addressCheckbox/css.css'
 // 导入ueditor相关
