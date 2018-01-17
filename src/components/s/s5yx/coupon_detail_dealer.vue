@@ -46,11 +46,11 @@
                 </i> -->
                 <span class="mr20 ml20">
                   <span class="mr10 wid80">总共发出</span>
-                  <span>{{couponInfo.couponTotal ===0 ?'无限制' : couponInfo.sendNum}}</span>
+                  <span>{{couponInfo.sendNum}}</span>
                 </span>
                 <span class="mr20">
                   <span class="mr10 wid80">已被使用</span>
-                  <span> {{couponInfo.usedNum}}</span>
+                  <span> {{couponInfo.usedNum}}</span>  
                 </span>
                 <span class="mr20">
                   <span class="mr10 wid80">还剩余</span>
