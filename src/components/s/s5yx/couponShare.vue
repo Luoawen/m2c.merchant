@@ -527,7 +527,14 @@ export default {
 				this.$message.error('请选择批量发送用户文件')
 				return 
 			}
-			let formData = new FormData()
+			// 二次确认弹框
+			  this.$confirm('确定发放, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+			that.centerDialogVisible02 = false
+      let formData = new FormData()
 			formData.append("upfile",that.excel_file)
 			formData.append('coupon_id',that.hand_edit_coupon.couponId)
 			formData.append('dealer_id',JSON.parse(sessionStorage.getItem('mUser')).dealerId)
@@ -543,10 +550,18 @@ export default {
 					if (res.status == 200) {
 						console.log('发放结果',res.content)
 						that.send_result = res.content
+					}else{
+						// that.$message.error('发送失败');
 					}
 					that.result = true
 				}
 			})
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
 		},	
 		// 重置搜索查询条件
 		reset() {

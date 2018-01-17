@@ -50,7 +50,7 @@
                 </span>
                 <span class="mr20">
                   <span class="mr10 wid80">已被使用</span>
-                  <span> {{couponInfo.usedNum}}</span>
+                  <span> {{couponInfo.usedNum}}</span>  
                 </span>
                 <span class="mr20">
                   <span class="mr10 wid80">还剩余</span>
