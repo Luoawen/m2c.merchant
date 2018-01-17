@@ -291,6 +291,7 @@
               <span class="linh35">发放授权</span>
               <el-form-item>
                 <el-checkbox v-model="couponParams.is_access" label="1" class="ml10">允许平台发放</el-checkbox>
+                <pre>{{couponParams.is_access}}</pre>
               </el-form-item>
               <div class="icon-intro02">
                 <div class="tips">
@@ -438,8 +439,8 @@ export default {
         num_per_one: '1', // 每人限领总次数
         num_per_day: '1', // 每人每天限领次数
         cost_json: {platform: 0, dealer: 100}, // 成本设置
-        is_share: '0',
-        is_access: '0',
+        is_share: false,
+        is_access: false,
         is_effect: 1,
         creator_type: 2, // 生成者类型，1：平台，2：商家
         creator: JSON.parse(sessionStorage.getItem('mUser')).dealerId // 生成者，平台或者商家ID
@@ -733,8 +734,8 @@ export default {
           num_per_one: _this.couponParams.num_per_one,
           num_per_day: _this.couponParams.num_per_day,
           is_effect: _this.couponParams.is_effect,
-          with_other_cut: _this.couponParams.is_share,
-          access_of_platform: _this.couponParams.is_access,
+          with_other_cut: _this.couponParams.is_share===false?0:1,
+          access_of_platform: _this.couponParams.is_access===false?0:1 ,
           cost_json: JSON.stringify(_this.couponParams.cost_json),
           receive_type: _this.couponParams.receive_type,
           creator_type: _this.couponParams.creator_type,
