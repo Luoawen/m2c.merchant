@@ -17,6 +17,7 @@ const goodList = r => require.ensure([], () => r(require('@/components/s/s3sp/1_
 const goodAppraise = r => require.ensure([], () => r(require('@/components/s/s3sp/2_goodAppraise')), 's')
 const goodAddModify = r => require.ensure([], () => r(require('@/components/s/s3sp/3_goodAddModify')), 's')
 const gooddetail = r => require.ensure([], () => r(require('@/components/s/s3sp/4_gooddetail')), 's')
+const test = r => require.ensure([], () => r(require('@/components/s/s3sp/test')), 's')
 // s4右侧内容
 const survey = r => require.ensure([], () => r(require('@/components/s/s4zj/1_survey')), 's')
 const detail = r => require.ensure([], () => r(require('@/components/s/s4zj/2_detail')), 's')
@@ -120,6 +121,12 @@ export default new Router({
           path: 'gooddetail',
           name: 'gooddetail',
           component: gooddetail,
+          meta: {title: '商品详情',bread: '商品列表>商品详情', pathR:'/s/goodList'}
+        },
+        {
+          path: 'test',
+          name: 'test',
+          component: test,
           meta: {title: '商品详情',bread: '商品列表>商品详情', pathR:'/s/goodList'}
         },
         {
