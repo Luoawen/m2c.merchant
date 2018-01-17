@@ -291,7 +291,6 @@
               <span class="linh35">发放授权</span>
               <el-form-item>
                 <el-checkbox v-model="couponParams.is_access" label="1" class="ml10">允许平台发放</el-checkbox>
-                <pre>{{couponParams.is_access}}</pre>
               </el-form-item>
               <div class="icon-intro02">
                 <div class="tips">
