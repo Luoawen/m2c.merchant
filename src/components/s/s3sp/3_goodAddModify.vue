@@ -313,6 +313,27 @@
           <p class="marginTop20">最多上传5张主图，可以通过拖曳图片调整顺序</p>
         </el-col>
       </el-row>
+      <el-row :gutter="20">
+        <el-col :span="3">主图视频</el-col>
+        <el-col :span="21" class="upLoadBox">
+          <div id="videoContainer" v-if="uploadBtn">
+              <el-button id="selectVideo" type="primary">上传视频<i class="el-icon-upload el-icon--right"></i></el-button>
+          </div>
+          <div class="uploadProgress" v-if="uploadProgress">
+            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
+            <img src="../../../assets/images/loading.gif" class="myicon">
+            <a class="stop" @click="pauseUpload"></a>
+          </div>
+          <div class="uploadProgress" v-if="uploadRepeat">
+            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
+            <a class="repeat" @click="initUpload"></a>
+            <a class="stop" @click="delectUpload"></a>
+          </div>
+        </el-col>
+        <el-col :offset="3" :span='21'>
+          <p class="mt20">仅支持mp4格式，视频大小30M以内</p>
+        </el-col>
+      </el-row>
       <el-row :gutter="20" style="z-index:1;"></el-row>
         <el-col :span="3">图文详情</el-col>
         <el-col :span="21" style="height:400px;z-index:1;">
@@ -490,7 +511,13 @@
         setUp: {},
         disabled: false, // 禁用规格选择
         tempGoodsMainImages: [],
-        unitName: ''
+        unitName: '',
+        goodsMainVideo:'',//视频地址
+        qiniuUploader:null, //七牛云上传对象变量
+        key:'',// 上传视频名
+        uploadBtn:this.$route.query.isAdd=='add'||this.goodsMainVideo==''?true:false,
+        uploadProgress:false,// 进度loading
+        uploadRepeat:this.goodsMainVideo!==''?true:false, //重新上传
       }
     },
     created() {},
@@ -547,6 +574,133 @@
       }
     },
     methods: {
+      //删除视频
+      delectUpload(){
+        let that = this
+        that.$.ajax({
+            url: that.base + "m2c.support/file/rm/video",
+            type: 'post',
+            data: {
+                fileKey:that.key
+            },
+            success: function (result) {
+                that.$message.success('操作成功！')
+                that.uploadBtn = true
+                that.uploadProgress = false
+                that.uploadRepeat = false
+                that.initUpload()
+            }
+        })
+      },
+      //取消上传
+      pauseUpload(){
+         this.qiniuUploader.stop()
+      },
+      //视频上传初始化
+      initUpload(){
+          let that = this
+          that.qiniuUploader = new QiniuJsSDK().uploader({
+              runtimes: 'html5,flash,html4',    //上传模式,依次退化
+              browse_button: 'selectVideo',       //上传选择的点选按钮，**必需**
+              // uptoken: getSStorageInfo("uptoken"), //若未指定uptoken_url,则必须指定 uptoken ,uptoken由其他程序生成
+              // uptoken_url:__webappserverUrl__ + "/third/file/getUploadToken",
+              uptoken_func: function (file) {    // 在需要获取 uptoken 时，该方法会被调用
+                  // do something
+                  let uptoken = ""
+                  that.$.ajax({
+                      type: 'get',
+                      async:false,
+                      url: that.base + 'm2c.scm/unit/suibian',
+                      success: function (result) {
+                          if (result.status === 200){
+                            let timestamp = (new Date()).valueOf()
+                            let date = that.date_format(new Date(timestamp), 'yyyyMMdd')
+                              that.key = "video" + "/" + '8' + "/" + date + result.content
+                              that.$.ajax({
+                                  url: that.base + "m2c.support/upload/token",
+                                  type: 'GET',
+                                  async:false,
+                                  data: {
+                                      fileKey:that.key
+                                  },
+                                  success: function (result) {
+                                      uptoken = result.uptoken
+                                  }
+                              })
+                          }
+                      }
+                  })
+                  console.log('uptoken',uptoken)
+                  return uptoken
+              },
+              filters: {
+                  mime_types: [
+                      {title: "视频文件", extensions: "mp4"}, // 限定mp4后缀上传
+                  ]
+              },//文件类型过滤，这里限制为图片类型
+              domain: 'http://dl.m2c2017.com',   //bucket 域名，下载资源时用到，**必需**
+              get_new_uptoken: true,  //设置上传文件的时候是否每次都重新获取新的token
+              container: 'videoContainer',           //上传区域DOM ID，默认是browser_button的父元素，
+              max_file_size: '30mb',           //最大文件体积限制
+              //flash_swf_url: '../../../plupload/Moxie.swf',  //引入flash,相对路径
+              max_retries: 3,                   //上传失败最大重试次数
+              dragdrop: false,                   //开启可拖曳上传
+              drop_element: 'videoContainer',        //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+              chunk_size: '4mb',                //分块上传时，每片的体积
+              auto_start: true,                 //选择文件后自动上传，若关闭需要自己绑定事件触发上传
+              unique_names: false ,
+              save_key: false,
+              init: {
+                  'FilesAdded': function(up, files) {
+                      // plupload.each(files, function(file) {
+                      //     // 文件添加进队列后,处理相关的事情
+                      // });
+                  },
+                  'BeforeUpload': function(up, file) {
+                          // 每个文件上传前,处理相关的事情
+                          // uploadBtn:this.$route.query.isAdd=='add'||this.goodsMainVideo==''?true:false,
+        // uploadProgress:false,// 进度loading
+        // uploadRepeat:this.goodsMainVideo!==''?true:false, //重新上传
+                          that.uploadBtn = false
+                          that.uploadProgress = true
+                          that.uploadRepeat = false
+                  },
+                  'UploadProgress': function(up, file) {
+                          // 每个文件上传时,处理相关的事情
+                  },
+                  'FileUploaded': function(up, file, info) {
+                          // 每个文件上传成功后,处理相关的事情
+                          // 其中 info.response 是文件上传成功后，服务端返回的json，形式如
+                          // {
+                          //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
+                          //    "key": "gogopher.jpg"
+                          //  }
+                          // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
+                          var domain = up.getOption('domain');
+                          var res = JSON.parse(info);
+                          var sourceLink = domain +'/'+ res.key; //获取上传成功后的文件的Url
+                          console.log(sourceLink)
+                  },
+                  'Error': function(up, err, errTip) {
+                          //上传出错时,处理相关的事情
+                  },
+                  'UploadComplete': function() {
+                          //队列文件处理完毕后,处理相关的事情
+                          that.uploadBtn = false
+                          that.uploadProgress = false
+                          that.uploadRepeat = true
+                  },
+                  'Key': function(up, file) {
+                      // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+                      // 该配置必须要在 unique_names: false , save_key: false 时才生效
+                      var key = "";
+                      key = that.key
+                      // do something with key here
+                      return key
+                  }
+              }
+          });
+      },
       // 获取商品详情
       getGoodsInfo(){
         let that = this
@@ -1294,6 +1448,7 @@
       let that = this
       that.$nextTick(function(){
         that.$('.el-upload').appendTo("#dragImg")
+        that.initUpload()
       })
       window.onscroll = function () {
         if (that.standardId != '') {
@@ -1440,6 +1595,29 @@
   }
 </script>
 <style lang="scss" scoped>
+.upLoadBox{width:100%;height:100px;margin:20px 0;}
+.upLoadBox #selectVideo{margin:20px 0;}
+.uploadProgress{position:relative;}
+.uploadProgress img{position:absolute;top:0;left:0;width:150px;height:100px;}
+.uploadProgress a.stop{position:absolute;top:-6px;left:144px;display:inline-block;width:13px;height:13px;z-index:2;
+  background:url(../../../assets/images/ico_close_close.png) no-repeat center;
+}
+/*
+<div id="videoContainer" v-if="uploadBtn">
+              <el-button id="selectVideo" type="primary">上传视频<i class="el-icon-upload el-icon--right"></i></el-button>
+          </div>
+          <div class="uploadProgress" v-if="uploadProgress">
+            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
+            <img src="../../../assets/images/icon-delet.png" class="myicon">
+            <a class="stop" @click="pauseUpload"></a>
+          </div>
+          <div class="uploadProgress" v-if="uploadRepeat">
+            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
+            <a class="repeat" @click="initUpload"></a>
+            <a class="stop" @click="delectUpload"></a>
+          </div>
+*/
+
   .graySpan span{color:#999;}
   .graySpan .el-row,.graySpan .el-row .el-col-10{margin-bottom:0;height:45px;}
   a.addGuarantee{margin-left:115px;padding-left:20px;margin-top:-10px;float:left;background:url(../../../assets/images/ico_add.png) no-repeat;}
