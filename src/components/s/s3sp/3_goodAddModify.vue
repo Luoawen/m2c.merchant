@@ -325,8 +325,8 @@
             <a class="stop" @click="pauseUpload"></a>
           </div>
           <div class="uploadProgress" v-if="uploadRepeat">
-            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
-            <a class="repeat" @click="repeatUpload"></a>
+            <img class="mainImg" id="videoContainer" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
+            <a class="repeat" id="selectVideo"><i></i>重新上传</a>
             <a class="stop" @click="delectUpload"></a>
           </div>
         </el-col>
@@ -472,7 +472,7 @@
         goodsSpecifications:[{itemName:'',itemValue:[],state1:''}],
         goodsMainImages:[],
         goodsGuarantee:[],
-        data: {skuFlag: '0' ,goodsMinQuantity:'',goodsBarCode:'',goodsKeyWord:'',goodsShelves:'1',goodsClassifyId:''},
+        data: {skuFlag: '0' ,goodsMinQuantity:'',goodsBarCode:'',goodsKeyWord:'',goodsShelves:'1',goodsClassifyId:'',goodsMainVideo:''},
         value:'',
         dynamicTags: [],
         dialogImageUrl: '',
@@ -512,12 +512,12 @@
         disabled: false, // 禁用规格选择
         tempGoodsMainImages: [],
         unitName: '',
-        goodsMainVideo:'',//视频地址
+        // goodsMainVideo:'',//视频地址
         qiniuUploader:null, //七牛云上传对象变量
         key:'',// 上传视频名
-        uploadBtn:this.$route.query.isAdd=='add'||this.goodsMainVideo==''?true:false,
+        uploadBtn:this.$route.query.isAdd=='add'?true:false,
         uploadProgress:false,// 进度loading
-        uploadRepeat:this.goodsMainVideo!==''&&this.goodsMainVideo!==undefined?true:false, //重新上传
+        uploadRepeat:false, //重新上传
       }
     },
     created() {},
@@ -566,6 +566,7 @@
               success: function (result) {
                 that.goodsBrandName=result.content.brandName
                 //console.log(that.goodsBrandName)
+                that.initUpload()
               }
             })
           }
@@ -574,11 +575,11 @@
       }
     },
     methods: {
-      repeatUpload(){
-        let that = this
-        that.initUpload()
-        document.getElementById('selectVideo').click()
-      },
+      // repeatUpload(){
+      //   let that = this
+      //   that.initUpload()
+      //   document.getElementById('selectVideo').click()
+      // },
       //删除视频
       delectUpload(){
         let that = this
@@ -593,17 +594,46 @@
                 that.uploadBtn = true
                 that.uploadProgress = false
                 that.uploadRepeat = false
-                that.initUpload()
+                that.$nextTick(()=>{
+                  that.initUpload()
+                })
             }
         })
       },
       //取消上传
       pauseUpload(){
-         this.qiniuUploader.stop()
+        let that = this
+        that.$confirm('是否取消视频上传?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if(that.uploadProgress){
+            that.qiniuUploader.stop()
+            that.uploadProgress = false
+            if(that.data.goodsMainVideo!==''){
+              that.uploadRepeat = true
+            }else{
+              that.uploadBtn = true
+            }
+            that.initUpload()
+          }else{
+            that.$message.error("操作已失效！")
+          }
+          // that.qiniuUploader.stop()
+        }).catch(() => {
+          if(that.uploadProgress){
+            return
+          }else{
+            that.$message.error("操作已失效！")
+            return
+          }
+        })
       },
       //视频上传初始化
       initUpload(){
           let that = this
+          console.log("初始化成功")
           that.qiniuUploader = new QiniuJsSDK().uploader({
               runtimes: 'html5,flash,html4',    //上传模式,依次退化
               browse_button: 'selectVideo',       //上传选择的点选按钮，**必需**
@@ -663,9 +693,9 @@
                   },
                   'BeforeUpload': function(up, file) {
                           // 每个文件上传前,处理相关的事情
-                          // uploadBtn:this.$route.query.isAdd=='add'||this.goodsMainVideo==''?true:false,
+                          // uploadBtn:this.$route.query.isAdd=='add'||this.data.goodsMainVideo==''?true:false,
         // uploadProgress:false,// 进度loading
-        // uploadRepeat:this.goodsMainVideo!==''?true:false, //重新上传
+        // uploadRepeat:this.data.goodsMainVideo!==''?true:false, //重新上传
                           that.uploadBtn = false
                           that.uploadProgress = false
                           that.uploadRepeat = false
@@ -685,18 +715,18 @@
                           var domain = up.getOption('domain');
                           var res = JSON.parse(info);
                           var sourceLink = domain +'/'+ res.key; //获取上传成功后的文件的Url
-                          console.log(sourceLink)
-                          // that.initUpload()
+                          that.data.goodsMainVideo = sourceLink
+                          that.initUpload()
                   },
                   'Error': function(up, err, errTip) {
                           //上传出错时,处理相关的事情
+                          that.initUpload()
                   },
                   'UploadComplete': function() {
                           //队列文件处理完毕后,处理相关的事情
                           that.uploadBtn = false
                           that.uploadProgress = false
                           that.uploadRepeat = true
-                          that.initUpload()
                   },
                   'Key': function(up, file) {
                       // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
@@ -723,6 +753,7 @@
           success: function (result) {
             that.disabled = true
             that.data = result.content
+            that.data.goodsMainVideo = result.content.goodsMainVideo
             that.serviceRate = result.content.serviceRate
             for(var j=0,len=result.content.goodsGuarantee.length;j<len;j++){
               that.goodsGuarantCheck.push(result.content.goodsGuarantee[j].guaranteeId)
@@ -751,7 +782,13 @@
             }else{
               that.$('#skuFlag1').hide()
             }
+            if(that.data.goodsMainVideo === ''){
+              that.uploadBtn = true
+            }else{
+              that.uploadRepeat = true
+            }
             that.$refs.ue.setUEContent(result.content.goodsDesc)
+            // that.initUpload()
           }
         })
       },
@@ -1073,7 +1110,8 @@
               goodsDesc:that.$refs.ue.getUEContent(),
               goodsBrandName:that.goodsBrandName,
               goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
-              goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString()
+              goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString(),
+              goodsMainVide:that.goodsMainVide
             }
             console.log(a.goodsSKUs)
             that.$.ajax({
@@ -1456,7 +1494,6 @@
       let that = this
       that.$nextTick(function(){
         that.$('.el-upload').appendTo("#dragImg")
-        that.initUpload()
       })
       window.onscroll = function () {
         if (that.standardId != '') {
@@ -1563,7 +1600,7 @@
           sessionStorage.setItem('fileList','')
         }else{
           if(sessionStorage.getItem('data') == ''){
-            //alert('请求')
+            //alert('请求')'
             that.getGoodsInfo()
           }else{
             //that.getGoodsInfo()
@@ -1583,7 +1620,8 @@
           }
         }
       }else{
-        if (that.handle_toggle === 'add') {
+        //alert(that.$route.query.isAdd)
+        if (that.$route.query.isAdd == 'add') {
           that.$.ajax({
             type: 'get',
             url: that.localbase + 'm2c.scm/web/goods/approve/id',
@@ -1592,9 +1630,12 @@
             },
             success: function (result) {
               that.goodsId = result.content
+              console.log(that.goodsId)
             }
           })
+          that.initUpload()
         } else {
+          //alert(1)
           that.getGoodsInfo()
         }
       }
@@ -1606,11 +1647,21 @@
 .upLoadBox{height:auto;margin-top:20px;}
 .uploadProgress{position:relative;height:100px;}
 .uploadProgress img{position:absolute;top:0;left:0;width:150px;height:100px;}
-.uploadProgress a.stop{position:absolute;top:-6px;left:144px;display:inline-block;width:13px;height:13px;z-index:2;
-  background:url(../../../assets/images/ico_close_close.png) no-repeat center;
+.uploadProgress a.stop{position:absolute;top:-10px;left:140px;display:inline-block;width:20px;height:20px;z-index:2;
+  background:url(../../../assets/images/icon-close.png) no-repeat center;background-size:20px;border-radius:50%; cursor: pointer;
 }
 .uploadProgress a.repeat{position:absolute;top:0px;left:0px;display:inline-block;width:150px;height:100px;z-index:2;
-  background:rgba(0,0,0,0.5) url(../../../assets/images/ico_repetition.png) no-repeat center center;
+  background:rgba(0,0,0,0.5); cursor: pointer; transition: all 0.3s ease;
+  text-align: center;line-height:136px;color:#fff;
+}
+.uploadProgress a.repeat i{width:20px;height:20px;display:inline-block;background:url(../../../assets/images/ico_repetition.png) no-repeat center 0;position:absolute;top:30px;left:65px;transition: all 0.3s ease;}
+.uploadProgress a.repeat:hover{
+  text-decoration:none;
+}
+.uploadProgress a.repeat:hover i{
+  transform: rotate(120deg);
+  -webkit-transform: rotate(120deg);
+  -moz-transform: rotate(120deg);
 }
 /*ico_reduce.png
 <div id="videoContainer" v-if="uploadBtn">
