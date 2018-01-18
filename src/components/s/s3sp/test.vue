@@ -10,6 +10,7 @@
                         <!-- <el-progress :text-inside="true" :stroke-width="18" :percentage="videoProgressValue"></el-progress> -->
                         <img :src="options.iconsrc" class="myicon" @click="pauseUpload">
                     </div>
+                    <el-button @click="initUpload">初始化</el-button>
                 </el-form-item>
             </el-col>
         </el-form>
@@ -65,6 +66,7 @@
                                             fileKey:that.key
                                         },
                                         success: function (result) {
+                                            console.log(3)
                                             uptoken = result.uptoken
                                         }
                                     })
@@ -118,6 +120,7 @@
                                 var res = JSON.parse(info);
                                 var sourceLink = domain +'/'+ res.key; //获取上传成功后的文件的Url
                                 console.log(sourceLink)
+                                that.initUpload()
                         },
                         'Error': function(up, err, errTip) {
                                 //上传出错时,处理相关的事情
@@ -125,6 +128,7 @@
                         'UploadComplete': function() {
                                 //队列文件处理完毕后,处理相关的事情
                                 that.isShowProgress = false
+                                
                         },
                         'Key': function(up, file) {
                             // 若想在前端对每个文件的key进行个性化处理，可以配置该函数

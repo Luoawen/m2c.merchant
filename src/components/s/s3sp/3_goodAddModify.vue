@@ -314,8 +314,8 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="3">主图视频</el-col>
-        <el-col :span="21" class="upLoadBox">
+        <el-col :span="3" style="margin-top:20px;">主图视频</el-col>
+        <el-col :span="20" class="upLoadBox">
           <div id="videoContainer" v-if="uploadBtn">
               <el-button id="selectVideo" type="primary">上传视频<i class="el-icon-upload el-icon--right"></i></el-button>
           </div>
@@ -326,12 +326,12 @@
           </div>
           <div class="uploadProgress" v-if="uploadRepeat">
             <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
-            <a class="repeat" @click="initUpload"></a>
+            <a class="repeat" @click="repeatUpload"></a>
             <a class="stop" @click="delectUpload"></a>
           </div>
         </el-col>
         <el-col :offset="3" :span='21'>
-          <p class="mt20">仅支持mp4格式，视频大小30M以内</p>
+          <p class="marginTop20">仅支持mp4格式，视频大小30M以内</p>
         </el-col>
       </el-row>
       <el-row :gutter="20" style="z-index:1;"></el-row>
@@ -517,7 +517,7 @@
         key:'',// 上传视频名
         uploadBtn:this.$route.query.isAdd=='add'||this.goodsMainVideo==''?true:false,
         uploadProgress:false,// 进度loading
-        uploadRepeat:this.goodsMainVideo!==''?true:false, //重新上传
+        uploadRepeat:this.goodsMainVideo!==''&&this.goodsMainVideo!==undefined?true:false, //重新上传
       }
     },
     created() {},
@@ -574,6 +574,11 @@
       }
     },
     methods: {
+      repeatUpload(){
+        let that = this
+        that.initUpload()
+        document.getElementById('selectVideo').click()
+      },
       //删除视频
       delectUpload(){
         let that = this
@@ -662,11 +667,12 @@
         // uploadProgress:false,// 进度loading
         // uploadRepeat:this.goodsMainVideo!==''?true:false, //重新上传
                           that.uploadBtn = false
-                          that.uploadProgress = true
+                          that.uploadProgress = false
                           that.uploadRepeat = false
                   },
                   'UploadProgress': function(up, file) {
                           // 每个文件上传时,处理相关的事情
+                          that.uploadProgress = true
                   },
                   'FileUploaded': function(up, file, info) {
                           // 每个文件上传成功后,处理相关的事情
@@ -680,6 +686,7 @@
                           var res = JSON.parse(info);
                           var sourceLink = domain +'/'+ res.key; //获取上传成功后的文件的Url
                           console.log(sourceLink)
+                          // that.initUpload()
                   },
                   'Error': function(up, err, errTip) {
                           //上传出错时,处理相关的事情
@@ -689,6 +696,7 @@
                           that.uploadBtn = false
                           that.uploadProgress = false
                           that.uploadRepeat = true
+                          that.initUpload()
                   },
                   'Key': function(up, file) {
                       // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
@@ -1595,14 +1603,16 @@
   }
 </script>
 <style lang="scss" scoped>
-.upLoadBox{width:100%;height:100px;margin:20px 0;}
-.upLoadBox #selectVideo{margin:20px 0;}
-.uploadProgress{position:relative;}
+.upLoadBox{height:auto;margin-top:20px;}
+.uploadProgress{position:relative;height:100px;}
 .uploadProgress img{position:absolute;top:0;left:0;width:150px;height:100px;}
 .uploadProgress a.stop{position:absolute;top:-6px;left:144px;display:inline-block;width:13px;height:13px;z-index:2;
   background:url(../../../assets/images/ico_close_close.png) no-repeat center;
 }
-/*
+.uploadProgress a.repeat{position:absolute;top:0px;left:0px;display:inline-block;width:150px;height:100px;z-index:2;
+  background:rgba(0,0,0,0.5) url(../../../assets/images/ico_repetition.png) no-repeat center center;
+}
+/*ico_reduce.png
 <div id="videoContainer" v-if="uploadBtn">
               <el-button id="selectVideo" type="primary">上传视频<i class="el-icon-upload el-icon--right"></i></el-button>
           </div>
