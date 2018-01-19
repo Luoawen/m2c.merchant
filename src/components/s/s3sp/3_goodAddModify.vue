@@ -693,12 +693,12 @@
                       // plupload.each(files, function(file) {
                       //     // 文件添加进队列后,处理相关的事情
                       // });
+                      console.log('加进队列')
+                      console.log(up, file)
                   },
                   'BeforeUpload': function(up, file) {
                           // 每个文件上传前,处理相关的事情
-                          // uploadBtn:this.$route.query.isAdd=='add'||this.data.goodsMainVideo==''?true:false,
-        // uploadProgress:false,// 进度loading
-        // uploadRepeat:this.data.goodsMainVideo!==''?true:false, //重新上传
+                          console.log(up, file)
                           that.uploadBtn = false
                           that.uploadProgress = false
                           that.uploadRepeat = false
@@ -723,6 +723,12 @@
                   },
                   'Error': function(up, err, errTip) {
                           //上传出错时,处理相关的事情
+                          // console.log("错误",err,errTip)
+                          //let res = JSON.parse(err)
+                          // console.log(err.code)
+                          if(err.code===-600){
+                            that.$message.error("请上传30M以内视频")
+                          }
                           that.initUpload()
                   },
                   'UploadComplete': function() {
