@@ -518,6 +518,9 @@
         uploadBtn:this.$route.query.isAdd=='add'?true:false,
         uploadProgress:false,// 进度loading
         uploadRepeat:false, //重新上传
+        newClassifyName:'',//新的分类名
+        oldServiceRate:'',//原分类费率
+        newServiceRate:'',//新分类费率
       }
     },
     created() {},
@@ -755,6 +758,7 @@
             that.data = result.content
             that.data.goodsMainVideo = result.content.goodsMainVideo
             that.serviceRate = result.content.serviceRate
+            that.oldServiceRate = result.content.serviceRate
             for(var j=0,len=result.content.goodsGuarantee.length;j<len;j++){
               that.goodsGuarantCheck.push(result.content.goodsGuarantee[j].guaranteeId)
             }
@@ -1111,7 +1115,11 @@
               goodsBrandName:that.goodsBrandName,
               goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
               goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString(),
-              goodsMainVide:that.goodsMainVide
+              goodsMainVide:that.goodsMainVide,
+              // oldServiceRate:that.oldServiceRate,
+              newServiceRate:that.serviceRate,
+              // oldClassifyName:that.data.goodsClassify,
+              newClassifyName:that.newClassifyName
             }
             console.log(a.goodsSKUs)
             that.$.ajax({
@@ -1162,7 +1170,7 @@
             success: function (result) {
               that.serviceRate = result.content
               that.data.goodsClassifys = children.toString()
-              console.log(that.data.goodsClassifys)
+              that.newClassifyName = document.querySelector('.el-cascader__label').innerText
             }
           })
         }
