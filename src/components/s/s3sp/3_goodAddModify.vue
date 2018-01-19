@@ -1169,12 +1169,17 @@
             },
             success: function (result) {
               that.serviceRate = result.content
-              that.data.goodsClassifys = children.toString()
+              //that.data.goodsClassifys = children.toString()
               // that.newClassifyName = document.querySelector('.el-cascader__label').innerText
             }
           })
         }
-        that.newClassifyName = document.querySelector('.el-cascader__label').innerText
+        that.$nextTick(()=>{
+          that.data.goodsClassifys = children.toString()
+          that.newClassifyName = document.querySelector('.el-cascader__label').innerText
+          // console.log(document.querySelector('.el-cascader__label').innerText)
+        })
+        
       },
       // 复选框选中
       handleCheckedCitiesChange(value) {
