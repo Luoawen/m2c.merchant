@@ -717,9 +717,6 @@
 					a.showVideo{display:inline-block;background:rgba(0,0,0,0.5) url(../../../assets/images/ico_play.png) no-repeat center center;
 					transition: all 0.3s ease;}
 					a.showVideo:hover{transform-origin: center center;transform: scale(1.1);}
-					/*
-					<img class="mainImg" :src="fileList[0]" />
-									<a @click="showVideo" class="showVideo"></a>*/
   			}
   			.t_img02{
   				border: 1px solid #E6E8F2;

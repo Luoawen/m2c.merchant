@@ -1,464 +1,477 @@
 <template>
-  <div class="addMess">
-    <form class="form-horizontal" id="temMess">
+  <div class="content">
+    <el-row :gutter="20">
+      <el-col :span="4">
+        <span class="alignRight"><i class="red">*</i>运费模板名称：</span>
+      </el-col>
+      <el-col :span="20">
+        <el-input placeholder="1-20字符" v-model="formwork.modelName" :maxlength="20"></el-input>
+      </el-col>
+      <!-- <label class="col-sm-2 control-label"> </label>
+      <div class="col-sm-3">
+        <input type="text" class="form-control" >
+      </div> -->
+    </el-row>
+    <el-row :gutter="20">
+      <el-col :span="4">
+        <span class="alignRight"><i class="red">*</i>计费方式：</span>
+      </el-col>
+      <!-- <label class="col-sm-2 control-label"><i class="red">*</i>计费方式： </label> -->
+      <el-col :span="20">
+        <el-radio-group v-model="formwork.chargeType">
+          <el-radio :label="0" :disabled="addModify==='modify'">按重量</el-radio>
+          <el-radio :label="1" :disabled="addModify==='modify'">按件数</el-radio>
+          <el-radio :label="2" :disabled="addModify==='modify'">全国包邮</el-radio>
+        </el-radio-group>
+      </el-col>
+        <!-- <form>
+          <input name="tem" type="radio" value='0' v-model="formwork.chargeType" id="tem" v-if="addModify==='add'" />
+          <input name="tem" type="radio" value='0' v-model="formwork.chargeType" id="tem" v-if="addModify==='modify'" :disabled="modifyFlag==1"/>
+          <label for="tem">按重量</label>
+          <input name="tem" type="radio" value='1' v-model="formwork.chargeType" id="tem1" v-if="addModify==='add'" />
+          <input name="tem" type="radio" value='1' v-model="formwork.chargeType" id="tem1" v-if="addModify==='modify'" :disabled="modifyFlag!=1"/>
+          <label for="tem1">按件数</label>
+        </form> -->
+      
+    </el-row>
+    <!--按重量-->
+    <template v-if="formwork.chargeType==0">
       <div class="form-group">
-        <label class="col-sm-2 control-label"> * 运费模板名称： </label>
-        <div class="col-sm-3">
-          <input type="text" class="form-control" placeholder="1-20字符" v-model="formwork.modelName" maxlength="20">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label"> * 计费方式： </label>
-        <div class="col-sm-3">
-          <form>
-            <input name="tem" type="radio" value='0' v-model="formwork.chargeType" id="tem" v-if="addModify==='add'" />
-            <input name="tem" type="radio" value='0' v-model="formwork.chargeType" id="tem" v-if="addModify==='modify'" :disabled="modifyFlag==1"/>
-            <label for="tem">按重量</label>
-            <input name="tem" type="radio" value='1' v-model="formwork.chargeType" id="tem1" v-if="addModify==='add'" />
-            <input name="tem" type="radio" value='1' v-model="formwork.chargeType" id="tem1" v-if="addModify==='modify'"  :disabled="modifyFlag!=1"/>
-            <label for="tem1">按件数</label>
-          </form>
-        </div>
-      </div>
-      <!--按重量-->
-      <template v-if="formwork.chargeType==0">
-        <div class="form-group">
-          <label class="col-sm-2 control-label"> * 运费计算规则
-            <div class="icon">
-              <div class="tips" style="width:400px;z-index:2; text-align: left;">
-                <p>1、按重计费规则；即≤首重时，按首运费计算，超过首重的部分，按照续重、续费计算；比如商品5kg，首重1kg，首运费10元，续重2kg，续费5元（代表每增加0~1kg，运费增加2.5元）；则运费=10+4*（5/2）
-                </p>
-                <p>
-                  2、按件计费规则；即≤首件时，按首运费计算，超过首件的部分，按照续件、续费计算；比如商品总共20件，首件5个，首运费10元，续件5个，续费15元；则运费=10+15*（15/5）
-                </p>
-              </div>
+        <label class="col-sm-2 control-label"><i class="red">*</i>运费计算规则
+          <div class="icon">
+            <div class="tips" style="width:400px;z-index:2; text-align: left;">
+              <p>1、按重计费规则；即≤首重时，按首运费计算，超过首重的部分，按照续重、续费计算；比如商品5kg，首重1kg，首运费10元，续重2kg，续费5元（代表每增加0~1kg，运费增加2.5元）；则运费=10+4*（5/2）
+              </p>
+              <p>
+                2、按件计费规则；即≤首件时，按首运费计算，超过首件的部分，按照续件、续费计算；比如商品总共20件，首件5个，首运费10元，续件5个，续费15元；则运费=10+15*（15/5）
+              </p>
             </div>
-            ： </label>
-          <div class="col-sm-8">
-            <table class="table table-bordered">
-              <thead>
-              <tr class="active">
-                <th style="width:210px"> 可配送至</th>
-                <th> 首重 / kg</th>
-                <th> 首运费 / 元</th>
-                <th> 续重 / kg</th>
-                <th> 续费 / 元</th>
-                <th> 操作</th>
+          </div>
+          ： </label>
+        <div class="col-sm-8">
+          <table class="table table-bordered">
+            <thead>
+            <tr class="active">
+              <th style="width:210px"> 可配送至</th>
+              <th> 首重 / kg</th>
+              <th> 首运费 / 元</th>
+              <th> 续重 / kg</th>
+              <th> 续费 / 元</th>
+              <th> 操作</th>
+            </tr>
+            </thead>
+            <tbody v-if="addModify==='add'">
+              <tr>
+                <td v-model="add_postageModelRule_w.address"> 全国（ 默认运费）</td>
+                <td>
+                  <input type="text"
+                          style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstWeight" @blur="checkDefaultNumber(add_postageModelRule_w.firstWeight,'firstWeight',add_postageModelRule_w)">
+                </td>
+                <td>
+                  <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstPostage" @blur="checkDefaultNumber(add_postageModelRule_w.firstPostage,'firstPostage',add_postageModelRule_w)">
+                </td>
+                <td>
+                  <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedWeight" @blur="checkDefaultNumber(add_postageModelRule_w.continuedWeight,'continuedWeight',add_postageModelRule_w)">
+                </td>
+                <td>
+                  <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedPostage" @blur="checkDefaultNumber(add_postageModelRule_w.continuedPostage,'continuedPostage',add_postageModelRule_w)">
+                </td>
+                <td></td>
               </tr>
-              </thead>
-              <tbody v-if="addModify==='add'">
-                <tr>
-                  <td v-model="add_postageModelRule_w.address"> 全国（ 默认运费）</td>
-                  <td>
-                    <input type="text"
-                           style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstWeight" @blur="checkDefaultNumber(add_postageModelRule_w.firstWeight,'firstWeight',add_postageModelRule_w)">
-                  </td>
-                  <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.firstPostage" @blur="checkDefaultNumber(add_postageModelRule_w.firstPostage,'firstPostage',add_postageModelRule_w)">
-                  </td>
-                  <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedWeight" @blur="checkDefaultNumber(add_postageModelRule_w.continuedWeight,'continuedWeight',add_postageModelRule_w)">
-                  </td>
-                  <td>
-                    <input type="text" style="width:50px;height:30px;" v-model="add_postageModelRule_w.continuedPostage" @blur="checkDefaultNumber(add_postageModelRule_w.continuedPostage,'continuedPostage',add_postageModelRule_w)">
-                  </td>
-                  <td></td>
-                </tr>
-                <tr v-for="(addRow,index) in addRows" v-if="addRows.length!==0">
+              <tr v-for="(addRow,index) in addRows" v-if="addRows.length!==0">
+                <td class="relative">{{addRow.address == '' ? '未添加地区' : addRow.address}}
+                  <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
+                  <!--地区选择-->
+                  <div class="cityBox">
+                    <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                    <div class="test-div">
+                      <div class="bigArea" v-for="(item,index) in datas">
+                        <div class="left">
+                          <input type="checkbox" v-model="addRow.areaIdArr" :class="'area'+item.code" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
+                          {{item.name}}
+                        </div>
+                        <div class="pro" v-for="(pro,index) in item.subs">
+                          <input type="checkbox" v-model="addRow.IdArr" :class="'pro'+pro.code" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                          <span> {{pro.name}} </span>
+                          <div class="cityWrap">
+                            <div class="city" v-for="(city,index) in pro.subs">
+                              <input type="checkbox" v-model="addRow.cityList" :class="'city'+city.code" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
+                  </div>
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.firstWeight" @blur="checkNumber(addRow.firstWeight,index,'firstWeight',addRows)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.continuedWeight" @blur="checkNumber(addRow.continuedWeight,index,'continuedWeight',addRows)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
+                </td>
+                <td><a @click="delectRule(index)">删除</a></td>
+              </tr>
+            </tbody>
+            <tbody v-if="addModify==='modify'">
+              <tr v-for="(add_postageModelRule_w,index) in formwork.postageModelRules">
+                <td>{{add_postageModelRule_w.address=='' || add_postageModelRule_w.address==null ?'全国（ 默认运费）':add_postageModelRule_w.address}}
+                  <!-- <a v-if="index!=0" @click="addressCheckBox(index,$event)">编辑 </a> -->
+                <!--地区选择-->
+                  <!-- <div class="cityBox">
+                    <h4> 选择地区 <a class="close"
+                                @click="cityBoxHide"> X </a></h4>
+                    <div class="test-div">
+                      <div class="bigArea"
+                          v-for="(item,index) in datas">
+                        <div class="left">
+                          <input type="checkbox"
+                                v-model="addRow.areaIdArr" :value="item.code"
+                                @click="chooseArea(item.code,$event)"/>{{item.name}}
+                        </div>
+                        <div class="pro" v-for="(pro,index) in item.subs">
+                          <input type="checkbox"
+                                v-model="addRow.IdArr" :value="pro.code"
+                                @click="choosePro(pro,$event)"/>
+                          <span @click="cityShow(index,$event)"> {{pro.name}} </span>
+                          <div class="cityWrap">
+                            <div class="city" v-for="(city,index) in pro.subs">
+                              <input type="checkbox"
+                                    v-model="addRow.cityList" :value="city.code"
+                                    @click="chooseCity(city,$event)"/> {{city.name}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td> -->
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="add_postageModelRule_w.firstWeight" @blur="checkNumber(add_postageModelRule_w.firstWeight,index,'firstWeight',formwork.postageModelRules)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="add_postageModelRule_w.firstPostage" @blur="checkNumber(add_postageModelRule_w.firstPostage,index,'firstPostage',formwork.postageModelRules)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="add_postageModelRule_w.continuedWeight" @blur="checkNumber(add_postageModelRule_w.continuedWeight,index,'continuedWeight',formwork.postageModelRules)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="add_postageModelRule_w.continuedPostage" @blur="checkNumber(add_postageModelRule_w.continuedPostage,index,'continuedPostage',formwork.postageModelRules)">
+                </td>
+                <td> <a v-if="index!=0" @click="delectRule1(index)">删除</a></td>
+              </tr>
+              <tr v-for="(addRow,index) in addRows"
+                  v-if="addRows.length!==0">
+                  <!--地区选择-->
                   <td class="relative">{{addRow.address == '' ? '未添加地区' : addRow.address}}
-                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
-                    <!--地区选择-->
-                    <div class="cityBox">
-                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
-                      <div class="test-div">
-                        <div class="bigArea" v-for="(item,index) in datas">
-                          <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :class="'area'+item.code" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
-                            {{item.name}}
-                          </div>
-                          <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox" v-model="addRow.IdArr" :class="'pro'+pro.code" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
-                            <span> {{pro.name}} </span>
-                            <div class="cityWrap">
-                              <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox" v-model="addRow.cityList" :class="'city'+city.code" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
-                    </div>
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.firstWeight" @blur="checkNumber(addRow.firstWeight,index,'firstWeight',addRows)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.continuedWeight" @blur="checkNumber(addRow.continuedWeight,index,'continuedWeight',addRows)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
-                  </td>
-                  <td><a @click="delectRule(index)">删除</a></td>
-                </tr>
-              </tbody>
-              <tbody v-if="addModify==='modify'">
-                <tr v-for="(add_postageModelRule_w,index) in formwork.postageModelRules">
-                  <td>{{add_postageModelRule_w.address=='' || add_postageModelRule_w.address==null ?'全国（ 默认运费）':add_postageModelRule_w.address}}
-                    <!-- <a v-if="index!=0" @click="addressCheckBox(index,$event)">编辑 </a> -->
+                  <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                   <!--地区选择-->
-                    <!-- <div class="cityBox">
-                      <h4> 选择地区 <a class="close"
-                                  @click="cityBoxHide"> X </a></h4>
-                      <div class="test-div">
-                        <div class="bigArea"
-                            v-for="(item,index) in datas">
-                          <div class="left">
-                            <input type="checkbox"
-                                  v-model="addRow.areaIdArr" :value="item.code"
-                                  @click="chooseArea(item.code,$event)"/>{{item.name}}
-                          </div>
-                          <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox"
-                                  v-model="addRow.IdArr" :value="pro.code"
-                                  @click="choosePro(pro,$event)"/>
-                            <span @click="cityShow(index,$event)"> {{pro.name}} </span>
-                            <div class="cityWrap">
-                              <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox"
-                                      v-model="addRow.cityList" :value="city.code"
-                                      @click="chooseCity(city,$event)"/> {{city.name}}
-                              </div>
+                  <div class="cityBox">
+                    <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                    <div class="test-div">
+                      <div class="bigArea" v-for="(item,index) in datas">
+                        <div class="left">
+                          <input type="checkbox" v-model="addRow.areaIdArr" :class="'area'+item.code" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
+                          {{item.name}}
+                        </div>
+                        <div class="pro" v-for="(pro,index) in item.subs">
+                          <input type="checkbox" v-model="addRow.IdArr" :class="'pro'+pro.code" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                          <span> {{pro.name}} </span>
+                          <div class="cityWrap">
+                            <div class="city" v-for="(city,index) in pro.subs">
+                              <input type="checkbox" v-model="addRow.cityList" :class="'city'+city.code" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </td> -->
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="add_postageModelRule_w.firstWeight" @blur="checkNumber(add_postageModelRule_w.firstWeight,index,'firstWeight',formwork.postageModelRules)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="add_postageModelRule_w.firstPostage" @blur="checkNumber(add_postageModelRule_w.firstPostage,index,'firstPostage',formwork.postageModelRules)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="add_postageModelRule_w.continuedWeight" @blur="checkNumber(add_postageModelRule_w.continuedWeight,index,'continuedWeight',formwork.postageModelRules)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="add_postageModelRule_w.continuedPostage" @blur="checkNumber(add_postageModelRule_w.continuedPostage,index,'continuedPostage',formwork.postageModelRules)">
-                  </td>
-                  <td> <a v-if="index!=0" @click="delectRule1(index)">删除</a></td>
-                </tr>
-                <tr v-for="(addRow,index) in addRows"
-                    v-if="addRows.length!==0">
-                    <!--地区选择-->
-                    <td class="relative">{{addRow.address == '' ? '未添加地区' : addRow.address}}
-                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
-                    <!--地区选择-->
-                    <div class="cityBox">
-                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
-                      <div class="test-div">
-                        <div class="bigArea" v-for="(item,index) in datas">
-                          <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :class="'area'+item.code" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
-                            {{item.name}}
-                          </div>
-                          <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox" v-model="addRow.IdArr" :class="'pro'+pro.code" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
-                            <span> {{pro.name}} </span>
-                            <div class="cityWrap">
-                              <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox" v-model="addRow.cityList" :class="'city'+city.code" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
-                    </div>
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.firstWeight" @blur="checkNumber(addRow.firstWeight,index,'firstWeight',addRows)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.continuedWeight" @blur="checkNumber(addRow.continuedWeight,index,'continuedWeight',addRows)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
-                  </td>
-                  <td><a @click="delectRule(index)">删除</a></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <p style="padding-left:290px;color:blue" ><span @click="addRow()" style="cursor:pointer;">为指定地区设置运费</span> </p>
-        <div class="form-group">
-          <label class="col-sm-2 control-label"> 模板说明： </label>
-          <div class="col-sm-6">
-          <textarea class="form-control"
-          cols="80"
-          rows="7"
-          placeholder="1-100字符"
-          style="resize:none;"
-          v-model="formwork.modelDescription" maxlength="100"> </textarea></div>
-        </div>
-        <div style="padding-left:290px;"><span style="color: #aab2bd">便于顾客看到每个商品的模板说明，以便知晓您的运费计费规则</span></div>
-        <br/>
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <el-button type="primary" @click="save()"> 保存
-            </el-button>
-            <el-button @click="back()"> 取消
-            </el-button>
-          </div>
-        </div>
-      </template>
-      <!--按件数-->
-      <template v-if="formwork.chargeType==1">
-        <div class="form-group">
-          <label class="col-sm-2 control-label"> * 运费计算规则
-            <div class="icon">
-              <div class="tips" style="width:400px;z-index:2; text-align: left;">
-                <p>1、按重计费规则；即≤首重时，按首运费计算，超过首重的部分，按照续重、续费计算；比如商品5kg，首重1kg，首运费10元，续重2kg，续费5元（代表每增加0~1kg，运费增加2.5元）；则运费=10+4*（5/2）
-                </p>
-                <p>
-                  2、按件计费规则；即≤首件时，按首运费计算，超过首件的部分，按照续件、续费计算；比如商品总共20件，首件5个，首运费10元，续件5个，续费15元；则运费=10+15*（15/5）
-                </p>
-              </div>
-            </div>
-            ： </label>
-          <div class="col-sm-8">
-            <table class="table table-bordered">
-              <thead>
-              <tr class="active">
-                <th scope="row" style="width:210px "> 可配送至
-                </th>
-                <th> 首件 / 个</th>
-                <th> 首运费 / 元</th>
-                <th> 续件 / 个</th>
-                <th> 续费 / 元</th>
-                <th> 操作</th>
+                    <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
+                  </div>
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.firstWeight" @blur="checkNumber(addRow.firstWeight,index,'firstWeight',addRows)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.continuedWeight" @blur="checkNumber(addRow.continuedWeight,index,'continuedWeight',addRows)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
+                </td>
+                <td><a @click="delectRule(index)">删除</a></td>
               </tr>
-              </thead>
-              <!-- modify -->
-              <tbody v-if="addModify==='modify'">
-                  <tr v-for="(add_postageModelRule,index) in formwork.postageModelRules">
-                    <td>{{add_postageModelRule.address=='' || add_postageModelRule.address== null ?'全国（ 默认运费）':add_postageModelRule.address}}</td>
-                    <td>
-                      <input type="text"
-                            style="width:50px;height:30px;"
-                            v-model="add_postageModelRule.firstPiece" @blur="checkInteger(add_postageModelRule.firstPiece,index,'firstPiece',formwork.postageModelRules)">
-                    </td>
-                    <td>
-                      <input type="text"
-                            style="width:50px;height:30px;"
-                            v-model="add_postageModelRule.firstPostage" @blur="checkNumber(add_postageModelRule.firstPostage,index,'firstPostage',formwork.postageModelRules)">
-                    </td>
-                    <td>
-                      <input type="text"
-                            style="width:50px;height:30px;"
-                            v-model="add_postageModelRule.continuedPiece" @blur="checkInteger(add_postageModelRule.continuedPiece,index,'continuedPiece',formwork.postageModelRules)">
-                    </td>
-                    <td>
-                      <input type="text"
-                            style="width:50px;height:30px;"
-                            v-model="add_postageModelRule.continuedPostage" @blur="checkNumber(add_postageModelRule.continuedPostage,index,'continuedPostage',formwork.postageModelRules)">
-                    </td>
-                    <td><a v-if="index!=0" @click="delectRule1(index)">删除</a></td>
-                </tr>
-                <tr v-for="(addRow,index) in addRows"
-                    v-if="addRows.length!==0">
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p style="padding-left:290px;color:blue" ><span @click="addRow()" style="cursor:pointer;">为指定地区设置运费</span> </p>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"> 模板说明： </label>
+        <div class="col-sm-6">
+        <textarea class="form-control"
+        cols="80"
+        rows="7"
+        placeholder="1-100字符"
+        style="resize:none;"
+        v-model="formwork.modelDescription" maxlength="100"> </textarea></div>
+      </div>
+      <div style="padding-left:290px;"><span style="color: #aab2bd">便于顾客看到每个商品的模板说明，以便知晓您的运费计费规则</span></div>
+      <br/>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <el-button type="primary" @click="save()"> 保存
+          </el-button>
+          <el-button @click="back()"> 取消
+          </el-button>
+        </div>
+      </div>
+    </template>
+    <!--按件数-->
+    <template v-if="formwork.chargeType==1">
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><i class="red">*</i>运费计算规则
+          <div class="icon">
+            <div class="tips" style="width:400px;z-index:2; text-align: left;">
+              <p>1、按重计费规则；即≤首重时，按首运费计算，超过首重的部分，按照续重、续费计算；比如商品5kg，首重1kg，首运费10元，续重2kg，续费5元（代表每增加0~1kg，运费增加2.5元）；则运费=10+4*（5/2）
+              </p>
+              <p>
+                2、按件计费规则；即≤首件时，按首运费计算，超过首件的部分，按照续件、续费计算；比如商品总共20件，首件5个，首运费10元，续件5个，续费15元；则运费=10+15*（15/5）
+              </p>
+            </div>
+          </div>
+          ： </label>
+        <div class="col-sm-8">
+          <table class="table table-bordered">
+            <thead>
+            <tr class="active">
+              <th scope="row" style="width:210px "> 可配送至
+              </th>
+              <th> 首件 / 个</th>
+              <th> 首运费 / 元</th>
+              <th> 续件 / 个</th>
+              <th> 续费 / 元</th>
+              <th> 操作</th>
+            </tr>
+            </thead>
+            <!-- modify -->
+            <tbody v-if="addModify==='modify'">
+                <tr v-for="(add_postageModelRule,index) in formwork.postageModelRules">
+                  <td>{{add_postageModelRule.address=='' || add_postageModelRule.address== null ?'全国（ 默认运费）':add_postageModelRule.address}}</td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="add_postageModelRule.firstPiece" @blur="checkInteger(add_postageModelRule.firstPiece,index,'firstPiece',formwork.postageModelRules)">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="add_postageModelRule.firstPostage" @blur="checkNumber(add_postageModelRule.firstPostage,index,'firstPostage',formwork.postageModelRules)">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="add_postageModelRule.continuedPiece" @blur="checkInteger(add_postageModelRule.continuedPiece,index,'continuedPiece',formwork.postageModelRules)">
+                  </td>
+                  <td>
+                    <input type="text"
+                          style="width:50px;height:30px;"
+                          v-model="add_postageModelRule.continuedPostage" @blur="checkNumber(add_postageModelRule.continuedPostage,index,'continuedPostage',formwork.postageModelRules)">
+                  </td>
+                  <td><a v-if="index!=0" @click="delectRule1(index)">删除</a></td>
+              </tr>
+              <tr v-for="(addRow,index) in addRows"
+                  v-if="addRows.length!==0">
+                <!--地区选择-->
+                  <td class="relative">{{addRow.address == '' ? '未添加地区' : addRow.address}}
+                  <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                   <!--地区选择-->
-                    <td class="relative">{{addRow.address == '' ? '未添加地区' : addRow.address}}
-                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
-                    <!--地区选择-->
-                    <div class="cityBox">
-                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
-                      <div class="test-div">
-                        <div class="bigArea" v-for="(item,index) in datas">
-                          <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :class="'area'+item.code" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
-                            {{item.name}}
-                          </div>
-                          <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox" v-model="addRow.IdArr" :class="'pro'+pro.code" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
-                            <span> {{pro.name}} </span>
-                            <div class="cityWrap">
-                              <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox" v-model="addRow.cityList" :class="'city'+city.code" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
-                              </div>
+                  <div class="cityBox">
+                    <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                    <div class="test-div">
+                      <div class="bigArea" v-for="(item,index) in datas">
+                        <div class="left">
+                          <input type="checkbox" v-model="addRow.areaIdArr" :class="'area'+item.code" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
+                          {{item.name}}
+                        </div>
+                        <div class="pro" v-for="(pro,index) in item.subs">
+                          <input type="checkbox" v-model="addRow.IdArr" :class="'pro'+pro.code" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                          <span> {{pro.name}} </span>
+                          <div class="cityWrap">
+                            <div class="city" v-for="(city,index) in pro.subs">
+                              <input type="checkbox" v-model="addRow.cityList" :class="'city'+city.code" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                             </div>
                           </div>
                         </div>
                       </div>
-                      <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
                     </div>
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.firstPiece" @blur="checkInteger(addRow.firstPiece,index,'firstPiece',addRows)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.continuedPiece" @blur="checkInteger(addRow.continuedPiece,index,'continuedPiece',addRows)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
-                  </td>
-                  <td><a @click="delectRule(index)">删除</a></td>
-                </tr>
-              </tbody>
-              <!-- add -->
-              <tbody v-if="addModify==='add'">
-                <tr>
-                   <td v-model="add_postageModelRule.address"> 全国（ 默认运费）</td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="add_postageModelRule.firstPiece" @blur="checkDefaultInteger(add_postageModelRule.firstPiece,'firstPiece',add_postageModelRule)"/>
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="add_postageModelRule.firstPostage" @blur="checkDefaultNumber(add_postageModelRule.firstPostage,'firstPostage',add_postageModelRule)"/>
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="add_postageModelRule.continuedPiece" @blur="checkDefaultInteger(add_postageModelRule.continuedPiece,'continuedPiece',add_postageModelRule)"/>
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="add_postageModelRule.continuedPostage" @blur="checkDefaultNumber(add_postageModelRule.continuedPostage,'continuedPostage',add_postageModelRule)"/>
-                  </td>
-                  <td></td>
-                </tr>
-                <tr v-for="(addRow,index) in addRows"
-                    v-if="addRows.length!==0">
+                    <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
+                  </div>
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.firstPiece" @blur="checkInteger(addRow.firstPiece,index,'firstPiece',addRows)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.continuedPiece" @blur="checkInteger(addRow.continuedPiece,index,'continuedPiece',addRows)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
+                </td>
+                <td><a @click="delectRule(index)">删除</a></td>
+              </tr>
+            </tbody>
+            <!-- add -->
+            <tbody v-if="addModify==='add'">
+              <tr>
+                  <td v-model="add_postageModelRule.address"> 全国（ 默认运费）</td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="add_postageModelRule.firstPiece" @blur="checkDefaultInteger(add_postageModelRule.firstPiece,'firstPiece',add_postageModelRule)"/>
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="add_postageModelRule.firstPostage" @blur="checkDefaultNumber(add_postageModelRule.firstPostage,'firstPostage',add_postageModelRule)"/>
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="add_postageModelRule.continuedPiece" @blur="checkDefaultInteger(add_postageModelRule.continuedPiece,'continuedPiece',add_postageModelRule)"/>
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="add_postageModelRule.continuedPostage" @blur="checkDefaultNumber(add_postageModelRule.continuedPostage,'continuedPostage',add_postageModelRule)"/>
+                </td>
+                <td></td>
+              </tr>
+              <tr v-for="(addRow,index) in addRows"
+                  v-if="addRows.length!==0">
+                <!--地区选择-->
+                  <td class="relative">{{addRow.address == '' ? '未添加地区' : addRow.address}}
+                  <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                   <!--地区选择-->
-                    <td class="relative">{{addRow.address == '' ? '未添加地区' : addRow.address}}
-                    <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
-                    <!--地区选择-->
-                    <div class="cityBox">
-                      <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
-                      <div class="test-div">
-                        <div class="bigArea" v-for="(item,index) in datas">
-                          <div class="left">
-                            <input type="checkbox" v-model="addRow.areaIdArr" :class="'area'+item.code" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
-                            {{item.name}}
-                          </div>
-                          <div class="pro" v-for="(pro,index) in item.subs">
-                            <input type="checkbox" v-model="addRow.IdArr" :class="'pro'+pro.code" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
-                            <span> {{pro.name}} </span>
-                            <div class="cityWrap">
-                              <div class="city" v-for="(city,index) in pro.subs">
-                                <input type="checkbox" v-model="addRow.cityList" :class="'city'+city.code" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
-                              </div>
+                  <div class="cityBox">
+                    <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                    <div class="test-div">
+                      <div class="bigArea" v-for="(item,index) in datas">
+                        <div class="left">
+                          <input type="checkbox" v-model="addRow.areaIdArr" :class="'area'+item.code" :value="item.code" @click.stop="chooseArea(item.code,$event)"/>
+                          {{item.name}}
+                        </div>
+                        <div class="pro" v-for="(pro,index) in item.subs">
+                          <input type="checkbox" v-model="addRow.IdArr" :class="'pro'+pro.code" :value="pro.code" @click.stop="choosePro(pro,$event)"/>
+                          <span> {{pro.name}} </span>
+                          <div class="cityWrap">
+                            <div class="city" v-for="(city,index) in pro.subs">
+                              <input type="checkbox" v-model="addRow.cityList" :class="'city'+city.code" :value="city.code" @click.stop="chooseCity(city,$event)"/> {{city.name}}
                             </div>
                           </div>
                         </div>
                       </div>
-                      <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
                     </div>
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.firstPiece" @blur="checkInteger(addRow.firstPiece,index,'firstPiece',addRows)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.continuedPiece" @blur="checkInteger(addRow.continuedPiece,index,'continuedPiece',addRows)">
-                  </td>
-                  <td>
-                    <input type="text"
-                          style="width:50px;height:30px;"
-                          v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
-                  </td>
-                  <td ><span @click="delectRule(index)">删除</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                    <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
+                  </div>
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.firstPiece" @blur="checkInteger(addRow.firstPiece,index,'firstPiece',addRows)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.continuedPiece" @blur="checkInteger(addRow.continuedPiece,index,'continuedPiece',addRows)">
+                </td>
+                <td>
+                  <input type="text"
+                        style="width:50px;height:30px;"
+                        v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)">
+                </td>
+                <td ><span @click="delectRule(index)">删除</span></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <p style="padding-left:290px;color:blue;"><span style="cursor:pointer;" @click="addRow()">为指定地区设置运费</span> </p>
-        <div class="form-group">
-          <label class="col-sm-2 control-label"> 模板说明： </label>
-          <div class="col-sm-6">
-          <textarea class="form-control"
-          cols="80"
-          rows="7"
-          placeholder="1-100字符"
-          style="resize:none;"
-          v-model="formwork.modelDescription" maxlength="100"> </textarea></div>
+      </div>
+      <p style="padding-left:290px;color:blue;"><span style="cursor:pointer;" @click="addRow()">为指定地区设置运费</span> </p>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"> 模板说明： </label>
+        <div class="col-sm-6">
+        <textarea class="form-control"
+        cols="80"
+        rows="7"
+        placeholder="1-100字符"
+        style="resize:none;"
+        v-model="formwork.modelDescription" maxlength="100"> </textarea></div>
+      </div>
+      <div style="padding-left:290px;"><span style="color: #aab2bd">便于顾客看到每个商品的模板说明，以便知晓您的运费计费规则</span></div>
+      <br/>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <el-button type="primary" @click="save()"> 保存
+          </el-button>
+          <el-button @click="back()"> 取消
+          </el-button>
         </div>
-        <div style="padding-left:290px;"><span style="color: #aab2bd">便于顾客看到每个商品的模板说明，以便知晓您的运费计费规则</span></div>
-        <br/>
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <el-button type="primary" @click="save()"> 保存
-            </el-button>
-            <el-button @click="back()"> 取消
-            </el-button>
-          </div>
+      </div>
+      <div class="delectSizeWrap" v-show="delectBg">
+        <div class="delectSizeCon">
+          <p>是否删除运费模板</p>
+          <button class="blueBtn" @click="delete_confirm()">确定</button>&nbsp;&nbsp;&nbsp;&nbsp;
+          <button class="defultBtn" @click="deleteUnit()">取消</button>
+          <a class="colseDelectBox" @click="deleteUnit()"><span class="	glyphicon glyphicon-remove"></span></a>
         </div>
-        <div class="delectSizeWrap" v-show="delectBg">
-          <div class="delectSizeCon">
-            <p>是否删除运费模板</p>
-            <button class="blueBtn" @click="delete_confirm()">确定</button>&nbsp;&nbsp;&nbsp;&nbsp;
-            <button class="defultBtn" @click="deleteUnit()">取消</button>
-            <a class="colseDelectBox" @click="deleteUnit()"><span class="	glyphicon glyphicon-remove"></span></a>
-          </div>
-        </div>
-      </template>
-    </form>
+      </div>
+    </template>
   </div>
 </template>
 <script>
