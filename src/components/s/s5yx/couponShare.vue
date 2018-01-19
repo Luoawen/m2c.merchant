@@ -580,11 +580,10 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-					console.log('that.excel_file1',this.excel_file);
-			
+					// console.log('that.excel_file1',this.excel_file);
 			let formData = new FormData()
 			formData.append("upfile",that.excel_file)
-			console.log('that.excel_file------二次存储-------',that.excel_file);
+			// console.log('that.excel_file------二次存储-------',that.excel_file);
 			formData.append('coupon_id',that.hand_edit_coupon.couponId)
 			formData.append('dealer_id',JSON.parse(sessionStorage.getItem('mUser')).dealerId)
 			that.$.ajax({
@@ -699,13 +698,15 @@ export default {
 		},
 		// 确认选择优惠券
 		coupon_selected() {
-			let that = this
-			console.log('手动发放')
-			this.hand_add_show = false
-			this.hand_edit_coupon = this.pre_sel_coupon
-			this.centerDialogVisible = false
-			console.log('this.hand_edit_coupon',this.hand_edit_coupon)
-
+			// 如果没有优惠券被勾选 执行取消的按钮事件
+			if(JSON.stringify(this.pre_sel_coupon)==='{}' ){
+				this.coupon_select_cancle ()
+			}else{
+				this.hand_add_show = false
+				this.hand_edit_coupon = this.pre_sel_coupon
+				this.centerDialogVisible = false
+				console.log('this.hand_edit_coupon',this.hand_edit_coupon)
+			}
 		},
 		// 取消选择优惠券
 		coupon_select_cancle () {
