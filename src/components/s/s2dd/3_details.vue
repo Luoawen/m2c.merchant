@@ -13,7 +13,7 @@
           <div class="detail_top mt20 clear">
             <div class="col-sm-4 detail_cen">
               <div>
-                <span class="tit01">售后状态:</span>
+                <span class="tit01">售后状态</span>
                 <span style="color: red;font-size: 15px" class="ml20">
                   <!-- {{orderDetail.status==0?'申请退货退款':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'售后完成':orderDetail.status==11?'售后关闭':orderDetail.status==-1?'已取消':'-'}} -->
                   {{orderDetail.orderType==0?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==1?'待商家同意':orderDetail.status==4?'待顾客寄回商品':(orderDetail.status==5||orderDetail.status==6)?'待商家发货':orderDetail.status==7?'待顾客收货':orderDetail.status>=8?'售后已完成':'--'):orderDetail.orderType==1?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==0?'待商家同意':orderDetail.status==4?'待顾客寄回商品':(orderDetail.status==5||orderDetail.status==6)?'待商家确认退款':orderDetail.status>=9?'售后已完成':'--'):orderDetail.orderType==2?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==2?'待商家同意':orderDetail.status==4?'待商家确认退款':orderDetail.status>=9?'售后已完成':'--'):'--'}}
@@ -21,38 +21,38 @@
               </div>
 
               <div>
-                <span class="tit01">售后单号:</span>
+                <span class="tit01">售后单号</span>
                 <span class="ml20">{{orderDetail.afterSelldealerOrderId}}</span>
               </div>
               <div>
-                <span class="tit01">申请原因:</span>
+                <span class="tit01">申请原因</span>
                 <span class="ml20">{{orderDetail.reason}}</span>
               </div>
               <div>
-                <span class="tit01">关联订货号:</span>
+                <span class="tit01">关联订货号</span>
                 <router-link :to="{name:'dealerOrDtl',query:{dealerOrderId: orderDetail.dealerOrderId,orderId: orderDetail.orderId}}" target="_blank"><span class="ml20">{{orderDetail.dealerOrderId}}</span></router-link>
               </div>
               <div>
-                <span class="tit01">订单总额:</span>
+                <span class="tit01">订单总额</span>
                 <span class="ml20">{{(orderDetail.orderTotalMoney -  parseFloat(orderDetail.couponDiscount))}}元（含运费<span>{{(orderDetail.orderFreight)}}</span>元）</span>
               </div>
             </div>
             <div class="col-sm-4 detail_cen">
               <div>
-                <span class="tit01">售后期望:</span>
+                <span class="tit01">售后期望</span>
                 <span class="ml20">{{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货退款':orderDetail.orderType==2?'仅退款':'-'}}</span>
               </div>
               <div>
-                <span class="tit01">售后总额:</span>
+                <span class="tit01">售后总额</span>
                 <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight) - parseFloat(orderDetail.couponDiscount))).toFixed(2)}}元
                   <span v-if="(orderDetail.orderType !=0) && orderDetail.status >= 4">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.status < 4">（运费待商家确认） </span></span>
               </div>
               <div>
-                <span class="tit01">申请时间:</span>
+                <span class="tit01">申请时间</span>
                 <span class="ml20">{{orderDetail.createdDate}}</span>
               </div>
               <div>
-                <span class="tit01 fl" v-show="orderDetail.rejectReason!=''">拒绝原因:</span>
+                <span class="tit01 fl" v-show="orderDetail.rejectReason!=''">拒绝原因</span>
                 <span class="ml20 fl mt10" style="width:65%;">{{orderDetail.rejectReason}}</span>
               </div>
             </div>
