@@ -515,12 +515,13 @@
         // goodsMainVideo:'',//视频地址
         qiniuUploader:null, //七牛云上传对象变量
         key:'',// 上传视频名
-        uploadBtn:this.$route.query.isAdd=='add'?true:false,
+        uploadBtn:true,
         uploadProgress:false,// 进度loading
         uploadRepeat:false, //重新上传
         newClassifyName:'',//新的分类名
         oldServiceRate:'',//原分类费率
         newServiceRate:'',//新分类费率
+        oldGoodsSpecifications:[],//原有规格值
       }
     },
     created() {},
@@ -597,6 +598,7 @@
                 that.uploadBtn = true
                 that.uploadProgress = false
                 that.uploadRepeat = false
+                that.data.goodsMainVideo=''
                 that.$nextTick(()=>{
                   that.initUpload()
                 })
@@ -619,16 +621,23 @@
             }else{
               that.uploadBtn = true
             }
-            that.initUpload()
+            that.$nextTick(()=>{
+              that.initUpload()
+            })
           }else{
             that.$message.error("操作已失效！")
+            that.$nextTick(()=>{
+              that.initUpload()
+            })
           }
           // that.qiniuUploader.stop()
         }).catch(() => {
           if(that.uploadProgress){
+            that.initUpload()
             return
           }else{
             that.$message.error("操作已失效！")
+            that.initUpload()
             return
           }
         })
@@ -693,12 +702,12 @@
                       // plupload.each(files, function(file) {
                       //     // 文件添加进队列后,处理相关的事情
                       // });
-                      console.log('加进队列')
-                      console.log(up, file)
+                      // console.log('加进队列')
+                      // console.log(up, file)
                   },
                   'BeforeUpload': function(up, file) {
                           // 每个文件上传前,处理相关的事情
-                          console.log(up, file)
+                          // console.log(up, file)
                           that.uploadBtn = false
                           that.uploadProgress = false
                           that.uploadRepeat = false
@@ -728,6 +737,9 @@
                           // console.log(err.code)
                           if(err.code===-600){
                             that.$message.error("请上传30M以内视频")
+                          }
+                          if(err.code===-601){
+                            that.$message.error("请上传mp4格式视频")
                           }
                           that.initUpload()
                   },
@@ -763,6 +775,9 @@
             that.disabled = true
             that.data = result.content
             that.data.goodsMainVideo = result.content.goodsMainVideo
+            if(that.data.goodsMainVideo!=''){
+              that.uploadBtn = false
+            }
             that.serviceRate = result.content.serviceRate
             that.oldServiceRate = result.content.serviceRate
             for(var j=0,len=result.content.goodsGuarantee.length;j<len;j++){
@@ -771,6 +786,13 @@
             console.log(that.goodsGuarantCheck)
             that.data.skuFlag = result.content.skuFlag.toString()
             that.goodsSpecifications = result.content.goodsSpecifications
+            for(let a=0;a<result.content.goodsSpecifications.length;a++){
+              for(let b=0;b<result.content.goodsSpecifications[a].itemValue.length;b++){
+                that.oldGoodsSpecifications.push(result.content.goodsSpecifications[a].itemValue[b].spec_name)
+              }
+            }
+            //that.oldGoodsSpecifications = result.content.goodsSpecifications
+            // sessionStorage.setItem('oldGoodsSpecifications',JSON.stringify(result.content.goodsSpecifications))
             that.goodsSKUs = result.content.goodsSKUs
             that.data.goodsMinQuantity = result.content.goodsMinQuantity.toString()
             that.data.goodsKeyWord = result.content.goodsKeyWord.join()
@@ -1375,7 +1397,19 @@
           that.goodsSpecifications[index].itemValue.splice(that.goodsSpecifications[index].itemValue.indexOf(specName), 1)
           that.mapValue()
         }else{
-          that.$message("已有规格不能移除")
+          let j = 0
+          let l = that.oldGoodsSpecifications.length
+          console.log(l)
+          if(that.oldGoodsSpecifications.indexOf(tag)===-1){
+            let specName={spec_name:tag}
+            console.log('goodsSpecifications1',that.goodsSpecifications)
+            that.goodsSpecifications[index].itemValue.splice(that.goodsSpecifications[index].itemValue.indexOf(specName), 1)
+            console.log('goodsSpecifications1',that.goodsSpecifications)
+            that.mapValue()
+          }else{
+            that.$message("已有规格不能移除")
+            return
+          }
         }
       },
       // 删除规格行

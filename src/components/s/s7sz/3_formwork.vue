@@ -14,7 +14,7 @@
           <thead>
             <tr class="active">
               <th width="30%">{{formwork.modelName}}</th>
-              <th width="17.5%">{{formwork.chargeType===0?'按重量':'按件数'}}</th>
+              <th width="17.5%">{{formwork.chargeType===0?'按重量':formwork.chargeType===1?'按件数':''}}</th>
               <th width="17.5%" class="some">
                 <p style="margin:0;" v-if="formwork.goodsUserNum==0">已有{{formwork.goodsUserNum}}个商品使用 </p>
                 <router-link v-if="formwork.goodsUserNum!=0" :to="{name:'goodList'}">已有{{formwork.goodsUserNum}}个商品使用 </router-link></th>
@@ -25,17 +25,24 @@
           <tbody>
             <tr class="active">
               <th scope="row">可配送至</th>
-              <td>{{formwork.chargeType==1?'首件/个':'首重/kg'}}</td>
-              <td>运费/元</td>
-              <td>{{formwork.chargeType==1?'续件/个':'续重/kg'}}</td>
-              <td>续费/元</td>
+              <td colspan="4" v-if="formwork.chargeType==2">运费/元</td>
+              <td v-if="formwork.chargeType!=2">{{formwork.chargeType==1?'首件/个':'首重/kg'}}</td>
+              <td v-if="formwork.chargeType!=2">运费/元</td>
+              <td v-if="formwork.chargeType!=2">{{formwork.chargeType==1?'续件/个':'续重/kg'}}</td>
+              <td v-if="formwork.chargeType!=2">续费/元</td>
             </tr>
-            <tr v-for="(postageModelRule,index) in formwork.postageModelRules">
+            <tr v-if="formwork.chargeType!=2" v-for="(postageModelRule,index) in formwork.postageModelRules">
+              
               <th scope="row">{{postageModelRule.defaultFlag==0 ?'全国（默认运费）':postageModelRule.address}}</th>
+              
               <td>{{formwork.chargeType==1?postageModelRule.firstPiece:postageModelRule.firstWeight}}</td>
               <td>{{postageModelRule.firstPostage}}</td>
               <td>{{formwork.chargeType==1?postageModelRule.continuedPiece:postageModelRule.continuedWeight}}</td>
               <td>{{postageModelRule.continuedPostage}}</td>
+            </tr>
+            <tr v-if="formwork.chargeType==2">
+              <th>全国（默认运费）</th>
+              <td colspan="4" v-if="formwork.chargeType==2">0.00</td>
             </tr>
           </tbody>
         </table>

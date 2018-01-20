@@ -59,7 +59,7 @@
       <el-tab-pane label="店铺主页" name="second">
         <p>店铺背景图片上传</p>
         <div class="shopBg">
-          <input type="file" id="bgInput" style="display:none" accept=".jpg,.gif,.png" @change="uploadBg($event)" />
+          <input type="file" id="bgInput" style="display:none" accept=".jpg,.png" @change="uploadBg($event)" />
           <div class="shopGg fl">
             <img v-show='bgShow' id="bgImg" v-model:src="shopBackImg"
                   onerror="this.src='../../../../static/assets/images/icon_uoloading.png';this.onerror=null" >
