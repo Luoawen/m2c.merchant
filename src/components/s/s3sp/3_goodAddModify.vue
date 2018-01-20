@@ -324,8 +324,8 @@
             <img src="../../../assets/images/loading.gif" class="myicon">
             <a class="stop" @click="pauseUpload"></a>
           </div>
-          <div class="uploadProgress" v-if="uploadRepeat">
-            <img class="mainImg" id="videoContainer" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
+          <div class="uploadProgress" v-if="uploadRepeat" id="videoContainer">
+            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
             <a class="repeat" id="selectVideo"><i></i>重新上传</a>
             <a class="stop" @click="delectUpload"></a>
           </div>
@@ -626,19 +626,18 @@
             })
           }else{
             that.$message.error("操作已失效！")
+            //that.initUpload()
+          }
+        }).catch(() => {
+          if(that.uploadProgress){
             that.$nextTick(()=>{
               that.initUpload()
             })
-          }
-          // that.qiniuUploader.stop()
-        }).catch(() => {
-          if(that.uploadProgress){
-            that.initUpload()
-            return
           }else{
             that.$message.error("操作已失效！")
-            that.initUpload()
-            return
+            that.$nextTick(()=>{
+              that.initUpload()
+            })
           }
         })
       },
