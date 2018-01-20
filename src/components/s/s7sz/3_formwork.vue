@@ -13,8 +13,8 @@
         <table class="table table-bordered">
           <thead>
             <tr class="active">
-              <th width="30%">模板名称</th>
-              <th width="17.5%">{{formwork.modelName}}</th>
+              <th width="30%">{{formwork.modelName}}</th>
+              <th width="17.5%">{{formwork.chargeType===0?'按重量':'按件数'}}</th>
               <th width="17.5%" class="some">
                 <p style="margin:0;" v-if="formwork.goodsUserNum==0">已有{{formwork.goodsUserNum}}个商品使用 </p>
                 <router-link v-if="formwork.goodsUserNum!=0" :to="{name:'goodList'}">已有{{formwork.goodsUserNum}}个商品使用 </router-link></th>

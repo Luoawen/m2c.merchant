@@ -1121,7 +1121,6 @@
               goodsBrandName:that.goodsBrandName,
               goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
               goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString(),
-              goodsMainVideo:that.goodsMainVideo,
               // oldServiceRate:that.oldServiceRate,
               newServiceRate:that.serviceRate,
               // oldClassifyName:that.data.goodsClassify,
