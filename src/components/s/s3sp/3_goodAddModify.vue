@@ -325,8 +325,8 @@
             <a class="stop" @click="pauseUpload"></a>
           </div>
           <div class="uploadProgress" v-if="uploadRepeat" id="videoContainer">
-            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
             <a class="repeat" id="selectVideo"><i></i>重新上传</a>
+            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
             <a class="stop" @click="delectUpload"></a>
           </div>
         </el-col>
@@ -727,19 +727,19 @@
                           //    "key": "gogopher.jpg"
                           //  }
                           // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
-                          console.log('info',info)
-                          var res
+                          let key
+                          let res
                           if(info.response==undefined){
                             res = JSON.parse(info);
-                          }else{
+                            key = res.key
+                          }else if(info.response!==undefined){
                             res = JSON.parse(info.response);
-                            console.log('info.response',res)
+                            key = res.key
+                          }else{
+                            key = that.key
                           }
-                          // console.log(JSON.parse(info))
-                          // console.log(JSON.stringify(info))
-                          var domain = up.getOption('domain');
-                          //var res = JSON.parse(info);
-                          var sourceLink = domain +'/'+ res.key; //获取上传成功后的文件的Url
+                          let domain = up.getOption('domain');
+                          let sourceLink = domain +'/'+ key; //获取上传成功后的文件的Url
                           that.data.goodsMainVideo = sourceLink
                           console.log(that.data.goodsMainVideo)
                           console.log('上传成功后')
@@ -797,7 +797,7 @@
             for(var j=0,len=result.content.goodsGuarantee.length;j<len;j++){
               that.goodsGuarantCheck.push(result.content.goodsGuarantee[j].guaranteeId)
             }
-            console.log(that.goodsGuarantCheck)
+            // console.log(that.goodsGuarantCheck)
             that.data.skuFlag = result.content.skuFlag.toString()
             that.goodsSpecifications = result.content.goodsSpecifications
             for(let a=0;a<result.content.goodsSpecifications.length;a++){
@@ -836,6 +836,9 @@
             that.$refs.ue.setUEContent(result.content.goodsDesc)
             // that.initUpload()
           }
+        })
+        that.$nextTick(()=>{
+          that.initUpload()
         })
       },
       // 新增商品保障
@@ -1032,7 +1035,7 @@
       },
       stantardIdChange(item,index){
         let that=this
-        console.log(that.goodsSpecifications)
+        // console.log(that.goodsSpecifications)
         let option = 0
         for(let j = 0;j<that.goodsSpecifications.length;j++){
           if(that.goodsSpecifications[j].standardId == item.standardId){
@@ -1051,7 +1054,7 @@
           }
         }
         that.goodsSpecifications[index].itemValue = []
-        console.log(that.goodsSpecifications)
+        // console.log(that.goodsSpecifications)
         // if(index != 2){
 
         // }
@@ -1162,8 +1165,8 @@
               // oldClassifyName:that.data.goodsClassify,
               newClassifyName:that.newClassifyName
             }
-            console.log(a.goodsSKUs)
-            console.log(that.data.goodsSKUs)
+            // console.log(a.goodsSKUs)
+            // console.log(that.data.goodsSKUs)
             that.$.ajax({
               type: that.handle_toggle === 'add' ? 'post' : 'put',
               url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/web/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/web/goods' : that.localbase + 'm2c.scm/web/goods/approve',
@@ -1413,12 +1416,12 @@
         }else{
           let j = 0
           let l = that.oldGoodsSpecifications.length
-          console.log(l)
+          // console.log(l)
           if(that.oldGoodsSpecifications.indexOf(tag)===-1){
             let specName={spec_name:tag}
-            console.log('goodsSpecifications1',that.goodsSpecifications)
+            // console.log('goodsSpecifications1',that.goodsSpecifications)
             that.goodsSpecifications[index].itemValue.splice(that.goodsSpecifications[index].itemValue.indexOf(specName), 1)
-            console.log('goodsSpecifications1',that.goodsSpecifications)
+            // console.log('goodsSpecifications1',that.goodsSpecifications)
             that.mapValue()
           }else{
             that.$message("已有规格不能移除")
@@ -1563,6 +1566,7 @@
       let that = this
       that.$nextTick(function(){
         that.$('.el-upload').appendTo("#dragImg")
+        
       })
       window.onscroll = function () {
         if (that.standardId != '') {
@@ -1667,6 +1671,9 @@
           sessionStorage.setItem('goodsSKUs','')
           sessionStorage.setItem('goodsGuarantCheck','')
           sessionStorage.setItem('fileList','')
+          that.$nextTick(()=>{
+            that.initUpload()
+          })
         }else{
           if(sessionStorage.getItem('data') == ''){
             //alert('请求')'
@@ -1686,6 +1693,9 @@
             sessionStorage.setItem('goodsGuarantCheck','')
             sessionStorage.setItem('fileList','')
             sessionStorage.setItem('goodsMainImages','')
+            that.$nextTick(()=>{
+              that.initUpload()
+            })
           }
         }
       }else{
@@ -1699,16 +1709,18 @@
             },
             success: function (result) {
               that.goodsId = result.content
-              console.log(that.goodsId)
+              // console.log(that.goodsId)
             }
           })
-
+          that.$nextTick(()=>{
+            that.initUpload()
+          })
         } else {
           //alert(1)
           that.getGoodsInfo()
         }
       }
-      that.initUpload()
+      
     }
   }
 </script>
