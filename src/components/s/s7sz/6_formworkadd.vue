@@ -542,23 +542,17 @@
     },
     created() {},
     watch: {
-      'formwork.chargeType': {
-        handler: function (val, oldVal) {
-          let that = this
-          if (val != oldVal) {
-            that.add_postageModelRule = {}
-            that.add_postageModelRule_w = {}
-            that.addRows = []
-            that.disabledList = []
-          }
-        },
-        deep: true
-      }
     },
     methods: {
       changeChargeType(){
         let that = this
         console.log(that.formwork.chargeType)
+        that.add_postageModelRule = {}
+        that.add_postageModelRule_w = {}
+        that.addRows = []
+        that.disabledList = []
+        that.formwork.modelName = ''
+        that.formwork.modelDescription = ''
         if(that.formwork.chargeType==2){
           that.$.ajax({
             method: 'get',
@@ -571,7 +565,7 @@
                 if(result.content===true)
                 {
                   that.chargeTypeFlag = 0
-                  that.$message.info('全国包邮模板已存在')
+                  that.$message.error('全国包邮模板已存在')
                   return
                 }else{
                   return
@@ -1108,6 +1102,10 @@
           for (var i = 0; i < that.postageModelRules.length; i++) {
             that.postageModelRules[i].continuedPostage = parseFloat(that.postageModelRules[i].continuedPostage).toFixed(2)
             that.postageModelRules[i].firstPostage = parseFloat(that.postageModelRules[i].firstPostage).toFixed(2)
+          }
+        }else{
+          if(that.chargeTypeFlag===0){
+            // that.$message.error('全国包邮模板已存在')
           }
         }
         
