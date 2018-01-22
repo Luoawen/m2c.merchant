@@ -199,7 +199,7 @@ export default new Router({
           path: 'couponShare',
           name: 'couponShare',
           component: couponShare,
-          meta: {title: '发放代金券'}
+          meta: {title: '发放代金券',bread: '工具>优惠券列表>发放代金券', pathR:'/s/coupon_list'}
         },
         {
           path: 'couponShareRecord',
