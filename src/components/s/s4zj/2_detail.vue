@@ -36,7 +36,7 @@
         <el-table-column
           label="业务类型"
           show-overflow-tooltip>
-          <template slot-scope="scope"><span>{{scope.row.businessType==1?'销售入账':scope.row.businessType==2?'活动分摊':scope.row.businessType==3?'服务费':scope.row.businessType==4?'提现':scope.row.businessType==5?'分摊退款':scope.row.businessType==6?'服务费退款':scope.row.businessType==7?'销售退款':'-'}}</span></template>
+          <template slot-scope="scope"><span>{{scope.row.businessType==1?'销售入账':scope.row.businessType==2?'满减分摊':scope.row.businessType==3?'服务费':scope.row.businessType==4?'提现':scope.row.businessType==5?'满减分摊退款':scope.row.businessType==6?'服务费退款':scope.row.businessType==7?'销售退款':scope.row.businessType==8?'优惠券分摊':scope.row.businessType==9?'优惠券分摊退款':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="收入/元"
@@ -118,7 +118,7 @@
           label: '销售入账'
         }, {
           value: '2',
-          label: '活动分摊'
+          label: '满减分摊'
         },{
           value: '3',
           label: '服务费'
@@ -127,15 +127,20 @@
           label: '提现'
         },{
           value: '5',
-          label: '分摊退款'
+          label: '满减分摊退款'
         },{
           value: '6',
           label: '服务费退款'
         },{
           value: '7',
           label: '销售退款'
+        },{
+          value: '8',
+          label: '优惠券分摊'
+        },{
+          value: '9',
+          label: '优惠券分摊退款'
         }],
-
 //        mediaStatus:[{
 //          value: '',
 //          label: '全部'

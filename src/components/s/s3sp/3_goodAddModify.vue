@@ -313,9 +313,30 @@
           <p class="marginTop20">最多上传5张主图，可以通过拖曳图片调整顺序</p>
         </el-col>
       </el-row>
-      <el-row :gutter="20" style="z-index:1;"></el-row>
+      <el-row :gutter="20">
+        <el-col :span="3" style="margin-top:20px;">主图视频</el-col>
+        <el-col :span="20" class="upLoadBox">
+          <div id="videoContainer" v-if="uploadBtn">
+              <el-button id="selectVideo" type="primary">上传视频<i class="el-icon-upload el-icon--right"></i></el-button>
+          </div>
+          <div class="uploadProgress" v-if="uploadProgress">
+            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
+            <img src="../../../assets/images/loading.gif" class="myicon">
+            <a class="stop" @click="pauseUpload"></a>
+          </div>
+          <div class="uploadProgress" v-if="uploadRepeat" id="videoContainer">
+            <a class="repeat" id="selectVideo"><i></i>重新上传</a>
+            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
+            <a class="stop" @click="delectUpload"></a>
+          </div>
+        </el-col>
+        <el-col :offset="3" :span='21'>
+          <p class="marginTop20">仅支持mp4格式，视频大小30M以内</p>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" style="z-index:1;">
         <el-col :span="3">图文详情</el-col>
-        <el-col :span="21" style="height:400px;z-index:1;">
+        <el-col :span="20" style="height:400px;z-index:1;">
           <div id="editor-container">
             <UE :config=config ref="ue"></UE>
           </div>
@@ -451,7 +472,7 @@
         goodsSpecifications:[{itemName:'',itemValue:[],state1:''}],
         goodsMainImages:[],
         goodsGuarantee:[],
-        data: {skuFlag: '0' ,goodsMinQuantity:'',goodsBarCode:'',goodsKeyWord:'',goodsShelves:'1',goodsClassifyId:''},
+        data: {skuFlag: '0' ,goodsMinQuantity:'',goodsBarCode:'',goodsKeyWord:'',goodsShelves:'1',goodsClassifyId:'',goodsMainVideo:''},
         value:'',
         dynamicTags: [],
         dialogImageUrl: '',
@@ -490,7 +511,17 @@
         setUp: {},
         disabled: false, // 禁用规格选择
         tempGoodsMainImages: [],
-        unitName: ''
+        unitName: '',
+        // goodsMainVideo:'',//视频地址
+        qiniuUploader:null, //七牛云上传对象变量
+        key:'',// 上传视频名
+        uploadBtn:true,
+        uploadProgress:false,// 进度loading
+        uploadRepeat:false, //重新上传
+        newClassifyName:'',//新的分类名
+        oldServiceRate:'',//原分类费率
+        newServiceRate:'',//新分类费率
+        oldGoodsSpecifications:[],//原有规格值
       }
     },
     created() {},
@@ -539,6 +570,7 @@
               success: function (result) {
                 that.goodsBrandName=result.content.brandName
                 //console.log(that.goodsBrandName)
+                // that.initUpload()
               }
             })
           }
@@ -547,6 +579,201 @@
       }
     },
     methods: {
+      // repeatUpload(){
+      //   let that = this
+      //   that.initUpload()
+      //   document.getElementById('selectVideo').click()
+      // },
+      //删除视频
+      delectUpload(){
+        let that = this
+        that.$.ajax({
+            url: that.base + "m2c.support/file/rm/video",
+            type: 'post',
+            data: {
+                fileKey:that.key
+            },
+            success: function (result) {
+                that.$message.success('操作成功！')
+                that.uploadBtn = true
+                that.uploadProgress = false
+                that.uploadRepeat = false
+                that.data.goodsMainVideo=''
+                that.$nextTick(()=>{
+                  console.log("删除视频")
+                  that.initUpload()
+                })
+            }
+        })
+      },
+      //取消上传
+      pauseUpload(){
+        let that = this
+        that.$confirm('是否取消视频上传?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if(that.uploadProgress){
+            that.qiniuUploader.stop()
+            that.uploadProgress = false
+            if(that.data.goodsMainVideo!==''){
+              that.uploadRepeat = true
+            }else{
+              that.uploadBtn = true
+            }
+            that.$nextTick(()=>{
+              console.log("取消上传视频")
+              that.initUpload()
+            })
+          }else{
+            that.$message.error("操作已失效！")
+            //that.initUpload()
+          }
+        }).catch(() => {
+          if(that.uploadProgress){
+            that.$nextTick(()=>{
+              console.log("取消按钮")
+              that.initUpload()
+            })
+          }else{
+            that.$message.error("操作已失效！")
+            that.$nextTick(()=>{
+              console.log("取消上传视频 失效")
+              that.initUpload()
+            })
+          }
+        })
+      },
+      //视频上传初始化
+      initUpload(){
+          let that = this
+          console.log("初始化成功")
+          that.qiniuUploader = new QiniuJsSDK().uploader({
+              runtimes: 'html5,flash,html4',    //上传模式,依次退化
+              browse_button: 'selectVideo',       //上传选择的点选按钮，**必需**
+              // uptoken: getSStorageInfo("uptoken"), //若未指定uptoken_url,则必须指定 uptoken ,uptoken由其他程序生成
+              // uptoken_url:__webappserverUrl__ + "/third/file/getUploadToken",
+              uptoken_func: function (file) {    // 在需要获取 uptoken 时，该方法会被调用
+                  // do something
+                  let uptoken = ""
+                  that.$.ajax({
+                      type: 'get',
+                      async:false,
+                      url: that.base + 'm2c.scm/unit/suibian',
+                      success: function (result) {
+                          if (result.status === 200){
+                            let timestamp = (new Date()).valueOf()
+                            let date = that.date_format(new Date(timestamp), 'yyyyMMdd')
+                              that.key = "video" + "/" + '8' + "/" + date + result.content
+                              that.$.ajax({
+                                  url: that.base + "m2c.support/upload/token",
+                                  type: 'GET',
+                                  async:false,
+                                  data: {
+                                      fileKey:that.key
+                                  },
+                                  success: function (result) {
+                                      uptoken = result.uptoken
+                                  }
+                              })
+                          }
+                      }
+                  })
+                  console.log('uptoken',uptoken)
+                  return uptoken
+              },
+              filters: {
+                  mime_types: [
+                      {title: "视频文件", extensions: "mp4"}, // 限定mp4后缀上传
+                  ]
+              },//文件类型过滤，这里限制为图片类型
+              domain: 'http://dl.m2c2017.com',   //bucket 域名，下载资源时用到，**必需**
+              get_new_uptoken: true,  //设置上传文件的时候是否每次都重新获取新的token
+              container: 'videoContainer',           //上传区域DOM ID，默认是browser_button的父元素，
+              max_file_size: '30mb',           //最大文件体积限制
+              //flash_swf_url: '../../../plupload/Moxie.swf',  //引入flash,相对路径
+              max_retries: 3,                   //上传失败最大重试次数
+              dragdrop: false,                   //开启可拖曳上传
+              drop_element: 'videoContainer',        //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+              chunk_size: '4mb',                //分块上传时，每片的体积
+              auto_start: true,                 //选择文件后自动上传，若关闭需要自己绑定事件触发上传
+              unique_names: false ,
+              save_key: false,
+              init: {
+                  'FilesAdded': function(up, files) {
+                      // plupload.each(files, function(file) {
+                      //     // 文件添加进队列后,处理相关的事情
+                      // });
+                      // console.log('加进队列')
+                      // console.log(up, file)
+                  },
+                  'BeforeUpload': function(up, file) {
+                          // 每个文件上传前,处理相关的事情
+                          // console.log(up, file)
+                          that.uploadBtn = false
+                          that.uploadProgress = false
+                          that.uploadRepeat = false
+                  },
+                  'UploadProgress': function(up, file) {
+                          // 每个文件上传时,处理相关的事情
+                          that.uploadProgress = true
+                  },
+                  'FileUploaded': function(up, file, info) {
+                          // 每个文件上传成功后,处理相关的事情
+                          // 其中 info.response 是文件上传成功后，服务端返回的json，形式如
+                          // {
+                          //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
+                          //    "key": "gogopher.jpg"
+                          //  }
+                          // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
+                          let key
+                          let res
+                          if(info.response==undefined){
+                            res = JSON.parse(info);
+                            key = res.key
+                          }else if(info.response!==undefined){
+                            res = JSON.parse(info.response);
+                            key = res.key
+                          }else{
+                            key = that.key
+                          }
+                          let domain = up.getOption('domain');
+                          let sourceLink = domain +'/'+ key; //获取上传成功后的文件的Url
+                          that.data.goodsMainVideo = sourceLink
+                          console.log(that.data.goodsMainVideo)
+                          console.log('上传成功后')
+                          that.initUpload()
+                  },
+                  'Error': function(up, err, errTip) {
+                          //上传出错时,处理相关的事情
+                          // console.log("错误",err,errTip)
+                          //let res = JSON.parse(err)
+                          // console.log(err.code)
+                          if(err.code===-600){
+                            that.$message.error("请上传30M以内视频")
+                          }
+                          if(err.code===-601){
+                            that.$message.error("请上传mp4格式视频")
+                          }
+                  },
+                  'UploadComplete': function() {
+                          //队列文件处理完毕后,处理相关的事情
+                          that.uploadBtn = false
+                          that.uploadProgress = false
+                          that.uploadRepeat = true
+                  },
+                  'Key': function(up, file) {
+                      // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+                      // 该配置必须要在 unique_names: false , save_key: false 时才生效
+                      var key = "";
+                      key = that.key
+                      // do something with key here
+                      return key
+                  }
+              }
+          });
+      },
       // 获取商品详情
       getGoodsInfo(){
         let that = this
@@ -561,13 +788,25 @@
           success: function (result) {
             that.disabled = true
             that.data = result.content
+            that.data.goodsMainVideo = result.content.goodsMainVideo
+            if(that.data.goodsMainVideo!=''){
+              that.uploadBtn = false
+            }
             that.serviceRate = result.content.serviceRate
+            that.oldServiceRate = result.content.serviceRate
             for(var j=0,len=result.content.goodsGuarantee.length;j<len;j++){
               that.goodsGuarantCheck.push(result.content.goodsGuarantee[j].guaranteeId)
             }
-            console.log(that.goodsGuarantCheck)
+            // console.log(that.goodsGuarantCheck)
             that.data.skuFlag = result.content.skuFlag.toString()
             that.goodsSpecifications = result.content.goodsSpecifications
+            for(let a=0;a<result.content.goodsSpecifications.length;a++){
+              for(let b=0;b<result.content.goodsSpecifications[a].itemValue.length;b++){
+                that.oldGoodsSpecifications.push(result.content.goodsSpecifications[a].itemValue[b].spec_name)
+              }
+            }
+            //that.oldGoodsSpecifications = result.content.goodsSpecifications
+            // sessionStorage.setItem('oldGoodsSpecifications',JSON.stringify(result.content.goodsSpecifications))
             that.goodsSKUs = result.content.goodsSKUs
             that.data.goodsMinQuantity = result.content.goodsMinQuantity.toString()
             that.data.goodsKeyWord = result.content.goodsKeyWord.join()
@@ -589,8 +828,17 @@
             }else{
               that.$('#skuFlag1').hide()
             }
+            if(that.data.goodsMainVideo === ''){
+              that.uploadBtn = true
+            }else{
+              that.uploadRepeat = true
+            }
             that.$refs.ue.setUEContent(result.content.goodsDesc)
+            // that.initUpload()
           }
+        })
+        that.$nextTick(()=>{
+          that.initUpload()
         })
       },
       // 新增商品保障
@@ -787,7 +1035,7 @@
       },
       stantardIdChange(item,index){
         let that=this
-        console.log(that.goodsSpecifications)
+        // console.log(that.goodsSpecifications)
         let option = 0
         for(let j = 0;j<that.goodsSpecifications.length;j++){
           if(that.goodsSpecifications[j].standardId == item.standardId){
@@ -806,14 +1054,14 @@
           }
         }
         that.goodsSpecifications[index].itemValue = []
-        console.log(that.goodsSpecifications)
+        // console.log(that.goodsSpecifications)
         // if(index != 2){
 
         // }
         that.mapValue()
         //that.goodsSpecifications = []
-        that.restaurants = []
-        that.getValue()
+        // that.restaurants = []
+        // that.getValue()
         that.standardIdShow = false
       },
       // 清空单规格内值
@@ -901,7 +1149,7 @@
               }
             }
             let a = {
-              token: sessionStorage.getItem('mToken'),
+              // token: sessionStorage.getItem('mToken'),
               goodsId: that.goodsId==''?that.$route.query.goodsId:that.goodsId,
               dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
               dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName,
@@ -911,12 +1159,18 @@
               goodsDesc:that.$refs.ue.getUEContent(),
               goodsBrandName:that.goodsBrandName,
               goodsGuarantee:that.goodsGuarantCheck.length==0?'':that.goodsGuarantCheck.toString(),
-              goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString()
+              goodsKeyWord:typeof that.data.goodsKeyWord =='string'?that.data.goodsKeyWord:that.data.goodsKeyWord.toString(),
+              // oldServiceRate:that.oldServiceRate,
+              newServiceRate:that.serviceRate,
+              // oldClassifyName:that.data.goodsClassify,
+              newClassifyName:that.newClassifyName
             }
-            console.log(a.goodsSKUs)
+            // console.log(a.goodsSKUs)
+            // console.log(that.data.goodsSKUs)
             that.$.ajax({
               type: that.handle_toggle === 'add' ? 'post' : 'put',
               url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/web/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/web/goods' : that.localbase + 'm2c.scm/web/goods/approve',
+              // url: that.handle_toggle === 'add' ? 'http://10.0.40.23:8081/m2c.scm/web/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? 'http://10.0.40.23:8081/m2c.scm/web/goods' : 'http://10.0.40.23:8081/m2c.scm/web/goods/approve',
               data:Object.assign(that.data,a),
               success: function (result) {
                 if (result.status === 200) {
@@ -961,11 +1215,17 @@
             },
             success: function (result) {
               that.serviceRate = result.content
-              that.data.goodsClassifys = children.toString()
-              console.log(that.data.goodsClassifys)
+              //that.data.goodsClassifys = children.toString()
+              // that.newClassifyName = document.querySelector('.el-cascader__label').innerText
             }
           })
         }
+        that.$nextTick(()=>{
+          that.data.goodsClassifys = children.toString()
+          that.newClassifyName = document.querySelector('.el-cascader__label').innerText
+          // console.log(document.querySelector('.el-cascader__label').innerText)
+        })
+        
       },
       // 复选框选中
       handleCheckedCitiesChange(value) {
@@ -1154,7 +1414,19 @@
           that.goodsSpecifications[index].itemValue.splice(that.goodsSpecifications[index].itemValue.indexOf(specName), 1)
           that.mapValue()
         }else{
-          that.$message("已有规格不能移除")
+          let j = 0
+          let l = that.oldGoodsSpecifications.length
+          // console.log(l)
+          if(that.oldGoodsSpecifications.indexOf(tag)===-1){
+            let specName={spec_name:tag}
+            // console.log('goodsSpecifications1',that.goodsSpecifications)
+            that.goodsSpecifications[index].itemValue.splice(that.goodsSpecifications[index].itemValue.indexOf(specName), 1)
+            // console.log('goodsSpecifications1',that.goodsSpecifications)
+            that.mapValue()
+          }else{
+            that.$message("已有规格不能移除")
+            return
+          }
         }
       },
       // 删除规格行
@@ -1173,7 +1445,7 @@
       query(item){
         console.log(item)
         this.standardId = item
-        //this.getValue()
+        this.getValue()
       },
       querySearch(queryString, cb) {
         let that = this
@@ -1294,6 +1566,7 @@
       let that = this
       that.$nextTick(function(){
         that.$('.el-upload').appendTo("#dragImg")
+        
       })
       window.onscroll = function () {
         if (that.standardId != '') {
@@ -1326,7 +1599,7 @@
         }
       })
       // 获取规格值
-      that.getValue()
+      //that.getValue()
       // 获取规格
       that.$.ajax({
         type: 'get',
@@ -1398,9 +1671,12 @@
           sessionStorage.setItem('goodsSKUs','')
           sessionStorage.setItem('goodsGuarantCheck','')
           sessionStorage.setItem('fileList','')
+          that.$nextTick(()=>{
+            that.initUpload()
+          })
         }else{
           if(sessionStorage.getItem('data') == ''){
-            //alert('请求')
+            //alert('请求')'
             that.getGoodsInfo()
           }else{
             //that.getGoodsInfo()
@@ -1417,10 +1693,14 @@
             sessionStorage.setItem('goodsGuarantCheck','')
             sessionStorage.setItem('fileList','')
             sessionStorage.setItem('goodsMainImages','')
+            that.$nextTick(()=>{
+              that.initUpload()
+            })
           }
         }
       }else{
-        if (that.handle_toggle === 'add') {
+        //alert(that.$route.query.isAdd)
+        if (that.$route.query.isAdd == 'add') {
           that.$.ajax({
             type: 'get',
             url: that.localbase + 'm2c.scm/web/goods/approve/id',
@@ -1429,17 +1709,57 @@
             },
             success: function (result) {
               that.goodsId = result.content
+              // console.log(that.goodsId)
             }
           })
+          that.$nextTick(()=>{
+            that.initUpload()
+          })
         } else {
+          //alert(1)
           that.getGoodsInfo()
         }
       }
-
+      
     }
   }
 </script>
 <style lang="scss" scoped>
+.upLoadBox{height:auto;margin-top:20px;}
+.uploadProgress{position:relative;height:100px;}
+.uploadProgress img{position:absolute;top:0;left:0;width:150px;height:100px;}
+.uploadProgress a.stop{position:absolute;top:-10px;left:140px;display:inline-block;width:20px;height:20px;z-index:2;
+  background:url(../../../assets/images/icon-close.png) no-repeat center;background-size:20px;border-radius:50%; cursor: pointer;
+}
+.uploadProgress a.repeat{position:absolute;top:0px;left:0px;display:inline-block;width:150px;height:100px;z-index:2;
+  background:rgba(0,0,0,0.5); cursor: pointer; transition: all 0.3s ease;
+  text-align: center;line-height:136px;color:#fff;
+}
+.uploadProgress a.repeat i{width:20px;height:20px;display:inline-block;background:url(../../../assets/images/ico_repetition.png) no-repeat center 0;position:absolute;top:30px;left:65px;transition: all 0.3s ease;}
+.uploadProgress a.repeat:hover{
+  text-decoration:none;
+}
+.uploadProgress a.repeat:hover i{
+  transform: rotate(120deg);
+  -webkit-transform: rotate(120deg);
+  -moz-transform: rotate(120deg);
+}
+/*ico_reduce.png
+<div id="videoContainer" v-if="uploadBtn">
+              <el-button id="selectVideo" type="primary">上传视频<i class="el-icon-upload el-icon--right"></i></el-button>
+          </div>
+          <div class="uploadProgress" v-if="uploadProgress">
+            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
+            <img src="../../../assets/images/icon-delet.png" class="myicon">
+            <a class="stop" @click="pauseUpload"></a>
+          </div>
+          <div class="uploadProgress" v-if="uploadRepeat">
+            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
+            <a class="repeat" @click="initUpload"></a>
+            <a class="stop" @click="delectUpload"></a>
+          </div>
+*/
+
   .graySpan span{color:#999;}
   .graySpan .el-row,.graySpan .el-row .el-col-10{margin-bottom:0;height:45px;}
   a.addGuarantee{margin-left:115px;padding-left:20px;margin-top:-10px;float:left;background:url(../../../assets/images/ico_add.png) no-repeat;}

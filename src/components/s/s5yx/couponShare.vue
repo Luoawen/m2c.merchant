@@ -210,7 +210,7 @@
 						</div>
 					</div>
 				</div>
-				<!--点击批量发放-->
+			 <!--点击批量发放-->
 				<el-dialog title="导入批量发放"  :visible.sync="centerDialogVisible02" width="890px" center  :modal-append-to-body="false"  :close-on-click-modal="false">
 					<div class="addquan_c">
 						<div class="addquan_c_t">已选择发放的优惠券</div>
@@ -260,6 +260,59 @@
 						<span class="fr addquan_t poi2">发送后将不可以撤销，请认真核对发送信息</span>
 					</span>
 				</el-dialog>
+			<!--点击发放-->
+				<el-dialog title="确认发放"  :visible.sync="centerDialogVisible03" width="890px" :modal-append-to-body="false" center>
+					<div class="addquan_c">
+						<div class="addquan_c_t">已选择发放的优惠券</div>
+						<div class="addquan_c_b">
+							<!--已选择的优惠券-->
+							<div class="Is03_user_boxnone" v-if="hand_add_show">
+									当前暂无已选择发放的优惠券
+							</div>
+							<div class="Select_box mt10 f-active fl mr10" v-show="hand_edit_coupon.couponId && !hand_add_show ">
+								<i class="icon_selected"></i>
+								<div class="fl s-t_b">
+									<div>
+										<span class="tit_s tit_s_h">{{hand_edit_coupon.faceValue}}{{hand_edit_coupon.couponForm == 1 ? '元':'折'}}</span>
+									</div>
+									<div class="tit_s_s ">
+										{{hand_edit_coupon.content}}
+									</div>
+								</div>
+								<div class="fl s-t_b02">
+									<div class="mt10">{{hand_edit_coupon.couponName}}</div>
+									<div class="tit02">{{hand_edit_coupon.rangeContent}}</div>
+									<div class="tit02">{{hand_edit_coupon.expirationTimeStart}} - {{hand_edit_coupon.expirationTimeEnd}}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="Is03_user">
+						<div class="Is03_user_top">
+							已选择发放
+							<span class="bluecolor02">{{sel_user.total}}</span>
+							位用户
+						</div>
+						<div class="Is03_user_btn">
+							<!--无数据-->
+							<div class="Is03_user_boxnone" v-if="sel_user.total==0">
+								当前暂无已选择发放的用户
+							</div>
+							<!--有数据-->
+							<div class="phone_box" v-if="sel_user.total>0" >
+								{{sel_user.mobiles}}
+								<span v-show="sel_user.total>23" class="totaluser">......共{{sel_user.total}}位用户</span>
+							</div>
+						</div>
+					</div>
+					<span slot="footer" class="dialog-footer mt30">
+						<el-button type="primary" @click="sure_send">确定发放</el-button>
+						<el-button @click="centerDialogVisible03 = false">取消发放</el-button>
+						<span class="fr addquan_t poi2">发送后将不可以撤销，请认真核对发送信息</span>
+					</span>
+				</el-dialog>
+
+				
 				<!--确认发送结果-->
 				<el-dialog  :visible.sync="result"  width="650px" center  :modal-append-to-body="false"  :close-on-click-modal="false">
 					<div  class="send_suc">
@@ -352,6 +405,7 @@ export default {
 			newaddReceive: false,
 			centerDialogVisible:false,
 			centerDialogVisible02: false,
+			centerDialogVisible03:false, // 点击发放弹框
 			create_flag: 'cash',
 		}
 	},
@@ -371,9 +425,9 @@ export default {
 	  'centerDialogVisible02': {
         handler (val, oldVal) {
           if (!val) {
-			  document.querySelector('#upload').value = ''
-			  this.excel_file = ''
-			  this.send_num = 0
+						document.querySelector('#upload').value = ''
+						this.excel_file = ''
+						this.send_num = 0
           }
         },
         deep: true
@@ -408,6 +462,8 @@ export default {
 			formData.append("upfile",target.files[0])
 			// 存一次上传的文件
 			this.excel_file = target.files[0]
+			// 存储有到文档的值
+			console.log('存储上一次的文件',this.excel_file)
 			this.$.ajax({
 				url:  `${this.base}m2c.market/web/coupon/read/user/excel/count`,
 				type: "POST",
@@ -446,7 +502,7 @@ export default {
 		exportFailure (){
 			location.href=`${this.base}m2c.market/web/coupon/export/send/fail/record/`+this.send_result.sendRecordId
 		},
-		// 确定发送
+		// 发送按钮确认弹框
 		send(){
 			let that = this
 				if (that.hand_edit_coupon.couponId == undefined) {
@@ -457,43 +513,32 @@ export default {
 				this.$message.error('请选择发放用户')
 				return 
 			}
-			   this.$confirm('确认给所选用户发放所选优惠券?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let formDate = {
-            coupon_id: that.hand_edit_coupon.couponId,
-						mobiles: that.sel_user.mobiles,
-						dealer_id:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-          }
-          $.ajax({
-            method: 'post',
-            url: that.localbase + 'm2c.market/web/coupon/dealer/batch/send/user',
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
-            data: JSON.stringify(formDate),
-            success: function (res) {
-              if (res.status == 200) {
-                console.log('发放结果', res.content)
-								that.send_result = res.content
-								// 页面刷新 清空数据
-			// 			that.reset()
-			// 			that.hand_add_show = true
-			// 			that.sel_user.total = 0
-			// 			that.sel_user.mobiles = ''
-			// 			that.get_user_list()
-			// 			// 用去除类的方法 去掉勾选的选项
-              }
-              that.result = true
-            }
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消发放'
-          })
-				})
+			this.centerDialogVisible03 = true
+		},
+		// 确认发送
+		sure_send(){
+			let that = this
+			let formDate = {
+				coupon_id: that.hand_edit_coupon.couponId,
+				mobiles: that.sel_user.mobiles,
+				dealer_id:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+			}
+			$.ajax({
+				method: 'post',
+				url: that.localbase + 'm2c.market/web/coupon/dealer/batch/send/user',
+				contentType: 'application/json; charset=utf-8',
+				dataType: 'json',
+				data: JSON.stringify(formDate),
+				success: function (res) {
+					if (res.status == 200) {
+						console.log('发放结果', res.content)
+						that.send_result = res.content
+					} else{
+						// that.$message.error('发送失败');
+					}
+					that.result = true
+				}
+			})
 		},
 		  // 点击导入批量发放
       click_send () {
@@ -513,12 +558,13 @@ export default {
         this.hand_edit_coupon = {}
         this.result = false
         this.sel_user_mobiles = []
+				this.centerDialogVisible03 = false
       },
 		// excel批量发放
 		excel_send () {
 			let that = this
 			console.log(that.hand_edit_coupon)
-			this.centerDialogVisible02 = false
+			// this.centerDialogVisible02 = false
 			if (that.hand_edit_coupon.couponId == undefined) {
 				this.$message.error('请选择优惠券！')
 				return
@@ -527,8 +573,17 @@ export default {
 				this.$message.error('请选择批量发送用户文件')
 				return 
 			}
+			console.log('that.excel_file0',that.excel_file);
+			// 二次确认弹框
+			  this.$confirm('确定发放, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+					// console.log('that.excel_file1',this.excel_file);
 			let formData = new FormData()
 			formData.append("upfile",that.excel_file)
+			// console.log('that.excel_file------二次存储-------',that.excel_file);
 			formData.append('coupon_id',that.hand_edit_coupon.couponId)
 			formData.append('dealer_id',JSON.parse(sessionStorage.getItem('mUser')).dealerId)
 			that.$.ajax({
@@ -543,10 +598,19 @@ export default {
 					if (res.status == 200) {
 						console.log('发放结果',res.content)
 						that.send_result = res.content
+					}else{
+						that.$message.error('发送失败');
 					}
 					that.result = true
+					that.centerDialogVisible02 = false
 				}
 			})
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });          
+        });
 		},	
 		// 重置搜索查询条件
 		reset() {
@@ -634,13 +698,15 @@ export default {
 		},
 		// 确认选择优惠券
 		coupon_selected() {
-			let that = this
-			console.log('手动发放')
-			this.hand_add_show = false
-			this.hand_edit_coupon = this.pre_sel_coupon
-			this.centerDialogVisible = false
-			console.log('this.hand_edit_coupon',this.hand_edit_coupon)
-
+			// 如果没有优惠券被勾选 执行取消的按钮事件
+			if(JSON.stringify(this.pre_sel_coupon)==='{}' ){
+				this.coupon_select_cancle ()
+			}else{
+				this.hand_add_show = false
+				this.hand_edit_coupon = this.pre_sel_coupon
+				this.centerDialogVisible = false
+				console.log('this.hand_edit_coupon',this.hand_edit_coupon)
+			}
 		},
 		// 取消选择优惠券
 		coupon_select_cancle () {

@@ -30,10 +30,17 @@
               </div>
             </div>
           </th>
-          <th>活动分摊/元
+          <th>满减分摊/元
             <div class="icon">
               <div class="tips">
-                <p>优惠活动，商家承担的活动成本</p>
+                <p>满减活动，商家承担的活动成本</p>
+              </div>
+            </div>
+          </th>
+          <th>优惠券分摊/元
+            <div class="icon">
+              <div class="tips">
+                <p>使用优惠券，商家承担的活动成本</p>
               </div>
             </div>
           </th>
@@ -80,9 +87,14 @@
           <template slot-scope="scope"><span>{{scope.row.serviceTotalCharge == undefined ? '-':(scope.row.serviceTotalCharge)}}</span></template>
         </el-table-column>
         <el-table-column
-          label="活动分摊/元"
+          label="满减分摊/元"
           show-overflow-tooltip>
           <template slot-scope="scope"><span>{{scope.row.activityTotalAmount == undefined ? '-':(scope.row.activityTotalAmount)}}</span></template>
+        </el-table-column>
+         <el-table-column
+          label="优惠券分摊/元"
+          show-overflow-tooltip>
+          <template slot-scope="scope"><span>{{scope.row.couponShareTotalAmount == undefined ? '-':(scope.row.couponShareTotalAmount)}}</span></template>
         </el-table-column>
         <el-table-column
           label="结算总额/元"

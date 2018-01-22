@@ -119,7 +119,7 @@
     <el-dialog
       title="选择需要新增的优惠券的类型"
       :visible.sync="centerDialogVisible"
-      width="30%"
+      width="580px"
       center :modal-append-to-body="false"
       :close-on-click-modal="false"
       >

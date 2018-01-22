@@ -217,6 +217,24 @@
 								</template>
 							</span>
       			</div>
+						<div class="clear">
+      				<span class="tit01 fl">主图视频</span>
+      				<span class="t_img fl ">
+								<i class="nothing" v-if="data.goodsMainVideo==''">--</i>
+								<template v-if="data.goodsMainVideo!==''">
+									<div class="positionR">
+										<img class="mainImg" :src="fileList[0]" />
+										<a @click="showVideo" class="showVideo"></a>
+									</div>
+								</template>
+							</span>
+      			</div>
+						<!--主图视频-->
+						<div class="hptczp" v-if="videoShow"></div>
+						<div class="videoBox" v-if="videoShow">
+							<a class="close" @click="videoHide"></a>
+							<video :src="data.goodsMainVideo" controls width="100%" height="100%"></video>
+						</div>
       			<div class="clear mt20">
       				<span class="tit01 fl">图文详情</span>
 							<span class="t_img fl">
@@ -282,10 +300,10 @@
       	</table>
       </div> -->
     </div>
-  <!--返回-->
-  <div class="return poi3">
-  	<button class="r_fh" @click="goBack()">返回</button>
-  </div>
+		<!--返回-->
+		<div class="return poi3">
+			<button class="r_fh" @click="goBack()">返回</button>
+		</div>
   </div>
 </template>
 
@@ -311,10 +329,18 @@
 				imgWrap:false, //图片盒子显示隐藏
 				imgIndex:0, //大图
 				ulIndex:0, //小图
-				ulLength:1 //小图页数
+				ulLength:1, //小图页数
+				videoShow:false, //视频弹层
       }
     },
     methods: {
+			//主图视频showVideo
+			showVideo(){
+				this.videoShow = true
+			},
+			videoHide(){
+				this.videoShow = false
+			},
 			// 图片放大
       imgWrapShow(index){
 				let that = this
@@ -440,6 +466,13 @@
   }
 </script>
 <style lang="scss" scoped>
+.videoBox{width:660px;height:440px;z-index: 1000;position: fixed;top:50%;left:50%;margin-left:-330px;margin-top:-220px;
+	a.close{
+		display:inline-block;width:30px;height:30px;opacity: 1;
+		position: absolute;top:-60px;right:-200px; background:url(../../../assets/images/ico_close_close.png) no-repeat 0 0;
+	}
+}
+.positionR{position:relative;width:150px;height:100px;overflow: hidden;}
 	i.nothing{
 		display:inline-block;
 	}
@@ -680,6 +713,10 @@
   					height: 101px;
   					margin-right: 20px;
   				}
+					img.mainImg,a.showVideo{width:150px;height:100px;position:absolute;top:0;left:0;}
+					a.showVideo{display:inline-block;background:rgba(0,0,0,0.5) url(../../../assets/images/ico_play.png) no-repeat center center;
+					transition: all 0.3s ease;}
+					a.showVideo:hover{transform-origin: center center;transform: scale(1.1);}
   			}
   			.t_img02{
   				border: 1px solid #E6E8F2;

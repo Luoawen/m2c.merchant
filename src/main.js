@@ -18,7 +18,8 @@ import 'bootstrap'
 import 'tableexport'
 import './assets/css/bootstrap3.0.min.css'
 import './assets/css/manage.css'
-
+//由于qiniu不是基于标准的commonjs开发的，所以要写全路径
+require('qiniu-js/dist/qiniu.min');
 // import 'addressCheckbox/js/RegionalChoice.js'
 // import 'addressCheckbox/css.css'
 // 导入ueditor相关
