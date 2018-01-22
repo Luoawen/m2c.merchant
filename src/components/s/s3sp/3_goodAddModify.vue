@@ -831,15 +831,18 @@
             if(that.data.goodsMainVideo === ''){
               that.uploadBtn = true
             }else{
+              that.uploadBtn = false
               that.uploadRepeat = true
             }
             that.$refs.ue.setUEContent(result.content.goodsDesc)
-            // that.initUpload()
+            that.$nextTick(()=>{
+              that.initUpload()
+            })
           }
         })
-        that.$nextTick(()=>{
-          that.initUpload()
-        })
+        // that.$nextTick(()=>{
+        //   that.initUpload()
+        // })
       },
       // 新增商品保障
       addGuarantee(){
