@@ -193,7 +193,7 @@
               </div>
               <div class="cont col-sm-4" style="width:40%;">
                 <div class="a5 fl mt20" style="width:25%;">
-                  {{((parseFloat(item.strGoodsMoney) + parseFloat(item.strOrderFreight) - parseFloat(item.strDealerDiscount) - parseFloat(item.strPlateDiscount))).toFixed(2)}}
+                  {{((parseFloat(item.strGoodsMoney) + parseFloat(item.strOrderFreight) - parseFloat(item.strDealerDiscount) - parseFloat(item.strPlateDiscount) - parseFloat(item.strCouponDiscount))).toFixed(2)}}
                 </div>
                 <div class="a6 fl mt20" style="width:28%;">
                   {{date_format(new Date(item.createdDate), 'yyyy-MM-dd hh:mm:ss')}}

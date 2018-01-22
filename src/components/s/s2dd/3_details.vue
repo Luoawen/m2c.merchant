@@ -44,7 +44,7 @@
               </div>
               <div>
                 <span class="tit01">售后总额</span>
-                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight) - parseFloat(orderDetail.couponDiscount))).toFixed(2)}}元
+                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight))).toFixed(2)}}元
                   <span v-if="(orderDetail.orderType !=0) && orderDetail.status >= 4">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.status < 4">（运费待商家确认） </span></span>
               </div>
               <div>
@@ -101,7 +101,7 @@
                 <span >{{(orderDetail.goodsInfo.strPrice)}}</span>
               </td>
               <td class="a5">{{(orderDetail.goodsInfo.strTotalPrice)}}</td>
-              <td class="a5">{{orderDetail.orderType!=0?(parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight) - parseFloat(orderDetail.couponDiscount)).toFixed(2) : '--'}}</td>
+              <td class="a5">{{orderDetail.orderType!=0?(parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight)).toFixed(2) : '--'}}</td>
               <td class="a6" >
                 <!--状态，0申请退货,1申请换货,2申请退款,3拒绝,4同意(退换货),5客户寄出,6商家收到,7商家寄出,8客户收到,9同意退款, 10确认退款,11交易关闭
                  {{orderDetail.orderType==0?'换货':orderDetail.orderType==1?'退货':orderDetail.orderType==2?'仅退款':'-'}}-->
