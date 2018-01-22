@@ -723,10 +723,14 @@
                           //    "key": "gogopher.jpg"
                           //  }
                           // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
+                          console.log(info)
+                          console.log(JSON.parse(info))
+                          console.log(JSON.stringify(info))
                           var domain = up.getOption('domain');
                           var res = JSON.parse(info);
                           var sourceLink = domain +'/'+ res.key; //获取上传成功后的文件的Url
                           that.data.goodsMainVideo = sourceLink
+                          console.log(that.data.goodsMainVideo)
                           that.initUpload()
                   },
                   'Error': function(up, err, errTip) {
