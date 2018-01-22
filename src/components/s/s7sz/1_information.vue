@@ -187,15 +187,23 @@
       let target = $event.target
       let objUrl = this.getBgURL(target.files[0])
       let size = target.files[0].size
-      console.log(target,objUrl,size)
-      if (size >= 500000 ) this.$message.error('图片超过500K了哦')
-      else {
-        if (objUrl) {
-          this.bgShow = true
-          document.querySelector('#bgImg').src = objUrl
-          console.log(document.querySelector('#bgImg').src)
-          this.bgChange = true
+      let type = target.files[0].type
+      console.log('---',target,objUrl,size,type)
+      if(type=='image/png'||type=='image/jpeg'){
+        console.log(size)
+        if (size >= 500000 )
+        {
+          this.$message.error('请上传500K以内的图片')
+        }else {
+          if (objUrl) {
+            this.bgShow = true
+            document.querySelector('#bgImg').src = objUrl
+            console.log(document.querySelector('#bgImg').src)
+            this.bgChange = true
+          }
         }
+      }else{
+        this.$message.error('请上传JPG/PNG格式的图片')
       }
     },
     // 修改背景图
@@ -216,6 +224,7 @@
           contentType: false,
           success: function (result) {
             result = JSON.parse(result)
+            console.log(result)
             // document.querySelector('#m11yhgl_img').src = that.img_url
             if (result.errorMessage && result.errorMessage !== '') {
               that.$message.error(result.errorMessage)

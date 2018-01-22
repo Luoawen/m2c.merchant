@@ -334,9 +334,9 @@
           <p class="marginTop20">仅支持mp4格式，视频大小30M以内</p>
         </el-col>
       </el-row>
-      <el-row :gutter="20" style="z-index:1;"></el-row>
+      <el-row :gutter="20" style="z-index:1;">
         <el-col :span="3">图文详情</el-col>
-        <el-col :span="21" style="height:400px;z-index:1;">
+        <el-col :span="20" style="height:400px;z-index:1;">
           <div id="editor-container">
             <UE :config=config ref="ue"></UE>
           </div>
