@@ -570,7 +570,7 @@
               success: function (result) {
                 that.goodsBrandName=result.content.brandName
                 //console.log(that.goodsBrandName)
-                that.initUpload()
+                // that.initUpload()
               }
             })
           }
@@ -600,6 +600,7 @@
                 that.uploadRepeat = false
                 that.data.goodsMainVideo=''
                 that.$nextTick(()=>{
+                  console.log("删除视频")
                   that.initUpload()
                 })
             }
@@ -622,6 +623,7 @@
               that.uploadBtn = true
             }
             that.$nextTick(()=>{
+              console.log("取消上传视频")
               that.initUpload()
             })
           }else{
@@ -631,11 +633,13 @@
         }).catch(() => {
           if(that.uploadProgress){
             that.$nextTick(()=>{
+              console.log("取消按钮")
               that.initUpload()
             })
           }else{
             that.$message.error("操作已失效！")
             that.$nextTick(()=>{
+              console.log("取消上传视频 失效")
               that.initUpload()
             })
           }
@@ -738,6 +742,7 @@
                           var sourceLink = domain +'/'+ res.key; //获取上传成功后的文件的Url
                           that.data.goodsMainVideo = sourceLink
                           console.log(that.data.goodsMainVideo)
+                          console.log('上传成功后')
                           that.initUpload()
                   },
                   'Error': function(up, err, errTip) {
@@ -751,7 +756,6 @@
                           if(err.code===-601){
                             that.$message.error("请上传mp4格式视频")
                           }
-                          that.initUpload()
                   },
                   'UploadComplete': function() {
                           //队列文件处理完毕后,处理相关的事情
@@ -1698,13 +1702,13 @@
               console.log(that.goodsId)
             }
           })
-          that.initUpload()
+
         } else {
           //alert(1)
           that.getGoodsInfo()
         }
       }
-
+      that.initUpload()
     }
   }
 </script>
