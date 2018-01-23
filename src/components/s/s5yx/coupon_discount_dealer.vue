@@ -92,9 +92,13 @@
                     <div class="shopbox_have clear" v-if="goodsResult.content != null && goodsResult.content.length > 0">
                       <!--控制点击的时候加上class名字b_active，就可以出现点击效果！！！-->
                       <div v-for="(goods, index) in goodsResult.content" @click="chooseGoods(goods)">
-                        <el-tooltip :content="goods.goodsName" placement="right-start" effect="light">
                           <div :class="['shopbox_have_box', 'fl', goods.isChoosed == 1 ? 'b_active' : '']">
-                            <div class="wose shopbox_have_tit clear">{{goods.goodsName}}</div>
+                              <div class="wose shopbox_have_tit clear02">
+                              <el-tooltip :content="goods.goodsName" placement="top-start" effect="light" v-if="goods.goodsName.length > 15">
+                                <span>{{goods.goodsName.substring(0,15).concat('...')}}</span>
+                              </el-tooltip>
+                              <span v-if="goods.goodsName.length <= 15">{{goods.goodsName}}</span>
+                            </div>
                             <div class="shopbox_have_img">
                               <div class="img fl mr10">
                                 <img :src="goods.goodsImageUrl"/>
@@ -287,7 +291,7 @@
           </div>
           <!--其他规则-->
           <div class="BasicinFormation clear mb100">
-            <div class="Basicinbt">
+            <div class="Basicinbt"  v-if="couponParams.receive_type ==='2'">
               <span class="linh35">发放授权</span>
               <el-form-item>
                 <el-checkbox v-model="couponParams.is_access" label="1" class="ml10">允许平台发放</el-checkbox>
@@ -333,9 +337,13 @@
                 <div class="shopbox_have clear" v-if="goodsResult.content != null && goodsResult.content.length > 0">
                   <!--控制点击的时候加上class名字b_active，就可以出现点击效果！！！-->
                   <div v-for="(goods, index) in goodsResult.content" @click="removeGoods(goods)">
-                    <el-tooltip :content="goods.goodsName" placement="right-start" effect="light">
                       <div :class="['shopbox_have_box', 'fl', goods.isRemoved == 1 ? 'b_active' : '']">
-                        <div class="wose shopbox_have_tit clear">{{goods.goodsName}}</div>
+                        <div class="wose shopbox_have_tit clear02">
+                            <el-tooltip :content="goods.goodsName" placement="top-start" effect="light" v-if="goods.goodsName.length > 15">
+                              <span>{{goods.goodsName.substring(0,15).concat('...')}}</span>
+                            </el-tooltip>
+                            <span v-if="goods.goodsName.length <= 15">{{goods.goodsName}}</span>
+                          </div>
                         <div class="shopbox_have_img">
                           <div class="img fl mr10">
                             <img :src="goods.goodsImageUrl"/>
@@ -348,7 +356,6 @@
                         </div>
                         <i :class="goods.isRemoved == 1 ? 'icon_selected' : ''"></i>
                       </div>
-                    </el-tooltip>
                   </div>
                 </div>
                 <!-- 请判断没有商品的时候显示 -->
