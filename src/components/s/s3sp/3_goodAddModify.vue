@@ -1,5 +1,5 @@
 <template>
-  <div class="infoBox">
+  <div class="content">
     <el-row>
       <el-col :span="24"><h4>基本信息</h4></el-col>
     </el-row>
@@ -7,13 +7,13 @@
       <el-row :gutter="20" style="margin-bottom:0;">
         <el-col :span="11">
           <el-form-item label="商品名称" prop="goodsName">
-            <el-input v-model="data.goodsName"   placeholder="1-50字符" :maxlength="50" ></el-input>
+            <el-input v-model="data.goodsName" placeholder="1-50字符" :maxlength="50" :disabled="approveModify"></el-input>
             <i class="red fl" style="margin-top:-8px;color:#999;line-height:20px;">请将商品关键信息设置在前十字，以便刺激顾客购买</i>
           </el-form-item>
         </el-col>
         <el-col :span="11">
           <el-form-item label="商品副标题" prop="goodsSubTitle">
-            <el-input v-model="data.goodsSubTitle" placeholder="1-100字符" :maxlength="100"></el-input>
+            <el-input v-model="data.goodsSubTitle" placeholder="1-100字符" :maxlength="100" :disabled="approveModify"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -25,7 +25,7 @@
         </el-col>
         <el-col :span="11">
           <el-form-item label="商品品牌" prop="goodsBrandId">
-            <el-select v-model="data.goodsBrandId" placeholder="请选择">
+            <el-select v-model="data.goodsBrandId" placeholder="请选择" :disabled="approveModify">
               <el-option
                 v-for="item in brands"
                 :key="item.brandId"
@@ -39,7 +39,7 @@
       <el-row :gutter="20">
         <el-col :span="11">
           <el-form-item label="计量单位" prop="goodsUnitId">
-            <el-select v-model="data.goodsUnitId" placeholder="请选择" @change="unitChange">
+            <el-select v-model="data.goodsUnitId" placeholder="请选择" @change="unitChange" :disabled="approveModify">
               <el-option
                 v-for="item in units"
                 :key="item.unitId"
@@ -51,14 +51,14 @@
         </el-col>
         <el-col :span="11">
           <el-form-item label="最小起订量" prop="goodsMinQuantity">
-            <el-input v-model="data.goodsMinQuantity" placeholder="请输入内容" type="number"></el-input>
+            <el-input v-model="data.goodsMinQuantity" placeholder="请输入内容" type="number" :disabled="approveModify"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="11">
           <el-form-item label="运费模板" prop="goodsPostageId">
-            <el-select v-model="data.goodsPostageId" placeholder="请选择">
+            <el-select v-model="data.goodsPostageId" placeholder="请选择" :disabled="approveModify">
               <el-option
                 v-for="item in models"
                 :key="item.modelId"
@@ -70,14 +70,14 @@
         </el-col>
         <el-col :span="11">
           <el-form-item label="商品条形码" prop="goodsBarCode">
-            <el-input v-model="data.goodsBarCode" placeholder="请输入内容"></el-input>
+            <el-input v-model="data.goodsBarCode" placeholder="请输入内容" :disabled="approveModify"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="11">
           <el-form-item label="关键词" prop="goodsKeyWord">
-            <el-input v-model="data.goodsKeyWord" placeholder="请输入内容"></el-input>
+            <el-input v-model="data.goodsKeyWord" placeholder="请输入内容" :disabled="approveModify"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -88,14 +88,14 @@
               <el-row :gutter="10" style="width:100%; margin-top:6px;">
                 <template v-for="(guarantee,index) in goodsGuaranteeList" v-if="guarantee.isDefault===1">
                   <el-col :span="5">
-                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId" :title="guarantee.guaranteeName+' '+guarantee.guaranteeDesc">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
+                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId" :title="guarantee.guaranteeName+' '+guarantee.guaranteeDesc" :disabled="approveModify">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
                   </el-col>
                 </template>
               </el-row>
               <el-row :gutter="10" style="width:100%;margin-left:0;" v-if="goodsGuaranteeList.length>4">
                 <template v-for="(guarantee,index) in goodsGuaranteeList" v-if="guarantee.isDefault===0">
                   <el-col :span="10">
-                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId" class="ellipsis" style="width:100%;" :title="guarantee.guaranteeName+' '+guarantee.guaranteeDesc">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
+                    <el-checkbox :key="guarantee.guaranteeId" :label="guarantee.guaranteeId" class="ellipsis" style="width:100%;" :title="guarantee.guaranteeName+' '+guarantee.guaranteeDesc" :disabled="approveModify">{{guarantee.guaranteeName}}<span v-if="guarantee.guaranteeDesc !=''">-{{guarantee.guaranteeDesc}}</span></el-checkbox>
                   </el-col>
                 </template>
               </el-row>
@@ -234,43 +234,43 @@
             <tr v-for="(good,index) in goodsSKUs">
               <td>{{good.skuName}}</td>
               <td>
-                <el-switch
+                <el-switch :disabled="oldGoodsSpecifications.indexOf(good.skuName)!==-1&&approveModify"
                   v-model="good.show"
                   active-color="#13ce66"
                   inactive-color="#ccc">
                 </el-switch>
               </td>
               <td>
-                  <el-input v-model="good.availableNum" placeholder="请输入内容" type="number" @blur="checkInventory(good.availableNum,index,'availableNum',goodsSKUs)"></el-input>
+                  <el-input v-model="good.availableNum" placeholder="请输入内容" type="number" @blur="checkInventory(good.availableNum,index,'availableNum',goodsSKUs)" :disabled="oldGoodsSpecifications.indexOf(good.skuName)!==-1&&approveModify"></el-input>
               </td>
               <td>
-                  <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkWeight(good.weight,index,'weight',goodsSKUs)"></el-input>
+                  <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkWeight(good.weight,index,'weight',goodsSKUs)" :disabled="oldGoodsSpecifications.indexOf(good.skuName)!==-1&&approveModify"></el-input>
               </td>
               <td>
                   <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkPhotographPrice(good.photographPrice,index,'photographPrice',goodsSKUs,good.supplyPrice)"></el-input>
               </td>
               <td>
-                <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkMarketPrice(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
+                <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkMarketPrice(good.marketPrice,index,'marketPrice',goodsSKUs)" :disabled="oldGoodsSpecifications.indexOf(good.skuName)!==-1&&approveModify"></el-input>
               </td>
               <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkSupplyPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs,good.photographPrice)"></el-input></td>
               <td v-if="countMode==2">{{serviceRate}}</td>
               <td>
-                <el-input v-model="good.goodsCode" placeholder="请输入内容" :maxlength = "30" @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)"></el-input>
+                <el-input v-model="good.goodsCode" placeholder="请输入内容" :maxlength = "30" @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)" :disabled="oldGoodsSpecifications.indexOf(good.skuName)!==-1&&approveModify"></el-input>
               </td>
             </tr>
             <tr v-if="goodsSKUs.length!=0">
               <td colspan="2">批量设置</td>
               <td>
-                <el-input v-model="setUp.availableNum" placeholder="请输入内容"></el-input>
+                <el-input v-model="setUp.availableNum" placeholder="请输入内容" :disabled="approveModify"></el-input>
               </td>
               <td>
-                <el-input v-model="setUp.weight" placeholder="请输入内容"></el-input>
+                <el-input v-model="setUp.weight" placeholder="请输入内容" :disabled="approveModify"></el-input>
               </td>
               <td>
                 <el-input v-model="setUp.photographPrice" placeholder="请输入内容"></el-input>
               </td>
               <td>
-                <el-input v-model="setUp.marketPrice" placeholder="请输入内容"></el-input>
+                <el-input v-model="setUp.marketPrice" placeholder="请输入内容" :disabled="approveModify"></el-input>
               </td>
               <td v-if="countMode==2">{{serviceRate}}</td>
               <td v-if="countMode==1">
@@ -302,7 +302,7 @@
             :action="uploadUrl" name="img"
             list-type="picture" :on-success="success" :data="upLoadData" :file-list="fileList"
             show-file-list :limit=5 :before-upload="beforeAvatarUpload"
-            :on-remove="handleRemove" >
+            :on-remove="handleRemove"  :disabled="approveModify">
             <i class="el-icon-plus"></i>
           </el-upload>
           <i v-if="imgShowList" style="color:red; font-style:normal;">商品主图不能为空</i>
@@ -317,7 +317,7 @@
         <el-col :span="3" style="margin-top:20px;">主图视频</el-col>
         <el-col :span="20" class="upLoadBox">
           <div id="videoContainer" v-if="uploadBtn">
-              <el-button id="selectVideo" type="primary">上传视频<i class="el-icon-upload el-icon--right"></i></el-button>
+              <el-button id="selectVideo" type="primary" :disabled="approveModify">上传视频<i class="el-icon-upload el-icon--right"></i></el-button>
           </div>
           <div class="uploadProgress" v-if="uploadProgress">
             <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
@@ -325,9 +325,9 @@
             <a class="stop" @click="pauseUpload"></a>
           </div>
           <div class="uploadProgress" v-if="uploadRepeat" id="videoContainer">
-            <a class="repeat" id="selectVideo"><i></i>重新上传</a>
+            <a class="repeat" id="selectVideo" :disabled="approveModify"><i></i>重新上传</a>
             <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
-            <a class="stop" @click="delectUpload"></a>
+            <a v-if="!approveModify" class="stop" @click="delectUpload"></a>
           </div>
         </el-col>
         <el-col :offset="3" :span='21'>
@@ -336,9 +336,15 @@
       </el-row>
       <el-row :gutter="20" style="z-index:1;">
         <el-col :span="3">图文详情</el-col>
-        <el-col :span="20" style="height:400px;z-index:1;">
+        <el-col :span="20" v-if="!approveModify" style="height:400px;z-index:1;">
           <div id="editor-container">
             <UE :config=config ref="ue"></UE>
+          </div>
+        </el-col>
+        <el-col :span="20" v-if="approveModify">
+          <i class="nothing" v-if="data.goodsDesc==''">--</i>
+          <div v-html="data.goodsDesc">
+            {{data.goodsDesc}}
           </div>
         </el-col>
       </el-row>
@@ -348,15 +354,30 @@
       <el-row :gutter="20" v-if="handle_toggle=='add'">
         <el-col :span="3"><i style="color:red;">* </i>设置上架</el-col>
         <el-col :span="21">
-          <el-radio v-model="data.goodsShelves" label="1">手动上架</el-radio>
+          <el-radio v-model="data.goodsShelves" label="1" :disabled="approveModify">手动上架</el-radio>
           <p>平台审核通过后，商家需手动上架商品</p>
-          <el-radio v-model="data.goodsShelves" label="2">审核通过立即上架</el-radio>
+          <el-radio v-model="data.goodsShelves" label="2" :disabled="approveModify">审核通过立即上架</el-radio>
           <p>平台审核通过，商品自动上架，无需商家操作</p>
         </el-col>
       </el-row>
     <el-button v-if="handle_toggle=='add'" type="primary" @click="save('ruleForm')">提交审核</el-button>
     <el-button v-if="handle_toggle!='add'" type="primary" @click="save('ruleForm')">保存修改</el-button>
     <el-button @click="goBack">取消</el-button>
+    <!--变更理由-->
+    <div class="hptczp" v-if="changeMind"></div>
+    <div class="hptczp_content" v-if="changeMind">
+      <div class="hptczp_header">
+        <span>变更原因</span>
+        <a class="close" @click="changeMind=!changeMind"></a>
+      </div>
+      <div class="hptczp_body">
+          <textarea placeholder="请填写100字符以内内容" v-model="data.changeReason" maxlength="100"></textarea>
+      </div>
+      <div class="hptczp_footer">
+        <el-button type="primary" size="medium" :disabled="data.changeReason==''||data.changeReason== undefined" @click="save('ruleForm')">确认</el-button>
+        <el-button size="medium" @click="changeMind=!changeMind">取消</el-button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -472,7 +493,7 @@
         goodsSpecifications:[{itemName:'',itemValue:[],state1:''}],
         goodsMainImages:[],
         goodsGuarantee:[],
-        data: {skuFlag: '0' ,goodsMinQuantity:'',goodsBarCode:'',goodsKeyWord:'',goodsShelves:'1',goodsClassifyId:'',goodsMainVideo:''},
+        data: {changeReason:'',skuFlag: '0' ,goodsMinQuantity:'',goodsBarCode:'',goodsKeyWord:'',goodsShelves:'1',goodsClassifyId:'',goodsMainVideo:''},
         value:'',
         dynamicTags: [],
         dialogImageUrl: '',
@@ -522,6 +543,8 @@
         oldServiceRate:'',//原分类费率
         newServiceRate:'',//新分类费率
         oldGoodsSpecifications:[],//原有规格值
+        approveModify:false,//审核编辑页不可修改项
+        changeMind:false,//变更理由弹层
       }
     },
     created() {},
@@ -805,8 +828,6 @@
                 that.oldGoodsSpecifications.push(result.content.goodsSpecifications[a].itemValue[b].spec_name)
               }
             }
-            //that.oldGoodsSpecifications = result.content.goodsSpecifications
-            // sessionStorage.setItem('oldGoodsSpecifications',JSON.stringify(result.content.goodsSpecifications))
             that.goodsSKUs = result.content.goodsSKUs
             that.data.goodsMinQuantity = result.content.goodsMinQuantity.toString()
             that.data.goodsKeyWord = result.content.goodsKeyWord.join()
@@ -834,10 +855,20 @@
               that.uploadBtn = false
               that.uploadRepeat = true
             }
-            that.$refs.ue.setUEContent(result.content.goodsDesc)
-            that.$nextTick(()=>{
-              that.initUpload()
-            })
+            console.log(that.$route.query.approveStatus=='1')
+            if(that.$route.query.approveStatus=='1'){
+              //商品审核进入时禁用选项
+              console.log('商品审核进入时禁用选项')
+              that.$('.addGuarantee').css('display','none')
+              that.approveModify = true
+            }else{
+              //商品库进入时初始化UE和七牛
+              console.log('商品库进入时初始化UE和七牛')
+              that.$nextTick(()=>{
+                that.$refs.ue.setUEContent(result.content.goodsDesc)
+                that.initUpload()
+              })
+            }
           }
         })
         // that.$nextTick(()=>{
@@ -1172,8 +1203,8 @@
             // console.log(that.data.goodsSKUs)
             that.$.ajax({
               type: that.handle_toggle === 'add' ? 'post' : 'put',
-              url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/web/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/web/goods' : that.localbase + 'm2c.scm/web/goods/approve',
-              // url: that.handle_toggle === 'add' ? 'http://10.0.40.23:8081/m2c.scm/web/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? 'http://10.0.40.23:8081/m2c.scm/web/goods' : 'http://10.0.40.23:8081/m2c.scm/web/goods/approve',
+              // url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/web/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/web/goods' : that.localbase + 'm2c.scm/web/goods/approve',
+              url: that.handle_toggle === 'add' ? 'http://10.0.40.23:8081/m2c.scm/web/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? 'http://10.0.40.23:8081/m2c.scm/web/goods' : 'http://10.0.40.23:8081/m2c.scm/web/goods/approve',
               data:Object.assign(that.data,a),
               success: function (result) {
                 if (result.status === 200) {
@@ -1182,7 +1213,21 @@
                     message:'保存成功'
                   })
                   that.$router.push({name:"goodList"})
-                } else {
+                } else if(result.status === 503){
+                  that.$confirm('该商品有待审核信息，若再次编辑提交，之前待审核的信息将被清除', '提示', {
+                    confirmButtonText: '继续提交',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                  }).then(() => {
+                    that.changeMind = true
+                  }).catch(() => {
+                    return false
+                  })
+                }
+                else if(result.status === 505){
+                  that.changeMind = true
+                }
+                else {
                   that.$message(result.errorMessage)
                   that.goodsGuarantee=[]
                   for (var k = 0; k < that.goodsSKUs.length; k++) {
@@ -1691,6 +1736,10 @@
             this.goodsMainImages = JSON.parse(sessionStorage.getItem('goodsMainImages'))
             this.$refs.ue.setUEContent(sessionStorage.getItem('goodsDesc'))
             this.disabled = true
+            if(this.$route.query.approveStatus===1){
+              this.approveModify = true
+            }
+            
             sessionStorage.setItem('data','')
             sessionStorage.setItem('goodsSKUs','')
             sessionStorage.setItem('goodsGuarantCheck','')
@@ -1728,6 +1777,84 @@
   }
 </script>
 <style lang="scss" scoped>
+.hptczp{
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  background:rgba(0,0,0,0.5);
+  z-index: 999;
+  opacity:0.3;
+}
+.hptczp_content{
+  width: 400px;
+  height: 280px;
+  background: #fff;
+  z-index: 9999;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  margin-left: -200px;
+  margin-top: -140px;
+  background: #FFFFFF;
+  border-radius: 4px;
+  .hptczp_header{
+    width:100%;
+    height: 50px;
+    background: #DFE9F6;
+    padding-left: 20px;
+    padding-right: 20px;
+    span{
+      display: inline-block;
+      line-height: 50px;
+    }
+    a.close{
+      opacity:1;display:inline-block;width:24px;height:24px;float:right; margin-top:12px;background:url(../../../assets/images/ico_close.png) no-repeat center center;
+    }
+  }
+  .hptczp_body{
+    padding-left: 20px;
+    padding-right: 20px;
+    background: #FFFFFF;
+    margin-top: 10px;
+    textarea{
+      width: 100%;
+      height: 100%;
+      border: 1px solid #E5E5E5;
+      width: 360px;
+      height: 140px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  }
+  .hptczp_footer{
+      height: 80px;
+      padding-top: 10px;
+      padding-left: 50%;
+      .btn {
+        width: 80px;
+        height: 30px;
+        border: none;
+        border-radius: 2px;
+        color: #fff;
+      }
+      .save {
+        margin-left: -110px;
+        background: #0086FF;
+      }
+      .cancel {
+        margin-left: 40px;
+        background: #FFF;
+        border: 1px solid #CCCCCC;
+        color: #444;
+      }
+
+  }
+}
 .upLoadBox{height:auto;margin-top:20px;}
 .uploadProgress{position:relative;height:100px;}
 .uploadProgress img{position:absolute;top:0;left:0;width:150px;height:100px;}
@@ -1747,91 +1874,9 @@
   -webkit-transform: rotate(120deg);
   -moz-transform: rotate(120deg);
 }
-/*ico_reduce.png
-<div id="videoContainer" v-if="uploadBtn">
-              <el-button id="selectVideo" type="primary">上传视频<i class="el-icon-upload el-icon--right"></i></el-button>
-          </div>
-          <div class="uploadProgress" v-if="uploadProgress">
-            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
-            <img src="../../../assets/images/icon-delet.png" class="myicon">
-            <a class="stop" @click="pauseUpload"></a>
-          </div>
-          <div class="uploadProgress" v-if="uploadRepeat">
-            <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
-            <a class="repeat" @click="initUpload"></a>
-            <a class="stop" @click="delectUpload"></a>
-          </div>
-*/
-
   .graySpan span{color:#999;}
   .graySpan .el-row,.graySpan .el-row .el-col-10{margin-bottom:0;height:45px;}
   a.addGuarantee{margin-left:115px;padding-left:20px;margin-top:-10px;float:left;background:url(../../../assets/images/ico_add.png) no-repeat;}
-  .dropdown1{
-      display: inline-block;
-      font-size: 16px;
-      line-height: 84px;
-      z-index:999999999999999;
-      .sort{
-        display: inline;
-        margin: 0 20px 0 30px;
-      }
-      .state{
-        display: inline;
-        margin-right: 20px;
-      }
-      .dropdown-menu,.dropdown1-menu {
-        li{
-          line-height: 30px;
-          padding-left: 25px;
-          position: relative;
-          i{
-            font-size: 10px;
-            color: gray;
-            padding-left: 15px;
-            position: absolute;
-            top: 8px;
-            right: 19px;
-          }
-        }
-      }
-      .dropdown1-menu{
-        position: relative;
-        top:0;
-      }
-        .dropdown1-menu>li{
-          width:120px;height:40px;background:#F56C6C;
-        }
-        .dropdown1-menu>li:hover{
-          background:#f65ffC;
-        }
-        .dropdown1-menu>li .dropdown1-menuSecond{display:none;
-          .dropdown1-menuTired{display:none;}
-        }
-        .dropdown1-menu>li:hover .dropdown1-menuSecond{
-          display:block;
-          position: absolute;
-          left: 119px;top:0;
-          li{
-            width:120px;height:40px;background:#18DCF6;
-            position: relative;
-          }
-          li:hover{
-            background:#14DCc6;
-          }
-        }
-        .dropdown1-menuSecond>li:hover .dropdown1-menuTired{
-          display:block;
-          position: absolute;
-          left: 119px;top:0;
-          li{
-            width:120px;height:40px;background:#18DCF6;
-            position: static;
-          }
-          li:hover{
-            background:#14DCc6;
-          }
-        }
-    }
   .marginTop20{margin-top:20px;}
   .el-upload--picture-card{overflow: hidden;}
   .infoBox{width:96%; margin:20px 2%;background:#fff;padding:20px 3%;float:left;position:relative;z-index:1;}
@@ -1846,23 +1891,6 @@
   .el-col {
     border-radius: 4px;
   }
-  .bg-purple-dark {
-    background: #99a9bf;
-  }
-  .bg-purple {
-    background: #d3dce6;
-  }
-  .bg-purple-light {
-    background: #e5e9f2;
-  }
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-  }
-  .row-bg {
-    padding: 10px 0;
-    background-color: #f9fafc;
-  }
   .tabPane table{width:100%; line-height:60px; text-align: center;margin-top:20px;margin-bottom:20px;}
   .tabPane table .el-input{width:auto;}
   .tabPane table th{
@@ -1876,18 +1904,6 @@
   }
   .el-tag + .el-tag {
     margin-left: 10px;
-  }
-  .button-new-tag {
-    margin-left: 10px;
-    height: 32px;
-    line-height: 30px;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-  .input-new-tag {
-    width: 90px;
-    margin-left: 10px;
-    vertical-align: bottom;
   }
 
 </style>
