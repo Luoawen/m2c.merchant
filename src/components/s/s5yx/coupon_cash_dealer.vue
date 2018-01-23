@@ -115,6 +115,7 @@
                       <div class="shopboxcen">暂时还没有商品可供选择哦</div>
                     </div>
                     <el-pagination v-if="goodsResult.content != null && goodsResult.content.length > 0"
+                     @size-change="goodsStoreHandleSizeChange"
                       @current-change="changeGoodsPageNo"
                       :current-page="goodsResult.pageNumber"
                       :page-size="10"
@@ -371,6 +372,7 @@
                   <div class="shopboxcen">暂时还没有商品可供选择哦</div>
                 </div>
                 <el-pagination v-if="goodsResult.content != null && goodsResult.content.length > 0"
+                  @size-change="goodsStoreHandleSizeChange"
                   @current-change="changeGoodsPageNo"
                   :current-page="goodsResult.pageNumber"
                   :page-size="8"
@@ -607,6 +609,11 @@ export default {
           that.goodsResult = result
         }
       })
+    },
+    goodsStoreHandleSizeChange(pageNo){
+       let _this = this
+      _this.goods_query_item.pageNum = pageNo
+      _this.goodsSelect()
     },
     // 商品查询改变分页页码
     changeGoodsPageNo (pageNo) {
