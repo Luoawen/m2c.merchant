@@ -226,7 +226,7 @@
               <div class="tdcolor mt10" v-if="comment.skuName != ''">规格：{{comment.skuName}}</div>
             </td>
             <td>
-              {{comment.orderId}}
+              <span class="ellipsis" :title="comment.orderId">{{comment.orderId}}</span>
             </td>
             <td>
               <div>{{comment.buyerName}}</div>

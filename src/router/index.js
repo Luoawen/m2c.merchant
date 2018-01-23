@@ -123,12 +123,6 @@ export default new Router({
           meta: {title: '商品详情',bread: '商品列表>商品详情', pathR:'/s/goodList'}
         },
         {
-          path: 'test',
-          name: 'test',
-          component: test,
-          meta: {title: '商品详情',bread: '商品列表>商品详情', pathR:'/s/goodList'}
-        },
-        {
           path: 'survey',
           name: 'survey',
           component: survey,

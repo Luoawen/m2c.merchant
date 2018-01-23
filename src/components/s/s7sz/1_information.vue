@@ -95,7 +95,9 @@
       activeName:'first',
       getImgWidth:'',
       height:'',
-      width:''
+      width:'',
+      objUrl:'',
+      obj:''
     }
   },
   created () {
@@ -179,31 +181,40 @@
       } else if (window.webkitURL !== undefined) { // webkit or chrome
         url = window.webkitURL.createObjectURL(file)
       }
-      console.log(url)
+      console.log('url:',url)
       return url
     },
     // 上传背景图
     uploadBg ($event) {
       let target = $event.target
-      let objUrl = this.getBgURL(target.files[0])
-      let size = target.files[0].size
-      let type = target.files[0].type
-      console.log('---',target,objUrl,size,type)
-      if(type=='image/png'||type=='image/jpeg'){
-        console.log(size)
-        if (size >= 500000 )
-        {
-          this.$message.error('请上传500K以内的图片')
-        }else {
-          if (objUrl) {
-            this.bgShow = true
-            document.querySelector('#bgImg').src = objUrl
-            console.log(document.querySelector('#bgImg').src)
-            this.bgChange = true
+      // let objUrl
+      // console.log('target.files[0]:',target.files[0])
+      //let objUrl = this.getBgURL(target.files[0])
+      if(target.files[0]!==undefined){
+        this.objUrl = this.getBgURL(target.files[0])
+        this.obj = document.querySelector('#bgInput').files[0]
+        let size = target.files[0].size
+        let type = target.files[0].type
+        // console.log('---',target,this.objUrl,size,type)
+        if(type=='image/png'||type=='image/jpeg'){
+          // console.log(size)
+          if (size >= 500000 )
+          {
+            this.$message.error('请上传500K以内的图片')
+          }else {
+            if (this.objUrl) {
+              this.bgShow = true
+              document.querySelector('#bgImg').src = this.objUrl
+              // console.log(document.querySelector('#bgImg').src)
+              this.bgChange = true
+            }
           }
+        }else{
+          this.$message.error('请上传JPG/PNG格式的图片')
         }
       }else{
-        this.$message.error('请上传JPG/PNG格式的图片')
+        // console.log("this.objUrl:",this.objUrl)
+        return
       }
     },
     // 修改背景图
@@ -213,9 +224,11 @@
         callback()
       } else {
         let formData = new FormData()
-        formData.append('img', document.querySelector('#bgInput').files[0])
+        formData.append('img', this.obj)
         formData.append('token', sessionStorage.getItem('mToken'))
         formData.append('imgGroup', 4)
+        // console.log("document.querySelector('#bgInput').files[0]:",document.querySelector('#bgInput').files[0])
+        // console.log("this.obj:",this.obj)
         that.$.ajax({
           type: 'post',
           url: that.base + 'm2c.support/img/upload',
