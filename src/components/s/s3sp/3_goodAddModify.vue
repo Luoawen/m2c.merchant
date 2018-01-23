@@ -1203,8 +1203,8 @@
             // console.log(that.data.goodsSKUs)
             that.$.ajax({
               type: that.handle_toggle === 'add' ? 'post' : 'put',
-              // url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/web/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/web/goods' : that.localbase + 'm2c.scm/web/goods/approve',
-              url: that.handle_toggle === 'add' ? 'http://10.0.40.23:8081/m2c.scm/web/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? 'http://10.0.40.23:8081/m2c.scm/web/goods' : 'http://10.0.40.23:8081/m2c.scm/web/goods/approve',
+              url: that.handle_toggle === 'add' ? that.localbase + 'm2c.scm/web/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? that.localbase + 'm2c.scm/web/goods' : that.localbase + 'm2c.scm/web/goods/approve',
+              // url: that.handle_toggle === 'add' ? 'http://10.0.40.23:8081/m2c.scm/web/goods/approve' : that.$route.query.approveStatus==''||that.$route.query.approveStatus==undefined ? 'http://10.0.40.23:8081/m2c.scm/web/goods' : 'http://10.0.40.23:8081/m2c.scm/web/goods/approve',
               data:Object.assign(that.data,a),
               success: function (result) {
                 if (result.status === 200) {
