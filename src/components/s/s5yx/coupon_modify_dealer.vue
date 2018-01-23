@@ -69,6 +69,7 @@
                   </div>
                   <div class="Alreadychosen">
                     <div class="Alreadychosen_t">
+                      <!-- <pre>{{removeGoodsList.length}}</pre> -->
                       已排除 <span class="bluecolor02">{{removeGoodsList.length}}</span> 件商品
                     </div>
                     <div class="Alreadychosen_c">
@@ -128,9 +129,13 @@
                     <div class="shopbox_have clear" v-if="goodsResult.content != null && goodsResult.content.length > 0">
                       <!--控制点击的时候加上class名字b_active，就可以出现点击效果！！！-->
                       <div v-for="(goods, index) in goodsResult.content" @click="chooseGoods(goods)">
-                        <el-tooltip :content="goods.goodsName" placement="right-start" effect="light">
                           <div :class="['shopbox_have_box', 'fl', (goods.isOld == 1 || goods.isChoosed == 1) ? 'b_active' : '']">
-                            <div class="wose shopbox_have_tit clear">{{goods.goodsName}}</div>
+                             <div class="wose shopbox_have_tit clear02">
+                            <el-tooltip :content="goods.goodsName" placement="top-start" effect="light" v-if="goods.goodsName.length > 15">
+                              <span>{{goods.goodsName.substring(0,15).concat('...')}}</span>
+                            </el-tooltip>
+                            <span v-if="goods.goodsName.length <= 15">{{goods.goodsName}}</span>
+                          </div>
                             <div class="shopbox_have_img">
                               <div class="img fl mr10">
                                 <img :src="goods.goodsImageUrl"/>
@@ -143,7 +148,6 @@
                             </div>
                             <i :class="(goods.isOld == 1 || goods.isChoosed == 1) ? 'icon_selected' : ''"></i>
                           </div>
-                        </el-tooltip>
                       </div>
                     </div>
                     <!-- 请判断没有商品的时候显示 -->
@@ -572,13 +576,11 @@ export default {
         _this.couponParams.total_num = _this.couponInfo.couponTotal
         if (_this.couponInfo.rangeType === 0) {
           for (let i = 0; i < _this.couponInfo.removeRangeList.length; i++) {
-            if (_this.couponInfo.removeRangeList[i].rangeType == 2) {
               let removeGoods = {}
               removeGoods.goodsId = _this.couponInfo.removeRangeList[i].goodsId
               removeGoods.goodsName = _this.couponInfo.removeRangeList[i].entityName
               removeGoods.goodsImageUrl = _this.couponInfo.removeRangeList[i].goodsPicUrl
               _this.removeGoodsList.push(removeGoods)
-            }
           }
         }
         if (_this.couponInfo.rangeType === 2) {
