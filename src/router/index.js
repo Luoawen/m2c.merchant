@@ -162,31 +162,31 @@ export default new Router({
           path: 'coupon_cash_dealer',
           name: 'coupon_cash_dealer',
           component: coupon_cash_dealer,
-          meta: {title: '代金券'}
+          meta: {title: '代金券',bread: '工具>优惠券列表>代金券', pathR:'/s/coupon_list'}
         },
         {
           path: 'coupon_detail_dealer',
           name: 'coupon_detail_dealer',
           component: coupon_detail_dealer,
-          meta: {title: '优惠券详情'}
+          meta: {title: '优惠券详情',bread: '工具>优惠券列表>优惠券详情', pathR:'/s/coupon_list'}
         },
         {
           path: 'coupon_discount_dealer',
           name: 'coupon_discount_dealer',
           component: coupon_discount_dealer,
-          meta: {title: '折扣券'}
+          meta: {title: '折扣券',bread: '工具>优惠券列表>折扣券', pathR:'/s/coupon_list'}
         },
         {
           path: 'coupon_list',
           name: 'coupon_list',
           component: coupon_list,
-          meta: {title: '优惠券列表'}
+          meta: {title: '优惠券列表',bread: '工具>优惠券列表', pathR:'/s/coupon_list'}
         },
         {
           path: 'coupon_modify_dealer',
           name: 'coupon_modify_dealer',
           component: coupon_modify_dealer,
-          meta: {title: '修改代金券'}
+          meta: {title: '修改优惠券',bread: '工具>优惠券列表>修改优惠券', pathR:'/s/coupon_list'}
         },
         {
           path: 'couponShare',
@@ -198,7 +198,7 @@ export default new Router({
           path: 'couponShareRecord',
           name: 'couponShareRecord',
           component: couponShareRecord,
-          meta: {title: '代金券发放记录'}
+          meta: {title: '代金券发放记录',bread: '工具>优惠券列表>发放代金券>代金券发放记录', pathR:'/s/coupon_list'}
         },
         {
           path: 'marketing',
