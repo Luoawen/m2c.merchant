@@ -139,21 +139,21 @@
               <tr v-for="(good,index) in goodsSKUs">
                 <td>无</td>
                 <td>
-                    <el-input v-model="good.availableNum" placeholder="请输入内容" type="number" @blur="checkInventory(good.availableNum,index,'availableNum',goodsSKUs)"></el-input>
+                    <el-input v-model="good.availableNum" placeholder="请输入内容" type="number" @blur="checkInventory(good.availableNum,index,'availableNum',goodsSKUs)" :disabled="approveModify"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkWeight(good.weight,index,'weight',goodsSKUs)"></el-input>
+                    <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkWeight(good.weight,index,'weight',goodsSKUs)" :disabled="approveModify"></el-input>
                 </td>
                 <td>
                     <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkPhotographPrice(good.photographPrice,index,'photographPrice',goodsSKUs,good.supplyPrice)"></el-input>
                 </td>
                 <td>
-                  <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkMarketPrice(good.marketPrice,index,'marketPrice',goodsSKUs)"></el-input>
+                  <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkMarketPrice(good.marketPrice,index,'marketPrice',goodsSKUs)" :disabled="approveModify"></el-input>
                 </td>
                 <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkSupplyPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs,good.photographPrice)"></el-input></td>
                 <td v-if="countMode==2">{{serviceRate}}</td>
                 <td>
-                  <el-input v-model="good.goodsCode" placeholder="请输入内容" :maxlength = "30" @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)"></el-input>
+                  <el-input v-model="good.goodsCode" placeholder="请输入内容" :maxlength = "30" @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)" :disabled="approveModify"></el-input>
                 </td>
               </tr>
             </tbody>
@@ -302,7 +302,7 @@
             :action="uploadUrl" name="img"
             list-type="picture" :on-success="success" :data="upLoadData" :file-list="fileList"
             show-file-list :limit=5 :before-upload="beforeAvatarUpload"
-            :on-remove="handleRemove"  :disabled="approveModify">
+            :on-remove="handleRemove" :disabled="approveModify">
             <i class="el-icon-plus"></i>
           </el-upload>
           <i v-if="imgShowList" style="color:red; font-style:normal;">商品主图不能为空</i>
