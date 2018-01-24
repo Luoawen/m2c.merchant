@@ -68,48 +68,48 @@
         <el-table-column
           label="订货号"
            width="200"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span><!--{{scope.row.orderType==0?'换货':scope.row.orderType==1?'退货':scope.row.orderType==2?'仅退款':'-'}}-->{{scope.row.dealerOrderId}}</span></template>
         </el-table-column>
         <el-table-column
           label="订货金额/元"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span>{{(scope.row.goodsTotalAmount)}}</span></template>
         </el-table-column>
         <el-table-column
           label="售后金额/元"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span>{{(scope.row.afterSellAmount)}}</span></template>
         </el-table-column>
         <el-table-column
           label="服务费/元"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span>{{scope.row.serviceTotalCharge == undefined ? '-':(scope.row.serviceTotalCharge)}}</span></template>
         </el-table-column>
         <el-table-column
           label="满减分摊/元"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span>{{scope.row.activityTotalAmount == undefined ? '-':(scope.row.activityTotalAmount)}}</span></template>
         </el-table-column>
          <el-table-column
           label="优惠券分摊/元"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span>{{scope.row.couponShareTotalAmount == undefined ? '-':(scope.row.couponShareTotalAmount)}}</span></template>
         </el-table-column>
         <el-table-column
           label="结算总额/元"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span>{{scope.row.settleTotalAmount == undefined ? '-':(scope.row.settleTotalAmount)}}</span></template>
         </el-table-column>
         <el-table-column
           label="结算状态"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span>{{scope.row.settleStatus==1?'待结算':scope.row.settleStatus == 2 ?'已结算':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="更新时间"
            width="200"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span >{{scope.row.updatedTime == undefined ? '-' : date_format(new Date(scope.row.updatedTime), 'yyyy-MM-dd hh:mm:ss')  }}</span></template>
         </el-table-column>
       </el-table>

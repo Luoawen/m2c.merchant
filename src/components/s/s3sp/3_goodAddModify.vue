@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <el-row>
-      <el-col :span="24"><h4>基本信息</h4></el-col>
+      <el-col :span="24"><h4 class="h4">基本信息</h4></el-col>
     </el-row>
     <el-form :model="data" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-row :gutter="20" style="margin-bottom:0;">
@@ -108,11 +108,11 @@
     </el-form>
       <el-row>
         <el-col>
-          <h4>商品规格</h4>
+          <h4 class="h4">商品规格</h4>
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="3">商品规格</el-col>
+        <el-col :span="3" class="alginRight">商品规格</el-col>
         <el-col :span="21">
           <el-radio v-model="data.skuFlag" label="0" id="skuFlag0" @change="clearSKU">单一规格</el-radio>
           <el-radio v-model="data.skuFlag" label="1" id="skuFlag1" @change="clearGoodsSKUs">多规格</el-radio>
@@ -234,28 +234,28 @@
             <tr v-for="(good,index) in goodsSKUs">
               <td>{{good.skuName}}</td>
               <td>
-                <el-switch :disabled="oldGoodsSpecifications.indexOf(good.skuName)!==-1&&approveModify"
+                <el-switch :disabled="good.skuId!==''&&approveModify"
                   v-model="good.show"
                   active-color="#13ce66"
                   inactive-color="#ccc">
                 </el-switch>
               </td>
               <td>
-                  <el-input v-model="good.availableNum" placeholder="请输入内容" type="number" @blur="checkInventory(good.availableNum,index,'availableNum',goodsSKUs)" :disabled="oldGoodsSpecifications.indexOf(good.skuName)!==-1&&approveModify"></el-input>
+                  <el-input v-model="good.availableNum" placeholder="请输入内容" type="number" @blur="checkInventory(good.availableNum,index,'availableNum',goodsSKUs)" :disabled="good.skuId!==''&&approveModify"></el-input>
               </td>
               <td>
-                  <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkWeight(good.weight,index,'weight',goodsSKUs)" :disabled="oldGoodsSpecifications.indexOf(good.skuName)!==-1&&approveModify"></el-input>
+                  <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkWeight(good.weight,index,'weight',goodsSKUs)" :disabled="good.skuId!==''&&approveModify"></el-input>
               </td>
               <td>
                   <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkPhotographPrice(good.photographPrice,index,'photographPrice',goodsSKUs,good.supplyPrice)"></el-input>
               </td>
               <td>
-                <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkMarketPrice(good.marketPrice,index,'marketPrice',goodsSKUs)" :disabled="oldGoodsSpecifications.indexOf(good.skuName)!==-1&&approveModify"></el-input>
+                <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkMarketPrice(good.marketPrice,index,'marketPrice',goodsSKUs)" :disabled="good.skuId!==''&&approveModify"></el-input>
               </td>
               <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkSupplyPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs,good.photographPrice)"></el-input></td>
               <td v-if="countMode==2">{{serviceRate}}</td>
               <td>
-                <el-input v-model="good.goodsCode" placeholder="请输入内容" :maxlength = "30" @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)" :disabled="oldGoodsSpecifications.indexOf(good.skuName)!==-1&&approveModify"></el-input>
+                <el-input v-model="good.goodsCode" placeholder="请输入内容" :maxlength = "30" @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)" :disabled="good.skuId!==''&&approveModify"></el-input>
               </td>
             </tr>
             <tr v-if="goodsSKUs.length!=0">
@@ -293,10 +293,10 @@
         <i v-if="sukShow5" style="color:red; font-style:normal;">商品编码为1-30字符的字母或数字且不能重复</i>
       </div>
       <el-row>
-        <el-col :span="24"><h4>商品详情</h4></el-col>
+        <el-col :span="24"><h4 class="h4">商品详情</h4></el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="3"><i style="color:red;">* </i>商品主图</el-col>
+        <el-col :span="3" class="alginRight"><i style="color:red;">* </i>商品主图</el-col>
         <el-col :span="21" id="dragImg">
           <el-upload
             :action="uploadUrl" name="img"
@@ -314,7 +314,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="3" style="margin-top:20px;">主图视频</el-col>
+        <el-col :span="3" style="margin-top:20px;" class="alginRight">主图视频</el-col>
         <el-col :span="20" class="upLoadBox">
           <div id="videoContainer" v-if="uploadBtn">
               <el-button id="selectVideo" type="primary" :disabled="approveModify">上传视频<i class="el-icon-upload el-icon--right"></i></el-button>
@@ -335,7 +335,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20" style="z-index:1;">
-        <el-col :span="3">图文详情</el-col>
+        <el-col :span="3" class="alginRight">图文详情</el-col>
         <el-col :span="20" v-if="!approveModify" style="height:400px;z-index:1;">
           <div id="editor-container">
             <UE :config=config ref="ue"></UE>
@@ -349,10 +349,10 @@
         </el-col>
       </el-row>
       <el-row v-if="handle_toggle=='add'">
-        <el-col :span="24"><h4>设置上架</h4></el-col>
+        <el-col :span="24"><h4 class="h4">设置上架</h4></el-col>
       </el-row>
       <el-row :gutter="20" v-if="handle_toggle=='add'">
-        <el-col :span="3"><i style="color:red;">* </i>设置上架</el-col>
+        <el-col :span="3" class="alginRight"><i style="color:red;">* </i>设置上架</el-col>
         <el-col :span="21">
           <el-radio v-model="data.goodsShelves" label="1" :disabled="approveModify">手动上架</el-radio>
           <p>平台审核通过后，商家需手动上架商品</p>
@@ -360,9 +360,10 @@
           <p>平台审核通过，商品自动上架，无需商家操作</p>
         </el-col>
       </el-row>
-    <el-button v-if="handle_toggle=='add'" type="primary" @click="save('ruleForm')">提交审核</el-button>
-    <el-button v-if="handle_toggle!='add'" type="primary" @click="save('ruleForm')">保存修改</el-button>
-    <el-button @click="goBack">取消</el-button>
+      <el-button v-if="handle_toggle=='add'" type="primary" @click="save('ruleForm')">提交审核</el-button>
+      <el-button v-if="handle_toggle!='add'" type="primary" @click="save('ruleForm')">保存修改</el-button>
+      <el-button @click="goBack">取消</el-button>
+
     <!--变更理由-->
     <div class="hptczp" v-if="changeMind"></div>
     <div class="hptczp_content" v-if="changeMind">
@@ -752,20 +753,23 @@
                           // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
                           let key
                           let res
+                          let timestamp = (new Date()).valueOf()
+                          let date = that.date_format(new Date(timestamp), 'yyyyMMdd')
                           if(info.response==undefined){
                             res = JSON.parse(info);
-                            key = res.key
+                            key = "video" + "/" + '8' + "/" + date + res.key
                           }else if(info.response!==undefined){
                             res = JSON.parse(info.response);
-                            key = res.key
+                            key = "video" + "/" + '8' + "/" + date + res.key
                           }else{
                             key = that.key
                           }
                           let domain = up.getOption('domain');
-                          let sourceLink = domain +'/'+ key; //获取上传成功后的文件的Url
+                          let sourceLink = domain +'/'+ key //获取上传成功后的文件的Url
                           that.data.goodsMainVideo = sourceLink
                           console.log(that.data.goodsMainVideo)
                           console.log('上传成功后')
+                          console.log(that.data)
                           that.initUpload()
                   },
                   'Error': function(up, err, errTip) {
@@ -877,7 +881,12 @@
       },
       // 新增商品保障
       addGuarantee(){
+        if(this.uploadProgress==true){
+          this.$message("您的视频还未上传完毕！")
+          return
+        }
         sessionStorage.setItem('data',JSON.stringify(this.data))
+        console.log(sessionStorage.getItem('data'))
         sessionStorage.setItem('goodsSpecifications',JSON.stringify(this.goodsSpecifications))
         sessionStorage.setItem('goodsSKUs',JSON.stringify(this.goodsSKUs))
         sessionStorage.setItem('goodsGuarantCheck',JSON.stringify(this.goodsGuarantCheck))
@@ -1173,7 +1182,10 @@
               that.imgShowList = true
               return
             }
-            
+            if(that.uploadProgress==true){
+              that.$message("您的视频还未上传完毕！")
+              return
+            }
             for (var k = 0; k < that.goodsSKUs.length; k++) {
               that.goodsSKUs[k].marketPrice = parseFloat(that.goodsSKUs[k].marketPrice).toFixed(2)
               that.goodsSKUs[k].photographPrice= parseFloat(that.goodsSKUs[k].photographPrice).toFixed(2)
@@ -1213,7 +1225,7 @@
                     type:'success',
                     message:'保存成功'
                   })
-                  that.$router.push({name:"goodList"})
+                  that.goBack()
                 } else if(result.status === 503){
                   that.$confirm('该商品有待审核信息，若再次编辑提交，之前待审核的信息将被清除', '提示', {
                     confirmButtonText: '继续提交',
@@ -1289,7 +1301,7 @@
         that.goodsSKUs=[]
           if(that.goodsSpecifications.length==1 || that.goodsSpecifications[1].itemValue.length==0){
             for(var j=0;j<that.goodsSpecifications[0].itemValue.length;j++){
-              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[j].spec_name + '",show:true}' + ')'))
+              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[j].spec_name + '",skuId:"",show:true}' + ')'))
             }
             for(var a=0;a<goodSkuList.length;a++){
               for(var b=0;b<that.goodsSKUs.length;b++){
@@ -1716,6 +1728,14 @@
           this.fileList = JSON.parse(sessionStorage.getItem('fileList'))
           this.goodsMainImages = JSON.parse(sessionStorage.getItem('goodsMainImages'))
           this.$refs.ue.setUEContent(sessionStorage.getItem('goodsDesc'))
+          console.log(this.data)
+          if(this.data.goodsMainVideo!==''){
+            that.uploadRepeat = true
+            that.uploadBtn = false
+          }else{
+            that.uploadRepeat = false
+            that.uploadBtn = true
+          }
           sessionStorage.setItem('data','')
           sessionStorage.setItem('goodsSKUs','')
           sessionStorage.setItem('goodsGuarantCheck','')
@@ -1737,10 +1757,17 @@
             this.goodsMainImages = JSON.parse(sessionStorage.getItem('goodsMainImages'))
             this.$refs.ue.setUEContent(sessionStorage.getItem('goodsDesc'))
             this.disabled = true
+            console.log(this.data)
             if(this.$route.query.approveStatus===1){
               this.approveModify = true
             }
-            
+            if(this.data.goodsMainVideo!==''){
+              that.uploadRepeat = true
+              that.uploadBtn = false
+            }else{
+              that.uploadRepeat = false
+              that.uploadBtn = true
+            }
             sessionStorage.setItem('data','')
             sessionStorage.setItem('goodsSKUs','')
             sessionStorage.setItem('goodsGuarantCheck','')
@@ -1778,6 +1805,8 @@
   }
 </script>
 <style lang="scss" scoped>
+ .alginRight{text-align: right;}
+h4.h4{margin-left:-4%;line-height:50px;}
 .hptczp{
   width: 100%;
   height: 100%;

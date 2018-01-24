@@ -35,33 +35,33 @@
         </el-table-column>
         <el-table-column
           label="业务类型"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span>{{scope.row.businessType==1?'销售入账':scope.row.businessType==2?'满减分摊':scope.row.businessType==3?'服务费':scope.row.businessType==4?'提现':scope.row.businessType==5?'满减分摊退款':scope.row.businessType==6?'服务费退款':scope.row.businessType==7?'销售退款':scope.row.businessType==8?'优惠券分摊':scope.row.businessType==9?'优惠券分摊退款':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="收入/元"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span>+{{scope.row.inoutType == 1 ?(scope.row.amount):(1-1).toFixed(2)}}</span></template>
         </el-table-column>
         <el-table-column
           label="支出/元"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span v-if="scope.row.amount>=0">-{{scope.row.inoutType == 2 ?(scope.row.amount):(1-1).toFixed(2)}}</span> <span v-if="scope.row.amount <0">{{scope.row.inoutType == 2 ?(scope.row.amount):(1-1).toFixed(2)}}</span></template>
         </el-table-column>
         <!--<el-table-column
           label="商家信息"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span>{{scope.row.platformName}}</span></template>
         </el-table-column>-->
         <el-table-column
           label="生成时间"
           width="300"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span >{{scope.row.createDate }}</span></template>
         </el-table-column>
         <!--<el-table-column
           label="操作"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope">
             <el-col :span="12">
               <el-dropdown trigger="click">

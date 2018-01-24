@@ -24,7 +24,7 @@
           <el-table-column
             label="操作"
             width="120"
-            show-overflow-tooltip>
+            >
             <template slot-scope="scope">
               <el-col :span="12">
                 <el-dropdown trigger="click">
@@ -42,14 +42,16 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="brandName"
             label="品牌名称"
-            show-overflow-tooltip>
+            >
+            <template slot-scope="scope">
+              <span class="ellipsis" style="width:160px;display:block" :title="scope.row.brandName">{{scope.row.brandName}}</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="createTime"
             label="申请时间"
-            show-overflow-tooltip>
+            >
           </el-table-column>
         </el-table>
         <div class="block" style="margin:20px;float:left">
@@ -93,7 +95,7 @@
           <el-table-column
             label="操作"
             width="120"
-            show-overflow-tooltip>
+            >
             <template slot-scope="scope">
               <el-col :span="12">
                 <el-dropdown trigger="click">
@@ -111,14 +113,16 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="brandName"
             label="品牌名称"
-            show-overflow-tooltip>
+            >
+            <template slot-scope="scope">
+              <span class="ellipsis" style="width:160px;display:block" :title="scope.row.brandName">{{scope.row.brandName}}</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="createTime"
             label="申请时间"
-            show-overflow-tooltip>
+            >
           </el-table-column>
           <el-table-column
             label="品牌状态">
@@ -196,11 +200,11 @@
       <div class="goodInfo changeGoodInfo" v-if="changeGoodShow">
         <p>
           <span><i class="red">*</i>品牌名称：</span>
-          <el-input v-model="add_modify_params.brandName" :maxlength="10" placeholder="1-10字符"></el-input>
+          <el-input v-model="add_modify_params.brandName" :maxlength="30" placeholder="1-30字符"></el-input>
         </p>
         <p>
           <span>英文名称：</span>
-          <el-input v-model="add_modify_params.brandNameEn"  :maxlength="20" placeholder="1-20字符"></el-input>
+          <el-input v-model="add_modify_params.brandNameEn" :maxlength="20" placeholder="1-20字符"></el-input>
         </p>
         <div>
           <span>品牌区域：</span>

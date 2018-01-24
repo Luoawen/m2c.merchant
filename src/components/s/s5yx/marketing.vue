@@ -34,7 +34,7 @@
               :data="goodsStoreData"
               tooltip-effect="dark"
               style="width: 100%;">
-              <el-table-column    label="操作" show-overflow-tooltip>
+              <el-table-column    label="操作" >
                 <template slot-scope="scope">
                   <el-col :span="24"  >
                       <el-dropdown trigger="click">
@@ -61,7 +61,7 @@
               <el-table-column
                 prop="totalNum"
                 label="数量"
-                show-overflow-tooltip>
+                >
                  <template slot-scope="scope">
                    <span v-if='scope.row.totalNum ===0' >无限制</span>
                    <span v-else>{{scope.row.totalNum}}</span>
@@ -70,18 +70,18 @@
               <el-table-column
                 prop="status"
                 label="状态"
-                show-overflow-tooltip>
+                >
                  <template slot-scope="scope"><span >{{scope.row.status==1?'未生效':scope.row.status==2?'已生效':scope.row.status==3?'已失效':''}}</span></template>
               </el-table-column>
               <el-table-column
                 prop="isUse"
                 label="使用情况"
-                show-overflow-tooltip>
+                >
               </el-table-column>
               <el-table-column
                 prop="createTime"
                 label="生成时间"
-                show-overflow-tooltip>
+                >
               </el-table-column>
             </el-table>
             <div class="block fl" style="margin: 20px;">

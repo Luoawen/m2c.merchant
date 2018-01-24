@@ -34,18 +34,18 @@
         </el-table-column>
         <el-table-column
           label="申请金额/元"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span>{{(scope.row.amount)}}</span></template>
         </el-table-column>
         <el-table-column
           label="提现状态"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span>{{scope.row.wdStatus == 0?'处理中':scope.row.wdStatus == 1?'待审批':scope.row.wdStatus == 2?'待转账':scope.row.wdStatus == 3?'不通过':scope.row.wdStatus == 4?'已转账':scope.row.wdStatus == 5?'作废':'-'}}</span></template>
         </el-table-column>
         <el-table-column
           label="更新时间"
           width="300"
-          show-overflow-tooltip>
+          >
           <template slot-scope="scope"><span>{{scope.row.updatedTime == ''?(date_format(new Date(scope.row.createdTime), 'yyyy-MM-dd hh:mm:ss')):(date_format(new Date(scope.row.updatedTime), 'yyyy-MM-dd hh:mm:ss'))}}</span></template>
         </el-table-column>
       </el-table>

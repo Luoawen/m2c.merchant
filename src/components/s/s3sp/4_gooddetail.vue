@@ -466,6 +466,17 @@
   }
 </script>
 <style lang="scss" scoped>
+video::-internal-media-controls-download-button {
+    display:none;
+}
+
+video::-webkit-media-controls-enclosure {
+    overflow:hidden;
+}
+
+video::-webkit-media-controls-panel {
+    width: calc(100% + 30px); 
+}
 .videoBox{width:660px;height:440px;z-index: 1000;position: fixed;top:50%;left:50%;margin-left:-330px;margin-top:-220px;
 	a.close{
 		display:inline-block;width:30px;height:30px;opacity: 1;

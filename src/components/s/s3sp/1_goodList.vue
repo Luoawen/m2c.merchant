@@ -47,7 +47,7 @@
               <el-table-column
                 label="操作"
                 width="120"
-                show-overflow-tooltip>
+                >
                 <template slot-scope="scope">
                   <el-col :span="12">
                     <el-dropdown trigger="click">
@@ -82,27 +82,27 @@
               <el-table-column
                 prop="brandName"
                 label="品牌"
-                show-overflow-tooltip>
+                >
               </el-table-column>
               <el-table-column
                 prop="goodsPrice"
                 label="拍货价/元"
-                show-overflow-tooltip>
+                >
                 <template slot-scope="scope"><span >{{scope.row.goodsPrice}}</span></template>
               </el-table-column>
               <el-table-column
                 prop="stockNum"
                 label="库存"
-                show-overflow-tooltip>
+                >
               </el-table-column>
               <el-table-column
                 prop="sellNum"
                 label="销量"
-                show-overflow-tooltip>
+                >
               </el-table-column>
               <el-table-column
                 label="状态"
-                show-overflow-tooltip>
+                >
                 <template slot-scope="scope"><span >{{scope.row.goodsStatus==1?'仓库中':scope.row.goodsStatus==2?'出售中':scope.row.goodsStatus==3?'已售罄':''}}</span></template>
               </el-table-column>
 
@@ -149,7 +149,7 @@
               <el-table-column
                 label="操作"
                 width="120"
-                show-overflow-tooltip>
+                >
                 <template slot-scope="scope">
                   <el-col :span="12">
                     <el-dropdown trigger="click">
@@ -184,18 +184,18 @@
               <el-table-column
                 prop="brandName"
                 label="品牌"
-                show-overflow-tooltip>
+                >
               </el-table-column>
               <el-table-column
                 prop="goodsPrice"
                 label="拍货价/元"
-                show-overflow-tooltip>
+                >
                 <template slot-scope="scope"><span >{{scope.row.goodsPrice}}</span></template>
               </el-table-column>
               <el-table-column
                 prop="stockNum"
                 label="库存"
-                show-overflow-tooltip>
+                >
               </el-table-column>
               <el-table-column
                 label="状态">
@@ -236,7 +236,7 @@
           <el-table-column
             label="操作"
             width="120"
-            show-overflow-tooltip>
+            >
             <template slot-scope="scope">
               <el-col :span="12">
                 <el-dropdown trigger="click">
@@ -266,23 +266,23 @@
           <el-table-column
             prop="brandName"
             label="品牌"
-            show-overflow-tooltip>
+            >
           </el-table-column>
           <el-table-column
             prop="goodsPrice"
             label="拍货价/元"
-            show-overflow-tooltip>
+            >
             <template slot-scope="scope"><span >{{scope.row.goodsPrice}}</span></template>
           </el-table-column>
           <el-table-column
             prop="stockNum"
             label="库存"
-            show-overflow-tooltip>
+            >
           </el-table-column>
           <el-table-column
             prop="sellNum"
             label="销量"
-            show-overflow-tooltip>
+            >
           </el-table-column>
         </el-table>
         <div class="block" style="margin:20px;float:left">

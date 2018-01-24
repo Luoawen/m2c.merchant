@@ -34,7 +34,7 @@
               </div>
               <div>
                 <span class="tit01">订单总额</span>
-                <span class="ml20">{{(orderDetail.orderTotalMoney -  parseFloat(orderDetail.couponDiscount))}}元（含运费<span>{{(orderDetail.orderFreight)}}</span>元）</span>
+                <span class="ml20">{{(orderDetail.orderTotalMoney - parseFloat(orderDetail.couponDiscount)).toFixed(2)}}元（含运费<span>{{(orderDetail.orderFreight)}}</span>元）</span>
               </div>
             </div>
             <div class="col-sm-4 detail_cen">
