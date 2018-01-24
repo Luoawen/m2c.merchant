@@ -558,7 +558,8 @@
             method: 'get',
             url: this.localbase + 'm2c.scm/web/postage/nationwide',
             data: {
-              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
+              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+              modelId:that.modelId
             },
             success: function (result) {
               if (result.status==200){

@@ -860,7 +860,7 @@
               that.uploadRepeat = true
             }
             console.log(that.$route.query.approveStatus=='1')
-            if(that.$route.query.approveStatus=='1'){
+            if(that.$route.query.approveStatus=='1'||that.$route.query.approveStatus=='2'){
               //商品审核进入时禁用选项
               console.log('商品审核进入时禁用选项')
               that.$('.addGuarantee').css('display','none')
