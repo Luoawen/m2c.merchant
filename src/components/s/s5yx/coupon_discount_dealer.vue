@@ -82,7 +82,7 @@
                   <div class="shopbox_top clear">
                     <el-col :span="5">
                       <el-input placeholder="请输入内容" v-model="goods_query_item.condition">
-                        <el-button slot="append" icon="el-icon-search" @click="goodsSelect()">搜索</el-button>
+                        <el-button slot="append" icon="el-icon-search" @click="goodsSelect(1)">搜索</el-button>
                       </el-input>
                     </el-col>
                     <span  class="limitTips" >最多选择30个商品</span>
@@ -329,7 +329,7 @@
             <div class="shopbox04">
               <div class="shopbox_top clear">
                 <el-input placeholder="请输入内容" v-model="goods_query_item.condition" style="width: 32%;">
-                   <el-button slot="append" icon="el-icon-search" @click="goodsSelect()">搜索</el-button>
+                   <el-button slot="append" icon="el-icon-search" @click="goodsSelect(1)">搜索</el-button>
                 </el-input>
               </div>
               <div class="shopbox_cen clear">
@@ -552,7 +552,7 @@ export default {
       }
     },
     // 商品搜索
-    goodsSelect () {
+    goodsSelect (flag) {
       let that = this
       that.$.ajax({
         type: 'get',
@@ -561,7 +561,7 @@ export default {
           goodsClassifyId: that.goods_query_item.goodsClassifyId,
           condition: that.goods_query_item.condition,
           dealerId: that.goods_query_item.dealerId,
-          pageNum: that.goods_query_item.pageNum,
+          pageNum: flag === 1? 1:that.goods_query_item.pageNum,
           rows: that.goods_query_item.rows
         },
         success: function (result) {
@@ -1459,6 +1459,7 @@ export default {
       }
       .shopbox{
         /*width: 980px;*/
+        min-width: 980px;
         height: 350px;
         border:1px solid #E6E8F2;
         border-radius: 3px;

@@ -1183,6 +1183,7 @@ export default {
     }
     .shopbox,.shopbox03{
       /*width: 980px;*/
+      min-width: 980px;
       height: 350px;
       border:1px solid #E6E8F2;
       border-radius: 3px;
