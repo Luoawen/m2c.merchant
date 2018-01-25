@@ -93,7 +93,7 @@ export default {
 							sessionStorage.setItem('mUser', JSON.stringify(result.content))
 							console.log(sessionStorage.getItem('mUser'))
               that.$goRoute('/s/home')
-							that.$message('登录成功');
+							that.$message.success('登录成功');
             } else {
 							that.show_tip(result.errorMessage)
 							console.log(result,"------------")
