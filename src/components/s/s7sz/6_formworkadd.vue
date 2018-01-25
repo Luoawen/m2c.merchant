@@ -67,16 +67,16 @@
                 <td v-model="add_postageModelRule_w.address"> 全国（ 默认运费）</td>
                 <td>
                   <el-input type="text"
-                          style="width:100px;height:30px;" v-model="add_postageModelRule_w.firstWeight" @blur="checkDefaultNumber(add_postageModelRule_w.firstWeight,'firstWeight',add_postageModelRule_w)"></el-input>
+                          style="width:80px;height:30px;" v-model="add_postageModelRule_w.firstWeight" @blur="checkDefaultNumber(add_postageModelRule_w.firstWeight,'firstWeight',add_postageModelRule_w)"></el-input>
                 </td>
                 <td>
-                  <el-input type="text" style="width:100px;height:30px;" v-model="add_postageModelRule_w.firstPostage" @blur="checkDefaultNumber(add_postageModelRule_w.firstPostage,'firstPostage',add_postageModelRule_w)"></el-input>
+                  <el-input type="text" style="width:80px;height:30px;" v-model="add_postageModelRule_w.firstPostage" @blur="checkDefaultNumber(add_postageModelRule_w.firstPostage,'firstPostage',add_postageModelRule_w)"></el-input>
                 </td>
                 <td>
-                  <el-input type="text" style="width:100px;height:30px;" v-model="add_postageModelRule_w.continuedWeight" @blur="checkDefaultNumber(add_postageModelRule_w.continuedWeight,'continuedWeight',add_postageModelRule_w)"></el-input>
+                  <el-input type="text" style="width:80px;height:30px;" v-model="add_postageModelRule_w.continuedWeight" @blur="checkDefaultNumber(add_postageModelRule_w.continuedWeight,'continuedWeight',add_postageModelRule_w)"></el-input>
                 </td>
                 <td>
-                  <el-input type="text" style="width:100px;height:30px;" v-model="add_postageModelRule_w.continuedPostage" @blur="checkDefaultNumber(add_postageModelRule_w.continuedPostage,'continuedPostage',add_postageModelRule_w)"></el-input>
+                  <el-input type="text" style="width:80px;height:30px;" v-model="add_postageModelRule_w.continuedPostage" @blur="checkDefaultNumber(add_postageModelRule_w.continuedPostage,'continuedPostage',add_postageModelRule_w)"></el-input>
                 </td>
                 <td></td>
               </tr>
@@ -85,7 +85,7 @@
                   <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                   <!--地区选择-->
                   <div class="cityBox">
-                    <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                    <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"></a></h4>
                     <div class="test-div">
                       <div class="bigArea" v-for="(item,index) in datas">
                         <div class="left">
@@ -103,27 +103,27 @@
                         </div>
                       </div>
                     </div>
-                    <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
+                    <el-button @click.stop="sureCheckCity(index,$event)" type="primary" style="margin-left:20px;margin-top:10px">确认</el-button>
                   </div>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.firstWeight" @blur="checkNumber(addRow.firstWeight,index,'firstWeight',addRows)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.continuedWeight" @blur="checkNumber(addRow.continuedWeight,index,'continuedWeight',addRows)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)"></el-input>
                 </td>
                 <td><a @click="delectRule(index)">删除</a></td>
@@ -136,7 +136,7 @@
                 <!--地区选择-->
                   <!-- <div class="cityBox">
                     <h4> 选择地区 <a class="close"
-                                @click="cityBoxHide"> X </a></h4>
+                                @click="cityBoxHide"></a></h4>
                     <div class="test-div">
                       <div class="bigArea"
                           v-for="(item,index) in datas">
@@ -164,22 +164,22 @@
                 </td> -->
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="add_postageModelRule_w.firstWeight" @blur="checkNumber(add_postageModelRule_w.firstWeight,index,'firstWeight',formwork.postageModelRules)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="add_postageModelRule_w.firstPostage" @blur="checkNumber(add_postageModelRule_w.firstPostage,index,'firstPostage',formwork.postageModelRules)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="add_postageModelRule_w.continuedWeight" @blur="checkNumber(add_postageModelRule_w.continuedWeight,index,'continuedWeight',formwork.postageModelRules)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="add_postageModelRule_w.continuedPostage" @blur="checkNumber(add_postageModelRule_w.continuedPostage,index,'continuedPostage',formwork.postageModelRules)"></el-input>
                 </td>
                 <td> <a v-if="index!=0" @click="delectRule1(index)">删除</a></td>
@@ -191,7 +191,7 @@
                   <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                   <!--地区选择-->
                   <div class="cityBox">
-                    <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                    <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"></a></h4>
                     <div class="test-div">
                       <div class="bigArea" v-for="(item,index) in datas">
                         <div class="left">
@@ -209,27 +209,27 @@
                         </div>
                       </div>
                     </div>
-                    <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
+                    <el-button @click.stop="sureCheckCity(index,$event)" type="primary" style="margin-left:20px;margin-top:10px">确认</el-button>
                   </div>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.firstWeight" @blur="checkNumber(addRow.firstWeight,index,'firstWeight',addRows)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.continuedWeight" @blur="checkNumber(addRow.continuedWeight,index,'continuedWeight',addRows)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)"></el-input>
                 </td>
                 <td><a @click="delectRule(index)">删除</a></td>
@@ -279,22 +279,22 @@
                   <td>{{add_postageModelRule.address=='' || add_postageModelRule.address== null ?'全国（ 默认运费）':add_postageModelRule.address}}</td>
                   <td>
                     <el-input type="text"
-                          style="width:100px;height:30px;"
+                          style="width:80px;height:30px;"
                           v-model="add_postageModelRule.firstPiece" @blur="checkInteger(add_postageModelRule.firstPiece,index,'firstPiece',formwork.postageModelRules)"></el-input>
                   </td>
                   <td>
                     <el-input type="text"
-                          style="width:100px;height:30px;"
+                          style="width:80px;height:30px;"
                           v-model="add_postageModelRule.firstPostage" @blur="checkNumber(add_postageModelRule.firstPostage,index,'firstPostage',formwork.postageModelRules)"></el-input>
                   </td>
                   <td>
                     <el-input type="text"
-                          style="width:100px;height:30px;"
+                          style="width:80px;height:30px;"
                           v-model="add_postageModelRule.continuedPiece" @blur="checkInteger(add_postageModelRule.continuedPiece,index,'continuedPiece',formwork.postageModelRules)"></el-input>
                   </td>
                   <td>
                     <el-input type="text"
-                          style="width:100px;height:30px;"
+                          style="width:80px;height:30px;"
                           v-model="add_postageModelRule.continuedPostage" @blur="checkNumber(add_postageModelRule.continuedPostage,index,'continuedPostage',formwork.postageModelRules)"></el-input>
                   </td>
                   <td><a v-if="index!=0" @click="delectRule1(index)">删除</a></td>
@@ -306,7 +306,7 @@
                   <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                   <!--地区选择-->
                   <div class="cityBox">
-                    <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                    <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"></a></h4>
                     <div class="test-div">
                       <div class="bigArea" v-for="(item,index) in datas">
                         <div class="left">
@@ -324,27 +324,27 @@
                         </div>
                       </div>
                     </div>
-                    <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
+                    <el-button @click.stop="sureCheckCity(index,$event)" type="primary" style="margin-left:20px;margin-top:10px">确认</el-button>
                   </div>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.firstPiece" @blur="checkInteger(addRow.firstPiece,index,'firstPiece',addRows)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.continuedPiece" @blur="checkInteger(addRow.continuedPiece,index,'continuedPiece',addRows)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)"></el-input>
                 </td>
                 <td><a @click="delectRule(index)">删除</a></td>
@@ -356,22 +356,22 @@
                   <td v-model="add_postageModelRule.address"> 全国（ 默认运费）</td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="add_postageModelRule.firstPiece" @blur="checkDefaultInteger(add_postageModelRule.firstPiece,'firstPiece',add_postageModelRule)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="add_postageModelRule.firstPostage" @blur="checkDefaultNumber(add_postageModelRule.firstPostage,'firstPostage',add_postageModelRule)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="add_postageModelRule.continuedPiece" @blur="checkDefaultInteger(add_postageModelRule.continuedPiece,'continuedPiece',add_postageModelRule)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="add_postageModelRule.continuedPostage" @blur="checkDefaultNumber(add_postageModelRule.continuedPostage,'continuedPostage',add_postageModelRule)"></el-input>
                 </td>
                 <td></td>
@@ -383,7 +383,7 @@
                   <a @click.stop="addressCheckBox(index,$event)"> 编辑 </a>
                   <!--地区选择-->
                   <div class="cityBox">
-                    <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"> X </a></h4>
+                    <h4 @click.stop="cityBoxShow(index,$event)"> 选择地区 <a class="close" @click.stop="cityBoxHide"></a></h4>
                     <div class="test-div">
                       <div class="bigArea" v-for="(item,index) in datas">
                         <div class="left">
@@ -401,27 +401,27 @@
                         </div>
                       </div>
                     </div>
-                    <el-button @click.stop="sureCheckCity(index,$event)">确认</el-button>
+                    <el-button @click.stop="sureCheckCity(index,$event)" type="primary" style="margin-left:20px;margin-top:10px">确认</el-button>
                   </div>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.firstPiece" @blur="checkInteger(addRow.firstPiece,index,'firstPiece',addRows)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.firstPostage" @blur="checkNumber(addRow.firstPostage,index,'firstPostage',addRows)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.continuedPiece" @blur="checkInteger(addRow.continuedPiece,index,'continuedPiece',addRows)"></el-input>
                 </td>
                 <td>
                   <el-input type="text"
-                        style="width:100px;height:30px;"
+                        style="width:80px;height:30px;"
                         v-model="addRow.continuedPostage" @blur="checkNumber(addRow.continuedPostage,index,'continuedPostage',addRows)"></el-input>
                 </td>
                 <td ><span @click="delectRule(index)">删除</span></td>
@@ -1206,6 +1206,7 @@
   .table thead th{font-weight: normal;background:#DFE9F6;}
   .table td,.table th{line-height:30px;border-bottom:1px solid #ddd;border-right:1px solid #ddd;}
   .table .el-input{margin:0;height:20px;}
+  .table .el-input__inner{width:80px;}
 .el-row{margin-bottom:20px;}
   td.relative a {
     display: block;
@@ -1215,8 +1216,8 @@
 
   .cityBox {
     display: none;
-    width: 650px;
-    height: 400px;
+    width: 670px;
+    height: 450px;
     background: #fff;
     border: 1px solid #ccc;
     position: absolute;
@@ -1231,11 +1232,11 @@
     background: #ededed;
     line-height: 40px;
     text-indent: 20px;
+    margin:0;
   }
 
   .cityBox h4 a.close {
-    float: right;
-    margin-right: 10px;
+    opacity:1;display:inline-block;width:24px;height:24px;float:right; margin-top:8px;background:url(../../../assets/images/ico_close.png) no-repeat center center;
   }
 
   .cityBox .bigArea {

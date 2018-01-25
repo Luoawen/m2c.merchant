@@ -325,7 +325,8 @@
             <a class="stop" @click="pauseUpload"></a>
           </div>
           <div class="uploadProgress" v-if="uploadRepeat" id="videoContainer">
-            <a class="repeat" id="selectVideo" :disabled="approveModify"><i></i>重新上传</a>
+            <el-button v-if="approveModify" class="repeat" id="selectVideo" :disabled="approveModify"><i></i>重新上传</el-button>
+            <a v-if="!approveModify" class="repeat" id="selectVideo" :disabled="approveModify"><i></i>重新上传</a>
             <img class="mainImg" v-if="goodsMainImages.length>0" :src="goodsMainImages[0]" />
             <a v-if="!approveModify" class="stop" @click="delectUpload"></a>
           </div>
@@ -864,7 +865,11 @@
               //商品审核进入时禁用选项
               console.log('商品审核进入时禁用选项')
               that.$('.addGuarantee').css('display','none')
+              that.$('.el-upload').css('display','none')
               that.approveModify = true
+              that.$nextTick(()=>{
+                that.$('.el-upload').css('display','none')
+              })
             }else{
               //商品库进入时初始化UE和七牛
               console.log('商品库进入时初始化UE和七牛')
@@ -1891,12 +1896,12 @@ h4.h4{margin-left:-4%;line-height:50px;}
 .uploadProgress a.stop{position:absolute;top:-10px;left:140px;display:inline-block;width:20px;height:20px;z-index:2;
   background:url(../../../assets/images/icon-close.png) no-repeat center;background-size:20px;border-radius:50%; cursor: pointer;
 }
-.uploadProgress a.repeat{position:absolute;top:0px;left:0px;display:inline-block;width:150px;height:100px;z-index:2;
-  background:rgba(0,0,0,0.5); cursor: pointer; transition: all 0.3s ease;
-  text-align: center;line-height:136px;color:#fff;
+.uploadProgress .repeat{position:absolute;top:0px;left:0px;display:inline-block;width:150px;height:100px;z-index:2;
+  background:rgba(0,0,0,0.5); transition: all 0.3s ease;
+  text-align: center;line-height:136px;color:#fff;overflow:hidden;
 }
-.uploadProgress a.repeat i{width:20px;height:20px;display:inline-block;background:url(../../../assets/images/ico_repetition.png) no-repeat center 0;position:absolute;top:30px;left:65px;transition: all 0.3s ease;}
-.uploadProgress a.repeat:hover{
+.uploadProgress .repeat i{width:20px;height:20px;display:inline-block;background:url(../../../assets/images/ico_repetition.png) no-repeat center 0;position:absolute;top:30px;left:65px;transition: all 0.3s ease;}
+.uploadProgress .repeat:hover{
   text-decoration:none;
 }
 .uploadProgress a.repeat:hover i{
