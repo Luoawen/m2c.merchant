@@ -26,7 +26,7 @@
                 <span v-if="couponInfo.couponForm == 1">{{couponInfo.couponItem.faceValue}}元</span>
                 <span v-if="couponInfo.couponForm == 2">{{couponInfo.couponItem.faceValue}}折</span>
         		  </span>
-        		  <span class="ml147">
+        		  <span class="ml195">
                 <span class="mr20">
                   <span class="mr10 wid120">发行量</span>
                   <span v-if="couponInfo.couponTotal > 0">{{couponInfo.couponTotal}}张</span>
@@ -332,8 +332,8 @@ export default {
 .mr20{
 	margin-right: 20px;
 }
-.ml147{
-  margin:147px;
+.ml195{
+  margin:195px;
 }
 .Detailcoupons_container{
 	padding: 15px 26px;
