@@ -758,10 +758,10 @@
                           let date = that.date_format(new Date(timestamp), 'yyyyMMdd')
                           if(info.response==undefined){
                             res = JSON.parse(info);
-                            key = "video" + "/" + '8' + "/" + date + res.key
+                            key = res.key
                           }else if(info.response!==undefined){
                             res = JSON.parse(info.response);
-                            key = "video" + "/" + '8' + "/" + date + res.key
+                            key = res.key
                           }else{
                             key = that.key
                           }

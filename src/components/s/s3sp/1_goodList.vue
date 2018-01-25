@@ -682,8 +682,8 @@
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
             dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-            rows: that.goodsStorePageRows,                     // 每页多少条数据
-            pageNum: that.goodsStoreCurrentPage,    // 请求第几页*/
+            rows: that.goodsCheckStorePageRows,                     // 每页多少条数据
+            pageNum: that.goodsCheckStoreCurrentPage,    // 请求第几页*/
             goodsClassifyId:that.selectedOptions2[that.selectedOptions2.length-1],
             approveStatus:that.search_goodsCheck_params.approveStatus,
             condition:that.search_goodsCheck_params.condition.replace(/\s+/g,""),
