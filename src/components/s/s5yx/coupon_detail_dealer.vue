@@ -6,9 +6,56 @@
         </div>
         <!--设置信息-->
         <div class="set_message">
+          <div class="ml20" >
+            <el-row :gutter="20">
+            <el-col :span="6"><b>基础信息</b></el-col>
+          </el-row>
+          <el-row :gutter="10">
+            <el-col :span="2"><span>优惠券名称</span></el-col>
+            <el-col :span="3"> <span>{{couponInfo.couponName}}</span></el-col>
+             <el-col :span="2"><span>面值</span></el-col>
+            <el-col :span="3"> 
+              <span v-if="couponInfo.couponForm == 1">{{couponInfo.couponItem.faceValue}}元</span>
+              <span v-if="couponInfo.couponForm == 2">{{couponInfo.couponItem.faceValue}}折</span>
+            </el-col>
+            <el-col :span="2"><span>优惠券类型</span></el-col>
+            <el-col :span="3"> 
+               <span v-if="couponInfo.couponType == 1">代金券</span>
+                <span v-if="couponInfo.couponType == 2">折扣券</span>
+                <span v-if="couponInfo.couponType == 3">分享券</span>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10">
+            <el-col :span="2"><span>有效期</span></el-col>
+            <el-col :span="3"> 
+                <span>{{couponInfo.expirtationTimeStart}}~{{couponInfo.expirtationTimeEnd}}</span>
+            </el-col>
+            <el-col :span="2"><span>发行量</span></el-col>
+            <el-col :span="3"> 
+               <span v-if="couponInfo.couponTotal > 0">{{couponInfo.couponTotal}}张</span>
+               <span v-if="couponInfo.couponTotal == 0">无限制</span>
+            </el-col>
+            <el-col :span="2"><span>总共发出</span></el-col>
+            <el-col :span="2"> 
+               <span >{{couponInfo.sendNum}}张</span>
+            </el-col>
+              <el-col :span="2"><span>已被使用</span></el-col>
+            <el-col :span="2"> 
+               <span > {{couponInfo.usedNum}}张</span>
+            </el-col>
+            <el-col :span="2"><span>还剩余</span></el-col>
+            <el-col :span="2"> 
+               <span v-if="couponInfo.couponTotal > 0">{{couponInfo.couponRemain}}张</span>
+               <span v-if="couponInfo.couponTotal == 0">无限制</span>
+            </el-col>
+          </el-row>
+
+          </div>
+          
+
         	<div class="mb30">
-        		<div class="ml20"><b>基础信息</b></div>
-        		<div class="mt10">
+        		<!-- <div class="ml20"><b>基础信息</b></div> -->
+        		<!-- <div class="mt10">
               <span>
                 <span class="mr10 wid80">优惠券名称</span>
                 <span>{{couponInfo.couponName}}</span>
@@ -19,9 +66,9 @@
                 <span v-if="couponInfo.couponType == 2">折扣券</span>
                 <span v-if="couponInfo.couponType == 3">分享券</span>
               </span>
-            </div>
+            </div> -->
         		<div class="mt10">
-              <span>
+              <!-- <span>
                 <span class="mr10 wid80">面值</span>
                 <span v-if="couponInfo.couponForm == 1">{{couponInfo.couponItem.faceValue}}元</span>
                 <span v-if="couponInfo.couponForm == 2">{{couponInfo.couponItem.faceValue}}折</span>
@@ -31,7 +78,7 @@
                   <span class="mr10 wid120">发行量</span>
                   <span v-if="couponInfo.couponTotal > 0">{{couponInfo.couponTotal}}张</span>
                   <span v-if="couponInfo.couponTotal == 0">无限制</span>
-                </span>
+                </span> -->
                 <!-- <span class="mr10 ml20">
                   <el-button type="primary" size="medium">提醒使用</el-button>
                 </span>
@@ -44,26 +91,14 @@
                     content="仅在还剩余优惠券，未被使用且距离生成优惠券7天之后，可发送推送">
                   </el-popover>
                 </i> -->
-                <span class="mr20 ml20">
-                  <span class="mr10 wid80">总共发出</span>
-                  <span>{{couponInfo.sendNum}}</span>
-                </span>
-                <span class="mr20">
-                  <span class="mr10 wid80">已被使用</span>
-                  <span> {{couponInfo.usedNum}}</span>  
-                </span>
-                <span class="mr20">
-                  <span class="mr10 wid80">还剩余</span>
-                  <span>{{couponInfo.couponTotal ===0 ?'无限制' :couponInfo.couponRemain}}</span>
-                </span>
               </span>
             </div>
-            <div class="mt10">
+            <!-- <div class="mt10">
         			<span class="mr10 wid80">
         				有效期
         			</span>
               <span>{{couponInfo.expirtationTimeStart}}~{{couponInfo.expirtationTimeEnd}}</span>
-            </div>
+            </div> -->
         		<div class="mt10" v-if="couponInfo.couponType == 3">
         			<span class="mr10 wid80">
         				领取地址
@@ -692,5 +727,11 @@ export default {
 }
 .marauto{
   margin: auto;
+}
+.el-row {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 </style>
