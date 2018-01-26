@@ -7,10 +7,10 @@
             <div class="Basicinbt">基础信息</div>
             <div class="mt10">
               <el-form-item label="优惠券名称">
-                <el-input style="width: 350px;" v-model="couponParams.coupon_name" placeholder="不超过11个字" :maxlength="11" @blur="formValidator(1)"></el-input>
+                <el-input style="width: 350px;" v-model="couponParams.coupon_name" placeholder="不超过11个字" :maxlength="11" @change="formValidator(1)"></el-input>
               </el-form-item>
               <el-form-item label="折扣" class="ml64">
-                <el-input  v-model="couponParams.coupon_json.discount" placeholder="1~9.9" :maxlength="5" @blur="formValidator(4)">
+                <el-input  v-model="couponParams.coupon_json.discount" placeholder="1~9.9" :maxlength="5" @change="formValidator(4)">
                   <i slot="suffix" class="el-input__icon fontstyle">折</i>
                 </el-input>
               </el-form-item>
@@ -30,7 +30,7 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="发行量" class="ml50">
-                <el-input  v-model="couponParams.total_num"  placeholder="最大99999" :maxlength="5" @blur="formValidator(2)">
+                <el-input  v-model="couponParams.total_num"  placeholder="最大99999" :maxlength="5" @change="formValidator(2)">
                   <i slot="suffix" class="el-input__icon fontstyle">张</i>
                 </el-input>
               </el-form-item>
@@ -57,10 +57,10 @@
             <div class="tit01" v-if="couponParams.threshold_type == 1 || couponParams.threshold_type == 2">
               <span class="ml60 mr10">满</span>
                <el-form-item>
-                <el-input v-if="couponParams.threshold_type == 1" v-model="couponParams.coupon_json.threshold" placeholder="最大9999" :maxlength="4" @blur="formValidator(9)">
+                <el-input v-if="couponParams.threshold_type == 1" v-model="couponParams.coupon_json.threshold" placeholder="最大9999" :maxlength="4" @change="formValidator(9)">
                   <i slot="suffix" class="el-input__icon fontstyle">元</i>
                 </el-input>
-                <el-input v-if="couponParams.threshold_type == 2" v-model="couponParams.coupon_json.threshold" placeholder="最大100" :maxlength="3" @blur="formValidator(9)">
+                <el-input v-if="couponParams.threshold_type == 2" v-model="couponParams.coupon_json.threshold" placeholder="最大100" :maxlength="3" @change="formValidator(9)">
                   <i slot="suffix" class="el-input__icon fontstyle">件</i>
                 </el-input>
               </el-form-item>
@@ -277,13 +277,13 @@
                 领取限制
               </span>
               <el-form-item label="每人限领" class="ml20 coupon_input">
-                <el-input  v-model="couponParams.num_per_one" :maxlength="5" @blur="formValidator(5)">
+                <el-input  v-model="couponParams.num_per_one" :maxlength="5" @change="formValidator(5)">
                   <i slot="prefix" class="fontstyle">共</i>
                   <i slot="suffix" class="el-input__icon fontstyle">次</i>
                 </el-input>
               </el-form-item>
               <el-form-item label="每人每天限领" v-if="couponParams.num_per_one > 1" class="coupon_input">
-                <el-input  v-model="couponParams.num_per_day" :maxlength="5" @blur="formValidator(6)">
+                <el-input  v-model="couponParams.num_per_day" :maxlength="5" @change="formValidator(6)">
                   <i slot="suffix" class="el-input__icon fontstyle">次</i>
                 </el-input>
               </el-form-item>

@@ -11,14 +11,14 @@
             <el-col :span="6"><b>基础信息</b></el-col>
           </el-row>
           <el-row :gutter="10">
-            <el-col :span="2"><span>优惠券名称</span></el-col>
+            <el-col :span="2"><span class='label'>优惠券名称</span></el-col>
             <el-col :span="3"> <span>{{couponInfo.couponName}}</span></el-col>
-             <el-col :span="2"><span>面值</span></el-col>
+             <el-col :span="2"><span class='label'>面值</span></el-col>
             <el-col :span="3"> 
               <span v-if="couponInfo.couponForm == 1">{{couponInfo.couponItem.faceValue}}元</span>
               <span v-if="couponInfo.couponForm == 2">{{couponInfo.couponItem.faceValue}}折</span>
             </el-col>
-            <el-col :span="2"><span>优惠券类型</span></el-col>
+            <el-col :span="2"><span class='label'>优惠券类型</span></el-col>
             <el-col :span="3"> 
                <span v-if="couponInfo.couponType == 1">代金券</span>
                 <span v-if="couponInfo.couponType == 2">折扣券</span>
@@ -26,33 +26,30 @@
             </el-col>
           </el-row>
           <el-row :gutter="10">
-            <el-col :span="2"><span>有效期</span></el-col>
+            <el-col :span="2"><span class='label'>有效期</span></el-col>
             <el-col :span="3"> 
                 <span>{{couponInfo.expirtationTimeStart}}~{{couponInfo.expirtationTimeEnd}}</span>
             </el-col>
-            <el-col :span="2"><span>发行量</span></el-col>
+            <el-col :span="2"><span class='label' >发行量</span></el-col>
             <el-col :span="3"> 
                <span v-if="couponInfo.couponTotal > 0">{{couponInfo.couponTotal}}张</span>
                <span v-if="couponInfo.couponTotal == 0">无限制</span>
             </el-col>
-            <el-col :span="2"><span>总共发出</span></el-col>
+            <el-col :span="2"><span class='label' >总共发出</span></el-col>
             <el-col :span="2"> 
                <span >{{couponInfo.sendNum}}张</span>
             </el-col>
-              <el-col :span="2"><span>已被使用</span></el-col>
+              <el-col :span="2"><span class='label' >已被使用</span></el-col>
             <el-col :span="2"> 
                <span > {{couponInfo.usedNum}}张</span>
             </el-col>
-            <el-col :span="2"><span>还剩余</span></el-col>
+            <el-col :span="2"><span class='label'>还剩余</span></el-col>
             <el-col :span="2"> 
                <span v-if="couponInfo.couponTotal > 0">{{couponInfo.couponRemain}}张</span>
                <span v-if="couponInfo.couponTotal == 0">无限制</span>
             </el-col>
           </el-row>
-
           </div>
-          
-
         	<div class="mb30">
         		<!-- <div class="ml20"><b>基础信息</b></div> -->
         		<!-- <div class="mt10">
@@ -110,23 +107,23 @@
         	</div>
         	<div class="mb30">
         		<div class="ml20"><b>条件设置</b></div>
-        		<div class="mt10">
-        			<span class="mr10 wid80">
+        		<div class="mt10 ml20">
+        			<span class="mr10 wid80 label">
         				使用门槛
         			</span>
         			<span v-if="couponInfo.thresholdType == 1">满{{couponInfo.couponItem.threshold}}元可使用该优惠券</span>
               <span v-if="couponInfo.thresholdType == 2">满{{couponInfo.couponItem.threshold}}件可使用该优惠券</span>
               <span v-if="couponInfo.thresholdType == 3">全场通用</span>
         		</div>
-        		<div class="mt10">
-        			<span class="mr10 wid80">
+        		<div class="mt10 ml20">
+        			<span class="mr10 wid80 label">
         				作用范围
         			</span>
         			<span v-if="couponInfo.rangeType == 0">全店</span>
               <span v-if="couponInfo.rangeType == 2">商品</span>
               <span v-if="couponInfo.rangeType == 3">品类</span>
         		</div>
-        		<div class="mt10">
+        		<div class="mt10 ml20">
         			<div class="Alreadychosen" v-if="couponInfo.rangeType == 0">
                 <div class="Alreadychosen_t">
                   已排除 <span class="bluecolor02">{{removeGoodsList.length}}</span> 件商品
@@ -228,7 +225,7 @@
         		</div>
         	</div>
         	<div class="mb30">
-        		<span class="ml20 mr20"><b>领取方式</b></span>
+        		<span class="ml20 mr20 label"><b>领取方式</b></span>
         		<span>{{couponInfo.receiveType == 1 ? '用户主动领取' : couponInfo.receiveType == 2 ? '后台派发' : ''}}</span>
         	</div>
         	<div class="mb30">
@@ -733,5 +730,9 @@ export default {
   &:last-child {
     margin-bottom: 0;
   }
+}
+.label{
+  font-size: 14px;
+  color:#666;
 }
 </style>
