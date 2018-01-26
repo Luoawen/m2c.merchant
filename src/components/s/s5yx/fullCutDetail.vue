@@ -193,13 +193,13 @@
         padding:10px 0 30px 30px ;
         background: #fff;
         margin-bottom:10px;
-        font-size: 12px;
+        font-size: 14px;
         a{
             color: #0086FF;
         }
         h4{
             line-height: 32px;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: bold;
             color:#333;
             margin-bottom:10px;
@@ -232,7 +232,7 @@
             }
         }
         .base{
-            width: 550px;
+            width: 680px;
             display: flex;
             div.intr{
                 width:480px;
