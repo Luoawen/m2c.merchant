@@ -1183,7 +1183,7 @@
                 return
               }
               // that.checkMarketPrice (that.goodsSKUs[k].marketPrice)
-              if (that.sukShow3 == true) {
+              if (that.sukShow3 == true||that.sukShow4 == true||that.sukShow5 == true) {
                 that.$message("您还有信息未正确填写！")
                 return
               }
