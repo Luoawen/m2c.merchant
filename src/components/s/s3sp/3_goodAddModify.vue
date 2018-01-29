@@ -872,10 +872,11 @@
               })
             }else{
               //商品库进入时初始化UE和七牛
-              console.log('商品库进入时初始化UE和七牛')
+              
               that.$nextTick(()=>{
                 that.$refs.ue.setUEContent(result.content.goodsDesc)
                 that.initUpload()
+                console.log('商品库进入时初始化UE和七牛')
               })
             }
           }
@@ -1513,9 +1514,15 @@
       },
       // 搜索建议
       query(item){
-        console.log(item)
-        this.standardId = item
-        this.getValue()
+        console.log('item=',item)
+        if(item==undefined){
+          this.restaurants = []
+          this.standardId = ''
+          return
+        }else{
+          this.standardId = item
+          this.getValue()
+        }
       },
       querySearch(queryString, cb) {
         let that = this
@@ -1802,7 +1809,9 @@
             }
           })
           that.$nextTick(()=>{
+            that.$refs.ue.setUEContent('')
             that.initUpload()
+            console.log('新增进入初始化UE')
           })
         } else {
           //alert(1)
