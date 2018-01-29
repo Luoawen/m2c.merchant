@@ -160,7 +160,7 @@
         </table>
         <i v-if="sukShow" style="color:red; font-style:normal;">商品库存不能为空且为大于或等于0的正整数<br/></i>
         <i v-if="sukShow1" style="color:red; font-style:normal;">商品重量不能为空且为大于0的数字<br/></i>
-        <i v-if="sukShow2" style="color:red; font-style:normal;">商品拍获价不能为空且为大于0的数字，不能超过999999.99元<br/></i>
+        <i v-if="sukShow2" style="color:red; font-style:normal;">商品拍获价不能为空且为大于0的数字，不能小于供货价，不能超过999999.99元<br/></i>
         <i v-if="sukShow3" style="color:red; font-style:normal;">商品市场价为大于0的数字，不能超过999999.99元<br/></i>
         <i v-if="sukShow4" style="color:red; font-style:normal;">商品供货价不能为空且为大于0的数字，不能大于拍获价，不能超过999999.99元<br/></i>
         <i v-if="sukShow5" style="color:red; font-style:normal;">商品编码为1-30字符的字母或数字且不能重复</i>
