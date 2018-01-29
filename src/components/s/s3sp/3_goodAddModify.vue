@@ -370,14 +370,14 @@
     <div class="hptczp_content" v-if="changeMind">
       <div class="hptczp_header">
         <span>变更原因</span>
-        <a class="close" @click="changeMind=!changeMind"></a>
+        <a class="close" @click="closeChangeMind"></a>
       </div>
       <div class="hptczp_body">
           <textarea placeholder="请填写100字符以内内容" v-model="data.changeReason" maxlength="100"></textarea>
       </div>
       <div class="hptczp_footer">
         <el-button type="primary" size="medium" :disabled="data.changeReason==''||data.changeReason== undefined" @click="save('ruleForm')">确认</el-button>
-        <el-button size="medium" @click="changeMind=!changeMind">取消</el-button>
+        <el-button size="medium" @click="closeChangeMind">取消</el-button>
       </div>
     </div>
   </div>
@@ -609,6 +609,11 @@
       //   that.initUpload()
       //   document.getElementById('selectVideo').click()
       // },
+      closeChangeMind(){
+        let that = this
+        that.data.changeReason = ''
+        that.changeMind = false
+      },
       //删除视频
       delectUpload(){
         let that = this
