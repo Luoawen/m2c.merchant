@@ -376,7 +376,7 @@
           <textarea placeholder="请填写100字符以内内容" v-model="data.changeReason" maxlength="100"></textarea>
       </div>
       <div class="hptczp_footer">
-        <el-button type="primary" size="medium" :disabled="data.changeReason==''||data.changeReason== undefined" @click="save('ruleForm')">确认</el-button>
+        <el-button type="primary" size="medium" :disabled='changeReasonRS' @click="save('ruleForm')">确认</el-button>
         <el-button size="medium" @click="closeChangeMind">取消</el-button>
       </div>
     </div>
@@ -434,6 +434,8 @@
         }, 0);
       };
       return {
+        changeReasonR:'',
+        changeReasonRS:true,
         ruleForm: {
           goodsName: '',
           goodsSubTitle: '',
@@ -551,6 +553,21 @@
     },
     created() {},
     watch: {
+      'data.changeReason':{
+        handler: function (val, oldVal) {
+          let that = this
+          if(val!==undefined){
+            if(val.replace(/(^\s*)|(\s*$)/g,"")==''){
+              that.changeReasonRS = true
+            }else{
+              that.changeReasonRS = false
+            }
+          }else{
+            return false
+          }
+        },
+        deep: true
+      },
       // 监听计量单位
       'data.goodsUnitId': {
         handler: function (val, oldVal) {
