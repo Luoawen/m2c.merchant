@@ -234,28 +234,28 @@
             <tr v-for="(good,index) in goodsSKUs">
               <td>{{good.skuName}}</td>
               <td>
-                <el-switch :disabled="good.skuId!==''&&approveModify"
+                <el-switch :disabled="good.skuId!==undefined&&approveModify"
                   v-model="good.show"
                   active-color="#13ce66"
                   inactive-color="#ccc">
                 </el-switch>
               </td>
               <td>
-                  <el-input v-model="good.availableNum" placeholder="请输入内容" type="number" @blur="checkInventory(good.availableNum,index,'availableNum',goodsSKUs)" :disabled="good.skuId!==''&&approveModify"></el-input>
+                  <el-input v-model="good.availableNum" placeholder="请输入内容" type="number" @blur="checkInventory(good.availableNum,index,'availableNum',goodsSKUs)" :disabled="good.skuId!==undefined&&approveModify"></el-input>
               </td>
               <td>
-                  <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkWeight(good.weight,index,'weight',goodsSKUs)" :disabled="good.skuId!==''&&approveModify"></el-input>
+                  <el-input v-model="good.weight" placeholder="请输入内容" type="number" @blur="checkWeight(good.weight,index,'weight',goodsSKUs)" :disabled="good.skuId!==undefined&&approveModify"></el-input>
               </td>
               <td>
                   <el-input v-model="good.photographPrice" placeholder="请输入内容" type="number" @blur="checkPhotographPrice(good.photographPrice,index,'photographPrice',goodsSKUs,good.supplyPrice)"></el-input>
               </td>
               <td>
-                <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkMarketPrice(good.marketPrice,index,'marketPrice',goodsSKUs)" :disabled="good.skuId!==''&&approveModify"></el-input>
+                <el-input v-model="good.marketPrice" placeholder="请输入内容" type="number" @blur="checkMarketPrice(good.marketPrice,index,'marketPrice',goodsSKUs)" :disabled="good.skuId!==undefined&&approveModify"></el-input>
               </td>
               <td v-if="countMode==1"><el-input v-model="good.supplyPrice" placeholder="请输入内容" type="number" @blur="checkSupplyPrice(good.supplyPrice,index,'supplyPrice',goodsSKUs,good.photographPrice)"></el-input></td>
               <td v-if="countMode==2">{{serviceRate}}</td>
               <td>
-                <el-input v-model="good.goodsCode" placeholder="请输入内容" :maxlength = "30" @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)" :disabled="good.skuId!==''&&approveModify"></el-input>
+                <el-input v-model="good.goodsCode" placeholder="请输入内容" :maxlength = "30" @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)" :disabled="good.skuId!==undefined&&approveModify"></el-input>
               </td>
             </tr>
             <tr v-if="goodsSKUs.length!=0">
@@ -1306,7 +1306,7 @@
         that.goodsSKUs=[]
           if(that.goodsSpecifications.length==1 || that.goodsSpecifications[1].itemValue.length==0){
             for(var j=0;j<that.goodsSpecifications[0].itemValue.length;j++){
-              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[j].spec_name + '",skuId:"",show:true}' + ')'))
+              that.goodsSKUs.push(eval('(' + '{skuName:"'+ that.goodsSpecifications[0].itemValue[j].spec_name + '",show:true}' + ')'))
             }
             for(var a=0;a<goodSkuList.length;a++){
               for(var b=0;b<that.goodsSKUs.length;b++){
