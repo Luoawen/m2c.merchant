@@ -1505,7 +1505,11 @@
         let newRow = {
           itemValue: []
         }
-        this.goodsSpecifications.push(newRow)
+        if(this.goodsSpecifications[this.goodsSpecifications.length-1].itemValue.length==0){
+          this.$message.error('请选择规格值')
+        }else{
+          this.goodsSpecifications.push(newRow)
+        }
       },
       // 搜索建议
       query(item){
