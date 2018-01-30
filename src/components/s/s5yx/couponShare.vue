@@ -687,7 +687,7 @@ export default {
 				success: function(res) {
 					if (res.status == 200) {
 						that.cashAndDiscount_list = res.content
-						console.log('that.cashAndDiscount_list',that.cashAndDiscount_list)
+						// console.log('that.cashAndDiscount_list',that.cashAndDiscount_list)
 					}
 				}
 			})

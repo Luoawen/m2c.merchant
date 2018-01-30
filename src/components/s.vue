@@ -57,9 +57,8 @@
     </div>
     <div class="right_nav">
       <i></i>
-      <a @click="goto_right_nav" path='/s/home'>首页</a>
-      <div class="right_nav_content" path='' @click="goto_right_nav"></div>
-      <div id="public_nav_three_level"></div>
+      <a @click="goto_right_nav($event,0)" path='/s/home' style='padding-right: 5px; text-decoration: none;'>首页</a>
+      <router-link v-for='(item,index) in breadArray' :to="{name:item.goto}" class="right_nav_content " > {{item.breadObjName}}</router-link>
     </div>
     <!-- 商家提示框样式 -->
     <div class="modal_refund_bg" v-show="sign_out_tip.isShow"></div>
@@ -81,6 +80,7 @@
     name: '',
     data () {
       return {
+        breadArray:[],
         life: 'beforeCreate',
         sign_out_tip: { isShow: false },
         three_level: '',
@@ -135,17 +135,11 @@
         // that.$('#public_nav_three_level').text('')
       },
       // 右侧导航跳转
-      goto_right_nav (event) {
+      goto_right_nav (event,index) {
         let that = this
-        console.log('元素', that.$(event.target).text())
         let path = event.target.getAttribute('path')
         if (!path) return
         that.$goRoute({path: path})
-        console.log(path)
-        Array.from(document.querySelectorAll('[path]')).map(function (x) {
-          that.$(x).removeClass('avter')
-        })
-        that.$('[path="' + path + '"]').addClass('avter')
         sessionStorage.setItem('Path', '')
         if (path === '/s/home') {
           that.$('.right_nav_content').attr('path', path)
@@ -155,7 +149,7 @@
           return
         }
         that.$('.right_nav_content').attr('path', path)
-        // that.active_path = ' ' + '>' + ' ' + that.$(event.target).text()
+        that.active_path = ' ' + '>' + ' ' + that.$(event.target).text()
         that.$('#public_nav_three_level').text('')
       },
       show_tips: function (content, title = '提示') {
@@ -166,6 +160,7 @@
       },
       change(){
         let path = this.$route.meta.pathR!=undefined?this.$route.meta.pathR:this.$route.path
+        console.log('--path',path)
         this.$nextTick(()=>{
           this.$('.content_s').removeClass('avter')
           this.$('.public_nav').removeClass('avter')
@@ -176,18 +171,16 @@
             this.$('.right_nav_content').text('')
           }else{
             document.title = this.$route.meta.title+'-商家平台-拍获'
-            let bread = this.$route.meta.bread!=undefined?this.$route.meta.bread:this.$route.meta.title
-            this.$('.right_nav_content').text(' > ' + bread)
+            this.breadArray=this.$route.meta.breadObj
+           console.log('this.breadArray.------------------',this.breadArray)
           }
         })
       }
     },
     mounted () {
       let that = this
-      // window.onpopstate = function() {
-      //   window.location.reload();
-      //  };
       window.onbeforeunload = function () {
+        console.log('sessionStorage',sessionStorage)
         sessionStorage.setItem('active_path', that.$('.right_nav_content').text())
       }
     },
@@ -298,9 +291,6 @@ body {
   .s {
     width: 100%;
     padding-left: 200px;
-    // padding-left: 10%;
-    // height: 100%;
-    // background: #F4F5FA;
     position: relative;
     z-index: 1;
     margin-top: 120px;
@@ -570,13 +560,17 @@ body {
       border-bottom: none;
       background: #fff;
       .right_nav_content {
-        float: left;
-        margin-left: 5px;
+        display: inline-block;
         cursor: pointer;
+        text-decoration: none;
+        //增大响应
+        background-origin: content-box;
+        background-clip: content-box;
+        margin-right: 10px;
       }
-      span {
-        margin: 5px;
-      }
+      // span {
+      //   margin: 5px;
+      // }
       .public_nav_click {
         cursor: pointer;
         height: 50px;
@@ -589,7 +583,7 @@ body {
         margin-left: 5px;
       }
       a {
-        width: 30px;
+        // width: 30px;
         cursor: pointer;
         color: #2699FF;
         font-size: 14px;
