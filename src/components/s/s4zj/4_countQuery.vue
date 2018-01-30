@@ -200,7 +200,7 @@
               that.$nextTick(()=>{
                 let th=that.$(".tableHead").find("th")
                 for(var i=0;i<th.length;i++){
-                  console.log(th.eq(i).width()+"px")
+                  // console.log(th.eq(i).width()+"px")
                   that.$('#multipleTable').find(".cell").eq(i).css('width',th.eq(i).width()+"px")
                 }
               })
