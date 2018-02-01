@@ -40,6 +40,31 @@
 </script>
 
 <style lang="scss">
+  /*自定义滚动条样式*/
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/  
+::-webkit-scrollbar  
+{  
+    width: 8px;  
+    height: 8px;  
+    background-color: #F5F5F5; 
+    text-align: left; 
+}  
+  
+/*定义滚动条轨道 内阴影+圆角*/  
+::-webkit-scrollbar-track  
+{  
+    -webkit-box-shadow: inset 0 0 1px #F5F5F5;  
+    border-radius: 5px;  
+    background-color: #F5F5F5;  
+}  
+  
+/*定义滑块 内阴影+圆角*/  
+::-webkit-scrollbar-thumb  
+{  
+    border-radius: 5px;  
+    -webkit-box-shadow: inset 0 0 1px #F5F5F5;  
+    background-color: #B7C9E1;  
+}
 .m,.bi,.s,#show_tip{
   .btn_table{width:auto;padding:0 15px;color:white;border-radius:14px;margin-right:10px;border:none;height:30px;line-height:30px;
   outline:none;

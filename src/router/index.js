@@ -164,7 +164,7 @@ export default new Router({
           path: 'coupon_cash_dealer',
           name: 'coupon_cash_dealer',
           component: coupon_cash_dealer,
-          meta: {title: '代金券',bread: '工具>优惠券列表>代金券', pathR:'/s/coupon_cash_dealer'}
+          meta: {title: '代金券',breadObj:[{breadObjName:' >工具', goto:'marketingTools'},{breadObjName:' >优惠券列表', goto:'coupon_list'},{breadObjName:' >代金券', goto:'coupon_cash_dealer'}],bread: '工具>优惠券列表>代金券', pathR:'/s/coupon_cash_dealer'}
         },
         {
           path: 'coupon_detail_dealer',
@@ -283,7 +283,7 @@ export default new Router({
           path: 'printSendOrder',
           name: 'printSendOrder',
           component: printSendOrder,
-          meta: {title:'发货单详情', pathR:'/s/bug'}
+          meta: {title:'发货单详情',breadObj:[{breadObjName:' >订货单', goto:'bug'},{breadObjName:' >发货单详情', goto:'printSendOrder'}], pathR:'/s/bug'}
         },
         {
           path: 'dealerOrDtl',
