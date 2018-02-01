@@ -920,12 +920,19 @@
       }
       ,handleAgree(){
         let that = this
-        if (that.orderDetail.orderType == 2 && that.orderDetail.doStatus == 1 && parseFloat(that.orderDetail.orderFreight)!=0) {
+        console.log('that.orderDetail',that.orderDetail)
+        console.log('that.orderDetail.orderFreight',that.orderDetail.orderFreight)
+        // 运费退完之后就不再显示可退运费弹框 (test)
+         let  flag = (parseFloat(that.orderDetail.orderFreight) - that.hasRtFreight)===0.00? true:false
+         console.log('111',flag)
+        if (that.orderDetail.orderType == 2 && that.orderDetail.doStatus == 1 && parseFloat(that.orderDetail.orderFreight)!=0 && flag ) {
             that.getHasReturnFreight();
             that.showMask = true;
             that.showRt = true;
+        console.log('可退的情况 ',that.orderDetail.orderFreight)
             return ;
         }
+      console.log('无运费可退的情况 ',that.orderDetail.orderFreight)
         let title= '是否同意售后申请?'
         let titleAisle= that.orderDetail.orderType==0?'同意申请换货':that.orderDetail.orderType==1?'同意申请退货':that.orderDetail.orderType==2?'申请退款':'-'
           that.$confirm(title, '提示', {
