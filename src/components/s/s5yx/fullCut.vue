@@ -943,20 +943,20 @@
           for (var i = 0; i < that.fullCutList.length; i++) {
             if (that.params.full_cut_type == 1) {
               if (that.fullCutList[i].threshold == '' || that.fullCutList[i].money == '') {
-                alert('满减门槛金额/件数和优惠金额不能为空')
+                 that.show_tip('满减门槛金额/件数和优惠金额不能为空')
                 return false
               }
               if (!/^[1-9][0-9]*$/.test(that.fullCutList[i].threshold) || !/^[1-9][0-9]*$/.test(that.fullCutList[i].money)) {
-                alert('满减门槛金额/件数和优惠金额必须为正整数')
+                 that.show_tip('满减门槛金额/件数和优惠金额必须为正整数')
                 return false
               }
               if (that.params.threshold_type == 1 && parseInt(that.fullCutList[i].threshold) <= parseInt(that.fullCutList[i].money)) {
-                alert('满减优惠金额不能大于门槛金额')
+                 that.show_tip('满减优惠金额不能大于门槛金额')
                 return false
               }
               for (var g = i + 1; g < that.fullCutList.length; g++) {
                 if (parseInt(that.fullCutList[g].threshold) <= parseInt(that.fullCutList[i].threshold) || parseInt(that.fullCutList[g].money) <= parseInt(that.fullCutList[i].money)) {
-                  alert('满减门槛金额/件数和优惠金额必须逐级递增')
+                   that.show_tip('满减门槛金额/件数和优惠金额必须逐级递增')
                   that.fullCutList[g].threshold = ''
                   that.fullCutList[g].money = ''
                   return false
@@ -965,25 +965,25 @@
             }
             if (that.params.full_cut_type == 2) {
               if (that.fullCutList[i].threshold == '' || that.fullCutList[i].discount == '') {
-                alert('满减门槛金额/件数和优惠折扣不能为空')
+                 that.show_tip('满减门槛金额/件数和优惠折扣不能为空')
                 return false
               }
               if (!/^[1-9][0-9]*$/.test(that.fullCutList[i].threshold)) {
-                alert('满减门槛金额/件数必须为正整数')
+                 that.show_tip('满减门槛金额/件数必须为正整数')
                 return false
               }
               if (!/^[0-9]{1}(.[0-9]{0,2})?$/.test(that.fullCutList[i].discount || parseFloat(that.fullCutList[i].discount) == 0)) {
-                alert('优惠折扣必须为0-10之间的最多两位小数')
+                 that.show_tip('优惠折扣必须为0-10之间的最多两位小数')
                 return false
               }
               for (var g = i + 1; g < that.fullCutList.length; g++) {
                 if (parseInt(that.fullCutList[g].threshold) <= parseInt(that.fullCutList[i].threshold)) {
-                  alert('满减门槛金额/件数必须逐级递增')
+                   that.show_tip('满减门槛金额/件数必须逐级递增')
                   that.fullCutList[g].threshold = ''
                   return false
                 }
                 if (parseFloat(that.fullCutList[g].discount) >= parseFloat(that.fullCutList[i].discount)) {
-                  alert('满减优惠折扣必须逐级递减')
+                   that.show_tip('满减优惠折扣必须逐级递减')
                   that.fullCutList[g].discount = ''
                   return false
                 }
@@ -991,25 +991,25 @@
             }
             if (that.params.full_cut_type == 3) {
               if (that.fullCutList[i].threshold == '' || that.fullCutList[i].buyingPrice == '' || that.fullCutList[i].goodsIds == '') {
-                alert('满减门槛金额/件数，换购价和换购商品不能为空')
+                 that.show_tip('满减门槛金额/件数，换购价和换购商品不能为空')
                 return false
               }
               if (!/^[1-9][0-9]*$/.test(that.fullCutList[i].buyingPrice)) {
-                alert('满减换购金额必须为正整数')
+                 that.show_tip('满减换购金额必须为正整数')
                 return false
               }
             }
           }
           if (that.params.full_cut_typ == 3 && that.exchangeGoodsList.length <= 0) {
-            alert('满减形式为换购时已选换购商品不能为空')
+             that.show_tip('满减形式为换购时已选换购商品不能为空')
             return false
           }
           if (that.params.range_type == 1 && (that.chooseShopList.length <= 0 || that.params.dealer_ids.length <= 0)) {
-            alert('作用范围为商家时已选商家不能为空')
+             that.show_tip('作用范围为商家时已选商家不能为空')
             return false
           }
           if (that.params.range_type == 2 && (that.chooseGoodsList.length <= 0 || that.params.goods_ids.length <= 0)) {
-            alert('作用范围为商品时已选商品不能为空')
+             that.show_tip('作用范围为商品时已选商品不能为空')
             return false
           }
         }
@@ -1974,21 +1974,21 @@
           that.fullCutList[i].discount = parseInt(that.fullCutList[i].discount) < 0 ? 0 - that.params.discount : that.fullCutList[i].discount
           if (flag == 1 || flag == 2) {
             if (that.fullCutList[i].threshold == '' || that.fullCutList[i].money == '') {
-              alert('满减门槛金额/件数和优惠金额不能为空')
+               that.show_tip('满减门槛金额/件数和优惠金额不能为空')
               return
             }
             if (flag == 1 && parseInt(that.fullCutList[i].threshold) < parseInt(that.fullCutList[i].money)) {
-              alert('满减优惠金额不能大于门槛金额')
+               that.show_tip('满减优惠金额不能大于门槛金额')
               return
             }
           }
           if (flag == 3 || flag == 4) {
             if (that.fullCutList[i].threshold == '' || that.fullCutList[i].discount == '') {
-              alert('满减门槛金额/件数和优惠折扣不能为空')
+               that.show_tip('满减门槛金额/件数和优惠折扣不能为空')
               return
             }
             if (parseInt(that.fullCutList[i].discount) > 10) {
-              alert('满减优惠折扣必须为0-10')
+               that.show_tip('满减优惠折扣必须为0-10')
               return
             }
           }
@@ -1998,7 +1998,7 @@
             for (var g = i + 1; g < that.fullCutList.length; g++) {
               if (flag == 1 || flag == 2) {
                 if (parseInt(that.fullCutList[g].threshold) <= parseInt(that.fullCutList[i].threshold) || parseInt(that.fullCutList[g].money) <= parseInt(that.fullCutList[i].money)) {
-                  alert('满减门槛金额/件数和优惠金额必须逐级递增')
+                   that.show_tip('满减门槛金额/件数和优惠金额必须逐级递增')
                   that.fullCutList[g].threshold = ''
                   that.fullCutList[g].money = ''
                   return
@@ -2006,12 +2006,12 @@
               }
               if (flag == 3 || flag == 4) {
                 if (parseInt(that.fullCutList[g].threshold) <= parseInt(that.fullCutList[i].threshold)) {
-                  alert('满减门槛金额/件数必须逐级递增')
+                   that.show_tip('满减门槛金额/件数必须逐级递增')
                   that.fullCutList[g].threshold = ''
                   return
                 }
                 if (parseFloat(that.fullCutList[g].discount) >= parseFloat(that.fullCutList[i].discount)) {
-                  alert('满减优惠折扣必须逐级递减')
+                   that.show_tip('满减优惠折扣必须逐级递减')
                   that.fullCutList[g].threshold = ''
                   that.fullCutList[g].discount = ''
                   return
@@ -2024,7 +2024,7 @@
           var fullcut = {threshold: '', discount: '', money: '', level: '', buyingPrice: '', goodsIds: ''}
           that.fullCutList.push(fullcut)
         } else {
-          alert('最多添加3个层级')
+           that.show_tip('最多添加3个层级')
         }
       },
       deleteDiscount (index) {

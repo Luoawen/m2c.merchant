@@ -2,30 +2,7 @@
   <div class="m91gj">
     <h4 class="gj_bt">你可以选择需要的功能，丰富运营能力及体验</h4>
     <div class="tool_box">
-      <!--
-      <div class="tools" @click="toFullCut()">
-        <div class="tools_left">
-        </div>
-        <div class="tools_body">
-          <div class="tools_body_left">
-            <div class="tools_heading">满减功能</div>
-            <p path="/m/m92mj">针对全平台所有满减进行管理，包括新增、删除</p>
-          </div>
-          <div class="tools_in">></div>
-        </div>
-      </div>
-      <div class="tools" @click="toCoupon()">
-        <div class="tools_left">
-        </div>
-        <div class="tools_body">
-          <div class="tools_body_left"> 
-            <div class="tools_heading">优惠券</div>
-            <p path="/m/couponList">针对全平台所有优惠券进行管理，包括新增、删除</p>
-          </div>
-          <div class="tools_in">></div>
-        </div>
-      </div>
-      -->
+      <!-- 满减入口 -->
       <div class="tools" @click="toFullCut()">
         <div class="tools_top tools_bg01">
         </div>
