@@ -1064,8 +1064,14 @@
       // 作用范围 选择商品
       goodsChoose () {
         var that = this
+        // 换购商品 8/page
+        if(that.panelFlag ===1){
+          that.goods_query_item.rows ='8'
+        }else if(that.panelFlag ===2){
+           that.goods_query_item.rows ='10'
+        }
         that.$.ajax({
-          type: 'get',
+          type: 'get',  
           url: that.localbase + 'm2c.scm/goods/choice',
            //    url: that.localbase + 'm2c.scm/goods/choice',
           data: {
