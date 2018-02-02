@@ -258,7 +258,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(good,index) in goodsSKUs">
+        <tr v-for="(good,index) in goodsSKUs" :key="index">
           <td>{{good.skuName}}</td>
           <td>
             <el-switch :disabled="good.skuId!==undefined&&approveModify"
@@ -748,7 +748,6 @@
       //视频上传初始化
       initUpload() {
         let that = this
-        console.log("初始化成功")
         that.qiniuUploader = new QiniuJsSDK().uploader({
           runtimes: 'html5,flash,html4',    //上传模式,依次退化
           browse_button: 'selectVideo',       //上传选择的点选按钮，**必需**
@@ -780,7 +779,6 @@
                 }
               }
             })
-            console.log('uptoken', uptoken)
             return uptoken
           },
           filters: {
@@ -1380,76 +1378,121 @@
         console.log(value)
         console.log(this.goodsGuarantCheck)
       },
+      cartesianProductOf() {
+          return Array.prototype.reduce.call(arguments,function(a, b) {
+            var ret = [];
+            if(a.length>0 && b.length>0){
+                  a.forEach(function(a) {
+                    b.forEach(function(b) {
+                    ret.push(a.concat([b]));
+                  });
+                });
+            }
+            else{
+              a.forEach(function(a){
+                ret.push(a)
+              })
+          }
+          return ret;
+        }, [[]]);
+      },
       // 获取多规格交叉属性
       mapValue() {
+
+        //组合
         let that = this
-        let goodSkuList = that.goodsSKUs
-        let goback = false
-        that.goodsSKUs = []
-        if (that.goodsSpecifications.length == 1 || that.goodsSpecifications[1].itemValue.length == 0) {
-          for (var j = 0; j < that.goodsSpecifications[0].itemValue.length; j++) {
-            that.goodsSKUs.push(eval('(' + '{skuName:"' + that.goodsSpecifications[0].itemValue[j].spec_name + '",show:true}' + ')'))
+        let arrayLength = 0,skus = new Array()
+        this.goodsSpecifications.forEach((item,index)=>{
+          if( item.itemValue.length>0){
+            skus.push(item.itemValue.map(p=>{ return p.spec_name }))
           }
-          for (var a = 0; a < goodSkuList.length; a++) {
-            for (var b = 0; b < that.goodsSKUs.length; b++) {
-              if (goodSkuList[a].skuName == that.goodsSKUs[b].skuName) {
-                that.goodsSKUs[b] = goodSkuList[a]
-              }
-            }
-          }
-        } else {
-          if (that.goodsSpecifications.length == 2) {
-            var p = [[], []]
-            for (var k = 0; k < that.goodsSpecifications.length; k++) {
-              for (var y = 0; y < that.goodsSpecifications[k].itemValue.length; y++) {
-                p[k].push(that.goodsSpecifications[k].itemValue[y].spec_name)
-              }
-            }
-          } else if (that.goodsSpecifications.length == 3) {
-            //console.log(that.goodsSKUs)
-            var p = [[], [], []]
-            for (var k = 0; k < that.goodsSpecifications.length; k++) {
-              for (var y = 0; y < that.goodsSpecifications[k].itemValue.length; y++) {
-                p[k].push(that.goodsSpecifications[k].itemValue[y].spec_name)
-              }
-            }
-            if (p[2].length == 0) {
-              p.splice(2, 1)
-            }
-          } // 此定义不利于拓展，暂时没想到更好的方法
-          var arr = js(p[0], p[1])
-          var b = true
-          var index = 2;
-          while (b) {
-            if (p[index]) {
-              arr = js(arr, p[index])
-              index++;
-            } else {
-              break;
-            }
-          }
-          for (var i = 0; i < arr.length; i++) {
-            that.goodsSKUs.push(eval('(' + '{skuName:"' + arr[i] + '",show:true}' + ')'))
-          }
-
-          function js(arr1, arr2) {
-            var arr = Array()
-            for (var i = 0; i < arr1.length; i++) {
-              for (var j = 0; j < arr2.length; j++) {
-                arr.push(arr1[i] + ',' + arr2[j])
-              }
-            }
-            return arr
-          }
-
-          for (var a = 0; a < goodSkuList.length; a++) {
-            for (var b = 0; b < that.goodsSKUs.length; b++) {
-              if (goodSkuList[a].skuName == that.goodsSKUs[b].skuName) {
-                that.goodsSKUs[b] = goodSkuList[a]
-              }
-            }
-          }
+        })
+        let array = []
+        if( skus.length === 1){
+         array = this.cartesianProductOf(skus[0],[])
+        }else if( skus.length === 2){
+          array = this.cartesianProductOf(skus[0],skus[1])
+        }else if( skus.length >2){
+          skus.forEach((items,index)=>{
+            if( index === skus.length-1)return
+            if( index === 0)
+              array = this.cartesianProductOf(skus[index],skus[index+1])
+            else 
+              array = this.cartesianProductOf(array,skus[index+1])
+          })
         }
+        this.goodsSKUs = []
+        array.forEach(element => {
+          this.goodsSKUs.push({skuName:element.join(','),show:true})
+        });
+        
+        // let that = this
+        // let goodSkuList = that.goodsSKUs
+        // that.goodsSKUs = []
+        // if (that.goodsSpecifications.length == 1 || that.goodsSpecifications[1].itemValue.length == 0) {
+        //   for (var j = 0; j < that.goodsSpecifications[0].itemValue.length; j++) {
+        //     that.goodsSKUs.push({skuName:that.goodsSpecifications[0].itemValue[j].spec_name,show:true})
+        //   }
+        //   for (var a = 0; a < goodSkuList.length; a++) {
+        //     for (var b = 0; b < that.goodsSKUs.length; b++) {
+        //       if (goodSkuList[a].skuName == that.goodsSKUs[b].skuName) {
+        //         that.goodsSKUs[b] = goodSkuList[a]
+        //       }
+        //     }
+        //   }
+        // } else {
+        //   if (that.goodsSpecifications.length == 2) {
+        //     var p = [[], []]
+        //     for (var k = 0; k < that.goodsSpecifications.length; k++) {
+        //       for (var y = 0; y < that.goodsSpecifications[k].itemValue.length; y++) {
+        //         p[k].push(that.goodsSpecifications[k].itemValue[y].spec_name)
+        //       }
+        //     }
+        //   } else if (that.goodsSpecifications.length == 3) {
+        //     //console.log(that.goodsSKUs)
+        //     var p = [[], [], []]
+        //     for (var k = 0; k < that.goodsSpecifications.length; k++) {
+        //       for (var y = 0; y < that.goodsSpecifications[k].itemValue.length; y++) {
+        //         p[k].push(that.goodsSpecifications[k].itemValue[y].spec_name)
+        //       }
+        //     }
+        //     if (p[2].length == 0) {
+        //       p.splice(2, 1)
+        //     }
+        //   } // 此定义不利于拓展，暂时没想到更好的方法
+        //   var arr = js(p[0], p[1])
+        //   var b = true
+        //   var index = 2;
+        //   while (b) {
+        //     if (p[index]) {
+        //       arr = js(arr, p[index])
+        //       index++;
+        //     } else {
+        //       break;
+        //     }
+        //   }
+        //   for (var i = 0; i < arr.length; i++) {
+        //     that.goodsSKUs.push({skuName:arr[i],show:true})
+        //   }
+
+        //   function js(arr1, arr2) {
+        //     var arr = Array()
+        //     for (var i = 0; i < arr1.length; i++) {
+        //       for (var j = 0; j < arr2.length; j++) {
+        //         arr.push(arr1[i] + ',' + arr2[j])
+        //       }
+        //     }
+        //     return arr
+        //   }
+
+        //   for (var a = 0; a < goodSkuList.length; a++) {
+        //     for (var b = 0; b < that.goodsSKUs.length; b++) {
+        //       if (goodSkuList[a].skuName == that.goodsSKUs[b].skuName) {
+        //         that.goodsSKUs[b] = goodSkuList[a]
+        //       }
+        //     }
+        //   }
+        // }
       },
       // 添加规格值
       specValueClick(state1, index) {
@@ -1566,12 +1609,9 @@
         } else {
           let j = 0
           let l = that.oldGoodsSpecifications.length
-          // console.log(l)
           if (that.oldGoodsSpecifications.indexOf(tag) === -1) {
             let specName = {spec_name: tag}
-            // console.log('goodsSpecifications1',that.goodsSpecifications)
             that.goodsSpecifications[index].itemValue.splice(that.goodsSpecifications[index].itemValue.indexOf(specName), 1)
-            // console.log('goodsSpecifications1',that.goodsSpecifications)
             that.mapValue()
           } else {
             that.$message("已有规格不能移除")
@@ -1842,7 +1882,6 @@
           this.fileList = JSON.parse(sessionStorage.getItem('fileList'))
           this.goodsMainImages = JSON.parse(sessionStorage.getItem('goodsMainImages'))
           this.$refs.ue.setUEContent(sessionStorage.getItem('goodsDesc'))
-          console.log(this.data)
           if (this.data.goodsMainVideo !== '') {
             that.uploadRepeat = true
             that.uploadBtn = false
@@ -1859,7 +1898,6 @@
           })
         } else {
           if (sessionStorage.getItem('data') == '') {
-            //alert('请求')'
             that.getGoodsInfo()
           } else {
             //that.getGoodsInfo()
@@ -1893,7 +1931,6 @@
           }
         }
       } else {
-        //alert(that.$route.query.isAdd)
         if (that.$route.query.isAdd == 'add') {
           that.$.ajax({
             type: 'get',
@@ -1903,16 +1940,13 @@
             },
             success: function (result) {
               that.goodsId = result.content
-              // console.log(that.goodsId)
             }
           })
           that.$nextTick(() => {
             that.$refs.ue.setUEContent('')
             that.initUpload()
-            console.log('新增进入初始化UE')
           })
         } else {
-          //alert(1)
           that.getGoodsInfo()
         }
       }

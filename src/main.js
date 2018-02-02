@@ -91,7 +91,6 @@ Vue.use(Element)
       document.body.addEventListener('keyup', function (e) {
         if (e.keyCode === 13) {
           let elements = [].slice.call(document.querySelectorAll('.btn-search'))
-          console.log(elements.length)
           elements.forEach( item => { item.click() })
         }})
     }
@@ -186,12 +185,10 @@ Vue.use(Element)
   }
   // 封装客户端操作对象
   function getattach(){
-    console.log('userInfo',JSON.parse(sessionStorage.getItem('mUser')))
     let attach;
     if(sessionStorage.getItem('mUser')){
       let userInfo =JSON.parse(sessionStorage.getItem('mUser'))
       attach={userName:encodeURI(userInfo.dealerName),userId:userInfo.dealerId,browserInfo:browserInfo(),ip:'127.0.0.1',userType:1};
-      console.log('_attach',JSON.stringify(attach))
       return JSON.stringify(attach)
     }
   }
@@ -287,7 +284,6 @@ Vue.use(Element)
         result = that.base64.decode(result.content)
         result = that.utf8.decode(result)
         that.$store.commit('set_m_role_ID', JSON.parse(result)['id'])
-        console.log('获取的m_role_ID:', that.m_role_ID)
         callback()
       }
     })
@@ -307,7 +303,6 @@ Vue.use(Element)
         result = that.base64.decode(result.content)
         result = that.utf8.decode(result)
         that.$store.commit('set_m_user_ID', JSON.parse(result)['id'])
-        console.log('获取的m_user_ID:', that.m_user_ID)
         callback()
       }
     })
@@ -327,7 +322,6 @@ Vue.use(Element)
         result = that.base64.decode(result.content)
         result = that.utf8.decode(result)
         that.$store.commit('set_m_forbid_ID', JSON.parse(result)['id'])
-        console.log('获取的m_forbid_ID:', that.m_forbid_ID)
         callback()
       }
     })
