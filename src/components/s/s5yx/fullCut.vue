@@ -2154,7 +2154,7 @@
 // input[type="number"]{-moz-appearance:textfield;-moz-box-shadow:none;}
 .alginRight{text-align: left; line-height:42px;color:#666;}
 .frame{
-      margin-top: 100px;
+      margin-top: 200px;
 }
 
   .frame_layer{
@@ -2544,7 +2544,7 @@
     .frame_layer01 {
       .frame {
         width: 890px;
-        height: 714px;
+        height: 520px;
         .frame_total {
           width: 100%;
           height: 100%;

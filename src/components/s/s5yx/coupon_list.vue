@@ -260,22 +260,30 @@ export default {
     // 终止优惠券
     stopCoupon (couponId) {
       let _this = this
-      if (confirm('确定要终止该优惠券?')) {
-        _this.$.ajax({
+      _this.$confirm('确定要终止该优惠券?','提示',{
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type:'warning'
+      }).then(()=>{
+           _this.$.ajax({
           type: 'post',
           url: _this.localbase + 'm2c.market/web/coupon/end/' + couponId,
-//          url: 'http://localhost:8080/m2c.market/coupon/end/' + couponId,
           success: function (result) {
             if (result.status === 200) {
               console.log('status:', result.status)
-              alert('优惠券终止成功!')
+               _this.$message.success('优惠券终止成功!')
               _this.getCouponList()
             } else {
-              alert('优惠券终止失败!')
+               _this.$message.error('优惠券终止失败!')
             }
           }
         })
-      }
+      }).catch(()=>{
+         this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });  
+      })
     },
     handleSizeChange (pageSize) {
       let _this = this

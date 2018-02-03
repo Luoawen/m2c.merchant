@@ -172,7 +172,6 @@
           }else{
             document.title = this.$route.meta.title+'-商家平台-拍获'
             this.breadArray=this.$route.meta.breadObj
-           console.log('this.breadArray.------------------',this.breadArray)
           }
         })
       }
