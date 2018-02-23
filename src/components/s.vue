@@ -58,7 +58,7 @@
     <div class="right_nav">
       <i></i>
       <a @click="goto_right_nav($event,0)" path='/s/home' style='padding-right: 5px; text-decoration: none;'>首页</a>
-      <router-link v-for='(item,index) in breadArray' :to="{name:item.goto}" class="right_nav_content " > {{item.breadObjName}}</router-link>
+      <router-link v-for='item in breadArray'  :key='item.id' :to="{name:item.goto}" class="right_nav_content " > {{item.breadObjName}}</router-link>
     </div>
     <!-- 商家提示框样式 -->
     <div class="modal_refund_bg" v-show="sign_out_tip.isShow"></div>
