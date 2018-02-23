@@ -620,9 +620,9 @@
         var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
         // 调用 callback 返回建议列表的数据
         console.log('results----',results)
-        if(results.length=== 0){
-          results =[{expressName:'暂无数据'}]
-        }
+        // if(results.length=== 0){
+        //   results =[{expressName:'暂无数据'}]
+        // }
         cb(results);
       },
       createFilter(queryString) {
@@ -663,7 +663,7 @@
                   // that.getflage(that.expressCode,that.expressNo)
                   return
                 }
-                return
+                //return
               }
             }
           }
