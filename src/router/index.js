@@ -283,7 +283,7 @@ export default new Router({
           path: 'printSendOrder',
           name: 'printSendOrder',
           component: printSendOrder,
-          meta: {title:'发货单详情',breadObj:[{breadObjName:' >订货单', goto:'bug'},{breadObjName:' >发货单详情', goto:'printSendOrder'}], pathR:'/s/bug'}
+          meta: {title:'发货单详情',breadObj:[{breadObjName:' >订货单', goto:'bug'},{breadObjName:' >订货单详情', goto:'dealerOrDtl'},{breadObjName:' >发货单详情', goto:'printSendOrder'}], pathR:'/s/bug'}
         },
         {
           path: 'dealerOrDtl',
