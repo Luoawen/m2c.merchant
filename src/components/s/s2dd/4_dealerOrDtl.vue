@@ -51,7 +51,6 @@
                 <span class="ml20">{{payNo==''?'--':payNo}}</span>
                 </div>
               </div>
-
             </div>
             <div class="col-sm-11 detail_cen">
             <div>
@@ -316,8 +315,8 @@
         <span>配送方式</span>
         </span>
         <template>
-          <el-radio v-model="expressWay" label="0" @click="expressCheck(0)">物流发货</el-radio>
-          <el-radio v-model="expressWay" label="1" @click="expressCheck(1)">自有物流</el-radio>
+          <el-radio v-model="expressWay" label="0" @change="expressCheck(0)">物流发货</el-radio>
+          <el-radio v-model="expressWay" label="1" @change="expressCheck(1)">自有物流</el-radio>
         </template>
         <div class="tit03 clear">若有自己的配送车队，可选自有物流</div>
       </div>
@@ -378,7 +377,7 @@
       </div>
       <div class="deliver_type01 mt20 mb10 clear">
         <button class="deliversure btn01 mr20 ml20" @click="deliverDealerOrder()">确定发货</button>
-        <button class="btn01 deliverdel" @click="Deliver=false">取消</button>
+        <button class="btn01 deliverdel" @click="clearExpress">取消</button>
         <span class="ml20 redcolor bz">请仔细填写发货信息，一旦确定，不可修改！</span>
       </div>
       </div>
@@ -611,13 +610,13 @@
       // 打印
       gotoprint(dealerOrId) {
         let that = this
-        //var path='printSendOrder';
+        //let path='printSendOrder';
         that.$router.push({name : 'printSendOrder',query: {dealerOrderId: that.dealerOrderId,orderNo:that.orderNo}})
       },
       // 物流模糊搜索
       querySearch(queryString, cb) {
-        var restaurants = this.shipments;
-        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        let restaurants = this.shipments;
+        let results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
         // 调用 callback 返回建议列表的数据
         console.log('results----',results)
         // if(results.length=== 0){
@@ -635,7 +634,7 @@
         this.expressCode =item.expressCode
       },
       customerfreight () {
-        var that = this
+        let that = this
         that.$.ajax({
           //url: that.base + 'm2c.scm/order/web/dealer/sendOrderDetail',
           //url: 'http://localhost:8080/m2c.scm/dealer/sendOrderDetail',
@@ -670,13 +669,26 @@
         })
       },
       deliver () {
-        var that = this
+        let that = this
         that.Deliver = true
+      },
+      clearExpress(){
+        let that = this
+        that.expressPerson = ''
+        that.expressNote = ''
+        that.expressNo = ''
+        that.expressPhone = ''
+        that.expressName = ''
+        that.Deliver = false
       }
       ,expressCheck(val) {
-        let that = this;
-        that.expressWay = val;
-        console.log(that.$("#classify2").val());
+        let that = this
+        that.expressPerson = ''
+        that.expressNote = ''
+        that.expressNo = ''
+        that.expressPhone = ''
+        that.expressName = ''
+        //console.log(that.$("#classify2").val());
       }
       //列表
       ,getDealerOrderInfo () {
@@ -710,7 +722,7 @@
           that.isShowShip = data.isShowShip;//发货标识 0:不展示，1:展示
           that.strOrderStatus = data.orderStatus === 0? '待付款': data.orderStatus === 1? '待发货': data.orderStatus === 2? '待收货': data.orderStatus === 3? '已完成': data.orderStatus === 4? '交易完成': data.orderStatus === 5? '交易关闭': data.orderStatus === -1? '已取消': '--';
           //that.dealerOrderId = dealerOrderId;
-          var d = new Date(data.createdDate);
+          let d = new Date(data.createdDate);
           that.createdDate = that.date_format(d, 'yyyy-MM-dd hh:mm:ss');
           that.payWay = data.payWay;
           that.payNo = data.payNo;
@@ -746,7 +758,7 @@
         that.goodses = goodses;
         that.totalData = totalData;
         that.expressNum = 0;
-        var resIds = '';
+        let resIds = '';
         that.goodses.forEach(function(val, index) {
           val.freight = val.freight;
           //val.mediaResId='18AD16F1F35C569E4C1785DF22FA47652789';
@@ -779,10 +791,10 @@
               // 获取订单操作列表
               that.operatingRecords = result.content;
               that.totalCount = result.totalCount;
-              var uIds = '';
-              var ct = 0;
-              for (var i=0; i< that.operatingRecords.length; i++) {
-                var usId = that.operatingRecords[i].optUser;
+              let uIds = '';
+              let ct = 0;
+              for (let i=0; i< that.operatingRecords.length; i++) {
+                let usId = that.operatingRecords[i].optUser;
                 that.operatingRecords[i].optUserStr = '--';
                 if (uIds.indexOf(usId) == -1) {
                   if (ct>0)
@@ -819,7 +831,7 @@
             that.show_tip('请填写物流单号')
             return
           }
-          var pattern = /^[0-9a-zA-Z]{1,30}$/
+          let pattern = /^[0-9a-zA-Z]{1,30}$/
           if (!pattern.test(that.expressNo)){
             that.show_tip('物流单号只可以输入字母或数字')
             return
@@ -834,7 +846,7 @@
             that.show_tip('请填写配送员手机号')
             return
           }
-          var pattern = /^(13|14|15|17|18)[0-9]{9}$/
+          let pattern = /^(13|14|15|17|18)[0-9]{9}$/
           if (!pattern.test(that.expressPhone)){
             that.show_tip('请填写正确的配送员手机号')
             return
@@ -916,7 +928,7 @@
           that.show_tip("输入金额不能位负数")
           return
         }
-        var pattern =/^[0-9]+([.]\d{1,2})?$/;
+        let pattern =/^[0-9]+([.]\d{1,2})?$/;
         if(!pattern.test(that.$(".a6_input").val())){
           that.show_tip("请输入数字(例:0.00),最高保留两位小数");
           return
@@ -934,7 +946,7 @@
           return
         }
 
-        var freightStr='';
+        let freightStr='';
         that.goodses.forEach(function(val, index) {
           if (index > 0)
             freightStr += ',';
@@ -1010,12 +1022,12 @@
             //console.log(result);
             if (result.status === 200){
               that._map = {};
-              var sz = result.content.length;
-              for(var i=0; i<sz; i++) {
-                var obj = result.content[i];
+              let sz = result.content.length;
+              for(let i=0; i<sz; i++) {
+                let obj = result.content[i];
                 that._map[obj.userId] = obj.mobile + '[' + obj.userName + ']';
               }
-              for (var i=0; i< that.operatingRecords.length> 0; i++) {
+              for (let i=0; i< that.operatingRecords.length> 0; i++) {
                 if (typeof(that._map[that.operatingRecords[i].optUser]) != 'undefined') {
                   that.operatingRecords[i].optUserStr = that._map[that.operatingRecords[i].optUser];
               } else {
@@ -1056,8 +1068,8 @@
               result.content;
               that.mediaResInfos = {};
 
-              for (var i=0; i<result.content.length; i++) {
-                var a = {};
+              for (let i=0; i<result.content.length; i++) {
+                let a = {};
                 a.name = result.content[i].mresName;
                 a.cateName = result.content[i].cateName;
                 that.mediaResInfos[result.content[i].mresId] = a;
