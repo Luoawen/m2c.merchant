@@ -920,14 +920,15 @@
       }
       ,handleAgree(){
         let that = this
+         that.getHasReturnFreight();
         console.log('that.orderDetail',that.orderDetail)
         console.log('that.orderDetail.orderFreight',that.orderDetail.orderFreight)
+        console.log('that.hasRtFreight',that.hasRtFreight)
         // 运费退完之后就不再显示可退运费弹框 (test)
         console.log( '-------', parseFloat(that.orderDetail.orderFreight) - that.hasRtFreight)
          let  flag = (parseFloat(that.orderDetail.orderFreight) - that.hasRtFreight)!=0.00? true:false
          console.log('111',flag)
         if (that.orderDetail.orderType == 2 && that.orderDetail.doStatus == 1 && parseFloat(that.orderDetail.orderFreight)!=0 && flag ) {
-            that.getHasReturnFreight();
             that.showMask = true;
             that.showRt = true;
         console.log('可退的情况 ',that.orderDetail.orderFreight)
