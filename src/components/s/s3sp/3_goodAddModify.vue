@@ -1398,9 +1398,9 @@
       },
       // 获取多规格交叉属性
       mapValue() {
-
         //组合
         let that = this
+        let goodSkuList = that.goodsSKUs
         let arrayLength = 0,skus = new Array()
         this.goodsSpecifications.forEach((item,index)=>{
           if( item.itemValue.length>0){
@@ -1425,7 +1425,13 @@
         array.forEach(element => {
           this.goodsSKUs.push({skuName:element.join(','),show:true})
         });
-        
+        for (var a = 0; a < goodSkuList.length; a++) {
+          for (var b = 0; b < that.goodsSKUs.length; b++) {
+            if (goodSkuList[a].skuName == that.goodsSKUs[b].skuName) {
+              that.goodsSKUs[b] = goodSkuList[a]
+            }
+          }
+        }
         // let that = this
         // let goodSkuList = that.goodsSKUs
         // that.goodsSKUs = []
