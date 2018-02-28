@@ -840,7 +840,7 @@
         }
         that.$.ajax({
           type: 'get',
-          url: this.base + 'm2c.scm/order/web/logs/res',
+          url: this.base + 'm2c.scm/order/web/logs/',
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
