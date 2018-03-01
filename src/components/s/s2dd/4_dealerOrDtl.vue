@@ -9,7 +9,7 @@
       </a>
       <button type="button" class="fah" v-show="!bModify && orderStatus == 1 && isShowShip == 1" @click="Deliver=true">发货</button>
         <button type="button" class="fah" v-show="bModify||fModify" @click="saveDealerOrder()">保存</button>
-        <button type="button" class="fah" v-show="bModify||fModify" @click="bModify = false,fModify = false">取消</button>
+        <button type="button" class="fah" v-show="bModify||fModify" @click="bModify = false,fModify = false,getDealerOrderInfo()">取消</button>
       </span>
     </div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">

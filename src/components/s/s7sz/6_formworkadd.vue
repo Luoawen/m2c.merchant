@@ -551,7 +551,7 @@
         that.add_postageModelRule_w = {}
         that.addRows = []
         that.disabledList = []
-        that.formwork.modelName = ''
+        //that.formwork.modelName = ''
         that.formwork.modelDescription = ''
         if(that.formwork.chargeType==2){
           that.$.ajax({
