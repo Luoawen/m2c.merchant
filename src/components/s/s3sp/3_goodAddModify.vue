@@ -1240,6 +1240,19 @@
         let that = this
         that.$refs[formName].validate((valid) => {
           if (valid) {
+            //多规格时规格值不能为空
+            
+            if(that.data.skuFlag==1)
+            {
+              //console.log(that.goodsSpecifications)
+              for(let i = 0; i<that.goodsSpecifications.length;i++){
+                //console.log(that.goodsSpecifications[i].itemValue.length)
+                if(that.goodsSpecifications[i].itemValue.length===0){
+                  that.$message("请完善规格值！")
+                  return
+                }
+              }
+            }
             for (var k = 0; k < that.goodsSKUs.length; k++) {
               that.checkInventorySubmit(that.goodsSKUs[k].availableNum)
               if (that.sukShow == true) {
@@ -1262,6 +1275,7 @@
                 return
               }
             }
+            
             if (that.goodsMainImages.length <= 0) {
               that.$message("您还有信息未完善！")
               that.imgShowList = true
