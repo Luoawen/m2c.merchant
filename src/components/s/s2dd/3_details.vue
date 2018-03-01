@@ -113,7 +113,7 @@
                   <el-button size="mini" style="margin:-1px 0 0 -1px;" @click="agreedRefund()">确认退款</el-button>
                 </div>
 
-                <div class="oprs" v-show="orderDetail.status==5 && orderDetail.orderType==1">
+                <div class="oprs" v-show="(orderDetail.status==5||orderDetail.status==6) && orderDetail.orderType==1">
                   <el-button size="mini" @click="agreedRefund()">确认退款</el-button>
                 </div>
 
