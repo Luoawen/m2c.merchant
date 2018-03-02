@@ -618,9 +618,6 @@
         if (reasonVal.length > 200) {
           that.show_tip("原因输入太长，不能大于200字!");
           return;
-        }else if(reasonVal.length < 0 || reasonVal == null){
-          that.show_tip("请输入拒绝理由");
-          return;
         }
         that.$.ajax({
           type: 'PUT',
