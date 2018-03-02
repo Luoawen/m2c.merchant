@@ -1064,7 +1064,8 @@
      rejectReasonConfirm () {
        let that = this
       //  请输入拒绝理由
-       if (that.textarea.length<=0 || that.textarea ==null ) {
+      let rejectReason = (that.textarea).replace(/(^\s*)|(\s*$)/g, "")
+       if (rejectReason.length<=0 || that.textarea ==null ) {
           that.show_tip("请输入拒绝理由");
           return;
         }

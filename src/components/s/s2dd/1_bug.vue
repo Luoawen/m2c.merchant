@@ -245,7 +245,7 @@
         <span class="fr" @click="Refuseshow=false">X</span>
       </div>
       <div class="refuse_body">
-        <textarea id="refuse_txt" maxlength="100" minlength="1" placeholder="请输入1-100个字符" ></textarea>
+        <textarea id="refuse_txt" maxlength="100" minlength="1" placeholder="请输入1-100个字符" v-model="rejectReason" ></textarea>
       </div>
       <div class="refuse_footer">
         <button type="button" class="btn save"  @click="handleReject">拒绝</button>
@@ -313,6 +313,7 @@
     name: '',
     data () {
       return {
+        rejectReason:'',//拒绝理由
         isIndeterminate: true,
         amout: '',
         number: '',
@@ -609,7 +610,11 @@
       }
       ,handleReject() {
         let that = this;
-        var reasonVal = that.$("#refuse_txt").val();
+        var reasonVal = (that.rejectReason).replace(/(^\s*)|(\s*$)/g, "");
+        if (reasonVal.length<=0 || reasonVal ==null ) {
+          that.show_tip("请输入拒绝理由");
+          return;
+        }
         if (reasonVal.length > 200) {
           that.show_tip("原因输入太长，不能大于200字!");
           return;
