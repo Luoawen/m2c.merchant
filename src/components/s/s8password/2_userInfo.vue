@@ -1,22 +1,22 @@
 <template>
   <div class="Account">
     <div class="message"><b>账户信息</b></div>
-    <div class="a_message"><span class="mr20">管理员</span><span id="userPhone">{{dealer_user_info.userName}}&nbsp;&nbsp;&nbsp;{{dealer_user_info.userPhone}}</span></div>
+    <div class="a_message"><span class="mr20">管理员</span><span>{{dealer_user_info.userName}}&nbsp;&nbsp;&nbsp;{{dealer_user_info.userPhone}}</span></div>
     <div class="message"><b>公司信息</b></div>
-    <div class="a_message"><span class="mr20">商家名称</span><span id="userPhone">{{dealer_user_info.dealerName}}</span></div>
-    <div class="a_message"><span class="mr20">商家类型</span><span id="userPhone">{{dealer_user_info.dealerFristClassifyName}}</span></div>
-    <div class="a_message"><span class="mr20">签约时间</span><span id="userPhone">{{dealer_user_info.startSignDate}}&nbsp;&nbsp;至&nbsp;&nbsp;{{dealer_user_info.endSignDate}}</span></div>
+    <div class="a_message"><span class="mr20">商家名称</span><span>{{dealer_user_info.dealerName}}</span></div>
+    <div class="a_message"><span class="mr20">商家类型</span><span>{{dealer_user_info.dealerFristClassifyName}}/{{dealer_user_info.dealerSecondClassifyName}}</span></div>
+    <div class="a_message"><span class="mr20">签约时间</span><span>{{dealer_user_info.startSignDate}}&nbsp;&nbsp;至&nbsp;&nbsp;{{dealer_user_info.endSignDate}}</span></div>
     <div class="a_message"><span class="mr20">合作方式</span>
-      <span id="userPhone" v-if="dealer_user_info.cooperationMode==1">包销</span>
-      <span id="userPhone" v-if="dealer_user_info.cooperationMode==2">代销</span>
-      <span id="userPhone" v-if="dealer_user_info.cooperationMode==3">经销</span>
-      <span id="userPhone" v-if="dealer_user_info.cooperationMode==4">入驻</span>
+      <span v-if="dealer_user_info.cooperationMode==1">包销</span>
+      <span v-if="dealer_user_info.cooperationMode==2">代销</span>
+      <span v-if="dealer_user_info.cooperationMode==3">经销</span>
+      <span v-if="dealer_user_info.cooperationMode==4">入驻</span>
     </div>
     <div class="a_message">
       <span class="mr20">详细地址</span>
-      <span id="userPhone">{{dealer_user_info.dealerProvince}},{{dealer_user_info.dealerCity}},{{dealer_user_info.dealerArea}},{{dealer_user_info.dealerDetailAddress}}</span></div>
+      <span>{{dealer_user_info.dealerProvince}},{{dealer_user_info.dealerCity}},{{dealer_user_info.dealerArea}},{{dealer_user_info.dealerDetailAddress}}</span></div>
     <div class="message"><b>业务员信息</b></div>
-    <div class="a_message"><span class="mr20">平台对接人</span><span id="userPhone">{{dealer_user_info.sellerName}},{{dealer_user_info.sellerPhone}}</span></div>
+    <div class="a_message"><span class="mr20">平台对接人</span><span>{{dealer_user_info.sellerName}},{{dealer_user_info.sellerPhone}}</span></div>
   </div>
 </template>
 <script>

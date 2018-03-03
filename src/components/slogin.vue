@@ -13,7 +13,9 @@
 					</div>
 					<div class="password">
 						<i class="password_i public_i"></i>
-						<input type="password" class="mima_dd" placeholder="6-16位密码"  :minlength="6" :maxlength="16"  v-model="login_params.password" @keydown.enter="login">
+						<input type="text" name="password" onfocus="this.type='password'" autocomplete="off" class="mima_dd" placeholder="6-16位密码"  :minlength="6" :maxlength="16"  v-model="login_params.password" @keydown.enter="login" v-if='!ie'/>
+						<!-- <input type="password" class="mima_dd" placeholder="6-16位密码"  :minlength="6" :maxlength="16"  v-model="login_params.password" @keydown.enter="login"> -->
+						<input type="password" class="mima_dd" placeholder="6-16位密码"  :minlength="6" :maxlength="16"  v-model="login_params.password" @keydown.enter="login" v-if='ie'>
 						<input type="text" class="mima_wz" placeholder="6-16位密码" :minlength="6" :maxlength="16"   v-model="login_params.password" @keydown.enter="login" style="display:none;">
 						<a @click="get_password" class="eyes_box " data-show="1" href="javascript:void(0);"><i class="icon iconfont" >&#xe624;</i></a>
 					</div>
@@ -51,6 +53,7 @@ export default {
   name: '', 
   data () {
     return {
+			ie:false,
       mobile: '',
       verifyCode: '',
       newPass: '',
@@ -254,11 +257,19 @@ export default {
   beforeCreate () {
     document.title = '登录-商家平台-拍获'
 		document.querySelector('#favicon').href = '/static/favicon_s.ico'
+		// alert(navigator.appName)
   },
   mounted () {
     if ((this.newPass !== '') & (this.confirmPass !== '')) {
       this.isActive_pass = true
     }
+		let userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
+    let isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器  
+		if(isIE){
+			this.ie = true
+		}else{
+			this.ie = false
+		}
   }
 }
 </script>
