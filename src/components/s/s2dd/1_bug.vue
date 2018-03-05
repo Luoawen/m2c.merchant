@@ -112,7 +112,7 @@
             </el-col>
             <el-col :span="3" class="alginRight">广告位：</el-col>
             <el-col :span="9">
-              <el-select v-model="searchParams.mediaInfo" placeholder="广告位">
+              <el-select v-model="searchParams.hasMedia" placeholder="广告位">
                 <el-option
                   v-for="mediaInfo in mediaInfos"
                   :key="mediaInfo.value"
