@@ -829,6 +829,8 @@
               let res
               let timestamp = (new Date()).valueOf()
               let date = that.date_format(new Date(timestamp), 'yyyyMMdd')
+              console.log('info.response',info.response)
+              console.log('info',info)
               if (info.response == undefined) {
                 res = JSON.parse(info);
                 key = res.key
