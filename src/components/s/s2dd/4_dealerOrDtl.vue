@@ -1100,8 +1100,8 @@
       let that = this;
       that.dealerOrderId = that.$route.query.dealerOrderId?that.$route.query.dealerOrderId:sessionStorage.getItem('dealerOrderId');
       that.orderNo = that.$route.query.orderId?that.$route.query.orderId:sessionStorage.getItem('orderNo')
-      // console.log('dealerOrderId',that.dealerOrderId)
-      //  console.log('that.orderNo',that.orderNo)
+      console.log('dealerOrderId',that.dealerOrderId)
+       console.log('that.orderNo',that.orderNo)
       that.getDealerMess()
       that.getDealerOrderInfo();
       that.$.ajax({

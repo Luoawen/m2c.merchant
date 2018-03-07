@@ -317,7 +317,8 @@
     mounted(){
       let that = this;
       that.dealerOrderId = that.$route.query.dealerOrderId;
-      console.log("----------------------------DealerOrderId:"+that.$route.query.dealerOrderId)
+      sessionStorage.setItem('dealerOrderId',that.dealerOrderId)
+      sessionStorage.setItem('orderNo',that.$route.query.orderNo)
       that.getDealerOrderInfo()
       that.getCustmerTel()
     }
