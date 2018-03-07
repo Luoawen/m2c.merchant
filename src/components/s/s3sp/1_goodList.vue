@@ -513,7 +513,7 @@
           data: {parentClassifyId:-1},
           success: function (result) {
             that.goodsClassifys=result.content;
-            that.goodsClassifys.unshift({"parentClassifyId":'',"classifyId":'',"serviceRate":'',"classifyName":"全部" });
+            that.goodsClassifys.unshift({"parentClassifyId":'',"classifyId":'',"serviceRate":'',"classifyName":"商品分类" });
           }
         })
       }
