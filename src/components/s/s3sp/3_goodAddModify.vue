@@ -1607,6 +1607,7 @@
             console.log(that.$("#dragImg").find("img")[l].src)
           })
           that.goodsMainImages.push(file.response.content.url)
+          that.fileList.push(eval('(' + '{url:"' + that.goodsMainImages + '"}' + ')'))
           that.picture()
         }
       },
@@ -1904,6 +1905,7 @@
           this.fileList = JSON.parse(sessionStorage.getItem('fileList'))
           this.goodsMainImages = JSON.parse(sessionStorage.getItem('goodsMainImages'))
           this.$refs.ue.setUEContent(sessionStorage.getItem('goodsDesc'))
+          console.log('this.fileList',this.fileList)
           if (this.data.goodsMainVideo !== '') {
             that.uploadRepeat = true
             that.uploadBtn = false
