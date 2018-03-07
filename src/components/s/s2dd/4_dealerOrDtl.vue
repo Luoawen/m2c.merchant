@@ -879,6 +879,9 @@
               that.Deliver = false;
               that.getDealerOrderInfo();
               that.show_tip('发货成功！');
+              if (that.expressWay == 0){
+                that.getflage(that.expressCode,that.expressNo)
+              }
             }
             else {
               that.show_tip('发货失败！');

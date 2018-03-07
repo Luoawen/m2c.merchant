@@ -1586,10 +1586,12 @@
         for (var i = 0; i < that.goodsMainImages.length; i++) {
           if (file.url == that.goodsMainImages[i]) {
             that.goodsMainImages.splice(i, 1)
+            that.fileList.splice(i,1)
           }
           if (file.response != undefined) {
             if (file.response.content.url == that.goodsMainImages[i]) {
               that.goodsMainImages.splice(i, 1)
+              that.fileList.splice(i,1)
             }
           }
         }
