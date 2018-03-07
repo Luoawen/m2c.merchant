@@ -667,7 +667,9 @@
           that.show_tip('开始时间不能大于结束时间')
           return
         }
-        let url=that.localbase + 'm2c.scm/web/goods/export?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+'&goodsClassifyId='+that.search_goods_params.goodsClassifyId+'&goodsStatus='+that.search_goods_params.goodsStatus+'&condition='+that.search_goods_params.condition+'&startTime='+that.search_goods_params.startTime+'&endTime='+that.search_goods_params.endTime;
+        // console.log('selectedOptions1length',that.selectedOptions1[that.selectedOptions1.length-1]);
+        let url=that.localbase + 'm2c.scm/web/goods/export?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId+'&goodsClassifyId='+that.selectedOptions1[that.selectedOptions1.length-1]+'&goodsStatus='+that.search_goods_params.goodsStatus+'&condition='+that.search_goods_params.condition+'&startTime='+that.search_goods_params.startTime+'&endTime='+that.search_goods_params.endTime;
+        // console.log('url',url);
         window.location.href=url
       }
       ,goodsCheckStore () {
