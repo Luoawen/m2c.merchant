@@ -296,14 +296,22 @@
               <el-form-item>
                 <el-checkbox v-model="couponParams.is_access" label="1" class="ml10">允许平台发放</el-checkbox>
               </el-form-item>
-              <i class="icon-intro02"></i>
+              <div class="icon-intro02">
+                <div class="tips">
+                 <p>授权则平台可以发放该优惠券</p>
+                </div>
+              </div>
             </div>
             <div class="Basicinbt">
               <span class="linh35">其他规则</span>
               <el-form-item>
                 <el-checkbox v-model="couponParams.is_share" label="1" class="ml10">可与其他营销活动共同使用</el-checkbox>
               </el-form-item>
-              <i class="icon-intro02"></i>
+              <div class="icon-intro02">
+                <div class="tips">
+                 <p>先使用满减，再用优惠券</p>
+                </div>
+              </div>
             </div>
           </div>
           <!--确定提交-->
@@ -1372,20 +1380,25 @@ export default {
         font-family:PingFangSC-Medium;
         color:rgba(0,0,0,1);
       }
-      .icon-intro02{
+      div.icon-intro02{
         width: 15px;
         height: 15px;
         background: url(../../../assets/images/icon-intro02.png) no-repeat center;
         display: inline-block;
         margin-top: 12px;
+        position:relative;
+        div.tips{display:none;width:200px;height:auto;background:#fff;border:1px solid #E5E5E5;border-radius: 4px;box-shadow: 0 1px 0 0 #E5E5E5;position: absolute;top:18px;left:0px; text-indent: 0;padding:6px;font-weight:normal;
+              p{line-height:24px;font-size:12px; color:#666;}
+            }
       }
+        div.icon-intro02:hover div.tips{display:block;}
       .tit{
         display: inline-block;
         width:280px;
         height:34px;
         font-size:12px;
         font-family:PingFangSC-Regular;
-        color:rgba(204,204,204,1);
+        color:rgba(204,204,204,1);  
         line-height:17px;
         /*padding-left:80px;*/
       }
