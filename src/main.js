@@ -163,12 +163,31 @@ Vue.use(Element)
   // 扩展ajax
   {
     let _ajax = $.ajax
+    let that = this
     $.ajax = function (options) {
       let _success = 'success' in options ? options.success : function () { return }
       let _error = 'error' in options ? options.error : function () { return }
+      // if(!sessionStorage.getItem("dealerId") || sessionStorage.getItem("dealerId")==''){
+      //   window.href = window.location.origin
+      //   return
+      // }
       let _options = $.extend(options, {
         headers:{'attach':(sessionStorage.getItem('mUser')!=null||sessionStorage.getItem('mUser')!=undefined)?getattach():"",
         'X-Authorization': sessionStorage.getItem('token')},
+            // 在排除登录验证用url  其他的请求都check是否有dealerId  没有的情况(清除缓存)调用登出接口
+        beforeSend:function(XMLHttpRequest){
+          console.log('options  -------------'   ,options.url)
+          let TheUrl = options.url.toString()
+          // let urlArray = 
+          console.log(null)
+
+          if((TheUrl.indexOf('m2c.users/user/dlogin')==-1)&&(TheUrl.indexOf('m2c.users/user/findPassword')==-1)&&(TheUrl.indexOf('m2c.users/user/sendSms')==-1)){
+            console.log(0)
+            if((JSON.parse(sessionStorage.getItem('mUser'))||JSON.parse(sessionStorage.getItem('mToken')))== null || undefined ||''){
+              alert(1)    
+              window.location.href = window.location.origin}
+          }
+      },  
         success: function (result) {
           if (result.status === 800000 || result.status === 800001 || result.status === 800002 || result.status === 800003 || result.status === 800004) {
             // showTip(result.errorMessage)

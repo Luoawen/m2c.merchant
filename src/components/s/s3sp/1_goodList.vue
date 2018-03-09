@@ -493,8 +493,8 @@
           type: 'GET',
           url: that.localbase + 'm2c.scm/shop/sys/shopInfo',
           data: {
-            dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
-            token: sessionStorage.getItem('mToken')
+            dealerId: sessionStorage.getItem('mUser')?JSON.parse(sessionStorage.getItem('mUser')).dealerId :'',
+            token: sessionStorage.getItem('mToken') ?sessionStorage.getItem('mToken'):''
           },
           success: function (result) {
             if(result.content==""){
@@ -617,13 +617,14 @@
         if(!that.isChangePage){
           that.currentPage = 1
         }
+        // console.log("sessionStorage.getItem('mToken')",sessionStorage.getItem('mToken'));
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.scm/web/goods',
           data: {
-            token: sessionStorage.getItem('mToken'),
+            token: sessionStorage.getItem('mToken')?sessionStorage.getItem('mToken'):'',
             isEncry: false,
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             rows: that.goodsStorePageRows,                     // 每页多少条数据
             pageNum: that.goodsStoreCurrentPage,    // 请求第几页*/
             goodsClassifyId:that.selectedOptions1[that.selectedOptions1.length-1],
@@ -677,13 +678,14 @@
          if(!that.isChangePage){
           that.currentPage = 1
         }
+        
         that.$.ajax({
           type: 'get',
           url: this.base + 'm2c.scm/web/goods/approve',
           data: {
-            token: sessionStorage.getItem('mToken'),
+            token: sessionStorage.getItem('mToken')?sessionStorage.getItem('mToken'):"",
             isEncry: false,
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId?JSON.parse(sessionStorage.getItem('mUser')).dealerId:"",
             rows: that.goodsCheckStorePageRows,                     // 每页多少条数据
             pageNum: that.goodsCheckStoreCurrentPage,    // 请求第几页*/
             goodsClassifyId:that.selectedOptions2[that.selectedOptions2.length-1],
