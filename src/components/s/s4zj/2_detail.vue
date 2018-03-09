@@ -179,7 +179,7 @@
           type: 'get',
           url: this.base + 'm2c.trading/web/accounting/dealer/inout/detail/page',
           data: {
-            dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             token: sessionStorage.getItem('mToken'),
             pageSize: that.pageRows,                     // 每页多少条数据
             pageNo: that.currentPage,    // 请求第几页*/

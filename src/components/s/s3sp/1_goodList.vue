@@ -685,7 +685,7 @@
           data: {
             token: sessionStorage.getItem('mToken')?sessionStorage.getItem('mToken'):"",
             isEncry: false,
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId?JSON.parse(sessionStorage.getItem('mUser')).dealerId:"",
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             rows: that.goodsCheckStorePageRows,                     // 每页多少条数据
             pageNum: that.goodsCheckStoreCurrentPage,    // 请求第几页*/
             goodsClassifyId:that.selectedOptions2[that.selectedOptions2.length-1],
@@ -784,7 +784,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             rows: that.goodsDelStorePageRows,                     // 每页多少条数据
             pageNum: that.goodsDelStoreCurrentPage,    // 请求第几页*/
             condition:that.search_goodsCheck_params.condition.replace(/\s+/g,''),

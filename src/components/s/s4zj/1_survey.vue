@@ -215,7 +215,7 @@
           url: this.base + 'm2c.scm/dealer/sys/web/dealerDeposit',
           data: {
             token: sessionStorage.getItem('mToken'),
-            dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
           },
           success: function (result) {
             if (result.status === 200){

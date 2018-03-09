@@ -29,7 +29,7 @@
         addressId: '',
         dealer_user_info: '',
        // dealer_user_info: { userPhone: '' , dealerName : '' , dealerFristClassifyName : '' , dealerSecondClassifyName : '' , startSignDate : '' ,endSignDate : '' cooperationMode :'' ,dealerDetailAddress : '',sellerName : '' sellerPhone :'' },
-        dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+        dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
         userPhone: JSON.parse(sessionStorage.getItem('mUser')).mobile
       }
     },

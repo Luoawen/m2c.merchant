@@ -171,7 +171,7 @@
         area_all_search: [],
         // 售后id
         addressId: '',
-        dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+        dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
         city_show: false,
         area_show: false,
         isAdd: false,
@@ -362,7 +362,7 @@
           type: 'get',
           url: this.localbase + 'm2c.scm/web/goods/guarantee/list',
           data:{
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
           },
           success: function (res) {
             that.dataList = res.content
@@ -515,7 +515,7 @@
           type: 'post',
           url: this.localbase + 'm2c.scm/web/after/sale/address',
           data: {
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             addressId: that.addressId,
             proCode: that.search_params.province,
             proName: that.search_params.proName,
@@ -616,7 +616,7 @@
           type: 'put',
           url: this.localbase + 'm2c.scm/web/after/sale/address',
           data: {
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             addressId: that.addressId,
             proCode: that.search_params.province,
             proName: that.search_params.proName,

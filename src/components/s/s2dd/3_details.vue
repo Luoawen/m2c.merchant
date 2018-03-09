@@ -770,7 +770,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             afterSellOrderId: sessionStorage.getItem('afterSale:afterSellOrderId'),
             userId: JSON.parse(sessionStorage.getItem('mUser')).userId
           },

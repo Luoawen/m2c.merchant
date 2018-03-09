@@ -533,10 +533,10 @@ export default {
       _this.rangeClassifyList = []
 
       if (rangeType === '0') { // 作用范围为全场
-        _this.goods_query_item = {goodsClassifyId: '', condition: '', dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, pageNum: 1, rows: 8}
+        _this.goods_query_item = {goodsClassifyId: '', condition: '', dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'', pageNum: 1, rows: 8}
         _this.goodsSelect()
       } else if (rangeType === '2') { // 作用范围为商品
-        _this.goods_query_item = {goodsClassifyId: '', condition: '', dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, pageNum: 1, rows: 10}
+        _this.goods_query_item = {goodsClassifyId: '', condition: '', dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'', pageNum: 1, rows: 10}
         _this.goodsSelect()
         _this.classifySelect('-1')
       } else if (rangeType === '3') { // 作用范围为品类

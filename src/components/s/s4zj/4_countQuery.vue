@@ -184,7 +184,7 @@
           url: this.base + 'm2c.trading/web/settle/dealer/pager.web',
           data: {
             token: sessionStorage.getItem('mToken'),
-            dealerId:JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             rows: that.pageRows,                     // 每页多少条数据
             pageNumber: that.currentPage,    // 请求第几页*/
             keyword:that.search_params.condition.replace(/\s+/g,""),

@@ -341,7 +341,7 @@ export default {
       _this.removeGoodsList = []
 
       if (rangeType === '2') { // 作用范围为商品
-        _this.goods_query_item = {goodsClassifyId: '', condition: '', dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, pageNum: 1, rows: 10}
+        _this.goods_query_item = {goodsClassifyId: '', condition: '', dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'', pageNum: 1, rows: 10}
         _this.goodsSelect()
       }
     },

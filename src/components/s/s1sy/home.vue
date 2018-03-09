@@ -323,7 +323,7 @@ export default {
         method: 'get',
         url: that.base + 'm2c.scm/shop/sys/shopcreatedtime',
         data: {
-          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+          dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
         },
         success: function (result) {
           if(result.status === 200){
@@ -345,7 +345,7 @@ export default {
         method: 'get',
         url: that.base + 'm2c.scm/web/goods/for/sale/num',
         data: {
-          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+          dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
         },
         success: function (result) {
           if(result.status === 200){
@@ -366,7 +366,7 @@ export default {
         method: 'get',
         url: that.base + 'm2c.scm/web/dealer/report/this/month/sell/money',
         data: {
-          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+          dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
         },
         success: function (result) {
           if(result.status === 200){
@@ -405,7 +405,7 @@ export default {
         method: 'get',
         url: that.base + 'm2c.scm/web/dealer/report/day',
         data: {
-          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+          dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
           timeType: that.activeData == 'first' ? '1':'2'
         },
         success: function (result) {
@@ -561,7 +561,7 @@ export default {
         method: 'get',
         url: that.base + 'm2c.scm/web/goods/sales/list/top5',
         data: {
-          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+          dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
           month:(that.month).slice(0,4).toString()+(that.month).slice(5,7).toString()
           //val.slice(0,4).toString() + val.slice(5,7).toString()
         },

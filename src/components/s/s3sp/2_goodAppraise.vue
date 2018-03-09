@@ -414,7 +414,7 @@
           pagination: true,
           data: {
             token: sessionStorage.getItem('mToken'),
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId, // 商户ID
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'', // 商户ID
             replyStatus: that.search_params.replyStatus,
             starLevel: that.search_params.starLevel,
             commentLevel: that.search_params.commentLevel,

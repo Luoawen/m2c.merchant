@@ -45,7 +45,7 @@
   export default {
     data () {
       return {
-        dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+        dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
         userPhone: JSON.parse(sessionStorage.getItem('mUser')).mobile,
         show: true,
         count: sessionStorage.getItem('totalT') == null || sessionStorage.getItem('totalT') == '' ? 60 : sessionStorage.getItem('totalT'),

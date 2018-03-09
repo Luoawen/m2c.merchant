@@ -283,7 +283,7 @@
               type: 'post',
               url: that.localbase + 'm2c.scm/shop/sys/web/shopBackImg',
               data: {
-                dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+                dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
                 shopId: that.storeinformation.shopId,
                 shopBackImg: that.shopBackImg,
               },
@@ -371,7 +371,7 @@
           type: methodStr,
           url: that.localbase + 'm2c.scm/shop/sys/web/shopInfo',
           data: {
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             shopId: that.storeinformation.shopId,
             shopName: that.storeinformation.appellation,
             shopIntroduce: that.storeinformation.introduce,

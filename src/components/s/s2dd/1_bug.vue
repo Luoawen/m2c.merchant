@@ -327,7 +327,7 @@
         pageSize: 10,
         pageIndex: 1,
         totalCount: 0,
-        dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,//'JXS42ACB6D352E9417FBBCF03908219AAF1',
+        dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',//'JXS42ACB6D352E9417FBBCF03908219AAF1',
         // 搜索参数
         searchParams: { orderStatus: '', afterSellStatus: '', startTime: '', endTime: '', condition: '',orderClassify:'', payWay:'', hasMedia:'', invoiceType: '',commentStatus:''},
         afStatus : -2,

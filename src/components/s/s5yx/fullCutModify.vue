@@ -709,7 +709,7 @@
           data: {
             goodsClassifyId: that.goods_query_item.goodsClassifyId,
             condition: that.goods_query_item.condition,
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             pageNum: that.goods_query_item.pageNum,
             rows: that.goods_query_item.rows
           },

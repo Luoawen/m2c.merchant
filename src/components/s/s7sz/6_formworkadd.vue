@@ -558,7 +558,7 @@
             method: 'get',
             url: this.localbase + 'm2c.scm/web/postage/nationwide',
             data: {
-              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+              dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
               modelId:that.modelId
             },
             success: function (result) {
@@ -1115,7 +1115,7 @@
           url: that.localbase + 'm2c.scm/web/postage',
           data: {
             token: sessionStorage.getItem('mToken'),
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             modelId: that.addModify === 'add' ? that.modelId : that.$route.query.modelId,
             postageModelRules: JSON.stringify(that.postageModelRules),
             modelName: that.formwork.modelName,

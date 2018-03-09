@@ -627,7 +627,7 @@
             // data: Object.assign({}, that.add_modify_params, that.touxiang_change ? {icon: that.add_modify_params_imgurl} : {}, {
             data: Object.assign({
               token: sessionStorage.getItem('mToken'),
-              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+              dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
               dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName
             }, that.add_modify_params, that.touxiang_change ? {brandLogo: that.add_modify_params_imgurl} : {}),
             success: function (result) {
@@ -722,7 +722,7 @@
           url: that.base + 'm2c.scm/web/brand',
           data: {
             token: sessionStorage.getItem('mToken'),
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             rows: that.bindPageRows,                     // 每页多少条数据
             pageNum: that.bindsCurrentPage,    // 请求第几页*/
             condition:that.search_params.condition.replace(/\s+/g,""),
@@ -751,7 +751,7 @@
           url: that.base + 'm2c.scm/web/brand/approve',
           data: {
             token: sessionStorage.getItem('mToken'),
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             rows: that.bindApprovePageRows,                     // 每页多少条数据
             pageNum: that.bindsApproveCurrentPage,    // 请求第几页*/
             condition:that.search_approve.condition.replace(/\s+/g,""),

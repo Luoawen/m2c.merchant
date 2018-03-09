@@ -70,7 +70,7 @@
         area_all_add_modify_2: [],
         // 售后id
         addressId: '',
-        dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+        dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
         userPhone: JSON.parse(sessionStorage.getItem('mUser')).mobile,
         show: true,
         count: sessionStorage.getItem('total') == null || sessionStorage.getItem('total') == '' ? 60 : sessionStorage.getItem('total'),

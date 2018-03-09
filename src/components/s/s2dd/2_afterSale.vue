@@ -198,7 +198,7 @@
           data: {
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             rows: that.pageRows,                     // 每页多少条数据
             pageNum: that.currentPage,    // 请求第几页*/
             orderType:that.search_params.expectation,

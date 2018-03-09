@@ -1008,7 +1008,7 @@
                 url: this.localbase + 'm2c.scm/web/goods/code',
                 data: {
                   token: sessionStorage.getItem('mToken'),
-                  dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+                  dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
                   goodsCode: val
                 },
                 success: function (result) {
@@ -1298,7 +1298,7 @@
             let a = {
               // token: sessionStorage.getItem('mToken'),
               goodsId: that.goodsId == '' ? that.$route.query.goodsId : that.goodsId,
-              dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+              dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
               dealerName: JSON.parse(sessionStorage.getItem('mUser')).dealerName,
               goodsSKUs: JSON.stringify(that.goodsSKUs),
               goodsSpecifications: JSON.stringify(that.goodsSpecifications),
@@ -1535,7 +1535,7 @@
               //url:'http://10.0.40.23:8080/m2c.scm/goods/spec/value',
               data: {
                 token: sessionStorage.getItem('mToken'),
-                dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+                dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
                 specValue: state1,
                 standardId: that.standardId
               },
@@ -1699,7 +1699,7 @@
           url: that.localbase + 'm2c.scm/web/goods/spec/value',
           data: {
             token: sessionStorage.getItem('mToken'),
-            dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId,
+            dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
             standardId: that.standardId
           },
           success: function (result) {
