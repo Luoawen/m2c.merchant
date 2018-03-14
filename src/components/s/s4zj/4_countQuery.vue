@@ -17,7 +17,7 @@
       <el-button type="primary" size="medium" @click="orderStore()" class="btn-search">搜索</el-button>
     </div>
     <div class="order_tab_list" style="margin-top: 20px;">
-      <table class="tableHead" style="z-index:2">
+      <table class="tableHead" style="z-index:2;">
         <tr>
           <th width="300">结算号</th>
           <th width="200">订货号</th>
@@ -55,6 +55,7 @@
           <th width="200">更新时间</th>
         </tr>
       </table>
+      <!-- -->
       <el-table
         id="multipleTable" :show-header=false
         :data="orderStoreData"

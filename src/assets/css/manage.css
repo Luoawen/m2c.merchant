@@ -71,3 +71,4 @@
 /* 设置图片的初始样式 */
 .img_up{width: 100px; height:100px; display: inline-block; background: url('../images/img_add.png')}
 /*公共样式*/
+.btnBox{margin:10px 0;margin-bottom:20px;}

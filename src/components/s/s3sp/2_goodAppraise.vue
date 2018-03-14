@@ -33,12 +33,12 @@
       <h4>高级搜索<a class="close" @click="advancedShow=!advancedShow"></a></h4>
       <div class="searcWrap mess">
         <el-row :gutter="20">
-          <el-col :span="3" class="alginRight">关键词：</el-col>
+          <el-col :span="3" class="alginRight">关键词</el-col>
           <el-col :span="9">
             <el-input v-model="search_params.condition" placeholder="输入商品名称/订单号/顾客姓名/顾客手机号" title="输入商品名称/订单号/顾客姓名/顾客手机号"></el-input>
           </el-col>
-          <el-col :span="3" class="alginRight">评价时间：</el-col>
-          <el-col :span="9">
+          <el-col :span="3" class="alginRight">评价时间</el-col>
+          <el-col :span="9" style="margin-top:7px;">
             <el-date-picker style="padding-bottom:1px;"
               v-model="time"
               type="daterange"
@@ -50,7 +50,7 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="3" class="alginRight">回复状态：</el-col>
+          <el-col :span="3" class="alginRight">回复状态</el-col>
           <el-col :span="9">
             <el-select v-model="search_params.replyStatus" placeholder="回复状态">
               <el-option
@@ -61,7 +61,7 @@
               </el-option>
             </el-select>
           </el-col>
-          <el-col :span="3" class="alginRight">评价星级：</el-col>
+          <el-col :span="3" class="alginRight">评价星级</el-col>
           <el-col :span="9">
             <el-select v-model="search_params.starLevel" placeholder="评价星级">
               <el-option
@@ -74,7 +74,7 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="3" class="alginRight">图片情况：</el-col>
+          <el-col :span="3" class="alginRight">图片情况</el-col>
           <el-col :span="9">
             <el-select v-model="search_params.imageStatus" placeholder="图片情况">
               <el-option
@@ -85,7 +85,7 @@
               </el-option>
             </el-select>
           </el-col>
-           <el-col :span="3" class="alginRight">评价级别：</el-col>
+           <el-col :span="3" class="alginRight">评价级别</el-col>
           <el-col :span="9">
             <el-select v-model="search_params.commentLevel" placeholder="评价级别">
               <el-option
@@ -105,60 +105,6 @@
         </el-row>
       </div>
     </div>
-    <!-- <div class="poi2 Advanced_s" v-show="advancedShow">
-      <div class="">
-        <div class="titbt">高级搜索<i @click="advancedShow=!advancedShow" class="close"></i></div>
-        <div class="clear">
-          <div class="col-sm-6 left">
-            <div class="clear mt10 mb20">
-              <span class="bt fl ">关键词</span>
-              <input class="form-control fl " placeholder="输入商品名称 / 订单号 / 顾客姓名/ 顾客手机号" v-model="search_params.condition"/>
-            </div>
-            <div class="clear mt10 mb20">
-              <span class="bt fl ">回复状态</span>
-              <select class="form-control fl " v-model="search_params.replyStatus">
-                <option value="" selected>全部</option>
-                <option value="2">已回复</option>
-                <option value="1">未回复</option>
-              </select>
-            </div>
-            <div class="clear mt10 mb20">
-              <span class="bt fl ">图片情况</span>
-              <select class="form-control fl " v-model="search_params.imageStatus">
-                <option value="" selected>全部</option>
-                <option value="2">有图</option>
-                <option value="1">无图</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-sm-6 right">
-            <div class="clear mt10 mb20">
-              <span class="bt fl ">评价时间</span>
-              <span class="clear">
-                  <span class="fl"><input class="form-control time" type="date" v-model="search_params.startTime"/></span>
-                  <span class="fl mr10" style="display:inline-block;line-height:40px;">~</span>
-                  <span class="fl"><input class="form-control time" type="date" v-model="search_params.endTime"/></span>
-                </span>
-            </div>
-            <div class="clear mt10 mb20">
-              <span class="bt fl ">评价星级</span>
-              <select class="form-control fl " v-model="search_params.starLevel">
-                <option value="" selected>全部</option>
-                <option value="1">1星</option>
-                <option value="2">2星</option>
-                <option value="3">3星</option>
-                <option value="4">4星</option>
-                <option value="5">5星</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="footer clear">
-          <el-button type="primary" size="medium" @click="get_comment_info()">搜索</el-button>
-          <el-button size="medium" @click="clearAll()">重置</el-button>
-        </div>
-      </div>
-    </div> -->
     <div class="comment_info  clear" style="margin-top:20px;">
       <table class="comment_table col-sm-12" id="table" style="table-layout:fixed">
         <thead>
@@ -251,7 +197,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="block" style="margin: 20px;float: left">
+      <div class="block fr" style="margin: 20px;">
         <el-pagination
           @size-change="goodsCommentHandleSizeChange"
           @current-change="goodsCommentHandleCurrentChange"
@@ -608,7 +554,7 @@
       .cancel {
         margin-left: 40px;
         background: #FFF;
-        border: 1px solid #CCCCCC;
+        border: 1px solid #E5E5E5;
         color: #444;
       }
 
@@ -616,7 +562,7 @@
 }
 .comment_table{
   /*width: 1160px;*/
-  border: 1px solid #DFE9F6;
+  border: 1px solid #E5E5E5;
   .a1{
     /*width: 344px; */
       width: 25%;
@@ -657,7 +603,7 @@
   }
     tbody{
       background: #fff;
-      border-bottom:1px solid #DFE9F6;
+      border-bottom:1px solid #E5E5E5;
       tr{
         td{
           padding-left: 20px;
@@ -700,17 +646,17 @@
           color: #999999;
         }
         a.ellipsis2{
-    width:180px;
-    height: 40px;
-    line-height:20px;
-    color:#5a5e66;
-    // margin-left:10px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    position: relative;
-    float:left;
+    // width:180px;
+    // height: 40px;
+    // line-height:20px;
+    // color:#5a5e66;
+    // // margin-left:10px;
+    // display: -webkit-box;
+    // -webkit-box-orient: vertical;
+    // -webkit-line-clamp: 2;
+    // overflow: hidden;
+    // position: relative;
+    // float:left;
   }
   a.ellipsis2:hover{ text-decoration:none;}
   a.ellipsis3{
@@ -763,25 +709,7 @@
     }
 }
 .zIndex2{z-index:21;}
-.soloSearchBox{position:absolute;top:0;left:0;height:auto;padding:20px;width:100%;background:#fff;z-index:2;
-  h4 a.close{
-    opacity:1;display:inline-block;width:24px;height:24px;float:right;background:url(../../../assets/images/ico_close.png) no-repeat center center;
-  }
-  .searcWrap{width:100%;height:auto;position:relative;}
-  .mess{
-    margin-top: 30px;padding:0px 40px;padding-bottom:30px;background:#fff;
-    h4{
-      line-height:50px;
-      margin-bottom:10px;
-      font-size:16px;
-      color:#333;
-    }
-    .inline{display:inline-block;line-height:50px;}
-    .modify{margin-left:10px;line-height:50px;width:16px;height:16px;background:url(../../../assets/images/ico_compile.png) no-repeat center center;}
-  }
-  .alginRight{text-align: right; line-height:50px;color:#666;}
-  .formControl{display:inline-block;width:100%;height:36px;padding:6px 12px; line-height:50px;font-size:14px;background:#fff;border:1px solid #ccc;border-radius:4px;}
-}
+
 .mb20{
   margin-bottom: 20px;
 }

@@ -26,109 +26,112 @@
         @change="timeCheck">
       </el-date-picker>
       <el-input v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码" title="输入商品名称/订单号/支付单号/收货人号码"></el-input>
-      <el-button type="primary" size="medium" @click="search()"   class="btn-search">搜索</el-button>
-      <el-button type="primary" size="medium" icon="el-icon-download" @click.native="exportSearch()" class="fr">导出</el-button>
+      <el-button type="primary" size="medium" @click="search()" class="btn-search">搜索</el-button>
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
-      <!-- 高级搜索 -->
-      <div class="soloSearchBox" v-if="Advancedshow">
-        <h4>高级搜索<a class="close" @click="Advancedshow=!Advancedshow"></a></h4>
-        <div class="searcWrap mess">
-          <el-row :gutter="20">
-            <el-col :span="3" class="alginRight">关键词：</el-col>
-            <el-col :span="9">
-              <el-input v-model="searchParams.condition" placeholder="输入商品名称/订货号/支付单号/收货人号码/商家名称/商家ID" title="输入商品名称/订货号/支付单号/收货人号码/商家名称/商家ID"></el-input>
-            </el-col>
-            <el-col :span="3" class="alginRight">下单时间</el-col>
-            <el-col :span="9">
-              <el-date-picker style="padding-bottom:1px;"
-                v-model="time"
-                type="daterange"
-                range-separator="-"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期" value-format="yyyy-MM-dd"
-                @change="timeCheck">
-              </el-date-picker><!--时间-->
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="3" class="alginRight">订单状态：</el-col>
-            <el-col :span="9">
-              <el-select v-model="searchParams.orderStatus" placeholder="订单状态">
-                <el-option
-                  v-for="orderStatu in orderStatuses"
-                  :key="orderStatu.value"
-                  :label="orderStatu.label"
-                  :value="orderStatu.value">
-                </el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="3" class="alginRight">评论状态：</el-col>
-            <el-col :span="9">
-              <el-select v-model="searchParams.commentStatus" placeholder="评论状态">
-                <el-option
-                  v-for="commentStatu in commentStatus"
-                  :key="commentStatu.value"
-                  :label="commentStatu.label"
-                  :value="commentStatu.value">
-                </el-option>
-              </el-select>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="3" class="alginRight">售后状态：</el-col>
-            <el-col :span="9">
-              <el-select v-model="searchParams.afterSellStatus" placeholder="售后状态">
-                <el-option
-                  v-for="afterSellStatu in afterSellStatuses"
-                  :key="afterSellStatu.value"
-                  :label="afterSellStatu.label"
-                  :value="afterSellStatu.value">
-                </el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="3" class="alginRight">支付方式：</el-col>
-            <el-col :span="9">
-              <el-select v-model="searchParams.payWay" placeholder="支付方式">
-                <el-option
-                  v-for="isPayDeposit in isPayDeposits"
-                  :key="isPayDeposit.value"
-                  :label="isPayDeposit.label"
-                  :value="isPayDeposit.value">
-                </el-option>
-              </el-select>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="3" class="alginRight">开发票：</el-col>
-            <el-col :span="9">
-              <el-select v-model="searchParams.invoiceType" placeholder="开发票">
-                <el-option
-                  v-for="invoiceType in invoiceTypes"
-                  :key="invoiceType.value"
-                  :label="invoiceType.label"
-                  :value="invoiceType.value">
-                </el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="3" class="alginRight">广告位：</el-col>
-            <el-col :span="9">
-              <el-select v-model="searchParams.hasMedia" placeholder="广告位">
-                <el-option
-                  v-for="mediaInfo in mediaInfos"
-                  :key="mediaInfo.value"
-                  :label="mediaInfo.label"
-                  :value="mediaInfo.value">
-                </el-option>
-              </el-select>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20" class="mt20">
-            <el-col :span="20" :offset="3">
-              <el-button type="primary" size="medium" @click="search()" class="btn-search">搜索</el-button>
-              <el-button size="medium" @click="clearAll()">重置</el-button>
-            </el-col>
-          </el-row>
-        </div>
+      <div class="btnBox">
+        <el-button size="medium" @click.native="exportSearch()">导出</el-button>
+      </div>
+      
+    </div>
+    <!-- 高级搜索 -->
+    <div class="soloSearchBox" v-if="Advancedshow">
+      <h4>高级搜索<a class="close" @click="Advancedshow=!Advancedshow"></a></h4>
+      <div class="searcWrap mess">
+        <el-row :gutter="20">
+          <el-col :span="3" class="alginRight">关键词</el-col>
+          <el-col :span="9">
+            <el-input v-model="searchParams.condition" placeholder="输入商品名称/订货号/支付单号/收货人号码/商家名称/商家ID" title="输入商品名称/订货号/支付单号/收货人号码/商家名称/商家ID"></el-input>
+          </el-col>
+          <el-col :span="3" class="alginRight">下单时间</el-col>
+          <el-col :span="9" style="margin-top:7px;">
+            <el-date-picker style="padding-bottom:1px;"
+              v-model="time"
+              type="daterange"
+              range-separator="-"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期" value-format="yyyy-MM-dd"
+              @change="timeCheck">
+            </el-date-picker><!--时间-->
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="3" class="alginRight">订单状态</el-col>
+          <el-col :span="9">
+            <el-select v-model="searchParams.orderStatus" placeholder="订单状态">
+              <el-option
+                v-for="orderStatu in orderStatuses"
+                :key="orderStatu.value"
+                :label="orderStatu.label"
+                :value="orderStatu.value">
+              </el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="3" class="alginRight">评论状态</el-col>
+          <el-col :span="9">
+            <el-select v-model="searchParams.commentStatus" placeholder="评论状态">
+              <el-option
+                v-for="commentStatu in commentStatus"
+                :key="commentStatu.value"
+                :label="commentStatu.label"
+                :value="commentStatu.value">
+              </el-option>
+            </el-select>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="3" class="alginRight">售后状态</el-col>
+          <el-col :span="9">
+            <el-select v-model="searchParams.afterSellStatus" placeholder="售后状态">
+              <el-option
+                v-for="afterSellStatu in afterSellStatuses"
+                :key="afterSellStatu.value"
+                :label="afterSellStatu.label"
+                :value="afterSellStatu.value">
+              </el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="3" class="alginRight">支付方式</el-col>
+          <el-col :span="9">
+            <el-select v-model="searchParams.payWay" placeholder="支付方式">
+              <el-option
+                v-for="isPayDeposit in isPayDeposits"
+                :key="isPayDeposit.value"
+                :label="isPayDeposit.label"
+                :value="isPayDeposit.value">
+              </el-option>
+            </el-select>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="3" class="alginRight">开发票</el-col>
+          <el-col :span="9">
+            <el-select v-model="searchParams.invoiceType" placeholder="开发票">
+              <el-option
+                v-for="invoiceType in invoiceTypes"
+                :key="invoiceType.value"
+                :label="invoiceType.label"
+                :value="invoiceType.value">
+              </el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="3" class="alginRight">广告位</el-col>
+          <el-col :span="9">
+            <el-select v-model="searchParams.hasMedia" placeholder="广告位">
+              <el-option
+                v-for="mediaInfo in mediaInfos"
+                :key="mediaInfo.value"
+                :label="mediaInfo.label"
+                :value="mediaInfo.value">
+              </el-option>
+            </el-select>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" class="mt20">
+          <el-col :span="20" :offset="3">
+            <el-button type="primary" size="medium" @click="search()" class="btn-search">搜索</el-button>
+            <el-button size="medium" @click="clearAll()">重置</el-button>
+          </el-col>
+        </el-row>
       </div>
     </div>
     <div class="good_info ">
@@ -210,7 +213,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="block" style="margin: 20px;float:left;">
+      <div class="block fr" style="margin: 20px;">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handlePageChange"
@@ -683,25 +686,6 @@
 </script>
 <style lang="scss" scoped>
   .content{
-    .soloSearchBox{position:absolute;top:0;left:0;height:auto;padding:20px;width:100%;background:#fff;z-index:2;
-      h4 a.close{
-        opacity:1;display:inline-block;width:24px;height:24px;float:right;background:url(../../../assets/images/ico_close.png) no-repeat center center;
-      }
-      .searcWrap{width:100%;height:auto;position:relative;}
-      .mess{
-        margin-top: 30px;padding:0px 40px;padding-bottom:30px;background:#fff;
-        h4{
-          line-height:50px;
-          margin-bottom:10px;
-          font-size:16px;
-          color:#333;
-        }
-        .inline{display:inline-block;line-height:50px;}
-        .modify{margin-left:10px;line-height:50px;width:16px;height:16px;background:url(../../../assets/images/ico_compile.png) no-repeat center center;}
-      }
-      .alginRight{text-align: right; line-height:50px;color:#666;}
-      .formControl{display:inline-block;width:100%;height:36px;padding:6px 12px; line-height:50px;font-size:14px;background:#fff;border:1px solid #ccc;border-radius:4px;}
-    }
     .dropdown{
       display: inline-block;
       font-size: 16px;

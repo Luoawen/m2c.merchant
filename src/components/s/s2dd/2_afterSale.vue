@@ -23,7 +23,9 @@
       </el-date-picker>
       <el-input v-model="search_params.condition" placeholder="输入商品名称/订货号/售后号" title="输入商品名称/订货号/售后号"></el-input>
       <el-button type="primary" size="medium" @click="orderStore()" class="btn-search">搜索</el-button>
-      <el-button type="primary" size="medium" icon="el-icon-download" @click.native="exportSearch()" class="fr">导出</el-button>
+    </div>
+    <div class="btnBox">
+      <el-button size="medium" @click.native="exportSearch()">导出</el-button>
     </div>
     <div class="order_tab_list" style="margin-top: 20px;">
       <el-table
@@ -36,14 +38,6 @@
           width="120"
           >
           <template slot-scope="scope">
-            <!--<el-dropdown trigger="click">
-              <span class="el-dropdown-link">
-                操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click.native="handleCommand(scope.$index, scope.row,'_detail')">详情</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>-->
             <el-button
               @click.native.prevent="handleCommand(scope.$index, scope.row,'_detail')"
               type="text"
@@ -92,7 +86,7 @@
           <template slot-scope="scope"><span >{{date_format(new Date(scope.row.createDate), 'yyyy-MM-dd hh:mm:ss')  }}</span></template>
         </el-table-column>
       </el-table>
-      <div class="block" style="margin: 20px;float: left">
+      <div class="block fr" style="margin: 20px;">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"

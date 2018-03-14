@@ -651,5 +651,27 @@ body {
   }
   @media print {.title{display: none;}.left_nav{display: none;}.right_nav{display: none;}.s{padding-left: 0px;}.printSendOrder{height:1000px;margin: 0px;font-size: 8px;position: absolute;top: -300px;}a{display: none;}}
   table th:nth-child(1),table td:nth-child(1){padding-left:30px;}
-}
+  
+}/*高级搜索*/
+.soloSearchBox{position:absolute;top:0;left:0;height:auto;padding:10px 20px;width:100%;background:#fff;z-index:2;
+box-shadow:0 2px 3px 0 rgba(0,0,0,0.10);border-left:1px solid rgba(0, 0, 0, 0.1);border-right:1px solid rgba(0, 0, 0, 0.1);
+    h4 a.close{
+      opacity:1;display:inline-block;width:24px;height:24px;float:right;background:url(../assets/images/ico_close.png) no-repeat center center;
+    }
+    .searcWrap{width:100%;height:auto;position:relative;}
+    .mess{
+      margin-top: 30px;padding:0px 40px;padding-bottom:30px;background:#fff;
+      h4{
+        line-height:50px;
+        margin-bottom:10px;
+        font-size:16px;
+        color:#333;
+      }
+      .inline{display:inline-block;line-height:50px;}
+      .modify{margin-left:10px;line-height:50px;width:16px;height:16px;background:url(../assets/images/ico_compile.png) no-repeat center center;}
+    }
+    .alginRight{text-align: right; line-height:50px;color:#666;}
+    .formControl{display:inline-block;width:100%;height:36px;padding:6px 12px; line-height:50px;font-size:14px;background:#fff;border:1px solid #ccc;border-radius:4px;}
+    .el-row:last-child{margin-top:20px;}
+  }
 </style>

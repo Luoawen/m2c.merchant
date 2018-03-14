@@ -20,8 +20,12 @@
             </el-date-picker>
             <el-input v-model="search_goods_params.condition" placeholder="输入商品名称/编码/条形码/品牌" title="输入商品名称/编码/条形码/品牌"></el-input>
             <el-button type="primary" size="medium" @click="goodsStoreSearch()" class="btn-search">搜索</el-button>
-            <div style="width:100px;position:relative; right:280px; top:7px" class = "fr">
-              <el-button type="default" size="medium"    id="lotsOptionBtn" @click.stop='lotsOptionShow = !lotsOptionShow'> 批量操作 </el-button>
+          </div>
+          <div class="btnBox">
+            <el-button type="primary" size="medium" @click="newGoods">新增</el-button>
+            <el-button size="medium" @click.native="exportSearch()">导出</el-button>
+            <div style="position:relative;display:inline-block;">
+              <el-button type="default" style="width:80px;" size="medium" id="lotsOptionBtn" @click.stop='lotsOptionShow = !lotsOptionShow'>批量操作</el-button>
                 <div v-show = 'lotsOptionShow' class='lotsOptionShowStyle'>
                   <ul class=" el-select-dropdown__list" id="lotsOptionselection">
                     <li class="el-select-dropdown__item" @click.stop='lotsOptionGoods(1)'>批量上架</li>
@@ -29,8 +33,6 @@
                   </ul>
                 </div>
             </div>
-            <el-button type="primary" size="medium" @click="newGoods"  style='margin-top:6px;margin-left:4px'  class="fr">新增</el-button>
-            <el-button type="primary" size="medium" icon="el-icon-download" @click.native="exportSearch()" class="fr">导出</el-button>
           </div>
           <div class="good_info" style="margin-top: 20px;">
             <el-table
@@ -107,7 +109,7 @@
               </el-table-column>
 
             </el-table>
-            <div class="block fl" style="margin: 20px;">
+            <div class="block fr" style="margin: 20px;">
                 <el-pagination
                   @size-change="goodsStoreHandleSizeChange"
                   @current-change="goodsStoreHandleCurrentChange"
@@ -207,7 +209,7 @@
                 </template>
               </el-table-column>
             </el-table>
-            <div class="block fl" style="margin: 20px;">
+            <div class="block fr" style="margin: 20px;">
               <el-pagination
                 @size-change="goodsCheckStoreHandleSizeChange"
                 @current-change="goodsCheckStoreHandleCurrentChange"
@@ -285,7 +287,7 @@
             >
           </el-table-column>
         </el-table>
-        <div class="block" style="margin:20px;float:left">
+        <div class="block fr" style="margin:20px;">
           <el-pagination
             @size-change="goodsDelStoreHandleSizeChange"
             @current-change="goodsDelStoreHandleCurrentChange"

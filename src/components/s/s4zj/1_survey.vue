@@ -1,61 +1,68 @@
 <template>
   <div class="survey_contaner content clear">
     <div style="height: 10px"></div>
-    <div style="font-size: 20px">&nbsp;&nbsp;<strong>我的资产</strong><a class="ruleShow" @click="ruleShow">结算规则说明</a></div>
-    <div class="survey_c_top clear">
-      <div class="survey_c_tbox fl mr20">
-        <div class="tit">
-          <span>待结算金额（元）</span>
-          <div class="icon">
-            <div class="tips">
-              <p>客户付款后，待系统结算的金额</p>
+    <div style="padding:0 10px"><strong>我的资产</strong><a class="ruleShow fr" @click="ruleShow">结算规则说明</a></div>
+    <el-row class="survey_c_top clear" :gutter="20">
+      <el-col :span='6'>
+        <div class="survey_c_tbox">
+          <div class="tit">
+            <span>待结算金额（元）</span>
+            <div class="icon">
+              <div class="tips">
+                <p>客户付款后，待系统结算的金额</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="tit02 clear">
-          <span style="font-size: 30px">{{content.settleAmount == undefined || '' ? '-' :(content.settleAmount)}}</span>
-        </div>
-      </div>
-      <div class="survey_c_tbox fl mr20">
-        <div class="tit">
-          <span>提现中金额（元）</span>
-          <div class="icon">
-            <div class="tips">
-              <p>待处理的提现金额</p>
-            </div>
-          </div>
-          <router-link class="fr" :to="{name:'record'}">详情</router-link>
-        </div>
-        <div class="tit02 clear">
-          <span style="font-size: 30px">{{content.tradableingAmount ==  null ? '-' : (content.tradableingAmount)}}</span>
-        </div>
-      </div>
-      <div class="survey_c_tbox fl mr20">
-        <div class="tit">
-          <span>平台质保金（元）</span>
-        </div>
-        <div class="tit02 clear">
-          <span style="font-size: 30px">{{platePositisCache == undefined || '' ? '-' : platePositisCache}}</span>
-        </div>
-      </div>
-      <div class="survey_c_tbox fl mr20">
-        <div class="tit">
-          <span>可用金额（元）</span>
-          <div class="icon">
-            <div class="tips">
-              <p>已结算的金额，可用金额可提现</p>
-            </div>
+          <div class="tit02 clear">
+            <span style="font-size: 30px">{{content.settleAmount == undefined || '' ? '-' :(content.settleAmount)}}</span>
           </div>
         </div>
-        <div class="tit02 clear">
-          <span style="font-size: 30px">{{content.tradableAmount == undefined  ? '-' : (content.tradableAmount)}}</span>
-          <el-button @click="pullMoney()" size="mini" type="primary"> 提现 </el-button>
+      </el-col>
+      <el-col :span="6">
+        <div class="survey_c_tbox">
+          <div class="tit">
+            <span>提现中金额（元）</span>
+            <div class="icon">
+              <div class="tips">
+                <p>待处理的提现金额</p>
+              </div>
+            </div>
+            <router-link class="fr" :to="{name:'record'}">详情</router-link>
+          </div>
+          <div class="tit02 clear">
+            <span style="font-size: 30px">{{content.tradableingAmount ==  null ? '-' : (content.tradableingAmount)}}</span>
+          </div>
         </div>
-      </div>
-
-    </div>
+      </el-col>
+      <el-col :span="6">
+        <div class="survey_c_tbox">
+          <div class="tit">
+            <span>平台质保金（元）</span>
+          </div>
+          <div class="tit02 clear">
+            <span style="font-size: 30px">{{platePositisCache == undefined || '' ? '-' : platePositisCache}}</span>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="6">
+        <div class="survey_c_tbox">
+          <div class="tit">
+            <span>可用金额（元）</span>
+            <div class="icon">
+              <div class="tips">
+                <p>已结算的金额，可用金额可提现</p>
+              </div>
+            </div>
+          </div>
+          <div class="tit02 clear">
+            <span style="font-size: 30px">{{content.tradableAmount == undefined ? '-' : (content.tradableAmount)}}</span>
+            <el-button @click="pullMoney()" size="mini" type="primary" class="fr">提现</el-button>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
     <div style="height: 20px"></div>
-    <div style="height: 30px"><span style="font-size: 20px;">&nbsp;&nbsp;<strong>提现记录</strong></span></div>
+    <div style="height: 30px;padding:0 10px;"><strong>提现记录</strong></div>
     <div class="survey_c_cen clear">
       <table class="col-sm-12 notetable">
         <thead>
@@ -66,7 +73,12 @@
             <td width="25%">申请时间</td>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="contents.length==0">
+          <tr>
+            <td colspan="4" style='background:#fff;text-align:center;line-height:60px;color:#5a5e66;'>暂无数据</td>
+          </tr>
+        </tbody>
+        <tbody v-if="contents.length>0">
           <tr v-for="item in contents" class="clear">
             <td>{{item.withdrawalId}}</td>
             <td>{{(item.amount)}}</td>
@@ -313,18 +325,18 @@
 
   }
   .survey_contaner{
-    a.ruleShow{margin-left:20px;color:#667991;font-size:14px;}
+    a.ruleShow{margin-right:20px;color: #667991;font-size:14px;cursor: pointer;}
     .survey_c_top{
       min-height: 120px;
       width: 100%;
       padding: 10px;
-      border-bottom: 1px solid #D2D4E2;
+      // border-bottom: 1px solid #D2D4E2;
       .survey_c_tbox{
-        width: 360px;
+        // width: 360px;
         height: 100px;
         background: #EDF0F7;
         padding: 20px;
-        margin:10px;
+        // margin:10px;
         .tit{
           font-size: 12px;
           color: #333333;
