@@ -429,7 +429,7 @@ body {
       line-height: 4.29rem;
       font-size: 1.43rem;
       color: #F2FAFA;
-      background-image: linear-gradient(-269deg, #2F9CFF 0%, #0086FF 44%, #0078E4 100%);
+      background:#4E8FF5 ;
       .left_title {
         position: relative;
         font-weight: 600;
@@ -491,10 +491,10 @@ body {
       margin-bottom: 0px;
       min-width: 100px;
       .avter {
-        background: #0078E4; // color: #fff;
+        background: #494E5A; // color: #fff;
       }
       .content_container {
-        background: #494D5A;
+        background: #505562;
       }
       .content_s {
         height: 40px;
@@ -650,6 +650,6 @@ body {
     // }
   }
   @media print {.title{display: none;}.left_nav{display: none;}.right_nav{display: none;}.s{padding-left: 0px;}.printSendOrder{height:1000px;margin: 0px;font-size: 8px;position: absolute;top: -300px;}a{display: none;}}
-
+  table th:nth-child(1),table td:nth-child(1){padding-left:30px;}
 }
 </style>

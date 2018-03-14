@@ -59,10 +59,10 @@
       <el-col :span="12">
         <div class="box" style="height:245px;">
           <h5>数据概要</h5>
-          <el-tabs v-model="activeData" @tab-click="handleClick" style="margin-top:-50px;">
+          <el-tabs v-model="activeData" @tab-click="handleClick" style="margin-top:-50px; font-size:12px;color:#666;text-align:left;">
             <el-tab-pane label="今日数据" name="first">
               <el-row :gutter="20">
-                <el-col :span="8">
+                <el-col :span="6" :offset="2">
                   <div>订单数
                     <div class="icon">
                       <div class="tips">
@@ -72,7 +72,7 @@
                   </div>
                   <h4>{{reportData.orderNum == undefined  ? '--' :reportData.orderNum}}</h4>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6" :offset="2">
                   <div>退款订单数
                     <div class="icon">
                       <div class="tips" style="width:160px;">
@@ -82,7 +82,7 @@
                   </div>
                   <h4>{{reportData.orderRefundNum == undefined  ? '--' :reportData.orderRefundNum}}</h4>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6" :offset="2">
                   <div>商品新增数
                     <div class="icon">
                       <div class="tips">
@@ -94,7 +94,7 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="8">
+                <el-col :span="6" :offset="2">
                   <div>销售金额
                     <div class="icon">
                       <div class="tips">
@@ -104,7 +104,7 @@
                   </div>
                   <h4>{{reportData.sellMoney == undefined  ? '--' :reportData.sellMoney}}</h4>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6" :offset="2">
                   <div>退款金额
                     <div class="icon">
                       <div class="tips" style="width:160px;">
@@ -114,7 +114,7 @@
                   </div>
                   <h4>{{reportData.refundMoney == undefined  ? '--' :reportData.refundMoney}}</h4>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6" :offset="2">
                   <div>评论新增数</div>
                   <h4>{{reportData.goodsCommentNum == undefined  ? '--' :reportData.goodsCommentNum}}</h4>
                 </el-col>
@@ -122,7 +122,7 @@
             </el-tab-pane>
             <el-tab-pane label="昨日数据" name="second">
               <el-row :gutter="20">
-                <el-col :span="8">
+                <el-col :span="6" :offset="2">
                   <div>订单数
                     <div class="icon">
                       <div class="tips">
@@ -132,7 +132,7 @@
                   </div>
                   <h4>{{reportData.orderNum == undefined  ? '--' :reportData.orderNum}}</h4>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6" :offset="2">
                   <div>退款订单数
                     <div class="icon">
                       <div class="tips" style="width:160px;">
@@ -142,7 +142,7 @@
                   </div>
                   <h4>{{reportData.orderRefundNum == undefined  ? '--' :reportData.orderRefundNum}}</h4>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6" :offset="2">
                   <div>商品新增数
                     <div class="icon">
                       <div class="tips">
@@ -154,7 +154,7 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="8">
+                <el-col :span="6" :offset="2">
                   <div>销售金额
                     <div class="icon">
                       <div class="tips">
@@ -164,7 +164,7 @@
                   </div>
                   <h4>{{reportData.sellMoney == undefined  ? '--' :reportData.sellMoney}}</h4>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6" :offset="2">
                   <div>退款金额
                     <div class="icon">
                       <div class="tips" style="width:160px;">
@@ -174,7 +174,7 @@
                   </div>
                   <h4>{{reportData.refundMoney == undefined  ? '--' :reportData.refundMoney}}</h4>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6" :offset="2">
                   <div>评论新增数</div>
                   <h4>{{reportData.goodsCommentNum == undefined  ? '--' :reportData.goodsCommentNum}}</h4>
                 </el-col>
@@ -606,28 +606,31 @@ export default {
 </script>
 <style lang="scss" scoped>
   a:hover{ text-decoration: none;}
-  
-  .home{padding:20px;}
+  .el-tabs__content h4{font-size:20px;color:#333;}
+  .home{padding:20px; padding-left:28px;}
   .el-row{margin-bottom:10px;}
   p.setUp{color: #667991;}
   .dataTotal .box,.dataInfo .box,.echart .box{background:#fff;height:auto;border-radius:5px;text-align: center;padding-bottom:20px;}
-  .dataTotal h5{text-align:left;background: #E6E8F2;font-size:16px;color: #667991;line-height:50px;padding:0 20px;
+  .dataTotal h5{text-align:left;background: #E6E8F2;font-size:16px;color: #667991;line-height:50px;padding:0 20px;border-radius:4px 4px 0 0;
     div.icon{top:2px;}
-    span{font-size:12px;background:#B7C9E1;color:#fff;float:right;line-height:20px;padding:0 4px;margin-top:15px;}
+    span{font-size:12px;background:#B7C9E1;color:#fff;float:right;line-height:20px;padding:0 5px;margin-top:15px;border-radius:2px;}
   }
   .dataTotal p{text-align: center;font-size:30px;color:#333;line-height:42px;padding:0 20px;
     span{font-size:14px;color:#151515;margin-left:6px;}
   }
-  .dataTotal a{width:80px;height:25px;border: 1px solid #CCCCCC;border-radius: 3px;display:inline-block;line-height:24px;font-size:13px;color: #333333;}
+  .dataTotal a{width:80px;height:28px;border: 1px solid #CCCCCC;border-radius: 3px;display:inline-block;line-height:28px;font-size:12px;color: #333333;}
+  .dataTotal a:hover{background:#EEE;}
   .dataInfo .box,.echart .box{border-radius:0;text-align:center;padding-bottom:0px;}
-  .dataInfo h5,.echart h5{font-size:16px;color:#333;text-align:left;line-height:50px;padding:0 20px;margin:0;border-bottom:1px solid #dfe4ed;}
-  .echart h5 span{font-size:12px;color:#666;float:right;}
+  .dataInfo h5,.echart h5{font-weight: bold;font-size:16px;color:#333;text-align:left;line-height:50px;padding:0 20px;margin:0;border-bottom:1px solid #dfe4ed;}
+  .echart h5 span{font-size:12px;color:#666;float:right;font-weight: normal;}
+  .dataInfo h5 span{font-weight: normal;}
   .echart .box{padding-bottom:20px;text-align: left;position:relative;}
   .echart .box p{position:absolute;margin-left:20px;margin-top:15px;color:#666;}
   .echart .box p.x{margin-top:315px;right:20px;}
   .dataInfo .box .el-col{padding:10px 0 ;}
   .height300{height:290px; text-align:left;
     p{text-align: center;}
+    a.ellipsis,a.ellipsis:hover{color:#333;}
   .pl26{padding-left:26px;}
     i.no1,i.no2,i.no3{float: left;margin-left:-26px;display:inline-block;width:16px;height:16px;line-height:40px;background:url(../../../assets/images/no.1.png) no-repeat;margin-top:2px;}
     i.no2{background:url(../../../assets/images/no.2.png) no-repeat;}

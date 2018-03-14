@@ -1,4 +1,4 @@
-html,body{font-family:MicrosoftYaHei!important}
+/* html,body{font-family:MicrosoftYaHei!important} */
 .nopad{padding:0}
 
 /* 左侧菜单栏 */
@@ -65,12 +65,9 @@ html,body{font-family:MicrosoftYaHei!important}
 /*模态框表单中下拉列表显示四个字*/
 .modal-dialog .modal-body .area_select3{padding-left:0!important}
 
-
-
-
 /* 去掉地图的标注原点 */
 /*.BMap_Marker,[unselectable="on"]{display:none}*/
 
 /* 设置图片的初始样式 */
 .img_up{width: 100px; height:100px; display: inline-block; background: url('../images/img_add.png')}
-/*img[src=''],img:not([src]){background:url('../images/icon_uoloading.png') no-repeat center center/100% 100%;border:none}*/
+/*公共样式*/
