@@ -149,6 +149,9 @@
   			</el-row>
   		</div>
   	</div>
+    	<div class="return poi3">
+			<button class="r_fh" @click="goBack()">返回</button>
+		</div>
   </div>
 </template>
 <script>
@@ -211,6 +214,9 @@
     methods: {
       print_order () {
         window.print()
+      },
+      goBack(){
+        this.$router.go(-1)
       },
       getDealerOrderInfo() {
         let that = this;
@@ -319,6 +325,7 @@
       that.dealerOrderId = that.$route.query.dealerOrderId;
       sessionStorage.setItem('dealerOrderId',that.dealerOrderId)
       sessionStorage.setItem('orderNo',that.$route.query.orderNo)
+      // console.log("----------------------------DealerOrderId:"+that.$route.query.dealerOrderId)
       that.getDealerOrderInfo()
       that.getCustmerTel()
     }
@@ -384,6 +391,27 @@
 		}
 	}
 }
+ .return{
+  	width: 100%;
+  	height: 65px;
+  	background: #FFFFFF;
+		box-shadow: 0 -1px 3px 0 rgba(0,0,0,0.30);
+		line-height: 60px;
+		padding-left: 30px;
+		bottom: 0px;
+		left: 0px;
+		padding-left:228px;
+		.r_fh{
+			border: 1px solid #CCCCCC;
+			border-radius: 2px;
+			font-size: 14px;
+			color: #333333;
+			width: 80px;
+			height: 30px;
+			line-height: 30px;
+			background: #fff;
+		}
+  }
 
  /*公用样式*/
 .clear{
@@ -481,10 +509,12 @@
     height: 17px;
     background:url(../../../assets/images/ico_radio_select.png) no-repeat center;
   }
+  a{text-decoration:none}
 .dy{
   padding-left: 0px;
   line-height: 38px;
-  font-size: 18px;
+  margin-right: 18px;
+  font-size: 14px;
   cursor: pointer;
 }
 .ico_print{

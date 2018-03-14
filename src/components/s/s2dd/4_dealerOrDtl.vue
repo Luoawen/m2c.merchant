@@ -626,7 +626,7 @@
       },
       createFilter(queryString) {
         return (restaurant) => {
-          return (restaurant.expressName.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+          return (restaurant.expressName.toLowerCase().indexOf(queryString.toLowerCase()) !== -1);
         };
       },
       handleSelect(item) {
