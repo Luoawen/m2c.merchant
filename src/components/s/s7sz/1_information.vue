@@ -6,36 +6,29 @@
         <div class="shop">
           <div class="shopMess">
             <form class="form-horizontal">
-              <div class="form-group">
-                <label class="col-sm-2 control-label">店铺名称：</label>
-                <div class="col-sm-6">
-                  <input type="text" class="form-control" maxlength="15" id="inputEmail3" placeholder="1-15字符" v-model="storeinformation.appellation">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">店铺介绍：</label>
-                <div class="col-sm-10">
-                  <textarea class="form-control" cols="80" rows="7" maxlength="200" placeholder="1-200字符" v-model="storeinformation.introduce" style="resize:none;"></textarea>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">客服电话：</label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d-]/g,'') " ng-pattern="/[^a-zA-Z]/" maxlength="20" id="inputEmail3" placeholder="请填写" v-model="storeinformation.service">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">发票信息：</label>
-                <div class="col-sm-10">
-                  <textarea class="form-control" cols="80" rows="7" placeholder="1-200字符"  maxlength="200" v-model="storeinformation.shopReceipt" style="resize:none;"></textarea>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                <el-button type="primary" size="medium" @click="modifyDealerMess()">保存</el-button>
-                <!--<button type="submit" class="btn btn-default btn-lg">取消</button>-->
-                </div>
-              </div>
+              <el-row :gutter="20" >
+                <el-col :span="3" :offset="1">店铺名称 </el-col>
+                <el-col :span="6" >  <input type="text" class="formControl" maxlength="15" id="inputEmail3" placeholder="1-15字符" v-model="storeinformation.appellation"> </el-col>
+              </el-row>
+               <div class="clear"></div>
+              <el-row :gutter="20" >
+                <el-col :span="3" :offset="1">店铺介绍 </el-col>
+                <el-col :span="20" >   <textarea class="formControl" cols="80" rows="7" maxlength="200" placeholder="1-200字符" v-model="storeinformation.introduce" style="resize:none;"></textarea> </el-col>
+              </el-row>
+               <div class="clear"></div>
+              <el-row :gutter="20" style='margin-top:10px' >
+                <el-col :span="3" :offset="1">客服电话 </el-col>
+                <el-col :span="20" > <input type="text" class="formControl" onkeyup="value=value.replace(/[^\d-]/g,'') " ng-pattern="/[^a-zA-Z]/" maxlength="20" id="inputEmail3" placeholder="请填写" v-model="storeinformation.service"></el-col>
+              </el-row>
+               <div class="clear"></div>
+              <el-row :gutter="20" >
+                <el-col :span="3" :offset="1">发票信息 </el-col>
+                <el-col :span="20" >  <textarea class="formControl" cols="80" rows="7" placeholder="1-200字符"  maxlength="200" v-model="storeinformation.shopReceipt" style="resize:none;"></textarea></el-col>
+              </el-row>
+               <div class="clear"></div>
+               <el-row :gutter="20" style="margin-top:-20px" >
+                <el-col :span="1" :offset="4" > <el-button type="primary" size="medium" @click="modifyDealerMess()">保存</el-button></el-col>
+              </el-row>
             </form>
           </div>
           <div class="shopLogo pull-right">
@@ -405,6 +398,30 @@
 </script>
 
 <style lang="scss" scoped>
+textarea.formControl{
+    width: 100%;
+    height: auto;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+  .el-row {
+  margin:0;
+  line-height:40px;
+  height:40px;
+  text-align: right;
+  margin-bottom: 15px;
+}
 #getWidth{opacity:0;filter: alpha(opacity=0);position:absolute;}
 .shopGg{width:232px;height:112px;background:url(../../../assets/images/def.png) no-repeat;
   margin-right:20px;

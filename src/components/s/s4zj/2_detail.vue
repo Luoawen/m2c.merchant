@@ -17,7 +17,7 @@
           end-placeholder="结束日期" value-format="yyyy-MM-dd"
           @change="timeCheck">
         </el-date-picker>
-      <el-input v-model="search_params.condition" placeholder="输入业务号" title="输入业务号"></el-input>
+      <el-input v-model="search_params.condition" placeholder="输入业务号/商品名称" title="输入业务号/商品名称"></el-input>
       <el-button type="primary" size="medium" @click="orderStore()" class="btn-search">搜索</el-button>
       <el-button type="primary" size="medium" icon="el-icon-download" @click.native="exportDetail()" class="fr">导出</el-button>
     </div>
@@ -48,11 +48,13 @@
           >
           <template slot-scope="scope"><span v-if="scope.row.amount>=0">-{{scope.row.inoutType == 2 ?(scope.row.amount):(1-1).toFixed(2)}}</span> <span v-if="scope.row.amount <0">{{scope.row.inoutType == 2 ?(scope.row.amount):(1-1).toFixed(2)}}</span></template>
         </el-table-column>
-        <!--<el-table-column
-          label="商家信息"
-          >
-          <template slot-scope="scope"><span>{{scope.row.platformName}}</span></template>
-        </el-table-column>-->
+          <el-table-column
+          label="商品信息" 
+          > <template slot-scope="scope">
+            <a v-if='scope.row.goodsName.length>30?true:false'   class='ellipsis2' :title="scope.row.goodsName">{{scope.row.goodsName}}</a>
+            <a v-else class='ellipsis2' >{{scope.row.goodsName}}</a>
+          </template>
+        </el-table-column>
         <el-table-column
           label="生成时间"
           width="300"

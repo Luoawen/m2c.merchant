@@ -45,7 +45,7 @@ const information = r => require.ensure([], () => r(require('@/components/s/s7sz
 const administer = r => require.ensure([], () => r(require('@/components/s/s7sz/2_administer')), 'administer')
 const formwork = r => require.ensure([], () => r(require('@/components/s/s7sz/3_formwork')), 'formwork')
 const address = r => require.ensure([], () => r(require('@/components/s/s7sz/4_address')), 'address')
-const transact = r => require.ensure([], () => r(require('@/components/s/s7sz/5_transact')), 'transact')
+// const transact = r => require.ensure([], () => r(require('@/components/s/s7sz/5_transact')), 'transact')
 const formworkadd = r => require.ensure([], () => r(require('@/components/s/s7sz/6_formworkadd')), 'formworkadd')
 
 const updatePass = r => require.ensure([], () => r(require('@/components/s/s8password/1_updatePass')), 'updatePass')
@@ -250,11 +250,11 @@ export default new Router({
           component: address,
           meta: {title:'通用设置',breadObj:[{breadObjName:' >通用设置', goto:'address'}]}
         },
-        {
-          path: 'transact',
-          name: 'transact',
-          component: transact //废除的交易密码
-        },
+        // {
+        //   path: 'transact',
+        //   name: 'transact',
+        //   component: transact //废除的交易密码
+        // },
         {
           path: 'updatePass',
           name: 'updatePass',
