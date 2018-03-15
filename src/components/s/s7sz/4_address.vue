@@ -3,57 +3,57 @@
     <div class="line"></div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane label="售后地址" name="first">
-        <form class="form-horizontal" action="" method="post" v-on:submit.prevent>
-          <div class="form-group search_cell">
-            <label class="col-sm-2 control-label"><span style="color: red">*</span>售后地址：</label>
-            <div class="col-sm-3">
-              <select class="form-control area_select col-sm-1" v-model="search_params.province"
-                      id="search_params_province_select" style="margin-bottom:5px;">
-              <!-- <option value=""></option>-->
-                <option v-for="(cell,index) in province_all_search" :key="index" :value="cell.code">
-                  {{cell.name}}
-                </option>
+          <el-row :gutter="20" >
+            <el-col  :span="2" :offset="1"> <label style="color: red">*</label>售后地址</el-col>
+            <el-col  :span="6" >  
+              <select class="formControl area_select col-sm-1" v-model="search_params.province"
+                          id="search_params_province_select" style="margin-bottom:5px;">
+                  <option v-for="(cell,index) in province_all_search" :key="index" :value="cell.code">
+                    {{cell.name}}
+                  </option>
               </select>
-              <select class="form-control area_select col-sm-1" v-model="search_params.city" id="search_params_city_select"
-                      style="margin-bottom:5px;" v-if="city_show">
-                <option v-for="(cell,index) in city_all_search" :key="index" :value="cell.code">
-                  {{cell.name}}
-                </option>
+              <select class="formControl area_select col-sm-1" v-model="search_params.city" id="search_params_city_select"
+                          style="margin-bottom:5px;" v-if="city_show">
+                  <option v-for="(cell,index) in city_all_search" :key="index" :value="cell.code">
+                    {{cell.name}}
+                  </option>
               </select>
-              <select class="form-control area_select col-sm-1" v-model="search_params.regionCode"
-                      id="search_params_regionCode_select" v-if="area_show">
-                <option v-for="(cell,index) in area_all_search" :key="index" :value="cell.code">
-                  {{cell.name}}
-                </option>
+              <select class="formControl area_select col-sm-1" v-model="search_params.regionCode"
+                          id="search_params_regionCode_select" v-if="area_show">
+                  <option v-for="(cell,index) in area_all_search" :key="index" :value="cell.code">
+                    {{cell.name}}
+                  </option>
               </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label">详细地址：</label>
-            <div class="col-sm-3">
-              <input type="text" class="form-control" id="input1" placeholder="1-50字符" v-model="search_params.detail" maxlength="50">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label">联系人姓名：</label>
-            <div class="col-sm-3">
-              <input type="text" class="form-control" id="input2" placeholder="1-10字符" v-model="search_params.person"maxlength="10">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label">联系电话：</label>
-            <div class="col-sm-3">
-              <input type="text" class="form-control" maxlength="11" id="input3" placeholder="请填写" v-model="search_params.tel">
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-              <el-button type="primary" size="medium" @click="isAdd == true?add_address():modify_address()">保存
-              </el-button>
-            <!-- <button type="submit" class="btn btn-default btn-lg" @click="cancel()">取消</button>-->
-            </div>
-          </div>
-        </form>
+            </el-col>
+          </el-row>
+          <div class="clear"></div>
+          <el-row :gutter="20" style='margin-top:15px'>
+            <el-col  :span="2" :offset="1">详细地址</el-col>
+            <el-col  :span="6" >  
+              <input type="text" class="formControl" id="input1" placeholder="1-50字符" v-model="search_params.detail" :maxlength="50">
+            </el-col>
+        </el-row>
+        <div class="clear"></div>
+          <el-row :gutter="20">
+            <el-col  :span="2" :offset="1">联系人姓名</el-col>
+            <el-col  :span="6" >  
+              <input type="text" class="formControl" id="input2" placeholder="1-10字符" v-model="search_params.person" :maxlength="10">
+            </el-col>
+        </el-row>
+        <div class="clear"></div>
+        <el-row :gutter="20">
+            <el-col  :span="2" :offset="1">联系电话</el-col>
+            <el-col  :span="6" >  
+                <input type="text" class="formControl" maxlength="11" id="input3" placeholder="请填写" v-model="search_params.tel">
+            </el-col>
+        </el-row>
+        <el-row :gutter="20">
+            <el-col  :span="1" :offset="3" style='margin-top:30px'>  
+                <el-button type="primary" size="medium" @click="isAdd == true?add_address():modify_address()">保存
+                    </el-button>
+            </el-col>
+        </el-row>
+
       </el-tab-pane>
       <el-tab-pane label="商品保障" name="second">
         <el-button type="primary" size="medium" @click="add()" v-if="dataList.length<10">新增</el-button>
@@ -535,7 +535,7 @@
       },
       // 修改地址
       modify_address () {
-        const that = this
+        let that = this
         that.isModify = false
         that.city_show = true
         that.area_show = true
@@ -670,16 +670,13 @@
   .sz {
     .form-horizontal{padding-top:20px;padding-left:0;}
     .control-label{font-weight:normal;}
-    .form-group {
-      margin-bottom: 30px;
-      button {
-        width: 136px;
-        height: 41px;
-        margin-top: 80px;
-      }
-      button, .save {
-        margin-right: 60px;
-      }
+    .el-row {
+      margin:0;
+      line-height:40px;
+      height:40px;
+      text-align: right;
+      margin-bottom: 15px;
+
     }
   }
   .topBox{position:absolute;top:0;left:0;height:auto;padding:0 20px;padding-bottom:20px;width:100%;background:#fff;z-index:2;

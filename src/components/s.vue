@@ -12,7 +12,7 @@
             {{dealerName}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown" >
-            <el-dropdown-item><div @click="goto" path='/s/userInfo'>账户信息</div></el-dropdown-item>
+            <el-dropdown-item><div @click="goto"  path='/s/userInfo'> <i class=" icon iconfont">&#xe688;</i> 账户信息</div></el-dropdown-item>
             <el-dropdown-item><div @click="goto" path='/s/updatePass'>登录密码</div></el-dropdown-item>
             <el-dropdown-item><div @click="goto" path='/s/cashPass'>交易密码</div></el-dropdown-item>
           </el-dropdown-menu>

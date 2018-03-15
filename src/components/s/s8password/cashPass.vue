@@ -1,44 +1,33 @@
 <template>
   <div class="sz">
-    <form class="form-horizontal">
-      <div class="form-group">
-        <label class="col-sm-2 control-label" ><label style="color: red">*</label>验证码：</label>
-        <div class="col-sm-3">
-          <input type="text" class="form-control" id="verifyCode" v-model="Info.verifyCode" placeholder="4位数验证码" maxlength="4">
-        </div>
-        <div class="col-sm-3">
-          <a class="btn btn-default btn-lg" @click="sendVerficode" :disabled="disabled">
-            <span v-show="show" id="sendVer">获取验证码</span>
-            <span v-show="!show" class="count">{{count}} s</span>
-          </a>
-        </div>
-        <!-- <label v-show="isSuccess" class="col-sm-3 control-label">已向手机号{{userPhone}}发送验证码</label> -->
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label" ></label>
-        <div class="col-sm-3">
-          <p v-show="isSuccess">已向手机号<label style="color: red">{{userPhone}}</label>发送验证码</p>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label" ><label style="color: red">*</label>交易密码：</label>
-        <div class="col-sm-3">
-          <input type="password" class="form-control" id="newPass" v-model="Info.newPass" maxlength="6" placeholder="6位数字密码">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label"><label style="color: red">*</label>再次确认：</label>
-        <div class="col-sm-3">
-          <input type="password" class="form-control" id="confirmNewPass" v-model="Info.confirmNewPass" maxlength="6" placeholder="6位数字密码">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <el-button  type="primary" @click="modify_pass()">保存</el-button>
-          <button type="submit" class="btn btn-default btn-lg" v-if="from=='cash'" @click="goBack">取消</button>
-        </div>
-      </div>
-    </form>
+    <el-row :gutter="20" >
+      <el-col  :span="2" :offset="1"> <label style="color: red">*</label>验证码
+      </el-col>
+      <el-col  :span="5" >   <input type="text" class="formControl" id="verifyCode" v-model="Info.verifyCode" placeholder="4位数验证码" maxlength="4">
+        <p v-show="isSuccess" style='font-size:12px;color:#ccc;text-align:left;' >已向手机号<label style="color: red;">{{userPhone}}</label>发送验证码</p>
+      </el-col>
+      <el-col   :span="2" > 
+        <el-button   type="plain" @click="sendVerficode" :disabled="disabled"> 
+          <span v-show="show" id="sendVer">获取验证码</span><span v-show="!show" class="count">{{count}} s</span> 
+        </el-button> 
+      </el-col>
+    </el-row>
+    <div class="clear"></div>
+  <el-row :gutter="20" >
+      <el-col  :span="2" :offset="1"> <label style="color: red">*</label>交易密码</el-col>
+      <el-col   :span="6" >  <input type="password" class="formControl" id="newPass" v-model="Info.newPass" 
+     minlength="6" maxlength="6" placeholder="6位数字密码"> </el-col>
+   </el-row>
+   <div class="clear"></div>
+  <el-row :gutter="20" >
+      <el-col :span="2" :offset="1"> <label style="color: red">*</label>再次确认 </el-col>
+      <el-col :span="6" > <input type="password" class="formControl" id="confirmNewPass" v-model="Info.confirmNewPass" maxlength="6" minlength="6"  placeholder="6位数字密码"> </el-col>
+   </el-row>
+    <el-row :gutter="20" style='margin-top:30px;text-align:left' >
+      <el-col   :span="6" :offset="3">  <el-button  type="primary" @click="modify_pass()">保存</el-button> 
+        <el-button type="plain"  v-if="from=='cash'" @click="goBack">取消</el-button>
+        </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -243,7 +232,7 @@
     }
   }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .sz{
   width: 96%;
   height: 880px;
@@ -253,10 +242,12 @@
   padding-top: 40px;
 
 }
+  .el-row {
+      margin:0;
+      line-height:40px;
+      height:40px;
+      text-align: right;
+      p{line-height:20px;margin:0;}
+    }
 </style>
-<style>
-  .btn-group-lg>.btn, .btn-lg{
-    padding:7px 16px;
-    font-size:14px;
-  }
-</style>
+
