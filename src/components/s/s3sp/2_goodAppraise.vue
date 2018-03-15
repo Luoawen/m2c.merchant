@@ -217,7 +217,8 @@
     <div class="hptczp_content"  v-show="showhptc===true">
         <div class="hptczp_header">
           <span>回评内容</span>
-          <span class="fr" @click="cancel()">X</span>
+          <span class="iconfont fr" @click="cancel()">&#xe661;</span>
+          <i class="icon iconfont" >&#xe624;</i>
         </div>
         <div class="hptczp_body">
             <textarea placeholder="请填写100字符以内内容" v-model="reply_params.replyContent" maxlength="100"></textarea>
@@ -432,17 +433,7 @@
 .fr{
   float: right;
 }
-.hptczp{
-  width: 100%;
-  height: 100%;
-  display: block;
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  background:rgba(0,0,0,0.5);
-  z-index: 999;
-  opacity:0.3;
-}
+
   .imgWrap{
     //禁用选中
 		-moz-user-select: none;
@@ -496,70 +487,7 @@
     }
   }
 
-.hptczp_content{
-  width: 400px;
-  height: 280px;
-  background: #fff;
-  z-index: 9999;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  margin-left: -200px;
-  margin-top: -140px;
-  background: #FFFFFF;
-  border-radius: 4px;
-  .hptczp_header{
-    width:100%;
-    height: 50px;
-    background: #DFE9F6;
-    padding-left: 20px;
-    padding-right: 20px;
-    span{
-      display: inline-block;
-      line-height: 50px;
-    }
-  }
-  .hptczp_body{
-    padding-left: 20px;
-    padding-right: 20px;
-    background: #FFFFFF;
-    margin-top: 10px;
-    textarea{
-      width: 100%;
-      height: 100%;
-      border: 1px solid #E5E5E5;
-      width: 360px;
-      height: 140px;
-      padding-left: 10px;
-      padding-right: 10px;
-      padding-top: 5px;
-      padding-bottom: 5px;
-    }
-  }
-  .hptczp_footer{
-      height: 80px;
-      padding-top: 10px;
-      padding-left: 50%;
-      .btn {
-        width: 80px;
-        height: 30px;
-        border: none;
-        border-radius: 2px;
-        color: #fff;
-      }
-      .save {
-        margin-left: -110px;
-        background: #0086FF;
-      }
-      .cancel {
-        margin-left: 40px;
-        background: #FFF;
-        border: 1px solid #E5E5E5;
-        color: #444;
-      }
 
-  }
-}
 .comment_table{
   /*width: 1160px;*/
   border: 1px solid #E5E5E5;

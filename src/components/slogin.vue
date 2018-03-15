@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import '../assets/css/iconfont_s/iconfont.css'
+// import '../assets/css/iconfont_s/iconfont.css'
 export default {
   name: '', 
   data () {

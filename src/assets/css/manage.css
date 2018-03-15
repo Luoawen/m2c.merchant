@@ -72,3 +72,78 @@
 .img_up{width: 100px; height:100px; display: inline-block; background: url('../images/img_add.png')}
 /*公共样式*/
 .btnBox{margin:10px 0;margin-bottom:20px;}
+    /*弹层*/
+    .hptczp{
+        width: 100%;
+        height: 100%;
+        display: block;
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        background:rgba(0,0,0,0.5);
+        z-index: 999;
+        opacity:0.3;
+    }
+    .hptczp_content{
+        width: 360px;
+        height: 240px;
+        background: #fff;
+        z-index: 9999;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        margin-left: -180px;
+        margin-top: -120px;
+        background: #FFFFFF;
+        border-radius: 4px;
+      }
+      .hptczp_content .hptczp_header{
+          width:100%;
+          height: 50px;
+          /* background: #DFE9F6; */
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+        .hptczp_content .hptczp_header span{
+            display: inline-block;
+            line-height: 50px;
+        }
+        .hptczp_content .hptczp_body{
+          padding-left: 20px;
+          padding-right: 20px;
+          background: #FFFFFF;
+          margin-top: 10px;
+        }
+        .hptczp_content .hptczp_body textarea{
+            width: 100%;
+            height: 100%;
+            border: 1px solid #E5E5E5;
+            width: 360px;
+            height: 140px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        .hptczp_content .hptczp_footer{
+            height: 80px;
+            padding-top: 10px;
+            padding-left: 50%;
+        }
+        .hptczp_content .hptczp_footer.btn {
+            width: 80px;
+            height: 30px;
+            border: none;
+            border-radius: 2px;
+            color: #fff;
+        }
+          .hptczp_content .hptczp_footer .save {
+            margin-left: -110px;
+            background: #0086FF;
+          }
+          .hptczp_content .hptczp_footer .cancel {
+            margin-left: 40px;
+            background: #FFF;
+            border: 1px solid #E5E5E5;
+            color: #444;
+          }

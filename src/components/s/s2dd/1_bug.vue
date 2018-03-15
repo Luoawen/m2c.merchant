@@ -30,8 +30,8 @@
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
       <div class="btnBox">
         <el-button size="medium" @click.native="exportSearch()">导出</el-button>
+        <el-button size="medium" @click="batchShow=true">批量发货</el-button>
       </div>
-      
     </div>
     <!-- 高级搜索 -->
     <div class="soloSearchBox" v-if="Advancedshow">
@@ -316,6 +316,7 @@
     name: '',
     data () {
       return {
+        batchShow:false,//批量发货弹层
         rejectReason:'',//拒绝理由
         isIndeterminate: true,
         amout: '',
