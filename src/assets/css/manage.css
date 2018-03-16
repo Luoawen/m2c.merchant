@@ -64,8 +64,6 @@
 
 /*模态框表单中下拉列表显示四个字*/
 .modal-dialog .modal-body .area_select3{padding-left:0!important}
-<<<<<<< HEAD
-=======
 /* 更新于bootstrap */
 .formControl {
     display: block;
@@ -84,7 +82,6 @@
     -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;}
->>>>>>> local_hey
 
 /* 去掉地图的标注原点 */
 /*.BMap_Marker,[unselectable="on"]{display:none}*/

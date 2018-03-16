@@ -98,35 +98,67 @@
         :total="totalCount">
       </el-pagination>
     </div>
-    <!-- 规则 -->
-    <div class="delectSizeBg" v-show="backgroundBg"></div>
-    <div class="delectSizeWrap" v-show="ruleShowBox">
-      <div class="agreetc_header">
+    <!-- 规则弹框 -->
+    <div class="hptczp" v-show="backgroundBg"></div>
+    <div class="hptczp_content inputInfo" v-show="ruleShowBox" style="height:360px">
+      <div class="hptczp_header">
         <span>结算规则</span>
-        <span class="fr" @click="ruleClose">X</span>
+        <span class="iconfont fr" @click="ruleClose">&#xe661;</span>
       </div>
-      <div class="delectGoodCon">
+      <div class="hptczp_body textIndent" style='text-align:left;margin-top:-20px;margin-left:20px'>
         <h5>待结算金额</h5>
-        <p>1、顾客完成付款后，款项先显示在待结算金额中；</p>
-        <p>2、当日订单总金额不一定等于当日待结算金额；</p>
-        <p>1）下单时间、付款时间可能不在同一天；</p>
-        <p>2）商家退款成功，待结算金额相应扣除；</p>
+        <p><span>1、</span>顾客完成付款后，款项先显示在待结算金额中；</p>
+        <p><span>2、</span>当日订单总金额不一定等于当日待结算金额；</p>
+        <p><span>1）</span>下单时间、付款时间可能不在同一天；</p>
+        <p><span>2）</span>商家退款成功，待结算金额相应扣除；</p>
         <h5>结算时间、方式</h5>
-        <p>1、订单交易完成（关闭）T+7工作日结算款项到商家可用金额，结算之前款项显示在待结算金额；</p>
-        <p>2、结算后，款项进入商家可用金额的同时结算服务费、活动分摊，商家可用余额可提现。若需要查询单号是否已经结算，可在结算查询中查看结算状态。</p>
+        <p><span>1、</span>订单交易完成（关闭）T+7工作日结算款项到商家可用金额，结算之前款项显示在待结算金额；</p>
+        <p><span>2、</span>结算后，款项进入商家可用金额的同时结算服务费、活动分摊，商家可用余额可提现。若需要查询单号是否已经结算，可在结算查询中查看结算状态。</p>
       </div>
     </div>
-    <!-- 是否有交易密码 -->
-    <div class="delectSizeWrap cashPassCon" v-show="cashPassShow">
-      <div class="agreetc_header">
+    <!-- 是否有交易密码 -->   
+    <div class='hptczp' v-show="cashPassShow"></div>
+    <div class="hptczp_content " v-show="cashPassShow">
+      <div class="hptczp_header">
         <span>提示</span>
-        <span class="fr" @click="cashPassHide">X</span>
+        <span class=" iconfont fr" @click="cashPassHide">&#xe661;</span>
       </div>
-      <div class="tipsCon">
+      <div class="hptczp_body">
         <h5>是否设置交易密码</h5>
         <p>您还未设置交易密码</p>
-        <router-link :to="{name:'cashPass'}"><el-button type="primary">确定</el-button></router-link>
-        <el-button @click="cashPassHide">取消</el-button>
+      </div>
+      <div class="hptczp_footer">
+        <el-button  @click="cashPassHide">取消</el-button>&nbsp;
+        <el-button type="primary" @click='showTransaction=true;'>确定</el-button>
+      </div>
+    </div>
+        <!-- 设置交易密码 -->   
+    <div class='hptczp' v-show="showTransaction"></div>
+    <div class="hptczp_content inputInfo" v-show="showTransaction">
+      <div class="hptczp_header">
+        <span>设置交易密码</span>
+        <span class=" iconfont fr" @click="cancel">&#xe661;</span>
+      </div>
+      <div class="hptczp_body" style='margin-left:48px'>
+        <div>
+          &nbsp;&nbsp;&nbsp;<label style="color: red">*</label>验证码
+          <input type="text" class="formControl" id="verifyCode" v-model="Info.verifyCode" placeholder="4位数验证码" maxlength="4">
+            <el-button  style='width:80px;float:right;margin-right:26px' type="plain" @click="sendVerficode" :disabled="disabled"> 
+              <span v-show="show" id="sendVer">获取验证码</span><span v-show="!show" class="count">{{count}} s</span> 
+            </el-button> 
+              <p  v-show="isSuccess" style='font-size:12px;color:#ccc;text-align:left;margin:4px 0 -10px 76px' >已向手机号<label style="color:red;">{{userPhone}}</label>发送验证码</p>
+        </div>
+      <div>
+        <label style="color: red">*</label>交易密码
+        <input type="password" class="formControl" id="newPass" v-model="Info.newPass"  minlength="6" maxlength="6" placeholder="6位数字密码">
+      </div>
+      <div><label style="color: red">*</label>再次确认 
+        <input type="password" class="formControl" id="confirmNewPass" v-model="Info.confirmNewPass" maxlength="6" minlength="6"  placeholder="6位数字密码">
+      </div>
+      </div>
+      <div class="hptczp_footer" style="height:90px">
+         <el-button type="plain"  @click="cancel">取消</el-button>
+         <el-button  type="primary" @click="modify_pass()">保存</el-button> 
       </div>
     </div>
   </div>
@@ -147,8 +179,19 @@
         ruleShowBox: false, // 结算规则
         backgroundBg: false, // 弹层背景
         cashPassShow: false, // 交易密码
+        showTransaction:false, //设置交易密码
         platePositisCache:'',
-        payPwdSetFlag:''// 是否有交易密码标识
+        payPwdSetFlag:'',// 是否有交易密码标识
+         dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
+        userPhone: JSON.parse(sessionStorage.getItem('mUser')).mobile,
+        show: true,
+        count: sessionStorage.getItem('totalT') == null || sessionStorage.getItem('totalT') == '' ? 60 : sessionStorage.getItem('totalT'),
+        total: '',
+        isSuccess: false,
+        masage:'',
+        disabled: false,
+        Info:{},
+        flage:''
       }
     },
     methods:{
@@ -163,9 +206,10 @@
       pullMoney () {
         let that = this
         if(that.payPwdSetFlag === 1){
-          that.$router.push({name:'cash'})
+                console.log(1111);
+          // that.$router.push({name:'cash'})
         }else{
-          that.backgroundBg = true
+          console.log(222);
           that.cashPassShow = true
         }
       }
@@ -252,7 +296,146 @@
             }
           }
         })
+      },
+     cancel(){
+        this.showTransaction = false
+        this.cashPassShow = false
+      },
+      timekeeping () {
+        let that = this
+        // 把按钮设置为不可以点击
+        that.show = false
+        var interval = setInterval(function () { // 每秒读取一次cookie
+          // 从cookie 中读取剩余倒计时
+          that.total = sessionStorage.getItem('totalT')
+          // 在发送按钮显示剩余倒计时
+          if (that.total == 1) {
+            that.count = 60
+          } else {
+            that.count = that.total
+          }
+          // 把剩余总倒计时减掉1
+          that.total--
+          if (that.total <= 0) { // 剩余倒计时为零，则显示 重新发送，可点击
+            // 清除定时器
+            clearInterval(interval)
+            // 删除cookie
+            sessionStorage.removeItem('totalT')
+            // 显示重新发送 把发送按钮设置为可点击
+            that.show = true
+            if(that.flage!=='save'){
+              that.$("#sendVer").text("重新发送")
+            }
+            that.disabled = false
+            that.isSuccess = false
+          } else { // 剩余倒计时不为零
+            // 重新写入总倒计时
+            sessionStorage.setItem('totalT', that.total)
+          }
+        }, 1000)
+      },
+      sendVerficode () {
+        //alert(0)
+        let that = this
+        if(that.disabled == true){
+          return
+        }
+        that.disabled = true // 把按钮设置为不可以点击
+        that.$.ajax({
+          url: that.base + 'm2c.users/user/sendSms',
+          timeout : 5000, //超时时间设置，单位毫秒
+          type: 'post',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+            codeType: 5,
+            mobile: JSON.parse(sessionStorage.getItem('mUser')).mobile
+          },
+          success: function (result) {
+            if (result.status === 200) {
+              that.isSuccess = true
+              sessionStorage.setItem('totalT', 60)
+              that.timekeeping()
+              that.show_tip('已发送短信注意查收')
+            } else {
+              that.show_tip(result.errorMessage)
+              that.disabled = false
+            }
+          },
+          complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+    　　　　if(status=='timeout'){//超时,status还有success,error等值的情况
+    　　　　　 //ajaxTimeoutTest.abort();
+    　　　　　 that.show_tip("请求超时");
+              that.disabled = false
+    　　　　}
+      　　}
+        })
+      },
+      modify_pass () {
+        let that = this
+        let verifyCode = that.$('#verifyCode').val()
+        if (verifyCode.length !== 4) {
+          that.show_tip('验证码长度必须4位')
+          return false
+        }
+        $('#newPass').bind('input propertychange',function(){ //添加监听input值的改变事件
+          let tvalmum;
+          //统计input输入字段的长度
+          tvalnum = $(this).val().length;
+          //如果大于8个字直接进行字符串截取
+          if(tvalnum>16){
+            var tval = $(this).val();
+            tval = tval.substring(6,16);
+            $(this).val(tval);
+            that.show_tip('长度超过限制！');
+          }
+        });
+        let pass = that.$('#newPass').val()
+        if (pass.length < 6 || pass.length > 16) {
+          that.show_tip('密码长度6-16位')
+          return false
+        }
+        let confirmNewPass = that.$('#confirmNewPass').val()
+        if (confirmNewPass !== pass) {
+          that.show_tip('两次密码不一致')
+          return false
+        }
+				that.$.ajax({
+          type: 'post',
+          url: that.base + 'm2c.trading/web/account/dealer/payPassword',
+          data: {
+            token: sessionStorage.getItem('mToken'),
+						mobile: that.userPhone,
+            newPass: that.md5(pass).toLowerCase(),
+            verifyCode: verifyCode,
+            correlationType: 2,
+            correlationId: that.dealerId
+          },
+          success: function (result) {
+            if (result.status === 200) {
+              // 删除cookie
+              sessionStorage.removeItem('totalT')
+              // 显示重新发送 把发送按钮设置为可点击
+              that.show = true
+              that.isSuccess = false
+              JSON.parse(sessionStorage.getItem('mUser')).dealerTradePassword = that.md5(pass).toLowerCase()
+              that.show_tip('修改操作成功')
+              that.$("#sendVer").text("获取验证码")
+              that.flage = 'save'
+              that.text = ''
+              that.Info = {}
+              if(that.$route.query.from == 'cash'){
+                that.$router.push({name:'cash'})
+              }
+            }else {
+              that.show_tip(result.errorMessage)
+            }
+          }
+        })
       }
+    },
+    clear(){
+      let that = this
+      that.text = ''
     },
     mounted(){
       let that = this;
@@ -273,7 +456,6 @@
     background: rgba(0, 0, 0, 0.6);
     z-index: 999;
   }
-
   .delectSizeWrap {
     position: fixed;
     width: 50%;
@@ -293,7 +475,7 @@
       }
       span.fr{margin-right:20px;cursor:pointer;}
     }
-    .delectGoodCon{padding:30px;padding-bottom:40px;
+    .delectGoodCon{padding:0 30px 40px 30px;
       h5,p{
         line-height: 24px;
         font-size: 14px;
@@ -302,6 +484,8 @@
       h5{
         line-height: 30px;
         margin-top:20px;
+        font-size: 14px;
+        font-weight: 700;
       }
     }
     .tipsCon{
@@ -322,7 +506,6 @@
     width: 30%;
     left: 50%;
     margin-left: -15%;
-
   }
   .survey_contaner{
     a.ruleShow{margin-right:20px;color: #667991;font-size:14px;cursor: pointer;}
@@ -394,6 +577,59 @@
           top: 0;
         }
       }
+    }
+    .hptczp_content{
+      height: 240px;
+      .hptczp_header{
+        span{
+          font-size: 16px;
+          color: #333;
+        }
+      }
+      .hptczp_body {
+        text-align: center;
+        padding-top:20px;
+      h5{
+        font-size: 16px;
+        color:#333;
+        font-weight: 700;
+      }
+      p{
+        font-size: 12px;
+        color:#666;
+      }
+      div{
+        width: 500px;
+        text-align: left;
+        margin:10px 0;
+        .formControl{
+        display: inline-block;
+        height: 36px;
+        margin-left:10px;
+        }
+      }
+     }
+     .textIndent p{
+       margin-right:20px;
+       padding-left:20px;
+       line-height: 18px;
+       span{
+         margin-left:-20px;
+       }
+     }
+     .hptczp_footer{
+       padding-left:0;
+       padding-top:20px;
+       line-height: 80px;
+       display: flex;
+       justify-content:center;  
+     }
+    }
+    .inputInfo{
+     width: 780px;
+     margin-left:-390px;
+     margin-top:-160px;
+     height:auto;
     }
     .survey_c_cen{
       min-height: 40px;

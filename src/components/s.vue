@@ -13,8 +13,8 @@
           </span>
           <el-dropdown-menu slot="dropdown" >
             <el-dropdown-item><div @click="goto"  path='/s/userInfo'> <i class=" icon iconfont">&#xe688;</i> 账户信息</div></el-dropdown-item>
-            <el-dropdown-item><div @click="goto" path='/s/updatePass'>登录密码</div></el-dropdown-item>
-            <el-dropdown-item><div @click="goto" path='/s/cashPass'>交易密码</div></el-dropdown-item>
+            <el-dropdown-item><div @click="goto" path='/s/updatePass'><i class=" icon iconfont">&#xe689;</i> 登录密码</div></el-dropdown-item>
+            <el-dropdown-item><div @click="goto" path='/s/cashPass'><i class=" icon iconfont">&#xe67e;</i> 交易密码</div></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <div class="right_title_quit" @click="sign_out_tips">退出</div>
