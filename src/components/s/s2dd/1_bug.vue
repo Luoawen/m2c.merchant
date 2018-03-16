@@ -447,7 +447,8 @@
 			var formData = new FormData()
       formData.append("myfile",target.files[0]),
       formData.append("userId",JSON.parse(sessionStorage.getItem('mUser')).userId),
-      formData.append("shopName",that.shopName)
+      formData.append("shopName",that.shopName),
+      formData.append("dealerId",JSON.parse(sessionStorage.getItem('mUser')).dealerId)
       //{"totalCount":1,"forbidTime":0,"forbidType":0,"userId":"HY364B9131D3C940FC887D9EF6B2B90FBB","mobile":"13500000046","icon":"","username":"商家管理员","groupType":4,"sysMsgSwitch":1,"orderMsgSwitch":1,"sex":0,"age":0,"createTime":1511322236000,"popedPacket":0,"salerId":null,"areaProvince":"","areaDistrict":"","provinceCode":"","mediaId":"","mediaName":"","districtCode":"","dealerName":"资金流服务费率","dealerId":"JXS1382A365F7D94350991D84AF23233FD7"}
 			// 存一次上传的文件
 			// this.excel_file = target.files[0]
@@ -456,8 +457,8 @@
       console.log('文件',obj)
       console.log("formedata",formData)
 			this.$.ajax({
-			//	url:  `${this.base}m2c.scm/order/web/expressmodel`,
-				 url:  'http://10.0.40.33:8080/m2c.scm/order/expressmodel ',
+				url:  `${this.base}m2c.scm/order/web/expressmodel`,
+				//  url:  'http://10.0.40.33:8080/m2c.scm/order/expressmodel ',
 				type: "POST",
         data: formData,
         // data:{},
