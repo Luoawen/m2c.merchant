@@ -142,6 +142,7 @@
         formData.append('img', document.querySelector('#m11yhgl_img_input').files[0])
         formData.append('token', sessionStorage.getItem('mToken'))
         formData.append('imgGroup', 4)
+        console.log("formedata",formData)
         that.$.ajax({
           type: 'post',
           url: that.base + 'm2c.support/img/upload',

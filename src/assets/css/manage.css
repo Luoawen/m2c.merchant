@@ -90,6 +90,7 @@
 .img_up{width: 100px; height:100px; display: inline-block; background: url('../images/img_add.png')}
 /*公共样式*/
 .btnBox{margin:10px 0;margin-bottom:20px;}
+.alginRight{line-height:50px;text-align:right;}
     /*弹层*/
     .hptczp{
         width: 100%;
@@ -115,9 +116,13 @@
         background: #FFFFFF;
         border-radius: 4px;
       }
+      .hptczp_contentTextarea{
+          height:260px;margin-top:-130px;
+      }
       .hptczp_content .hptczp_header{
           width:100%;
           height: 50px;
+          font-size:16px;
           /* background: #DFE9F6; */
           padding-left: 20px;
           padding-right: 20px;
@@ -126,42 +131,48 @@
             display: inline-block;
             line-height: 50px;
         }
+        .hptczp_content .hptczp_header span.iconfont{color:#999;font-size:13px;}
         .hptczp_content .hptczp_body{
           padding-left: 20px;
           padding-right: 20px;
           background: #FFFFFF;
-          margin-top: 10px;
+          margin-top: 36px;
+          text-align: center;
+          height:66px;
+        }
+        .hptczp_contentTextarea .hptczp_body{
+            padding-left: 20px;
+            padding-right: 20px;
+            background: #FFFFFF;
+            margin-top: 10px;
+            text-align: center;
+            height:auto;
+          }
+        .hptczp_content .hptczp_body h5{
+            line-height: 24px;font-size:18px;
+        }
+        .hptczp_content .hptczp_body p{
+            line-height: 24px;font-size:13px;color:#666;
         }
         .hptczp_content .hptczp_body textarea{
             width: 100%;
-            height: 100%;
+            height: 110px;
             border: 1px solid #E5E5E5;
-            width: 360px;
-            height: 140px;
-            padding-left: 10px;
-            padding-right: 10px;
-            padding-top: 5px;
-            padding-bottom: 5px;
+            padding:5px 10px;
         }
         .hptczp_content .hptczp_footer{
-            height: 80px;
-            padding-top: 10px;
-            padding-left: 50%;
+            /* height: 80px; */
+            /* padding-top: 10px; */
+            text-align: center;margin:30px auto;
+            /* padding-left: 50%; */
         }
-        .hptczp_content .hptczp_footer.btn {
-            width: 80px;
-            height: 30px;
-            border: none;
-            border-radius: 2px;
-            color: #fff;
+        .hptczp_content .hptczp_footer .cancel {
+            /* margin-left: -110px; */
+        /* background: #0086FF; */
         }
-          .hptczp_content .hptczp_footer .save {
-            margin-left: -110px;
-            background: #0086FF;
-          }
-          .hptczp_content .hptczp_footer .cancel {
-            margin-left: 40px;
-            background: #FFF;
-            border: 1px solid #E5E5E5;
-            color: #444;
-          }
+        .hptczp_content .hptczp_footer .save {
+            margin-left:20px;
+        /* background: #FFF;
+        border: 1px solid #E5E5E5;
+        color: #444; */
+        }

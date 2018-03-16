@@ -76,7 +76,7 @@
           <template slot-scope="scope">
             <span>
             <!--{{scope.row.status==0?'申请退货':scope.row.status==1?'申请换货':scope.row.status==2?'申请退款':scope.row.status==3?'拒绝':scope.row.status==4?'已同意申请':scope.row.status==5?'客户已寄出':scope.row.status==6?'商家已收到':scope.row.status==7?'商家已寄出':scope.row.status==8?'客户收到':scope.row.status==9?'已同意退款':scope.row.status==10?'已退款':scope.row.status==11?'售后完成':scope.row.status==-1?'取消':'-'}}-->
-              {{scope.row.orderType==0?(scope.row.status==-1?'售后已取消':scope.row.status==3?'商家已拒绝':scope.row.status==1?'待商家同意':scope.row.status==4?'待顾客寄回商品':(scope.row.status==5||scope.row.status==6)?'待商家发货':scope.row.status==7?'待顾客收货':scope.row.status>=8?'售后已完成':'--'):scope.row.orderType==1?(scope.row.status==-1?'售后已取消':scope.row.status==3?'商家已拒绝':scope.row.status==0?'待商家同意':scope.row.status==4?'待顾客寄回商品':(scope.row.status==5||scope.row.status==6)?'待商家确认退款':scope.row.status>=9?'售后已完成':'--'):scope.row.orderType==2?(scope.row.status==-1?'售后已取消':scope.row.status==3?'商家已拒绝':scope.row.status==2?'待商家同意':scope.row.status==4?'待商家确认退款':scope.row.status>=9?'售后已完成':'--'):'--'}}
+              {{scope.row.orderType==0?(scope.row.status==-1?'售后已取消':scope.row.status==3?'商家已拒绝':scope.row.status==1?'待商家同意':scope.row.status==4?'待顾客寄回商品':(scope.row.status==5||scope.row.status==6)?'待商家发货':scope.row.status==7?'待顾客收货':scope.row.status>=8?'售后已完成':'--'):scope.row.orderType==1?(scope.row.status==-1?'售后已取消':scope.row.status==3?'商家已拒绝':scope.row.status==0?'待商家同意':scope.row.status==4?'待顾客寄回商品':(scope.row.status==5||scope.row.status==6)?'待商家确认退款':scope.row.status==9?'退款中':scope.row.status>9?'售后已完成':'--'):scope.row.orderType==2?(scope.row.status==-1?'售后已取消':scope.row.status==3?'商家已拒绝':scope.row.status==2?'待商家同意':scope.row.status==4?'待商家确认退款':scope.row.status==9?'退款中':scope.row.status>9?'售后已完成':'--'):'--'}}
             </span></template>
         </el-table-column>
         <el-table-column
@@ -148,6 +148,9 @@
         },{
           value: '27',
           label: '商家已拒绝'
+        },{
+          value: '28',
+          label: '退款处理中'
         }],
         afterSaleStatus:'',//售后状态
         mediaStatus:[{

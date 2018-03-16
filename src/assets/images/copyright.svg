@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>ico_commodity_default copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ico_commodity_default-copy" fill-rule="nonzero" fill="#7ED321">
+            <g id="ico_commodity_default">
+                <path d="M20,40 C8.954305,40 0,31.045695 0,20 C0,8.954305 8.954305,0 20,0 C31.045695,0 40,8.954305 40,20 C40,31.045695 31.045695,40 20,40 Z M20,38 C29.9411255,38 38,29.9411255 38,20 C38,10.0588745 29.9411255,2 20,2 C10.0588745,2 2,10.0588745 2,20 C2,29.9411255 10.0588745,38 20,38 Z M11.8968817,20.0533624 L17.156046,25.3125267 L28.1431192,14.3254534 C28.5770571,13.8915155 29.2806095,13.8915155 29.7145475,14.3254534 C30.1484854,14.7593914 30.1484854,15.4629438 29.7145475,15.8968817 L17.9417601,27.6696691 C17.5078222,28.103607 16.8042698,28.103607 16.3703319,27.6696691 L10.3254534,21.6247906 C9.89151552,21.1908527 9.89151552,20.4873003 10.3254534,20.0533624 C10.7593914,19.6194244 11.4629438,19.6194244 11.8968817,20.0533624 Z" id="Combined-Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

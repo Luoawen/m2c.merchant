@@ -214,23 +214,22 @@
     <div class="hptczp" v-show="showhptc===true"  style="">
 
     </div>
-    <div class="hptczp_content"  v-show="showhptc===true">
+    <div class="hptczp_content hptczp_contentTextarea" v-show="showhptc===true">
         <div class="hptczp_header">
           <span>回评内容</span>
           <span class="iconfont fr" @click="cancel()">&#xe661;</span>
-          <i class="icon iconfont" >&#xe624;</i>
         </div>
         <div class="hptczp_body">
             <textarea placeholder="请填写100字符以内内容" v-model="reply_params.replyContent" maxlength="100"></textarea>
         </div>
         <div class="hptczp_footer">
-          <button type="button" class="btn save" @click="reply()" :disabled="reply_params.replyContent==''">确认</button>
-          <button type="button" class="btn cancel" @click="cancel()" >取消</button>
+          <el-button size="medium" class="cancel" @click="cancel()">取消</el-button>
+          <el-button type="primary" size="medium" class="save" @click="reply()" :disabled="reply_params.replyContent==''">确认</el-button>
+          <!-- <button type="button" class="btn save" @click="reply()" :disabled="reply_params.replyContent==''">确认</button>
+          <button type="button" class="btn cancel" @click="cancel()" >取消</button> -->
         </div>
     </div>
   </div>
-
-
 </template>
 <script>
   export default {
