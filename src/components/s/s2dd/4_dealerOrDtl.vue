@@ -152,7 +152,7 @@
                   <span v-if="goods.afterSellOrderId ==''"> --</span>
                   <span v-else class='iconTips'>
                     <router-link  style='margin-left:20px' :to="{name:'details',query:{'afterSellOrderId':goods.afterSellOrderId,from:'details'}} " target='_blank'>
-                      {{goods.afterOrderType==0?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==1?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家发货':goods.afterSellStatus==7?'待顾客收货':goods.afterSellStatus>=8?'售后已完成':'--'):goods.afterOrderType==1?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==0?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):goods.afterOrderType==2?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==2?'待商家同意':goods.afterSellStatus==4?'待商家确认退款':goods.afterSellStatus>=9?'售后已完成':'--'):'--'}}
+                      {{goods.afterOrderType==0?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==1?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家发货':goods.afterSellStatus==7?'待顾客收货':goods.afterSellStatus>=8?'售后已完成':'--'):goods.afterOrderType==1?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==0?'待商家同意':goods.afterSellStatus==4?'待顾客寄回商品':(goods.afterSellStatus==5||goods.afterSellStatus==6)?'待商家确认退款':goods.afterSellStatus==9?'退款中':goods.afterSellStatus>9?'售后已完成':'--'):goods.afterOrderType==2?(goods.afterSellStatus==-1?'售后已取消':goods.afterSellStatus==3?'商家已拒绝':goods.afterSellStatus==2?'待商家同意':goods.afterSellStatus==4?'待商家确认退款':goods.afterSellStatus==9?'退款中':goods.afterSellStatus>9?'售后已完成':'--'):'--'}}
                     </router-link>
                   </span>
                 </td>
@@ -378,7 +378,7 @@
       <div class="deliver_type01 mt20 mb10 clear">
         <button class="deliversure btn01 mr20 ml20" @click="deliverDealerOrder()">确定发货</button>
         <button class="btn01 deliverdel" @click="clearExpress">取消</button>
-        <span class="ml20 redcolor bz">请仔细填写发货信息，一旦确定，不可修改！</span>
+        <!-- <span class="ml20 redcolor bz">请仔细填写发货信息，一旦确定，不可修改！</span> -->
       </div>
       </div>
   	</div>

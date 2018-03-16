@@ -17,7 +17,7 @@
 						<!-- <input type="password" class="mima_dd" placeholder="6-16位密码"  :minlength="6" :maxlength="16"  v-model="login_params.password" @keydown.enter="login"> -->
 						<input type="password" class="mima_dd" placeholder="6-16位密码"  :minlength="6" :maxlength="16"  v-model="login_params.password" @keydown.enter="login" v-if='ie'>
 						<input type="text" class="mima_wz" placeholder="6-16位密码" :minlength="6" :maxlength="16"   v-model="login_params.password" @keydown.enter="login" style="display:none;">
-						<a @click="get_password" class="eyes_box " data-show="1" href="javascript:void(0);"><i class="icon iconfont" >&#xe624;</i></a>
+						<a @click="get_password" class="eyes_box " data-show="1" href="javascript:void(0);"><i class="icon iconfont" >&#xe7d2;</i></a>
 					</div>
 					<div class="login_s">
 						<button type="submit"  @click="login"   ref='submitButton' >登&nbsp;&nbsp; 录</button> 
@@ -111,14 +111,14 @@ export default {
       let that = this
       if (that.$('.eyes_box').attr('data-show') === '1') { // 明文
         that.$('.eyes_box').attr('data-show', '2')
-        that.$('.eyes_box').children('i').html('&#xe627;')
+        that.$('.eyes_box').children('i').html('&#xe7d3;')
         that.$('.mima_dd').hide()
         that.$('.mima_wz').show()
         return
       }
       if (that.$('.eyes_box').attr('data-show') === '2') { // 密码
         that.$('.eyes_box').attr('data-show', '1')
-        that.$('.eyes_box').children('i').html('&#xe624;')
+        that.$('.eyes_box').children('i').html('&#xe7d2;')
         that.$('.mima_dd').show()
         that.$('.mima_wz').hide()
         return

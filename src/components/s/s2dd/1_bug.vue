@@ -30,7 +30,7 @@
       <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
       <div class="btnBox">
         <el-button size="medium" @click.native="exportSearch()">导出</el-button>
-        <el-button size="medium" @click="batchShow=true">批量发货</el-button>
+        <el-button size="medium" @click="batchShow=true" style="width:80px;">批量发货</el-button>
       </div>
     </div>
     <!-- 高级搜索 -->
@@ -183,7 +183,7 @@
                   <!-- 有几种情况的不同表现方 -->
                   <div>
                     <div>
-                      {{goodsItem.afOrderType==0?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==1?'待商家同意':goodsItem.afStatus==4?'待顾客寄回商品':(goodsItem.afStatus==5||goodsItem.afStatus==6)?'待商家发货':goodsItem.afStatus==7?'待顾客收货':goodsItem.afStatus>=8?'售后已完成':'--'):goodsItem.afOrderType==1?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==0?'待商家同意':goodsItem.afStatus==4?'待顾客寄回商品':(goodsItem.afStatus==5||goodsItem.afStatus==6)?'待商家确认退款':goodsItem.afStatus>=9?'售后已完成':'--'):goodsItem.afOrderType==2?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==2?'待商家同意':goodsItem.afStatus==4?'待商家确认退款':goodsItem.afStatus>=9?'售后已完成':'--'):'--'}}
+                      {{goodsItem.afOrderType==0?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==1?'待商家同意':goodsItem.afStatus==4?'待顾客寄回商品':(goodsItem.afStatus==5||goodsItem.afStatus==6)?'待商家发货':goodsItem.afStatus==7?'待顾客收货':goodsItem.afStatus>=8?'售后已完成':'--'):goodsItem.afOrderType==1?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==0?'待商家同意':goodsItem.afStatus==4?'待顾客寄回商品':(goodsItem.afStatus==5||goodsItem.afStatus==6)?'待商家确认退款':goodsItem.afStatus==9?'退款中':goodsItem.afStatus>9?'售后已完成':'--'):goodsItem.afOrderType==2?(goodsItem.afStatus==-1?'售后已取消':goodsItem.afStatus==3?'商家已拒绝':goodsItem.afStatus==2?'待商家同意':goodsItem.afStatus==4?'待商家确认退款':goodsItem.afStatus==9?'退款中':goodsItem.afStatus>9?'售后已完成':'--'):'--'}}
                       </div>
                     <div class="mt5" v-if="goodsItem.afStatus<=2 && goodsItem.afStatus>-1"><button class="a4_btn" @click="agreeShow(goodsItem.saleAfterNo, goodsItem.afStatus, item.orderStatus, goodsItem.afOrderType, goodsItem.strBackMoney, item.strOrderFreight, item.dealerOrderId, goodsItem.skuId)" >同意</button></div>
                     <div class="mt5 mb10" v-if="goodsItem.afStatus>=0 && goodsItem.afStatus<=2"><button class="a4_btn" @click="refuseShow(goodsItem.saleAfterNo)" >拒绝</button></div>
@@ -226,42 +226,91 @@
       </div>
     </div>
     <!-- &lt;!&ndash; 是否同意 或者拒绝浮层弹框 &ndash;&gt; -->
-    <div class="agreetc"  style="" v-show="Agreeshow===true||Refuseshow===true||TowAgreeshow===true">
+    <div class="hptczp" v-show="Agreeshow===true||Refuseshow===true||TowAgreeshow===true||batchShow===true||batchNum===true">
 
     </div>
+    <!--导入批量发货-->
+    <div class="hptczp_content" v-show="batchShow===true" style="width:500px;height:400px;margin-left:-250px;margin-top:-200px;">
+        <div class="hptczp_header">
+          <span>导入数据</span>
+          <span class="iconfont fr" @click="batchShow=false">&#xe661;</span>
+        </div>
+        <div class="hptczp_body" style="padding:0 40px;text-align:left;margin-top:30px;height:auto;">
+          <input type="file" id="upload" style="display:none" @change="file_upload" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
+          <el-button type="primary" size="mini" icon="el-icon-upload2" style="width:100px;" onclick="document.querySelector('#upload').click()">上传文件</el-button>
+          <el-button size="mini" icon="el-icon-download" style="width:124px;" @click.native="exportSearch1()">下载待发货订单</el-button>
+          <div class="tipBox">
+            <p>1、请使用系统默认的模板导入，请勿擅自更改模板；</p>
+            <p>2、模板已预置需要发货的订单信息，请按照对应订单填写物流信息；</p>
+            <p>3、此模板只用于物流发货使用，自有物流暂不支持；</p>
+            <p>4、请严格按照表格说明的规范填写，填写不合法均会导入失败；</p>
+            <p>5、单次导入数据不可多于500个；</p>
+            <p>6、导入后，数据需要一段时间同步，请耐心等待</p>
+          </div>
+        </div>
+    </div>
+    <!--导入成功数目-->
+    <div class="hptczp_content" v-show="batchNum===true" style="width:500px;height:400px;margin-left:-250px;margin-top:-200px;">
+        <div class="hptczp_header">
+          <span>导入数据</span>
+          <span class="iconfont fr" @click="batchNum=false">&#xe661;</span>
+        </div>
+        <div class="hptczp_body" style="padding:0 40px;margin-top:30px;height:auto;">
+          <div class="success">
+            <img src="../../../assets/images/copyright.svg" />
+            <p>已导入数据
+              <br /><span style="margin-top:10px;display:inline-block;">导入成功 {{}}</span>
+              <br /><span>导入失败 {{}}</span>
+            </p>
+          </div>
+        </div>
+        <div class="hptczp_footer">
+          <el-button size="mini" icon="el-icon-download" style="width:124px;" @click.native="exportSearch2()">下载失败数据</el-button>
+          <input type="file" id="upload2" style="display:none" @change="file_upload" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
+          <el-button size="mini" class="iconfont" style="width:100px;font-size:12px;margin-left:10px;" onclick="document.querySelector('#upload2').click()">&#xe697;&nbsp;重新上传</el-button>
+          <p>数据修正后，可再次上传，已导入的数据不受影响</p>
+        </div>
+    </div>
     <!-- &lt;!&ndash; 是否同意弹框 &ndash;&gt; -->
-    <div class="agreetc_content" v-show="agreeApplyShow===true" >
-      <div class="agreetc_header">
+    <div class="hptczp_content" v-show="agreeApplyShow===true" >
+      <div class="hptczp_header">
         <span>提示</span>
-        <span class="fr" @click="agreeApplyShow=false;Agreeshow=false;">X</span>
+        <span class="iconfont fr" @click="agreeApplyShow=false;Agreeshow=false;">&#xe661;</span>
       </div>
-      <div class="agreetc_body">确认同意{{afStatus==0?'退货':afStatus==1?'换货':afStatus==2?'退款' : '--'}}申请？</div>
-      <div class="agreetc_footer">
-        <button type="button" class="btn save" @click="agreeApply()">确认</button>
-        <button type="button" class="btn cancel" @click="agreeApplyShow=false;Agreeshow=false;">取消</button>
+      <div class="hptczp_body">
+        <h5>确认同意{{afStatus==0?'退货':afStatus==1?'换货':afStatus==2?'退款' : '--'}}申请？</h5>
+      </div>
+      <div class="hptczp_footer">
+        <el-button size="medium" class="cancel" @click="agreeApplyShow=false;Agreeshow=false;">取消</el-button>
+        <el-button type="primary" size="medium" class="save" @click="agreeApply()">确认</el-button>
+        <!-- <button type="button" class="btn save" @click="agreeApply()">确认</button>
+        <button type="button" class="btn cancel" @click="agreeApplyShow=false;Agreeshow=false;">取消</button> -->
       </div>
     </div>
     <!-- &lt;!&ndash; 拒绝原因 &ndash;&gt; -->
-    <div class="refuse_content" v-show="Refuseshow===true">
-      <div class="refuse_header">
+    <div class="hptczp_content hptczp_contentTextarea" v-show="Refuseshow===true">
+      <div class="hptczp_header">
         <span>拒绝理由</span>
-        <span class="fr" @click="Refuseshow=false">X</span>
+        <span class="iconfont fr" @click="Refuseshow=false">&#xe661;</span>
+        <!-- <span class="fr" @click="Refuseshow=false">X</span> -->
       </div>
-      <div class="refuse_body">
-        <textarea id="refuse_txt" maxlength="100" minlength="1" placeholder="请输入1-100个字符" v-model="rejectReason" ></textarea>
+      <div class="hptczp_body">
+        <textarea maxlength="100" minlength="1" placeholder="请输入1-100个字符" v-model="rejectReason" ></textarea>
       </div>
-      <div class="refuse_footer">
-        <button type="button" class="btn save"  @click="handleReject">拒绝</button>
-        <button type="button" class="btn cancel" @click="Refuseshow=false">取消</button>
+      <div class="hptczp_footer">
+        <el-button size="medium" class="cancel" @click="Refuseshow=false">取消</el-button>
+        <el-button type="primary" size="medium" class="save" @click="handleReject()" :disabled="rejectReason==''">拒绝</el-button>
+        <!-- <button type="button" class="btn cancel" @click="Refuseshow=false">取消</button>
+        <button type="button" class="btn save"  @click="handleReject">拒绝</button> -->
       </div>
     </div>
     <!-- v-show="TowAgreeshow===true" -->
-    <div class="TowAgreeshow_content" v-show="TowAgreeshow===true" >
-      <div class="agreetc_header">
+    <!-- <div class="hptczp_content" v-show="TowAgreeshow===true" >
+      <div class="hptczp_header">
         <span>提示</span>
         <span class="fr" @click="TowAgreeshow=false">X</span>
       </div>
-      <div class="TowAgreeshow_body">
+      <div class="hptczp_body TowAgreeshow_body">
         <input type="number" placeholder="填入要退的运费" id="rt_freight"></input>
         <div class="tit01">是否确认{{afStatus==0?'退货':afStatus==1?'换货':afStatus==2?'退款':''}}？</div>
         <div class="tit02">{{afStatus==0?'款项将原路退回给顾客':afStatus==2?'款项将原路退回给顾客':''}}</div>
@@ -270,22 +319,28 @@
         <button type="button" class="btn save" >确认</button>
         <button type="button" class="btn cancel" @click="TowAgreeshow=false">取消</button>
       </div>
-    </div>
-
-    <div class="pop_content"  v-show="showRt===true">
+    </div> -->
+    <div class="hptczp_content hptczp_contentTextarea" v-show="showRt===true" style="height:290px;margin-top:-145px;">
       <div class="hptczp_header">
         <span>同意申请</span>
-        <span class="fr" @click="Agreeshow=false;showRt=false">X</span>
+        <span class="iconfont fr" @click="Agreeshow=false;showRt=false">&#xe661;</span>
+        <!-- <span class="fr" @click="Agreeshow=false;showRt=false">X</span> -->
       </div>
-      <div class="hptczp_body">
-        <div class="linh40">
-          <!-- <span class=" wid80">
-            <span style="color: red;">*</span>
-            运费退款
-          </span>
-          <span> <el-input-number v-model="pRtFreight" :controls="false" :min="-1" :max="orderFreight" ></el-input-number></span>
-          <span>元</span> -->
-          <span class=" wid80">
+      <div class="hptczp_body" style="text-align:left;">
+        <el-row :gutter="20">
+          <el-col :span="7" class="alginRight"><i class="red">*</i>运费退款</el-col>
+          <el-col :span="17">
+            <el-input style="width:180px;" v-model="pRtFreight" type="number" :controls="false" :min="-1" :max="(orderFreight - hasRtFreight)" :placeholder="'最多可退'+(orderFreight - hasRtFreight).toFixed(2) +'元'" @change="pRtFreightChange"></el-input>
+            <span>元</span>
+          </el-col>
+          <el-col :span="17" :offset="7" style="color:#6b6b6b;font-size:12px;">运费退款不能大于订单实际剩余运费</el-col>
+          <el-col :span="7" class="alginRight" style="line-height:40px;">售后金额</el-col>
+          <el-col :span="17"><span style="line-height:40px;">{{(backMoney).toFixed(2)}}元</span></el-col>
+          <el-col :span="7" class="alginRight" style="line-height:40px;">售后总额</el-col>
+          <el-col :span="17"><span style="line-height:40px;">{{(backMoney + rtFreight).toFixed(2)}}元</span></el-col>
+        </el-row>
+        <!-- <div class="linh40">
+          <span class="wid80">
             <span style="color: red;">*</span>
             运费退款
           </span>
@@ -300,11 +355,13 @@
         <div class="linh40 pl10">
           <span class=" wid80">售后总额</span>
           <span>{{(backMoney + rtFreight).toFixed(2)}}元</span>
-        </div>
+        </div> -->
       </div>
-      <div class="hptczp_footer">
-        <button type="button" class="btn save" @click="agreeRtMoneyApply" >确认</button>
-        <button type="button" class="btn cancel" @click="Agreeshow=false;showRt=false" >取消</button>
+      <div class="hptczp_footer" style="margin:20px auto;">
+        <el-button size="medium" class="cancel" @click="Agreeshow=false;showRt=false">取消</el-button>
+        <el-button type="primary" size="medium" class="save" @click="agreeRtMoneyApply">确认</el-button>
+        <!-- <button type="button" class="btn cancel" @click="Agreeshow=false;showRt=false" >取消</button>
+        <button type="button" class="btn save" @click="agreeRtMoneyApply" >确认</button> -->
       </div>
     </div>
   </div>
@@ -316,6 +373,8 @@
     name: '',
     data () {
       return {
+        batchNum:false,//导入成功数目
+        shopName:'',//商铺名
         batchShow:false,//批量发货弹层
         rejectReason:'',//拒绝理由
         isIndeterminate: true,
@@ -337,7 +396,10 @@
         afStatus : -2,
         saleAfterNo : '',
         orderStatuses:[{value:'',label:'订单状态'},{value:'0',label:'待付款'},{value:'1',label:'待发货'},{value:'2',label:'待收货'},{value:'3',label:'已完成'},{value:'4',label:'交易完成'},{value:'5',label:'交易关闭'},{value:'-1',label:'已取消'}],
-        afterSellStatuses:[{value:'',label:'售后状态'},{value:'20',label:'待商家同意'},{value:'21',label:'待顾客寄回商品'},{value:'22',label:'待商家确认退款'},{value:'23',label:'待商家发货'},{value:'24',label:'待顾客收货'},{value:'25',label:'售后已完成'},{value:'26',label:'售后已取消'},{value:'27',label:'商家已拒绝'}],
+        afterSellStatuses:[{value:'',label:'售后状态'},{value:'20',label:'待商家同意'},{value:'21',label:'待顾客寄回商品'},{value:'22',label:'待商家确认退款'},{value:'23',label:'待商家发货'},{value:'24',label:'待顾客收货'},{value:'25',label:'售后已完成'},{value:'26',label:'售后已取消'},{value:'27',label:'商家已拒绝'},{
+          value: '28',
+          label: '退款处理中'
+        }],
         commentStatus:[{value:'',label:'评论状态'},{value:'0',label:'待评论'},{value:'1',label:'已评论'}],
         isPayDeposits:[{value:'',label:'支付方式'},{value:'1',label:'支付宝'},{value:'2',label:'微信'}],// 支付方式
         invoiceTypes:[{value:'',label:'开发票'},{value:'0',label:'个人'},{value:'1',label:'公司'}], // 发票
@@ -354,7 +416,78 @@
       }
     },
     methods: {
-      //
+    //查询经销商shopName
+    getDealerMess () {
+      let that = this
+      that.$.ajax({
+        type: 'get',
+        url: this.base + 'm2c.scm/shop/sys/shopInfo',
+        // url:'http://10.0.40.33:8080/m2c.scm/shop/sys/shopInfo',
+        data: {
+          dealerId: JSON.parse(sessionStorage.getItem('mUser')).dealerId
+        },
+        success: function (res) {
+          console.log(res)
+          that.shopName = res.content.shopName
+        }
+      })
+    },
+    //文件导出
+    exportSearch1 (){
+      let that = this
+      let url=that.base + 'm2c.scm/order/export/web/outputmodel?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId
+      window.location.href=url
+    },
+		// 文件上传
+		file_upload(event) {
+      let that = this
+			let target = event.target
+			let obj = window.URL.createObjectURL(target.files[0])
+			console.log('文件',obj)
+			var formData = new FormData()
+      formData.append("myfile",target.files[0]),
+      formData.append("userId",JSON.parse(sessionStorage.getItem('mUser')).userId),
+      formData.append("shopName",that.shopName)
+      //{"totalCount":1,"forbidTime":0,"forbidType":0,"userId":"HY364B9131D3C940FC887D9EF6B2B90FBB","mobile":"13500000046","icon":"","username":"商家管理员","groupType":4,"sysMsgSwitch":1,"orderMsgSwitch":1,"sex":0,"age":0,"createTime":1511322236000,"popedPacket":0,"salerId":null,"areaProvince":"","areaDistrict":"","provinceCode":"","mediaId":"","mediaName":"","districtCode":"","dealerName":"资金流服务费率","dealerId":"JXS1382A365F7D94350991D84AF23233FD7"}
+			// 存一次上传的文件
+			// this.excel_file = target.files[0]
+			// 存储有到文档的值
+      // console.log('存储上一次的文件',this.excel_file)
+      console.log('文件',obj)
+      console.log("formedata",formData)
+			this.$.ajax({
+			//	url:  `${this.base}m2c.scm/order/web/expressmodel`,
+				 url:  'http://10.0.40.33:8080/m2c.scm/order/expressmodel ',
+				type: "POST",
+        data: formData,
+        // data:{},
+				/**
+				*必须false才会自动加上正确的Content-Type
+				*/
+				contentType: false,
+				/**
+				* 必须false才会避开jQuery对 formdata 的默认处理
+				* XMLHttpRequest会对 formdata 进行正确的处理
+				*/
+				processData: false,
+				success: function (res) {
+					if (res.status == '200') {
+						// alert("上传成功！")
+						that.$message({
+							message: '上传成功！',
+							type: 'success'
+						})
+						// that.send_num = res.content.rows
+					}
+				},
+				error: function () {
+					console.log('上传内容格式错误，请下载模板参照！')
+					that.$message.error('上传内容格式错误，请下载模板参照！')
+				}
+			});
+
+		},
+      //退运费
       pRtFreightChange(){
         let that = this
         var re = /^[0-9]+\.?[0-9]*$/
@@ -506,10 +639,10 @@
       that.Refuseshow = true
       that.saleAfterNo = afterNo;
     },
-    towAgreeshow () {
-      var that = this
-      that.TowAgreeshow = true
-    },
+    // towAgreeshow () {
+    //   var that = this
+    //   that.TowAgreeshow = true
+    // },
 
     timeBox () {
       this.is_Success = true
@@ -681,11 +814,15 @@
   },
   mounted () {
     this.getDealerOrders()
+    this.getDealerMess()
   }
-  }
+}
 
 </script>
 <style lang="scss" scoped>
+.tipBox{border-top:1px solid #E6E8F2 ; padding-top:20px;margin-top:34px;
+  p{font-size:12px;color:#999;line-height:20px;}
+}
   .content{
     .dropdown{
       display: inline-block;
@@ -1142,74 +1279,16 @@
   .timeIcon{background:url(../../../assets/images/ico_calendar@2x.png) no-repeat center bottom;background-size:19px 20px;}
   .searchIcon{background:url(../../../assets/images/ico_search.png) no-repeat center center;background-size:20px 20px;}
 
-  .pop_content{
-    width: 400px;
-    height: 280px;
-    background: #fff;
-    z-index: 9999;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    margin-left: -200px;
-    margin-top: -140px;
-    background: #FFFFFF;
-    border-radius: 4px;
-    .hptczp_header{
-      width:100%;
-      height: 50px;
-      background: #DFE9F6;
-      padding-left: 20px;
-      padding-right: 20px;
-      span{
-        display: inline-block;
-        line-height: 50px;
-      }
+  .hptczp_content{
+    .hptczp_body .success{
+      width:170px;height:110px;margin:0 auto;margin-top:50px;
+      img,p{float:left;display:inline-block;}
+      p{width:110px;margin-left:20px;font-size:14px;text-align:left;color:#333;}
+      p span{color:#666;}
     }
-    .hptczp_body{
-      padding-left: 20px;
-      padding-right: 20px;
-      background: #FFFFFF;
-      margin-top: 10px;
-      textarea{
-        width: 100%;
-        height: 100%;
-        border: 1px solid #E5E5E5;
-        width: 360px;
-        height: 140px;
-        padding-left: 10px;
-        padding-right: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-      }
-      p{
-        margin-left:78px;
-        color:rgb(107,107,107);
-        font-size: 12px;
-        line-height: 18px;
-      }
-    }
-    .hptczp_footer{
-      height: 80px;
-      padding-top: 10px;
-      padding-left: 50%;
-      .btn {
-        width: 80px;
-        height: 30px;
-        border: none;
-        border-radius: 2px;
-        color: #fff;
-      }
-      .save {
-        margin-left: -110px;
-        background: #0086FF;
-      }
-      .cancel {
-        margin-left: 40px;
-        background: #FFF;
-        border: 1px solid #CCCCCC;
-        color: #444;
-      }
-
+    .hptczp_footer p{
+      font-size: 12px;
+      color: #999999;margin-top:20px;
     }
     .linh40{
       line-height: 40px;

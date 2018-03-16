@@ -10,13 +10,14 @@
           <div class="detail_tit03" v-show="orderDetail.status==4 && orderDetail.orderType==2">请及时退款给顾客</div>
           <div class="detail_tit03" v-show="orderDetail.status==5 && orderDetail.orderType==1">顾客已寄回商品，收到寄回商品请及时退款给顾客</div>
           <div class="detail_tit03" v-show="orderDetail.status==5 && orderDetail.orderType==0">顾客已寄回商品，收到寄回商品请及时发货</div>
+          <div class="detail_tit03" v-show="orderDetail.status==9 && (orderDetail.orderType==1||orderDetail.orderType==2)">第三方支付平台正在处理退款</div>
           <div class="detail_top mt20 clear">
             <div class="col-sm-4 detail_cen">
               <div>
                 <span class="tit01">售后状态</span>
                 <span style="color: red;font-size: 15px" class="ml20">
                   <!-- {{orderDetail.status==0?'申请退货退款':orderDetail.status==1?'申请换货':orderDetail.status==2?'申请退款':orderDetail.status==3?'拒绝':orderDetail.status==4?'已同意申请':orderDetail.status==5?'客户已寄出':orderDetail.status==6?'商家已收到':orderDetail.status==7?'商家已寄出':orderDetail.status==8?'客户已收到':orderDetail.status==9?'已同意退款':orderDetail.status==10?'已退款':orderDetail.status==11?'售后完成':orderDetail.status==11?'售后关闭':orderDetail.status==-1?'已取消':'-'}} -->
-                  {{orderDetail.orderType==0?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==1?'待商家同意':orderDetail.status==4?'待顾客寄回商品':(orderDetail.status==5||orderDetail.status==6)?'待商家发货':orderDetail.status==7?'待顾客收货':orderDetail.status>=8?'售后已完成':'--'):orderDetail.orderType==1?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==0?'待商家同意':orderDetail.status==4?'待顾客寄回商品':(orderDetail.status==5||orderDetail.status==6)?'待商家确认退款':orderDetail.status>=9?'售后已完成':'--'):orderDetail.orderType==2?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==2?'待商家同意':orderDetail.status==4?'待商家确认退款':orderDetail.status>=9?'售后已完成':'--'):'--'}}
+                  {{orderDetail.orderType==0?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==1?'待商家同意':orderDetail.status==4?'待顾客寄回商品':(orderDetail.status==5||orderDetail.status==6)?'待商家发货':orderDetail.status==7?'待顾客收货':orderDetail.status>=8?'售后已完成':'--'):orderDetail.orderType==1?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==0?'待商家同意':orderDetail.status==4?'待顾客寄回商品':(orderDetail.status==5||orderDetail.status==6)?'待商家确认退款':orderDetail.status==9?'退款中':orderDetail.status>9?'售后已完成':'--'):orderDetail.orderType==2?(orderDetail.status==-1?'售后已取消':orderDetail.status==3?'商家已拒绝':orderDetail.status==2?'待商家同意':orderDetail.status==4?'待商家确认退款':orderDetail.status==9?'退款中':orderDetail.status>9?'售后已完成':'--'):'--'}}
                 </span>
               </div>
 
@@ -140,7 +141,7 @@
            <el-col :span='8'>
               <span class="tit01">售后状态:</span>
               <span class="ml20" >
-                {{orderDetail.orderType==0?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==1?'待商家同意':logistics.status==4?'待顾客寄回商品':(logistics.status==5||logistics.status==6)?'待商家发货':logistics.status==7?'待顾客收货':logistics.status>=8?'售后已完成':'--'):orderDetail.orderType==1?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==0?'待商家同意':logistics.status==4?'待顾客寄回商品':(logistics.status==5||logistics.status==6)?'待商家确认退款':logistics.status>=9?'售后已完成':'--'):orderDetail.orderType==2?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==2?'待商家同意':logistics.status==4?'待商家确认退款':logistics.status>=9?'售后已完成':'--'):'--'}}
+                {{orderDetail.orderType==0?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==1?'待商家同意':logistics.status==4?'待顾客寄回商品':(logistics.status==5||logistics.status==6)?'待商家发货':logistics.status==7?'待顾客收货':logistics.status>=8?'售后已完成':'--'):orderDetail.orderType==1?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==0?'待商家同意':logistics.status==4?'待顾客寄回商品':(logistics.status==5||logistics.status==6)?'待商家确认退款':logistics.status==9?'退款中':logistics.status>9?'售后已完成':'--'):orderDetail.orderType==2?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==2?'待商家同意':logistics.status==4?'待商家确认退款':logistics.status==9?'退款中':logistics.status>9?'售后已完成':'--'):'--'}}
               </span>
            </el-col>
             <el-col :span='4'>
