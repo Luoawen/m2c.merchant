@@ -19,13 +19,15 @@
               <el-form-item label="有效期">
                 <el-date-picker
                   v-model="couponParams.expiration_time"
-                  type="daterange"
+                  type="datetimerange"
                   clearable
                   align="left"
                   :editable="false"
                   range-separator="-"
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  :default-time="['00:00:00','23:59:59']"
                   :picker-options="pickerOptions">
                 </el-date-picker>
               </el-form-item>
@@ -498,26 +500,27 @@ export default {
       let _this = this
       return (_this.S4() + _this.S4() + _this.S4() + _this.S4() + _this.S4() + _this.S4() + _this.S4() + _this.S4())
     },
-    formatDate (date, fmt) {
-      let that = this
-      if (/(y+)/.test(fmt)) {
-        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
-      }
-      let o = {
-        'M+': date.getMonth() + 1,
-        'd+': date.getDate(),
-        'h+': date.getHours(),
-        'm+': date.getMinutes(),
-        's+': date.getSeconds()
-      }
-      for (let k in o) {
-        if (new RegExp(`(${k})`).test(fmt)) {
-          let str = o[k] + ''
-          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : that.padLeftZero(str))
-        }
-      }
-      return fmt
-    },
+    // formatDate (date, fmt) {
+    //   console.log('fmt',fmt)
+    //   let that = this
+    //   if (/(y+)/.test(fmt)) {
+    //     fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+    //   }
+    //   let o = {
+    //     'M+': date.getMonth() + 1,
+    //     'd+': date.getDate(),
+    //     'h+': date.getHours(),
+    //     'm+': date.getMinutes(),
+    //     's+': date.getSeconds()
+    //   }
+    //   for (let k in o) {
+    //     if (new RegExp(`(${k})`).test(fmt)) {
+    //       let str = o[k] + ''
+    //       fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : that.padLeftZero(str))
+    //     }
+    //   }
+    //   return fmt
+    // },
     padLeftZero (str) {
       return ('00' + str).substr(str.length)
     },
@@ -796,10 +799,11 @@ export default {
         }
       }
       if (flag == 0 || flag == 3) {
+              debugger;
+              console.log('shijain',_this.couponParams.expiration_time[0])
         if (_this.couponParams.expiration_time != null && _this.couponParams.expiration_time.length > 0) {
-          _this.couponParams.expiration_time_start = _this.formatDate(_this.couponParams.expiration_time[0], 'yyyy-MM-dd')
-          _this.couponParams.expiration_time_end = _this.formatDate(_this.couponParams.expiration_time[1], 'yyyy-MM-dd')
-//          console.log('start_time:' + _this.couponParams.expiration_time_start + ',end_time:' + _this.couponParams.expiration_time_end)
+          _this.couponParams.expiration_time_start =_this.couponParams.expiration_time[0]
+          _this.couponParams.expiration_time_end = _this.couponParams.expiration_time[1]
         }
         if (_this.couponParams.expiration_time_start == '' || _this.couponParams.expiration_time_end == '') {
           _this.warning('有效期时间不能为空')
@@ -1878,3 +1882,9 @@ export default {
     width: 200px;
   }
 </style>
+<style>
+  .el-date-range-picker__time-header .el-input, .el-date-picker__time-header .el-input{
+    width: 136px!important;
+  }
+</style>
+

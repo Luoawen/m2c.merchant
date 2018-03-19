@@ -18,12 +18,13 @@
                 <span>{{couponInfo.expirtationTimeStart}} 至 </span>
                 <el-date-picker
                   v-model="couponParams.expiration_time_end"
-                  type="date"
+                  type="datetime"
                   clearable
                   :editable="false"
                   :default-value="couponInfo.expirtationTimeEnd"
                   placeholder="结束日期"
-                  value-format="yyyy-MM-dd"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  :default-time="['00:00:00','23:59:59']"
                   :picker-options="pickerOptions">
                 </el-date-picker>
               </el-form-item>
