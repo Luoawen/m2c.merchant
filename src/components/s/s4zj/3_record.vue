@@ -147,7 +147,7 @@
             if (result.status === 200){
               // 获取商品列表
 
-              that.orderStoreData = result.content
+              that.orderStoreData = result.content? result.content:[]
               that.totalCount = result.totalCount
             }
           }
