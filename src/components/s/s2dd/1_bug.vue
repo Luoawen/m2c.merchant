@@ -259,15 +259,15 @@
           <div class="success">
             <img src="../../../assets/images/copyright.svg" />
             <p>已导入数据
-              <br /><span style="margin-top:10px;display:inline-block;">导入成功 {{}}</span>
-              <br /><span>导入失败 {{}}</span>
+              <br /><span style="margin-top:10px;display:inline-block;">导入成功 {{uploadResult.successNum}}</span>
+              <br /><span>导入失败 {{uploadResult.failNum}}</span>
             </p>
           </div>
         </div>
         <div class="hptczp_footer">
           <el-button size="mini" icon="el-icon-download" style="width:124px;" @click.native="exportSearch2()">下载失败数据</el-button>
-          <input type="file" id="upload2" style="display:none" @change="file_upload" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
-          <el-button size="mini" class="iconfont" style="width:100px;font-size:12px;margin-left:10px;" onclick="document.querySelector('#upload2').click()">&#xe697;&nbsp;重新上传</el-button>
+          <!-- <input type="file" id="upload2" style="display:none" @change="file_upload" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"> -->
+          <el-button size="mini" class="iconfont" style="width:100px;font-size:12px;margin-left:10px;" onclick="document.querySelector('#upload').click()">&#xe697;&nbsp;重新上传</el-button>
           <p>数据修正后，可再次上传，已导入的数据不受影响</p>
         </div>
     </div>
@@ -373,6 +373,7 @@
     name: '',
     data () {
       return {
+        uploadResult:{},//导入后返回的值
         batchNum:false,//导入成功数目
         shopName:'',//商铺名
         batchShow:false,//批量发货弹层
@@ -438,6 +439,12 @@
       let url=that.base + 'm2c.scm/order/export/web/outputmodel?dealerId='+JSON.parse(sessionStorage.getItem('mUser')).dealerId
       window.location.href=url
     },
+    //导入失败文件导出
+    exportSearch2 (){
+      let that = this
+      let url=that.base + 'm2c.scm/order/export/web/failmodel?expressFlag='+that.uploadResult.expressFlag
+      window.location.href=url
+    },
 		// 文件上传
 		file_upload(event) {
       let that = this
@@ -472,22 +479,33 @@
 				*/
 				processData: false,
 				success: function (res) {
+          let content = res.content[0]
 					if (res.status == '200') {
-						// alert("上传成功！")
-						that.$message({
-							message: '上传成功！',
-							type: 'success'
-						})
+            // alert("上传成功！")
+            if(content.failNum==0){
+              that.$message({
+                message: '上传成功！',
+                type: 'success'
+              })
+              that.batchShow=false
+            }else{
+              that.uploadResult=res.content[0]
+              console.log('uploadResult',that.uploadResult)
+              that.batchNum=true
+              that.batchShow=false
+            }
 						// that.send_num = res.content.rows
-					}
+					}else{
+            that.$message.error(res.errorMessage)
+          }
 				},
 				error: function () {
-					console.log('上传内容格式错误，请下载模板参照！')
-					that.$message.error('上传内容格式错误，请下载模板参照！')
+					that.$message.error('请求失败，请稍后再试！')
 				}
-			});
-
-		},
+      });
+      let file = document.getElementById('upload');
+      file.value = '' //虽然file的value不能设为有字符的值，但是可以设置为空值
+    },
       //退运费
       pRtFreightChange(){
         let that = this
