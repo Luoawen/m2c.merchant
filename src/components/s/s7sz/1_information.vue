@@ -6,24 +6,46 @@
         <div class="shop">
           <div class="shopMess">
             <form class="form-horizontal">
+              <h4>店铺信息<span>上次更新时间：{{storeinformation.lastUpdateDate}}</span></h4>
               <el-row :gutter="20" >
-                <el-col :span="3" :offset="1">店铺名称 </el-col>
-                <el-col :span="6" >  <input type="text" class="formControl" maxlength="15" id="inputEmail3" placeholder="1-15字符" v-model="storeinformation.appellation"> </el-col>
+                <el-col :span="3" :offset="1" class="alginRight">店铺名称 </el-col>
+                <el-col :span="6" >
+                  <el-input type="text" :maxlength="15" id="inputEmail3" placeholder="1-15字符" v-model="storeinformation.appellation"></el-input>
+                </el-col>
               </el-row>
                <div class="clear"></div>
               <el-row :gutter="20" >
-                <el-col :span="3" :offset="1">店铺介绍 </el-col>
-                <el-col :span="20" >   <textarea class="formControl" cols="80" rows="7" maxlength="200" placeholder="1-200字符" v-model="storeinformation.introduce" style="resize:none;"></textarea> </el-col>
+                <el-col :span="3" :offset="1" class="alginRight">店铺介绍 </el-col>
+                <el-col :span="20" >
+                  <el-input type="textarea" cols="80" :rows="4" :maxlength="200" placeholder="1-200字符" v-model="storeinformation.introduce" style="resize:none;width:380px;"></el-input>
+                </el-col>
               </el-row>
                <div class="clear"></div>
+               <el-row :gutter="20" style="margin-top:20px;">
+                <el-col :span="3" :offset="1" class="alginRight">店铺Logo </el-col>
+                <el-col :span="20" style="text-align: left;" >
+                  <input type="file" id="m11yhgl_img_input" style="display:none" @change="upload_img()">
+                  <div class="img_up" onclick="document.querySelector('#m11yhgl_img_input').click()">
+                    <img width="100" height="100" v-show='imgshow' id="m11yhgl_img" v-model:src="storeinformation.imgUrl"
+                          onerror="this.src='../../../../static/assets/images/icon_uoloading.png';this.onerror=null">
+                  </div>
+                  <span class="upload">请上传1M以内的图片</span>
+                </el-col>
+              </el-row>
+              <div class="clear"></div>
               <el-row :gutter="20" style='margin-top:10px' >
-                <el-col :span="3" :offset="1">客服电话 </el-col>
-                <el-col :span="20" > <input type="text" class="formControl" onkeyup="value=value.replace(/[^\d-]/g,'') " ng-pattern="/[^a-zA-Z]/" maxlength="20" id="inputEmail3" placeholder="请填写" v-model="storeinformation.service"></el-col>
+                <el-col :span="3" :offset="1" class="alginRight">客服电话 </el-col>
+                <el-col :span="20" >
+                  <el-input type="text" onkeyup="value=value.replace(/[^\d-]/g,'') " ng-pattern="/[^a-zA-Z]/" :maxlength="20" id="inputEmail3" placeholder="请填写" v-model="storeinformation.service"></el-input>
+                  <!-- <input type="text" class="formControl" onkeyup="value=value.replace(/[^\d-]/g,'') " ng-pattern="/[^a-zA-Z]/" maxlength="20" id="inputEmail3" placeholder="请填写" v-model="storeinformation.service"> -->
+                </el-col>
               </el-row>
-               <div class="clear"></div>
+              <div class="clear"></div>
               <el-row :gutter="20" >
-                <el-col :span="3" :offset="1">发票信息 </el-col>
-                <el-col :span="20" >  <textarea class="formControl" cols="80" rows="7" placeholder="1-200字符"  maxlength="200" v-model="storeinformation.shopReceipt" style="resize:none;"></textarea></el-col>
+                <el-col :span="3" :offset="1" class="alginRight">发票信息 </el-col>
+                <el-col :span="20" >
+                  <el-input type="textarea" cols="80" :rows="4" placeholder="1-200字符" :maxlength="200" v-model="storeinformation.shopReceipt" style="resize:none;width:380px;" ></el-input>
+                </el-col>
               </el-row>
                <div class="clear"></div>
                <el-row :gutter="20" style="margin-top:-20px" >
@@ -31,7 +53,7 @@
               </el-row>
             </form>
           </div>
-          <div class="shopLogo pull-right">
+          <!-- <div class="shopLogo pull-right">
             <div class="form-group nopad">
               <div class="col-sm-8">
                 <input type="file" id="m11yhgl_img_input" style="display:none" @change="upload_img($event)">
@@ -46,11 +68,11 @@
                 </span>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </el-tab-pane>
       <el-tab-pane label="店铺主页" name="second">
-        <p>店铺背景图片上传</p>
+        <h4>店铺背景图片上传<span>上次更新时间：{{lastUpdateDate}}</span></h4>
         <div class="shopBg">
           <input type="file" id="bgInput" style="display:none" accept=".jpg,.png" @change="uploadBg($event)" />
           <div class="shopGg fl">
@@ -58,10 +80,10 @@
                   onerror="this.src='../../../../static/assets/images/icon_uoloading.png';this.onerror=null" >
           </div>
           <i class="fl">尺寸限制750px*240px，JPG/PNG格式，500K以内</i><br />
-          <el-button class="upload fl" onclick="document.querySelector('#bgInput').click()">{{upText}}</el-button>
+          <el-button class="upload fl" onclick="document.querySelector('#bgInput').click()" style="width:80px;">{{upText}}</el-button>
         </div>
         <div class="clear"></div>
-        <el-button class="save" type="primary" size="medium" @click="postshopBackImg">保存设置</el-button>
+        <el-button class="save" type="primary" size="medium" @click="postshopBackImg" style="width:80px;">保存设置</el-button>
         <img id="getWidth" :src='getImgWidth' />
       </el-tab-pane>
     </el-tabs>
@@ -82,6 +104,7 @@
       touxiang_change: false,
       storeinformation: {appellation: '', introduce: '', service: '', imgUrl: '', shopId: '' , shopReceipt: ''},
       shopBackImg:'',
+      lastUpdateDate:'',//背景图最后更新时间
       upText:'点击上传',
       bgShow:false,
       bgChange:false,
@@ -90,7 +113,8 @@
       height:'',
       width:'',
       objUrl:'',
-      obj:''
+      obj:'',
+      lastUpdateDate:''
     }
   },
   created () {
@@ -239,6 +263,7 @@
               return
             }
             that.shopBackImg = result.content.url
+            that.lastUpdateDate = result.content.lastUpdateDate
             let imgObj = document.getElementById('getWidth')
             that.$nextTick(()=>{
               that.getImgWidth = result.content.url
@@ -280,6 +305,7 @@
                 dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
                 shopId: that.storeinformation.shopId,
                 shopBackImg: that.shopBackImg,
+
               },
               success: function (res) {
                 if (res.status === 200) {
@@ -305,10 +331,11 @@
         },
         success: function (res) {
           console.log(res)
-          that.shopBackImg = res.content
+          that.shopBackImg = res.content.shopBackImg
           if(that.shopBackImg!==''){
             that.bgShow = true
-            that.$("#bgImg")[0].src = res.content
+            that.$("#bgImg")[0].src = res.content.shopBackImg
+            that.lastUpdateDate = res.content.lastUpdateDate
           }else{
             that.bgShow = false
           }
@@ -334,6 +361,7 @@
           that.$("#m11yhgl_img")[0].src = res.content.shopIcon
           that.storeinformation.shopId = res.content.shopId
           that.storeinformation.shopReceipt = res.content.shopReceipt
+          that.storeinformation.lastUpdateDate = res.content.lastUpdateDate
         }
       })
     },
@@ -399,29 +427,14 @@
 </script>
 
 <style lang="scss" scoped>
-textarea.formControl{
-    width: 100%;
-    height: auto;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-}
-  .el-row {
+.el-row {
   margin:0;
   line-height:40px;
   height:40px;
-  text-align: right;
+  // text-align: right;
   margin-bottom: 15px;
+  .el-input{width:380px;}
+  .alginRight{color:#2A2A2A;}
 }
 #getWidth{opacity:0;filter: alpha(opacity=0);position:absolute;}
 .shopGg{width:232px;height:112px;background:url(../../../assets/images/def.png) no-repeat;
@@ -438,38 +451,36 @@ textarea.formControl{
     display: block;
     float: left;}
 }
+h4 span{
+          color:#666;font-size:14px;margin-left:20px;display:inline-block;
+        }
 .save{margin-left:110px;}
   .message{
     .shop{
-      margin-top: 30px;
+      // margin-top: 30px;
       .shopMess{
-        display: inline-block;
-        margin-left: 20px;
+        // display: inline-block;
+        // margin-left: 20px;
         button{
-          width: 136px;
-          height: 41px;
-          margin-top: 80px;
+          // width: 136px;
+          // height: 41px;
+          margin-top: 40px;
         }
         button,.save{
           margin-right: 60px;
         }
+        // h4 span{
+        //   color:#666;font-size:14px;margin-left:20px;display:inline-block;
+        // }
       }
-      .shopLogo{
-        display: inline-block;
-        .img_up{
-          width: 100px;
-          height: 100px;
-          background-size: 100px 100px;
-          background:none;
-        }
-        span{
-          div{
-            button{
-              margin-top: 15px;
-            }
-          }
-        }
+      div.img_up{
+        width: 100px;
+        height: 100px;
+        background-size: 100px 100px;
+        background:none;
+        margin-top:10;margin-left:6px;
       }
+      span.upload{display: block;margin-left:0px;color:#999;}
     }
   }
 </style>
