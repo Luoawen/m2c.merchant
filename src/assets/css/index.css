@@ -9403,10 +9403,10 @@ font-size:12px;
 border-radius:3px
 }
 .el-button--medium.is-round {
-padding:10px 20px
+/* padding:10px 20px */
 }
 .el-button--small,.el-button--small.is-round {
-padding:9px 15px
+/* padding:9px 15px */
 }
 .el-button--mini,.el-button--mini.is-round {
 /* padding:7px 15px */

@@ -239,8 +239,10 @@
                   <span class="mr20 tit_tb">配送方式</span>
                   <span class="ml20">
                     <span>{{orderStatus>=2? (expressWay==0?'物流发货':expressWay==1?'自有物流':'--') :'--'}}
-                      <span class="mr20 tit_tbb">{{orderStatus>=2? (expressWay==0?'物流公司':expressWay==1?'配送员':''):''}}</span>
+                      <span class="mr20 tit_tbb">{{orderStatus>=2? (expressWay==0?'物流公司':expressWay==1?'配送员':''):''}}
+                      </span>
                       <span class="ml20">{{expressWay==0?expressName:expressWay==1?expressPerson+'， '+expressPhone:''}}</span>
+                      <i class="ico_compile" v-show="strOrderStatus=='待收货'" @click="changeExpress=true;Deliver=true;customerfreight()"></i>
                     </span>
                   </span>
                 </div>
@@ -308,62 +310,62 @@
   	<div class="poi2 deliver col-sm-12" v-show="Deliver===true">
     <div class="poi1">
       <i class="poi2 ico_close02" @click="Deliver=false"></i>
-      <div class="deliver_tit">发货信息</div>
+      <div class="deliver_tit">{{changeExpress?'修改物流信息':'发货信息'}}</div>
       <div class="deliver_type01 mt20 clear">
         <span class="mr20 tit01 fl">
         <span class="redcolor">*</span>
         <span>配送方式</span>
         </span>
         <template>
-          <el-radio v-model="expressWay" label="0" @change="expressCheck(0)">物流发货</el-radio>
-          <el-radio v-model="expressWay" label="1" @change="expressCheck(1)">自有物流</el-radio>
+          <el-radio v-model="expressWay1" label="0" @change="expressCheck(0)">物流发货</el-radio>
+          <el-radio v-model="expressWay1" label="1" @change="expressCheck(1)">自有物流</el-radio>
         </template>
         <div class="tit03 clear">若有自己的配送车队，可选自有物流</div>
       </div>
       <div class="deliver_type01 clear" id ='deliverCompany'>
-        <div class="" v-if="expressWay != 1">
+        <div class="" v-if="expressWay1 != 1">
         <span class="mr20 tit01 mt10 fl">
         <span class="redcolor">*</span>
         <span style="line-height:30px">物流公司</span>
         </span>
         <span>
-          <el-autocomplete popper-class="my-autocomplete"  v-model="expressName"  id="ship_select"  :fetch-suggestions="querySearch" placeholder="" @select="handleSelect">
+          <el-autocomplete popper-class="my-autocomplete"  v-model="expressName1"  id="ship_select"  :fetch-suggestions="querySearch" placeholder="" @select="handleSelect">
             <template slot-scope="props">
               <div class="name" >{{props.item.expressName}}</div>
             </template>
           </el-autocomplete>
         </span>
         </div>
-        <div class="" v-if="expressWay == 1">
+        <div class="" v-if="expressWay1 == 1">
         <span class="mr20 tit01 fl">
           <span class="redcolor">*</span>
           <span>配送员姓名</span>
         </span>
           <span>
-          <input class="form-control deliver_input" placeholder="请填写" maxlength="10" v-model="expressPerson"/>
+          <input class="form-control deliver_input" placeholder="请填写" maxlength="10" v-model="expressPerson1"/>
         </span>
         </div>
       </div>
       <div class="deliver_type01 mb10 clear" style="margin-top:-10px;">
         <div class="">
         <span class="mr20 tit01 fl">
-           <span class="redcolor" v-show="expressWay != 1">*</span>
-           <span v-show="expressWay == 1">运单号</span>
-           <span  v-show="expressWay != 1">物流单号</span>
+           <span class="redcolor" v-show="expressWay1 != 1">*</span>
+           <span v-show="expressWay1 == 1">运单号</span>
+           <span  v-show="expressWay1 != 1">物流单号</span>
         </span>
         <span>
-          <input v-show="expressWay == 1" class="form-control deliver_input" placeholder="选填" maxlength="30" v-model="expressNo"/>
-          <input v-show="expressWay != 1" class="form-control deliver_input" placeholder="请填写" maxlength="30" v-model="expressNo"/>
+          <input v-show="expressWay1 == 1" class="form-control deliver_input" placeholder="选填" maxlength="30" v-model="expressNo1"/>
+          <input v-show="expressWay1 != 1" class="form-control deliver_input" placeholder="请填写" maxlength="30" v-model="expressNo1"/>
         </span>
         </div>
 
-          <div class="" v-show="expressWay == 1">
+          <div class="" v-show="expressWay1 == 1">
         <span class="mr20 tit01 fl">
         <span class="redcolor">*</span>
         <span>配送员手机号</span>
         </span>
             <span>
-          <input class="form-control deliver_input" placeholder="请填写" maxlength="11" v-model="expressPhone"/>
+          <input class="form-control deliver_input" placeholder="请填写" maxlength="11" v-model="expressPhone1"/>
         </span>
           </div>
         <div class="">
@@ -371,12 +373,12 @@
         <span>备注</span>
         </span>
           <span>
-          <input class="form-control deliver_input" placeholder="选填" maxlength="100" v-model="expressNote"/>
+          <input class="form-control deliver_input" placeholder="选填" maxlength="100" v-model="expressNote1"/>
         </span>
         </div>
       </div>
       <div class="deliver_type01 mt20 mb10 clear">
-        <button class="deliversure btn01 mr20 ml20" @click="deliverDealerOrder()">确定发货</button>
+        <button class="deliversure btn01 mr20 ml20" @click="deliverDealerOrder()">{{changeExpress?'确定修改':'确定发货'}}</button>
         <button class="btn01 deliverdel" @click="clearExpress">取消</button>
         <!-- <span class="ml20 redcolor bz">请仔细填写发货信息，一旦确定，不可修改！</span> -->
       </div>
@@ -404,6 +406,7 @@
     name: '',
     data () {
       return {
+        changeExpress:false,//是否修改发货信息
         goodsMoney: 0,
         orderFreight: 0,
         is_Success: false,
@@ -443,6 +446,13 @@
         ,expressWay: '0'
         ,expressPhone: ''
         ,expressPerson: ''
+        ,expressNote1: ''
+        ,expressNo1: ''
+        ,expressName1: ''
+        ,expressCode1: ''
+        ,expressWay1: '0'
+        ,expressPhone1: ''
+        ,expressPerson1: ''
         ,province_all_search: []
         // 可选的城市(供搜索使用)
         ,city_all_search: []
@@ -630,8 +640,8 @@
         };
       },
       handleSelect(item) {
-        this.expressName =item.expressName
-        this.expressCode =item.expressCode
+        this.expressName1 =item.expressName
+        this.expressCode1 =item.expressCode
       },
       customerfreight () {
         let that = this
@@ -659,6 +669,13 @@
                   that.expressPerson=result.content[i].expressPerson
                   that.expressPhone =result.content[i].expressPhone
                   that.expressCode  =result.content[i].expressCode
+                  that.expressNote1  =result.content[i].expressNote
+                  that.expressNo1    =result.content[i].expressNo
+                  that.expressName1  =result.content[i].expressName
+                  that.expressWay1   =result.content[i].expressWay
+                  that.expressPerson1=result.content[i].expressPerson
+                  that.expressPhone1 =result.content[i].expressPhone
+                  that.expressCode1  =result.content[i].expressCode
                   // that.getflage(that.expressCode,that.expressNo)
                   return
                 }
@@ -674,20 +691,24 @@
       },
       clearExpress(){
         let that = this
-        that.expressPerson = ''
-        that.expressNote = ''
-        that.expressNo = ''
-        that.expressPhone = ''
-        that.expressName = ''
+        if(that.changeExpress){
+
+        }else{
+          that.expressPerson = ''
+          that.expressNote = ''
+          that.expressNo = ''
+          that.expressPhone = ''
+          that.expressName = ''
+        }
         that.Deliver = false
       }
       ,expressCheck(val) {
         let that = this
-        that.expressPerson = ''
-        that.expressNote = ''
-        that.expressNo = ''
-        that.expressPhone = ''
-        that.expressName = ''
+        that.expressPerson1 = ''
+        that.expressNote1 = ''
+        that.expressNo1 = ''
+        that.expressPhone1 = ''
+        that.expressName1 = ''
         //console.log(that.$("#classify2").val());
       }
       //列表
@@ -852,6 +873,13 @@
             return
           }
         }
+        that.expressWay = that.expressWay1
+        that.expressNo = that.expressNo1
+        that.expressName = that.expressName1
+        that.expressNote = that.expressNote1
+        that.expressPerson = that.expressPerson1
+        that.expressPhone = that.expressPhone1
+        that.expressCode = that.expressCode1
         // console.log('that.expressName',that.expressName )
         that.$.ajax({
           url: that.base + 'm2c.scm/order/web/dealer/sendOrder',

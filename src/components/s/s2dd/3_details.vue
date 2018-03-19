@@ -180,9 +180,10 @@
                     <td colspan="2">
                       <h3 style="color:rgb(0, 102, 204);padding-left:12px;font-size:16px;" >商家重新发货</h3>
                       <!--退换货（增加寄出的）的情况-->
-                      <template v-if="logistics.expressWay===0">
+                      <template v-if="logistics.expressWay==0">
                         <div class="col-sm-8 detail_cen">
                           <span class="tit01">物流公司:</span> <span class="ml20">{{logistics.expressName!=='' ? logistics.expressName : '--'}}</span>
+                          <i class="ico_compile" v-show="orderDetail.status==7" @click="changeExpress=true;dialogVisible=true"></i>
                         </div>
                         <div class="col-sm-8 detail_cen" >
                           <span class="tit01">物流单号:</span>
@@ -192,13 +193,14 @@
                           </span>
                         </div>
                       </template>
-                      <template v-if="logistics.expressWay===1">
+                      <template v-if="logistics.expressWay==1">
                         <div class="col-sm-8 detail_cen">
                           <span class="tit01">配送方式:</span> <span class="ml20">自有物流</span>
                         </div>
                         <div class="col-sm-8 detail_cen" >
                           <span class="tit01">配送员:</span>
                           <span class="ml20">{{logistics.expressPerson!=='' ? logistics.expressPerson : '--'}}</span>
+                          <i class="ico_compile" v-show="orderDetail.status==7" @click="changeExpress=true;dialogVisible=true"></i>
                           <span class="ml20">{{logistics.expressPhone!=='' ? logistics.expressPhone : '--'}}</span>
                         </div>
                       </template>
@@ -311,8 +313,8 @@
           <div style="padding-left:32px;font-size:14px; line-height:55px;">
             <span class="redcolor">*</span>
             <span class="tit01" style="margin-right: 10px;">配送方式:</span>
-            <el-radio v-model="shipmentForm.expressWay" label="0">物流发货</el-radio>
-            <el-radio v-model="shipmentForm.expressWay" label="1" >自有物流</el-radio>
+            <el-radio v-model="shipmentForm.expressWay" label="0" @change="clearExp">物流发货</el-radio>
+            <el-radio v-model="shipmentForm.expressWay" label="1" @change="clearSelf">自有物流</el-radio>
           </div>
           <el-form :model="shipmentForm" v-show="shipmentForm.expressWay==0">
             <el-form-item label="物流公司:" :label-width="formLabelWidth" required>
@@ -448,7 +450,7 @@
           <el-col :span="20" :offset="3">
             <el-button type="primary" size="medium" @click="submiteAdd()">确定添加</el-button>
             <el-button size="medium" @click="close()">取消</el-button>
-            <i class="red ml20">请仔细填写物流信息，一旦确定，不可修改！</i>
+            <!-- <i class="red ml20">请仔细填写物流信息，一旦确定，不可修改！</i> -->
           </el-col>
         </el-row>
     </div>
@@ -474,6 +476,7 @@
     name: '',
     data () {
       return {
+        changeExpress:false,//是否修改进入
         expressLink1:false,//顾客
         expressLink:false,//商家
         textarea:'',
@@ -571,6 +574,21 @@
     //   },
     // },
     methods: {
+      //清空物流发货的值
+      clearExp(){
+        let that = this
+        that.shipmentForm.expressCode ='',
+        that.shipmentForm.expressNo = '',
+        that.shipmentForm.expressName = ''
+      },
+      //清空自有物流的值
+      clearSelf(){
+        let that = this
+        that.shipmentForm.expressNo = '',
+        that.shipmentForm.expressPerson = '',
+        that.shipmentForm.phone = '',
+        that.shipmentForm.noted = ''
+      },
       //获取‘查看物流信息’标识
       getflage(com,nu,flage){
         let that = this
@@ -900,21 +918,42 @@
             if (result.status === 200){
               //售后物流信息
               let _content = result.content
-              that.logistics = _content
+              // that.logistics = _content
+              that.logistics.expressWay = _content.expressWay
+              that.logistics.afterSellOrderId=_content.afterSellOrderId;
+              that.logistics.expressName=_content.expressName;
+              that.logistics.expressNo=_content.expressNo;
+              that.logistics.backExpressName=_content.backExpressName;
+              that.logistics.backExpressNo=_content.backExpressNo;
+              that.logistics.orderType=_content.orderType;
+              that.logistics.goodsInfo=_content.goodsInfo;
+              that.logistics.status=_content.status;
+              that.logistics.expressPhone=_content.expressPhone;
+              that.logistics.expressPerson=_content.expressPerson;
               if(that.logistics.expressNo!==''&&that.logistics.expressWay!=='1'){
                 that.getflage(that.logistics.expressCode,that.logistics.expressNo,1)
               }
               if(that.logistics.backExpressNo!==''){
                 that.getflage(that.logistics.backExpressCode,that.logistics.backExpressNo,0)
               }
-              // that.logistics.afterSellOrderId=_content.afterSellOrderId;
-              // that.logistics.expressName=_content.expressName;
-              // that.logistics.expressNo=_content.expressNo;
-              // that.logistics.backExpressName=_content.backExpressName;
-              // that.logistics.backExpressNo=_content.backExpressNo;
-              // that.logistics.orderType=_content.orderType;
-              // that.logistics.goodsInfo=_content.goodsInfo;
-              // that.logistics.status=_content.status;
+              // that.shipmentForm = _content
+              that.shipmentForm.expressNo = _content.expressNo
+              that.shipmentForm.expressName = _content.expressName
+              that.shipmentForm.expressCode = _content.expressCode
+              that.shipmentForm.expressPerson = _content.expressPerson
+              that.shipmentForm.expressWay = (_content.expressWay).toString()
+              that.shipmentForm.phone = _content.expressPhone
+              that.shipmentForm.noted = _content.expressNote
+              console.log('001',that.logistics,that.shipmentForm)
+        //       shipmentForm: {
+        //   expressNo: '',
+        //   expressName: '',
+        //   expressCode: '',
+        //   noted:'',
+        //   expressPerson: '',
+        //   phone: '',
+        //   expressWay:'0',
+        // },
             }
           }
         })
@@ -1307,13 +1346,15 @@
             expressWay:that.shipmentForm.expressWay,
             phone:that.shipmentForm.phone,
             orderId: that.orderDetail.orderId,
-            shopName: that.shopName
+            shopName: that.shopName,
+            expressNote:that.shipmentForm.noted
           },
           success: function (result) {
             if (result.status === 200){
               // 物流列表
               that.dialogVisible = false;
               that.loadOrderDetail();
+              that.afterselllogistics()
             }
           }
         })
@@ -1404,22 +1445,29 @@
       that.getshipInfo()
     },
     watch: {
-      'shipmentForm.expressWay': {
-        handler(code, oldCode) {
-            let that = this
-            that.shipmentForm.expressPerson=''
-            that.shipmentForm.phone=''
-            that.shipmentForm.expressNo=''
-            that.shipmentForm.expressName=''
-            that.shipmentForm.expressCode=''
-            that.shipmentForm.noted=''
-        },
-        deep: true
-      }
+      // 'shipmentForm.expressWay': {
+      //   handler(code, oldCode) {
+      //       let that = this
+      //       that.shipmentForm.expressPerson=''
+      //       that.shipmentForm.phone=''
+      //       that.shipmentForm.expressNo=''
+      //       that.shipmentForm.expressName=''
+      //       that.shipmentForm.expressCode=''
+      //       that.shipmentForm.noted=''
+      //   },
+      //   deep: true
+      // }
     }
   }
 </script>
 <style lang="scss" scoped>
+.ico_compile{
+     	width: 16px;
+      height: 16px;
+      background: url(../../../assets/images/ico_compile.png);
+      display: inline-block;
+      margin-left: 10px;
+    }
 i.redTip{padding-top:0;}
 .building{
   font-size:20px;color:#666;
