@@ -31,14 +31,26 @@
         <el-col :span="2">&nbsp;</el-col>
         <el-col :span="9" :offset="2">
           <el-form-item label="商品品牌" prop="goodsBrandId">
-            <el-select v-model="data.goodsBrandId" placeholder="请选择" :disabled="approveModify">
+            <!-- <el-select v-model="data.goodsBrandId" placeholder="请选择" :disabled="approveModify">
               <el-option
                 v-for="item in brands"
                 :key="item.brandId"
                 :label="item.brandName"
                 :value="item.brandId">
               </el-option>
-            </el-select>
+            </el-select> -->
+                <el-autocomplete
+                class="inline-input"
+                v-model="goodsBrandName"
+                :disabled="approveModify"
+                :fetch-suggestions="querySearch1"
+                placeholder="请选择"
+                @select="handleSelect1"
+              >
+              <template slot-scope="props">
+              <div class="name" >{{props.item.brandName}}</div>
+            </template>
+              </el-autocomplete>
           </el-form-item>
         </el-col>
         <el-col :span="2">&nbsp;</el-col>
@@ -68,14 +80,26 @@
       <el-row :gutter="20">
         <el-col :span="9">
           <el-form-item label="运费模板" prop="goodsPostageId">
-            <el-select v-model="data.goodsPostageId" placeholder="请选择" :disabled="approveModify">
+            <!-- <el-select v-model="data.goodsPostageId" placeholder="请选择" :disabled="approveModify">
               <el-option
                 v-for="item in models"
                 :key="item.modelId"
                 :label="item.modelName"
                 :value="item.modelId">
               </el-option>
-            </el-select>
+            </el-select> -->
+            <el-autocomplete
+                class="inline-input"
+                v-model="modelName"
+                :disabled="approveModify"
+                :fetch-suggestions="querySearch2"
+                placeholder="请选择"
+                @select="handleSelect2"
+              >
+              <template slot-scope="props">
+              <div class="name" >{{props.item.modelName}}</div>
+            </template>
+              </el-autocomplete>
           </el-form-item>
         </el-col>
         <el-col :span="2">&nbsp;</el-col>
@@ -490,6 +514,8 @@
         isAddGoods: false,
         changeReasonR: '',
         changeReasonRS: true,
+           search1:'',  //商品品牌
+          modelName:'', // 运费模板
         ruleForm: {
           goodsName: '',
           goodsSubTitle: '',
@@ -1683,6 +1709,46 @@
           this.getValue()
         }
       },
+       // 商品品牌 模糊搜索
+       querySearch1(queryString, cb) {
+        let that = this
+        var restaurants = that.brands
+        console.log('restaurants',restaurants)
+        var results = queryString ? restaurants.filter(that.createFilter1(queryString)) : restaurants;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      createFilter1(queryString) {
+        return (restaurant) => {
+          return (restaurant.brandName.toLowerCase().indexOf(queryString.toLowerCase()) !== -1)
+        }
+      },
+      handleSelect1(item) {
+        this.data.goodsBrandId =item.brandId
+        this.goodsBrandName =item.brandName
+        console.log('item=' + item)
+         console.table(item)
+      },
+      // 运费模板 模糊搜索  
+       querySearch2(queryString, cb) {
+        let that = this
+        var restaurants = that.models
+        console.log('restaurants',restaurants)
+        var results = queryString ? restaurants.filter(that.createFilter2(queryString)) : restaurants;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },  
+      createFilter2(queryString) {
+        return (restaurant) => {
+          return (restaurant.modelName.toLowerCase().indexOf(queryString.toLowerCase()) !== -1)
+        }
+      },
+      handleSelect2(item) {
+        this.modelName = item.modelName
+        this.data.goodsPostageId = item.modelId
+        // console.log('item=' + item)
+        //  console.table(item)
+      },
       querySearch(queryString, cb) {
         let that = this
         var restaurants = that.restaurants
@@ -2299,7 +2365,9 @@
   .demo-ruleForm .el-form-item__label {
     line-height: 50px;
   }
-
+    .demo-ruleForm .el-input__inner {
+    width:418px;
+  }
   .el-icon-plus:before {
     content: '';
   }
