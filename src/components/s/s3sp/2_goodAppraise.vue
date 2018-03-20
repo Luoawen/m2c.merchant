@@ -27,7 +27,7 @@
       </el-date-picker>
       <el-input v-model="search_params.condition" placeholder="输入商品名称/订单号/顾客姓名/顾客手机号" title="输入商品名称/订单号/顾客姓名/顾客手机号"></el-input>
       <el-button type="primary" size="medium" @click="get_comment_info()" class="btn-search">搜索</el-button>
-      <span class="ml10 gjsort" @click="advancedSearch">高级搜索</span>
+      <a class="ml10 gjsort" @click="advancedSearch">高级搜索</a>
     </div>
     <div class="soloSearchBox" v-if="advancedShow">
       <h4>高级搜索<a class="close" @click="advancedShow=!advancedShow"></a></h4>

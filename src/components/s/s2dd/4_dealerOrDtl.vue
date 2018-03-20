@@ -86,24 +86,37 @@
                   </select>
                 </span>
                 <span class="fl mr20">
-                  <input class="bj02_select form-control" maxlength="20" v-model="streetAddr"/>
+                  <input class="bj02_select form-control" :maxlength="20" v-model="streetAddr"/>
                 </span>
                   <span class="fl mr20">
-                  <input class="bj_select form-control" maxlength="10" v-model="revPerson"/>
+                  <input class="bj_select form-control" :maxlength="10" v-model="revPerson"/>
                 </span>
                   <span class="fl mr20">
-                  <input class="bj_select form-control" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" v-model="phone"/>
+                  <input class="bj_select form-control" :maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" v-model="phone"/>
                 </span>
                 </span>
             </div>
             <div>
-              <span class="tit01">发票信息</span>
-              <span class="ml20">{{invoiceInfo==''?'--':invoiceInfo}}</span>
+              <span class="tit01 fl">发票信息</span>
+              <div class="bg" v-if="invoiceInfo.invoiceType==1">
+                <span>发票抬头：{{invoiceInfo.invoiceHeader}}</span>
+                <span>纳税人识别号：{{invoiceInfo.invoiceCode}}</span><br />
+                <span>发票内容：明细</span>
+              </div>
+              <div class="bg" v-else-if="invoiceInfo.invoiceType==0">
+                <span>发票抬头：{{invoiceInfo.invoiceHeader}}</span>
+                <span>发票内容：明细</span>
+              </div>
+              <div class="bg" v-else style="background:#fff;padding-left:0;">--</div>
+              <!-- <span class="ml20">{{invoiceInfo==''?'--':invoiceInfo}}</span> -->
             </div>
-
+            <div class="clear"></div>
             <div>
-              <span class="tit01">买家留言</span>
-              <span class="ml20 ">{{noted==''?'--':noted}}</span>
+              <span class="tit01 fl">买家留言</span>
+              <div class="bg" style="background:#fff;padding-left:0;">
+                {{noted==''?'--':noted}}
+              </div>
+              <!-- <span class="ml20 "></span> -->
             </div>
             </div>
           </div>
@@ -117,7 +130,7 @@
                 <td class="a4">单位</td>
                 <td class="a5">单价/元</td>
                 <td class="a5">商品金额/元</td>
-                <td class="a6">运费</td>
+                <!-- <td class="a6">运费</td> -->
                 <td class="a7">售后信息</td>
               </tr>
             </thead>
@@ -142,12 +155,11 @@
                   <p :class="{'lineThrough':goods.isSpecial==1}">{{(goods.strPrice)}}</p>
                 </td>
                 <td class="a5">{{(goods.strTotalPrice)}}</td>
-                <td class="a6">
+                <!-- <td class="a6">
                   <span :id="'spanFreight' + index" v-show="!fModify">{{(goods.strFreight)}}</span>
                   <i class="ico_compile" @click="modifyFreight1(true)" v-show="orderStatus === 0 ? !fModify : fModify"></i>
-                  <!--点击ico_compile后会出现input-->
                   <input class="form-control a6_input" :id="'freight'+ index" v-show="fModify" v-model="goods.strFreight" type="number"/>
-                </td>
+                </td> -->
                 <td class="a7">
                   <span v-if="goods.afterSellOrderId ==''"> --</span>
                   <span v-else class='iconTips'>
@@ -160,18 +172,20 @@
             </tbody>
             <tbody class="js_num">
               <tr>
-                <td colspan="5"></td>
-                <td></td>
-                <td>
+                <td colspan="5" style="color:#666;">
                   <div>商品总额</div>
                   <div>运费</div>
                   <div>满减抵扣</div>
                   <div>优惠券抵扣</div>
                   <div>订单总额</div>
                 </td>
-                <td class="pr40">
+                <td colspan="2" class="pr40">
                   <div>{{(totalData.strTotalOrderPrice)}}</div>
-                  <div>{{(totalData.strTotalFreight)}}</div>
+                  <div>
+                    <span v-show="!fModify">{{(totalData.strTotalFreight)}}</span>
+                    <i class="ico_compile" @click="modifyFreight1(true)" v-show="orderStatus === 0 ? !fModify : fModify"></i>
+                    <el-input v-show="fModify" class="a6_input" style="width:82px;margin-right:0;" v-model="totalData.strTotalFreight" type="number"></el-input>
+                  </div>
                   <div>{{(totalData.strPlateformDiscount)}}</div>
                   <div>{{totalData.strCouponDiscount}}</div>
                   <div class="redcolor" style="font-size: 18px;">{{(totalData.orderPrice)}}</div>
@@ -311,7 +325,79 @@
     <div class="poi1">
       <i class="poi2 ico_close02" @click="Deliver=false"></i>
       <div class="deliver_tit">{{changeExpress?'修改物流信息':'发货信息'}}</div>
-      <div class="deliver_type01 mt20 clear">
+      <el-row :gutter="20">
+        <el-col :span="3" class="alginRight">
+          <span class="redcolor">*</span>
+          <span>配送方式</span>
+        </el-col>
+        <el-col :span="9" style="margin-top:16px;">
+          <el-radio v-model="expressWay1" label="0" @change="expressCheck(0)">物流发货</el-radio>
+          <el-radio v-model="expressWay1" label="1" @change="expressCheck(1)">自有物流</el-radio><br />
+          <i class="red" style="margin-top:-8px;color:#999;line-height:20px;">若有自己的配送车队，可选自有物流</i>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" v-if="expressWay1 != 1">
+        <el-col :span="3" class="alginRight">
+          <span class="redcolor">*</span>
+          <span>物流公司</span>
+        </el-col>
+        <el-col :span="9">
+          <el-autocomplete popper-class="my-autocomplete"  v-model="expressName1"  id="ship_select"  :fetch-suggestions="querySearch" placeholder="请选择" @select="handleSelect">
+              <template slot-scope="props">
+                <div class="name" >{{props.item.expressName}}</div>
+              </template>
+          </el-autocomplete>
+        </el-col>
+        <el-col :span="3" class="alginRight">
+          <span class="redcolor">*</span>
+          <span>物流单号</span>
+        </el-col>
+        <el-col :span="9">
+          <el-input placeholder="请填写" :maxlength="30" v-model="expressNo1"></el-input>
+        </el-col>
+        <div class="clear"></div>
+        <el-col :span="3" class="alginRight">
+          <span>备注</span>
+        </el-col>
+        <el-col :span="9">
+          <el-input placeholder="选填" :maxlength="100" v-model="expressNote1"></el-input>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" v-if="expressWay1 == 1">
+        <el-col :span="3" class="alginRight">
+          <span class="redcolor">*</span>
+          <span>配送员姓名</span>
+        </el-col>
+        <el-col :span="9">
+          <el-input placeholder="请填写" :maxlength="10" v-model="expressPerson1"></el-input>
+        </el-col>
+        <el-col :span="3" class="alginRight">
+          <span class="redcolor">*</span>
+          <span>配送员手机</span>
+        </el-col>
+        <el-col :span="9">
+          <el-input placeholder="请填写" :maxlength="11" v-model="expressPhone1"></el-input>
+        </el-col>
+        <el-col :span="3" class="alginRight">
+          <span>运单号</span>
+        </el-col>
+        <el-col :span="9">
+          <el-input v-show="expressWay1 == 1" placeholder="选填" :maxlength="30" v-model="expressNo1"></el-input>
+        </el-col>
+        <el-col :span="3" class="alginRight">
+          <span>备注</span>
+        </el-col>
+        <el-col :span="9">
+          <el-input placeholder="选填" :maxlength="100" v-model="expressNote1"></el-input>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" style="margin-top:20px;">
+        <el-col :span="9" :offset="3">
+          <el-button style="width:80px;" type="primary" @click="deliverDealerOrder()">{{changeExpress?'确定修改':'确定发货'}}</el-button>
+          <el-button @click="clearExpress">取消</el-button>
+        </el-col>
+      </el-row>
+      <!-- <div class="deliver_type01 mt20 clear">
         <span class="mr20 tit01 fl">
         <span class="redcolor">*</span>
         <span>配送方式</span>
@@ -321,20 +407,20 @@
           <el-radio v-model="expressWay1" label="1" @change="expressCheck(1)">自有物流</el-radio>
         </template>
         <div class="tit03 clear">若有自己的配送车队，可选自有物流</div>
-      </div>
-      <div class="deliver_type01 clear" id ='deliverCompany'>
+      </div> -->
+      <!-- <div class="deliver_type01 clear" id ='deliverCompany'>
         <div class="" v-if="expressWay1 != 1">
-        <span class="mr20 tit01 mt10 fl">
-        <span class="redcolor">*</span>
-        <span style="line-height:30px">物流公司</span>
-        </span>
-        <span>
-          <el-autocomplete popper-class="my-autocomplete"  v-model="expressName1"  id="ship_select"  :fetch-suggestions="querySearch" placeholder="" @select="handleSelect">
-            <template slot-scope="props">
-              <div class="name" >{{props.item.expressName}}</div>
-            </template>
-          </el-autocomplete>
-        </span>
+          <span class="mr20 tit01 mt10 fl">
+            <span class="redcolor">*</span>
+            <span style="line-height:30px">物流公司</span>
+          </span>
+          <span>
+            <el-autocomplete popper-class="my-autocomplete"  v-model="expressName1"  id="ship_select"  :fetch-suggestions="querySearch" placeholder="" @select="handleSelect">
+              <template slot-scope="props">
+                <div class="name" >{{props.item.expressName}}</div>
+              </template>
+            </el-autocomplete>
+          </span>
         </div>
         <div class="" v-if="expressWay1 == 1">
         <span class="mr20 tit01 fl">
@@ -342,7 +428,7 @@
           <span>配送员姓名</span>
         </span>
           <span>
-          <input class="form-control deliver_input" placeholder="请填写" maxlength="10" v-model="expressPerson1"/>
+          <input class="form-control deliver_input" placeholder="请填写" :maxlength="10" v-model="expressPerson1"/>
         </span>
         </div>
       </div>
@@ -354,8 +440,8 @@
            <span  v-show="expressWay1 != 1">物流单号</span>
         </span>
         <span>
-          <input v-show="expressWay1 == 1" class="form-control deliver_input" placeholder="选填" maxlength="30" v-model="expressNo1"/>
-          <input v-show="expressWay1 != 1" class="form-control deliver_input" placeholder="请填写" maxlength="30" v-model="expressNo1"/>
+          <input v-show="expressWay1 == 1" class="form-control deliver_input" placeholder="选填" :maxlength="30" v-model="expressNo1"/>
+          <input v-show="expressWay1 != 1" class="form-control deliver_input" placeholder="请填写" :maxlength="30" v-model="expressNo1"/>
         </span>
         </div>
 
@@ -365,7 +451,7 @@
         <span>配送员手机号</span>
         </span>
             <span>
-          <input class="form-control deliver_input" placeholder="请填写" maxlength="11" v-model="expressPhone1"/>
+          <input class="form-control deliver_input" placeholder="请填写" :maxlength="11" v-model="expressPhone1"/>
         </span>
           </div>
         <div class="">
@@ -373,15 +459,14 @@
         <span>备注</span>
         </span>
           <span>
-          <input class="form-control deliver_input" placeholder="选填" maxlength="100" v-model="expressNote1"/>
+          <input class="form-control deliver_input" placeholder="选填" :maxlength="100" v-model="expressNote1"/>
         </span>
         </div>
       </div>
       <div class="deliver_type01 mt20 mb10 clear">
         <button class="deliversure btn01 mr20 ml20" @click="deliverDealerOrder()">{{changeExpress?'确定修改':'确定发货'}}</button>
         <button class="btn01 deliverdel" @click="clearExpress">取消</button>
-        <!-- <span class="ml20 redcolor bz">请仔细填写发货信息，一旦确定，不可修改！</span> -->
-      </div>
+      </div> -->
       </div>
   	</div>
     <!--查看物流跟踪信息-->
@@ -422,7 +507,7 @@
         payNo: '',
         payTime: '',
         recvAddr: '',
-        invoiceInfo: '',
+        invoiceInfo: {},
         noted: '',
         goodses: [],
         totalData: {},
@@ -765,10 +850,12 @@
 
           that.recvAddr = data.province + data.city + data.areaCounty + data.streetAddr + " " + data.revPerson + " " + data.revPhone;
           if (data.invoiceType != -1) {
-            if (data.invoiceType==1)
-              that.invoiceInfo = "发票抬头：" + data.invoiceHeader + " 纳税人标识：" + data.invoiceCode + "发票内容：明细"; //data.invoiceName +
-            else if (data.invoiceType==0)
-              that.invoiceInfo = "发票抬头：" + data.invoiceHeader + "发票内容：明细"; //data.invoiceName;
+            that.invoiceInfo = data
+            // if (data.invoiceType==1)
+            //   that.invoiceInfo = data
+            //   that.invoiceInfo = "发票抬头：" + data.invoiceHeader + " 纳税人标识：" + data.invoiceCode + "发票内容：明细"
+            // else if (data.invoiceType==0)
+            //   that.invoiceInfo = "发票抬头：" + data.invoiceHeader + "发票内容：明细"
           }
           that.noted = data.noted;
 
@@ -977,13 +1064,13 @@
           return
         }
 
-        let freightStr='';
-        that.goodses.forEach(function(val, index) {
-          if (index > 0)
-            freightStr += ',';
-          freightStr += (val.skuId + ':' + val.strFreight);
-        });
-        freightStr = '{' + freightStr + '}';
+        // let strTotalFreight='';
+        // that.goodses.forEach(function(val, index) {
+        //   if (index > 0)
+        //     freightStr += ',';
+        //   freightStr += (val.skuId + ':' + val.strFreight);
+        // });
+        // freightStr = '{' + freightStr + '}';
         // 发请求
         that.$.ajax({
           url: that.base + 'm2c.scm/dealerorder/web/addrfreight',
@@ -1003,7 +1090,7 @@
             phone: that.phone,
             street: that.streetAddr,
             dealerOrderId: that.dealerOrderId,
-            freights: freightStr
+            dealerOrderFreight: that.totalData.strTotalFreight
             ,userId: JSON.parse(sessionStorage.getItem('mUser')).userId
           },
           success: function (result) {
@@ -1149,6 +1236,7 @@
   }
 </script>
 <style lang="scss" scoped>
+.poi1 .el-input{width:350px;}
 .hptczp {
     width: 100%;
     height: 100%;
@@ -1177,7 +1265,7 @@
     }
   }
 }
-#ship_select{width:30%;}
+#ship_select{width:350px;}
 a{text-decoration:none}
 .mt20{
   margin-top: 20px;
@@ -1446,6 +1534,12 @@ a{text-decoration:none}
         color: #FD3242;
       }
       .detail_top{
+        .bg{background:#F4F5FA;width:80%;line-height:24px;padding:6px 10px;display:inline-block;margin-left:20px;
+          span{
+            display:inline-block;
+            margin-right:50px;
+          }
+        }
         .detail_cen{
           .tit01{
             display: inline-block;
@@ -1453,6 +1547,7 @@ a{text-decoration:none}
             height: 40px;
             line-height:40px;
             text-align: right;
+            color:#666;
           }
           .bj_select{
           	width: 120px;

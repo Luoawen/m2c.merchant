@@ -27,7 +27,7 @@
       </el-date-picker>
       <el-input v-model="searchParams.condition" placeholder="输入商品名称/订单号/支付单号/收货人号码" title="输入商品名称/订单号/支付单号/收货人号码"></el-input>
       <el-button type="primary" size="medium" @click="search()" class="btn-search">搜索</el-button>
-      <span class="ml10 gjsort" @click="Advancedsearch">高级搜索</span>
+      <a class="ml10 gjsort" @click="Advancedsearch">高级搜索</a>
       <div class="btnBox">
         <el-button size="medium" @click.native="exportSearch()">导出</el-button>
         <el-button size="medium" @click="batchShow=true" style="width:80px;">批量发货</el-button>
@@ -157,8 +157,8 @@
         <tbody v-for="(item,index) in resultdata" v-if="totalCount>0">
           <tr>
             <td colspan="8" class="bt clear">
-              <span class="ml10">订货号：{{item.dealerOrderId}}</span>  <span style="color: #ccc">&nbsp;|</span></span> <span class="ml10" v-show="item.payNo != '' ? true : false">支付单号：{{item.payNo}}</span>
               <div class="detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</div>
+              <span class="ml10">订货号：{{item.dealerOrderId}}</span>  <span style="color: #ccc">&nbsp;|</span></span><span class="ml10">平台号：{{item.orderId}}</span>  <span style="color: #ccc">&nbsp;|</span></span> <span class="ml10" v-show="item.payNo != '' ? true : false">支付单号：{{item.payNo}}</span>
             </td>
           </tr>
           <tr class="content clear" >
@@ -1070,7 +1070,7 @@
             }
           }
           .wid{
-            width: 180px;
+            width: 200px;
             height: 40px;
             font-size: 14px;
             color: #333333;
@@ -1089,7 +1089,7 @@
             padding-right: 30px;
             .detail{
               font-size: 13px;
-              color: #667991;
+              color: #2699FF;
               cursor: pointer;
               display:inline-block;
               margin-left:10px;

@@ -606,7 +606,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   a:hover{ text-decoration: none;}
-  .el-tabs__content h4{font-size:20px;color:#333;}
+  .el-tabs__content h4{font-size:20px;color:#333;line-height:24px;}
   .home{padding:20px; padding-left:28px;}
   .el-row{margin-bottom:10px;}
   p.setUp{color: #667991;}

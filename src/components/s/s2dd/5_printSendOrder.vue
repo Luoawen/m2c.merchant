@@ -2,10 +2,10 @@
   <div class="printSendOrder">
   	<div class="bt">
   		拍获商城发货单
-      <a @click="print_order" class="print_order_style">
+      <!-- <a @click="print_order" class="print_order_style">
         <i class="ico_print"></i>
         <span class="dy" >打印</span>
-      </a>
+      </a> -->
   	</div>
   	<div class="printSend_top">
   		<el-row>
@@ -24,7 +24,7 @@
   						<span>{{(goodsMoney)}}</span>
   					</div>
   					<div class="tit">
-  						<span class="tit_span1">收货地址：</span>
+  						<span class="tit_span">收货地址：</span>
   						<span style="width:500px">{{recvAddr}}</span>
   					</div>
   					<div class="tit">
@@ -139,18 +139,19 @@
   			<el-col :span="8">
   				<div class="grid-content">
   					<div class="tit">
-  						<span class="tit_span">美图溪客服</span>
+  						<span>美图溪客服</span>
   					</div>
   					<div class="tit">
-  						<span class="tit_span">400-101-3888（工作日9：00~18：00）</span>
+  						<span>400-101-3888（工作日9：00~18：00）</span>
   					</div>
   				</div>
   			</el-col>
   			</el-row>
   		</div>
   	</div>
-    	<div class="return poi3">
-			<button class="r_fh" @click="goBack()">返回</button>
+    <div class="return poi3">
+      <el-button type="primary" @click="print_order">打印</el-button>
+			<el-button @click="goBack()">返回</el-button>
 		</div>
   </div>
 </template>
@@ -341,10 +342,10 @@
 	padding-bottom: 80px;
 	.bt{
 		width: 100%;
-		height: 150px;
+		height: 70px;
 		border-bottom: 1px solid #E5E5E5;
 		text-align: center;
-		line-height: 150px;
+		line-height:70px;
 		font-size: 24px;
     position: relative;
 	}
@@ -357,7 +358,8 @@
 			line-height: 35px;
 			.tit_span{
 				display: inline-block;
-				height: 35px;
+        height: 35px;
+        color:#666;
 				/*width: 100px;*/
 			}
 		}
@@ -377,6 +379,7 @@
 					line-height: 40px;
 					border: 1px solid #ccc;
           text-align: center;
+          p{margin:0;}
           p.lineThrough{text-decoration:line-through;font-size:12px;color:#999;}
 				}
 			}
@@ -385,7 +388,8 @@
 			line-height: 35px;
 			.tit_span{
 				display: inline-block;
-				height: 35px;
+        height: 35px;
+        color:#666;
 				/*width: 100px;*/
 			}
 		}
