@@ -114,7 +114,7 @@
           <template slot-scope="scope"><span >{{scope.row.updatedTime == undefined ? '-' : date_format(new Date(scope.row.updatedTime), 'yyyy-MM-dd hh:mm:ss')  }}</span></template>
         </el-table-column>
       </el-table>
-      <div class="block" style="margin: 20px;float: left">
+      <div class="block" style="margin: 20px;float: right">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"

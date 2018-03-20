@@ -23,8 +23,8 @@
         <el-row width="50%"> 
            <el-col>
               <el-button type="primary"  class='w80' @click="goto($event,'/s/fullCut')"  path="/s/fullCut" >新增满减</el-button>  
-              <el-button type="primary" class='w100'  @click="resetSearchParams()">重置搜索条件</el-button>
               <el-button type="primary"  @click="getFullCutList()" class="btn-search">搜索</el-button>
+              <el-button  class='w100'  @click="resetSearchParams()">重置搜索条件</el-button>
            </el-col>
         </el-row>
     </div>
