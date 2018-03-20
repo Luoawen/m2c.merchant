@@ -76,9 +76,12 @@
   }
   .a_message{
     font-size: 14px;
-    color: #333333;
     line-height: 30px;
     padding-left: 30px;
+    color:#666;
+    span:first-child{
+      color:#333;
+    }
   }
 }
 .mr20{
