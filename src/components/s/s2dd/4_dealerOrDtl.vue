@@ -1293,7 +1293,7 @@ a{text-decoration:none}
         width: 16px;
     		height: 16px;
         zoom:0.85 ;
-    		background: url(../../../assets/images/ico_hint_hint.png) 0 3px no-repeat;
+    		background: url(../../../assets/images/ico_hint_hint.png) 0 0 no-repeat;
       }
     .nav{
     	.ico_print{

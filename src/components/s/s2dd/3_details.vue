@@ -45,7 +45,7 @@
               </div>
               <div>
                 <span class="tit01">售后总额</span>
-                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight))).toFixed(2)}}元
+                <span class="ml20 redcolor">{{orderDetail.orderType==0?'--':((parseFloat(orderDetail.backMoney) + parseFloat(orderDetail.backFreight))).toFixed(2)+'元'}}
                   <span v-if="(orderDetail.orderType !=0) && orderDetail.status >= 4">（含运费{{orderDetail.orderType==0?'0':(orderDetail.backFreight)}}元） </span> <span v-if="orderDetail.orderType ==2&& orderDetail.doStatus == 1 && orderDetail.status < 4">（运费待商家确认） </span></span>
               </div>
               <div>
@@ -85,10 +85,17 @@
                   </div>
                 </div>
               </td>
-              <td class="a2">
-                {{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].name : '--'):'--'}}
+              <td class="a2" v-if="orderDetail.goodsInfo.mediaResId != '' && typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'">
+                {{mediaResInfos[orderDetail.goodsInfo.mediaResId].name}}<br />
+                {{mediaResInfos[orderDetail.goodsInfo.mediaResId].cateName}}
+              </td>
+              <td class="a2" v-if="orderDetail.goodsInfo.mediaResId == '' || typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])=='undefined'">
+                --
+              </td>
+                <!-- {{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].name + mediaResInfos[orderDetail.goodsInfo.mediaResId].cateName : '--'):'--'}}
                 <br>
-                {{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].cateName:'--'):'--'}}</td>
+                {{orderDetail.goodsInfo.mediaResId != ''?(typeof(mediaResInfos[orderDetail.goodsInfo.mediaResId])!='undefined'?mediaResInfos[orderDetail.goodsInfo.mediaResId].cateName:'--'):'--'}}
+              </td> -->
               <td class="a4">{{orderDetail.goodsInfo.sellNum}}</td>
                <td class="a4">{{orderDetail.goodsInfo.unitName}}</td>
               <td class="a3" v-if ="orderDetail.goodsInfo.isSpecial==1">
@@ -418,7 +425,7 @@
       </div>
     </div>
     <!--添加物流信息-->
-    <div class="addLogisticsBox" v-if="addLogisticsShow">
+    <div class="soloSearchBox" v-if="addLogisticsShow">
       <h4>添加物流信息<a class="close" @click="close"></a></h4>
         <el-row :gutter="20">
           <el-col :span="3" class="alginRight"><i class="red">*</i>物流公司</el-col>
@@ -448,7 +455,7 @@
         </el-row>
         <el-row :gutter="20" class="mt20">
           <el-col :span="20" :offset="3">
-            <el-button type="primary" size="medium" @click="submiteAdd()">确定添加</el-button>
+            <el-button type="primary" size="medium" @click="submiteAdd()" style="width:80px">确定添加</el-button>
             <el-button size="medium" @click="close()">取消</el-button>
             <!-- <i class="red ml20">请仔细填写物流信息，一旦确定，不可修改！</i> -->
           </el-col>
@@ -1515,12 +1522,7 @@ display:-webkit-box;
 -webkit-box-orient:vertical;
 -webkit-line-clamp:2;
 }
-.addLogisticsBox{position:absolute;top:0;left:0;height:auto;padding:20px;width:100%;background:#fff;z-index:2;
-  h4 a.close{
-    opacity:1;display:inline-block;width:24px;height:24px;float:right;background:url(../../../assets/images/ico_close.png) no-repeat center center;
-  }
-  .alginRight{text-align: right; line-height:50px;color:#666;}
-}
+.soloSearchBox{padding-bottom:40px;}
 .hptczp {
     width: 100%;
     height: 100%;
@@ -1874,7 +1876,6 @@ display:-webkit-box;
 }
 </style>
 <style>
-.addLogisticsBox .el-input,.addLogisticsBox .el-select{width:100%;}
 label.el-form-item__label{
       line-height: 50px !important;}
 </style>

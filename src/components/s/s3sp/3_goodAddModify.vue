@@ -1,58 +1,50 @@
 <template>
   <div class="content">
     <el-row>
-      <el-col :span="24"><h4 class="h4">基本信息</h4></el-col>
+      <el-col :span="24"><h4 class="h4" style="margin-top:-10px;">基本信息</h4></el-col>
     </el-row>
     <el-form :model="data" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-row :gutter="20" style="margin-bottom:0;">
-        <el-col :span="11">
+        <el-col :span="9">
           <el-form-item label="商品名称" prop="goodsName">
             <el-input v-model="data.goodsName" placeholder="1-50字符" :maxlength="50"
                       :disabled="approveModify"></el-input>
             <i class="red fl" style="margin-top:-8px;color:#999;line-height:20px;">请将商品关键信息设置在前十字，以便刺激顾客购买</i>
           </el-form-item>
         </el-col>
-        <el-col :span="11">
+        <el-col :span="2">&nbsp;</el-col>
+        <el-col :span="9" :offset="2">
           <el-form-item label="商品副标题" prop="goodsSubTitle">
             <el-input v-model="data.goodsSubTitle" placeholder="1-100字符" :maxlength="100"
                       :disabled="approveModify"></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="2">&nbsp;</el-col>
       </el-row>
       <el-row :gutter="20" style="z-index:2;">
-        <el-col :span="11" style="height:40px;z-index:2;">
+        <el-col :span="9" style="height:40px;z-index:2;">
           <el-form-item label="商品分类" prop="goodsClassifyId">
             <el-cascader expand-trigger="hover" :options="goodsClassifys" v-model="data.goodsClassifyIds"
                          :props="goodsClassifyProps" @change="handleChange"></el-cascader>
           </el-form-item>
         </el-col>
-        <el-col :span="11">
+        <el-col :span="2">&nbsp;</el-col>
+        <el-col :span="9" :offset="2">
           <el-form-item label="商品品牌" prop="goodsBrandId">
-            <!-- <el-select v-model="data.goodsBrandId" placeholder="请选择" :disabled="approveModify">
+            <el-select v-model="data.goodsBrandId" placeholder="请选择" :disabled="approveModify">
               <el-option
                 v-for="item in brands"
                 :key="item.brandId"
                 :label="item.brandName"
                 :value="item.brandId">
               </el-option>
-            </el-select> -->
-              <el-autocomplete
-                class="inline-input"
-                v-model="goodsBrandName"
-                :disabled="approveModify"
-                :fetch-suggestions="querySearch1"
-                placeholder="请选择"
-                @select="handleSelect1"
-              >
-              <template slot-scope="props">
-              <div class="name" >{{props.item.brandName}}</div>
-            </template>
-              </el-autocomplete>
+            </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="2">&nbsp;</el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="11">
+        <el-col :span="9">
           <el-form-item label="计量单位" prop="goodsUnitId">
             <el-select v-model="data.goodsUnitId" placeholder="请选择" @change="unitChange" :disabled="approveModify">
               <el-option
@@ -64,46 +56,38 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="11">
+        <el-col :span="2">&nbsp;</el-col>
+        <el-col :span="9" :offset="2">
           <el-form-item label="最小起订量" prop="goodsMinQuantity">
             <el-input v-model="data.goodsMinQuantity" placeholder="请输入内容" type="number"
                       :disabled="approveModify"></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="2">&nbsp;</el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="11">
+        <el-col :span="9">
           <el-form-item label="运费模板" prop="goodsPostageId">
-            <!-- <el-select v-model="data.goodsPostageId" placeholder="请选择" :disabled="approveModify">
+            <el-select v-model="data.goodsPostageId" placeholder="请选择" :disabled="approveModify">
               <el-option
                 v-for="item in models"
                 :key="item.modelId"
                 :label="item.modelName"
                 :value="item.modelId">
               </el-option>
-            </el-select> -->
-            <el-autocomplete
-                class="inline-input"
-                v-model="modelName"
-                :disabled="approveModify"
-                :fetch-suggestions="querySearch2"
-                placeholder="请选择"
-                @select="handleSelect2"
-              >
-              <template slot-scope="props">
-              <div class="name" >{{props.item.modelName}}</div>
-            </template>
-              </el-autocomplete>
+            </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="11">
+        <el-col :span="2">&nbsp;</el-col>
+        <el-col :span="9" :offset="2">
           <el-form-item label="商品条形码" prop="goodsBarCode">
             <el-input v-model="data.goodsBarCode" placeholder="请输入内容" :disabled="approveModify"></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="2">&nbsp;</el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="11">
+        <el-col :span="9">
           <el-form-item label="关键词" prop="goodsKeyWord">
             <el-input v-model="data.goodsKeyWord" placeholder="请输入内容" :disabled="approveModify"></el-input>
           </el-form-item>
@@ -152,11 +136,14 @@
         <el-radio v-model="data.skuFlag" label="1" id="skuFlag1" @change="clearGoodsSKUs">多规格</el-radio>
       </el-col>
     </el-row>
+    <!-- <div class="skuFlag">
+      <el-checkbox v-model="data.skuFlag" :disabled="approveModify" style="color:#667991;" @change="clearSKU">设置多重规格</el-checkbox>
+    </div> -->
     <div class="tabPane" v-if="data.skuFlag==0">
       <table>
         <thead>
         <tr>
-          <th>规格</th>
+          <th style="width:150px;">规格</th>
           <th><span style="color: red">*</span>库存</th>
           <th><span style="color: red">*</span>重量/kg{{unitName == '' ? '' : '（' + unitName + '）'}}
             <div class="icon">
@@ -168,7 +155,7 @@
           <th><span style="color: red">*</span>拍获价/元</th>
           <th>市场价/元</th>
           <th><span style="color: red" v-show="countMode==1">*</span>{{countMode == 1 ? '供货价' : '服务费率/%'}}</th>
-          <th>商品编码</th>
+          <th style="width:250px;">商品编码</th>
         </tr>
         </thead>
         <tbody>
@@ -198,7 +185,7 @@
           </td>
           <td v-if="countMode==2">{{serviceRate}}</td>
           <td>
-            <el-input v-model="good.goodsCode" placeholder="请输入内容" :maxlength="30"
+            <el-input v-model="good.goodsCode" placeholder="1-30字符" :maxlength="30" class="width200"
                       @blur="checkGoodsCode(good.goodsCode,index,'goodsCode',goodsSKUs)"
                       :disabled="approveModify"></el-input>
           </td>
@@ -224,9 +211,11 @@
         </thead>
         <tbody>
         <tr v-for="(item,index) in goodsSpecifications">
-          <td><span @click="delect(index)" v-if="goodsSpecifications.length>1 && handle_toggle=='add'">移除</span></td>
+          <td style="width:120px;">
+            <span @click="delect(index)" v-if="goodsSpecifications.length>1 && handle_toggle=='add'">移除</span>
+          </td>
           <td>
-            <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item,index)"
+            <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item,index)" class="width200"
                        :disabled="disabled">
               <el-option
                 v-for="item in stantards"
@@ -503,8 +492,6 @@
         isAddGoods: false,
         changeReasonR: '',
         changeReasonRS: true,
-           search1:'',  //商品品牌
-          modelName:'', // 运费模板
         ruleForm: {
           goodsName: '',
           goodsSubTitle: '',
@@ -514,7 +501,7 @@
           goodsMinQuantity: '',
           goodsPostageId: '',
           goodsBarCode: '',
-          goodsKeyWord: '',
+          goodsKeyWord: ''
         },
         rules: {
           goodsClassifyId: [
@@ -690,14 +677,14 @@
               },
               success: function (result) {
                 that.goodsBrandName = result.content.brandName
-                // console.log(that.goodsBrandName)
+                //console.log(that.goodsBrandName)
                 // that.initUpload()
               }
             })
           }
         },
         deep: true
-      }
+      },
     },
     methods: {
       // repeatUpload(){
@@ -857,7 +844,6 @@
               let date = that.date_format(new Date(timestamp), 'yyyyMMdd')
               console.log('info.response',info.response)
               console.log('info',info)
-              console.log('file',file)
               if (info.response == undefined) {
                 res = JSON.parse(info);
                 key = res.key
@@ -1235,7 +1221,6 @@
       // 批量设置
       setUpSure() {
         let that = this
-
         for (var i = 0; i < that.goodsSKUs.length; i++) {
           if (that.setUp.availableNum != '' && that.setUp.availableNum != undefined) {
             that.$set(that.goodsSKUs[i], 'availableNum', that.setUp.availableNum)
@@ -1338,7 +1323,8 @@
               // oldServiceRate:that.oldServiceRate,
               newServiceRate: that.serviceRate,
               // oldClassifyName:that.data.goodsClassify,
-              newClassifyName: that.newClassifyName
+              newClassifyName: that.newClassifyName,
+              // skuFlag:that.data.skuFlag===false?'0':'1'
             }
             // console.log(a.goodsSKUs)
             // console.log(that.data.goodsSKUs)
@@ -1699,47 +1685,6 @@
           this.getValue()
         }
       },
-      // 商品品牌 模糊搜索
-       querySearch1(queryString, cb) {
-        let that = this
-        var restaurants = that.brands
-        console.log('restaurants',restaurants)
-        var results = queryString ? restaurants.filter(that.createFilter1(queryString)) : restaurants;
-        // 调用 callback 返回建议列表的数据
-        cb(results);
-      },
-      createFilter1(queryString) {
-        return (restaurant) => {
-          return (restaurant.brandName.toLowerCase().indexOf(queryString.toLowerCase()) !== -1)
-        }
-      },
-      handleSelect1(item) {
-        this.data.goodsBrandId =item.brandId
-        this.goodsBrandName =item.brandName
-        console.log('item=' + item)
-         console.table(item)
-      },
-      // 运费模板 模糊搜索  
-       querySearch2(queryString, cb) {
-        let that = this
-        var restaurants = that.models
-        console.log('restaurants',restaurants)
-        var results = queryString ? restaurants.filter(that.createFilter2(queryString)) : restaurants;
-        // 调用 callback 返回建议列表的数据
-        cb(results);
-      },
-      createFilter2(queryString) {
-        return (restaurant) => {
-          return (restaurant.modelName.toLowerCase().indexOf(queryString.toLowerCase()) !== -1)
-        }
-      },
-      handleSelect2(item) {
-        this.modelName = item.modelName
-        this.data.goodsPostageId = item.modelId
-        // console.log('item=' + item)
-        //  console.table(item)
-      },
-
       querySearch(queryString, cb) {
         let that = this
         var restaurants = that.restaurants
@@ -1747,16 +1692,18 @@
         // 调用 callback 返回建议列表的数据
         cb(results);
       },
-        createFilter(queryString) {
+      createFilter(queryString) {
         return (restaurant) => {
-          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===0)
+          // $nextTick(() => {
+          //   let that = this
+          //   that.getValue()
+          // })
+          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
         }
       },
       handleSelect(item) {
         console.log('item=' + item)
-         console.table(item)
       },
- 
       // 获取规格值
       getValue() {
         let that = this
@@ -2140,7 +2087,6 @@
 
     }
   }
-
   .upLoadBox {
     height: auto;
     margin-top: 20px;
@@ -2222,9 +2168,10 @@
   a.addGuarantee {
     margin-left: 115px;
     padding-left: 20px;
-    margin-top: -10px;
+    // margin-top: -10px;
     float: left;
     background: url(../../../assets/images/ico_add.png) no-repeat;
+    color:#0086FF;
   }
 
   .marginTop20 {
@@ -2253,13 +2200,14 @@
 
   .el-row {
     // margin-bottom: 20px;
-    width: 80%;
-    margin-left: 4%;
+    width: 90%;
+    margin-left:4%;
     &:last-child {
       margin-bottom: 0;
     }
   }
-
+  .el-row .el-input,.el-select,.el-select>.el-input,.el-cascader{width:100%;}
+  .el-form{margin-left:20px;}
   .el-col {
     border-radius: 4px;
   }
@@ -2267,7 +2215,7 @@
   .tabPane table {
     width: 100%;
     line-height: 60px;
-    text-align: center;
+    // text-align: center;
     margin-top: 20px;
     margin-bottom: 20px;
   }
@@ -2278,9 +2226,9 @@
 
   .tabPane table th {
     background: #DFE9F6;
-    text-align: center;
+    // text-align: center;
+    font-weight: normal;
   }
-
   .tabPane table tr:nth-child(2n+1) td {
     background: #F4F5FA;
   }
@@ -2298,11 +2246,11 @@
   .el-upload--picture-card {
     overflow: hidden;
   }
-
+  .el-form .el-input{width:100%;}
   table .el-input__inner {
     width: 118px;
   }
-
+  table .width200 .el-input__inner{width:200px;}
   #dragImg ul {
     width: auto;
     float: left;
