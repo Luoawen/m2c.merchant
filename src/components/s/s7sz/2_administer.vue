@@ -54,7 +54,7 @@
             >
           </el-table-column>
         </el-table>
-        <div class="block" style="margin:20px;float:left">
+        <div class="block" style="margin:20px;float:right">
           <el-pagination
             @size-change="bindsSizeChange"
             @current-change="bindsCurrentChange"
@@ -134,7 +134,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="block" style="margin:20px;float:left">
+        <div class="block" style="margin:20px;float:right">
           <el-pagination
             @size-change="bindsApproveSizeChange"
             @current-change="bindsApproveCurrentChange"

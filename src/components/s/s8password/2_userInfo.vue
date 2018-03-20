@@ -78,9 +78,9 @@
     font-size: 14px;
     line-height: 30px;
     padding-left: 30px;
-    color:#666;
+    color:#333;
     span:first-child{
-      color:#333;
+      color:#666;
     }
   }
 }
