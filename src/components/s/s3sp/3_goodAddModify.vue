@@ -129,13 +129,11 @@
         <h4 class="h4">商品规格</h4>
       </el-col>
     </el-row>
-    <el-row :gutter="20">
-      <el-col :span="3" class="alginRight">商品规格</el-col>
-      <el-col :span="21">
-        <el-radio v-model="data.skuFlag" label="0" id="skuFlag0" @change="clearSKU">单一规格</el-radio>
-        <el-radio v-model="data.skuFlag" label="1" id="skuFlag1" @change="clearGoodsSKUs">多规格</el-radio>
-      </el-col>
-    </el-row>
+    <div class="skuFlag">
+      <!-- <el-col :span="3" class="alginRight">商品规格</el-col> -->
+      <el-radio v-model="data.skuFlag" label="0" id="skuFlag0" @change="clearSKU">单一规格</el-radio>
+      <el-radio v-model="data.skuFlag" label="1" id="skuFlag1" @change="clearGoodsSKUs">多规格</el-radio>
+    </div>
     <!-- <div class="skuFlag">
       <el-checkbox v-model="data.skuFlag" :disabled="approveModify" style="color:#667991;" @change="clearSKU">设置多重规格</el-checkbox>
     </div> -->
@@ -249,7 +247,7 @@
         </tr>
         </tbody>
       </table>
-      <el-button type="primary" @click="addRow" v-if="goodsSpecifications.length<3 && handle_toggle=='add'">添加规格
+      <el-button type="primary" @click="addRow" v-if="goodsSpecifications.length<3 && handle_toggle=='add'" style="width:80px;">添加规格
       </el-button>
       <table>
         <thead>
@@ -369,7 +367,7 @@
       <el-col :span="3" style="margin-top:20px;" class="alginRight">主图视频</el-col>
       <el-col :span="20" class="upLoadBox">
         <div id="videoContainer" v-if="uploadBtn">
-          <el-button id="selectVideo" type="primary" :disabled="approveModify">上传视频<i
+          <el-button id="selectVideo" type="primary" :disabled="approveModify" style="width:100px;">上传视频<i
             class="el-icon-upload el-icon--right"></i></el-button>
         </div>
         <div class="uploadProgress" v-if="uploadProgress">
@@ -391,7 +389,7 @@
     </el-row>
     <el-row :gutter="20" style="z-index:1;">
       <el-col :span="3" class="alginRight">图文详情</el-col>
-      <el-col :span="20" v-if="!approveModify" style="height:400px;z-index:1;">
+      <el-col :span="20" v-if="!approveModify" style="z-index:1;">
         <div id="editor-container">
           <UE :config=config ref="ue"></UE>
         </div>
@@ -573,8 +571,8 @@
         },
         fileList: [],
         config: {
-          initialFrameWidth: 700,
-          initialFrameHeight: 300
+          // initialFrameWidth: 700,
+          // initialFrameHeight: 300
         },
         handle_toggle: this.$route.query.isAdd, // 是否来自新增
         goodsId: '', // 获取的商品Id
@@ -2087,6 +2085,7 @@
 
     }
   }
+  .skuFlag{width:100%;border:1px solid #E5E5E5;border-bottom:0;line-height:40px;padding-left:16px;margin-bottom:-20px;}
   .upLoadBox {
     height: auto;
     margin-top: 20px;
