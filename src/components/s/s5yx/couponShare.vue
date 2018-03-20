@@ -1292,6 +1292,7 @@ export default {
 						height: 100%;
 						padding: 7px;
 						font-size: 12px;
+						line-height: 14px;
 						padding-left: 12px;
 						.tit02 {
 							color: #878787;
