@@ -82,6 +82,12 @@ html,body{font-family:"Helvetica Neue",Helvetica,'PingFang SC',Arial,sans-serif;
     -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;}
+    /* 按钮文字超出 4字 80px  5-6字 100px   默认2个字60px 由index.css 设定 */
+    .w80{
+        width: 80px !important;
+    }
+    .w100{
+    width: 100px !important;}
 
 /* 去掉地图的标注原点 */
 /*.BMap_Marker,[unselectable="on"]{display:none}*/

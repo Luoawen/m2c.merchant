@@ -22,9 +22,9 @@
         <el-input v-model="search_params.full_cut_name" placeholder="满减名称"  :maxlength="11"  ></el-input>
         <el-row width="50%"> 
            <el-col>
-              <el-button type="primary" size="medium"  @click="goto($event,'/s/fullCut')"  path="/s/fullCut" >新增满减</el-button>  
-              <el-button type="primary" size="medium" @click="resetSearchParams()">重置搜索条件</el-button>
-              <el-button type="primary" size="medium" @click="getFullCutList()" class="btn-search">搜索</el-button>
+              <el-button type="primary"  class='w80' @click="goto($event,'/s/fullCut')"  path="/s/fullCut" >新增满减</el-button>  
+              <el-button type="primary"  @click="getFullCutList()" class="btn-search">搜索</el-button>
+              <el-button  class='w100'  @click="resetSearchParams()">重置搜索条件</el-button>
            </el-col>
         </el-row>
     </div>
@@ -84,7 +84,7 @@
                 >
               </el-table-column>
             </el-table>
-            <div class="block fl" style="margin: 20px;">
+            <div class="block fr" style="margin: 20px;">
                 <el-pagination
                   @size-change="goodsStoreHandleSizeChange"
                   @current-change="goodsStoreHandleCurrentChange"
@@ -410,5 +410,4 @@
     .area_select{width:90px;display:inline-block;vertical-align:middle;border-radius:0;margin-right:5px;}
     .search_input,.search_button,.area_select{height:36px;line-height:36px;padding-top:0;padding-bottom:0;}
   }
-  
 </style>
