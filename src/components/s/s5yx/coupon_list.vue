@@ -43,10 +43,10 @@
         </el-form>
       </el-col>
       <el-col :span="24" class="tablecontainer">
-        <el-button  class="tbcolor01" @click="centerDialogVisible = true">新增优惠券</el-button>
-        <el-button  class="tbcolor02" @click="gotoSendCoupon()">发放优惠券</el-button>
+        <el-button  class="tbcolor01 w100" @click="centerDialogVisible = true">新增优惠券</el-button>
+        <el-button  class="tbcolor02 w100" @click="gotoSendCoupon()">发放优惠券</el-button>
         <el-button type="primary" class="sort btn-search" @click="getCouponList()">搜索</el-button>
-        <el-button plain @click="resetSearchParams()">重置搜索条件</el-button>
+        <el-button plain  class='w100' @click="resetSearchParams()">重置搜索条件</el-button>
       </el-col>
     </div>
     <div class="tab">
@@ -104,7 +104,7 @@
         <el-table-column label="生成时间" align="center" prop="createTime">
         </el-table-column>
       </el-table>
-      <div class="fl mt10">
+      <div class="fr mt10">
         <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -435,3 +435,4 @@ export default {
   }
 
 </style>
+
