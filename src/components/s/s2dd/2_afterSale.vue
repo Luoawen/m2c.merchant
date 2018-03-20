@@ -38,12 +38,13 @@
           width="120"
           >
           <template slot-scope="scope">
-            <el-button
+            <!-- <el-button 
               @click.native.prevent="handleCommand(scope.$index, scope.row,'_detail')"
               type="text"
               size="small">
               详情
-            </el-button>
+            </el-button> -->
+            <router-link :to="{name:'details',query:{afterSellOrderId:scope.row.afterSellOrderId}}" target="_blank"><span>详情</span></router-link>
           </template>
         </el-table-column>
         <el-table-column

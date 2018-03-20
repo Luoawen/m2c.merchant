@@ -797,7 +797,7 @@
             token: sessionStorage.getItem('mToken'),
             isEncry: false,
             dealerId: JSON.parse(sessionStorage.getItem('mUser'))?JSON.parse(sessionStorage.getItem('mUser')).dealerId:'',
-            afterSellOrderId: sessionStorage.getItem('afterSale:afterSellOrderId'),
+            afterSellOrderId: that.$route.query.afterSellOrderId,
             userId: JSON.parse(sessionStorage.getItem('mUser')).userId
           },
           success: function (result) {
@@ -937,6 +937,7 @@
               that.logistics.status=_content.status;
               that.logistics.expressPhone=_content.expressPhone;
               that.logistics.expressPerson=_content.expressPerson;
+              that.logistics.expressCode=_content.expressCode
               if(that.logistics.expressNo!==''&&that.logistics.expressWay!=='1'){
                 that.getflage(that.logistics.expressCode,that.logistics.expressNo,1)
               }

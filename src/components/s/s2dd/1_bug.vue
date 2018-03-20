@@ -157,7 +157,9 @@
         <tbody v-for="(item,index) in resultdata" v-if="totalCount>0">
           <tr>
             <td colspan="8" class="bt clear">
-              <div class="detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</div>
+              <!-- <a class="detail" @click="gotoDetail(item.dealerOrderId, item.orderId)">查看详情</a> -->
+<!-- that.$router.push({name : 'dealerOrDtl',query: {dealerOrderId: dealerOrId, orderId:orderId}}) -->
+              <router-link :to="{name:'dealerOrDtl',query:{dealerOrderId: item.dealerOrderId,orderId: item.orderId}}" target="_blank"><span class="detail">查看详情</span></router-link>
               <span class="ml10">订货号：{{item.dealerOrderId}}</span>  <span style="color: #ccc">&nbsp;|</span></span><span class="ml10">平台号：{{item.orderId}}</span>  <span style="color: #ccc">&nbsp;|</span></span> <span class="ml10" v-show="item.payNo != '' ? true : false">支付单号：{{item.payNo}}</span>
             </td>
           </tr>
@@ -692,7 +694,7 @@
         let that = this
         var path='dealerOrDtl';
         //sessionStorage.setItem('dealerOrderId', dealerOrId);
-        that.$router.push({name : path,query: {dealerOrderId: dealerOrId, orderId:orderId}})
+        that.$router.push({name : 'dealerOrDtl',query: {dealerOrderId: dealerOrId, orderId:orderId}})
         //that.$goRoute({name:'dealerOrDtl',});
       }
       ,clearAll() {
