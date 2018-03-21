@@ -39,18 +39,6 @@
                 :value="item.brandId">
               </el-option>
             </el-select>
-                <!-- <el-autocomplete
-                class="inline-input"
-                v-model="goodsBrandName"
-                :disabled="approveModify"
-                :fetch-suggestions="querySearch1"
-                placeholder="请选择"
-                @select="handleSelect1"
-              >
-              <template slot-scope="props">
-              <div class="name" >{{props.item.brandName}}</div>
-            </template>
-              </el-autocomplete> -->
           </el-form-item>
         </el-col>
         <el-col :span="2">&nbsp;</el-col>
