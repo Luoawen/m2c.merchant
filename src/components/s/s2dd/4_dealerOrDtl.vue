@@ -929,7 +929,15 @@
       deliverDealerOrder(){
         // 发货请求
         let that=this;
+        that.expressWay = that.expressWay1
+        that.expressNo = that.expressNo1
+        that.expressName = that.expressName1
+        that.expressNote = that.expressNote1
+        that.expressPerson = that.expressPerson1
+        that.expressPhone = that.expressPhone1
+        that.expressCode = that.expressCode1
         if (that.expressWay == 0) {
+          console.log('that.expressCode',that.expressCode)
           if (that.expressCode == '') {
             that.show_tip('请选择物流公司')
             return
@@ -959,13 +967,7 @@
             return
           }
         }
-        that.expressWay = that.expressWay1
-        that.expressNo = that.expressNo1
-        that.expressName = that.expressName1
-        that.expressNote = that.expressNote1
-        that.expressPerson = that.expressPerson1
-        that.expressPhone = that.expressPhone1
-        that.expressCode = that.expressCode1
+        
         // console.log('that.expressName',that.expressName )
         that.$.ajax({
           url: that.base + 'm2c.scm/order/web/dealer/sendOrder',
@@ -1486,7 +1488,7 @@ a{text-decoration:none}
           width:7%;
         }
         .a6_input{
-        	border: 1px solid #E6E8F2;
+        	// border: 1px solid #E6E8F2;
         	width: 100px;
         	height: 40px;
         }

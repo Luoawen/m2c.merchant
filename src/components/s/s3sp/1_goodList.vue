@@ -541,12 +541,15 @@
               if(to === 'a'){
                 that.goodsStore()
                that. delectGoodHide()
+               that.$message.success("删除成功")
               } else if(to === 'b'){
                 that.goodsCheckStore()
                 that. delectGoodHide()
+                that.$message.success("删除成功")
               }
             } else {
-              alert('商品删除异常');
+              // alert('商品删除异常');
+              that.$message.error("商品删除异常")
             }
           }
         })

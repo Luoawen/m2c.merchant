@@ -369,15 +369,15 @@
         </span>
       </el-dialog>
     </div>
-    <div class="hptczp" v-show="showMask===true||textAreaShow===true||logisticShow===true"  style="">
+    <div class="hptczp" v-show="showMask===true||textAreaShow===true||logisticShow===true||showRt===true"  style="">
     </div>
-    <div class="hptczp_content" style="height:270px;" v-show="showRt===true">
+    <div class="hptczp_content" style="height:280px;" v-show="showRt===true">
       <div class="hptczp_header">
         <span>同意申请</span>
         <span class="iconfont fr" @click="showMask=false;showRt=false">&#xe661;</span>
         <!-- <span class="fr" @click="showMask=false;showRt=false">X</span> -->
       </div>
-      <div class="pop_content hptczp_body" style="margin-top:16px;height:120px;">
+      <div class="pop_content hptczp_body" style="margin-top:10px;height:130px;">
         <div class="linh40">
           <span class=" wid80">
             <span style="color: red;">*</span>
@@ -1870,14 +1870,14 @@ display:-webkit-box;
 
   }
   .linh40{
-    line-height: 40px;text-align: left;
+    line-height:30px;text-align: left;
   }
   .wid80{
     width: 70px;margin-right:10px;text-align: right;
-    display: inline-block;
+    display: inline-block;color:#666;
   }
   .pl10{
-    padding-left: 10px;
+    padding-left: 85px;
   }
 }
 </style>

@@ -50,15 +50,19 @@
       
     </template>
     <!--是否删除  弹框-->
-    <div class="agreetc_content" v-show="deleteShow" >
-      <div class="agreetc_header">
+    <div class="hptczp" v-show="deleteShow===true"></div>
+    <div class="hptczp_content" v-show="deleteShow" >
+      <div class="hptczp_header">
         <span>提示</span>
-        <span class="fr" @click="deleteShow=false">X</span>
+        <span class="iconfont fr" @click="deleteShow=false">&#xe661;</span>
+        <!-- <span class="fr" @click="deleteShow=false">X</span> -->
       </div>
-      <div class="agreetc_body">是否删除运费模板？</div>
-      <div class="agreetc_footer">
-        <button type="button" class="btn save" @click = "deleted()">确认</button>
-        <button type="button" class="btn cancel" @click="deleteShow=false">取消</button>
+      <div class="hptczp_body"><h5>是否删除运费模板？</h5></div>
+      <div class="hptczp_footer">
+        <el-button size="medium" class="cancel" @click="deleteShow=false">取消</el-button>
+        <el-button type="primary" size="medium" @click="deleted()">确认</el-button>
+        <!-- <button type="button" class="btn save" @click = "deleted()">确认</button>
+        <button type="button" class="btn cancel" @click="deleteShow=false">取消</button> -->
       </div>
     </div>
   </div>
