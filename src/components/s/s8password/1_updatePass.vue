@@ -43,7 +43,7 @@
        <p v-show="isSuccess" style='font-size:12px;color:#ccc;text-align:left;' >已向手机号<label style="color: red;">{{userPhone}}</label>发送验证码</p>
       </el-col>
       <el-col  :span="2" > 
-        <el-button   type="plain" @click="sendVerficode" :disabled="disabled"> 
+        <el-button  class='w100' type="plain" @click="sendVerficode" :disabled="disabled"> 
           <span v-show="show" id="sendVer">获取验证码</span><span v-show="!show" class="count">{{count}} s</span> 
         </el-button> 
       </el-col>
