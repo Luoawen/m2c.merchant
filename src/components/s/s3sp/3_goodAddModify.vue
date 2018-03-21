@@ -31,7 +31,7 @@
         <el-col :span="2">&nbsp;</el-col>
         <el-col :span="9" :offset="2">
           <el-form-item label="商品品牌" prop="goodsBrandId">
-            <el-select v-model="data.goodsBrandId" placeholder="请选择" :disabled="approveModify">
+            <el-select v-model="data.goodsBrandId"  filterable placeholder="请选择" :disabled="approveModify">
               <el-option
                 v-for="item in brands"
                 :key="item.brandId"
@@ -39,6 +39,18 @@
                 :value="item.brandId">
               </el-option>
             </el-select>
+                <!-- <el-autocomplete
+                class="inline-input"
+                v-model="goodsBrandName"
+                :disabled="approveModify"
+                :fetch-suggestions="querySearch1"
+                placeholder="请选择"
+                @select="handleSelect1"
+              >
+              <template slot-scope="props">
+              <div class="name" >{{props.item.brandName}}</div>
+            </template>
+              </el-autocomplete> -->
           </el-form-item>
         </el-col>
         <el-col :span="2">&nbsp;</el-col>
@@ -68,7 +80,7 @@
       <el-row :gutter="20">
         <el-col :span="9">
           <el-form-item label="运费模板" prop="goodsPostageId">
-            <el-select v-model="data.goodsPostageId" placeholder="请选择" :disabled="approveModify">
+            <el-select v-model="data.goodsPostageId"   filterable placeholder="请选择" :disabled="approveModify">
               <el-option
                 v-for="item in models"
                 :key="item.modelId"
@@ -76,6 +88,18 @@
                 :value="item.modelId">
               </el-option>
             </el-select>
+            <!-- <el-autocomplete
+                class="inline-input"
+                v-model="modelName"
+                :disabled="approveModify"
+                :fetch-suggestions="querySearch2"
+                placeholder="请选择"
+                @select="handleSelect2"
+              >
+              <template slot-scope="props">
+              <div class="name" >{{props.item.modelName}}</div>
+            </template>
+              </el-autocomplete> -->
           </el-form-item>
         </el-col>
         <el-col :span="2">&nbsp;</el-col>
@@ -213,7 +237,7 @@
             <span @click="delect(index)" v-if="goodsSpecifications.length>1 && handle_toggle=='add'">移除</span>
           </td>
           <td>
-            <el-select v-model="item.standardId" placeholder="请选择" @change="stantardIdChange(item,index)" class="width200"
+            <el-select v-model="item.standardId" placeholder="请选择" filterable  @change="stantardIdChange(item,index)" class="width200"
                        :disabled="disabled">
               <el-option
                 v-for="item in stantards"
@@ -493,6 +517,8 @@
         isAddGoods: false,
         changeReasonR: '',
         changeReasonRS: true,
+           search1:'',  //商品品牌
+          modelName:'', // 运费模板
         ruleForm: {
           goodsName: '',
           goodsSubTitle: '',
@@ -1695,10 +1721,6 @@
       },
       createFilter(queryString) {
         return (restaurant) => {
-          // $nextTick(() => {
-          //   let that = this
-          //   that.getValue()
-          // })
           return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
         }
       },
@@ -2302,7 +2324,9 @@
   .demo-ruleForm .el-form-item__label {
     line-height: 50px;
   }
-
+    .demo-ruleForm .el-input__inner {
+    width:418px;
+  }
   .el-icon-plus:before {
     content: '';
   }
