@@ -158,7 +158,7 @@
             <el-row :gutter="10" >
             <el-col  :span="3" :offset="1" > <label style="color: red">*</label>验证码</el-col>
             <el-col  :span="8" > <input type="text" class="formControl" id="verifyCode" v-model="Info.verifyCode" placeholder="4位数验证码" maxlength="4">
-              <p  v-show="isSuccess" style='font-size:12px;color:#ccc;text-align:left' >已向手机号<span style="color: red;">{{userPhone}}</span>发送验证码</p>
+              <p  v-show="isSuccess" style='font-size:12px;color:#ccc;text-align:left;heigh：12px;line-height:12px;margin:4px 0 -6px 0' >已向手机号<span style="color: red;">{{userPhone}}</span>发送验证码</p>
             </el-col>
             <el-col :span="3"  :offset="3"> 
               <el-button  class='w100' style='box-sizing: border-box' type="plain" @click="sendVerficode" :disabled="disabled"> 
