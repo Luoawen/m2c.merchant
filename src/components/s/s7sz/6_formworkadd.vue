@@ -103,7 +103,7 @@
                         </div>
                       </div>
                     </div>
-                    <el-button @click.stop="sureCheckCity(index,$event)" type="primary" style="margin-left:20px;margin-top:10px">确认</el-button>
+                    <el-button @click.stop="sureCheckCity(index,$event)" type="primary" style="margin-left:20px;margin-top:10px;margin-bottom:10px;">确认</el-button>
                   </div>
                 </td>
                 <td>
@@ -209,7 +209,7 @@
                         </div>
                       </div>
                     </div>
-                    <el-button @click.stop="sureCheckCity(index,$event)" type="primary" style="margin-left:20px;margin-top:10px">确认</el-button>
+                    <el-button @click.stop="sureCheckCity(index,$event)" type="primary" style="margin-left:20px;margin-top:10px;margin-bottom:10px;">确认</el-button>
                   </div>
                 </td>
                 <td>
@@ -324,7 +324,7 @@
                         </div>
                       </div>
                     </div>
-                    <el-button @click.stop="sureCheckCity(index,$event)" type="primary" style="margin-left:20px;margin-top:10px">确认</el-button>
+                    <el-button @click.stop="sureCheckCity(index,$event)" type="primary" style="margin-left:20px;margin-top:10px;margin-bottom:10px;">确认</el-button>
                   </div>
                 </td>
                 <td>
@@ -401,7 +401,7 @@
                         </div>
                       </div>
                     </div>
-                    <el-button @click.stop="sureCheckCity(index,$event)" type="primary" style="margin-left:20px;margin-top:10px">确认</el-button>
+                    <el-button @click.stop="sureCheckCity(index,$event)" type="primary" style="margin-left:20px;margin-top:10px;margin-bottom:10px;">确认</el-button>
                   </div>
                 </td>
                 <td>
@@ -1217,7 +1217,7 @@
   .cityBox {
     display: none;
     width: 670px;
-    height: 450px;
+    height: auto;
     background: #fff;
     border: 1px solid #ccc;
     position: absolute;

@@ -335,9 +335,9 @@
           },
           success: function (result) {
             if (result.status === 200) {
-              console.log(result)
+              that.$message.success("回评成功")
               that.get_comment_info()
-              that.showhptc = false
+              that.cancel()
             }
           }
         })

@@ -8,23 +8,23 @@
             <form class="form-horizontal">
               <h4>店铺信息<span>上次更新时间：{{storeinformation.lastUpdateDate}}</span></h4>
               <el-row :gutter="20" >
-                <el-col :span="3" :offset="1" class="alginRight">店铺名称 </el-col>
+                <el-col :span="3" class="alginRight">店铺名称 </el-col>
                 <el-col :span="6" >
                   <el-input type="text" :maxlength="15" id="inputEmail3" placeholder="1-15字符" v-model="storeinformation.appellation"></el-input>
                 </el-col>
               </el-row>
                <div class="clear"></div>
               <el-row :gutter="20" >
-                <el-col :span="3" :offset="1" class="alginRight">店铺介绍 </el-col>
+                <el-col :span="3" class="alginRight">店铺介绍 </el-col>
                 <el-col :span="20" >
                   <el-input type="textarea" cols="80" :rows="4" :maxlength="200" placeholder="1-200字符" v-model="storeinformation.introduce" style="resize:none;width:380px;"></el-input>
                 </el-col>
               </el-row>
                <div class="clear"></div>
                <el-row :gutter="20" style="margin-top:20px;">
-                <el-col :span="3" :offset="1" class="alginRight">店铺Logo </el-col>
+                <el-col :span="3" class="alginRight">店铺Logo </el-col>
                 <el-col :span="20" style="text-align: left;" >
-                  <input type="file" id="m11yhgl_img_input" style="display:none" @change="upload_img()">
+                  <input type="file" id="m11yhgl_img_input" style="display:none" @change="upload_img($event)">
                   <div class="img_up" onclick="document.querySelector('#m11yhgl_img_input').click()">
                     <img width="100" height="100" v-show='imgshow' id="m11yhgl_img" v-model:src="storeinformation.imgUrl"
                           onerror="this.src='../../../../static/assets/images/icon_uoloading.png';this.onerror=null">
@@ -34,7 +34,7 @@
               </el-row>
               <div class="clear"></div>
               <el-row :gutter="20" style='margin-top:10px' >
-                <el-col :span="3" :offset="1" class="alginRight">客服电话 </el-col>
+                <el-col :span="3" class="alginRight">客服电话 </el-col>
                 <el-col :span="20" >
                   <el-input type="text" onkeyup="value=value.replace(/[^\d-]/g,'') " ng-pattern="/[^a-zA-Z]/" :maxlength="20" id="inputEmail3" placeholder="请填写" v-model="storeinformation.service"></el-input>
                   <!-- <input type="text" class="formControl" onkeyup="value=value.replace(/[^\d-]/g,'') " ng-pattern="/[^a-zA-Z]/" maxlength="20" id="inputEmail3" placeholder="请填写" v-model="storeinformation.service"> -->
@@ -42,7 +42,7 @@
               </el-row>
               <div class="clear"></div>
               <el-row :gutter="20" >
-                <el-col :span="3" :offset="1" class="alginRight">发票信息 </el-col>
+                <el-col :span="3" class="alginRight">发票信息 </el-col>
                 <el-col :span="20" >
                   <el-input type="textarea" cols="80" :rows="4" placeholder="1-200字符" :maxlength="200" v-model="storeinformation.shopReceipt" style="resize:none;width:380px;" ></el-input>
                 </el-col>
@@ -434,7 +434,7 @@
   // text-align: right;
   margin-bottom: 15px;
   .el-input{width:380px;}
-  .alginRight{color:#2A2A2A;}
+  .alginRight{color:#666;}
 }
 #getWidth{opacity:0;filter: alpha(opacity=0);position:absolute;}
 .shopGg{width:232px;height:112px;background:url(../../../assets/images/def.png) no-repeat;
