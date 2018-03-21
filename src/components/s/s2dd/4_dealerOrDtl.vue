@@ -939,31 +939,31 @@
         if (that.expressWay == 0) {
           console.log('that.expressCode',that.expressCode)
           if (that.expressCode == '') {
-            that.show_tip('请选择物流公司')
+            that.$message.error('请选择物流公司')
             return
           }
           if (that.expressNo == '') {
-            that.show_tip('请填写物流单号')
+            that.$message.error('请填写物流单号')
             return
           }
           let pattern = /^[0-9a-zA-Z]{1,30}$/
           if (!pattern.test(that.expressNo)){
-            that.show_tip('物流单号只可以输入字母或数字')
+            that.$message.error('物流单号只可以输入字母或数字')
             return
           }
         }
         if (that.expressWay == 1) {
           if (that.expressPerson == '') {
-            that.show_tip('请填写配送员姓名')
+            that.$message.error('请填写配送员姓名')
             return
           }
           if (that.expressPhone == '') {
-            that.show_tip('请填写配送员手机号')
+            that.$message.error('请填写配送员手机号')
             return
           }
           let pattern = /^(13|14|15|17|18)[0-9]{9}$/
           if (!pattern.test(that.expressPhone)){
-            that.show_tip('请填写正确的配送员手机号')
+            that.$message.error('请填写正确的配送员手机号')
             return
           }
         }
