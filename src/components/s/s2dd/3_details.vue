@@ -142,7 +142,7 @@
         <div class="logistics" style="padding-bottom:20px"  >
           <!--没有物流的情况 -->
           <h3  class="building" v-if="orderDetail.status <=4">暂无物流信息<br />
-            <el-button type="primary" @click="addLogistics" v-if="logistics.status===4">添加物流信息</el-button>
+            <el-button type="primary" @click="addLogistics" v-if="logistics.status===4" style="width:100px;">添加物流信息</el-button>
           </h3>
           <el-row v-if ="orderDetail.status>=5">
            <el-col :span='8'>
@@ -203,11 +203,11 @@
                       <template v-if="logistics.expressWay==1">
                         <div class="col-sm-8 detail_cen">
                           <span class="tit01">配送方式:</span> <span class="ml20">自有物流</span>
+                          <i class="ico_compile" v-show="orderDetail.status==7" @click="changeExpress=true;dialogVisible=true"></i>
                         </div>
                         <div class="col-sm-8 detail_cen" >
                           <span class="tit01">配送员:</span>
                           <span class="ml20">{{logistics.expressPerson!=='' ? logistics.expressPerson : '--'}}</span>
-                          <i class="ico_compile" v-show="orderDetail.status==7" @click="changeExpress=true;dialogVisible=true"></i>
                           <span class="ml20">{{logistics.expressPhone!=='' ? logistics.expressPhone : '--'}}</span>
                         </div>
                       </template>
@@ -279,7 +279,6 @@
         :visible.sync="dialogVisible"
         width="700"
         :modal-append-to-body="false" >
-
         <table style="margin: auto;border: 1px solid #e7e7e7;width: 100%;">
           <thead style="background: #DFE9F6; line-height: 40px; height: 40px;">
               <tr>
@@ -316,7 +315,7 @@
           </tbody>
         </table>
 
-        <div class="col-sm-4 detail_cen" style="width:100%;height:350px;">
+        <div class="col-sm-4 detail_cen" style="width:100%;height:320px;">
           <div style="padding-left:32px;font-size:14px; line-height:55px;">
             <span class="redcolor">*</span>
             <span class="tit01" style="margin-right: 10px;">配送方式:</span>
@@ -338,7 +337,7 @@
             <el-form-item label="物流单号:" :label-width="formLabelWidth" required>
               <el-input v-model="shipmentForm.expressNo" auto-complete="off" width="200" :maxlength="20" @blur="vExpressNo(shipmentForm.expressNo)"></el-input>
               <i class="red redTip" v-if="checkexpressNo1">请填写物流单号</i>
-              <i class="red redTip" v-if="checkexpressNo">请填写正确的物流单号</i>
+              <i class="red redTip" v-if="checkexpressNo">物流单号只支持数字或字母</i>
             </el-form-item>
             <el-form-item label="备注:" :label-width="formLabelWidth">
               <el-input v-model="shipmentForm.noted" auto-complete="off" width="200" :maxlength="100"></el-input>
@@ -351,12 +350,12 @@
             </el-form-item>
             <el-form-item label="配送员手机号:" :label-width="formLabelWidth" required >
               <el-input v-model="shipmentForm.phone" auto-complete="off" :maxlength="11" @blur="vExpressPhone(shipmentForm.phone)"></el-input>
-              <i class="red redTip" v-if="checkexpPhone">请输入配送员手机号</i>
-              <i class="red redTip" v-if="checkexpPhone1">配送员手机号码格式不正确</i>
+              <i class="red redTip" v-if="checkexpPhone">请输入11位数手机号</i>
+              <i class="red redTip" v-if="checkexpPhone1">手机号码格式不正确</i>
             </el-form-item>
             <el-form-item label="运单号:" :label-width="formLabelWidth">
               <el-input v-model="shipmentForm.expressNo" auto-complete="off" :maxlength="20" @blur="vExpressNo1(shipmentForm.expressNo)"></el-input>
-              <i class="red redTip" v-if="checkexpressNo2">请填写正确的物流单号</i>
+              <i class="red redTip" v-if="checkexpressNo2">物流单号只支持数字或字母</i>
             </el-form-item>
             <el-form-item label="备注:" :label-width="formLabelWidth">
               <el-input v-model="shipmentForm.noted" auto-complete="off" :maxlength="100"></el-input>
@@ -1685,6 +1684,7 @@ display:-webkit-box;
       }
       .detail_top,.logistics{
         .detail_cen{
+          .el-form-item{margin-bottom:0;}
           .tit01{
             display: inline-block;
             width: 90px;
@@ -1882,6 +1882,7 @@ display:-webkit-box;
 }
 </style>
 <style>
+.detail_cen .el-form-item{margin-bottom:0;}
 label.el-form-item__label{
       line-height: 50px !important;}
 </style>
