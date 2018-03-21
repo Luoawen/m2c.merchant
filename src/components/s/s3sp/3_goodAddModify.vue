@@ -406,16 +406,14 @@
     </el-row>
     <el-row :gutter="20" v-if="handle_toggle=='add'">
       <el-col :span="3" class="alginRight"><i style="color:red;">* </i>设置上架</el-col>
-      <el-col :span="21">
+      <el-col :span="21" style="margin-top:16px;">
         <el-radio v-model="data.goodsShelves" label="1" :disabled="approveModify">手动上架</el-radio>
         <p>平台审核通过后，商家需手动上架商品</p>
         <el-radio v-model="data.goodsShelves" label="2" :disabled="approveModify">审核通过立即上架</el-radio>
         <p>平台审核通过，商品自动上架，无需商家操作</p>
       </el-col>
     </el-row>
-    <el-button v-if="handle_toggle=='add'" type="primary" @click="save('ruleForm')">提交审核</el-button>
-    <el-button v-if="handle_toggle!='add'" type="primary" @click="save('ruleForm')">保存修改</el-button>
-    <el-button @click="goBack">取消</el-button>
+    
 
     <!--变更理由-->
     <div class="hptczp" v-if="changeMind"></div>
@@ -432,6 +430,11 @@
         <el-button size="medium" @click="closeChangeMind">取消</el-button>
       </div>
     </div>
+    <div class="return poi3">
+			<el-button v-if="handle_toggle=='add'" type="primary" @click="save('ruleForm')" style="width:80px;">提交审核</el-button>
+      <el-button v-if="handle_toggle!='add'" type="primary" @click="save('ruleForm')" style="width:80px;">保存修改</el-button>
+      <!-- <el-button @click="goBack">取消</el-button> -->
+		</div>
   </div>
 </template>
 <script>
@@ -1994,7 +1997,7 @@
   .alginRight {
     text-align: right;
   }
-
+.content {padding-bottom:80px;}
   h4.h4 {
     margin-left: -4%;
     line-height: 50px;

@@ -104,7 +104,11 @@ export default {
         },
         success: function (result) {
           if (result.status==200){
-            that.show_tip("删除成功")
+            // that.show_tip("删除成功")
+            that.$message({
+              type: 'success',
+              message: '删除成功'
+            })
             that.getTemplate()
           } else {
             that.show_tip(result.errorMessage)

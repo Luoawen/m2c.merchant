@@ -121,7 +121,7 @@
     <div class="hptczp_content " v-show="cashPassShow">
       <div class="hptczp_header">
         <span>提示</span>
-        <span class=" iconfont fr" @click="cashPassHide">&#xe661;</span>
+        <span class="iconfont fr" @click="cashPassHide">&#xe661;</span>
       </div>
       <div class="hptczp_body">
         <h5>是否设置交易密码</h5>
@@ -137,7 +137,7 @@
     <div class="hptczp_content inputInfo" v-show="showTransaction">
       <div class="hptczp_header">
         <span>设置交易密码</span>
-        <span class=" iconfont fr" @click="cancel">&#xe661;</span>
+        <span class="iconfont fr" @click="cancel">&#xe661;</span>
       </div>
       <div class="hptczp_body" style='margin-left:48px'>
         <div>
@@ -206,10 +206,8 @@
       pullMoney () {
         let that = this
         if(that.payPwdSetFlag === 1){
-                console.log(1111);
-          // that.$router.push({name:'cash'})
+          that.$router.push({name:'cash'})
         }else{
-          console.log(222);
           that.cashPassShow = true
         }
       }
@@ -578,58 +576,18 @@
         }
       }
     }
-    .hptczp_content{
-      height: 240px;
-      .hptczp_header{
-        span{
-          font-size: 16px;
-          color: #333;
-        }
-      }
-      .hptczp_body {
-        text-align: center;
-        padding-top:20px;
-      h5{
-        font-size: 16px;
-        color:#333;
-        font-weight: 700;
-      }
-      p{
-        font-size: 12px;
-        color:#666;
-      }
-      div{
-        width: 500px;
-        text-align: left;
-        margin:10px 0;
-        .formControl{
-        display: inline-block;
-        height: 36px;
-        margin-left:10px;
-        }
-      }
-     }
-     .textIndent p{
-       margin-right:20px;
-       padding-left:20px;
-       line-height: 18px;
-       span{
-         margin-left:-20px;
-       }
-     }
-     .hptczp_footer{
-       padding-left:0;
-       padding-top:20px;
-       line-height: 80px;
-       display: flex;
-       justify-content:center;  
-     }
-    }
     .inputInfo{
      width: 780px;
      margin-left:-390px;
      margin-top:-160px;
      height:auto;
+     .hptczp_body{padding-top:20px;}
+     h5{font-size:16px;color:#333;font-weight: 700;}
+     .textIndent p{
+       margin-bottom:0px;
+       margin-right:20px;padding-left:20px;line-height:24px;font-size:12px;color:#666;
+       span{margin-left:-20px;}
+     }
     }
     .survey_c_cen{
       min-height: 40px;

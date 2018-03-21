@@ -301,9 +301,9 @@
       </div> -->
     </div>
 		<!--返回-->
-		<div class="return poi3">
+		<!-- <div class="return poi3">
 			<button class="r_fh" @click="goBack()">返回</button>
-		</div>
+		</div> -->
   </div>
 </template>
 

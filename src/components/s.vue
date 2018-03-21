@@ -259,7 +259,7 @@ body {
     position: relative;
     box-sizing: border-box;
     .searcWrap{width:100%;height:auto;position:relative;}
-    .line{height:1px;margin-left:-25px;margin-right:-25px;background:#dfe4ed;position:absolute;width:100%;top:64px;}
+    .line{height:1px;margin-left:-25px;margin-right:-25px;background:#dfe4ed;position:absolute;width:100%;top:49px;}
   }
   .clear{
     clear: both;
@@ -490,9 +490,6 @@ body {
       margin-top: 0rem;
       margin-bottom: 0px;
       min-width: 100px;
-      .avter {
-        background: #494E5A; // color: #fff;
-      }
       .content_container {
         background: #505562;
       }
@@ -503,6 +500,10 @@ body {
         padding-left: 40px;
         font-size: 13px;
         cursor: pointer;
+        background: #494E5A;
+      }
+      .avter {
+        background: #4E8FF5; // color: #fff;
       }
       // .content_s:hover {
       //   color: #B7CAE2;
@@ -652,9 +653,13 @@ body {
   @media print {.title{display: none;}.left_nav{display: none;}.right_nav{display: none;}.s{padding-left: 0px;}.printSendOrder{height:1000px;margin: 0px;font-size: 8px;position: absolute;top: -300px;}a{display: none;}}
   table th:nth-child(1),table td:nth-child(1){padding-left:30px;}
   
-}/*高级搜索*/
+}
+.searcWrap{
+  a.gjsort{white-space:nowrap;}
+}
+/*高级搜索*/
 .soloSearchBox{position:absolute;top:0;left:0;height:auto;padding:10px 20px;width:100%;background:#fff;z-index:2;
-box-shadow:0 2px 3px 0 rgba(0,0,0,0.10);border-left:1px solid rgba(0, 0, 0, 0.1);border-right:1px solid rgba(0, 0, 0, 0.1);
+box-shadow:0 2px 4px 0 rgba(0,0,0,0.10);border-left:1px solid rgba(0, 0, 0, 0.1);border-right:1px solid rgba(0, 0, 0, 0.1);
     h4 a.close{
       opacity:1;display:inline-block;width:24px;height:24px;float:right;background:url(../assets/images/ico_close.png) no-repeat center center;
     }

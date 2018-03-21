@@ -1,5 +1,5 @@
 <template>
-  <div class="sz content clear">
+  <div class="sz content clear" style="padding-top:10px;">
     <div class="line"></div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane label="售后地址" name="first">
@@ -64,19 +64,17 @@
             label="操作"
             width="180">
             <template slot-scope="scope">
-              <el-col :span="12">
-                <el-button v-if="scope.row.isDefault===0"
-                  @click.native.prevent="handleCommand(scope.$index, scope.row,'_edit')"
-                  type="text"
-                  size="small">
+              <el-col :span="24">
+                <a v-if="scope.row.isDefault===0" style="margin-right:10px;"
+                  @click="handleCommand(scope.$index, scope.row,'_edit')"
+                  >
                   编辑
-                </el-button>
-                <el-button v-if="scope.row.isDefault===0"
-                  @click.native.prevent="handleCommand(scope.$index, scope.row,'_delete')"
-                  type="text"
-                  size="small">
+                </a>
+                <a v-if="scope.row.isDefault===0"
+                  @click="handleCommand(scope.$index, scope.row,'_delete')"
+                  >
                   删除
-                </el-button>
+                </a>
               </el-col>
             </template>
           </el-table-column>
@@ -95,7 +93,7 @@
       </el-tab-pane>
     </el-tabs>
     <!--新增商品保障-->
-    <div class="topBox" v-if="topBoxShow">
+    <div class="topBox soloSearchBox" v-if="topBoxShow">
       <h4>新增商品保障<a class="close" @click="topBoxShow=!topBoxShow"></a></h4>
       <el-row :gutter="20">
         <el-col :span="3" class="alginRight"><i class="red">*</i>标题</el-col>
@@ -122,16 +120,20 @@
       </el-row>
     </div>
     <!-- 删除弹框 -->
-    <div class="delectGoodBg" v-if="delectGoodBg"></div>
-    <div class="delectGoodCon" v-if="delectGood">
-      <div class="agreetc_header">
+    <div class="hptczp" v-if="delectGoodBg"></div>
+    <div class="hptczp_content" v-if="delectGood">
+      <div class="hptczp_header">
         <span>提示</span>
-        <span class="fr" @click="delectGoodHide()">X</span>
+        <span class="iconfont fr" @click="delectGoodHide()">&#xe661;</span>
       </div>
-      <div class="agreetc_body">是否删除商品保障？</div>
-      <div class="agreetc_footer">
-        <button type="button" class="btn save" @click = "deleteConfirmFn()">确认</button>
-        <button type="button" class="btn cancel" @click="delectGoodHide()">取消</button>
+      <div class="hptczp_body">
+        <h5>是否删除商品保障？</h5>
+      </div>
+      <div class="hptczp_footer">
+        <el-button size="medium" class="cancel" @click="delectGoodHide()">取消</el-button>
+        <el-button type="primary" size="medium" @click="deleteConfirmFn()">确认</el-button>
+        <!-- <button type="button" class="btn save" @click = "deleteConfirmFn()">确认</button>
+        <button type="button" class="btn cancel" @click="delectGoodHide()">取消</button> -->
       </div>
     </div>
   </div>
@@ -629,7 +631,8 @@
             contactNumber: that.search_params.tel
           },
           success: function (data) {
-            that.show_tip('修改成功')
+            // that.show_tip('修改成功')
+            that.$message.success('修改成功')
             that.find_address()
           }
         })
@@ -679,7 +682,7 @@
 
     }
   }
-  .topBox{position:absolute;top:0;left:0;height:auto;padding:0 20px;padding-bottom:20px;width:100%;background:#fff;z-index:2;
+  .topBox{
     .el-row{margin-bottom:15px;}
     .el-input{width:100%;}
     h4{

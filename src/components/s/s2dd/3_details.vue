@@ -1,5 +1,5 @@
 <template>
-  <div class="detail content">
+  <div class="detail content" style="padding-top:10px;">
     <div class="line"></div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="售后单详情" name="first">
@@ -146,13 +146,13 @@
           </h3>
           <el-row v-if ="orderDetail.status>=5">
            <el-col :span='8'>
-              <span class="tit01">售后状态:</span>
-              <span class="ml20" >
+              <span class="tit01">售后状态</span>
+              <span class="ml20">
                 {{orderDetail.orderType==0?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==1?'待商家同意':logistics.status==4?'待顾客寄回商品':(logistics.status==5||logistics.status==6)?'待商家发货':logistics.status==7?'待顾客收货':logistics.status>=8?'售后已完成':'--'):orderDetail.orderType==1?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==0?'待商家同意':logistics.status==4?'待顾客寄回商品':(logistics.status==5||logistics.status==6)?'待商家确认退款':logistics.status==9?'退款中':logistics.status>9?'售后已完成':'--'):orderDetail.orderType==2?(logistics.status==-1?'售后已取消':logistics.status==3?'商家已拒绝':logistics.status==2?'待商家同意':logistics.status==4?'待商家确认退款':logistics.status==9?'退款中':logistics.status>9?'售后已完成':'--'):'--'}}
               </span>
            </el-col>
-            <el-col :span='4'>
-                <span class="tit01">售后单号:</span><span class="ml20">{{logistics.afterSellOrderId}}</span>
+            <el-col :span='8'>
+                <span class="tit01">售后单号</span><span class="ml20">{{logistics.afterSellOrderId}}</span>
             </el-col>
           </el-row>
           <div class=" detail_cen" style="line-height: 40px;"  v-if ="orderDetail.status>=5">
@@ -196,7 +196,7 @@
                           <span class="tit01">物流单号:</span>
                           <span class="ml20">{{logistics.expressNo!=='' ? logistics.expressNo : '--'}}
                             <a v-if="!expressLink" class="ml20" @click="getQueryExpress(logistics.expressCode,logistics.expressNo)">查看物流跟踪信息</a>
-                            <a v-if="expressLink" href="http://www.kuaidi100.com/?from=openv" target="_blank">查看物流跟踪信息</a>
+                            <a v-if="expressLink" class="ml20" href="http://www.kuaidi100.com/?from=openv" target="_blank">查看物流跟踪信息</a>
                           </span>
                         </div>
                       </template>
@@ -226,7 +226,7 @@
                           <span class="tit01">物流单号:</span>
                           <span class="ml20">{{logistics.backExpressNo == ''? '--' :logistics.backExpressNo}}
                             <a class="ml20" v-if="!expressLink1" @click="getQueryExpress(logistics.backExpressCode,logistics.backExpressNo)">查看物流跟踪信息</a>
-                            <a v-if="expressLink1" href="http://www.kuaidi100.com/?from=openv" target="_blank">查看物流跟踪信息</a>
+                            <a v-if="expressLink1" class="ml20" href="http://www.kuaidi100.com/?from=openv" target="_blank">查看物流跟踪信息</a>
                           </span>
                         </div>
                       </div>
@@ -369,14 +369,15 @@
         </span>
       </el-dialog>
     </div>
-    <div class="clsMask" v-show="showMask===true"  style="">
+    <div class="hptczp" v-show="showMask===true||textAreaShow===true||logisticShow===true"  style="">
     </div>
-    <div class="pop_content"  v-show="showRt===true">
+    <div class="hptczp_content" style="height:270px;" v-show="showRt===true">
       <div class="hptczp_header">
         <span>同意申请</span>
-        <span class="fr" @click="showMask=false;showRt=false">X</span>
+        <span class="iconfont fr" @click="showMask=false;showRt=false">&#xe661;</span>
+        <!-- <span class="fr" @click="showMask=false;showRt=false">X</span> -->
       </div>
-      <div class="hptczp_body">
+      <div class="pop_content hptczp_body" style="margin-top:16px;height:120px;">
         <div class="linh40">
           <span class=" wid80">
             <span style="color: red;">*</span>
@@ -386,42 +387,42 @@
           <span>元</span>
             <P class="pl10">运费退款不能大于订单实际剩余运费</P>
         </div>
-        <div class="linh40 pl10">
+        <div class="linh40">
           <span class="wid80">售后金额</span>
           <span>{{(orderDetail.backMoney)}}元</span>
         </div>
-        <div class="linh40 pl10">
-          <span class=" wid80">售后总额</span>
+        <div class="linh40">
+          <span class="wid80">售后总额</span>
           <span>{{(parseFloat(orderDetail.backMoney) + rtFreight).toFixed(2)}}元</span>
         </div>
       </div>
       <div class="hptczp_footer">
-        <button type="button" class="btn save" @click="agreeRtMoneyApply" >确认</button>
-        <button type="button" class="btn cancel" @click="showMask=false;showRt=false" >取消</button>
+        <el-button size="medium" class="cancel" @click="showMask=false;showRt=false">取消</el-button>
+        <el-button type="primary" size="medium" @click="agreeRtMoneyApply()">确认</el-button>
+        <!-- <button type="button" class="btn save" @click="agreeRtMoneyApply" >确认</button>
+        <button type="button" class="btn cancel" @click="showMask=false;showRt=false" >取消</button> -->
       </div>
     </div>
-    <!-- 遮罩层 -->
-    <div class="v-modal" tabindex="0" v-if="textAreaShow" style="z-index:2000;"></div>
       <!--提示 拒绝申请退款理由 输入框-->
-    <div class="el-message-box" style="position:fixed;top:50%;left:40%;z-index:2003;"  v-if="textAreaShow" >
-      <div class="el-message-box__header">
-        <div class="el-message-box__title">
-          <span>提示</span>
-        </div>
-        <button type="button" aria-label="Close" class="el-message-box__headerbtn" @click="textAreaShow=false"><i class="el-message-box__close el-icon-close"></i></button>
+    <div class="hptczp_content hptczp_contentTextarea" v-if="textAreaShow" >
+      <div class="hptczp_header">
+        <span>拒绝理由</span>
+        <span class="iconfont fr" @click="textAreaShow=false">&#xe661;</span>
       </div>
-      <div class="el-message-box__content">
-        <div class="el-message-box__message"><p>请输入拒绝理由</p></div>
+      <div class="hptczp_body">
+        <textarea placeholder="请输入1-100 字符" v-model="textarea" :maxlength="100"></textarea>
+        <!-- <div class="el-message-box__message"><p>请输入拒绝理由</p></div>
         <div class="el-message-box__input" style="">
           <div class="el-textarea">
             <textarea  v-model='textarea'   placeholder="请输入1-100 字符" type="textarea" rows="2" autocomplete="off" :maxlength="100"   validateevent="true" class="el-textarea__inner" style="min-height: 33px;"></textarea>
           </div>
           <div class="el-message-box__errormsg" style="visibility: hidden;"></div>
-        </div>
+        </div> -->
       </div>
-      <div class="el-message-box__btns">
+      <div class="hptczp_footer">
         <!-- <button type="button" class="el-button el-button--default el-button--small" @click="textAreaShow=false" ><span>取消</span></button> -->
-        <button type="button" class="el-button el-button--default el-button--small el-button--primary" @click="rejectReasonConfirm"><span>确定</span></button>
+        <el-button type="primary" size="medium" @click="rejectReasonConfirm()" :disabled="textarea==''">确认</el-button>
+        <!-- <button type="button" class="el-button el-button--default el-button--small el-button--primary" @click="rejectReasonConfirm"><span>确定</span></button> -->
       </div>
     </div>
     <!--添加物流信息-->
@@ -462,7 +463,7 @@
         </el-row>
     </div>
     <!--查看物流跟踪信息-->
-    <div class="hptczp" v-if="logisticShow"></div>
+    <!-- <div class="hptczp" v-if="logisticShow"></div> -->
     <div class="infoBox" v-if="logisticShow">
       <h4>物流跟踪信息<a class="close bg-ico_close02" @click="logisticShow=!logisticShow"></a></h4>
       <ul>
@@ -474,7 +475,7 @@
           </h5>
         </li>
       </ul>
-      <h6>如快递有问题，请先拨打快递公司电话咨询<el-button size="medium" @click="logisticShow=!logisticShow" class="fr mr20" style="margin-top:8px;">关闭查询结果</el-button></h6>
+      <h6>如快递有问题，请先拨打快递公司电话咨询<el-button size="medium" @click="logisticShow=!logisticShow" class="fr mr20" style="margin-top:8px;width:100px;">关闭查询结果</el-button></h6>
     </div>
   </div>
 </template>
@@ -938,6 +939,8 @@
               that.logistics.expressPhone=_content.expressPhone;
               that.logistics.expressPerson=_content.expressPerson;
               that.logistics.expressCode=_content.expressCode
+              that.logistics.backExpressCode=_content.backExpressCode
+              console.log('that.logistics.expressCode',that.logistics.expressCode)
               if(that.logistics.expressNo!==''&&that.logistics.expressWay!=='1'){
                 that.getflage(that.logistics.expressCode,that.logistics.expressNo,1)
               }
@@ -1355,7 +1358,7 @@
             phone:that.shipmentForm.phone,
             orderId: that.orderDetail.orderId,
             shopName: that.shopName,
-            expressNote:that.shipmentForm.noted
+            noted:that.shipmentForm.noted
           },
           success: function (result) {
             if (result.status === 200){
@@ -1469,6 +1472,7 @@
   }
 </script>
 <style lang="scss" scoped>
+.tit01{color:#666;}
 .ico_compile{
      	width: 16px;
       height: 16px;
@@ -1536,7 +1540,7 @@ display:-webkit-box;
     opacity: 0.5;
 }
 .infoBox{width:780px;height:800px;position:fixed;top:50%;left:50%;margin-top:-400px;margin-left:-390px;background:#fff;border-radius:5px;    z-index: 999;overflow: hidden;
-  h4{background:#DFE9F6;width:100%;height:50px;line-height: 50px;text-indent: 1.5em;color:#666;font-size:16px;margin:0;}
+  h4{width:100%;height:50px;line-height: 50px;text-indent: 1.5em;color:#666;font-size:16px;margin:0;}
   a.close{display:inline-block;width:50px; height:50px;position:absolute;top:0; right:0;background:url(../../../assets/images/ico_close.png) no-repeat center center;opacity:1;}
   h6{height:50px;line-height: 50px;text-indent:20px;color:#999;font-size:12px;width:100%;background: #F5F5F5;margin:0;position:absolute;bottom:0px;}
   ul{width:800px;height:670px;padding:20px 55px 10px;overflow-y:auto;overflow-x:hidden;
@@ -1687,6 +1691,7 @@ display:-webkit-box;
             height: 40px;
             line-height:40px;
             text-align: right;
+            color:#666;
           }
         }
       }
@@ -1796,79 +1801,79 @@ display:-webkit-box;
   opacity: 0.5;
 }
 .pop_content{
-  width: 400px;
-  height: 280px;
-  background: #fff;
-  z-index: 9999;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-left: -200px;
-  margin-top: -140px;
-  background: #FFFFFF;
-  border-radius: 4px;
-  .hptczp_header{
-    width:100%;
-    height: 50px;
-    background: #DFE9F6;
-    padding-left: 20px;
-    padding-right: 20px;
-    span{
-      display: inline-block;
-      line-height: 50px;
-    }
-  }
-  .hptczp_body{
-    padding-left: 20px;
-    padding-right: 20px;
-    background: #FFFFFF;
-    margin-top: 10px;
-    textarea{
-      width: 100%;
-      height: 100%;
-      border: 1px solid #E5E5E5;
-      width: 360px;
-      height: 140px;
-      padding-left: 10px;
-      padding-right: 10px;
-      padding-top: 5px;
-      padding-bottom: 5px;
-    }
-    p{
-      margin-left:78px;
-      color:rgb(107,107,107);
-      font-size: 12px;
-      line-height: 18px;
-    }
-  }
+  // width: 400px;
+  // height: 280px;
+  // background: #fff;
+  // z-index: 9999;
+  // position: absolute;
+  // left: 50%;
+  // top: 50%;
+  // margin-left: -200px;
+  // margin-top: -140px;
+  // background: #FFFFFF;
+  // border-radius: 4px;
+  // .hptczp_header{
+  //   width:100%;
+  //   height: 50px;
+  //   background: #DFE9F6;
+  //   padding-left: 20px;
+  //   padding-right: 20px;
+  //   span{
+  //     display: inline-block;
+  //     line-height: 50px;
+  //   }
+  // }
+  // .hptczp_body{
+  //   padding-left: 20px;
+  //   padding-right: 20px;
+  //   background: #FFFFFF;
+  //   margin-top: 10px;
+  //   textarea{
+  //     width: 100%;
+  //     height: 100%;
+  //     border: 1px solid #E5E5E5;
+  //     width: 360px;
+  //     height: 140px;
+  //     padding-left: 10px;
+  //     padding-right: 10px;
+  //     padding-top: 5px;
+  //     padding-bottom: 5px;
+  //   }
+  //   p{
+  //     margin-left:78px;
+  //     color:rgb(107,107,107);
+  //     font-size: 12px;
+  //     line-height: 18px;
+  //   }
+  // }
   .hptczp_footer{
-    height: 80px;
-    padding-top: 10px;
-    padding-left: 50%;
-    .btn {
-      width: 80px;
-      height: 30px;
-      border: none;
-      border-radius: 2px;
-      color: #fff;
-    }
-    .save {
-      margin-left: -110px;
-      background: #0086FF;
-    }
-    .cancel {
-      margin-left: 40px;
-      background: #FFF;
-      border: 1px solid #CCCCCC;
-      color: #444;
-    }
+    // height: 80px;
+    // padding-top: 10px;
+    // padding-left: 50%;
+    // .btn {
+    //   width: 80px;
+    //   height: 30px;
+    //   border: none;
+    //   border-radius: 2px;
+    //   color: #fff;
+    // }
+    // .save {
+    //   margin-left: -110px;
+    //   background: #0086FF;
+    // }
+    // .cancel {
+    //   margin-left: 40px;
+    //   background: #FFF;
+    //   border: 1px solid #CCCCCC;
+    //   color: #444;
+    // }
 
   }
   .linh40{
-    line-height: 40px;
+    line-height: 40px;text-align: left;
   }
   .wid80{
-    width: 80px;
+    width: 70px;margin-right:10px;text-align: right;
     display: inline-block;
   }
   .pl10{

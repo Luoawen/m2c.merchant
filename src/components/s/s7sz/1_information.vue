@@ -1,5 +1,5 @@
 <template>
-  <div class="message content clear">
+  <div class="message content clear" style="padding-top:10px;">
     <div class="line"></div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="店铺信息" name="first">

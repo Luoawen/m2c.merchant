@@ -27,7 +27,7 @@
       </el-date-picker>
       <el-input v-model="search_params.condition" placeholder="输入商品名称/订单号/顾客姓名/顾客手机号" title="输入商品名称/订单号/顾客姓名/顾客手机号"></el-input>
       <el-button type="primary" size="medium" @click="get_comment_info()" class="btn-search">搜索</el-button>
-      <a class="ml10 gjsort" @click="advancedSearch">高级搜索</a>
+      <a class="ml10 gjsort" style="" @click="advancedSearch">高级搜索</a>
     </div>
     <div class="soloSearchBox" v-if="advancedShow">
       <h4>高级搜索<a class="close" @click="advancedShow=!advancedShow"></a></h4>
@@ -127,10 +127,10 @@
         <tbody v-for="(comment,index) in datacomment">
           <tr>
             <td>
-              <div v-if='!comment.replyCommentContent ' @click="showtchp(comment.commentId)">
+              <a v-if='!comment.replyCommentContent ' @click="showtchp(comment.commentId)">
                 <i class="icon_hp"></i>
                 <span>回评</span>
-              </div>
+              </a>
             </td>
             <td>
               <a class="ellipsis3" :title="comment.commentContent">{{comment.commentContent}}</a><br/><br/>
@@ -168,7 +168,7 @@
               <span v-else > 中评</span>
             </td>
             <td>
-              <a class="ellipsis2" :title="comment.goodsName">{{comment.goodsName}}</a><br/><br/>
+              <a class="ellipsis2" :title="comment.goodsName">{{comment.goodsName}}</a><br/>
               <div class="tdcolor mt10" v-if="comment.skuName != ''">规格：{{comment.skuName}}</div>
             </td>
             <td>
@@ -541,6 +541,7 @@
           min-height: 80px;
           overflow: hidden;
           text-overflow:ellipsis;
+          color:#666;
           // white-space: nowrap;
         }
         .td_img{

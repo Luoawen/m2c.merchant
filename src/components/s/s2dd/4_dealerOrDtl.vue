@@ -1,5 +1,5 @@
 <template>
-  <div class="detail poi1 content">
+  <div class="detail poi1 content" style="padding-top:10px;">
     <div class="line"></div>
     <div class="nav clear" v-show="activeName==='first'">
       <span class="fr">
@@ -218,7 +218,6 @@
               </div>
             </div>
           </div>
-
           <table class="mt20 detail_table">
             <thead>
               <tr class="fh">
@@ -1099,7 +1098,8 @@
               that.bModify = false;
               that.fModify = false;
               that.getDealerOrderInfo();
-              that.show_tip('修改成功！');
+              // that.show_tip('修改成功！');
+              that.$message.success('修改成功')
             }
           }
         })

@@ -1,5 +1,5 @@
 <template>
-  <div class="content clear">
+  <div class="content clear" style="padding-top:10px;">
     <div class="line"></div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane label="商品库" name="first">
@@ -51,7 +51,7 @@
                 width="120"
                 >
                 <template slot-scope="scope">
-                  <el-col :span="12">
+                  <el-col :span="24">
                     <el-dropdown trigger="click">
                       <span class="el-dropdown-link">
                         操作<i class="el-icon-arrow-down el-icon--right"></i>
@@ -153,7 +153,7 @@
                 width="120"
                 >
                 <template slot-scope="scope">
-                  <el-col :span="12">
+                  <el-col :span="24">
                     <el-dropdown trigger="click">
                       <span class="el-dropdown-link">
                         操作<i class="el-icon-arrow-down el-icon--right"></i>
@@ -240,7 +240,7 @@
             width="120"
             >
             <template slot-scope="scope">
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-dropdown trigger="click">
                       <span class="el-dropdown-link">
                         操作<i class="el-icon-arrow-down el-icon--right"></i>
@@ -301,32 +301,37 @@
       </el-tab-pane>
     </el-tabs>
     <!-- 删除弹框 -->
-    <div class="delectGoodBg" v-if="delectGoodBg"></div>
-     <div class="delectGoodCon" v-if="delectGood" >
-        <div class="agreetc_header">
+    <div class="hptczp" v-if="delectGood===true||agreeGoodBg===true"></div>
+     <div class="hptczp_content" v-if="delectGood" >
+        <div class="hptczp_header">
           <span>提示</span>
-          <span class="fr" @click="delectGoodHide()">X</span>
+          <span class="iconfont fr" @click="delectGoodHide()">&#xe661;</span>
+          <!-- <span class="fr" @click="delectGoodHide()">X</span> -->
         </div>
-      <div class="agreetc_body">{{delectCon}}</div>
-      <div class="agreetc_footer">
-        <button type="button" class="btn save" @click = "deleteConfirmFn()">确认</button>
-        <button type="button" class="btn cancel" @click="delectGoodHide()">取消</button>
+      <div class="hptczp_body">
+        <h5>{{delectCon}}</h5>
+      </div>
+      <div class="hptczp_footer">
+        <el-button size="medium" class="cancel" @click="delectGoodHide()">取消</el-button>
+        <el-button type="primary" size="medium" @click="deleteConfirmFn()">确认</el-button>
+        <!-- <button type="button" class="btn save" @click = "deleteConfirmFn()">确认</button>
+        <button type="button" class="btn cancel" @click="delectGoodHide()">取消</button> -->
       </div>
     </div>
-        <!--商品库批量上下架确认弹框 商品审核 同意上架商品 -->
-    <div class="delectGoodBg" v-if="agreeGoodBg"></div>
-    <div class="delectGoodWrap" v-if="agreeGoodBg">
-      <div class="delectGoodCon" v-if="agreeGood" >
-        <div class="agreetc_header">
-           <span>提示</span>
-          <span class="fr" style='cursor:pointer' @click="agreeGoodHide()">X</span>
-        </div>
-          <div class="agreetc_body" v-if="agreeTypeFlag===1? true:false">是否上架商品？</div>
-          <div class="agreetc_body" v-if="agreeTypeFlag===2? true:false">是否下架商品？</div>
-        <div class="agreetc_footer">
-          <button type="button" class="btn save" :disabled='noDoubleClick'    @click = "agree_confirm()">确认</button>
-          <button type="button" class="btn cancel" @click="agreeGoodHide()">取消</button>
-        </div>
+    <!--商品库批量上下架确认弹框 商品审核 同意上架商品 -->
+    <div class="hptczp_content" v-if="agreeGood" >
+      <div class="hptczp_header">
+        <span>提示</span>
+        <span class="iconfont fr" @click="agreeGoodHide()">&#xe661;</span>
+        <!-- <span class="fr" style='cursor:pointer' @click="agreeGoodHide()">X</span> -->
+      </div>
+        <div class="hptczp_body" v-if="agreeTypeFlag===1? true:false"><h5>是否上架商品？</h5></div>
+        <div class="hptczp_body" v-if="agreeTypeFlag===2? true:false"><h5>是否下架商品？</h5></div>
+      <div class="hptczp_footer">
+        <el-button size="medium" class="cancel" @click="agreeGoodHide()">取消</el-button>
+        <el-button type="primary" size="medium" @click="agree_confirm()" :disabled='noDoubleClick'>确认</el-button>
+        <!-- <button type="button" class="btn save"    @click = "agree_confirm()">确认</button>
+        <button type="button" class="btn cancel" @click="agreeGoodHide()">取消</button> -->
       </div>
     </div>
   </div>
@@ -491,6 +496,7 @@
       // 点击新增时校验店铺信息是否存在
       newGoods () {
         let that = this
+        let newWindow = window.open()
         that.$.ajax({
           type: 'GET',
           url: that.localbase + 'm2c.scm/shop/sys/shopInfo',
@@ -502,7 +508,10 @@
             if(result.content==""){
               that.show_tip("店铺信息不存在！")
             }else{
-              that.$router.push({name:'goodAddModify',query:{isAdd:'add'}})
+              let routeData = that.$router.resolve({name:'goodAddModify',query:{isAdd:'add'}})
+              // window.open(routeData.href, '_blank')
+              newWindow.location.href = routeData.href
+              // that.$router.push({name:'goodAddModify',query:{isAdd:'add'}})
             }
           }
         })
@@ -730,12 +739,18 @@
         if (action === '_detail') {
           let goodsId = row.goodsId
           if(to=='a'){
-            that.$router.push({name:'gooddetail',query:{goodsId:row.goodsId,from:to}});
+            // that.$router.push({name:'gooddetail',query:{goodsId:row.goodsId,from:to}});
+            let routeData = that.$router.resolve({name:'gooddetail',query:{goodsId:row.goodsId,from:to}})
+            window.open(routeData.href, '_blank')
           }else if(to=='b'){
             let approveStatus = row.approveStatus
-            that.$router.push({name:'gooddetail',query:{goodsId:goodsId,approveStatus:approveStatus,from:to}});
+            // that.$router.push({name:'gooddetail',query:{goodsId:goodsId,approveStatus:approveStatus,from:to}})
+            let routeData = that.$router.resolve({name:'gooddetail',query:{goodsId:goodsId,approveStatus:approveStatus,from:to}})
+            window.open(routeData.href, '_blank')
           }else{
-            that.$router.push({name:'gooddetail',query:{goodsId:row.goodsId,from:to}});
+            // that.$router.push({name:'gooddetail',query:{goodsId:row.goodsId,from:to}})
+            let routeData = that.$router.resolve({name:'gooddetail',query:{goodsId:row.goodsId,from:to}})
+            window.open(routeData.href, '_blank')
           }
         } else if (action === '_soldout') {
           that.soldGoods(row,to)
@@ -745,10 +760,14 @@
         else if (action === '_edit') {
           let goodsId = row.goodsId
           if(to=='a'){
-            that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId,from:to}});
+            // that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId,from:to}})
+            let routeData = that.$router.resolve({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId,from:to}})
+            window.open(routeData.href, '_blank')
           }else if(to=='b'){
             let approveStatus = row.approveStatus
-            that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId,approveStatus:approveStatus,from:to}});
+            // that.$router.push({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId,approveStatus:approveStatus,from:to}})
+            let routeData = that.$router.resolve({name:'goodAddModify',query:{isAdd:'modify',goodsId:goodsId,approveStatus:approveStatus,from:to}})
+            window.open(routeData.href, '_blank')
           }
         } else if (action === '_delete') {
           if(to=='a'){

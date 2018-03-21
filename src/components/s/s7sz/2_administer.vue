@@ -1,5 +1,5 @@
 <template>
-  <div class="content clear" style="min-height:600px;">
+  <div class="content clear" style="min-height:600px;padding-top:10px;">
     <div class="line"></div>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane label="品牌库" name="first">
@@ -14,7 +14,9 @@
           </el-date-picker>
           <el-input v-model="search_params.condition" placeholder="输入品牌名称"></el-input>
           <el-button type="primary" size="medium" @click="get_comment_info()" class="btn-search">搜索</el-button>
-          <el-button type="primary" size="medium" class="fr" @click="addGood()">新增</el-button>
+        </div>
+        <div class="btnBox">
+          <el-button type="primary" size="medium" @click="addGood()">新增</el-button>
         </div>
         <el-table
           ref="multipleTable"
@@ -26,7 +28,7 @@
             width="120"
             >
             <template slot-scope="scope">
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-dropdown trigger="click">
                   <span class="el-dropdown-link">
                     操作<i class="el-icon-arrow-down el-icon--right"></i>
@@ -97,7 +99,7 @@
             width="120"
             >
             <template slot-scope="scope">
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-dropdown trigger="click">
                   <span class="el-dropdown-link">
                     操作<i class="el-icon-arrow-down el-icon--right"></i>
@@ -159,39 +161,40 @@
             {{goodInfo.twoAreaName=='' ? '': ','+ goodInfo.twoAreaName}}
             {{goodInfo.threeAreaName==''? '': ',' + goodInfo.threeAreaName}}</template>
         </p>
-        <div>
-          <span>品牌LOGO：</span>
-          <template v-if="goodInfo.brandLogo != ''"><img :src="goodInfo.brandLogo" /></template>
-          <template v-if="goodInfo.brandLogo == ''">--</template>
+        <div style="margin-top:20px;">
+          <span style="float:left;">品牌LOGO：</span>
+          <template style="margin-top:10px;float:left;" v-if="goodInfo.brandLogo != ''"><img :src="goodInfo.brandLogo" /></template>
+          <template style="margin-top:10px;float:left;" v-if="goodInfo.brandLogo == ''">--</template>
         </div>
-        <p v-show="goodInfo.rejectReason!==undefined"><span>拒绝原因：</span>{{goodInfo.rejectReason}}</p>
+        <p v-show="goodInfo.rejectReason!==undefined && goodInfo.rejectReason!== ''"><span>拒绝原因：</span>{{goodInfo.rejectReason}}</p>
         <el-button size="medium" @click="goodInfoShow=!goodInfoShow">返回</el-button>
       </div>
       <!--删除-->
-      <div class="delectGoodBg" v-if="delectGoodBg"></div>
-      <div class="delectGoodWrap" v-if="delectGoodBg">
-        <div class="delectGoodCon" v-if="delectGood" >
-          <div class="agreetc_header">
-            <span>提示</span>
-            <span class="fr" @click="delectGoodHide()">X</span>
-          </div>
-          <div class="agreetc_body">是否删除品牌</div>
-          <div class="agreetc_footer">
-            <button type="button" class="btn save" @click = "delete_confirm()">确认</button>
-            <button type="button" class="btn cancel" @click="delectGoodHide()">取消</button>
-          </div>
+      <div class="hptczp" v-if="delectGood===true||delectApprove===true"></div>
+      <div class="hptczp_content" v-if="delectGood" >
+        <div class="hptczp_header">
+          <span>提示</span>
+          <span class="fr" @click="delectGoodHide()">X</span>
         </div>
-
-        <div class="delectGoodCon" v-if="delectApprove" >
-          <div class="agreetc_header">
-            <span>提示</span>
-            <span class="fr" @click="delectApproveHide()">X</span>
-          </div>
-          <div class="agreetc_body">是否删除品牌审核</div>
-          <div class="agreetc_footer">
-            <button type="button" class="btn save" @click = "deleteApprove_confirm()">确认</button>
-            <button type="button" class="btn cancel" @click="delectApproveHide()">取消</button>
-          </div>
+        <div class="hptczp_body"><h5>是否删除品牌</h5></div>
+        <div class="hptczp_footer">
+          <el-button size="medium" class="cancel" @click="delectGoodHide()">取消</el-button>
+          <el-button type="primary" size="medium" @click="delete_confirm()">确认</el-button>
+          <!-- <button type="button" class="btn save" @click = "delete_confirm()">确认</button>
+          <button type="button" class="btn cancel" @click="delectGoodHide()">取消</button> -->
+        </div>
+      </div>
+      <div class="hptczp_content" v-if="delectApprove" >
+        <div class="hptczp_header">
+          <span>提示</span>
+          <span class="fr" @click="delectApproveHide()">X</span>
+        </div>
+        <div class="hptczp_body"><h5>是否删除品牌审核</h5></div>
+        <div class="hptczp_footer">
+          <el-button size="medium" class="cancel" @click="delectApproveHide()">取消</el-button>
+          <el-button type="primary" size="medium" @click="deleteApprove_confirm()">确认</el-button>
+          <!-- <button type="button" class="btn save" @click = "deleteApprove_confirm()">确认</button>
+          <button type="button" class="btn cancel" @click="delectApproveHide()">取消</button> -->
         </div>
       </div>
       <!--修改/新增-->
@@ -227,13 +230,18 @@
             </option>
           </select>
         </div>
-        <div><span>品牌LOGO：</span>
+        <div style="margin-top:20px;">
+          <span style="margin-top:10px;float:left;">品牌LOGO：</span>
           <input type="file" id="m11yhgl_img_input" style="display:none" @change="upload_img()">
-          <div class="img_up" onclick="document.querySelector('#m11yhgl_img_input').click()">
-            <img width="100" height="100" v-show='imgshow' id="m11yhgl_img">
+          <div style="margin-top:16px;float:left;" class="img_up" onclick="document.querySelector('#m11yhgl_img_input').click()">
+            <img width="100" height="100" v-show='imgshow' id="m11yhgl_img"
+                          onerror="this.src='../../../../static/assets/images/icon_uoloading.png';this.onerror=null">
+            <!-- <img width="100" height="100" v-show='imgshow' id="m11yhgl_img"> -->
           </div>
+          <div class="clear"></div>
           <span class="upload">请上传1M以内的图片</span>
         </div>
+        <div class="clear"></div>
         <el-button type="primary" size="medium" @click="change_confirm()">保存</el-button>
         <el-button size="medium" style="margin-left:20px;margin-top:29px;" @click="changeGoodShow=!changeGoodShow">返回</el-button>
       </div>
@@ -660,7 +668,11 @@
           },
           success: function (result) {
             if (result.status == 200) {
-              that.show_tip('删除成功')
+              // that.show_tip('删除成功')
+              that.$message({
+                type: 'success',
+                message: '删除成功'
+              })
               that.delectApproveHide()
               that.get_comment_info1()
             } else {
@@ -681,7 +693,11 @@
           },
           success: function (result) {
             if(result.status == 200){
-              that.show_tip('删除成功')
+              // that.show_tip('删除成功')
+              that.$message({
+                type: 'success',
+                message: '删除成功'
+              })
               that.delectGoodHide()
               that.get_comment_info()
             }else{
@@ -908,46 +924,7 @@
         margin-top: 10px;
         padding: 10px;
         position: relative;
-        .bootstrap-table {
-          margin: 0;
-        }
-        [tableexport-id] {
-          width: 120px;
-          height: 25px;
-          color: #fff;
-          line-height: 25px;
-          border-radius: 2px;
-          border: none;
-          margin-bottom: 12px;
-          position: absolute;
-          top: 10px;
-          left: 134px;
-          background: #F56C6C;
-        }
-        .public_button {
-          width: 120px;
-          height: 25px;
-          color: #fff;
-          border-radius: 2px;
-          border: none;
-        }
-        .print_order {
-          background: #18DCF6;
-        }
-
-        //表格样式
-        .comment_info{
-          table {
-            td {
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-            }
-          }
-          .pagination{
-            margin: 0;
-          }
-        }
+        
     }
 }
 .nav-tabs{
@@ -996,9 +973,9 @@
   }
 /*详情*/
 #myTabContent{position:relative;}
-em.bread{position:fixed; top:80px;left:367px;font-style:normal;color:#333;z-index:9999;}
+em.bread{position:fixed; top:80px;left:350px;font-style:normal;color:#2699FF;z-index:9999;}
 .goodInfo{position:absolute;top:-50px;left:0;width:100%;height:840px;padding-top:80px;background:#fff;z-index:99;}
-  .goodInfo p,.goodInfo div{margin-left:160px;margin-top:20px;line-height:36px;}
+  .goodInfo p,.goodInfo div{margin-left:160px;line-height:36px;margin-bottom:10px;}
   .goodInfo button{margin-left:160px;margin-top:20px;}
   .goodInfo div img{width:100px;height:100px; display:inline-block;}
   .goodInfo .goodInfop
@@ -1009,103 +986,14 @@ em.bread{position:fixed; top:80px;left:367px;font-style:normal;color:#333;z-inde
   .goodInfo p span,.goodInfo div span{
     margin-left: -160px; display:inline-block;width:160px;padding-right:20px;text-align: right;
   }
-  .goodInfo div span.upload{display: block;margin-left:0px;color:#999;}
+  .goodInfo div span.upload{display: block;margin-left:0px;color:#999;text-align:left;}
   .goodInfo p div,.goodInfo div div{margin-left:0;}
-/*删除*/
-.delectGoodCon {
-  width: 400px;
-  height: 280px;
-  background: #fff;
-  z-index: 9999;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  margin-left: -200px;
-  margin-top: -180px;
-  background: #FFFFFF;
-  border-radius: 4px;
-  .agreetc_header, .refuse_header {
-    width: 100%;
-    height: 50px;
-    background: #DFE9F6;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 16px;
-    span {
-      display: inline-block;
-      line-height: 50px;
-    }
-    span.fr{
-      cursor: pointer;
-    }
-  }
-}
-
-.agreetc_header, .refuse_header {
-  width: 100%;
-  height: 50px;
-  background: #DFE9F6;
-  padding-left: 20px;
-  padding-right: 20px;
-  font-size: 16px;
-  span {
-    display: inline-block;
-    line-height: 50px;
-  }
-  span.fr{
-    cursor: pointer;
-  }
-}
 .fr{
   float: right;
 }
-.agreetc_body{
-  padding-left: 20px;
-  padding-right: 20px;
-  background: #FFFFFF;
-  margin-top: 10px;
-  text-align: center;
-  font-size: 20px;
-  color: #333333;
-  line-height: 150px;
-}
-.agreetc_footer,.refuse_footer {
-  height: 80px;
-  padding-top: 10px;
-  padding-left: 50%;
-  .btn {
-    width: 80px;
-    height: 30px;
-    border: none;
-    border-radius: 2px;
-    color: #fff;
-  }
-
-  .save {
-    margin-left: -110px;
-    background: #0086FF;
-  }
-  .cancel {
-    margin-left: 40px;
-    background: #FFF;
-    border: 1px solid #CCCCCC;
-    color: #444;
-  }
-}
-.delectGoodBg{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:999;}
-/*.delectGoodWrap{position:absolute;width:380px;height:280px;padding:10px;border-radius:10px;top:50%;left:50%;margin-left:-200px;background:#fff;z-index:99;}*/
-/*.delectGoodWrap p{line-height:50px;}*/
-.blueBtn,.defultBtn{background:rgb(96, 174, 246);width:80px;height:30px;border-radius:4px;text-align: center;color:#fff;}
-.defultBtn{background:#ccc;}
 /*修改/新增*/
 .changeGoodInfo input,.changeGoodInfo select{width:200px;line-height:34px;color:#666;}
 .zIndex2{z-index:21;}
 .sz .tab-content .tab-pane .search_cell .time{top:50px;left:14px;width:450px;}
-.icon{width:40px;height:40px;z-index:11;display:inline-block;}
-.timeIcon{background:url(../../../assets/images/ico_calendar@2x.png) no-repeat center bottom;background-size:19px 20px;}
-.searchIcon{background:url(../../../assets/images/ico_search.png) no-repeat center center;background-size:20px 20px;}
-.arrowsIcon{background:url(../../../assets/images/ico_arrows_default.png) no-repeat center center;background-size:20px 20px;
-float: right;margin-top:20px;margin-right:10px;}
-.rightIcon{background:url(../../../assets/images/ico_arrows_packup.png) no-repeat center center;background-size:20px 20px;
-float: right;margin-top:-2px;width:20px;height:20px;}
+
 </style>
