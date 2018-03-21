@@ -129,18 +129,18 @@
       </div>
       <div class="hptczp_footer">
         <el-button  @click="cashPassHide">取消</el-button>&nbsp;
-        <el-button type="primary" @click='showTransaction=true;'>确定</el-button>
+        <el-button type="primary" @click='showTransaction=true;cashPassShow =false'>确定</el-button>
       </div>
     </div>
         <!-- 设置交易密码 -->   
     <div class='hptczp' v-show="showTransaction"></div>
-    <div class="hptczp_content inputInfo" v-show="showTransaction">
-      <div class="hptczp_header">
+    <div class="hptczp_content inputInfo clear" v-show="showTransaction">
+      <div class="hptczp_header ">
         <span>设置交易密码</span>
         <span class="iconfont fr" @click="cancel">&#xe661;</span>
       </div>
-      <div class="hptczp_body" style='margin-left:48px'>
-        <div>
+      <div class="hptczp_body" style='height:180px,vertical-align:middle'>
+        <!-- <div>
           &nbsp;&nbsp;&nbsp;<label style="color: red">*</label>验证码
           <input type="text" class="formControl" id="verifyCode" v-model="Info.verifyCode" placeholder="4位数验证码" maxlength="4">
             <el-button  style='width:80px;float:right;margin-right:26px' type="plain" @click="sendVerficode" :disabled="disabled"> 
@@ -154,11 +154,36 @@
       </div>
       <div><label style="color: red">*</label>再次确认 
         <input type="password" class="formControl" id="confirmNewPass" v-model="Info.confirmNewPass" maxlength="6" minlength="6"  placeholder="6位数字密码">
+      </div> -->
+            <el-row :gutter="10" >
+            <el-col  :span="3" :offset="1" > <label style="color: red">*</label>验证码</el-col>
+            <el-col  :span="8" > <input type="text" class="formControl" id="verifyCode" v-model="Info.verifyCode" placeholder="4位数验证码" maxlength="4">
+              <p  v-show="isSuccess" style='font-size:12px;color:#ccc;text-align:left' >已向手机号<span style="color: red;">{{userPhone}}</span>发送验证码</p>
+            </el-col>
+            <el-col :span="3"  :offset="3"> 
+              <el-button  class='w100' style='box-sizing: border-box' type="plain" @click="sendVerficode" :disabled="disabled"> 
+                <span v-show="show"  id="sendVer">获取验证码</span><span v-show="!show" class="count">{{count}} s</span> 
+              </el-button> 
+            </el-col>
+          </el-row>
+          <div class="clear" style="height:10px"></div>
+        <el-row :gutter="10" >
+            <el-col  :span="3"  :offset="1" > <label style="color: red">*</label>交易密码</el-col>
+            <el-col   :span="6" >  <input type="password" class="formControl" id="newPass" v-model="Info.newPass" 
+          minlength="6" maxlength="6" placeholder="6位数字密码"> </el-col>
+        </el-row>
+        <div class="clear" style="height:10px"></div>
+        <el-row :gutter="10" >
+            <el-col :span="3"  :offset="1" > <label style="color: red">*</label>再次确认 </el-col>
+            <el-col :span="6" > <input type="password" class="formControl" id="confirmNewPass" v-model="Info.confirmNewPass" maxlength="6" minlength="6"  placeholder="6位数字密码"> </el-col>
+        </el-row>
       </div>
-      </div>
-      <div class="hptczp_footer" style="height:90px">
-         <el-button type="plain"  @click="cancel">取消</el-button>
-         <el-button  type="primary" @click="modify_pass()">保存</el-button> 
+      <div class="hptczp_footer clear">
+         <el-row :gutter="20" style='margin-top:30px;height:60px;text-align:left' >
+          <el-col   :span="6" :offset="4"  ><el-button  type="primary" @click="modify_pass()">保存</el-button> 
+          <el-button type="plain"  @click="cancel">取消</el-button>
+          </el-col>
+       </el-row>
       </div>
     </div>
   </div>
