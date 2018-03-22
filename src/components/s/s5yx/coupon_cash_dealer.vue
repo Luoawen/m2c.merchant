@@ -1882,9 +1882,13 @@ export default {
     width: 200px;
   }
 </style>
-<style>
-  .el-date-range-picker__time-header .el-input, .el-date-picker__time-header .el-input{
+<style >
+    .el-date-range-picker__time-header .el-input, .el-date-picker__time-header .el-input{
     width: 136px!important;
   }
+    .el-date-table th:nth-child(1), .el-date-table td:nth-child(1){
+    padding-left:0px!important;
+  }
 </style>
+
 
