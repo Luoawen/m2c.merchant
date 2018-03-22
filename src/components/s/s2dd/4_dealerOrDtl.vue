@@ -948,7 +948,7 @@
           }
           let pattern = /^[0-9a-zA-Z]{1,30}$/
           if (!pattern.test(that.expressNo)){
-            that.$message.error('物流单号只可以输入字母或数字')
+            that.$message.error('物流单号只支持数字或字母')
             return
           }
         }
@@ -963,7 +963,7 @@
           }
           let pattern = /^(13|14|15|17|18)[0-9]{9}$/
           if (!pattern.test(that.expressPhone)){
-            that.$message.error('请填写正确的配送员手机号')
+            that.$message.error('请输入11位数手机号')
             return
           }
         }
